@@ -81,7 +81,7 @@ describe('Stufenpruefung: Bewertung', () => {
     const jeLektion = new Map<string, number>();
     for (const f of FRAGEN.bronze) jeLektion.set(f.lektionSlug, (jeLektion.get(f.lektionSlug) ?? 0) + 1);
     expect(FRAGEN.bronze.length).toBeGreaterThanOrEqual(33);
-    for (const [slug, n] of jeLektion) expect(n, slug).toBeGreaterThanOrEqual(3);
+    for (const [slug, n] of Array.from(jeLektion.entries())) expect(n, slug).toBeGreaterThanOrEqual(3);
   });
 
   it('der Browser bekommt keine Loesungen', () => {
