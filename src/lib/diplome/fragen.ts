@@ -1,6 +1,8 @@
 /**
- * Fragenbank der Stufenpruefungen — eine Quelle fuer Client (Anzeige, Sofort-
- * Feedback) und Server (Bewertung, Eintrag des Ergebnisses).
+ * Fragenbank der Stufenpruefungen. Seit 08.09.2026 (Rahmenlehrplan §8) zieht der
+ * Server aus dem Pool (zieheFragen), gibt dem Browser Fragen OHNE Loesung
+ * (fragenFuerClient) und bewertet nach ids (bewerte). Die Loesungen verlassen
+ * diese Datei nur ueber die Bewertung — nie als Bundle im Browser.
  *
  * Jede Frage traegt `lektionSlug`: die Lektion, in der die Antwort steht.
  * Damit hat jede Pruefungsfrage einen Bezug zum Lernstoff (Regel 8b, Punkt e)
@@ -16,7 +18,8 @@
  * 58–63), well done 70+ (vorher 68+).
  */
 
-import { QUIZ_BESTEHENSGRENZE, type StufeKey } from './stufen';
+import 'server-only';
+import { QUIZ_FRAGEN_PRO_PRUEFUNG, bestehensgrenze, type StufeKey } from './stufen';
 
 export type QuizFrage = {
   q: string;
@@ -28,7 +31,6 @@ export type QuizFrage = {
   lektionSlug: string;
 };
 
-export type Flashcard = { front: string; back: string };
 
 export const FRAGEN: Record<StufeKey, readonly QuizFrage[]> = {
   bronze: [
@@ -98,77 +100,77 @@ export const FRAGEN: Record<StufeKey, readonly QuizFrage[]> = {
   ],
 };
 
-export const FLASHCARDS: Record<StufeKey, readonly Flashcard[]> = {
-  bronze: [
-    { front: 'Direkte Hitze',          back: '230–290 °C · Kruste, schnelles Anbraten' },
-    { front: 'Indirekte Hitze',        back: '150–180 °C · schonend durchgaren, große Stücke & Geflügel' },
-    { front: 'Aschefilm',              back: 'Grauer Belag = Kohle ist bereit, gleichmäßige Glut' },
-    { front: 'Maillard-Reaktion',      back: 'Bräunung & Aromen · startet ab ~140 °C' },
-    { front: 'Reverse Sear',           back: 'Erst niedrig garen, dann kurz scharf für Kruste' },
-    { front: 'Deckel zu',              back: 'Erstickt Aufflackern, hält Temperatur konstant' },
-    { front: 'Abstand Rost zu Kohle',  back: '10–15 cm · Standard für gleichmäßiges Garen' },
-    { front: 'Salz-Timing',            back: 'Direkt vor dem Grillen oder ≥ 40 Min davor' },
-  ],
-  anatomie: [
-    { front: 'Ribeye',       back: 'Hohe Rippe · direkt grillen, medium rare' },
-    { front: 'Brisket',      back: 'Rinderbrust · Low & Slow, 12–16 h smoken' },
-    { front: 'Onglet',       back: 'Zwerchfellpfeiler · scharf anbraten, rare bis medium rare' },
-    { front: 'Tomahawk',     back: 'Ribeye mit langem Knochen · Reverse Sear, ~600 g pro Person' },
-    { front: 'Picanha',      back: 'Tafelspitz (Sirloin Cap) · BR-BBQ, mit Fettkappe' },
-    { front: 'Flank Steak',  back: 'Bauchlappen · marinieren, quer zur Faser schneiden' },
-    { front: 'Hanger Steak', back: 'Onglet-Verwandter · hängt am Zwerchfell, intensiv im Geschmack' },
-    { front: 'Wagyu A5',     back: 'Japan-Top · BMS 8–12, sehr dünn aufgeschnitten kurz braten' },
-  ],
-  thermometer: [
-    { front: 'Rind rare',         back: '45–49 °C · roter Kern, weich' },
-    { front: 'Rind medium rare',  back: '52–55 °C · rosa Kern, saftig — Standard 54 °C (bei 50–51 °C ziehen)' },
-    { front: 'Rind medium',       back: '55–60 °C · rosa-grau, fester' },
-    { front: 'Rind well done',    back: '70+ °C · durch, deutlicher Saftverlust' },
-    { front: 'Schwein Filet',     back: '63–65 °C · zart, saftig — 63 °C ist das Minimum' },
-    { front: 'Hähnchen Brust',    back: '72–75 °C · weiß, sicher, noch saftig' },
-    { front: 'Lachs',             back: '48–52 °C · glasig, mi-cuit' },
-    { front: 'Lamm Rücken',       back: '54–57 °C · medium rare, rosé' },
-  ],
-  holz: [
-    { front: 'Hickory',  back: 'Stark würzig · Brisket, Pulled Pork, Ribs' },
-    { front: 'Apfel',    back: 'Mild, leicht süß · Geflügel, Schwein, Fisch' },
-    { front: 'Kirsche',  back: 'Süßlich, färbt rot · Geflügel, Lamm' },
-    { front: 'Mesquite', back: 'Sehr intensiv, erdig · Beef, kurze Sessions' },
-    { front: 'Buche',    back: 'Mittel, neutral · Allrounder, Fisch' },
-    { front: 'Walnuss',  back: 'Stark, kann bitter werden · Wild, Rind sparsam' },
-    { front: 'Ahorn',    back: 'Süß, mild · Geflügel, Schinken' },
-    { front: 'Pekan',    back: 'Süßlich-nussig · Schwein, Geflügel' },
-  ],
-  kcbs: [
-    { front: 'Chicken',     back: '6 gleiche Stücke · Turn-In 12:00' },
-    { front: 'Pork Ribs',   back: 'St. Louis oder Baby Back · Turn-In 12:30' },
-    { front: 'Pork',        back: 'Schulter/Butt 4–6 kg · Turn-In 13:00' },
-    { front: 'Brisket',     back: 'Flat oder Point, 6–7 kg · Turn-In 13:30' },
-    { front: 'Appearance',  back: 'Score 6–9 · Box-Layout, Farbe, Glanz' },
-    { front: 'Taste',       back: 'Score 6–9 · der wichtigste Faktor' },
-    { front: 'Tenderness',  back: 'Score 6–9 · zart, aber nicht zerfallend' },
-    { front: 'DQ-Gründe',   back: 'Falsche Garnitur, Box-Sticker fehlt, Sauce-Pool' },
-  ],
-};
-
 export type Bewertung = {
   score: number;
+  /** Anzahl bewerteter Fragen — 10 bei vollem Pool, weniger bei kleinen Pools. */
+  gesamt: number;
+  grenze: number;
   bestanden: boolean;
-  ergebnisse: { richtig: boolean; explain: string; lektionSlug: string }[];
+  ergebnisse: { id: string; richtig: boolean; explain: string; lektionSlug: string }[];
 };
 
+function frageById(modul: StufeKey, id: string): QuizFrage | undefined {
+  return FRAGEN[modul].find((f) => f.id === id);
+}
+
 /**
- * Reine Bewertungsfunktion — laeuft identisch im Server (verbindlich) und
- * im Client (Anzeige). Ungueltige Eingaben (falsche Laenge, Index ausserhalb
- * der Optionen) werden als falsch gewertet, nicht als Fehler geworfen.
+ * Ziehung (Rahmenlehrplan §8, 08.09.2026): bis zu QUIZ_FRAGEN_PRO_PRUEFUNG
+ * Fragen, **hoechstens eine je Lektion**, solange genug Lektionen im Pool sind;
+ * danach wird aus dem Rest aufgefuellt. Kleine Pools (Stufen 2–5, je 5
+ * Fragen) liefern alles — dort bleibt die Pruefung damit unveraendert, bis
+ * der Pool waechst.
+ *
+ * Laeuft auf dem Server (GET /api/diplome/pruefung), der die gezogenen ids
+ * signiert zurueckgibt. Der Browser kann sich die Fragen also nicht aussuchen.
  */
-export function bewerte(modul: StufeKey, antworten: readonly number[]): Bewertung {
-  const fragen = FRAGEN[modul];
-  const ergebnisse = fragen.map((f, i) => {
+export function zieheFragen(modul: StufeKey, anzahl = QUIZ_FRAGEN_PRO_PRUEFUNG): string[] {
+  const pool = [...FRAGEN[modul]];
+  // Fisher–Yates
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const gewaehlt: QuizFrage[] = [];
+  const belegteLektionen = new Set<string>();
+  for (const f of pool) {
+    if (gewaehlt.length >= anzahl) break;
+    if (belegteLektionen.has(f.lektionSlug)) continue;
+    belegteLektionen.add(f.lektionSlug);
+    gewaehlt.push(f);
+  }
+  for (const f of pool) {
+    if (gewaehlt.length >= anzahl) break;
+    if (!gewaehlt.includes(f)) gewaehlt.push(f);
+  }
+  return gewaehlt.map((f) => f.id);
+}
+
+/** Fragen ohne Loesung — das, was der Browser zu sehen bekommt. */
+export type FrageOhneLoesung = Omit<QuizFrage, 'correct' | 'explain'>;
+export function fragenFuerClient(modul: StufeKey, ids: readonly string[]): FrageOhneLoesung[] {
+  return ids
+    .map((id) => frageById(modul, id))
+    .filter((f): f is QuizFrage => Boolean(f))
+    .map(({ id, q, options, lektionSlug }) => ({ id, q, options, lektionSlug }));
+}
+
+/**
+ * Reine Bewertungsfunktion — laeuft auf dem Server (verbindlich). Bewertet
+ * genau die per `ids` gezogenen Fragen in dieser Reihenfolge. Ungueltige
+ * Eingaben (unbekannte id, Index ausserhalb der Optionen) werden als falsch
+ * gewertet, nicht als Fehler geworfen.
+ *
+ * Bestehensgrenze haengt von der Anzahl ab (80 %): 10 Fragen → 8, 5 → 4.
+ */
+export function bewerte(modul: StufeKey, ids: readonly string[], antworten: readonly number[]): Bewertung {
+  const ergebnisse = ids.map((id, i) => {
+    const f = frageById(modul, id);
     const a = antworten[i];
-    const richtig = Number.isInteger(a) && a === f.correct;
-    return { richtig, explain: f.explain, lektionSlug: f.lektionSlug };
+    const richtig = Boolean(f) && Number.isInteger(a) && a === f!.correct;
+    return { id, richtig, explain: f?.explain ?? '', lektionSlug: f?.lektionSlug ?? '' };
   });
   const score = ergebnisse.filter((e) => e.richtig).length;
-  return { score, bestanden: score >= QUIZ_BESTEHENSGRENZE, ergebnisse };
+  const gesamt = ids.length;
+  const grenze = bestehensgrenze(gesamt);
+  return { score, gesamt, grenze, bestanden: gesamt > 0 && score >= grenze, ergebnisse };
 }
