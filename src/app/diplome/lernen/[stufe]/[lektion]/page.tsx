@@ -7,7 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb, Lock } from 'lucide-react';
-import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
 import LektionFortschritt from '@/components/diplome/LektionFortschritt';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
@@ -75,7 +75,7 @@ const mdxComponents = {
     <blockquote className="border-l-4 border-brand-gold pl-5 my-6 font-body text-lg italic text-text-secondary" {...p} />
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
-  Schnelluebersicht, Achtung, ProTipp, TempBox,
+  Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff,
 };
 
 /**
