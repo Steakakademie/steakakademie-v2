@@ -7,11 +7,11 @@ import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 // anderen Preis als die Seite — eine irrefuehrende Angabe im Sinne des § 5 UWG.
 export const metadata: Metadata = {
   title: 'Grillmeister-Urkunde — digital kostenlos, gedruckt per Post',
-  description: `Deine Grillmeister-Urkunde: digital kostenlos zum Teilen, auf Wunsch gedruckt und per Post (${urkundePreisMitVersand()}). Mit Name und erreichter Stufe.`,
+  description: `Deine Grillmeister-Urkunde: digital kostenlos zum Teilen, auf Wunsch gedruckt und per Post (${urkundePreisMitVersand()}). Mit Name, Grad und erreichter Stufe.`,
   alternates: { canonical: 'https://steakakademie.de/diplome/urkunde' },
   openGraph: {
     title: 'Grillmeister-Urkunde — digital kostenlos, gedruckt per Post',
-    description: 'Urkunde mit deinem Namen und deiner Stufe — digital gratis, gedruckt per Post.',
+    description: `Urkunde mit deinem Namen, Grad und Stufe — digital gratis, gedruckt per Post (${urkundePreisMitVersand()}).`,
     url: 'https://steakakademie.de/diplome/urkunde',
     type: 'website',
   },
