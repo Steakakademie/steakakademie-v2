@@ -45,6 +45,14 @@ export default function Glutbett({ slugs, color, variant = 'klein', label = true
   const [anzahl, setAnzahl] = useState(0);
   const [zuendend, setZuendend] = useState<number | null>(null);
   const letzte = useRef(0);
+  /**
+   * Der erste Lauf zeigt den mitgebrachten Stand — er darf NICHT zuenden.
+   * Sonst flackert bei jedem Seitenaufruf die zuletzt verdiente Kohle erneut
+   * auf, und aus einem Moment wird eine Marotte. Gezuendet wird nur, was
+   * waehrend dieses Besuchs dazukommt.
+   */
+  const ersterLauf = useRef(true);
+  const uhr = useRef<number | null>(null);
 
   // `slugs` kommt als frisches Array aus dem Rendern der Seite und hat bei
   // jedem Durchlauf eine neue Identitaet. Als Abhaengigkeit direkt eingesetzt,
@@ -59,11 +67,13 @@ export default function Glutbett({ slugs, color, variant = 'klein', label = true
     const lesen = () => {
       const n = anzahlBestanden(liste);
       setAnzahl(n);
-      if (n > letzte.current) {
+      if (n > letzte.current && !ersterLauf.current) {
         setZuendend(n - 1); // die gerade hinzugekommene Kohle
-        window.setTimeout(() => setZuendend(null), 1250);
+        if (uhr.current !== null) window.clearTimeout(uhr.current);
+        uhr.current = window.setTimeout(() => setZuendend(null), 1250);
       }
       letzte.current = n;
+      ersterLauf.current = false;
     };
     lesen();
     window.addEventListener(CHECK_EREIGNIS, lesen);
@@ -72,6 +82,7 @@ export default function Glutbett({ slugs, color, variant = 'klein', label = true
     return () => {
       window.removeEventListener(CHECK_EREIGNIS, lesen);
       window.removeEventListener('storage', lesen);
+      if (uhr.current !== null) window.clearTimeout(uhr.current);
     };
   }, [schluessel]);
 

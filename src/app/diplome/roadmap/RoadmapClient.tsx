@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
 import KontextRail from '@/components/diplome/KontextRail';
+import Glutbett from '@/components/diplome/Glutbett';
 import { createClient } from '@/lib/supabase/client';
 import {
   STUFEN,
@@ -1097,6 +1098,23 @@ function LerninhalteTab({
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Glutbett gross — hier ist der Ort, an dem man den eigenen Stand sucht.
+          Auf der Lektionsseite steht dieselbe Anzeige klein im Kopfband; beide
+          lesen denselben Speicher (check-speicher.ts), es gibt also keine
+          zweite Wahrheit. */}
+      {lektionen.length > 0 && (
+        <div className="rounded-2xl p-6" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
+          <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-3" style={{ color: meta.color }}>
+            Dein Feuer
+          </div>
+          <Glutbett
+            slugs={lektionen.map((l) => l.lektionSlug)}
+            color={meta.color}
+            variant="gross"
+          />
+        </div>
+      )}
+
       {lektionen.length > 0 && (
         <div className="rounded-2xl p-6" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
           <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-3" style={{ color: meta.color }}>
