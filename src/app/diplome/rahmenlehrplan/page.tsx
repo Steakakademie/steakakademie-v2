@@ -80,7 +80,7 @@ export default function RahmenlehrplanPage() {
                 Was ein Grillmeister<br className="hidden lg:block" /> können muss.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                „Grillmeister" ist kein geschützter Beruf. Es gibt keine Ausbildungsordnung, keinen
+                „Grillmeister“ ist kein geschützter Beruf. Es gibt keine Ausbildungsordnung, keinen
                 Lehrplan, keine Prüfungsordnung. Wir haben eine geschrieben.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
@@ -228,7 +228,7 @@ export default function RahmenlehrplanPage() {
                 </p>
                 <p>
                   Ab Stufe 3 gehört zur gedruckten Urkunde zusätzlich der praktische Nachweis — ein Foto mit
-                  Kurzprotokoll. Das ist der Unterschied zwischen „Quiz bestanden" und „kann es".
+                  Kurzprotokoll. Das ist der Unterschied zwischen „Quiz bestanden“ und „kann es“.
                 </p>
               </div>
             </div>
