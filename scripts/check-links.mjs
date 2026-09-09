@@ -57,18 +57,20 @@ const WAISEN_ERLAUBT = [
   /^\/prive$/,
   // A/B-Variante der Startseite: wird nur per Rewrite aus der Middleware
   // erreicht, hat noindex und Canonical auf "/". Sie wird NIE verlinkt werden —
-  // anders als /bbq-grundkurs ist das kein Versaeumnis, sondern die Bauart.
+  // das ist kein Versaeumnis, sondern die Bauart.
   /^\/home-b$/,
 ];
 
-// BEWUSST NICHT auf der Liste: /bbq-grundkurs und /challenge-teilnahmebedingungen.
-// Beide sind fertig gebaut, aber noch nicht gestartet. Sie sollen als Warnung
-// stehen bleiben, damit sie beim Start nicht vergessen werden. Eine Liste, die
-// alles stillstellt, damit am Ende null steht, ist keine Pruefung mehr.
-//   /bbq-grundkurs — bleibt eigenes Produkt (Uwe, 27.08.2026): Einstiegskurs
-//     zwischen Gratis-Trichter und Diplom. Konzept: docs/konzept-bbq-grundkurs.md.
-//     KEIN Starttermin mehr auf der Seite — die frueheren "2026"-Zusagen sind raus.
+// BEWUSST NICHT auf der Liste: /challenge-teilnahmebedingungen.
+// Fertig gebaut, aber noch nicht gestartet — die Warnung soll stehen bleiben,
+// damit die Seite beim Start nicht vergessen wird. Eine Liste, die alles
+// stillstellt, damit am Ende null steht, ist keine Pruefung mehr.
 //   /challenge-teilnahmebedingungen — wartet auf Community und Rechtsfreigabe.
+//
+// ENTFALLEN (Uwe, 09.09.2026): /bbq-grundkurs stand hier als offene Baustelle.
+// Der Kurs ist eingestellt — Stufe 1 des Diploms deckt seinen Stoff seit dem
+// neuen Rahmenlehrplan kostenlos ab. Die URL leitet dauerhaft auf /diplome
+// (next.config.mjs), es gibt also keine Seite mehr, die verlinkt werden muesste.
 
 // Routen mit dynamischem Segment, z. B. /rezepte/[slug] oder /autoren/[slug].
 // Deren konkrete Werte stehen in generateStaticParams und lassen sich statisch

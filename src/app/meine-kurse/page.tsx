@@ -32,7 +32,9 @@ const G_BG     = { background: 'linear-gradient(135deg, rgba(200,136,42,0.08) 0%
 const COURSE_ROUTES: Record<string, string> = {
   'steak-beichte': '/steak-beichte',
   'mein-protokoll': '/mein-protokoll',
-  'bbq-grundkurs': '/bbq-grundkurs',
+  // Eingestellt 09.09.2026 — der Eintrag bleibt fuer Bestandsbuchungen, zeigt
+  // aber auf das Diplom, das den Stoff uebernommen hat.
+  'bbq-grundkurs': '/diplome',
   'gruender-schmiede': '/gruender-schmiede',
   'gruendung-sprint': '/gruender-schmiede', // Legacy-Slug (Migration 006)
   'steuer-matrix': '/steuer-matrix',

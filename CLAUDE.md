@@ -730,7 +730,9 @@ Analytics & Data · CRM & Monetization.
 
 **Manuelle Restpunkte, übernommen aus den gelöschten `STATUS.md`/`ROADMAP.md`
 (Stand dort Mai 2026, seither NICHT nachgeprüft — 03.09.2026):** Digistore24
-Dankeseiten-URLs für 696394/696396/696399 auf `/danke/*` setzen, Widerrufs-Checkbox
+Dankeseiten-URLs für 696394/696396 auf `/danke/*` setzen (**696399 entfällt — der
+BBQ-Grundkurs ist am 09.09.2026 eingestellt, die Dankeseite leitet auf `/diplome`;
+das Digistore-Produkt selbst ist noch abzuschalten**), Widerrufs-Checkbox
 aktivieren, Genehmigung per „Testkauf anlegen" beantragen · `AMAZON_ACCESS_KEY` +
 `AMAZON_SECRET_KEY` in Vercel eintragen, dann `npm run fetch-images` · Google Business
 Profil anlegen und verifizieren · `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Vercel.

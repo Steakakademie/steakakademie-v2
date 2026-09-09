@@ -265,6 +265,26 @@ const nextConfig = {
         destination: '/glossar/packer-brisket',
         permanent: true,
       },
+      // BBQ-Grundkurs eingestellt (Uwe, 09.09.2026). Grund: Der neu gefasste
+      // Rahmenlehrplan hat Stufe 1 des Grillmeister-Diploms von sieben auf elf
+      // Lektionen erweitert und deckt damit vier der fuenf geplanten
+      // Grundkurs-Module ab — kostenlos. Ein Bezahlprodukt, das dasselbe sagt,
+      // haette beide beschaedigt.
+      //
+      // WEITERLEITEN statt loeschen: /bbq-grundkurs war indexiert. Ein 410
+      // wirft die aufgebauten Signale weg, die Weiterleitung vererbt sie an das
+      // Produkt, das den Bedarf jetzt bedient. Ziel ist bewusst /diplome und
+      // nicht die Startseite — der Besucher hat nach einem Kurs gesucht.
+      {
+        source: '/bbq-grundkurs',
+        destination: '/diplome',
+        permanent: true,
+      },
+      {
+        source: '/danke/bbq-grundkurs',
+        destination: '/diplome',
+        permanent: true,
+      },
     ];
   },
 };

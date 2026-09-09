@@ -54,7 +54,9 @@ export default function Footer() {
           <div className="sk-footer__col">
             <span className="sk-footer__head">Akademie</span>
             <Link href="/relaunch/diplome">Grillmeister-Diplome</Link>
-            <Link href="/bbq-grundkurs">BBQ-Grundkurs</Link>
+            {/* BBQ-Grundkurs eingestellt 09.09.2026 — ersetzt durch den
+                Rahmenlehrplan, der zeigt, was die Ausbildung umfasst. */}
+            <Link href="/diplome/rahmenlehrplan">Rahmenlehrplan</Link>
             <Link href="/autoren">Autoren</Link>
             <Link href="/relaunch/ueber-uns">Über uns</Link>
           </div>

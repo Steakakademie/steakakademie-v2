@@ -12,6 +12,16 @@
 // grant_diagnose_credits statt grant_course_access.
 //
 // NICHT enthalten (Nachzügler): Diplom (noch nicht monetarisiert).
+//
+// ENTFERNT 09.09.2026: BBQ-Grundkurs (79 €). Der Kurs ist eingestellt — Stufe 1
+// des Diploms deckt seinen Stoff seit dem neuen Rahmenlehrplan kostenlos ab.
+// Ein Geschenkgutschein auf ein Produkt, das es nicht mehr gibt, wäre der
+// schlimmste Fall dieser Liste: Der Schenkende zahlt, der Beschenkte kann nichts
+// einlösen. Deshalb raus, bevor die Gutscheine live gehen.
+//
+// Was dadurch offen bleibt: Das Weihnachtsgeschäft hat jetzt nur noch 19 € und
+// 7 € im Regal. Der Ersatz ist ein Gutschein auf das Diplom — der gehört hier
+// hinein, sobald das Diplom monetarisiert ist.
 
 export interface GiftableProduct {
   courseSlug: string;
@@ -22,13 +32,6 @@ export interface GiftableProduct {
 }
 
 export const GIFTABLE_PRODUCTS: GiftableProduct[] = [
-  {
-    courseSlug: 'bbq-grundkurs',
-    title: 'BBQ-Grundkurs',
-    priceLabel: '79 €',
-    blurb: 'Der komplette Einsteiger-Kurs: Feuer, Temperatur, Grundtechniken — vom ersten Funken zum sicheren Steak.',
-    checkoutUrl: process.env.NEXT_PUBLIC_DS_VOUCHER_BBQ_GRUNDKURS,
-  },
   {
     courseSlug: 'mein-protokoll',
     title: 'Mein Protokoll',
