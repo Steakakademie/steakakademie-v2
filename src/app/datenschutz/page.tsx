@@ -44,6 +44,21 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>1a. SSL-/TLS-Verschlüsselung</h2>
+              <p>
+                Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung
+                vertraulicher Inhalte — etwa Anfragen über das Kontaktformular oder Anmeldedaten —
+                eine SSL-/TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennst du daran,
+                dass die Adresszeile deines Browsers auf &bdquo;https://&ldquo; steht und an dem
+                Schloss-Symbol in deiner Browserzeile. Unverschlüsselte Verbindungen werden
+                serverseitig automatisch auf https umgeleitet und der Browser wird zusätzlich per
+                HTTP Strict Transport Security (HSTS) angewiesen, ausschließlich verschlüsselt zu
+                verbinden. Ist die SSL-/TLS-Verschlüsselung aktiviert, können die Daten, die du an
+                uns übermittelst, nicht ohne Weiteres von Dritten mitgelesen werden.
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>2. Allgemeine Hinweise zur Datenverarbeitung</h2>
               <p>
                 Die Nutzung dieser Website ist grundsätzlich ohne Angabe personenbezogener Daten
@@ -51,6 +66,35 @@ export default function DatenschutzPage() {
                 Basis. Diese Daten werden ohne deine ausdrückliche Zustimmung nicht an Dritte
                 weitergegeben, außer es ist zur Erbringung des Dienstes erforderlich oder gesetzlich
                 vorgeschrieben.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>2a. Kontaktformular</h2>
+              <p className="mb-3">
+                Nutzt du das Formular unter{' '}
+                <Link href="/kontakt" className={linkClass}>steakakademie.de/kontakt</Link>, verarbeiten
+                wir die von dir eingegebenen Daten: Name, E-Mail-Adresse, ausgewählter Betreff und
+                deine Nachricht. Zum Nachweis deiner Einwilligung (Art. 5 Abs. 2 DSGVO) speichern wir
+                zusätzlich Zeitpunkt und Wortlaut des Einwilligungstextes, dem du zugestimmt hast —
+                nicht jedoch deine IP-Adresse.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherort &amp; Zustellung:</strong> Deine
+                Anfrage wird bei Supabase (Abschnitt 9) abgelegt und zusätzlich per E-Mail über
+                unseren Versanddienstleister Loops (Abschnitt 7) an unser Postfach zugestellt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Deine Anfrage bleibt
+                gespeichert, bis sie bearbeitet und das Anliegen abgeschlossen ist; eine automatische
+                Löschfrist ist derzeit nicht eingerichtet. Du kannst jederzeit die Löschung verlangen
+                unter{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Bearbeitung deiner Anfrage) bzw. lit. f
+                DSGVO (berechtigtes Interesse an der Beantwortung), Art. 6 Abs. 1 lit. c
+                i.&nbsp;V.&nbsp;m. Art. 5 Abs. 2 DSGVO für den Nachweis deiner Einwilligung.
               </p>
             </section>
 
@@ -542,6 +586,32 @@ export default function DatenschutzPage() {
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Bebilderung
                 der Inhalte). Drittlandübermittlung USA — EU-Standardvertragsklauseln (Art. 46 DSGVO).
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>10c. Wissenssuche &amp; Rezept-Generierung (Voyage AI)</h2>
+              <p className="mb-3">
+                Die Wissenssuche und die „Rezept-Schmiede&quot; wandeln deine Eingabe (Frage bzw.
+                Rezept-Auftrag) serverseitig in einen Vektor um, um passende Einträge unserer
+                Wissensdatenbank zu finden. Dafür nutzen wir den Dienst{' '}
+                <strong className="text-text-primary">Voyage AI Innovations, Inc.</strong>, eine
+                hundertprozentige Tochtergesellschaft der MongoDB, Inc., 1633 Broadway, 38th Floor,
+                New York, NY 10019, USA (Auftragsverarbeiter, Art. 28 DSGVO).
+              </p>
+              <p className="mb-3">
+                Verarbeitet wird ausschließlich der von dir eingegebene Text zur Berechnung der
+                Vektor-Darstellung; eine dauerhafte Speicherung deiner Eingabe bei Voyage AI ist uns
+                nicht bekannt und nicht beabsichtigt. Es werden keine Nutzerprofile oder Kontodaten
+                übermittelt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Drittlandübermittlung:</strong> USA — abgesichert
+                über EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
+                funktionierenden Wissenssuche und Rezept-Generierung).
               </p>
             </section>
 
