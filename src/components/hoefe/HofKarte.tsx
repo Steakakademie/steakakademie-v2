@@ -19,6 +19,17 @@ import { adresseZeile, entfernungLabel } from '@/lib/hoefe/format';
 
 export const MAPTILER_STYLE = 'streets-v2-dark';
 
+// DACH-Region + Puffer (SW/NO) -- begrenzt das Panning und verhindert,
+// dass Besucher zu Kachel-Anfragen ausserhalb des relevanten Gebiets
+// (Weltkarte etc.) kommen. Senkt das MapTiler-Sessions/Requests-Volumen
+// im Free-Tier (5.000 Sessions/Monat), siehe project_hofladen_radar_* .
+const DACH_BOUNDS: L.LatLngBoundsExpression = [
+  [45.5, 4.5], // Suedwest
+  [55.5, 16.5], // Nordost
+];
+const MIN_ZOOM = 6; // zeigt noch ganz Deutschland
+const MAX_ZOOM = 17; // Strassenebene reicht fuer Hofladen-Adressen
+
 const ICON_STANDARD = L.divIcon({
   className: 'hof-marker',
   html: '<span class="hof-marker__punkt"></span>',
@@ -74,11 +85,16 @@ export default function HofKarte({
       scrollWheelZoom={false}
       className="h-[420px] w-full sm:h-[520px]"
       aria-label="Karte der gefundenen Hofläden"
+      maxBounds={DACH_BOUNDS}
+      maxBoundsViscosity={1.0}
+      minZoom={MIN_ZOOM}
+      maxZoom={MAX_ZOOM}
     >
       <TileLayer
         url={`https://api.maptiler.com/maps/${MAPTILER_STYLE}/{z}/{x}/{y}.png?key=${encodeURIComponent(apiKey)}`}
         attribution='&copy; <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener noreferrer">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap-Mitwirkende</a>'
-        maxZoom={19}
+        minZoom={MIN_ZOOM}
+        maxZoom={MAX_ZOOM}
         crossOrigin="anonymous"
       />
       <Ausschnitt mitte={mitte} km={km} treffer={treffer} />
