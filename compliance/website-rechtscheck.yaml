@@ -192,9 +192,18 @@ komponenten:
       1633 Broadway, 38th Floor, New York, NY 10019, USA — Adresse per SEC-Filing MDB DEF 14A
       verifiziert) verarbeitet produktiv Nutzereingaben in /api/kochwissen und
       /api/kochwissen/generieren (Rezept-Schmiede, ToolBoxes.tsx auf der Startseite), fehlte
-      aber vollständig in der DSE. Abschnitt 10c ergänzt. Noch zu klären: ob ein AV-Vertrag
-      (Art. 28 DSGVO) mit Voyage AI/MongoDB abgeschlossen ist — technisch/organisatorisch nicht
-      aus dem Repo verifizierbar, gehört auf den Maßnahmenplan.
+      aber vollständig in der DSE. Abschnitt 10c ergänzt.
+      Nachtrag 16.09.2026: voyageai.com/dpa, /tos, /privacy direkt gelesen (nicht nur
+      zitiert). AV-Vertrag existiert und wird durch reine Nutzung des Dienstes automatisch
+      Vertragsbestandteil (ToS §6, DPA), keine gesonderte Unterschrift nötig. Drittlandüber-
+      mittlung läuft über EU-Standardvertragsklauseln (Kommissionsbeschluss 2021/914,
+      DPA Appendix C) — Kunde gilt durch Vertragsschluss als Unterzeichner; die Formulierung
+      in Abschnitt 10c der DSE ist damit verifiziert korrekt. KEINE DPF-Zertifizierung von
+      Voyage AI Innovations Inc. selbst (nur MongoDBs separate Enterprise-Cloud-DPA nennt DPF,
+      gilt aber nicht für die direkt angesprochene api.voyageai.com). Trainings-Opt-out
+      (ToS §3(iii), Default ist Opt-in) am 16.09.2026 von Uwe im Voyage-Dashboard aktiviert —
+      Abschnitt 10c um entsprechenden Hinweis ergänzt. Offen: Subprocessor-Liste (DPA §11)
+      war beim Fetch nicht als Text extrahierbar, nicht sicherheitskritisch für die DSE-Formulierung.
 
   - id: dse-zahlungsdienstleister
     titel: "DSE: Zahlungsdienstleister"

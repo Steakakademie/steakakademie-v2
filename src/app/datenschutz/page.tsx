@@ -606,6 +606,14 @@ export default function DatenschutzPage() {
                 übermittelt.
               </p>
               <p className="mb-3">
+                <strong className="text-text-primary">Kein KI-Training mit deinen Daten:</strong> Wir
+                haben das Trainings-Opt-out gemäß Ziff. 3(iii) der Voyage-AI-Nutzungsbedingungen
+                aktiviert (Stand: 16.09.2026). Ab diesem Zeitpunkt eingehende Anfragen werden nicht zum
+                Training von KI-Modellen verwendet und nach der Verarbeitung gelöscht. Für Anfragen vor
+                diesem Zeitpunkt kann Voyage AI laut seinen Nutzungsbedingungen ein fortbestehendes
+                Nutzungsrecht zu Trainingszwecken haben.
+              </p>
+              <p className="mb-3">
                 <strong className="text-text-primary">Drittlandübermittlung:</strong> USA — abgesichert
                 über EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
               </p>
