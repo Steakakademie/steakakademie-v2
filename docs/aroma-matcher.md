@@ -4,7 +4,7 @@
 
 ## Was es ist
 
-„Meat-First"-Pairing: Cut wählen → Aroma-Radar (5 Aromenfamilien, Tailwind-Balken) → drei Cluster
+„Meat-First"-Pairing: Cut wählen → Aroma-Radar (4 Aromenfamilien seit Kuration v1: Röst & Maillard · Nussig & Reifung · Cremig & Lactone · Umami & Metallisch; Tailwind-Balken) → drei Cluster
 (Rubs & Glazes · Wood & Smoke · Drinks & Sides), jeder Vorschlag mit Begründung.
 Lead-Magnet: anonym nur Teaser (Dry-Aged Ribeye), registriert **5 verschiedene Cuts frei**,
 danach Sperrzustand mit Warteliste (Arbeitstitel „Aroma-Matrix").
