@@ -32,6 +32,8 @@ export default function MarcoWidget() {
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
     api: '/api/marco',
+    // /api/marco streamt Klartext (Gemini), nicht das Data-Stream-Protokoll der AI-SDK.
+    streamProtocol: 'text',
   });
 
   const handleToggle = useCallback(() => {
