@@ -1,3 +1,4 @@
+import { use } from "react";
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -13,14 +14,15 @@ import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import KnowledgeBreak from '@/components/persoenlichkeiten/KnowledgeBreak';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return allPersoenlichkeits.map(p => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const person = allPersoenlichkeits.find(p => p.slug === params.slug);
   if (!person) return {};
   return {
@@ -52,7 +54,8 @@ function estimateReadTime(code: string): number {
   return Math.max(3, Math.ceil(words / 200));
 }
 
-export default function PersoenlichkeitPage({ params }: Props) {
+export default function PersoenlichkeitPage(props0: Props) {
+  const params = use(props0.params);
   const sorted = allPersoenlichkeits.sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
   const idx = sorted.findIndex(p => p.slug === params.slug);
   if (idx === -1) notFound();

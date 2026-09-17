@@ -130,7 +130,7 @@ const SERVICE_REGELN = [
 
 // ─── Typen & generateStaticParams ────────────────────────────────────────────
 
-interface Props { params: { slug: string } }
+interface Props { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   return Object.keys(KATEGORIEN).map((k) => ({ slug: k }));
@@ -138,7 +138,8 @@ export async function generateStaticParams() {
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const kat = KATEGORIEN[params.slug];
   if (!kat) return {};
   const metaDescription = kat.seoDescription ?? kat.description;
@@ -171,7 +172,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // ─── Seite ────────────────────────────────────────────────────────────────────
 
-export default function RezeptKategoriePage({ params }: Props) {
+export default async function RezeptKategoriePage(props: Props) {
+  const params = await props.params;
   const kat = KATEGORIEN[params.slug];
   if (!kat) notFound();
 

@@ -66,10 +66,11 @@ function Treffer({ h }: { h: Hit }) {
   );
 }
 
-type Props = { searchParams: { q?: string; typ?: string } };
+type Props = { searchParams: Promise<{ q?: string; typ?: string }> };
 
 // Next 14: searchParams ist ein einfaches Objekt (erst Next 15 macht es zum Promise)
-export default function RelaunchSuche({ searchParams }: Props) {
+export default async function RelaunchSuche(props: Props) {
+  const searchParams = await props.searchParams;
   const query = (searchParams.q ?? '').trim().slice(0, 80);
   const alle = query ? search(query) : [];
 

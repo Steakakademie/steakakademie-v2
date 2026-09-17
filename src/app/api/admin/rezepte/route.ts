@@ -12,8 +12,8 @@ import { generateRecipeImage } from '@/lib/rezept/generate-image';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 90;
 
-function authed(): boolean {
-  return istAdminPasswort(cookies().get('admin_auth')?.value);
+async function authed(): Promise<boolean> {
+  return istAdminPasswort((await cookies()).get('admin_auth')?.value);
 }
 
 function service() {
@@ -25,7 +25,7 @@ function service() {
 }
 
 export async function GET() {
-  if (!authed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await authed())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const supabase = service();
   const { data, error } = await supabase
@@ -40,7 +40,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: Request) {
-  if (!authed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await authed())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { id, status } = await req.json();
   if (!id || !['approved', 'rejected'].includes(status)) {

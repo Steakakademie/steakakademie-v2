@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -19,14 +20,15 @@ import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
 import BildCredit from '@/components/BildCredit';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   return allMethodes.map((m) => ({ slug: m.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const methode = allMethodes.find((m) => m.slug === params.slug);
   if (!methode) return {};
   const title = methode.seoTitle ?? methode.title;
@@ -94,7 +96,8 @@ const mdxComponents = {
   InlineAffiliate,
 };
 
-export default function MethodePage({ params }: Props) {
+export default function MethodePage(props: Props) {
+  const params = use(props.params);
   const methode = allMethodes.find((m) => m.slug === params.slug);
   if (!methode) notFound();
 

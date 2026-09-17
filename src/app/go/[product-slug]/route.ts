@@ -12,8 +12,9 @@ import { getProductById } from '@/lib/products';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { 'product-slug': string } }
+  props0: { params: Promise<{ 'product-slug': string }> }
 ) {
+  const params = await props0.params;
   const productId = params['product-slug'];
   const product = getProductById(productId);
 

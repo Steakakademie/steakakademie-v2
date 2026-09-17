@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   }
 
   // 1) Auth — eingeloggter Nutzer
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: 'Nicht eingeloggt.' }, { status: 401 });

@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function GutscheinEinloesenPage({ searchParams }: { searchParams: { code?: string } }) {
+export default async function GutscheinEinloesenPage(props: { searchParams: Promise<{ code?: string }> }) {
+  const searchParams = await props.searchParams;
   const initialCode = (searchParams.code ?? '').toUpperCase();
 
   return (

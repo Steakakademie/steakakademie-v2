@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Big_Shoulders_Display, Literata } from 'next/font/google';
+import { Big_Shoulders, Literata } from 'next/font/google';
 import Header from '@/components/relaunch/Header';
 import Footer from '@/components/relaunch/Footer';
 import './relaunch.css';
@@ -18,11 +18,18 @@ import './relaunch.css';
  * als Doppelung zur Live-Site werten. Beim Umschalten fällt das weg — und die
  * URLs bleiben dieselben wie heute (keine Slug-Änderung, SEO-Kriterium).
  */
-const display = Big_Shoulders_Display({
+// Next 16: Google hat „Big Shoulders Display“ in die Familie „Big Shoulders“
+// zusammengefuehrt — next/font/google exportiert nur noch Big_Shoulders.
+const display = Big_Shoulders({
   subsets: ['latin'],
   weight: ['600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-big-shoulders',
+  // Next 16.3 kennt fuer die zusammengefuehrte Familie noch keine
+  // Fallback-Metriken ("Failed to find font override values") — ohne diesen
+  // Schalter steht der Hinweis in jedem Build. Betrifft nur die
+  // /relaunch-Vorschau; Layout-Shift-Feinjustage dort ist verzichtbar.
+  adjustFontFallback: false,
 });
 
 const literata = Literata({
