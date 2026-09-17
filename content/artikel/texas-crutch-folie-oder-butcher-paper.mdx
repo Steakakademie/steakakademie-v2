@@ -10,8 +10,13 @@
 # Artikel, dieser dreimal zurück. Wer einen Slug ändert, muss den anderen
 # mitändern — tote interne Links brechen den Build (check-links.mjs).
 #
-# HERO-BILD: bewusst platzhalter.svg, Begründung wie im Schwesterartikel.
-# imageAI bleibt false, solange kein KI-Bild drinsteht.
+# HERO-BILD: erzeugt am 17.09.2026, Runde 2 abgenommen (Runde 1 hatte eine
+# Person, einen Knochengriff und keine sichtbare Faltung — Lehren im Brief
+# art-texas-crutch in scripts/hero-images.mjs notiert). Eintrag in
+# data/bildregister.yaml (status ki). Kennzeichnung wie im Schwesterartikel.
+# Offen: Die Papierfaltung ist im Motiv nicht zu sehen, das Brisket liegt auf
+# dem Bogen statt halb darin. Für die Bildaussage (Papier oder Folie?) trägt
+# es, für eine wörtliche Illustration des Crutch bräuchte es Runde 3.
 #
 # Temperaturen gegen data/kerntemperatur-referenz.yaml geprüft:
 #   beef_lowslow 90–96 °C · pork_lowslow 88–95 °C — beide im Fazit genannt.
@@ -32,9 +37,10 @@ author: Marco
 authorSlug: marco
 category: "Grundlagen-Werkstatt"
 categorySlug: "grundlagen-werkstatt"
-image: "/images/artikel/platzhalter.svg"
-imageAlt: "Ein Brisket wird auf einem Holztisch straff in rosa Butcher Paper eingeschlagen, daneben eine Rolle Alufolie"
-imageAI: false
+image: "/images/artikel/texas-crutch.jpg"
+imageAlt: "Ein geräuchertes Brisket mit dunkler Rinde liegt von oben gesehen auf einem Bogen rosa Butcher Paper, daneben eine Rolle Alufolie"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA) — Brief art-texas-crutch in scripts/hero-images.mjs"
+imageAI: true
 tags:
   - "Low and Slow"
   - "Texas Crutch"

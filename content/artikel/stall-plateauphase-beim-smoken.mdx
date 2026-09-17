@@ -10,11 +10,13 @@
 # diesen Artikel, dieser zweimal zurück. Wer einen Slug ändert, muss den
 # anderen mitändern — tote interne Links brechen den Build (check-links.mjs).
 #
-# HERO-BILD: bewusst platzhalter.svg. Das ursprünglich vorgeschlagene Motiv
-# wurde nie erzeugt (fal.ai kostet Geld, Uwes Entscheidung), und ein Verweis
-# auf eine nicht existierende Datei wäre live ein 404 gewesen. Solange der
-# Platzhalter steht, ist imageAI false und imageSource leer — es gibt kein
-# KI-Bild zu kennzeichnen. Beim Austausch beide Felder mitsetzen.
+# HERO-BILD: erzeugt am 17.09.2026 auf Uwes Ansage, Runde 1 abgenommen.
+# Brief art-stall-plateauphase in scripts/hero-images.mjs, Eintrag in
+# data/bildregister.yaml (status ki). imageAI true + imageSource sind die
+# sichtbare KI-Kennzeichnung (AI Act Art. 50 Abs. 4).
+# ACHTUNG: BildCredit wird auf /artikel/-Seiten derzeit NICHT gerendert —
+# die Kennzeichnung steht also im Frontmatter, erscheint aber nicht auf der
+# Seite. Offener Repo-Befund, siehe PR #122.
 #
 # Temperaturen gegen data/kerntemperatur-referenz.yaml geprüft:
 #   beef_lowslow 90–96 °C · pork_lowslow 88–95 °C — beide im Fazit genannt.
@@ -28,9 +30,10 @@ author: Marco
 authorSlug: marco
 category: "Grundlagen-Werkstatt"
 categorySlug: "grundlagen-werkstatt"
-image: "/images/artikel/platzhalter.svg"
-imageAlt: "Nahaufnahme eines Briskets im Smoker, Wasserperlen auf der dunklen Rinde, dünner Rauch im Gegenlicht"
-imageAI: false
+image: "/images/artikel/stall-plateauphase.jpg"
+imageAlt: "Ein großes Stück Rindfleisch mit dunkler, feucht glänzender Rinde auf dem Rost eines Smokers, feiner Dampf steigt auf"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA) — Brief art-stall-plateauphase in scripts/hero-images.mjs"
+imageAI: true
 tags:
   - "Low and Slow"
   - "Stall"
