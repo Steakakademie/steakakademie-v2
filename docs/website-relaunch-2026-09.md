@@ -150,7 +150,8 @@ Live-Übersicht `/vergleich`.
 - **Fakten in `katalog.ts`:** gegen `data/kerntemperatur-referenz.yaml` abgeglichen, zwei
   Werte korrigiert (Schweinefilet 63 °C, Ziehtemperatur 52 °C). Die Prototyp-Tabelle der
   Garstufen (Rare 48–52 usw.) wurde NICHT übernommen — sie widerspricht der Referenz
-  (Medium Rare 54–58) und hat in den Lektionen keine Datenbasis.
+  (Medium Rare 52–55, Standard 54; bestätigte Skala `garstufen_rind` seit 07.09.) und hat
+  in den Lektionen keine Datenbasis.
 - **Startseiten-Doktrin** (CLAUDE.md § 2 Regel 8) gilt für `src/app/page.tsx`; das
   Gate prüft `/relaunch` nicht. Ob die Reihenfolge Value-Prop → HERO → Artikel →
   Mitglieder-CTA auf das neue Layout übertragen wird, entscheidet Uwe.
