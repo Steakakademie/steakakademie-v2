@@ -2,7 +2,9 @@
   "name": "steakakademie-v2",
   "version": "2.0.0",
   "private": true,
-  "engines": { "node": ">=24 <25" },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:full": "node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next dev",
@@ -73,6 +75,7 @@
     "@ai-sdk/anthropic": "^1.2.12",
     "@anthropic-ai/sdk": "^0.99.0",
     "@emotion/is-prop-valid": "^1.4.0",
+    "@google/genai": "^2.22.0",
     "@next/third-parties": "^14.2.29",
     "@opentelemetry/api": "^1.9.1",
     "@opentelemetry/instrumentation": "^0.220.0",

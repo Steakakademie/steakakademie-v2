@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import type { Message } from 'ai';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
-import { X, Send } from 'lucide-react';
+import { X, Send, Paperclip } from 'lucide-react';
 import Link from 'next/link';
 import MarcoAvatar from './MarcoAvatar';
 import { useAvatarStateMachine } from '@/hooks/useAvatarStateMachine';
@@ -16,27 +16,24 @@ const SUGGESTIONS = [
   'Mein Steak ist grau geworden — was tun?',
 ];
 
-// ── Bilder: Vorderseite (Portrait) + Rückseite (am Grill) ────────────────────
-// 128-px-Ableitungen (Perf-Audit 02.09.2026): Der Avatar wird maximal 56 px
-// gross gezeigt; vorher luden beide Seiten das 512-px-Original (2 x 33 kB)
-// auf jeder Seite. Die Originale bleiben fuer Autorenseite/OG erhalten.
 const MARCO_PORTRAIT  = '/images/marco-portrait-128.webp';
 const MARCO_BACK      = '/images/marco-back-128.webp';
 
 export default function MarcoWidget() {
   const [open, setOpen] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<{ base64: string; mimeType: string; preview: string } | null>(null);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevIsLoading = useRef(false);
 
-  // Zustandsmaschine
   const { state: avatarState, send } = useAvatarStateMachine();
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
-    api: '/api/chat',
+    api: '/api/marco',
   });
 
-  // Widget öffnen / schließen
   const handleToggle = useCallback(() => {
     if (!open) {
       setOpen(true);
@@ -44,15 +41,9 @@ export default function MarcoWidget() {
       send('OPEN');
     } else {
       send('CLOSE');
-      // Panel erst schließen wenn Farewell-Animation durch (onClosed)
     }
   }, [open, send]);
 
-  // Von aussen oeffnen — mit optionaler Frage im Eingabefeld (05.09.2026).
-  //   window.dispatchEvent(new CustomEvent('sk:marco', { detail: { frage: '…' } }))
-  // Anlass: Die Suche braucht einen Weg, den Chat als Auffangnetz anzubieten
-  // ("Nichts gefunden? Frag Marco"). Ein Ereignis statt eines globalen Zustands,
-  // damit das Widget weiterhin nichts ueber den Rest der Seite weiss.
   useEffect(() => {
     const auf = (e: Event) => {
       const frage = (e as CustomEvent<{ frage?: string }>).detail?.frage;
@@ -62,25 +53,21 @@ export default function MarcoWidget() {
         setHasOpened(true);
         send('OPEN');
       }
-      // Fokus erst, wenn das Panel gerendert ist
       window.setTimeout(() => document.getElementById('marco-input')?.focus(), 260);
     };
     window.addEventListener('sk:marco', auf as EventListener);
     return () => window.removeEventListener('sk:marco', auf as EventListener);
   }, [open, send, setInput]);
 
-  // Farewell-Animation beendet → Panel schließen
   const handleAvatarClosed = useCallback(() => {
     send('CLOSED');
     setOpen(false);
   }, [send]);
 
-  // Umdreh-Animation beendet → idle
   const handleAvatarGreeted = useCallback(() => {
     send('GREETED');
   }, [send]);
 
-  // Nutzer tippt → listening / idle
   const handleInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       handleInputChange(e);
@@ -93,23 +80,46 @@ export default function MarcoWidget() {
     [handleInputChange, send]
   );
 
-  // Submit → thinking
+  // Bildauswahl verarbeiten
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const base64 = result.split(',')[1];
+      setSelectedImage({
+        base64,
+        mimeType: file.type,
+        preview: result,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFormSubmit = useCallback(
     (e: React.FormEvent) => {
-      handleSubmit(e);
+      e.preventDefault();
+      if (!input.trim() && !selectedImage) return;
+
+      handleSubmit(e, {
+        data: selectedImage ? { image: selectedImage.base64, mimeType: selectedImage.mimeType } : undefined,
+      });
+
+      setSelectedImage(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       send('SUBMIT');
     },
-    [handleSubmit, send]
+    [handleSubmit, input, selectedImage, send]
   );
 
-  // isLoading-Übergang → STREAM_START / STREAM_DONE
   useEffect(() => {
     if (isLoading && !prevIsLoading.current) send('STREAM_START');
     if (!isLoading && prevIsLoading.current)  send('STREAM_DONE');
     prevIsLoading.current = isLoading;
   }, [isLoading, send]);
 
-  // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -121,7 +131,6 @@ export default function MarcoWidget() {
 
   return (
     <>
-      {/* Floating Button */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
         {!hasOpened && (
           <motion.button
@@ -141,7 +150,6 @@ export default function MarcoWidget() {
           aria-label="KI-Assistent Marco öffnen — Chatbot, keine echte Person"
           aria-expanded={open}
         >
-          {/* X-Icon-Overlay beim Öffnen */}
           <AnimatePresence mode="wait">
             {open && (
               <motion.span
@@ -174,7 +182,6 @@ export default function MarcoWidget() {
         </button>
       </div>
 
-      {/* Chat Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -184,19 +191,10 @@ export default function MarcoWidget() {
             transition={{ duration: 0.2 }}
             className="fixed bottom-24 right-6 z-50 flex w-[340px] flex-col border border-white/10 bg-surface-elevated shadow-2xl shadow-black/60 sm:w-[380px]"
             style={{
-              maxHeight: '520px',
-              // Das Panel wächst aus dem Button, nicht aus seiner eigenen Mitte.
-              // Herleitung: Der Avatar ist 56 px breit (size="md") und sitzt in
-              // `bottom-6 right-6`, das Panel in `bottom-24 right-6`. Der
-              // Button-Mittelpunkt liegt damit 24+28 = 52 px vom rechten Rand und
-              // 52 px vom unteren Rand — also 28 px links der rechten Panelkante
-              // und 44 px unter dessen Unterkante (96 − 52).
-              // Wer bottom-24, right-6 oder die Avatar-Größe ändert, muss diese
-              // beiden Werte mitziehen.
+              maxHeight: '560px',
               transformOrigin: 'calc(100% - 28px) calc(100% + 44px)',
             }}
           >
-            {/* Panel-Header mit Avatar */}
             <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
               <MarcoAvatar
                 state={avatarState}
@@ -212,9 +210,6 @@ export default function MarcoWidget() {
                  : avatarState === 'listening'  ? 'Hört zu'
                  : 'Dein BBQ-Guide · Steakakademie'}
                 </p>
-                <p className="text-xs font-sans mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                  KI-Assistent · Keine Rechts- oder Gesundheitsberatung
-                </p>
               </div>
               <motion.div
                 className="ml-auto h-2 w-2 rounded-full"
@@ -229,7 +224,6 @@ export default function MarcoWidget() {
               />
             </div>
 
-            {/* Messages */}
             <div
               className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
               style={{ minHeight: '200px', maxHeight: '340px' }}
@@ -237,7 +231,7 @@ export default function MarcoWidget() {
               {messages.length === 0 && (
                 <div className="space-y-3">
                   <p className="text-center text-xs font-sans" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    Als KI-Assistent beantwortet Marco deine BBQ-Fragen
+                    Marco beantwortet deine BBQ-Fragen & analysiert Fleisch-Fotos 📸
                   </p>
                   <div className="space-y-2">
                     {SUGGESTIONS.map((s) => (
@@ -286,24 +280,57 @@ export default function MarcoWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
+            {/* Bild-Vorschau vor dem Senden */}
+            {selectedImage && (
+              <div className="relative px-3 pt-2">
+                <div className="relative inline-block border border-white/20 rounded overflow-hidden">
+                  <img src={selectedImage.preview} alt="Upload-Vorschau" className="h-16 w-16 object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setSelectedImage(null)}
+                    className="absolute top-0.5 right-0.5 bg-black/70 text-white rounded-full p-0.5"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Formular mit Klammer-Icon */}
             <form
               onSubmit={handleFormSubmit}
               className="flex items-center gap-2 border-t border-white/10 px-3 py-3"
             >
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
+                className="flex h-9 w-9 shrink-0 items-center justify-center text-white/60 hover:text-white transition-colors disabled:opacity-40"
+                aria-label="Bild anheften"
+              >
+                <Paperclip size={18} />
+              </button>
+
               <label htmlFor="marco-input" className="sr-only">Frage an Marco</label>
               <input
                 id="marco-input"
                 value={input}
                 onChange={handleInput}
-                placeholder="Deine BBQ-Frage…"
+                placeholder={selectedImage ? "Frage zum Bild stellen…" : "Deine BBQ-Frage…"}
                 disabled={isLoading}
                 autoComplete="off"
                 className="flex-1 border border-white/10 bg-white/5 px-3 py-2 text-sm font-sans text-white placeholder-white/30 focus:border-brand-gold/50 disabled:opacity-50"
               />
               <button
                 type="submit"
-                disabled={isLoading || !input.trim()}
+                disabled={isLoading || (!input.trim() && !selectedImage)}
                 className="flex h-9 w-9 shrink-0 items-center justify-center bg-brand-fire text-white transition-colors hover:bg-brand-fire/80 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Senden"
               >
@@ -311,10 +338,6 @@ export default function MarcoWidget() {
               </button>
             </form>
 
-            {/* KI-Offenlegung (EU AI Act Art. 50 Abs. 1). Kontrast-Fix 17.08.2026:
-                stand vorher auf rgba(255,255,255,0.2) bei 10px — rechnerisch rund
-                1,5:1 gegen den dunklen Panel-Grund und damit praktisch unlesbar.
-                Ein Hinweis, den niemand lesen kann, ist kein Hinweis. */}
             <p className="px-4 pb-3 text-center text-[11px] font-sans" style={{ color: 'rgba(255,255,255,0.6)' }}>
               🤖 Marco ist ein KI-Assistent — keine Rechts-, Gesundheits- oder Steuerberatung.{' '}
               <Link href="/ki-disclaimer" className="underline hover:opacity-60 transition-opacity">
