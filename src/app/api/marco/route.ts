@@ -1,6 +1,16 @@
 import { GoogleGenAI } from '@google/genai';
 
+// Modell per Env überschreibbar: gemini-2.5-flash wurde am 17.09.2026 von Google mit
+// 404 „no longer available to new users" abgelehnt (Empfehlung im Fehlertext: gemini-3.6-flash).
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-3.6-flash';
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+type ChatMessage = { role: 'user' | 'assistant' | 'system' | 'data'; content: string };
+
 
 const MARCO_SYSTEM_PROMPT = `
 Du bist Marco, der exklusive Grill- und Fleischexperte von steakakademie.de.
@@ -23,14 +33,23 @@ STRIKTE LEITPLANEN & OFF-TOPIC SCHUTZ (GUARDRAILS):
 `;
 
 export async function POST(request: Request) {
+  if (!process.env.GEMINI_API_KEY) {
+    console.error('Marco API Error: GEMINI_API_KEY fehlt');
+    return new Response('Marco ist kurz am Grill – bitte versuche es gleich noch einmal.', { status: 500 });
+  }
+
   try {
     const body = await request.json();
-    
-    const prompt = body.messages 
-      ? body.messages[body.messages.length - 1].content 
-      : body.message;
 
-    // Prüfe, ob ein Bild über useChat (data) mitgeschickt wurde
+    // useChat schickt den gesamten Verlauf — Marco bekommt ihn komplett, nicht nur die letzte Frage.
+    const history: ChatMessage[] = Array.isArray(body.messages)
+      ? body.messages.filter((m: ChatMessage) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+      : body.message ? [{ role: 'user', content: String(body.message) }] : [];
+
+    const last = history[history.length - 1];
+    const prompt = last?.role === 'user' ? last.content : '';
+
+    // Bild über useChat (data) mitgeschickt?
     const imageData = body.data?.image;
     const mimeType = body.data?.mimeType || 'image/jpeg';
 
@@ -38,30 +57,47 @@ export async function POST(request: Request) {
       return new Response('Keine Nachricht oder Bild übergeben.', { status: 400 });
     }
 
-    // Baue den Inhalt für Gemini zusammen
-    const contents: Array<any> = [];
+    // Gemini-Verlauf: user/model-Turns; das Bild hängt am letzten User-Turn.
+    const contents = history.slice(0, -1).map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    }));
+    const lastParts: Array<{ text: string } | { inlineData: { mimeType: string; data: string } }> = [];
+    if (imageData) lastParts.push({ inlineData: { mimeType, data: imageData } });
+    lastParts.push({ text: prompt || 'Was ist auf diesem Bild zu sehen und was kannst du mir dazu im Kontext BBQ sagen?' });
+    contents.push({ role: 'user', parts: lastParts as Array<{ text: string }> });
 
-    if (imageData) {
-      contents.push({
-        inlineData: {
-          mimeType: mimeType,
-          data: imageData,
-        },
-      });
-    }
-
-    contents.push(prompt || 'Was ist auf diesem Bild zu sehen und was kannst du mir dazu im Kontext BBQ sagen?');
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: contents,
+    const stream = await ai.models.generateContentStream({
+      model: GEMINI_MODEL,
+      contents,
       config: {
         systemInstruction: MARCO_SYSTEM_PROMPT,
         temperature: 0.7,
       },
     });
 
-    return new Response(response.text);
+    // Reiner Text-Stream — das Widget liest ihn mit streamProtocol: 'text'.
+    // (Das Standard-Protokoll von useChat ist der Data-Stream; Klartext darin
+    // wird nicht geparst → „Marco antwortet nicht".)
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.text;
+            if (text) controller.enqueue(encoder.encode(text));
+          }
+          controller.close();
+        } catch (err) {
+          console.error('Marco Stream Error:', err);
+          controller.error(err);
+        }
+      },
+    });
+
+    return new Response(readable, {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
+    });
   } catch (error) {
     console.error('Marco API Error:', error);
     return new Response('Marco ist kurz am Grill – bitte versuche es gleich noch einmal.', { status: 500 });
