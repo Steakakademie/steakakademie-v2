@@ -1,0 +1,217 @@
+---
+# ─────────────────────────────────────────────────────────────────────────────
+# Pipeline-Lauf 14.09.2026, Frage #2 der 25-Fragen-Warteschlange.
+# FREIGEGEBEN durch Uwe am 17.09.2026: „ENTWÜRFE — VERÖFFENTLICHEN, ICH HABE
+# GEGEN GELESEN." reviewedAt dokumentiert genau diese menschliche Prüfung
+# (AI Act Art. 50 Abs. 4), nicht das Datum der Faktenchecks.
+# Fachliche Verantwortung: Uwe Yendell (src/lib/authors.ts).
+#
+# SLUG-VERTRAG: texas-crutch-folie-oder-butcher-paper.mdx verlinkt dreimal auf
+# diesen Artikel, dieser zweimal zurück. Wer einen Slug ändert, muss den
+# anderen mitändern — tote interne Links brechen den Build (check-links.mjs).
+#
+# HERO-BILD: bewusst platzhalter.svg. Das ursprünglich vorgeschlagene Motiv
+# wurde nie erzeugt (fal.ai kostet Geld, Uwes Entscheidung), und ein Verweis
+# auf eine nicht existierende Datei wäre live ein 404 gewesen. Solange der
+# Platzhalter steht, ist imageAI false und imageSource leer — es gibt kein
+# KI-Bild zu kennzeichnen. Beim Austausch beide Felder mitsetzen.
+#
+# Temperaturen gegen data/kerntemperatur-referenz.yaml geprüft:
+#   beef_lowslow 90–96 °C · pork_lowslow 88–95 °C — beide im Fazit genannt.
+# Zwei Prüfrunden durch Subagenten, 6 + 3 kritische Blocker behoben
+# (Protokoll: Content-Pipeline/PIPELINE-25-FRAGEN.md, Lauf 14.09.2026).
+# ─────────────────────────────────────────────────────────────────────────────
+title: "Der Stall: Warum dein Brisket sechs Stunden lang stehen bleibt"
+excerpt: "Die Kerntemperatur hängt seit vier Stunden bei 68 Grad fest. Der Smoker läuft. Das Fleisch tut nichts. Die Erklärung, die überall steht, ist falsch — und die richtige macht dich zu einem besseren Griller."
+publishedAt: "2026-10-09"
+author: Marco
+authorSlug: marco
+category: "Grundlagen-Werkstatt"
+categorySlug: "grundlagen-werkstatt"
+image: "/images/artikel/platzhalter.svg"
+imageAlt: "Nahaufnahme eines Briskets im Smoker, Wasserperlen auf der dunklen Rinde, dünner Rauch im Gegenlicht"
+imageAI: false
+tags:
+  - "Low and Slow"
+  - "Stall"
+  - "Plateauphase"
+  - "Brisket"
+  - "Pulled Pork"
+  - "Kerntemperatur"
+  - "Smoker"
+readingTime: 10
+seoTitle: "Plateauphase beim Smoken: Was der Stall wirklich ist"
+seoDescription: "Der Stall beim Brisket liegt bei 65 bis 72 Grad und dauert Stunden. Nicht Kollagen ist schuld, sondern Verdunstungskühlung — mit den Messwerten, die das belegen, und fünf Hebeln dagegen."
+status: "published"
+reviewed: true
+reviewedAt: "2026-09-17"
+faq:
+  - question: "Bei welcher Kerntemperatur tritt der Stall auf?"
+    answer: "In den dokumentierten Messungen an Rindfleisch liegt er bei rund 66 Grad — sowohl an einem Brisket als auch an einem Stück Rippenbraten, beide bei 107 Grad Garraumtemperatur. Die gängige Praxisangabe für Brisket und Schweineschulter lautet 65 bis 77 Grad. Ein fester Wert existiert nicht — die Stall-Temperatur hängt von Garraumtemperatur, Luftfeuchte und Luftstrom ab."
+  - question: "Wie lange dauert der Stall?"
+    answer: "Die veröffentlichten Einzelmessungen reichen von rund zwei bis knapp sechs Stunden. Eine systematische Studie mit mehreren Wiederholungen und Streuungsangabe gibt es nicht, deshalb ist jede engere Angabe — etwa ein Durchschnitt mit Plus-minus-Spanne — nicht belegbar. Belastbar ist die Größenordnung: zwei bis sechs Stunden, abhängig von Stückgröße, Garraumfeuchte und Luftstrom."
+  - question: "Ist Kollagen schuld am Stall?"
+    answer: "Nein. Ein nasser Schwamm ohne jedes Kollagen zeigt denselben Effekt, reines Rinderfett zeigt ihn gar nicht, und ein vakuumverschweißtes Brisket hat keinen Stall — obwohl darin dieselbe Kollagen-Umwandlung abläuft. Die Ursache ist Verdunstungskühlung an der Fleischoberfläche."
+  - question: "Soll ich die Temperatur erhöhen, wenn der Stall einsetzt?"
+    answer: "Das ist ein gangbarer Weg. Je höher die Garraumtemperatur, desto höher liegt die Stall-Temperatur und desto kürzer dauert er. Der Preis: weniger Zeit für Kollagenabbau und Raucharoma, steilere Temperaturgradienten im Fleisch und eine geringere Ausbeute. Wer die Bark behalten will, hält besser durch oder wickelt ein."
+  - question: "Verlängert eine Wasserschale den Stall?"
+    answer: "Ja, bei großen Cuts wie Brisket und Schweineschulter — vorausgesetzt, sie bringt überhaupt nennenswert Feuchtigkeit in den Garraum. Feuchte Luft bremst die Verdunstung, dadurch beginnt der Stall bei höherer Kerntemperatur und dauert länger. Eine kleine Schale in einem gut belüfteten Outdoor-Smoker bewirkt dabei wenig. Und der oft genannte Zweck „hält das Fleisch saftig“ ist die Ursache falsch herum: Die Wasserschale verlangsamt das Austrocknen, sie führt dem Fleisch kein Wasser zu."
+  - question: "Warum stallt mein Fleisch zweimal?"
+    answer: "Ein zweiter Stall ist normal, sobald sich eine der Randbedingungen ändert — ein Leck in der Folie, eine Änderung am Feuer, Spritzen, ein Windwechsel. In einem Modellversuch ließen sich allein durch unterschiedlich enges Einwickeln drei aufeinanderfolgende Plateaus erzeugen, bei 57, 68 und 93 Grad."
+---
+Es ist halb zwei nachts. Der Smoker läuft seit sechs Stunden sauber auf 110 Grad, der Rauch ist dünn und blau, alles ist genau so, wie es sein soll. Nur das Fleisch macht nicht mit.
+
+68 Grad. Seit vier Stunden. Es bewegt sich nichts.
+
+Irgendwann in dieser Nacht kommt bei fast jedem der Moment, in dem er das Thermometer verdächtigt, dann die Batterie wechselt, dann die Klappe aufreißt, dann die Temperatur hochdreht. Und am Ende steht ein Brisket auf dem Brett, das schneller fertig war — und schlechter.
+
+Dabei ist nichts kaputt. Was du da siehst, ist der bestdokumentierte Effekt im ganzen Low-&-Slow-Handwerk. Er heißt **Stall** oder **Plateauphase**, und die Erklärung, die dafür in den meisten deutschen Ratgebern steht, ist nachweislich falsch.
+
+---
+
+## Was überall steht — und warum es nicht stimmt
+
+Die gängige Erzählung geht so: Bei etwa 70 Grad beginnt das Bindegewebe, sich in Gelatine umzuwandeln. Dieser Vorgang verbraucht Energie. Solange er läuft, geht die ganze zugeführte Wärme dorthin, statt die Temperatur zu erhöhen. Deshalb das Plateau.
+
+Das klingt gut. Es ist auch nicht ganz absurd — Phasenübergänge verbrauchen tatsächlich Energie, das ist der Grund, warum kochendes Wasser bei 100 Grad stehen bleibt. Nur trifft es hier nicht zu, und das lässt sich auf vier voneinander unabhängigen Wegen zeigen.
+
+**Erstens, die Energiebilanz.** Kollagen macht in den typischen Low-&-Slow-Cuts nur einen kleinen Bruchteil der Masse aus — der Physiker Greg Blonder, der die Sache als Erster systematisch vermessen hat, nennt weniger als zwei Prozent, teils nur 0,2 Prozent. Selbst wenn man dieser kleinen Menge großzügig die Umwandlungsenergie von Wasser zuschriebe, käme rechnerisch kein mehrstündiges Plateau heraus.
+
+**Zweitens, der Vakuumversuch.** Nathan Myhrvold hat für *Modernist Cuisine* zwei Briskets nebeneinander in einen Umluftofen gelegt, eines offen, eines vakuumverschweißt. Das offene stallte, etwa zwei bis vier Stunden nach Garbeginn, für rund vier Stunden. Das vakuumierte stieg ohne jedes Plateau durch und erreichte die Ofentemperatur in rund drei Stunden. In beiden Stücken läuft dieselbe Kollagen-Umwandlung ab. Eine Plastikfolie kann keinen Phasenübergang abschalten.
+
+**Drittens, Dinge ohne Kollagen stallen trotzdem.** Blonder hat einen wassergetränkten Zelluloseschwamm in den Smoker gelegt — kein Protein, kein Fett, kein Bindegewebe. Der Schwamm stallte bei rund 60 Grad, seine Temperatur *sank* zeitweise sogar, und erst als er nach Stunden ausgetrocknet war, stieg sie steil an.
+
+**Viertens, Fett stallt gar nicht.** Ein Klumpen reines Rinderfett im selben Smoker, bei denselben 107 Grad: eine glatte Aufheizkurve, kein Knick, obwohl das Fett sichtbar komplett ausschmolz.
+
+Vier Befunde, drei davon aus derselben Versuchsreihe, einer aus einer völlig unabhängigen. Sie zeigen alle in dieselbe Richtung.
+
+---
+
+## Was wirklich passiert: Dein Fleisch schwitzt
+
+Die Erklärung ist unspektakulärer und weit nützlicher.
+
+Dein Brisket besteht zu etwa zwei Dritteln aus Wasser. Sobald es warm wird, wandert Feuchtigkeit an die Oberfläche und verdunstet. Verdunstung kostet Energie, und diese Energie wird dem Fleisch entzogen. Es ist exakt derselbe Vorgang, der dich kühlt, wenn du schwitzt.
+
+Der entscheidende Punkt ist die Rückkopplung: Je wärmer das Fleisch wird, desto mehr verdunstet — desto stärker kühlt es sich selbst. Ab einem bestimmten Punkt hält sich beides die Waage. Der Smoker führt genau so viel Wärme zu, wie die Verdunstung abführt. Die Kerntemperatur steht.
+
+> **Kurz erklärt: Feuchtkugeltemperatur**
+> Die Temperatur, die ein feuchtes Thermometer in bewegter Luft anzeigt. Sie liegt immer unter der normalen („trockenen“) Lufttemperatur, weil das verdunstende Wasser den Fühler kühlt — und umso weiter darunter, je trockener die Luft ist. Eine nasse Oberfläche in einem Garraum kann diese Temperatur nicht überschreiten, solange sie nass bleibt. Genau darin steckt die ganze Physik des Stalls.
+
+Myhrvold hat in seinem Ofen nicht nur die Fleischtemperatur gemessen, sondern auch die Trocken- und die Feuchtkugeltemperatur der Luft. Die relative Luftfeuchte stieg zu Beginn auf rund 72 Prozent — das Wasser kam aus dem Fleisch selbst — und fiel im Lauf des Garens wieder ab, nach acht Stunden unter 50 Prozent. Der Stall endete genau dann, als die Oberfläche so weit abgetrocknet war, dass sie die Feuchtkugeltemperatur überschreiten konnte.
+
+Douglas Baldwin hat denselben Vorgang an anderer Stelle direkt sichtbar gemacht. In seiner Messung an einem ausgelösten Rinder-Rippenbraten bei 175 Grad Ofentemperatur sitzt ein Fühler dicht unter der Oberfläche. Man sieht dort, wie sich diese Oberfläche der Feuchtkugeltemperatur annähert — und sie erst nach rund einer Stunde überschreitet, nämlich sobald sie abgetrocknet ist. Der Effekt beginnt also außen und arbeitet sich nach innen.
+
+Und eine letzte Beobachtung aus Blonders Reihe, die den Mechanismus endgültig festnagelt: Dreht man ein Stück Rippenbraten durch den Fleischwolf und gart dieselbe Menge noch einmal, stallt gar nichts. Der Saft läuft schneller ab, als er verdunsten kann — und damit fehlt die Dauerkühlung.
+
+---
+
+## Die Zahlen — und worauf sie sich jeweils beziehen
+
+Hier ist Sorgfalt nötig, denn in Foren wandern diese Werte munter zwischen Tierarten hin und her. Jede Zahl unten steht mit dem Stück, an dem sie gemessen wurde.
+
+| Messung | Woran | Bedingungen | Stall-Temperatur |
+|---|---|---|---|
+| Blonder | **Rind, kleines Brisket** | 107 °C, thermostatgeregelter Smoker | **66 °C**, fast 6 Stunden |
+| Blonder | **Rind, Rippenbraten, 230 g** | 107 °C | **66 °C**, rund 2 Stunden |
+| Blonder | **Rind, reines Fett** | 107 °C | **kein Stall** |
+| Blonder | **Rind, durchgedreht** | 107 °C | **kein Stall** |
+| Blonder | **Zelluloseschwamm** (kein Fleisch) | 107 °C | **ca. 60 °C** |
+| Myhrvold | **Rind, Brisket, offen** | Umluftofen | Beginn nach 2–4 h, Dauer **ca. 4 h** |
+| Myhrvold | **Rind, Brisket, vakuumiert** | Umluftofen | **kein Stall** |
+
+Als Praxisangabe für Brisket und Schweineschulter nennt AmazingRibs einen Bereich von 65 bis 77 Grad. Die belastbaren Einzelmessungen liegen am unteren Ende davon. **Wir halten uns deshalb an die Spanne 65 bis 72 Grad** — mit dem ausdrücklichen Hinweis, dass es hier keinen festen Wert gibt, sondern ein Ergebnis aus drei Stellschrauben.
+
+Denn die Stall-Temperatur ist keine Eigenschaft des Fleisches. Sie ist der Punkt, an dem sich Wärmezufuhr und Verdunstungskühlung ausgleichen — und der verschiebt sich mit den Bedingungen:
+
+- **Höhere Garraumtemperatur → höherer, kürzerer Stall.** Blonder hat das an einem reinen Wasserbad durchgemessen: bei 79 Grad Garraumtemperatur stallte es bei 60 Grad, bei 107 Grad bei 71 Grad, und knapp über 218 Grad Garraumtemperatur stieg es fast bis zum Siedepunkt durch. Das ist ein Modellsystem ohne Fleisch — aber es erklärt, warum Wettkampfköche zunehmend heißer garen.
+- **Mehr Luftstrom → niedrigerer Stall.** In einem Pelletsmoker mit Gebläse lag die Stall-Temperatur um bis zu 14 Kelvin tiefer als im nahezu windstillen Küchenofen. Der Unterschied ist drastisch: Ein Küchenofen tauscht sein eigenes Luftvolumen nach Blonders Angabe nur wenige Male pro Stunde aus, ein Pelletsmoker über hundertmal.
+- **Feuchtere Luft → höherer, längerer Stall.** Wasserschale, Spritzen, Moppen: alles Maßnahmen, die die Verdunstung bremsen. Sie verlängern das Plateau.
+
+<DiplomCTA
+  modul="fleischkunde"
+  headline="Ein Cut ist keine Fleischsorte. Er ist ein Bauplan."
+  text="Warum genau Brisket und Schweineschulter stundenlang stallen und ein Filet nie — das steckt in der Anatomie: Wasseranteil, Muskelverlauf, Bindegewebe, Oberfläche im Verhältnis zur Masse. Im Diplom-Level zu Cuts und Anatomie lernst du, jedes Stück Fleisch zu lesen, statt Rezepten zu folgen."
+  cta="Modul ansehen"
+/>
+
+---
+
+## Der Sonderfall, an dem sich die halbe Foren-Weisheit blamiert
+
+Wenn Feuchtigkeit die Ursache ist, dann müsste eine Wasserschale das Plateau immer verlängern. Tut sie auch — bei großen Cuts.
+
+Bei **Hähnchenbrust** ist es umgekehrt. Blonder hat 227-Gramm-Brüste bei 121 Grad gegart: Im trockenen Ofen gab es **gar keinen Stall**, die Temperatur stieg durchgehend. Erst über einer großen Wasserschale entstand ein Plateau. Die Erklärung passt zur Theorie: Hähnchenbrust hat schlicht zu wenig verfügbare Feuchtigkeit, um die Kühlung stundenlang aufrechtzuerhalten — sie zieht durch. Erst eine sehr feuchte Garraumluft bremst die Verdunstung so weit ab, dass sich ein Gleichgewicht einstellt.
+
+Das ist kein Detail für Spezialisten. Es ist der Grund, warum du Stall-Zahlen aus dem Internet nie ohne die Angabe verwenden solltest, an welchem Tier und welchem Stück sie gemessen wurden. Derselbe Autor, dieselbe Methode, gegenteiliges Ergebnis — nur ein anderes Stück Fleisch.
+
+---
+
+## Fünf Hebel, und was jeder kostet
+
+**1. Durchhalten.** Der Stall endet von selbst, sobald die Oberfläche abgetrocknet ist. Das kostet zwei bis sechs Stunden, die schwer planbar sind. Es liefert dafür die beste [Bark](/glossar/bark) und, nach Blonders Argument, das intensivere Fleisch: Was verdunstet, ist Wasser — die Aromastoffe bleiben drin und konzentrieren sich.
+
+**2. Einwickeln (Texas Crutch).** Der stärkste Hebel und der mit der besten Datenlage. In einem Versuch mit drei Brisket Points von je 2,7 Kilo — zwei eingewickelt, eines nackt — waren die eingewickelten rund vier Stunden schneller fertig. Der Preis ist die Bark, die weich wird. Wann, womit und wie dicht — das ist ein eigenes Thema, und wir haben es [im Texas-Crutch-Artikel](/artikel/texas-crutch-folie-oder-butcher-paper) auseinandergenommen.
+
+**3. Garraumtemperatur erhöhen.** Funktioniert, weil sich damit der Gleichgewichtspunkt nach oben schiebt. Kostet Zeit für Kollagenabbau und Raucharoma und macht die Temperaturverteilung im Fleisch ungleichmäßiger. Wer ohnehin knapp dran ist, fährt besser damit, als panisch die Klappe aufzureißen.
+
+**4. Wasserschale weglassen.** Naheliegend, aber vorsichtig: Die Wasserschale hat andere Aufgaben, sie puffert Temperaturschwankungen und hilft dem Rauch, sich an einer feuchten Oberfläche anzulagern. Und eine kleine Schale tut in einem gut belüfteten Garraum ohnehin wenig — Blonder rechnet vor, dass es für einen spürbaren Effekt ein großes Blech nah an der Hitzequelle und rund eine Stunde Vorlauf braucht. Wer also am Stall verzweifelt, sollte die Schale nicht als Erstes verdächtigen.
+
+**5. Nicht spritzen.** Theoretisch verlängert jedes Befeuchten der Oberfläche das Plateau. Gemessen — an Schweinefilet, nicht an Brisket — fiel der Effekt allerdings gering aus und erholte sich schnell. Wenn du also ums Spritzen nicht herumkommst, weil es dir Freude macht: Es ist nicht der Grund, warum dein Brisket seit vier Stunden steht.
+
+Was auf keiner dieser Listen steht: die Klappe aufreißen und nachsehen. Jedes Öffnen kostet Garraumtemperatur und beschleunigt gar nichts.
+
+---
+
+## Wo die Daten aufhören
+
+Wir sagen es lieber selbst, bevor es jemand anders tut: **Zum Stall im Smoker gibt es keine klassische peer-reviewte Studie.** Die belastbaren Einzelversuche stammen aus zwei populärwissenschaftlichen, aber sauber dokumentierten Quellen — Myhrvolds Versuchspaar und Blonders Messreihen. Dazu kommt ein Fachbuchkapitel, das den Vorgang als Randbedingungsproblem sauber durchrechnet und eine eigene Messung enthält.
+
+Die *zugrundeliegende* Physik ist dagegen gut untersucht. Dass der Gewichtsverlust beim Braten bis etwa 65 bis 70 Grad überwiegend durch Verdunstung von einer nassen Oberfläche entsteht, steht seit 1976 in der Fachliteratur — gemessen an Rinder-Oberschale im Ofen, nicht an Brisket im Smoker. Dass die Temperatur dieser Oberfläche dabei durch die Feuchtkugeltemperatur des Garraums begrenzt wird, ist die Modellierung, die Baldwin daraus entwickelt.
+
+Konkret heißt das für die Zahlen in diesem Artikel:
+
+- **Die Stall-Dauer ist eine Größenordnung, kein Messwert.** Zwei bis sechs Stunden, alles Einzelmessungen mit einem Stück pro Gruppe. Eine Angabe wie „durchschnittlich vier Stunden“ lässt sich daraus nicht bilden — es gibt keine Stichprobe dafür.
+- **Die Kollagen-Anteile schwanken je nach Quelle** zwischen 0,2 und knapp zwei Prozent. Für das Argument ist das egal, die Größenordnung trägt es in jedem Fall. Als Präzisionswert taugt keine dieser Zahlen.
+
+Wir halten diese Trennung durch, weil sie den Unterschied macht: Was gemessen ist, was Erfahrung ist, und was schlicht niemand weiß.
+
+---
+
+## Fazit: Der Stall ist kein Problem. Er ist eine Uhr.
+
+Wenn du eines aus diesem Artikel mitnimmst, dann das: Das Plateau ist kein Defekt an deinem Aufbau, keine Macke deines Thermometers und kein geheimnisvoller Zustand im Fleisch. Es ist ein physikalisches Gleichgewicht, das du mit drei Stellschrauben in jede Richtung verschieben kannst — Temperatur, Luftstrom, Feuchte.
+
+Wer das einmal verstanden hat, plant anders. Er rechnet den Stall ein, statt gegen ihn anzukämpfen. Er plant großzügig Puffer ein, und wenn das Fleisch früher fertig ist, ruht es eben länger — das schadet nie. Und er weiß, dass der Zielkorridor am Ende zählt, nicht die Uhrzeit: **Brisket 90 bis 96 Grad, Pulled Pork 88 bis 95 Grad**, jedes Stück, wann es so weit ist.
+
+Feuer ist keine Technik. Feuer ist Erinnerung. Aber es hilft, wenn man weiß, warum es sich gerade nicht bewegt.
+
+<AffiliateBox
+  id="inkbird-ibbq-4t"
+  headline="Der Stall ist nur sichtbar, wenn du zwei Werte hast"
+  text="Kerntemperatur allein sagt dir nicht, ob dein Fleisch stallt oder dein Feuer eingeschlafen ist. Du brauchst beides gleichzeitig: die Luft auf Rostebene und den Kern im dicksten Punkt. Bei einem Zwölf-Stunden-Job ist WLAN dabei kein Luxus — es ist der Unterschied zwischen schlafen und alle vierzig Minuten in den Garten laufen."
+  cta="Zum Angebot"
+/>
+
+---
+
+## Weiterlesen
+
+- [Smoken — Low & Slow](/methoden/smoken-low-and-slow) — das Verfahren von Grund auf
+- [Texas Crutch: Folie, Butcher Paper oder gar nichts?](/artikel/texas-crutch-folie-oder-butcher-paper) — der stärkste Hebel gegen den Stall, im Detail
+- [Die Minion-Methode](/methoden/minion-methode) — Temperatur über Stunden konstant halten
+- [Temperatur-Guide](/temperatur-guide) — die kanonischen Kerntemperaturen der Steakakademie
+- [Glossar: Plateauphase](/glossar/plateauphase) und [Glossar: Stall](/glossar/stall) — die Kurzfassung
+
+---
+
+## Quellen
+
+1. Blonder, G.: *BBQ stall explained.* genuineideas.com — Primärquelle mit den Messreihen an Brisket, Rippenbraten, Rinderfett, Schwamm und Wasserbad. Die Seite selbst trägt kein Datum; die erste öffentliche Berichterstattung darüber stammt von Oktober 2011. [genuineideas.com](https://genuineideas.com/ArticlesIndex/stallbbq.html)
+2. Blonder, G. (2011): *Humid effect on chicken breast baking.* genuineideas.com — Quelle für den Hähnchenbrust-Sonderfall und die Wasserschalen-Zahlen. [genuineideas.com](https://genuineideas.com/ArticlesIndex/chickenBreastHumidity.html)
+3. Blonder, G. (2013): *Texas crutch.* genuineideas.com — Brisket-Point- und Schweineschulter-Versuche, Leck-Effekt, Mehrfach-Stalls. [genuineideas.com](https://genuineideas.com/ArticlesIndex/thecrutch.html)
+4. Modernist Cuisine Team: *The chemistry of the barbecue „stall“.* Modernist Cuisine Blog, 30.08.2012; adaptiert aus *Modernist Cuisine: The Art and Science of Cooking* (2011) — Versuchspaar offen/vakuumiert im Umluftofen, mit Trocken- und Feuchtkugelmessung. [modernistcuisine.com](https://modernistcuisine.com/mc/barbecue-stall/)
+5. Goldwyn, M.: *What causes the BBQ stall.* AmazingRibs.com — Sekundärdarstellung von Blonders Arbeit, Quelle des Praxisbereichs 65–77 °C. [amazingribs.com](https://amazingribs.com/more-technique-and-science/more-cooking-science/understanding-and-beating-barbecue-stall/)
+6. Baldwin, D. E. (2021): *Meat: heat transfer in meat.* Kapitel 62 in: *Handbook of Molecular Gastronomy*, Routledge/CRC — Energiebilanz an der Fleischoberfläche, Feuchtkugeltemperatur als Randbedingung; eigene Messung an ausgelöstem Rinder-Rippenbraten bei 175 °C Ofentemperatur. Online-Fassung: [douglasbaldwin.com](https://douglasbaldwin.com/roasting.html)
+7. Bengtsson, N. E., Jakobsson, B. & Dagerskog, M. (1976): *Cooking of beef by oven roasting: a study of heat and mass transfer.* Journal of Food Science 41, 1047–1053 — Rinder-Oberschale (M. semimembranosus); Verdunstung als dominanter Verlustmechanismus im Niedertemperaturbereich. [researchgate.net](https://www.researchgate.net/publication/229899061_Cooking_of_beef_by_oven_roasting_A_study_of_heat_and_mass_transfer)
+8. Kerntemperatur-Referenz der Steakakademie, `data/kerntemperatur-referenz.yaml` — Zielkorridore Brisket 90–96 °C und Pulled Pork 88–95 °C.
