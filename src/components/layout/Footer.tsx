@@ -58,6 +58,7 @@ const FOOTER_LINKS = {
   // entfernt statt hierher verschoben — bleibt aber über "Alle Cuts" erreichbar.
   Sonstiges: [
     { label: 'Hofladen-Radar', href: '/hoefe' },
+    { label: 'Aroma-Matcher', href: '/aroma-matcher' },
     { label: 'Geschenkgutscheine', href: '/gutschein' },
   ],
 };
