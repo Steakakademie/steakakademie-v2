@@ -83,7 +83,7 @@ export default function AromaMatcherPage() {
             <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
               <h2 className="mb-2 font-serif text-lg font-bold text-text-light">Schritt 3 · Der Aroma-Radar</h2>
               <p className="text-sm text-text-secondary">
-                Fünf Aromenfamilien, ein Blick: Röst, Nussig, Cremig, Rauch, Zitrus. So siehst du sofort, welche Brücke
+                Vier Aromenfamilien, ein Blick: Röst, Nussig, Cremig, Umami. So siehst du sofort, welche Brücke
                 ein Pairing schlägt — und welche es bewusst nicht schlägt.
               </p>
             </div>
