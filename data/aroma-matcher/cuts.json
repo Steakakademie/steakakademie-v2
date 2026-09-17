@@ -1,0 +1,223 @@
+{
+  "_hinweis": "Kuration v0 (17.09.2026) — Koch-Kuration, fachlich von Uwe freizugeben. Aromenfamilien-Profile sind relative Gewichtungen (0–100), keine Messwerte. Schlüsselaromen ohne OAV-Zahlen, bis Quellen belegt sind (siehe docs/aroma-matcher.md).",
+  "familien": {
+    "maillard_roast": "Röst & Maillard",
+    "pyrazines_nutty": "Nussig & Pyrazine",
+    "lactones_creamy": "Cremig & Lactone",
+    "phenols_smoke": "Rauch & Phenole",
+    "terpenes_citrus": "Zitrus & Terpene"
+  },
+  "cuts": [
+    {
+      "id": "ribeye-dry-aged",
+      "name": "Dry-Aged Ribeye",
+      "description": "Nussig, intensiv fleischig, mit ausgeprägten Maillard- und Lacton-Noten durch die Reifung.",
+      "aroma_profile": { "maillard_roast": 85, "pyrazines_nutty": 75, "lactones_creamy": 60, "phenols_smoke": 20, "terpenes_citrus": 10 },
+      "key_compounds": [
+        { "name": "2-Methyl-3-furanthiol", "family": "Fleischig / Maillard" },
+        { "name": "γ-Nonalacton", "family": "Lactone / Nussig-Butter" },
+        { "name": "2-Acetyl-1-pyrrolin", "family": "Röstbrot / Pyrrolin" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Geröstete Haselnuss & Malz-Rub", "reason": "Verstärkt die Pyrazin- und Maillard-Noten des Reifeprozesses." },
+          { "item": "Rosmarin & Schwarzer Knoblauch", "reason": "Verbindet Terpene mit tiefem Umami-Unterton." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Hickory", "reason": "Kräftige Phenol-Note, die gegen den hohen Fettanteil besteht." },
+          { "item": "Eiche", "reason": "Ausgewogene, neutrale Rauchnote, die den Eigengeschmack betont." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Gereifter Cabernet Sauvignon / Syrah", "reason": "Tannine schneiden durchs Fett; die Röstaromen harmonieren." },
+          { "item": "Gegrillter Radicchio mit Balsamico", "reason": "Bitterstoffe und Säure balancieren den reichen Schmelz." }
+        ]
+      }
+    },
+    {
+      "id": "filet-tenderloin",
+      "name": "Rinderfilet (Tenderloin)",
+      "description": "Mager, feinfaserig, milde Aromatik mit dezenten Eisen- und Butter-Nuancen.",
+      "aroma_profile": { "maillard_roast": 40, "pyrazines_nutty": 20, "lactones_creamy": 70, "phenols_smoke": 10, "terpenes_citrus": 50 },
+      "key_compounds": [
+        { "name": "Hexanal", "family": "Grün / Frisch" },
+        { "name": "Diacetyl", "family": "Butter / Diketon" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Estragon-Thymian-Butter", "reason": "Hebt die feinen Butternoten des mageren Fleisches." },
+          { "item": "Grapefruit-Pfeffer-Glaze", "reason": "Frische Terpene bilden den Kontrast zur milden Textur." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Kirschholz", "reason": "Fruchtig-milder Rauch, der das zarte Filetaroma nicht erschlägt." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Pinot Noir / Spätburgunder", "reason": "Seidige Tannine und rote Beerennoten passen zur Textur." }
+        ]
+      }
+    },
+    {
+      "id": "flank-steak",
+      "name": "Flank Steak",
+      "description": "Lange Faser, sehr herzhafter, intensiver Eigengeschmack mit metallisch-frischen Noten.",
+      "aroma_profile": { "maillard_roast": 70, "pyrazines_nutty": 40, "lactones_creamy": 20, "phenols_smoke": 30, "terpenes_citrus": 65 },
+      "key_compounds": [
+        { "name": "1-Octen-3-ol", "family": "Pilzig / Erdig" },
+        { "name": "Methional", "family": "Herzhaft / Kartoffel" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Chimichurri (Petersilie, Koriander, Limette)", "reason": "Hoher Terpen-Gehalt bricht die dichte Faserstruktur sensorisch auf." },
+          { "item": "Kaffee-Chili-Rub", "reason": "Röstaromen verstärken das herzhafte Methional-Profil." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Mesquite", "reason": "Kräftiger, erdiger Rauch passt zur intensiven Faser." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Malbec / Session IPA", "reason": "Frucht und Hopfenbittere ergänzen die kräftige Würze." }
+        ]
+      }
+    },
+    {
+      "id": "brisket-low-slow",
+      "name": "Rinderbrust (Brisket)",
+      "description": "Stark durchwachsen, kollagenreich — dominiert von Rauch, Fett und Kollagen-Schmelz.",
+      "aroma_profile": { "maillard_roast": 90, "pyrazines_nutty": 80, "lactones_creamy": 50, "phenols_smoke": 95, "terpenes_citrus": 20 },
+      "key_compounds": [
+        { "name": "Guajacol", "family": "Phenole / Holzrauch" },
+        { "name": "4-Methylguajacol", "family": "Phenole / Süßlich-rauchig" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Dalmatiner-Rub (Schwarzer Pfeffer & grobes Salz)", "reason": "Piperin harmoniert mit den Phenolen aus stundenlangem Rauch." },
+          { "item": "Apfelessig-Ahornsirup-Mop", "reason": "Säure schneidet das ausgelassene Fett, Zucker steigert die Maillard-Karamellnoten." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Post Oak (texanische Eiche)", "reason": "Der klassische, saubere Phenol-Spender für Brisket." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Bourbon (pur / Sour) oder Craft Stout", "reason": "Röstmalz und Eichenfass-Lactone spiegeln den Barbecue-Prozess." }
+        ]
+      }
+    },
+    {
+      "id": "bavette",
+      "name": "Bavette (Flap Meat)",
+      "description": "Grobfaserig, saftig, ausgeprägter Umami-Charakter mit feiner Eisennote.",
+      "aroma_profile": { "maillard_roast": 75, "pyrazines_nutty": 50, "lactones_creamy": 30, "phenols_smoke": 25, "terpenes_citrus": 60 },
+      "key_compounds": [
+        { "name": "2-Acetyl-2-thiazolin", "family": "Röstig / Nussig" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Schalotten-Rotwein-Reduktion", "reason": "Schwefelverbindungen der Zwiebel ergänzen das Fleisch-Umami." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Pecan", "reason": "Süßlich-nussiger Rauch ergänzt die Thiazolin-Noten." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Carmenère oder Côtes du Rhône", "reason": "Würzige Kräuternoten im Wein passen zur groben Faser." }
+        ]
+      }
+    },
+    {
+      "id": "rumpsteak-striploin",
+      "name": "Rumpsteak (Striploin)",
+      "description": "Kräftiges Fleisch mit fester Fettabdeckung; gute Balance aus Saftigkeit und Biss.",
+      "aroma_profile": { "maillard_roast": 80, "pyrazines_nutty": 60, "lactones_creamy": 45, "phenols_smoke": 20, "terpenes_citrus": 15 },
+      "key_compounds": [
+        { "name": "Nonanal", "family": "Fruchtig / Fettig" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Senfsaat & Grüner Pfeffer", "reason": "Isothiocyanate aus Senf bringen Schärfe gegen den Fettrand." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Buche", "reason": "Ausgewogenes, universelles Raucharoma." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Merlot / Pale Ale", "reason": "Abgerundete Frucht gleicht die Maillard-Kruste aus." }
+        ]
+      }
+    },
+    {
+      "id": "denver-steak",
+      "name": "Denver Steak (Zungenstück)",
+      "description": "Stark marmoriert, extrem saftig, intensiver Rindfleischgeschmack aus dem Nackenbereich.",
+      "aroma_profile": { "maillard_roast": 85, "pyrazines_nutty": 70, "lactones_creamy": 65, "phenols_smoke": 15, "terpenes_citrus": 10 },
+      "key_compounds": [
+        { "name": "Furaneol", "family": "Karamellig / Süß" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Miso-Sojasauce-Glaze", "reason": "Verstärkt die Karamellnoten durch zusätzliche Glutamate." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Apfelholz", "reason": "Milde Süße unterstreicht die karamellige Fettschmelze." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Blaufränkisch / Zinfandel", "reason": "Reife dunkle Früchte tragen das kräftige Fettprofil." }
+        ]
+      }
+    },
+    {
+      "id": "short-ribs",
+      "name": "Beef Short Ribs",
+      "description": "Dicke Rippe mit massivem Fett- und Bindegewebsanteil; extrem tiefes Umami nach dem Garen.",
+      "aroma_profile": { "maillard_roast": 95, "pyrazines_nutty": 85, "lactones_creamy": 75, "phenols_smoke": 80, "terpenes_citrus": 5 },
+      "key_compounds": [
+        { "name": "2-Methylbutanal", "family": "Röstig / Kakao" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Ancho-Chili & Zartbitter-Kakao-Rub", "reason": "Kakaonoten greifen die Röst-Aldehyde direkt auf." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Hickory & Kirsche (Mix)", "reason": "Tiefe Phenole, kombiniert mit fruchtiger Süße." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Imperial Stout / Amarone", "reason": "Röstbittere und Körper tragen die schwere Rippe." }
+        ]
+      }
+    },
+    {
+      "id": "t-bone-porterhouse",
+      "name": "T-Bone / Porterhouse",
+      "description": "Kräftiges Rumpsteak und zartes Filet am Knochen — zwei Texturen in einem Stück.",
+      "aroma_profile": { "maillard_roast": 80, "pyrazines_nutty": 60, "lactones_creamy": 55, "phenols_smoke": 25, "terpenes_citrus": 30 },
+      "key_compounds": [
+        { "name": "3-Methylbutanal", "family": "Malzig / Röstig" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Frisches Knoblauch-Kräuter-Öl (nach dem Sear)", "reason": "Verbindet die zwei Texturen durch Frische." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Whiskey-Fass-Chunks", "reason": "Eichen-Lactone passen zu beiden Fleischseiten." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Brunello di Montalcino / Bordeaux-Blend", "reason": "Komplexer Körper bedient Filet und Rumpsteak zugleich." }
+        ]
+      }
+    },
+    {
+      "id": "tomahawk-ribeye",
+      "name": "Tomahawk Steak",
+      "description": "Ribeye am langen Knochen — stark marmoriert, röstaromatisch, optisch prägend.",
+      "aroma_profile": { "maillard_roast": 90, "pyrazines_nutty": 80, "lactones_creamy": 65, "phenols_smoke": 40, "terpenes_citrus": 10 },
+      "key_compounds": [
+        { "name": "2-Ethyl-3,5-dimethylpyrazin", "family": "Nussig / Röstig" }
+      ],
+      "clusters": {
+        "rubs_and_glazes": [
+          { "item": "Meersalz-Flocken & Smoked Paprika", "reason": "Unterstreicht die Kruste, ohne den Eigengeschmack zu überdecken." }
+        ],
+        "wood_and_smoke": [
+          { "item": "Walnuss", "reason": "Harziger, schwerer Rauch für den großen Fettkörper." }
+        ],
+        "drinks_and_sides": [
+          { "item": "Barolo / Double IPA", "reason": "Kräftige Säure bzw. Bittere setzt Akzente gegen die starke Marmorierung." }
+        ]
+      }
+    }
+  ]
+}

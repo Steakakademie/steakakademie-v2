@@ -20,6 +20,9 @@ const FOOTER_LINKS = {
   Cuts: [
     { label: 'Ribeye', href: '/cuts/ribeye' },
     { label: 'Brisket', href: '/cuts/brisket' },
+    // Uwe, 17.09.2026: Aroma-Matcher bewusst HIER statt unter "Sonstiges" — das
+    // Werkzeug startet mit der Cut-Wahl, gehört thematisch zu den Cuts.
+    { label: 'Aroma-Matcher', href: '/aroma-matcher' },
     { label: 'Alle Cuts', href: '/cuts' },
   ],
   Akademie: [
