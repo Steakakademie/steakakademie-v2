@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 interface CutImageProps {
   src: string;
@@ -12,6 +13,13 @@ interface CutImageProps {
   accent?: string;
   /** Skalierung: 'contain' zeigt den Cut komplett (Default), 'cover' füllt/beschneidet */
   fit?: 'cover' | 'contain';
+  /**
+   * true = generativ erzeugtes oder wesentlich verändertes Bild (Cut.imageAI).
+   * Zeigt ein Badge direkt am Bild. Bewusst KEIN Link auf /ki-disclaimer: die
+   * Kacheln im Atlas sind selbst ein <button>, ein Link darin wäre ungültiges
+   * HTML. Der Verweis steht in der Detailansicht unter dem Foto (BildCredit).
+   */
+  ai?: boolean;
 }
 
 /**
@@ -20,7 +28,7 @@ interface CutImageProps {
  * Cut-Namen statt eines kaputten Bild-Icons. Sobald das Foto existiert,
  * überlagert es den Platzhalter automatisch.
  */
-export default function CutImage({ src, alt, label, className = '', accent = '#C8882A', fit = 'contain' }: CutImageProps) {
+export default function CutImage({ src, alt, label, className = '', accent = '#C8882A', fit = 'contain', ai = false }: CutImageProps) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -51,6 +59,11 @@ export default function CutImage({ src, alt, label, className = '', accent = '#C
             Foto folgt
           </span>
         </div>
+      )}
+      {ai && !failed && (
+        <span className="absolute bottom-2 right-2 z-20 inline-flex items-center gap-1 bg-black/65 px-1.5 py-0.5 text-[9px] font-sans font-bold uppercase tracking-[0.1em] text-zinc-200 backdrop-blur-sm border border-white/15">
+          <Sparkles size={9} /> KI-Bild
+        </span>
       )}
     </div>
   );
