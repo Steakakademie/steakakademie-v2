@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { allStreitfalls } from 'contentlayer/generated';
 import { sichtbareArtikel } from '@/lib/redaktion';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Streitfälle am Grill — klare Entscheidungen',
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     'Salzen vorher oder nachher, Edelstahl oder Guss: die strittigen Grillfragen mit beiden Positionen und einer klaren Entscheidung aus 30 Jahren Praxis.',
   alternates: { canonical: 'https://steakakademie.de/streitfaelle' },
   openGraph: {
+    images: ogImages('Streitfälle am Grill'),
     title: 'Streitfälle am Grill',
     description:
       'Die strittigen Grillfragen — beide Seiten fair dargestellt, dann eine klare Entscheidung mit der Bedingung, unter der die andere Antwort gewinnt.',
