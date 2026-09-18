@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Kerntemperatur-Spickzettel zum Ausdrucken',
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     'Der Kerntemperatur-Spickzettel: alle Garstufen für Rind, Schwein, Lamm, Geflügel und Fisch auf einer Seite — druckfertig für die Grillstation.',
   alternates: { canonical: 'https://steakakademie.de/kerntemperatur-spickzettel' },
   openGraph: {
+    images: ogImages('Der Kerntemperatur-Spickzettel — druckfertig'),
     title: 'Der Kerntemperatur-Spickzettel — druckfertig',
     description: 'Alle Kerntemperaturen auf einer Seite. Keine Faustregeln — Werte, die stimmen.',
     url: 'https://steakakademie.de/kerntemperatur-spickzettel',

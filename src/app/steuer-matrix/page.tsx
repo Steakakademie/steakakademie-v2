@@ -4,6 +4,7 @@ import { ChevronRight, Lock, BarChart3, Globe, ShieldCheck } from 'lucide-react'
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
     'Interaktiver Netto-Vergleich für Solo-Selbstständige: Was bleibt in 23 Ländern übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix' },
   openGraph: {
+    images: ogImages('Steuer-Matrix — 23 Länder im Vergleich'),
     title: 'Steuer-Matrix — 23 Länder im Vergleich',
     description: 'Datengestützte Entscheidungshilfe für Solo-Selbstständige: 23 Länder im Netto-Vergleich. Finde heraus, wo du als Solopreneur am meisten behältst.',
     url: 'https://steakakademie.de/steuer-matrix',

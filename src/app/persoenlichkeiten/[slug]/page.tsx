@@ -12,6 +12,7 @@ import SeriesBadge from '@/components/persoenlichkeiten/SeriesBadge';
 import DiplomFunnel from '@/components/persoenlichkeiten/DiplomFunnel';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import KnowledgeBreak from '@/components/persoenlichkeiten/KnowledgeBreak';
+import { ogImages } from '@/lib/og';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -29,6 +30,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title: person.seoTitle ?? person.title,
     description: person.seoDescription ?? person.excerpt,
     openGraph: {
+      images: ogImages(person.title),
       title: person.seoTitle ?? person.title,
       description: person.seoDescription ?? person.excerpt,
       type: 'article',

@@ -4,7 +4,30 @@ export const runtime = 'edge';
 
 // Dynamisches Standard-OG-Bild (1200×630) — markenkonform, ohne statisches Asset.
 // Ersetzt das fehlende /api/og überall.
-export function GET() {
+//
+// Seit dem og:image-Sweep (Plan C5) nimmt die Route zwei optionale Parameter:
+//   /api/og?title=BBQ-Glossar&sub=Fachbegriffe%20erklaert
+// Ohne Parameter bleibt alles wie zuvor — die Startseite nutzt weiter /api/og
+// pur. Gesetzt werden sie ueber ogImages() aus src/lib/og.ts.
+//
+// Laengen sind gedeckelt, damit ein langer Titel das Layout nicht sprengt: der
+// Titel bricht bei 76px in maximal drei Zeilen, die Unterzeile in eine.
+const TITEL_MAX = 80;
+const SUB_MAX = 110;
+
+/** Query-Wert saeubern: Steuerzeichen raus, auf Maximallaenge kuerzen. */
+function clean(value: string | null, max: number): string | null {
+  if (!value) return null;
+  const text = value.replace(/\s+/g, ' ').trim();
+  if (!text) return null;
+  return text.length > max ? text.slice(0, max - 1).trimEnd() + '…' : text;
+}
+
+export function GET(request: Request) {
+  const params = new URL(request.url).searchParams;
+  const titel = clean(params.get('title'), TITEL_MAX) ?? 'Deutschlands BBQ-Wissensplattform';
+  const sub = clean(params.get('sub'), SUB_MAX) ?? 'Cuts · Techniken · Kerntemperaturen · Grillmeister-Diplome';
+
   return new ImageResponse(
     (
       <div
@@ -50,10 +73,10 @@ export function GET() {
               maxWidth: '960px',
             }}
           >
-            Deutschlands BBQ-Wissensplattform
+            {titel}
           </div>
           <div style={{ fontSize: '34px', color: '#A89B8C', marginTop: '28px' }}>
-            Cuts · Techniken · Kerntemperaturen · Grillmeister-Diplome
+            {sub}
           </div>
         </div>
 
