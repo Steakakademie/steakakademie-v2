@@ -170,7 +170,8 @@
   genau dieser Vertauschung.
 - Die Frage, ob die Gates den Merge-Button sperren oder nur informativ laufen,
   ist mit dem Punkt oben beantwortet: drei Kontexte sperren, alles andere laeuft
-  informativ mit (Netlify, "Rechtschreibung", "Abmahn-Regressionen").
+  informativ mit ("Rechtschreibung", "Abmahn-Regressionen"). **Netlify stand hier
+  bis 13.09.2026 mit in der Liste — die Anbindung ist seitdem abgebaut (§ 4).**
 - **Nie `git add -A`**, auch nicht auf ein Unterverzeichnis. Immer Pfade einzeln
   nennen — sonst wandert uncommitteter Fremdstand mit (Regel 9).
 - Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt
@@ -215,6 +216,36 @@
 - Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
   `teamId: team_tEPqF2rHcoOrrPEGRD7Q4hl8` — damit liefert die Vercel-MCP
   `state: READY|ERROR` je Commit. Env-Variablen kann sie **nicht** lesen.
+
+**Netlify ist abgebaut (13.09.2026) — es gibt genau einen Deploy-Weg: Vercel**
+- Im Repo liegt **keine** Netlify-Konfiguration mehr: kein `netlify.toml`, keine
+  Netlify-Abhaengigkeit in package.json, kein Netlify-Schritt in einem Workflow.
+  Was bis zum 13.09.2026 noch auf Netlify zeigte, waren ausschliesslich Kommentare
+  und Doku-Saetze — sie sind in diesem Zug auf Vercel korrigiert worden. Wer
+  „Netlify" im Repo findet, findet damit eine historische Notiz, keine Mechanik.
+  Eine Ausnahme ist offen geblieben: der Kommentar in
+  `.github/workflows/build-guard.yml` („blockiert NICHT den Vercel/Netlify-Deploy")
+  — Workflow-Dateien sind gegen Schreibzugriffe aus der Cowork-Bruecke gesperrt,
+  das aendert Uwe von Hand oder Claude Code lokal.
+- Die Netlify-Checks an PRs (Redirect rules, Header rules, Pages changed,
+  deploy-preview) stammen aus der **Netlify-GitHub-App plus der Site-Konfiguration
+  im Netlify-Dashboard**, nicht aus dem Repo. Sie verschwinden erst, wenn die
+  Verbindung dort geloest ist — das ist ein Handgriff im Dashboard, kein Commit.
+- Belegter Anlass: Das Netlify-Team hat am 13.09.2026 das Build-Minuten-Kontingent
+  des Free-Plans aufgebraucht („builds will be paused"). Die Minuten gingen fuer
+  Deploys drauf, die niemand ausliefert — die Produktion laeuft seit dem
+  13.08.2026 auf Vercel.
+- **Zweiter Grund, wichtiger als die Minuten:** Die Netlify-Kopie
+  `steakakademie-de.netlify.app` ist am 13.09.2026 live und liefert
+  `meta-robots: index, follow` — eine vollstaendige, crawlbare Zweitfassung der
+  Seite. Der Canonical zeigt auf die Hauptdomain, das ist der einzige Schutz.
+  Drei Wochen vor dem Launch gehoert diese Kopie offline, nicht nur pausiert.
+- **Was dazu im Dashboard noch zu tun ist** (nur Uwe, kein Commit moeglich):
+  Site in Netlify loeschen oder mindestens die GitHub-Verbindung trennen
+  (Site configuration → Build & deploy → Continuous deployment → „Unlink
+  repository"), danach die Netlify-App aus dem GitHub-Konto entfernen
+  (GitHub → Settings → Applications → Installed GitHub Apps → Netlify).
+  Erst dann verschwinden die Netlify-Checks aus neuen PRs.
 
 **Startseite**
 - Es gibt zwei Varianten. `/` = A (dunkel), `/home-b` = B (Editorial Ember,
@@ -498,8 +529,18 @@ Analytics & Data · CRM & Monetization.
   NICHT Keyword-Stuffing. `docs/geo-llm-ranking-factors.md`. Auto-Check: `geo-check.yml`.
 - **TikTok:** Story-Highlights aktiv nutzen (Reichweiten-Bonus), immer benennen.
 - **Werbekennzeichnung:** siehe §2.1.
-- **Stufe 2 (Streitfall-Beiträge) LIVE seit 31.08.2026:** Erfahrungsberichte unter Streitfällen,
-  Flag `STREITFALL_BEITRAEGE_ENABLED=1` (Netlify alle Kontexte + .env.local). Nichts erscheint
+- **Stufe 2 (Streitfall-Beiträge) ist NICHT live — Korrektur 13.09.2026.** Bis hierher stand
+  „LIVE seit 31.08.2026" mit Flag `STREITFALL_BEITRAEGE_ENABLED=1` (Netlify alle Kontexte +
+  .env.local). Beides ist im Code nicht gedeckt, nachgeprüft am 13.09.2026: die Komponente
+  `src/components/streitfaelle/StreitfallBeitraege.tsx` wird **von keiner Seite importiert**
+  (gerendert wird nur `StreitfallUmfrage`, Stufe 1), und `STREITFALL_BEITRAEGE_ENABLED` kommt
+  im gesamten Quellbaum **nur im Kommentarkopf dieser Komponente** vor — es liest sie niemand.
+  Tabelle, RLS-Policies und Moderations-Warteschlange existieren, die Oberfläche dazu ist
+  unerreichbar. Praktisch heisst das: Der Zustand ist der rechtlich sichere (keine
+  ungeprüften Nutzerinhalte online, anwaltliche DSA-Prüfung durch RAin Nieweg steht ja noch
+  aus) — aber der beschriebene Rückbauweg „Flag auf 0" existiert nicht, und Livegang heisst
+  einbauen, nicht umschalten. Beschreibung des geplanten Stands unverändert gültig:
+  Erfahrungsberichte unter Streitfällen, nichts erscheint
   automatisch — jeder Beitrag landet mit status `neu` in der Warteschlange und wird manuell unter
   `/admin/beitraege` freigegeben. Ein Beitrag je Nutzer und Streitfall (UNIQUE slug+user_id),
   max. 600 Zeichen, Anzeigename Vorname+Ort. Rechtlich abgedeckt: AGB §12 (Rechtseinräumung,
@@ -509,8 +550,10 @@ Analytics & Data · CRM & Monetization.
 
 - **Rechtschreibprüfung (22.08.2026):** `npm run spell:check` prüft content/ gegen die
   LanguageTool-API (de-DE), inkrementell über data/spell-check-cache.json, Fachbegriffe in
-  data/rechtschreib-whitelist.txt. Läuft report-only im Netlify-postbuild (bricht NIE den
-  Build — auch nicht bei API-Ausfall); --strict für CI, --force für Vollprüfung. Erster
+  data/rechtschreib-whitelist.txt. Report-only (bricht NIE den Build — auch nicht bei
+  API-Ausfall); --strict für CI, --force für Vollprüfung. **Korrektur 13.09.2026:** Hier
+  stand „läuft im Netlify-postbuild". `postbuild` ruft next-sitemap, validate-frontmatter
+  und check-links — **kein** spell:check; Netlify ist abgebaut. Der Lauf ist manuell. Erster
   Voll-Lauf: ~392 Dateien ÷ 20 Req/min ≈ 25 Min in Uwes Terminal, danach nur Deltas.
   Der Checker maskiert JSX-Tags — Bezeichner sind kein Fließtext (Vorfall 30.08.2026, 7f19d67).
   Konkret: `JSX_TAG` in scripts/spell-check.mjs entfernt Tags samt Attributnamen vor dem
@@ -573,8 +616,17 @@ Analytics & Data · CRM & Monetization.
   beide gemeinsam. Nacht-Index läuft auf `voyage-4` (200M Free-Tier; voyage-3 war Legacy
   ohne Free-Tier) — Modellwechsel re-embeddet automatisch (isAlreadyIndexed prüft Modell),
   Query-Seite erkennt das Korpus-Modell selbst (voyage-retrieval.ts). Kochwissen wurde am 22.08.2026 per
-  `scripts/kochwissen-reembed.mjs` auf voyage-4 re-embedded (VOYAGE_MODEL=voyage-4 lokal
-  und auf Netlify gesetzt) — beide Korpora sprechen voyage-4. Reranker ist modell-agnostisch.
+  `scripts/kochwissen-reembed.mjs` auf voyage-4 re-embedded — beide Korpora sprechen
+  voyage-4 im Speicher. Reranker ist modell-agnostisch.
+  **OFFEN, seit 13.09.2026 belegt: VOYAGE_MODEL war „lokal und auf Netlify" gesetzt — die
+  Produktion laeuft aber auf Vercel.** `src/lib/kochwissen/voyage.ts` liest
+  `process.env.VOYAGE_MODEL ?? 'voyage-3.5'`; anders als der Nacht-Index (voyage-retrieval.ts,
+  liest das Modell aus dem Korpus) haengt dieser Pfad allein an der Variable. Fehlt sie im
+  Vercel-Projekt, bettet die Produktion Suchanfragen mit voyage-3.5 ein und vergleicht sie
+  mit einem voyage-4-Korpus: gleiche Dimension, kein Fehler, still schlechtere Treffer.
+  **Zu tun: im Vercel-Dashboard prüfen, ob `VOYAGE_MODEL=voyage-4` in allen Umgebungen
+  gesetzt ist — falls nein, setzen und neu deployen.** Aus dem Repo ist das nicht einsehbar
+  (Vercel-MCP gibt Env-Variablen nicht heraus).
   Indexierung läuft MANUELL in Uwes Terminal (lokale Cowork-VM hat keinen Netz-Egress);
   der 23:45-Task ist nur noch Wächter (prüft Frische via Supabase, indexiert nicht).
 
