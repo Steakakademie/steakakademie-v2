@@ -5,50 +5,69 @@ import { z } from 'zod';
 import { createClient as createAdminClient, type SupabaseClient } from '@supabase/supabase-js';
 import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/lib/api/guard';
 import { bewerte } from '@/lib/diplome/fragen';
+import { pruefeZiehung, tokenSecret } from '@/lib/diplome/pruefung-token';
 import {
   DIPLOM_COURSE_SLUG,
   ERSTE_BEZAHLSTUFE,
-  QUIZ_FRAGEN_JE_MODUL,
+  QUIZ_FRAGEN_PRO_PRUEFUNG,
   isStufeKey,
   stufeByKey,
 } from '@/lib/diplome/stufen';
 
 /**
- * POST /api/diplome/pruefung — die einzige Stelle, die ein Pruefungsergebnis
- * verbindlich feststellt und in course_progress schreibt.
+ * /api/diplome/pruefung — die einzige Stelle, die eine Pruefung stellt und
+ * ein Ergebnis verbindlich feststellt.
+ *
+ * Die Ziehung stellt /api/diplome/pruefung/ziehung (POST { modul }) — sie gibt
+ * Fragen OHNE Loesung zurueck und ein signiertes Token fuer genau diese Ziehung.
+ * POST { modul, token, antworten[] } → prueft das Token, bewertet genau die
+ *                           gezogenen Fragen, schreibt bei Bestehen in
+ *                           course_progress (service_role).
  *
  * Warum es diese Route gibt (Audit 06.09.2026, Showstopper S1):
- *  - Vorher bewertete der Browser und schrieb selbst per supabase-js in
- *    course_progress — mit `status: 'bestanden'` unabhaengig vom Ergebnis.
- *  - Die RLS liess das zu (users_insert_own_progress prueft nur user_id).
- *    Jedes Konto konnte sich „Master of Steak" eintragen.
- *  - Die Pruefungen der Bezahlstufen waren frei, nur der Lernstoff gesperrt.
- * Jetzt: Server bewertet, Server prueft die Berechtigung, Server schreibt
- * mit service_role. Die Nutzer-Schreibrechte auf course_progress sind per
- * Migration entzogen.
+ *  - Vorher bewertete der Browser und schrieb selbst in course_progress —
+ *    mit `status: 'bestanden'` unabhaengig vom Ergebnis. Jedes Konto konnte
+ *    sich „Master of Steak" eintragen.
+ * Jetzt: Server bewertet, Server prueft die Berechtigung, Server schreibt.
  *
- * Antwort: { score, bestanden, badge, ergebnisse[], gespeichert, hinweis? }
- *  - gespeichert=false + hinweis, wenn kein Login (Stufe 1 darf anonym
- *    geuebt werden, aber nichts wird eingetragen) oder Speichern unmoeglich.
+ * Warum Ziehung + Token (Rahmenlehrplan §8, 08.09.2026):
+ *  - Die Pruefung zieht 10 aus einem Pool von 33 (Stufe 1). Wuerde der Browser
+ *    ziehen, koennte er sich die Fragen aussuchen. Also zieht der Server und
+ *    signiert die ids; der POST gilt nur fuer genau diese Ziehung.
+ *  - Der Browser bekommt die Fragen ohne `correct` und `explain`. Vorher lag
+ *    die komplette Fragenbank samt Loesungen im Client-Bundle.
+ *  - Das Token ist zustandslos (HMAC), 30 Minuten gueltig — kein Tabelleneintrag
+ *    pro Ziehung, kein Aufraeumen.
+ *
+ * Antwort POST: { score, gesamt, grenze, bestanden, badge, ergebnisse[],
+ * gespeichert, hinweis? } — gespeichert=false + hinweis, wenn kein Login
+ * (Stufe 1 darf anonym geuebt werden, aber nichts wird eingetragen).
  */
 
-const Body = z.object({
+const PostBody = z.object({
   modul: z.string().min(1).max(32),
-  antworten: z.array(z.number().int().min(-1).max(16)).length(QUIZ_FRAGEN_JE_MODUL),
+  token: z.string().min(16).max(4096),
+  antworten: z.array(z.number().int().min(-1).max(16)).min(1).max(QUIZ_FRAGEN_PRO_PRUEFUNG),
 });
 
 export async function POST(req: Request) {
   const guard = await guardRequest(req, {
     key: 'diplome-pruefung',
     rate: { limit: 30, windowMs: 10 * 60 * 1000 },
-    schema: Body,
+    schema: PostBody,
     auth: 'none',
   });
   if (!guard.ok) return guard.response;
 
-  const { modul, antworten } = guard.body;
+  const { modul, token, antworten } = guard.body;
   if (!isStufeKey(modul)) return jsonError(400, 'Unbekanntes Modul.');
   const stufe = stufeByKey(modul)!;
+
+  const secret = tokenSecret();
+  if (!secret) return jsonError(503, 'Prüfung derzeit nicht verfügbar.');
+  const ziehung = pruefeZiehung(token, secret);
+  if (!ziehung || ziehung.m !== modul) return jsonError(400, 'Prüfung ungültig oder abgelaufen — bitte neu starten.');
+  if (ziehung.ids.length !== antworten.length) return jsonError(400, 'Antworten passen nicht zur Prüfung.');
 
   const admin = isAdminRequest(req);
   const userId = await userIdFromRequest(req);
@@ -63,7 +82,7 @@ export async function POST(req: Request) {
     if (!zugang) return jsonError(403, 'diplom_erforderlich');
   }
 
-  const ergebnis = bewerte(modul, antworten);
+  const ergebnis = bewerte(modul, ziehung.ids, antworten);
 
   let gespeichert = false;
   let hinweis: string | undefined;
@@ -98,6 +117,8 @@ export async function POST(req: Request) {
 
   return Response.json({
     score: ergebnis.score,
+    gesamt: ergebnis.gesamt,
+    grenze: ergebnis.grenze,
     bestanden: ergebnis.bestanden,
     badge: ergebnis.bestanden ? stufe.badge : null,
     ergebnisse: ergebnis.ergebnisse,
@@ -105,6 +126,8 @@ export async function POST(req: Request) {
     hinweis,
   });
 }
+
+// ── Supabase ────────────────────────────────────────────────────────────────
 
 function adminClient(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
