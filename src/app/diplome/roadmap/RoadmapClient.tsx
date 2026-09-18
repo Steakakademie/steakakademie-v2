@@ -5,17 +5,17 @@ import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
 import KontextRail from '@/components/diplome/KontextRail';
+import Glutbett from '@/components/diplome/Glutbett';
 import { createClient } from '@/lib/supabase/client';
 import {
   STUFEN,
   STUFEN_ORDER,
   ERSTE_BEZAHLSTUFE,
-  QUIZ_BESTEHENSGRENZE,
   levelsOfStufe,
   pruefungsText,
   type StufeKey,
 } from '@/lib/diplome/stufen';
-import { FRAGEN, FLASHCARDS, type QuizFrage, type Flashcard } from '@/lib/diplome/fragen';
+import { FLASHCARDS, type Flashcard } from '@/lib/diplome/flashcards';
 
 // Das Pruefungsergebnis stellt seit dem Audit vom 06.09.2026 ausschliesslich
 // der Server fest (/api/diplome/pruefung) und schreibt es mit service_role.
@@ -33,6 +33,7 @@ type Lernmethode = { icon: string; label: string; desc: string; vorhanden: boole
 type Stage = {
   id: number;
   cert: string;
+  metall: string;
   title: string;
   emoji: string;
   color: string;
@@ -63,7 +64,8 @@ type ModuleMeta = {
   requires?: ModuleKey;
 };
 
-type QuizQuestion = QuizFrage;
+/** Frage, wie sie der Browser bekommt — ohne Loesung (Rahmenlehrplan §8). */
+type QuizQuestion = { id: string; q: string; options: readonly string[]; lektionSlug: string };
 
 type FeuerzoneItem = {
   id: string;
@@ -233,13 +235,14 @@ const STAGE_CONTENT: Record<StufeKey, StageContent> = {
 const stages: Stage[] = STUFEN.map((s) => ({
   id: s.nr,
   cert: s.cert,
+  metall: s.metall,
   title: s.title,
   emoji: s.emoji,
   color: s.color,
   glow: s.glow,
   levels: [...s.levels],
   levelNames: levelsOfStufe(s.nr).map((l) => l.name),
-  badge: s.nr === 5 ? `${s.cert} (postfähige Urkunde)` : `${s.badge} Zertifikat`,
+  badge: s.nr === 5 ? `${s.cert} (postfähige Urkunde)` : `${s.cert} · ${s.badge}`,
   // Der Pruefungssatz kommt aus den Konstanten — vorher versprach er
   // 10/15/20/25/30 Fragen, Fallstudien und eine Videopruefung, die es nicht gab.
   pruefung: pruefungsText(),
@@ -270,10 +273,10 @@ const moduleMeta: Record<ModuleKey, ModuleMeta> = Object.fromEntries(
 const moduleOrder: readonly ModuleKey[] = STUFEN_ORDER;
 
 // ═══════════════════════════════════════════════════════════════════════════
-// DATA — Quizzes & Flashcards: src/lib/diplome/fragen.ts (mit Lektionsbezug)
+// DATA — Flashcards: src/lib/diplome/flashcards.ts. Die Pruefungsfragen liegen
+// server-only in fragen.ts und kommen per /api/diplome/pruefung/ziehung.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const quizzes: Record<ModuleKey, readonly QuizQuestion[]> = FRAGEN;
 const flashcards: Record<ModuleKey, readonly Flashcard[]> = FLASHCARDS;
 // ═══════════════════════════════════════════════════════════════════════════
 // DATA — Feuerzonen-Spiel
@@ -420,10 +423,12 @@ function useProgress() {
     (key: ModuleKey): boolean => {
       const meta = moduleMeta[key];
       if (!meta.requires) return true;
-      const reqScore = progress.quiz_scores[meta.requires] ?? 0;
-      return reqScore >= QUIZ_BESTEHENSGRENZE;
+      // Bestanden ist, was der Server als bestanden eingetragen hat — die
+      // Punktzahl allein taugt nicht mehr, seit die Fragenzahl je Pruefung
+      // variiert (5 bei kleinem Pool, 10 bei Stufe 1).
+      return progress.bestandene_module.includes(meta.requires);
     },
-    [progress.quiz_scores],
+    [progress.bestandene_module],
   );
 
   return { progress, hydrated, completeModule, bumpStreak, resetStreak, resetAll, isUnlocked, mergeServer };
@@ -454,8 +459,11 @@ function useBanner(): [BannerMsg, (msg: BannerMsg) => void] {
 /** Serverseitig festgestelltes Pruefungsergebnis (siehe /api/diplome/pruefung). */
 export type PruefungsErgebnis = {
   score: number;
+  gesamt: number;
+  grenze: number;
   bestanden: boolean;
   badge: string | null;
+  ergebnisse: { id: string; richtig: boolean; explain: string; lektionSlug: string }[];
   gespeichert: boolean;
   hinweis?: string;
 };
@@ -702,7 +710,7 @@ function RoadmapView({
                   Stufe {st.id}
                 </div>
                 <div className="text-[11px] font-sans mt-0.5" style={{ color: active === i ? T.text : T.textFaint }}>
-                  {st.cert.split('-')[0]}
+                  {st.metall}
                 </div>
               </button>
             );
@@ -893,7 +901,7 @@ function RoadmapView({
                 className="text-[9px] font-sans uppercase tracking-wider text-center flex-1"
                 style={{ color: i === active ? st.color : T.textFaint }}
               >
-                {st.cert.split('-')[0]}
+                {st.metall}
               </div>
             ))}
           </div>
@@ -994,7 +1002,7 @@ function ModuleView({
             )}
             {bestScore > 0 && (
               <span className="rounded-full px-3 py-1" style={{ background: `${meta.color}15`, border: `1px solid ${meta.color}40`, color: meta.color }}>
-                Beste Quiz-Punktzahl: {bestScore}/{quizzes[moduleKey].length}
+                Beste Quiz-Punktzahl: {bestScore}
               </span>
             )}
             {streakCount > 0 && (
@@ -1090,6 +1098,23 @@ function LerninhalteTab({
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Glutbett gross — hier ist der Ort, an dem man den eigenen Stand sucht.
+          Auf der Lektionsseite steht dieselbe Anzeige klein im Kopfband; beide
+          lesen denselben Speicher (check-speicher.ts), es gibt also keine
+          zweite Wahrheit. */}
+      {lektionen.length > 0 && (
+        <div className="rounded-2xl p-6" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
+          <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-3" style={{ color: meta.color }}>
+            Dein Feuer
+          </div>
+          <Glutbett
+            slugs={lektionen.map((l) => l.lektionSlug)}
+            color={meta.color}
+            variant="gross"
+          />
+        </div>
+      )}
+
       {lektionen.length > 0 && (
         <div className="rounded-2xl p-6" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
           <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-3" style={{ color: meta.color }}>
@@ -1416,36 +1441,61 @@ function Quiz({
   onStreakHit: () => void;
   onStreakBreak: () => void;
 }) {
-  const questions = quizzes[moduleKey];
-  const meta      = moduleMeta[moduleKey];
-  const color     = meta.color;
+  const meta  = moduleMeta[moduleKey];
+  const color = meta.color;
 
-  const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState<number | null>(null);
-  const [answers, setAnswers]   = useState<{ chosen: number; correct: boolean }[]>([]);
-  const [showExplain, setShowExplain] = useState(false);
-  const [finished, setFinished] = useState(false);
+  // Ziehung kommt vom Server (Rahmenlehrplan §8, 08.09.2026): Fragen OHNE
+  // Loesung plus signiertes Token. Der Browser sieht `correct` und `explain`
+  // erst im Ergebnis — vorher lag die komplette Fragenbank im Bundle.
+  const [laden, setLaden]         = useState<'laeuft' | 'fertig' | 'fehler'>('laeuft');
+  const [ladeFehler, setLadeFehler] = useState('');
+  const [questions, setQuestions] = useState<readonly QuizQuestion[]>([]);
+  const [token, setToken]         = useState('');
+
+  const [current, setCurrent]     = useState(0);
+  const [selected, setSelected]   = useState<number | null>(null);
+  const [answers, setAnswers]     = useState<number[]>([]);
+  const [finished, setFinished]   = useState(false);
   const [einreichen, setEinreichen] = useState<'idle' | 'laeuft' | 'fertig' | 'fehler'>('idle');
-  const [ergebnis, setErgebnis] = useState<PruefungsErgebnis | null>(null);
+  const [ergebnis, setErgebnis]   = useState<PruefungsErgebnis | null>(null);
   const [fehlerText, setFehlerText] = useState<string>('');
 
   const lektionTitel = (slug: string) => lektionen.find((l) => l.lektionSlug === slug)?.title ?? 'Lektion';
   const lektionUrl   = (slug: string) => lektionen.find((l) => l.lektionSlug === slug)?.url ?? `/diplome/lernen/stufe-${meta.stage}/${slug}`;
 
+  const ziehen = useCallback(async () => {
+    setLaden('laeuft');
+    setLadeFehler('');
+    try {
+      const res = await fetch('/api/diplome/pruefung/ziehung', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ modul: moduleKey }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !Array.isArray(data?.fragen) || typeof data?.token !== 'string') {
+        setLadeFehler(typeof data?.error === 'string' ? data.error : 'Die Prüfung konnte nicht geladen werden.');
+        setLaden('fehler');
+        return;
+      }
+      setQuestions(data.fragen as QuizQuestion[]);
+      setToken(data.token);
+      setLaden('fertig');
+    } catch {
+      setLadeFehler('Keine Verbindung — die Prüfung konnte nicht geladen werden.');
+      setLaden('fehler');
+    }
+  }, [moduleKey]);
+
+  useEffect(() => { void ziehen(); }, [ziehen]);
+
   function choose(idx: number) {
     if (selected !== null) return;
-    const q = questions[current];
-    const correct = idx === q.correct;
     setSelected(idx);
-    setShowExplain(true);
-    setAnswers(prev => [...prev, { chosen: idx, correct }]);
-    if (correct) onStreakHit();
-    else         onStreakBreak();
   }
 
-  // Das Ergebnis stellt der Server fest. Der Browser zeigt nur an, was
-  // zurueckkommt — vorher wurde hier `onComplete(score)` ohne jede Bedingung
-  // aufgerufen und das Modul auch bei 0 von 5 als bestanden verbucht.
+  // Das Ergebnis stellt der Server fest — fuer genau die gezogenen Fragen
+  // (Token). Der Browser zeigt nur an, was zurueckkommt.
   async function einreichenAnServer(antworten: number[]) {
     setEinreichen('laeuft');
     setFehlerText('');
@@ -1453,7 +1503,7 @@ function Quiz({
       const res = await fetch('/api/diplome/pruefung', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ modul: moduleKey, antworten }),
+        body: JSON.stringify({ modul: moduleKey, token, antworten }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -1468,13 +1518,24 @@ function Quiz({
       }
       const e: PruefungsErgebnis = {
         score: Number(data.score) || 0,
+        gesamt: Number(data.gesamt) || antworten.length,
+        grenze: Number(data.grenze) || 0,
         bestanden: Boolean(data.bestanden),
         badge: typeof data.badge === 'string' ? data.badge : null,
+        ergebnisse: Array.isArray(data.ergebnisse)
+          ? (data.ergebnisse as PruefungsErgebnis['ergebnisse']).map((r) => ({
+              id: String(r.id ?? ''),
+              richtig: Boolean(r.richtig),
+              explain: typeof r.explain === 'string' ? r.explain : '',
+              lektionSlug: typeof r.lektionSlug === 'string' ? r.lektionSlug : '',
+            }))
+          : [],
         gespeichert: Boolean(data.gespeichert),
         hinweis: typeof data.hinweis === 'string' ? data.hinweis : undefined,
       };
       setErgebnis(e);
       setEinreichen('fertig');
+      if (e.bestanden) onStreakHit(); else onStreakBreak();
       onComplete(e);
     } catch {
       setFehlerText('Keine Verbindung — die Prüfung wurde nicht ausgewertet.');
@@ -1483,13 +1544,15 @@ function Quiz({
   }
 
   function next() {
+    if (selected === null) return;
+    const neu = [...answers, selected];
+    setAnswers(neu);
     if (current + 1 >= questions.length) {
       setFinished(true);
-      void einreichenAnServer(answers.map((a) => a.chosen));
+      void einreichenAnServer(neu);
     } else {
-      setCurrent(c => c + 1);
+      setCurrent((c) => c + 1);
       setSelected(null);
-      setShowExplain(false);
     }
   }
 
@@ -1497,25 +1560,47 @@ function Quiz({
     setCurrent(0);
     setSelected(null);
     setAnswers([]);
-    setShowExplain(false);
     setFinished(false);
     setEinreichen('idle');
     setErgebnis(null);
     setFehlerText('');
+    void ziehen(); // neue Ziehung — nicht dieselben zehn Fragen
+  }
+
+  if (laden === 'laeuft') {
+    return (
+      <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${color}40` }}>
+        <div className="text-4xl mb-3">🎲</div>
+        <div className="font-serif text-xl font-bold text-text-primary mb-2">Prüfung wird gestellt …</div>
+        <div className="text-sm font-sans" style={{ color: T.textMuted }}>Der Server zieht deine Fragen aus dem Pool.</div>
+      </div>
+    );
+  }
+
+  if (laden === 'fehler' || questions.length === 0) {
+    return (
+      <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${T.error}40` }}>
+        <div className="text-4xl mb-3">⚠️</div>
+        <div className="font-serif text-xl font-bold text-text-primary mb-2">Prüfung nicht verfügbar</div>
+        <p className="text-sm font-sans mb-5 max-w-md mx-auto" style={{ color: T.textMuted }}>{ladeFehler || 'Keine Fragen erhalten.'}</p>
+        <button
+          onClick={() => { void ziehen(); }}
+          className="rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase"
+          style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)`, color: T.bg }}
+        >
+          Erneut laden
+        </button>
+      </div>
+    );
   }
 
   if (finished) {
-    const lokalScore = answers.filter(a => a.correct).length;
-    const falsch = questions
-      .map((q, i) => ({ q, i, richtig: answers[i]?.correct ?? false }))
-      .filter((x) => !x.richtig);
-
     if (einreichen === 'laeuft' || einreichen === 'idle') {
       return (
         <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${color}40` }}>
           <div className="text-4xl mb-3">⏳</div>
           <div className="font-serif text-xl font-bold text-text-primary mb-2">Prüfung wird ausgewertet …</div>
-          <div className="text-sm font-sans" style={{ color: T.textMuted }}>{lokalScore} von {questions.length} sahen richtig aus — der Server hat das letzte Wort.</div>
+          <div className="text-sm font-sans" style={{ color: T.textMuted }}>{questions.length} Antworten abgegeben — der Server hat das letzte Wort.</div>
         </div>
       );
     }
@@ -1527,7 +1612,7 @@ function Quiz({
           <div className="font-serif text-xl font-bold text-text-primary mb-2">Nicht ausgewertet</div>
           <p className="text-sm font-sans mb-5 max-w-md mx-auto" style={{ color: T.textMuted }}>{fehlerText}</p>
           <button
-            onClick={() => { void einreichenAnServer(answers.map((a) => a.chosen)); }}
+            onClick={() => { void einreichenAnServer(answers); }}
             className="rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase mr-3"
             style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)`, color: T.bg }}
           >
@@ -1545,6 +1630,10 @@ function Quiz({
     }
 
     const passed = ergebnis.bestanden;
+    const falsch = ergebnis.ergebnisse
+      .map((r, i) => ({ r, i }))
+      .filter(({ r }) => !r.richtig);
+
     return (
       <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${color}40` }}>
         <div className="text-5xl mb-3">{passed ? '🏅' : '📚'}</div>
@@ -1552,26 +1641,32 @@ function Quiz({
           {passed ? 'Modul bestanden!' : 'Noch nicht bestanden'}
         </div>
         <div className="text-sm font-sans mb-2" style={{ color: T.textMuted }}>
-          {ergebnis.score} von {questions.length} richtig{passed ? '' : ` — du brauchst mindestens ${QUIZ_BESTEHENSGRENZE}`}.
+          {ergebnis.score} von {ergebnis.gesamt} richtig{passed ? '' : ` — du brauchst mindestens ${ergebnis.grenze}`}.
         </div>
         {ergebnis.hinweis && (
           <div className="text-[12px] font-sans mb-4" style={{ color: T.textDim }}>{ergebnis.hinweis}</div>
         )}
 
-        {/* Nachlesen: jede falsche Frage zeigt auf die Lektion, in der die Antwort steht (Audit R12). */}
+        {/* Nachlesen: jede falsche Frage zeigt Erklaerung und die Lektion, in der die Antwort steht (Audit R12). */}
         {falsch.length > 0 && (
           <div className="text-left rounded-xl p-4 mb-5" style={{ background: T.panelAlt, border: `1px solid ${T.borderMuted}` }}>
             <div className="text-[11px] font-sans uppercase tracking-wider mb-2" style={{ color }}>
               Nachlesen
             </div>
-            <ul className="flex flex-col gap-1.5">
-              {falsch.map(({ q, i }) => (
-                <li key={i} className="text-[13px] font-sans" style={{ color: T.textMuted }}>
-                  <span style={{ color: T.text }}>Frage {i + 1}</span>
-                  {' · '}
-                  <Link href={lektionUrl(q.lektionSlug)} className="underline hover:opacity-80" style={{ color }}>
-                    {lektionTitel(q.lektionSlug)}
-                  </Link>
+            <ul className="flex flex-col gap-2.5">
+              {falsch.map(({ r, i }) => (
+                <li key={r.id || i} className="text-[13px] font-sans" style={{ color: T.textMuted }}>
+                  <div>
+                    <span style={{ color: T.text }}>Frage {i + 1}</span>
+                    {' · '}
+                    <span>{questions[i]?.q}</span>
+                  </div>
+                  {r.explain && <div className="mt-0.5" style={{ color: T.textDim }}>💡 {r.explain}</div>}
+                  {r.lektionSlug && (
+                    <Link href={lektionUrl(r.lektionSlug)} className="underline hover:opacity-80" style={{ color }}>
+                      → {lektionTitel(r.lektionSlug)}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -1588,7 +1683,7 @@ function Quiz({
               border:     passed ? `1px solid ${T.borderMuted}` : 'none',
             }}
           >
-            {passed ? 'Nochmal' : 'Erneut versuchen'}
+            {passed ? 'Nochmal (neue Fragen)' : 'Erneut versuchen (neue Fragen)'}
           </button>
         </div>
       </div>
@@ -1604,9 +1699,9 @@ function Quiz({
           Frage {current + 1} / {questions.length}
         </div>
         <div className="flex gap-1">
-          {questions.map((_, i) => (
+          {questions.map((frage, i) => (
             <span
-              key={i}
+              key={frage.id}
               className="w-2 h-2 rounded-full"
               style={{ background: i < current ? color : i === current ? `${color}aa` : T.borderMuted }}
             />
@@ -1620,43 +1715,30 @@ function Quiz({
 
       <div className="flex flex-col gap-2.5 mb-4">
         {q.options.map((opt, i) => {
-          const isCorrect = i === q.correct;
-          const isChosen  = selected === i;
-          const reveal    = selected !== null;
-          let bg     = T.panelAlt;
-          let border = T.borderMuted;
-          let textCol = T.text;
-          if (reveal) {
-            if (isCorrect)         { bg = T.successBg; border = T.success; textCol = T.success; }
-            else if (isChosen)     { bg = T.errorBg;   border = T.error;   textCol = T.error;   }
-          }
+          const isChosen = selected === i;
           return (
             <button
               key={i}
               onClick={() => choose(i)}
-              disabled={reveal}
               className="text-left rounded-lg px-4 py-3 text-[13px] font-sans transition-[background-color,border-color,color]"
               style={{
-                background: bg,
-                border:     `1px solid ${border}`,
-                color:      textCol,
-                cursor:     reveal ? 'default' : 'pointer',
+                background: isChosen ? `${color}22` : T.panelAlt,
+                border:     `1px solid ${isChosen ? color : T.borderMuted}`,
+                color:      isChosen ? color : T.text,
+                cursor:     'pointer',
               }}
             >
               <span style={{ color: T.textDim, marginRight: '8px' }}>{String.fromCharCode(65 + i)}.</span>
               {opt}
-              {reveal && isCorrect && <span className="float-right">✓</span>}
-              {reveal && isChosen && !isCorrect && <span className="float-right">✗</span>}
+              {isChosen && <span className="float-right">●</span>}
             </button>
           );
         })}
       </div>
 
-      {showExplain && q.explain && (
-        <div className="rounded-lg p-3 text-[13px] font-sans mb-4" style={{ background: T.panelAlt, color: T.textMuted }}>
-          💡 {q.explain}
-        </div>
-      )}
+      <div className="text-[11px] font-sans mb-3" style={{ color: T.textDim }}>
+        Die Auswertung kommt am Ende — mit Erklärung zu jeder Frage, die nicht gestimmt hat.
+      </div>
 
       {selected !== null && (
         <button
@@ -1664,7 +1746,7 @@ function Quiz({
           className="w-full rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase"
           style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)`, color: T.bg }}
         >
-          {current + 1 >= questions.length ? 'Ergebnis sehen →' : 'Nächste Frage →'}
+          {current + 1 >= questions.length ? 'Abgeben und Ergebnis sehen →' : 'Nächste Frage →'}
         </button>
       )}
     </div>

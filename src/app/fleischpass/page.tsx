@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Fleischpass — Dein persönliches Grill-Logbuch mit KI-Auswertung',
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://steakakademie.de/fleischpass' },
   robots: { index: false, follow: false },
   openGraph: {
+    images: ogImages('Fleischpass — Grill-Logbuch mit KI-Intelligenz'),
     title: 'Fleischpass — Grill-Logbuch mit KI-Intelligenz',
     description:
       '47 Sessions. Deine Schwäche: Rinderbrust. Deine Stärke: Rippchen. Fleischpass macht deinen Fortschritt sichtbar — und sagt dir was als nächstes kommt.',

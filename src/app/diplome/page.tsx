@@ -42,8 +42,11 @@ export default function DiplomePage() {
   // Schema.org — Course (ohne Offer: Kursinhalt in Vorbereitung) + Breadcrumb
   const courseSch = courseSchema({
     name: 'Grillmeister-Ausbildung',
+    // „Das einzige" entfernt (08.09.2026): Spitzenstellungsbehauptung, die wir nicht
+    // beweisen koennen — § 5 UWG. Die Websuche vom selben Tag fand Online-Grillkurse
+    // vor uns; ob es kein vergleichbares Stufen-Diplom gibt, ist ungeprueft.
     description:
-      'Das einzige strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
+      'Das strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
     url: '/diplome',
   });
   const breadcrumbSch = breadcrumbSchema([{ name: 'Diplome', url: '/diplome' }]);

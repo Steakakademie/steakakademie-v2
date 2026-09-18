@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -9,9 +10,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Eine Liste fuer alles auf dieser Seite — statische Pfade, Metadaten, Inhalt
@@ -23,7 +25,8 @@ export async function generateStaticParams() {
   return sichtbareBegriffe.map(g => ({ slug: g.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) return {};
   const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar`;
@@ -33,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `https://steakakademie.de${entry.url}` },
     openGraph: {
+      images: ogImages(entry.title),
       title,
       description,
       url: `https://steakakademie.de${entry.url}`,
@@ -78,7 +82,8 @@ const mdxComponents = {
   ),
 };
 
-export default function GlossarEntryPage({ params }: Props) {
+export default function GlossarEntryPage(props: Props) {
+  const params = use(props.params);
   const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) notFound();
 
@@ -137,13 +142,17 @@ export default function GlossarEntryPage({ params }: Props) {
               {entry.title}
             </h1>
 
-            {/* Short definition callout */}
-            <blockquote
-              className="font-body text-lg text-text-light/80 leading-relaxed pl-5"
-              style={{ borderLeft: '3px solid #C8882A' }}
-            >
-              {entry.shortDefinition}
-            </blockquote>
+            {/* Frueher stand hier ein Zitatblock mit entry.shortDefinition. Der war
+                in 160 von 183 Eintraegen wortgleich mit dem direkt darunter
+                folgenden Abschnitt „## Definition" aus dem MDX-Body, in 14
+                weiteren nahezu wortgleich — derselbe Satz zweimal untereinander
+                auf derselben Seite (Plan C2, HCU-Risiko).
+
+                Entfernt statt den Abschnitt aus den Eintraegen zu loeschen: die
+                Eintraege sind mit im Mittel 113 Woertern ohnehin duenn, ein
+                Wegkuerzen haette das Problem vergroessert. shortDefinition bleibt
+                im Frontmatter und wird weiter fuer Meta-Description, Uebersicht
+                und DefinedTermSet-Schema genutzt. */}
           </div>
         </section>
 

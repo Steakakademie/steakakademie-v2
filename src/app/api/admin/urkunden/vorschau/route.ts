@@ -29,7 +29,7 @@ import { rendereUrkunde, urkundenDatum } from '@/lib/urkunde/render';
  * hier auf und nicht beim Empfaenger.
  */
 export async function GET(req: Request) {
-  if (!istAdminPasswort(cookies().get('admin_auth')?.value)) {
+  if (!istAdminPasswort((await cookies()).get('admin_auth')?.value)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

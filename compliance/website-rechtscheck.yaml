@@ -49,6 +49,12 @@ komponenten:
     rechtsgrundlage: "UrhG §§ 2, 19a, 72"
     status: ok
     befund: "Eigen-/KI-Bilder; Symbolbild-Badge vorhanden. Affiliate-Produktbilder via PA-API/Hersteller."
+    monitor: >-
+      Compliance-Scan 16.09.2026: picanha-churrasco.jpg trug eingebettete XMP-Metadaten
+      (DigitalSourceType=trainedAlgorithmicMedia, Credit="Made with Google AI"), war aber seit
+      dem Audit vom 18.08.2026 (Commit 2d1a48f, nach rein visueller Prüfung) ohne imageAI-Tag.
+      Frontmatter + CREDITS.md korrigiert. Lehre: Metadaten schlagen visuellen Eindruck — künftige
+      Bild-Übernahmen immer per Metadaten-Check (nicht nur Sichtprüfung) einstufen.
 
   - id: impressum-ddg
     titel: "Impressum nach § 5 DDG (Erreichbarkeit 2-Klick)"
@@ -105,6 +111,10 @@ komponenten:
     pruefung: "Aktive TLS-Verschlüsselung + Erwähnung in der DSE"
     rechtsgrundlage: "Art. 32 DSGVO"
     status: ok
+    befund: >-
+      Compliance-Scan 16.09.2026: TLS/HSTS war aktiv (next.config.mjs erzwingt
+      Strict-Transport-Security), fehlte aber als eigener Absatz in der Datenschutzerklärung —
+      Status "ok" war unbelegt (kein befund-Feld). Abschnitt 1a ergänzt.
 
   - id: dse-datensparsamkeit
     titel: "DSE: Grundsatz der Datensparsamkeit"
@@ -113,7 +123,12 @@ komponenten:
     pruefung: "Nur erforderliche Daten; Speicherdauer/Löschfristen je Kategorie"
     rechtsgrundlage: "Art. 5 Abs. 1 lit. c + e DSGVO"
     status: ok
-    befund: "Mit #5-Fix erfüllt."
+    befund: >-
+      Mit #5-Fix erfüllt. Compliance-Scan 16.09.2026: Kontaktformular (/kontakt,
+      Tabelle kontaktanfragen — Name/E-Mail/Betreff/Nachricht/Einwilligungsnachweis,
+      keine IP-Adresse) war nur beiläufig erwähnt, nicht als eigene Verarbeitung
+      beschrieben. Abschnitt 2a ergänzt, inkl. ehrlichem Hinweis, dass aktuell keine
+      automatische Löschfrist eingerichtet ist (Rest-Lücke, siehe Maßnahmenplan).
 
   - id: dse-cookies-consent
     titel: "DSE: Cookies & Einwilligung"
@@ -172,6 +187,23 @@ komponenten:
     rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
     status: ok
     befund: "07.06. korrigiert: Vercel (§3 Host, war fälschlich Netlify), Cloudflare (§4), Loops (§6), Supabase (§8), Resend (§8b), Digistore24 (§9), Anthropic (§10/§10a), fal.ai (§10b) benannt."
+    monitor: >-
+      Compliance-Scan 16.09.2026: Voyage AI Innovations, Inc. (Tochter der MongoDB, Inc.,
+      1633 Broadway, 38th Floor, New York, NY 10019, USA — Adresse per SEC-Filing MDB DEF 14A
+      verifiziert) verarbeitet produktiv Nutzereingaben in /api/kochwissen und
+      /api/kochwissen/generieren (Rezept-Schmiede, ToolBoxes.tsx auf der Startseite), fehlte
+      aber vollständig in der DSE. Abschnitt 10c ergänzt.
+      Nachtrag 16.09.2026: voyageai.com/dpa, /tos, /privacy direkt gelesen (nicht nur
+      zitiert). AV-Vertrag existiert und wird durch reine Nutzung des Dienstes automatisch
+      Vertragsbestandteil (ToS §6, DPA), keine gesonderte Unterschrift nötig. Drittlandüber-
+      mittlung läuft über EU-Standardvertragsklauseln (Kommissionsbeschluss 2021/914,
+      DPA Appendix C) — Kunde gilt durch Vertragsschluss als Unterzeichner; die Formulierung
+      in Abschnitt 10c der DSE ist damit verifiziert korrekt. KEINE DPF-Zertifizierung von
+      Voyage AI Innovations Inc. selbst (nur MongoDBs separate Enterprise-Cloud-DPA nennt DPF,
+      gilt aber nicht für die direkt angesprochene api.voyageai.com). Trainings-Opt-out
+      (ToS §3(iii), Default ist Opt-in) am 16.09.2026 von Uwe im Voyage-Dashboard aktiviert —
+      Abschnitt 10c um entsprechenden Hinweis ergänzt. Offen: Subprocessor-Liste (DPA §11)
+      war beim Fetch nicht als Text extrahierbar, nicht sicherheitskritisch für die DSE-Formulierung.
 
   - id: dse-zahlungsdienstleister
     titel: "DSE: Zahlungsdienstleister"

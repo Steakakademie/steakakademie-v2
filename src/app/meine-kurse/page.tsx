@@ -55,7 +55,7 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
 };
 
 export default async function MeineKursePage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login?redirectTo=/meine-kurse');

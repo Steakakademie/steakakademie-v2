@@ -176,6 +176,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
             alt={`${result.nameDE} (${result.nameEN})`}
             label={result.nameDE}
             className="w-full aspect-[4/3] md:aspect-auto md:h-full min-h-[240px]"
+            ai={result.imageAI}
           />
           <div className="p-6 sm:p-8">
             <span className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em]">
@@ -241,7 +242,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
                   onClick={() => { setResultId(c.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   className="text-left border border-border-subtle bg-surface-card hover:border-brand-gold/40 transition-colors overflow-hidden"
                 >
-                  <CutImage src={c.image} alt={c.nameDE} label={c.nameDE} className="aspect-[4/3]" />
+                  <CutImage src={c.image} alt={c.nameDE} label={c.nameDE} className="aspect-[4/3]" ai={c.imageAI} />
                   <p className="font-serif text-xs font-bold text-text-light p-2 leading-tight">{c.nameDE}</p>
                 </button>
               ))}

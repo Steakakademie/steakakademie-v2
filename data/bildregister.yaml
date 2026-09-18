@@ -43,6 +43,23 @@ bilder:
   images/articles/thermometer-test-steak-grill-1.webp: { status: offen }
   images/articles/thermometer-test-steak-grill-2.webp: { status: offen }
   images/articles/usa-expedition-smoker-hero.webp: { status: offen }
+  # Content-Pipeline W2, erzeugt 17.09.2026 mit scripts/hero-images.mjs.
+  # Keine erkennbaren Personen, keine Marken, kein Text im Bild (geprueft).
+  # Kennzeichnung im Frontmatter: imageAI: true + imageSource (AI Act Art. 50).
+  images/artikel/stall-plateauphase.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/flux-lora), Prompt in scripts/hero-images.mjs Brief art-stall-plateauphase
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-17
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/artikel/texas-crutch.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/flux-lora), Prompt in scripts/hero-images.mjs Brief art-texas-crutch (Runde 2)
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-17
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/authors/marco-richter.jpg: { status: offen }
   images/beilagen-salate-hero.jpg: { status: offen }
   images/bulle-freigestellt.png: { status: offen }

@@ -1,3 +1,13 @@
+/**
+ * Proxy (bis Next 16: src/middleware.ts) — 17.09.2026 umbenannt
+ * ==============================================================
+ * Next 16 hat die Datei-Konvention `middleware` zu `proxy` umbenannt (Export
+ * `proxy` statt `middleware`); sie laeuft jetzt in der Node-Runtime, nicht mehr
+ * auf der Edge. Inhalt unveraendert: A/B-Cookie fuer die Startseite, 401-Gate
+ * fuer Admin-/Pipeline-APIs, Supabase-Session-Refresh + Login-Gate. Der
+ * Helfer @/lib/supabase/middleware behaelt seinen Namen — er ist kein
+ * Next-Konventionsdateiname.
+ */
 import { type NextRequest, NextResponse } from 'next/server';
 import { istAdminPasswort } from '@/lib/admin-auth';
 import { updateSession } from '@/lib/supabase/middleware';
@@ -5,7 +15,7 @@ import { updateSession } from '@/lib/supabase/middleware';
 const IS_CRAWLER =
   /bot|crawler|spider|crawling|slurp|googlebot|bingbot|duckduckbot|baiduspider|yandex|applebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|discordbot|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-searchbot|anthropic-ai|perplexitybot|perplexity-user|ccbot|bytespider|amazonbot|google-extended|lighthouse|pagespeed|ahrefs|semrush|screaming frog/i;
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // A/B-Test Startseite: 50/50-Zuteilung per Cookie, Variante B wird intern

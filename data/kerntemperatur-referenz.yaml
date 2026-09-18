@@ -50,20 +50,6 @@ badges:
   oily_whole:   { c: 63, range: [60, 65], label: "durch" }            # ganze Makrele/Sardine
   burger:       { c: 70, range: [70, 72], label: "durchgegart" }      # Hack: durch Wolfen Keime innen → ≥70 °C
 
-# Garstufen-Skala Rind (serviert) — ZU BESTÄTIGEN (Uwe), deshalb noch nicht unter `badges`.
-# Kanonisch ist bislang nur medium rare (beef_mr, 54–58). Die Nachbarstufen stehen seit
-# 07.09.2026 in Lektion Stufe 3/01, in den Flashcards und im Marco-Chat-Prompt gleichlautend;
-# sie folgen aus dem Anker, sind aber nicht extern belegt. Bestätigt Uwe die Reihe, wandert
-# sie als beef_rare/beef_medium/beef_mw/beef_wd unter `badges`; sonst werden die drei
-# Stellen angepasst. Bis dahin gilt: keine dieser vier Zahlen in neuen Inhalten verwenden.
-garstufen_rind_vorschlag:
-  bestaetigt: false
-  rare:        [50, 54]
-  medium_rare: [54, 58]   # = beef_mr, kanonisch
-  medium:      [58, 63]
-  medium_well: [63, 68]
-  well_done:   [68, 99]
-
 # Sicherheits-Mindestwerte (nie unterschreiten — Risikogruppen)
 sicherheit:
   schwein: 63          # Lebensmittelhygiene
