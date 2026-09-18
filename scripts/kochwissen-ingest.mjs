@@ -32,6 +32,7 @@ import { readFile } from 'fs/promises'
 import { join, dirname, basename, extname } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
+import { titelKey, quelleKey as ankerFuer } from './lib/kochwissen-schluessel.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
@@ -59,20 +60,13 @@ if (!FILE) {
 const SOURCE = String(flag('source', basename(FILE, extname(FILE))))
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-const slug = (s) =>
-  (s || '')
-    .toLowerCase()
-    .normalize('NFKD').replace(/[̀-ͯ]/g, '') // Diakritika entfernen
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+// Schluessel-Normalisierung: scripts/lib/kochwissen-schluessel.mjs (getestet). Die
+// fruehere lokale slug()-Funktion entfernte Diakritika vor dem Ausschreiben der Umlaute
+// und erzeugte fuer "ä"/"ae"-Schreibweisen zwei Schluessel (Fix 15.09.2026).
+const slug = titelKey
 
 // Anker fuer spaeteres Aufloesen von Index-Platzhaltern (z.B. "S. 267" -> "modernist:s267")
-const quelleKey = (quelle) => {
-  if (!quelle) return null
-  const page = quelle.match(/s\.?\s*(\d+)/i)
-  return `${SOURCE}:${page ? `s${page[1]}` : slug(quelle)}`
-}
+const quelleKey = (quelle) => ankerFuer(SOURCE, quelle)
 
 const splitKeywords = (s) =>
   (s || '').split(',').map((k) => k.trim()).filter(Boolean)

@@ -31,7 +31,9 @@
 **Läuft:** Vercel-Produktion (`steakakademie.de`), Supabase-Auth (Magic Link), Branch
 Protection auf `main` mit drei Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
 prüfen`, `Build pruefen` — alle aus GitHub Actions), 21 GitHub-Actions-Workflows,
-Sentry-Monitoring, Ops-Alert → Jira (KAN).
+Sentry-Monitoring, Ops-Alert → Jira (KAN), **Ops-Heartbeat** (täglich 09:00 UTC,
+`docs/ops-heartbeat.md`) — prüft Ergebnisse statt Läufe und schlägt an, wenn eine
+Automation aufhört zu liefern, auch wenn sie grün bleibt.
 
 **Hängt:** Der Build-Gate baut ohne Env-Variablen — Supabase-gestützte Bereiche rendern
 dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das reichen soll,
@@ -128,8 +130,15 @@ Lernvideo-Produktion mit Marcos Stimme. Danach OpenMontage stilllegen.
 **Läuft:** 64 Cuts im Katalog, 334 MDX-Dateien ohne Frontmatter-Fehler, keine toten
 internen Links, Glossar- und Rezept-Agent (täglich 03:00 / 03:30 UTC), Rechtschreibprüfung
 (report-only), MDX-Komponenten-Gate im `prebuild`.
+*13.09.:* Rezept-Nachschub automatisiert — `data/rezept-seeds.json` (34 Gerichte aus den
+11 BBQ-Hochburgen) wird von `scripts/recipe-seeds.mjs` aufgefüllt, sobald der Vorrat unter
+10 offene Seeds fällt. Der Agent läuft damit nicht mehr trocken.
 
-**Hängt:** 7 Rind-Cuts mit `52–54 °C` widersprechen der Untergrenze 54 °C in
+**Hängt:** **Rezept-Produktion stand vom 27.08. bis 13.09.2026 still** — 84 Seeds
+abgearbeitet, `recipe-grow` lief 17 Nächte grün in 48 Sekunden ohne Ergebnis. Ursache
+behoben (Nachschub + Heartbeat), aber: der Rückstand von ~17 Rezepten wird nicht
+nachgeholt, es läuft ab jetzt wieder 1 Rezept/Tag ·
+7 Rind-Cuts mit `52–54 °C` widersprechen der Untergrenze 54 °C in
 `data/kerntemperatur-referenz.yaml` — Fachentscheidung offen, welche Seite recht hat ·
 `content/cuts/pulled-pork.mdx` hat keinen Katalog-Eintrag (Seite existiert, aus dem
 Atlas nicht erreichbar) · `id: 'roastbeef'` ≠ `slug: 'rumpsteak'` (einziger ID/Slug-Bruch) ·

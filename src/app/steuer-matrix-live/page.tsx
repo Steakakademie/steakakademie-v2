@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     'Steuerrecht ändert sich jedes Jahr. Das Jahres-Update-Abo hält deine Steuer-Matrix für alle 23 Länder aktuell: neue Steuersätze, geänderte Regelungen.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix-live' },
   openGraph: {
+    images: ogImages('Steuer-Matrix LIVE — Immer aktuelle Steuerdaten für 23 Länder'),
     title: 'Steuer-Matrix LIVE — Immer aktuelle Steuerdaten für 23 Länder',
     description:
       'Jährliches Update-Abo: alle Steuersätze, Pflichtabgaben und Regeländerungen für 23 Länder — direkt in deinen Rechner. Kündbar jederzeit.',

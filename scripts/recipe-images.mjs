@@ -221,9 +221,48 @@ async function generate(prompt, scale = 0.9, size = 'landscape_4_3') {
   return Buffer.from(await img.arrayBuffer())
 }
 
+// ─── BILDREGISTER ─────────────────────────────────────────────────────────────
+// data/bildregister.yaml ist der Lizenznachweis fuer JEDES Bild unter public/;
+// scripts/legal-guard.mjs bricht ohne Eintrag ab (Regel 6 in
+// compliance/website-rechtscheck.yaml). Der Rezept-Agent hat nie eingetragen —
+// am 14.09.2026 fiel PR #99 deshalb im Legal-Guard durch. Textbasiert, KEIN
+// Re-Serialisieren: Die Datei traegt Kommentare, die js-yaml verlieren wuerde.
+const REGISTER = join(ROOT, 'data', 'bildregister.yaml')
+
+async function registerEintragen(webPath, slug) {
+  const key = webPath.replace(/^\//, '')                 // images/rezepte/<slug>.jpg
+  const heute = new Date().toISOString().slice(0, 10)
+  const block =
+`  ${key}:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/${slug}.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: ${heute}
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+`
+  let raw = await readFile(REGISTER, 'utf8')
+  const esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  // Bestehenden Eintrag ersetzen — einzeilig ({ status: offen }) oder als Block
+  // (bis zur naechsten Zeile mit zwei Leerzeichen Einzug + Schluessel oder EOF).
+  const vorhanden = new RegExp(`^  ${esc}:(?:[^\\n]*\\n(?:    [^\\n]*\\n)*)`, 'm')
+  if (vorhanden.test(raw)) {
+    raw = raw.replace(vorhanden, block)
+  } else {
+    if (!raw.endsWith('\n')) raw += '\n'
+    raw += block
+  }
+  await writeFile(REGISTER, raw, 'utf8')
+}
+
 async function main() {
   console.log(c.d('\n🖼  Recipe Image Generator (FLUX.1 dev)\n'))
-  if (!DRY && !FAL_KEY) { console.log(c.r('⚠ FAL_KEY fehlt — Abbruch.')); process.exit(0) }
+  // exit 1, nicht 0 (13.09.2026): Ohne Bild landet ein frisch erzeugtes Rezept mit
+  // einem image-Pfad im PR, zu dem keine Datei existiert. Frueher endete der Lauf
+  // hier still und gruen — der Defekt fiel erst am Content-Gate auf, ohne dass
+  // irgendwo stand, warum. Dieses Skript wird nur aus Workflows gerufen; ein
+  // fehlender Key ist dort ein Ausfall, kein Normalzustand.
+  if (!DRY && !FAL_KEY) { console.log(c.r('⚠ FAL_KEY fehlt — Abbruch.')); process.exit(1) }
   await mkdir(IMG_DIR, { recursive: true })
 
   const files = (await readdir(REZEPTE)).filter(f => f.endsWith('.mdx'))
@@ -253,6 +292,7 @@ async function main() {
       process.stdout.write(c.d(`◇ ${slug}${suffix} … `))
       const buf = await generate(prompt, DRAMATIC ? 0.4 : loraScale(raw, slug), DRAMATIC ? 'landscape_16_9' : 'landscape_4_3')
       await writeFile(target, buf)
+      await registerEintragen(webPath, slug)
       // Frontmatter patchen (regex, KEIN Re-Serialize): warm → image:, dramatic → heroImage:
       const field = DRAMATIC ? 'heroImage' : 'image'
       const fieldRe = new RegExp(`^${field}:\\s*.*$`, 'm')
@@ -269,6 +309,10 @@ async function main() {
   }
 
   console.log(`\n${c.g(`✓ ${done} generiert`)} · ${c.d(`${skipped} vorhanden`)} · ${failed ? c.r(`${failed} Fehler`) : '0 Fehler'}\n`)
+
+  // Ein fehlgeschlagenes Bild ist ein fehlendes Bild. Vorher lief der Schritt
+  // trotzdem gruen weiter und der PR trug einen toten Bildpfad.
+  if (failed > 0) process.exitCode = 1
 }
 
 main().catch(e => { console.error(c.r(e.stack || e.message)); process.exit(1) })

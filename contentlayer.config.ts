@@ -336,6 +336,12 @@ export const Recipe = defineDocumentType(() => ({
     authorSlug:     { type: 'string',  required: true },
     image:          { type: 'string',  required: true },
     imageAlt:       { type: 'string',  required: true },
+    // Redaktionsvorbehalt — gleiche Felder und Defaults wie Artikel/Streitfall.
+    // Die Defaults halten den gesamten Altbestand (118 Rezepte ohne diese Felder)
+    // unveraendert sichtbar; der Rezept-Agent setzt sie ab 13.09.2026 explizit.
+    status:         { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed:       { type: 'boolean', default: true },
+    reviewedAt:     { type: 'date' },
     heroImage:      { type: 'string' },   // optional: dramatischer Hero-Look (Eyecatcher); Galerie/Karten nutzen image
     imagePrompt:    { type: 'string' },   // DEPRECATED: Relikt der rein generativen Bild-Pipeline.
                                           // Nicht mehr befuellen — Bildherkunft gehoert in imageSource.
@@ -418,6 +424,14 @@ export const DiplomLektion = defineDocumentType(() => ({
     publishedAt:    { type: 'date',   required: true },
     seoTitle:       { type: 'string' },
     seoDescription: { type: 'string' },
+    // Redaktionsvorbehalt (08.09.2026): Lektionen entstehen als KI-Entwurf und
+    // sind erst veroeffentlichungsfaehig, wenn Uwe sie gelesen hat — daran haengt
+    // die AI-Act-Einstufung (Art. 50 Abs. 4, compliance/ai-act-einstufung.md).
+    // Defaults published/true, damit die 30 Altlektionen unveraendert bleiben;
+    // Neues traegt status: draft + reviewed: false, bis die Freigabe da ist.
+    status:     { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed:   { type: 'boolean', default: true },
+    reviewedAt: { type: 'date' },
   },
   computedFields: {
     slug: {

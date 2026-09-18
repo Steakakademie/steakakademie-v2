@@ -3,6 +3,112 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW38 — 14.09.2026
+
+> Vorwoche = **KW37 (07.09.)**, direkt darunter. Abstand 7 Tage, sauberer Wochenrhythmus.
+> Queries wörtlich wie im Auftrag — 1:1 vergleichbar mit KW37.
+
+### Rankings (US-basierte WebSearch — Trefferliste, KEINE deutsche SERP-Position)
+
+| Keyword | steakakademie.de in der Trefferliste? | Wer erscheint (Top 3) | Δ KW37 | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ **nein** (Liste mit 5 Treffern) | lecker.de · shop.block-house.de · grillfuerst.de | = (KW37 ebenfalls nicht gelistet; **Top 3 identisch**) | = (Baseline: nicht in Top 10) |
+| „Ribeye" | ❌ nein — trotz eigenem Ribeye-Guide | meatnbone.com · Wikipedia „Rib eye steak" · allenbrothers.com | = (Feld weiter rein US/EN) | = |
+| „Reverse Sear" | ❌ nein — trotz eigener Methoden-Seite | traeger.com · jesspryles.com · theglamorousgourmet.com | = (nicht gelistet; Top-3-Zusammensetzung leicht rotiert) | = |
+| „Brisket Anleitung" | ❌ nein — trotz eigenem Brisket-Guide | bbqpit.de · ofen.de · bbqlicate.de | = (nicht gelistet; beefbandits jetzt Rang 4 statt 3) | = |
+| „Steakakademie" (Brand) | ✅ ja — **Rang 5** (`steakakademie.de/`) | Instagram @steakakademie · Facebook Steakakademie (Bochum, fremd) · **github.com/Arkamas/steakakademie-v2** | 🔴 **Rang 3 → Rang 5** | 🔴 schlechter (Baseline: Platz 1) |
+
+⚠️ **Methodik-Caveats:**
+- Werkzeug ist US-basiert. Laut `docs/geo-baseline.md` (Messung 3) ist die Trefferliste
+  **keine deutsche SERP-Position**. Leitmessung bleibt der manuelle DE-Inkognito-Check
+  durch Uwe — **auch diese Woche nicht erhoben** (damit seit Messung 3, 09.08., offen).
+- „Ribeye" und „Reverse Sear" liefern erneut eine **rein US/EN-SERP** — für DACH der
+  falsche Markt. Als „nicht gefunden" gewertet, aber ohne Aussagekraft.
+- Der Brand-Rückgang von Rang 3 auf 5 ist bei diesem Werkzeug **keine belegte
+  Positionsveränderung**; die Ursache ist aber sichtbar (siehe Befund).
+
+**Befund — neu diese Woche:** Beim Brand-Keyword stehen jetzt **zwei GitHub-Seiten des
+eigenen öffentlichen Repos** (`Arkamas/steakakademie-v2` sowie PR #49 unter
+`Steakakademie/steakakademie-v2`) **vor** der eigenen Domain. Das Repo ist öffentlich
+(bekannt, siehe Memory „Repo-Hygiene"); neu ist, dass es auf die Marken-Query indexiert
+wird und dabei die Website verdrängt. SEO-Schaden gering (wer „Steakakademie" sucht,
+findet die Seite weiterhin), aber das Marken-SERP zeigt Interessenten jetzt PR-Titel wie
+„fix(ci): Fehlerpfad in pr-statt-push" statt Inhalte. Bei den vier Sach-Keywords bewegt
+sich nichts: null Sichtbarkeit, bei „Kerntemperatur Steak" sogar Top 3 **identisch** mit
+KW37.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe
+Erwähnungen/Backlinks.** Alle Treffer sind Namensvettern oder fremde Kursanbieter,
+keiner verlinkt auf unsere Domain:
+
+- https://www.facebook.com/steakakademie/ (Steakakademie Bochum — fremd)
+- https://beisser.de/fleischerei/steakakademie/
+- https://www.grillkonzept.de/kurstermin/steakakademie-100-bestes-fleisch-holzwickede-2022-05-13/ (**neu in der Liste**, fremder Kursanbieter)
+- https://www.grillkonzept.de/kurstermin/steakakademie-100-bestes-fleisch-2024-01-05/
+- https://www.oberpfalz-beef.de/gutschein-kurs-steaktasting/7024 (fremd)
+- Wikipedia „Nordakademie" (themenfremd)
+- (KW37 gelistet, diese Woche nicht mehr: smokefire-grillakademie.de — Listen-Rauschen, war ohnehin kein Link auf uns)
+
+**Δ KW37 (0) und Δ Baseline (0): unverändert 0 — jetzt 10 Wochen.**
+
+> Abgrenzung, damit es nicht falsch gezählt wird: Die neu sichtbaren GitHub-Seiten sind
+> **eigene Properties**, kein externer Backlink und kein Autoritätssignal. Off-Page
+> bleibt bei null.
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW37 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/`, Seite lädt vollständig, Canonical `https://steakakademie.de`, `meta-robots: index, follow` | 🟢 ok | = |
+| `/llms.txt` erreichbar | vollständig ausgeliefert (`text/plain`): Kern-Referenzen, Weitere Inhalte, Über | 🟢 ok | = (5. Woche in Folge sauber) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` als letzte Zeile; AI-Crawler (GPTBot, ClaudeBot, PerplexityBot u. a.) weiterhin ausdrücklich erlaubt | 🟢 ok | = |
+
+### Offene Punkte / GEO
+
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 35) ✅ weiterhin verdrahtet — nichts offen.
+- **AI-Abfragen-Tabelle `docs/geo-baseline.md`: Messung 4 (01.09.) weiterhin komplett leer**
+  (ChatGPT, Perplexity, Google AIO — alle drei „nicht erhoben"), Messung 2 (04.08.) ebenfalls.
+  Der 4-Wochen-Re-Check war zum **06.09. fällig — jetzt 8 Tage überfällig**. Nur manuell
+  durch Uwe erhebbar (~15 Min für alle drei).
+  Folge unverändert: Die Kernfrage aus Messung 3 — **bleibt der Perplexity-Treffer vom
+  09.08. stabil?** — ist seit fünf Wochen unbeantwortet. Der einzige belegte GEO-Erfolg
+  des Projekts gilt weiter als *einmalig beobachtet*, nicht als Ranking.
+- **Backlinks = 0** bleibt der strukturelle Engpass — jetzt 10 Wochen unverändert.
+  Die Empfehlung aus KW36 **und** KW37 (Foren-Referenz) ist erneut nicht umgesetzt worden.
+- Nicht geprüft in diesem Lauf: DE-Inkognito-SERP, echte Positionen, Google Search Console,
+  Traffic-Zahlen, Content-Änderungen seit KW37.
+
+### Ampeln
+
+- Rankings: 🔴 (4 von 5 Keywords ohne Sichtbarkeit, Sach-Top-3 teils wörtlich identisch mit KW37; Brand-Query zusätzlich von eigenen GitHub-Seiten verdrängt)
+- Off-Page: 🔴 (10 Wochen 0 Backlinks — Ursache Nr. 1, unverändert)
+- Technik: 🟢 (alle drei Checks sauber, fünfte Woche in Folge)
+
+### Handlungsempfehlung (max. 1)
+
+**Die Foren-Empfehlung entweder diese Woche terminieren oder streichen.** Sie steht jetzt
+die dritte Woche unerledigt im Log; sie noch kleiner zu schneiden hat beim zweiten Versuch
+nicht geholfen. Zwei ehrliche Optionen, eine davon wählen:
+(a) **15-Minuten-Termin im Kalender** für eine sachliche Antwort in *einem* deutschen
+BBQ-Forum (Grillsportverein oder BBQPit-Community) auf eine Frage, die die
+Kerntemperatur-Tabelle tatsächlich beantwortet, mit `/temperatur-guide` als Beleg —
+Regel 5 (kein Spam): nur posten, wo die Antwort auch ohne Link hilfreich wäre. Oder
+(b) **bewusst streichen** und akzeptieren, dass Off-Page vorerst bei null bleibt —
+dann steht sie nächste Woche nicht mehr als „offen" im Log.
+Ein drittes Mal dieselbe unerledigte Zeile zu wiederholen wäre Selbstbetrug.
+
+### Trend vs. Vorwoche
+
+Stillstand mit einem kleinen Rückschritt: sachlich exakt wie KW37 (null generische
+Sichtbarkeit, bei „Kerntemperatur Steak" sogar identische Konkurrenz-Top-3), zusätzlich
+verdrängen jetzt eigene GitHub-Repo-Seiten die Domain auf der Marken-Query von Rang 3 auf
+Rang 5. Technik seit fünf Wochen stabil grün — das ist nicht die Baustelle. Die Baustelle
+ist seit zehn Wochen dieselbe und wurde in zehn Wochen kein einziges Mal angefasst.
+
+---
+
 ## KW37 — 07.09.2026
 
 > Vorwoche = **KW36 (31.08.)**, direkt darunter. Abstand 7 Tage, sauberer Wochenrhythmus.

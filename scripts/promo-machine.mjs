@@ -184,7 +184,9 @@ function classifyBadge(fm, slug) {
   if (has('pulled pork', 'boston butt', 'spareribs', 'sparerib', 'schälrippchen')) return 'pork_lowslow';
   if (has('iberico', 'pluma', 'presa', 'secreto', 'schweinefilet', 'schweinelende', 'schweinekotelett', 'schweinenacken')) return lowslow ? 'pork_lowslow' : 'pork_juicy';
 
-  // Lamm (Keule rosa 60–63 → spezifisch via Regex)
+  // Lamm. Keule bewusst NICHT hier: Beide Keulen-Rezepte zielen auf 70 °C (lamb_done)
+  // und nennen rosa (lamb_rosa, 60–65 °C) nur als Variante — der Text-Fallback in
+  // deriveFact() liest den Hauptwert aus description/Text (geprueft 15.09.2026: 70 °C).
   if (has('lammkarree', 'lammkotelett', 'lammrücken', 'lammruecken', 'lammlachs')) return 'lamb_mr';
 
   // Rind Low & Slow — immer kollagenreiche Schmor-/Smoke-Cuts …

@@ -1,3 +1,10 @@
+-- ANGEWENDET erst am 15.09.2026 auf Projekt bbgdrzhlellxzggbbqcm (per MCP apply_migration),
+-- Ledger-Version 20260915073002. Die Datei lag seit dem 13.09. im Repo, war aber nie auf
+-- der Produktion gelaufen — aufgefallen, weil der Security-Advisor den Befund unten weiter
+-- meldete. Vorher geprueft: Rumpf auf der Produktion identisch, nur ohne search_path.
+-- Danach: proconfig = search_path=public, pg_temp, Trigger an hoefe unveraendert,
+-- Advisor-Befund 0011 fuer hoefe_touch_geaendert verschwunden.
+--
 -- Nachtrag zu 20260913120000_hoefe.sql
 --
 -- Der Supabase-Linter (0011, function_search_path_mutable) hat nach dem Anwenden

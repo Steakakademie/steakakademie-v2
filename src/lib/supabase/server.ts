@@ -1,8 +1,10 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies }            from 'next/headers';
 
-export function createClient() {
-  const cookieStore = cookies();
+// Next 15+/16: cookies() ist asynchron — deshalb ist createClient() jetzt
+// async und JEDER Aufrufer schreibt `await createClient()`.
+export async function createClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

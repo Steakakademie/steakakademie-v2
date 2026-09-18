@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs.',
   alternates: { canonical: 'https://steakakademie.de/erste-kunden-sprint' },
   openGraph: {
+    images: ogImages('Erste-Kunden-Sprint — Erste Aufträge in 72h'),
     title: 'Erste-Kunden-Sprint — Erste Aufträge in 72h',
     description:
       'Das System für den Übergang von "gegründet" zu "erste bezahlte Kunden". Positionierung schärfen, erstes Angebot formulieren, drei Wunschkunden direkt ansprechen.',

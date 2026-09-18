@@ -1,4 +1,32 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx tsc --noEmit *)",
+      "PowerShell(Set-Location *)",
+      "PowerShell(Get-ChildItem *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__search_threads",
+      "mcp__Claude_in_Chrome__get_page_text",
+      "mcp__plugin_claude-mem_mcp-search__search",
+      "mcp__Claude_in_Chrome__read_page",
+      "PowerShell(Select-String *)",
+      "PowerShell(Test-Path *)",
+      "mcp__Claude_in_Chrome__find",
+      "PowerShell(Get-Content *)",
+      "PowerShell(npx tsc --noEmit)",
+      "PowerShell(npx tsc --noEmit *)",
+      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__list_labels",
+      "mcp__bb573ec8-7cf6-4022-9009-383d32442f78__netlify-project-services-reader",
+      "mcp__e77bfedf-bcd2-47f8-909d-53ae8ac85061__searchJiraIssuesUsingJql",
+      "mcp__Claude_in_Chrome__read_network_requests",
+      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__get_thread",
+      "mcp__07efb22d-715d-48d1-ac3e-edbc8b60a254__balance",
+      "Bash(gh run watch *)",
+      "mcp__ce9756a3-17c7-44d4-93f8-1ddb07f3d326__notion-fetch",
+      "mcp__plugin_claude-mem_mcp-search__get_observations"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

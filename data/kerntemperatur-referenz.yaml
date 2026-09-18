@@ -37,6 +37,7 @@ badges:
   wagyu:        { c: 52, range: [50, 54], label: "Medium Rare" }      # Fett schmilzt früh
   lamb_mr:      { c: 56, range: [54, 57], label: "Medium Rare" }
   lamb_done:    { c: 70, range: [70, 75], label: "durch" }            # Keule durch
+  lamb_rosa:    { c: 62, range: [60, 65], label: "rosa" }             # Keule rosa (Uwe, 15.09.2026) — zwischen lamb_mr und lamb_done; Rezepte lammkeule-drehspiess, aussie-lamb-leg-butterflied (#109)
   pork_juicy:   { c: 63, range: [63, 65], label: "saftig" }           # Untergrenze = sicherheit.schwein (63); vorher [60,65] und damit im Widerspruch zur eigenen Sicherheitsangabe — Audit 06.09.2026
   pork_lowslow: { c: 92, range: [88, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
   pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten
@@ -48,20 +49,6 @@ badges:
   whitefish:    { c: 58, range: [55, 62], label: "durch" }            # Dorade/Kabeljau/Rotbarbe/Mahi/Schwertfisch
   oily_whole:   { c: 63, range: [60, 65], label: "durch" }            # ganze Makrele/Sardine
   burger:       { c: 70, range: [70, 72], label: "durchgegart" }      # Hack: durch Wolfen Keime innen → ≥70 °C
-
-# Garstufen-Skala Rind (serviert) — ZU BESTÄTIGEN (Uwe), deshalb noch nicht unter `badges`.
-# Kanonisch ist bislang nur medium rare (beef_mr, 54–58). Die Nachbarstufen stehen seit
-# 07.09.2026 in Lektion Stufe 3/01, in den Flashcards und im Marco-Chat-Prompt gleichlautend;
-# sie folgen aus dem Anker, sind aber nicht extern belegt. Bestätigt Uwe die Reihe, wandert
-# sie als beef_rare/beef_medium/beef_mw/beef_wd unter `badges`; sonst werden die drei
-# Stellen angepasst. Bis dahin gilt: keine dieser vier Zahlen in neuen Inhalten verwenden.
-garstufen_rind_vorschlag:
-  bestaetigt: false
-  rare:        [50, 54]
-  medium_rare: [54, 58]   # = beef_mr, kanonisch
-  medium:      [58, 63]
-  medium_well: [63, 68]
-  well_done:   [68, 99]
 
 # Sicherheits-Mindestwerte (nie unterschreiten — Risikogruppen)
 sicherheit:

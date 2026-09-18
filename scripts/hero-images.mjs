@@ -110,6 +110,66 @@ const BRIEFS = [
       + 'an empty dirt farm track curving out of the frame in the foreground, dew on the grass, '
       + 'still atmospheric landscape photography, 50mm lens, f/5.6, muted palette with warm highlights, ' + NEG,
   },
+  // ── Content-Pipeline W2 (17.09.2026) ───────────────────────────────────────
+  // Zwei Pillar-Artikel, die untereinander in derselben Kategorie stehen und
+  // sich gegenseitig verlinken — die Motive muessen also klar unterscheidbar
+  // sein. Getrennt ueber Ort und Zustand: Stall = Fleisch IM Smoker, halbdunkel,
+  // Dampf; Crutch = Fleisch AUF dem Tisch, hell, Papier.
+  //
+  // Beide sind Fleisch-gefuehrte Motive, der Hausstil-LoRA passt hier also
+  // grundsaetzlich. ABER: er ist auf Hero-STEAKfotos trainiert und zieht (Lehre
+  // aus Runde 3 beim Ribeye) systematisch Richtung Steak-Close-up. Ein Brisket
+  // ist das Gegenteil davon — ein grosses, laengliches Stueck. Deshalb wie beim
+  // Ribeye scale 0.5 statt 0.85, und die Form wird positiv und geschlossen
+  // beschrieben, damit kein formloser Klumpen entsteht (Trick aus dem
+  // Rotisserie-Brief: expliziter Form-Anker).
+  {
+    id: 'art-stall-plateauphase',
+    target: 'images/artikel/stall-plateauphase.jpg',
+    patch: { file: 'content/artikel/stall-plateauphase-beim-smoken.mdx', field: 'image' },
+    size: 'landscape_16_9',
+    scale: 0.5,
+    // Das Thema ist Verdunstungskuehlung — das Bild muss also FEUCHTIGKEIT
+    // zeigen, nicht Hitze. Beschlagene Oberflaeche und aufsteigender Dunst sind
+    // hier der eigentliche Bildinhalt, die dunkle Rinde nur der Traeger.
+    prompt: 'a whole beef brisket resting on a steel grate inside a dark smoker chamber, '
+      + 'the brisket is one long solid rectangular slab with a smooth closed outline and a rounded thicker end, '
+      + 'its surface a deep mahogany-brown bark, densely beaded with glistening droplets of moisture, '
+      + 'fine wisps of pale steam and thin blue smoke drifting upward off the surface into the dark, '
+      + 'a single shaft of warm light raking across the meat from the side, the chamber behind falling into shadow, '
+      + 'close three-quarter angle, 50mm lens, f/4, shallow depth of field, moody warm amber tones, ' + NEG,
+  },
+  {
+    id: 'art-texas-crutch',
+    target: 'images/artikel/texas-crutch.jpg',
+    patch: { file: 'content/artikel/texas-crutch-folie-oder-butcher-paper.mdx', field: 'image' },
+    size: 'landscape_16_9',
+    scale: 0.4,
+    // RUNDE 1 (17.09.2026) lieferte drei Fehler auf einmal — alle drei sind im
+    // Skript bereits andernorts dokumentiert, ich bin trotzdem hineingelaufen:
+    //   1. Eine PERSON im Bild (Oberkoerper, Hand) trotz „no people, no hands"
+    //      in NEG. Derselbe Verneinungs-Effekt wie bei Plancha Runde 2. Die
+    //      Lehre dort lautet: nicht verbieten, sondern durch den Ausschnitt
+    //      ausschliessen. Runde 2 ist deshalb ein randloses Top-down-Flatlay —
+    //      hinter der Kamera ist schlicht kein Bildraum mehr fuer jemanden.
+    //   2. Ein KNOCHENGRIFF ragte aus dem Fleisch. Der LoRA zieht Richtung
+    //      Tomahawk, sobald die Form nicht geschlossen beschrieben ist
+    //      (Ribeye Runde 3). Das Wort steht hier nirgends; stattdessen wird die
+    //      Silhouette positiv als rundum geschlossen beschrieben.
+    //   3. Das Fleisch lag nur AUF dem Papier statt halb darin — also genau
+    //      der Vorgang, um den es im Artikel geht, war nicht im Bild. Runde 2
+    //      beschreibt die Faltung als Zustand des Papiers, nicht als Handlung.
+    // scale zusaetzlich 0.45 → 0.4: das rosa Papier ist die halbe Bildaussage,
+    // der Fleisch-Bias hatte es in Runde 1 an den Rand gedraengt.
+    prompt: 'a whole smoked beef brisket on a large sheet of pink butcher paper, photographed from directly above as a clean top-down flat lay, '
+      + 'the paper fills the entire frame from edge to edge and lies on a worn wooden surface, '
+      + 'the brisket is one long rounded rectangular slab of meat with a smooth closed silhouette on every side, '
+      + 'its surface an even dark mahogany bark, '
+      + 'the near long edge of the paper is already folded up and over the meat and lies flat across the lower third of it, '
+      + 'the rest of the brisket still uncovered, the paper creased along the fold and darkened translucent where the meat rests on it, '
+      + 'a roll of aluminium foil lying flat along the right edge of the frame, '
+      + 'bright soft daylight, clean uncluttered still life, 35mm lens, f/5.6, warm neutral tones, ' + NEG,
+  },
   {
     id: 'ribeye',
     // ABGENOMMEN 16.08.2026 (Querformat, knochenlos, Fettrand umlaufend, zwei

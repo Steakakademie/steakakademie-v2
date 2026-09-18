@@ -1,8 +1,15 @@
 name: Rezepte wachsen lassen
 
-# Lässt die Rezept-Bibliothek im Hintergrund weiterwachsen: generiert neue Rezepte
-# aus der Seed-Liste (scripts/recipe-agent.mjs), committet sie persistent (der
+# Lässt die Rezept-Bibliothek im Hintergrund weiterwachsen: füllt bei knappem Vorrat
+# die Seed-Liste auf (scripts/recipe-seeds.mjs → data/rezept-seeds.json), generiert
+# daraus neue Rezepte (scripts/recipe-agent.mjs) und legt sie als PR vor (der
 # Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
+#
+# Hintergrund (13.09.2026): Vom 27.08. bis 13.09. lief dieser Workflow jede Nacht
+# grün durch, ohne ein Rezept zu erzeugen — die fest verdrahtete Seed-Liste war
+# leer. Deshalb: Nachschub VOR dem Agenten und eine Lauf-Bilanz mit Zahlen im
+# Job-Summary (CLAUDE.md Regel 10). Ob tatsächlich etwas in main ankommt, prüft
+# zusätzlich ops-heartbeat.yml.
 on:
   schedule:
     - cron: '30 3 * * *'   # Täglich 03:30 UTC (~30 Min nach dem Glossar-Lauf) — 1 Rezept/Tag
@@ -29,6 +36,17 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
+      # Ruft das Modell nur, wenn weniger als 10 offene Seeds übrig sind — sonst
+      # kostenloser No-op. continue-on-error: Ein gescheiterter Nachschub darf die
+      # heutige Produktion aus dem Restvorrat nicht verhindern. Rot wird der Lauf
+      # trotzdem — siehe Schritt „Seed-Nachschub gescheitert" unten.
+      - name: Seed-Vorrat prüfen + bei Bedarf nachlegen
+        id: seeds
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/recipe-seeds.mjs
+
       - name: Rezept-Agent ausführen
         id: agent
         env:
@@ -41,32 +59,109 @@ jobs:
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/recipe-images.mjs
 
+      # Vor dem PR-Schritt zählen: pr-statt-push committet, danach ist der
+      # Arbeitsbaum sauber und nichts mehr messbar.
+      - name: Lauf-Bilanz erheben
+        id: bilanz
+        run: |
+          set -euo pipefail
+          REZEPTE=$(git status --porcelain --untracked-files=all -- content/rezepte | grep -c '\.mdx$' || true)
+          BILDER=$(git status --porcelain --untracked-files=all -- public/images/rezepte | wc -l | tr -d ' ')
+          NACHGELEGT=$(node -e '
+            const fs = require("fs")
+            const { execFileSync } = require("child_process")
+            const jetzt = JSON.parse(fs.readFileSync("data/rezept-seeds.json", "utf8")).length
+            let vorher = 0
+            try { vorher = JSON.parse(execFileSync("git", ["show", "HEAD:data/rezept-seeds.json"], { encoding: "utf8" })).length } catch {}
+            console.log(Math.max(0, jetzt - vorher))
+          ')
+          {
+            echo "neue_rezepte=$REZEPTE"
+            echo "neue_bilder=$BILDER"
+            echo "seeds_nachgelegt=$NACHGELEGT"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Neue Rezepte + Bilder als PR (Review-Gate)
+        id: pr
         uses: ./.github/actions/pr-statt-push
         with:
-          pfade: content/rezepte public/images/rezepte
+          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml
           branch-prefix: bot/rezept
           bot-name: recipe-bot
           commit-message: 'chore(rezepte): neue Rezepte + Hero-Bilder (automatisch) — zur Prüfung'
-          pr-titel: '🍖 Rezept-Agent: neues Rezept + Hero-Bild — bitte Bild prüfen (Regel 8c)'
-          pr-body: 'Automatisch generiert (recipe-agent.mjs + recipe-images.mjs / FLUX). **Vor dem Mergen das Hero-Bild gegen das Rezept prüfen** — stimmt Cut, Garstufe, Anrichtung? Text ist Rezept-Wachstum nach Doktrin. Merge löst den Deploy aus.'
+          pr-titel: '🍖 Rezept-Agent: neues Rezept + Hero-Bild — Merge = Freigabe, bitte prüfen'
+          pr-body: |
+            Automatisch generiert (`recipe-agent.mjs` + `recipe-images.mjs` / FLUX).
+
+            ## ⚠️ Dieser Merge ist die redaktionelle Freigabe
+
+            Das Rezept trägt bereits `status: published` und `reviewed: true`. **Beides wird erst durch deinen Merge wahr** — der Merge-Commit ist der datierte Prüfnachweis, an dem der Redaktionsvorbehalt nach Art. 50 Abs. 4 KI-VO hängt (CLAUDE.md Regel 4, Präzisierung 13.09.2026). Ungeprüft mergen macht diese Felder zur Falschaussage. `reviewedAt` setzt weiterhin nur Uwe von Hand.
+
+            **Vor dem Mergen prüfen:**
+
+            - [ ] **Hero-Bild** gegen das Rezept (Regel 8c): Stimmen Cut, Garstufe, Anrichtung?
+            - [ ] **Fachlich:** Kerntemperaturen, Garzeiten, Mengen plausibel?
+            - [ ] **Herkunft:** Gericht existiert so und stammt aus dem angegebenen Land?
+
+            **Lauf-Bilanz:** ${{ steps.bilanz.outputs.neue_rezepte }} neue(s) Rezept(e) · ${{ steps.bilanz.outputs.neue_bilder }} Bilddatei(en) · ${{ steps.bilanz.outputs.seeds_nachgelegt }} Seed(s) nachgelegt. Sind Seeds nachgelegt, enthält der PR auch `data/rezept-seeds.json` — die Gerichtsauswahl dort bitte mit durchsehen, daraus entstehen die nächsten Rezepte.
+
+            Merge löst den Deploy aus.
           auto-merge: 'false'
           token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Seed-Liste leer → Jira-Hinweis (KAN, dedup)
-        if: steps.agent.outputs.seeds_exhausted == 'true'
+        # Nur, wenn der Nachschub selbst durchlief und trotzdem nichts offen ist —
+        # ein gescheiterter Nachschub meldet sich über den Fehler-Schritt unten.
+        if: steps.agent.outputs.seeds_exhausted == 'true' && steps.seeds.outcome == 'success'
         continue-on-error: true
         env:
           JIRA_BASE_URL: https://steakakademie.atlassian.net
           JIRA_PROJECT_KEY: KAN
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          ALERT_SUMMARY: '🌱 Rezept-Seed-Liste abgearbeitet — neue Cuts nachlegen'
-          ALERT_DESCRIPTION: 'Der Rezept-Agent hat alle Seeds generiert; ohne neue Cuts in SEED_RECIPES (scripts/recipe-agent.mjs) entstehen keine neuen Rezepte mehr. Neue Premium-Cuts ergänzen, dann läuft die tägliche Generierung weiter.'
+          ALERT_SUMMARY: '🌱 Rezept-Seed-Vorrat leer — Nachschub hat nichts geliefert'
+          ALERT_DESCRIPTION: 'Der Rezept-Agent findet keinen offenen Seed mehr, obwohl scripts/recipe-seeds.mjs vorher erfolgreich lief. Wahrscheinlich ist data/rezept-seeds.json unlesbar oder alle Vorschläge wurden als Dublette verworfen. Lokal prüfen: npm run seeds:dry. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,content,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Task'
           ALERT_DEDUP_LABEL: 'ops-recipe-seeds-empty'
         run: node scripts/ops-alert-to-jira.mjs
+
+      # Regel 10: Wer nichts liefern konnte, schreibt das mit Zahl ins Job-Summary.
+      - name: Lauf-Bilanz ins Job-Summary
+        if: always()
+        env:
+          VORRAT: ${{ steps.seeds.outputs.vorrat }}
+          SEEDS_STATUS: ${{ steps.seeds.outcome }}
+          NACHGELEGT: ${{ steps.bilanz.outputs.seeds_nachgelegt }}
+          OFFEN_VOR_LAUF: ${{ steps.agent.outputs.seeds_remaining }}
+          REZEPTE: ${{ steps.bilanz.outputs.neue_rezepte }}
+          BILDER: ${{ steps.bilanz.outputs.neue_bilder }}
+          PR_URL: ${{ steps.pr.outputs.pr-url }}
+        run: |
+          if [ "${REZEPTE:-0}" -gt 0 ] 2>/dev/null; then
+            KOPF="## 🍖 Rezept-Lauf: ${REZEPTE} Rezept(e) geliefert"
+          else
+            KOPF="## 🔴 Rezept-Lauf: 0 Rezepte geliefert"
+            echo "::warning::Rezept-Lauf ohne Ergebnis — 0 neue Rezepte. Ursache im Log oben; ops-heartbeat schlägt nach 4 Tagen ohne Rezept-Commit an."
+          fi
+          {
+            echo "$KOPF"
+            echo ""
+            echo "| Kennzahl | Wert |"
+            echo "| --- | --- |"
+            echo "| Offene Seeds vor Nachschub | ${VORRAT:-–} |"
+            echo "| Seed-Nachschub | ${SEEDS_STATUS:-–} · ${NACHGELEGT:-–} nachgelegt |"
+            echo "| Offene Seeds vor Generierung | ${OFFEN_VOR_LAUF:-–} |"
+            echo "| Neue Rezepte | ${REZEPTE:-–} |"
+            echo "| Neue Bilddateien | ${BILDER:-–} |"
+            echo "| PR | ${PR_URL:-kein PR} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Seed-Nachschub gescheitert → Lauf rot
+        if: steps.seeds.outcome == 'failure'
+        run: |
+          echo "::error::scripts/recipe-seeds.mjs ist gescheitert (Log im Schritt „Seed-Vorrat prüfen“). Die heutige Produktion lief aus dem Restvorrat weiter, aber der Vorrat wird nicht mehr aufgefüllt."
+          exit 1
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()
@@ -77,7 +172,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_SUMMARY: '🔴 Rezept-Agent fehlgeschlagen'
-          ALERT_DESCRIPTION: 'Der tägliche Rezept-Agent (recipe-grow, inkl. FLUX-Bilder) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_DESCRIPTION: 'Der tägliche Rezept-Lauf (recipe-grow: Seed-Nachschub, Rezept-Agent, FLUX-Bilder, PR) ist abgebrochen oder der Seed-Nachschub scheiterte. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Bug'
           ALERT_DEDUP_LABEL: 'ops-recipe-failed'

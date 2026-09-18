@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allArtikels } from 'contentlayer/generated';
 import { sichtbareArtikel, nurVeroeffentlicht, istEntwurf } from '@/lib/redaktion';
+import { ogImages } from '@/lib/og';
 
 /** JSON-LD sicher einbetten: verhindert das Ausbrechen aus dem script-Tag. */
 const ldJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
@@ -28,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: 'https://steakakademie.de/artikel' },
     ...(leer && { robots: { index: false, follow: false } }),
     openGraph: {
+      images: ogImages('Artikel — Grundlagen und Werkstattwissen'),
       title: 'Artikel — Grundlagen und Werkstattwissen',
       description: 'Grundlagen, Technik und Werkstattwissen rund um Grill, Smoker und Fleisch.',
       url: 'https://steakakademie.de/artikel',

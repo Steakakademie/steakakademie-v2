@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import MesserClient from './MesserClient';
 import { getProductsByCategory } from '@/lib/products';
 import { breadcrumbSchema, collectionPageSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Messer für den Grill: Handwerk und Präzision',
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     'Kochmesser, Damast-Messer und BBQ-Tranchiermesser im Überblick: Premium (Wüsthof, Güde), Damast (Miyabi, Kai Shun), Mittelklasse (F. Dick, Victorinox).',
   alternates: { canonical: 'https://steakakademie.de/ausruestung/messer' },
   openGraph: {
+    images: ogImages('Messer für den Grill'),
     title: 'Messer für den Grill',
     description:
       'Deutsches Handwerk trifft japanische Präzision — 11 Messer in 4 Segmenten für Steaks, Brisket und BBQ.',

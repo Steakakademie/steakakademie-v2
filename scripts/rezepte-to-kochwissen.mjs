@@ -6,7 +6,7 @@
  * Format wie alle Lieferungen (siehe data/kochwissen/README.md):
  *   Titel; Kategorie; Cut/Zutat; Schwierigkeit; Keywords; Quelle-Fundstelle; Inhalt_normalisiert
  *
- * - Quelle-Fundstelle = "Steakakademie-Rezept: /rezepte/<slug>" → der Generator
+ * - Quelle-Fundstelle = "Steakakademie-Rezept: /rezepte/<kategorie>/<slug>" → der Generator
  *   kann auf die eigene Rezeptseite verweisen.
  * - Zutaten werden mit ihrer Basis-Personenzahl (servings) aufgenommen; die
  *   Pro-Person-Umrechnung passiert im UI (PortionCalculator / Rezept-Schmiede).
@@ -96,7 +96,9 @@ for (const file of files) {
     cell(fm.meatType ?? fm.kategorie ?? ''),
     cell(fm.difficulty ?? ''),
     cell(Array.isArray(fm.keywords) ? fm.keywords.join(', ') : fm.keywords ?? ''),
-    cell(`Steakakademie-Rezept: /rezepte/${slug}`),
+    // Route wie src/app/rezepte/[slug]/[recipe] — MIT Kategorie. Bis 15.09.2026 fehlte
+    // sie; jeder Link der Rezept-Schmiede (ToolBoxes.tsx) fuehrte auf eine 404-Seite.
+    cell(`Steakakademie-Rezept: /rezepte/${fm.kategorie}/${slug}`),
     inhalt,
   ].join('; '))
 }

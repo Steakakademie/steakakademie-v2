@@ -217,7 +217,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
         setErgebnis(text);
         setZutatenBasis(zutaten);
         // Verkettung: Quellen aus unserer eigenen Rezeptwelt als Links anbieten
-        // (Quelle-Format "Steakakademie-Rezept: /rezepte/<slug>" aus dem Ingest).
+        // (Quelle-Format "Steakakademie-Rezept: /rezepte/<kategorie>/<slug>" aus dem Ingest).
         const PREFIX = 'Steakakademie-Rezept: ';
         const links = new Map<string, { titel: string; href: string }>();
         for (const q of Array.isArray(data.verwendete_quellen) ? data.verwendete_quellen : []) {

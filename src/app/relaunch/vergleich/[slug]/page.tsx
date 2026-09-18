@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -23,7 +24,7 @@ import { skMdx, Crumbs, Faq } from '@/components/relaunch/Prose';
  * belegt sind — sie werden nicht erfunden. testedCount/testDuration aus dem
  * Frontmatter stehen im Kicker.
  */
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 const SLUG_KATEGORIE: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
   'fleischthermometer': 'thermometer',
@@ -39,7 +40,8 @@ export function generateStaticParams() {
   return allVergleiches.map((v) => ({ slug: v.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const v = allVergleiches.find((x) => x.slug === params.slug);
   if (!v) return {};
   return { title: v.seoTitle ?? v.title, description: v.seoDescription ?? v.excerpt };
@@ -50,7 +52,8 @@ function preis(p: Product) {
   return `${Math.round(p.price)} €`;
 }
 
-export default function VergleichSeite({ params }: Props) {
+export default function VergleichSeite(props: Props) {
+  const params = use(props.params);
   const v = allVergleiches.find((x) => x.slug === params.slug);
   if (!v) notFound();
   const MDXContent = useMDXComponent(v.body.code);
