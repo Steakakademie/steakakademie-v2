@@ -142,13 +142,17 @@ export default function GlossarEntryPage(props: Props) {
               {entry.title}
             </h1>
 
-            {/* Short definition callout */}
-            <blockquote
-              className="font-body text-lg text-text-light/80 leading-relaxed pl-5"
-              style={{ borderLeft: '3px solid #C8882A' }}
-            >
-              {entry.shortDefinition}
-            </blockquote>
+            {/* Frueher stand hier ein Zitatblock mit entry.shortDefinition. Der war
+                in 160 von 183 Eintraegen wortgleich mit dem direkt darunter
+                folgenden Abschnitt „## Definition" aus dem MDX-Body, in 14
+                weiteren nahezu wortgleich — derselbe Satz zweimal untereinander
+                auf derselben Seite (Plan C2, HCU-Risiko).
+
+                Entfernt statt den Abschnitt aus den Eintraegen zu loeschen: die
+                Eintraege sind mit im Mittel 113 Woertern ohnehin duenn, ein
+                Wegkuerzen haette das Problem vergroessert. shortDefinition bleibt
+                im Frontmatter und wird weiter fuer Meta-Description, Uebersicht
+                und DefinedTermSet-Schema genutzt. */}
           </div>
         </section>
 
