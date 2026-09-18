@@ -337,45 +337,77 @@ function alleSeeds() {
 // Ergebnis: vier PRs mit demselben Slug, drei davon mit Merge-Konflikt, und vier
 // mal FLUX-Bildkosten fuer ein einziges Rezept.
 //
-// Deshalb: vor der Auswahl zusaetzlich nachsehen, was in den bot/rezept-*-
-// Branches auf origin schon liegt. Faellt das aus (kein Netz, kein origin,
-// kein git), bleibt es beim alten Verhalten — das darf die Produktion nicht
-// blockieren.
-function slugsInOffenenRezeptPRs() {
-  const git = (args) => execSync(`git ${args}`, {
-    cwd: ROOT, encoding: 'utf-8', timeout: 30_000, stdio: ['ignore', 'pipe', 'ignore'],
-  })
+// Deshalb: vor der Auswahl nachsehen, welche Rezepte bereits in einem OFFENEN
+// PR auf Freigabe warten.
+//
+// Gefragt wird die GitHub-API, nicht die Branch-Liste. Der Unterschied ist
+// wichtig: Ein geschlossener PR laesst seinen Branch stehen (am 18.09.2026 lagen
+// vier bot/rezept-*-Branches auf origin, deren PRs alle erledigt waren). Wer
+// Branches liest, haelt so ein abgelehntes Rezept fuer "wartet noch auf
+// Freigabe" — und erzeugt es nie wieder. Die API kennt den Unterschied, und
+// /pulls/<n>/files liefert genau die Dateien, die der PR NEU bringt.
+//
+// Faellt das aus (kein Netz, Rate-Limit, privates Repo ohne Token), bleibt es
+// beim alten Verhalten mit Warnung — eine nicht erreichbare Gegenprobe darf die
+// Produktion nicht anhalten.
+const REZEPT_BRANCH_PREFIX = 'bot/rezept'
 
-  let refs
+function repoSlug() {
+  if (process.env.GITHUB_REPOSITORY) return process.env.GITHUB_REPOSITORY
   try {
-    refs = git("ls-remote --heads origin 'refs/heads/bot/rezept-*'")
-      .split('\n').map(z => z.trim()).filter(Boolean)
-      .map(z => z.split('\t')[1]).filter(Boolean)
+    const url = execSync('git remote get-url origin', {
+      cwd: ROOT, encoding: 'utf-8', timeout: 10_000, stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+    return url.match(/github\.com[:/](.+?)(?:\.git)?$/)?.[1] ?? null
   } catch {
-    console.warn('  ⚠ Offene Rezept-PRs nicht pruefbar (kein origin erreichbar) — nur main als Grundlage.')
+    return null
+  }
+}
+
+async function slugsInOffenenRezeptPRs() {
+  const repo = repoSlug()
+  if (!repo) {
+    console.warn('  ⚠ Kein GitHub-Repo ermittelbar — offene Rezept-PRs werden nicht geprueft.')
     return new Set()
   }
-  if (refs.length === 0) return new Set()
+
+  const kopf = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'steakakademie-recipe-agent',
+  }
+  // Optional: hebt das Rate-Limit von 60/h auf 5000/h und erlaubt private Repos.
+  if (process.env.GITHUB_TOKEN) kopf.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+
+  const hole = async (pfad) => {
+    const res = await fetch(`https://api.github.com/repos/${repo}${pfad}`, {
+      headers: kopf, signal: AbortSignal.timeout(15_000),
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const daten = await res.json()
+    if (!Array.isArray(daten)) throw new Error('unerwartete Antwort (kein Array)')
+    return daten
+  }
+
+  let offene
+  try {
+    offene = await hole('/pulls?state=open&per_page=100')
+  } catch (err) {
+    console.warn(`  ⚠ Offene Rezept-PRs nicht pruefbar (${err.message}) — nur main als Grundlage.`)
+    return new Set()
+  }
+
+  const rezeptPRs = offene.filter(pr => pr?.head?.ref?.startsWith(REZEPT_BRANCH_PREFIX))
+  if (rezeptPRs.length === 0) return new Set()
 
   const slugs = new Set()
-  for (const ref of refs) {
-    const name = ref.replace('refs/heads/', '')
+  for (const pr of rezeptPRs) {
     try {
-      // Der CI-Checkout ist flach und kennt nur main — den Branch-Tip einzeln und
-      // flach nachholen, damit ls-tree seinen Baum lesen kann.
-      git(`fetch --depth=1 origin ${ref}:refs/remotes/rezept-pr-check/${name}`)
-      const dateien = git(`ls-tree -r --name-only refs/remotes/rezept-pr-check/${name} content/rezepte/`)
-      for (const datei of dateien.split('\n')) {
-        const treffer = datei.trim().match(/^content\/rezepte\/(.+)\.mdx$/)
-        if (!treffer) continue
-        // Ein Bot-Branch zweigt von main ab und enthaelt damit den kompletten
-        // Bestand. Interessant ist nur, was NUR dort liegt — alles andere faengt
-        // die Datei-Pruefung im Arbeitsverzeichnis ohnehin ab.
-        if (existsSync(join(REZEPTE, `${treffer[1]}.mdx`))) continue
-        slugs.add(treffer[1])
+      for (const datei of await hole(`/pulls/${pr.number}/files?per_page=100`)) {
+        const treffer = datei?.filename?.match(/^content\/rezepte\/(.+)\.mdx$/)
+        if (treffer) slugs.add(treffer[1])
       }
-    } catch {
-      console.warn(`  ⚠ Branch ${name} nicht lesbar — wird bei der Dublettenpruefung uebergangen.`)
+    } catch (err) {
+      console.warn(`  ⚠ Dateiliste von PR #${pr.number} nicht lesbar (${err.message}) — uebergangen.`)
     }
   }
   return slugs
@@ -856,7 +888,7 @@ async function main() {
   // Wartet ein Rezept schon als PR auf Freigabe, darf es nicht noch einmal
   // erzeugt werden (siehe slugsInOffenenRezeptPRs). Nur im echten Wachstums-Lauf
   // nachsehen — --force/--slug/--dry-run sollen kein Netz brauchen.
-  const inOffenenPRs = (FORCE || SLUG_ONLY || DRY_RUN) ? new Set() : slugsInOffenenRezeptPRs()
+  const inOffenenPRs = (FORCE || SLUG_ONLY || DRY_RUN) ? new Set() : await slugsInOffenenRezeptPRs()
   if (inOffenenPRs.size > 0) {
     console.log(`  ${inOffenenPRs.size} Rezept(e) warten in offenen PRs auf Freigabe — werden uebersprungen`)
   }
@@ -980,4 +1012,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt }
+export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs }
