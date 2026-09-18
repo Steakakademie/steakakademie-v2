@@ -79,7 +79,7 @@ interface CourseRow { slug: string; price: number }
 // ─── Seite ────────────────────────────────────────────────────────────────────
 
 export default async function MeinSystemPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login?redirectTo=/mein-system');

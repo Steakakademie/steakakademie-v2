@@ -1,51 +1,106 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { bewerte, FRAGEN, FLASHCARDS } from '@/lib/diplome/fragen';
+import { bewerte, zieheFragen, fragenFuerClient, FRAGEN } from '@/lib/diplome/fragen';
+import { FLASHCARDS } from '@/lib/diplome/flashcards';
 import {
   STUFEN,
   LEVELS,
   STUFEN_ORDER,
-  QUIZ_FRAGEN_JE_MODUL,
-  QUIZ_BESTEHENSGRENZE,
+  QUIZ_FRAGEN_PRO_PRUEFUNG,
+  QUIZ_BESTEHENSQUOTE,
+  bestehensgrenze,
   stufeByKey,
   tierForLevel,
   type StufeKey,
 } from '@/lib/diplome/stufen';
 
 // Audit 06.09.2026 — die Tests halten fest, was vorher kaputt war.
+// Rahmenlehrplan §8 (08.09.2026): Ziehung aus dem Pool, 80 %, ids statt Reihenfolge.
 
 describe('Stufenpruefung: Bewertung', () => {
-  const alleRichtig = (modul: StufeKey) => FRAGEN[modul].map((f) => f.correct);
+  const ids = (modul: StufeKey) => FRAGEN[modul].map((f) => f.id);
+  const richtigFuer = (modul: StufeKey, idList: readonly string[]) =>
+    idList.map((id) => FRAGEN[modul].find((f) => f.id === id)!.correct);
 
-  it('bestanden nur ab der Bestehensgrenze', () => {
+  it('bestanden nur ab der Bestehensgrenze (80 %, aufgerundet)', () => {
     for (const modul of STUFEN_ORDER) {
-      const richtig = alleRichtig(modul);
-      expect(bewerte(modul, richtig)).toMatchObject({ score: QUIZ_FRAGEN_JE_MODUL, bestanden: true });
+      const alle = ids(modul);
+      const richtig = richtigFuer(modul, alle);
+      const n = alle.length;
+      const grenze = bestehensgrenze(n);
+      expect(bewerte(modul, alle, richtig)).toMatchObject({ score: n, gesamt: n, grenze, bestanden: true });
 
-      // genau eine falsch → immer noch bestanden (4 von 5)
-      const eineFalsch = richtig.map((c, i) => (i === 0 ? (c + 1) % 4 : c));
-      expect(bewerte(modul, eineFalsch)).toMatchObject({ score: QUIZ_FRAGEN_JE_MODUL - 1, bestanden: true });
+      // genau an der Grenze → bestanden
+      const anGrenze = richtig.map((c, i) => (i < n - grenze ? (c + 1) % 4 : c));
+      expect(bewerte(modul, alle, anGrenze)).toMatchObject({ score: grenze, bestanden: true });
 
-      // zwei falsch → NICHT bestanden. Vorher wurde jedes Ergebnis verbucht.
-      const zweiFalsch = richtig.map((c, i) => (i < 2 ? (c + 1) % 4 : c));
-      expect(bewerte(modul, zweiFalsch)).toMatchObject({ score: QUIZ_FRAGEN_JE_MODUL - 2, bestanden: false });
+      // eine unter der Grenze → NICHT bestanden. Vorher wurde jedes Ergebnis verbucht.
+      const darunter = richtig.map((c, i) => (i < n - grenze + 1 ? (c + 1) % 4 : c));
+      expect(bewerte(modul, alle, darunter)).toMatchObject({ score: grenze - 1, bestanden: false });
 
       // alles falsch / leer → 0, nicht bestanden
-      expect(bewerte(modul, [])).toMatchObject({ score: 0, bestanden: false });
-      expect(bewerte(modul, [-1, -1, -1, -1, -1])).toMatchObject({ score: 0, bestanden: false });
+      expect(bewerte(modul, alle, [])).toMatchObject({ score: 0, bestanden: false });
+      expect(bewerte(modul, [], [])).toMatchObject({ score: 0, gesamt: 0, bestanden: false });
     }
   });
 
-  it('Bestehensgrenze ist 4 von 5', () => {
-    expect(QUIZ_FRAGEN_JE_MODUL).toBe(5);
-    expect(QUIZ_BESTEHENSGRENZE).toBe(4);
+  it('Bestehensgrenze: 10 → 8, 5 → 4', () => {
+    expect(QUIZ_FRAGEN_PRO_PRUEFUNG).toBe(10);
+    expect(QUIZ_BESTEHENSQUOTE).toBe(80);
+    expect(bestehensgrenze(10)).toBe(8);
+    expect(bestehensgrenze(5)).toBe(4);
   });
 
-  it('jedes Modul hat genau QUIZ_FRAGEN_JE_MODUL Fragen mit gueltigem correct-Index', () => {
+  it('unbekannte ids und fremde Reihenfolge werden nicht belohnt', () => {
+    const modul: StufeKey = 'bronze';
+    const alle = ids(modul).slice(0, 5);
+    const richtig = richtigFuer(modul, alle);
+    // fremde id → als falsch gewertet, nicht als Fehler geworfen
+    expect(bewerte(modul, [...alle.slice(0, 4), 'gibt-es-nicht'], richtig).score).toBe(4);
+    // Antworten zur falschen Reihenfolge → nicht dieselbe Punktzahl
+    const gedreht = [...alle].reverse();
+    expect(bewerte(modul, gedreht, richtig).score).toBeLessThanOrEqual(5);
+  });
+
+  it('Ziehung: hoechstens eine Frage je Lektion, nie mehr als der Pool', () => {
     for (const modul of STUFEN_ORDER) {
-      expect(FRAGEN[modul]).toHaveLength(QUIZ_FRAGEN_JE_MODUL);
+      for (let lauf = 0; lauf < 20; lauf++) {
+        const gezogen = zieheFragen(modul);
+        expect(gezogen.length).toBe(Math.min(QUIZ_FRAGEN_PRO_PRUEFUNG, FRAGEN[modul].length));
+        expect(new Set(gezogen).size).toBe(gezogen.length);
+        const lektionen = gezogen.map((id) => FRAGEN[modul].find((f) => f.id === id)!.lektionSlug);
+        const verschiedene = new Set(FRAGEN[modul].map((f) => f.lektionSlug)).size;
+        // solange genug Lektionen da sind, kommt jede hoechstens einmal vor
+        if (verschiedene >= gezogen.length) expect(new Set(lektionen).size).toBe(gezogen.length);
+      }
+    }
+  });
+
+  it('Stufe 1 hat einen Pool von mindestens 3 Fragen je Lektion (Rahmenlehrplan §8)', () => {
+    const jeLektion = new Map<string, number>();
+    for (const f of FRAGEN.bronze) jeLektion.set(f.lektionSlug, (jeLektion.get(f.lektionSlug) ?? 0) + 1);
+    expect(FRAGEN.bronze.length).toBeGreaterThanOrEqual(33);
+    for (const [slug, n] of Array.from(jeLektion.entries())) expect(n, slug).toBeGreaterThanOrEqual(3);
+  });
+
+  it('der Browser bekommt keine Loesungen', () => {
+    const client = fragenFuerClient('bronze', ids('bronze'));
+    expect(client.length).toBe(FRAGEN.bronze.length);
+    for (const f of client as unknown as Record<string, unknown>[]) {
+      expect(f).not.toHaveProperty('correct');
+      expect(f).not.toHaveProperty('explain');
+      expect(typeof f.id).toBe('string');
+    }
+  });
+
+  it('jede Frage hat eine eindeutige id und einen gueltigen correct-Index', () => {
+    const alleIds = new Set<string>();
+    for (const modul of STUFEN_ORDER) {
+      expect(FRAGEN[modul].length).toBeGreaterThan(0);
       for (const f of FRAGEN[modul]) {
+        expect(alleIds.has(f.id), `doppelte id ${f.id}`).toBe(false);
+        alleIds.add(f.id);
         expect(f.correct).toBeGreaterThanOrEqual(0);
         expect(f.correct).toBeLessThan(f.options.length);
         expect(f.explain.length).toBeGreaterThan(0);
@@ -79,8 +134,9 @@ describe('Fragen ↔ Lektionen (Regel 8b, Pruefungsbezug)', () => {
     }
   });
 
-  it('jede Stufe hat sieben Lektionen', () => {
-    for (const s of STUFEN) expect(slugsJeStufe.get(s.nr)!.size).toBe(7);
+  it('Stufe 1 hat elf Lektionen (Rahmenlehrplan 08.09.2026), Stufen 2–5 je sieben', () => {
+    expect(slugsJeStufe.get(1)!.size).toBe(11);
+    for (const s of STUFEN) if (s.nr >= 2) expect(slugsJeStufe.get(s.nr)!.size).toBe(7);
   });
 });
 

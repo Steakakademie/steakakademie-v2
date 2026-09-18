@@ -10,14 +10,14 @@ import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
-interface Props { params: { slug: string } }
+interface Props { params: Promise<{ slug: string }> }
 
 // Taxonomie aus der einen Quelle — vorher stand hier Gold #F5C842 gegen #FFD700 anderswo.
 const STAGES = STUFEN.map((s) => ({ stufe: s.nr, tier: s.tier, cert: s.metall, name: s.title, color: s.color }));
 
 async function loadProfile(slug: string) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: profile } = await supabase
       .from('profiles')
       .select('user_id, slug, display_name, is_public')
@@ -36,7 +36,8 @@ async function loadProfile(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const data = await loadProfile(params.slug);
   if (!data) return { title: 'Grillmeister-Profil' };
   const name = data.profile.display_name ?? 'Grillmeister';
@@ -47,7 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function GrillerProfilePage({ params }: Props) {
+export default async function GrillerProfilePage(props: Props) {
+  const params = await props.params;
   const data = await loadProfile(params.slug);
   if (!data) notFound();
   const { profile, done } = data;

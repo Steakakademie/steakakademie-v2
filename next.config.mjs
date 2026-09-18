@@ -58,20 +58,18 @@ const CSP = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Ohne diesen Schalter laedt Next 14 src/instrumentation.ts nicht, und ohne
-  // die Datei bleibt die Telemetrie im Marco-Chat wirkungslos (No-op-Tracer).
-  // Ab Next 15 ist der Hook stabil und die Zeile entfaellt.
-  experimental: {
-    instrumentationHook: true,
-    // Die Urkunden-Vorlagen (300-dpi-PNG je Stufe) und die beiden Schriften
-    // liest src/lib/urkunde/render.ts zur Laufzeit von der Platte. Next
-    // verfolgt nur Importe — was per fs.readFile geoeffnet wird, muss hier
-    // stehen, sonst fehlt es im Deploy und die Freigabe scheitert erst in der
-    // Produktion mit ENOENT.
-    outputFileTracingIncludes: {
-      '/api/admin/urkunden': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
-      '/api/admin/urkunden/vorschau': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
-    },
+  // Next 16 (17.09.2026): `experimental.instrumentationHook` ist weg — der
+  // Hook (src/instrumentation.ts) ist seit Next 15 stabil und laedt immer.
+  //
+  // Die Urkunden-Vorlagen (300-dpi-PNG je Stufe) und die beiden Schriften
+  // liest src/lib/urkunde/render.ts zur Laufzeit von der Platte. Next
+  // verfolgt nur Importe — was per fs.readFile geoeffnet wird, muss hier
+  // stehen, sonst fehlt es im Deploy und die Freigabe scheitert erst in der
+  // Produktion mit ENOENT. Seit Next 15 eine Top-Level-Option (vorher
+  // unter `experimental`).
+  outputFileTracingIncludes: {
+    '/api/admin/urkunden': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
+    '/api/admin/urkunden/vorschau': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
   },
   images: {
     formats: ['image/avif', 'image/webp'],

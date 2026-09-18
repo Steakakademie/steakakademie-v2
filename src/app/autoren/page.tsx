@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getAllAuthors } from '@/lib/authors';
 import { breadcrumbSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/autoren' },
   openGraph: {
+    images: ogImages('Unsere Autoren'),
     title: 'Unsere Autoren',
     description: 'Lerne die Experten hinter der Steakakademie kennen — Pitmaster, Enthusiast und Food-Wissenschaftlerin.',
     url: 'https://steakakademie.de/autoren',

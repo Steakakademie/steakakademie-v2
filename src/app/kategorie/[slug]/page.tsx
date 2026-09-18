@@ -9,7 +9,7 @@ import { allCuts, allMethodes, allVergleiches } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 type CategoryConfig = {
@@ -44,7 +44,8 @@ export function generateStaticParams() {
   return Object.keys(CATEGORIES).map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const cat = CATEGORIES[params.slug];
   if (!cat) return {};
   return {
@@ -101,7 +102,8 @@ function getArticles(slug: string): ArticleItem[] {
   }
 }
 
-export default function KategoriePage({ params }: Props) {
+export default async function KategoriePage(props: Props) {
+  const params = await props.params;
   const cat = CATEGORIES[params.slug];
   if (!cat) notFound();
 

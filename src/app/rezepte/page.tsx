@@ -9,6 +9,7 @@ import RecipeSubmitModal from '@/components/recipe/RecipeSubmitModal';
 import RecipeExplorer from '@/components/recipe/RecipeExplorer';
 import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill',
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — jedes Rezept mehrfach getestet.',
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
   openGraph: {
+    images: ogImages('BBQ-Rezepte'),
     title: 'BBQ-Rezepte',
     description: 'Geprüfte Grill-Rezepte mit interaktivem Koch-Coach und automatischer Portionsskalierung.',
     url: 'https://steakakademie.de/rezepte',

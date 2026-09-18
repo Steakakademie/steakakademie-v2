@@ -28,7 +28,7 @@ export type Stufe = {
   tier: MedalTier;
   /** „Bronze", „Silber" … */
   metall: string;
-  /** „Bronze-Zertifikat" … „Meister-Diplom" */
+  /** Grad-Bezeichnung: Grillmeister Bronze bis Grillmeister Meisterklasse (seit 08.09.2026; vorher Bronze-Zertifikat bis Meister-Diplom). */
   cert: string;
   /** Stufentitel, identisch mit /diplome und dem Reel */
   title: string;
@@ -50,7 +50,7 @@ export type Stufe = {
 
 export const STUFEN: readonly Stufe[] = [
   {
-    nr: 1, key: 'bronze', tier: 'bronze', metall: 'Bronze', cert: 'Bronze-Zertifikat',
+    nr: 1, key: 'bronze', tier: 'bronze', metall: 'Bronze', cert: 'Grillmeister Bronze',
     title: 'Der Funke', badge: 'Glut-Lehrling',
     color: '#CD7F32', glow: 'rgba(205,127,50,0.4)', emoji: '🔥',
     modulTitle: 'Feuerzone', modulEmoji: '🔥',
@@ -58,7 +58,7 @@ export const STUFEN: readonly Stufe[] = [
     levels: [1, 2], requires: null,
   },
   {
-    nr: 2, key: 'anatomie', tier: 'silber', metall: 'Silber', cert: 'Silber-Zertifikat',
+    nr: 2, key: 'anatomie', tier: 'silber', metall: 'Silber', cert: 'Grillmeister Silber',
     title: 'Die Flamme bezähmen', badge: 'Fleischkenner',
     color: '#C0C0C0', glow: 'rgba(192,192,192,0.4)', emoji: '🌡️',
     modulTitle: 'Anatomie & Cuts', modulEmoji: '🥩',
@@ -66,7 +66,7 @@ export const STUFEN: readonly Stufe[] = [
     levels: [3, 4], requires: 'bronze',
   },
   {
-    nr: 3, key: 'thermometer', tier: 'gold', metall: 'Gold', cert: 'Gold-Zertifikat',
+    nr: 3, key: 'thermometer', tier: 'gold', metall: 'Gold', cert: 'Grillmeister Gold',
     title: 'Hitzekontrolle', badge: 'Präzisions-Griller',
     color: '#FFD700', glow: 'rgba(255,215,0,0.4)', emoji: '🎯',
     modulTitle: 'Kerntemperatur', modulEmoji: '🌡️',
@@ -74,7 +74,7 @@ export const STUFEN: readonly Stufe[] = [
     levels: [5, 6], requires: 'anatomie',
   },
   {
-    nr: 4, key: 'holz', tier: 'platin', metall: 'Platin', cert: 'Platin-Zertifikat',
+    nr: 4, key: 'holz', tier: 'platin', metall: 'Platin', cert: 'Grillmeister Platin',
     title: 'Präzision & Geschmack', badge: 'BBQ-Scientist',
     color: '#E5E4E2', glow: 'rgba(229,228,226,0.5)', emoji: '💨',
     modulTitle: 'Holz & Smoke', modulEmoji: '🌲',
@@ -82,7 +82,7 @@ export const STUFEN: readonly Stufe[] = [
     levels: [7, 8], requires: 'thermometer',
   },
   {
-    nr: 5, key: 'kcbs', tier: 'master', metall: 'Meister', cert: 'Meister-Diplom',
+    nr: 5, key: 'kcbs', tier: 'master', metall: 'Meister', cert: 'Grillmeister Meisterklasse',
     title: 'Der vollendete Pitmaster', badge: 'Master of Steak',
     color: '#FF6B35', glow: 'rgba(255,107,53,0.5)', emoji: '👑',
     modulTitle: 'KCBS-Wettbewerb', modulEmoji: '🏅',
@@ -122,12 +122,38 @@ export const ERSTE_BEZAHLSTUFE = 2;
 export const DIPLOM_COURSE_SLUG = 'grillmeister-diplom';
 
 /**
+ * Klassifizierung (Uwe, 08.09.2026, Rahmenlehrplan §1): Der Grad heisst
+ * „Grillmeister <Klasse>" und steht nie allein — auf Urkunden und in Titeln
+ * immer mit Traeger. „Zertifizierter Grillmeister" ist der Titel des
+ * Bildungszentrums des Fleischerhandwerks (zwei Wochen Praesenz); Klassenzusatz,
+ * Traeger und der Hinweis halten beides auseinander. Die Ehrentitel (badge,
+ * Glut-Lehrling bis Master of Steak) bleiben der Community-Rang.
+ */
+export const DIPLOM_TRAEGER = 'Steakakademie';
+export const DIPLOM_HINWEIS = 'Diplom der Steakakademie · keine staatlich anerkannte Ausbildung';
+/** „Grillmeister Gold · Steakakademie" — so steht der Grad auf der Urkunde. */
+export function gradMitTraeger(s: Stufe): string {
+  return `${s.cert} · ${DIPLOM_TRAEGER}`;
+}
+
+/**
  * Pruefungsregeln — EINE Stelle. Vorher stand „4" hart in der Quiz-Komponente
  * und in isUnlocked, waehrend die Roadmap-Texte 70 % und 75 % behaupteten.
+ *
+ * Seit 08.09.2026 (Rahmenlehrplan §8, von Uwe freigegeben): Die Pruefung zieht
+ * bis zu QUIZ_FRAGEN_PRO_PRUEFUNG Fragen aus dem Pool der Stufe, hoechstens eine
+ * je Lektion, und ist bestanden ab QUIZ_BESTEHENSQUOTE Prozent — aufgerundet.
+ * Bei 10 Fragen also 8, bei 5 Fragen 4. Stufen mit kleinem Pool (2–5, je 5
+ * Fragen) bekommen alle Fragen und behalten damit ihre bisherige Huerde, bis
+ * ihr Pool waechst. Vorher: fest 5 Fragen, 4 richtig, bei 7 Lektionen je Stufe —
+ * zwei Lektionen blieben ungeprueft, eine Fehlantwort war frei.
  */
-export const QUIZ_FRAGEN_JE_MODUL = 5;
-export const QUIZ_BESTEHENSGRENZE = 4;
-export const QUIZ_BESTEHENSQUOTE = Math.round((QUIZ_BESTEHENSGRENZE / QUIZ_FRAGEN_JE_MODUL) * 100);
+export const QUIZ_FRAGEN_PRO_PRUEFUNG = 10;
+export const QUIZ_BESTEHENSQUOTE = 80;
+/** Mindestzahl richtiger Antworten fuer `gesamt` gestellte Fragen. */
+export function bestehensgrenze(gesamt: number): number {
+  return Math.ceil((gesamt * QUIZ_BESTEHENSQUOTE) / 100);
+}
 
 export function stufeByNr(nr: number): Stufe | undefined {
   return STUFEN.find((s) => s.nr === nr);
@@ -156,5 +182,5 @@ export function tierForLevel(levelId: number): MedalTier {
 
 /** Der lesbare Pruefungssatz — aus den Konstanten, nie von Hand geschrieben. */
 export function pruefungsText(): string {
-  return `${QUIZ_FRAGEN_JE_MODUL} Fragen · ${QUIZ_BESTEHENSGRENZE} von ${QUIZ_FRAGEN_JE_MODUL} richtig (${QUIZ_BESTEHENSQUOTE} %) · sofort wiederholbar`;
+  return `bis zu ${QUIZ_FRAGEN_PRO_PRUEFUNG} Fragen aus dem Pool · ${QUIZ_BESTEHENSQUOTE} % richtig · sofort wiederholbar`;
 }

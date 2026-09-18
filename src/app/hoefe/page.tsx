@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HofladenRadar from '@/components/hoefe/HofladenRadar';
 import { bestand } from '@/lib/hoefe/db';
+import { ogImages } from '@/lib/og';
 
 export const revalidate = 3600;
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     'Hofläden und Direktvermarkter in deiner Nähe — mit Umkreissuche nach Ort oder PLZ. Rind, Schwein, Lamm, Geflügel direkt vom Hof, Bio-Höfe markiert.',
   alternates: { canonical: 'https://steakakademie.de/hoefe' },
   openGraph: {
+    images: ogImages('Hofladen-Radar — Fleisch direkt vom Erzeuger'),
     title: 'Hofladen-Radar — Fleisch direkt vom Erzeuger',
     description: 'Hofläden in deiner Nähe finden: Umkreissuche nach Ort oder PLZ, Fleischangebot und Bio auf einen Blick.',
     url: 'https://steakakademie.de/hoefe',
