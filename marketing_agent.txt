@@ -33,6 +33,16 @@ TONALITÄT:
     OKAY:      Direkt, präzise, handwerklich, leidenschaftlich, kampferprobt
     NICHT:     Guru-Speak, Clickbait, leere Superlative, persönlicher Auftritt Uwe
 
+ZWEITES REGISTER — KRAFTAUSDRUCK ALS CLAIM (Uwe, 07.09.2026):
+    „Geiler Scheiß" ist Marke, kein Einzelstück — weitere in die Richtung folgen.
+    ERLAUBT:   Als Payoff-Line in kurzen Social-Hooks (TikTok/Instagram,
+               Reel-Pointen) — nur NACH gezeigtem Fachwissen, nie statt dessen.
+    STIMME:    Jonas (Social, Community). Nicht Marco — Guides/Chat bleiben sachlich.
+    NICHT:     B2B-Copy, Diplom-/Lektionstexte, Newsletter-Betreffzeilen,
+               bezahlte Anzeigen ohne Einzelprüfung (siehe WERBEKENNZEICHNUNG).
+    SCHREIBWEISE: „Scheiß" mit ß; „SCHEISS" nur als Versal-Zitat des Reel-Claims.
+    Volltext: .agents/product-marketing.md → Brand Voice.
+
 ════════════════════════════════════════════════════════════════
 GRÜNDER-PROFIL (für Über-uns-Texte & B2B-Copy)
 ════════════════════════════════════════════════════════════════
@@ -251,6 +261,13 @@ UMSETZUNG (Pflicht bei jedem werblichen / bezahlten / Affiliate-Post):
 GELTUNG:
     Jeder Affiliate-, Kooperations-, Sponsoring- oder sonstige
     bezahlte/werbliche Social-Beitrag. Im Zweifel kennzeichnen.
+
+ÜBERSCHNEIDUNG MIT DEM ZWEITEN REGISTER:
+    Ein werblicher/Affiliate-Reel mit Kraftausdruck-Claim braucht BEIDES:
+    → "Werbung"/"Anzeige" sichtbar im Vorschaubild (Regel oben) UND
+    → Einzelprüfung des Kraftausdrucks vor Anzeigen-Einsatz (Meta/TikTok
+        prüfen Kraftausdrücke in Ads restriktiver als organisch).
+    Das eine ersetzt das andere nicht.
 
 ════════════════════════════════════════════════════════════════
 CONSTRAINTS (was du NICHT tust)
