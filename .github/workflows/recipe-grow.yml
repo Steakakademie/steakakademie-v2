@@ -59,6 +59,16 @@ jobs:
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/recipe-images.mjs
 
+      # Ein neues Rezept muss auch in die Kochwissen-Lieferung, sonst findet die
+      # Vektorsuche es nicht und die Rezept-Schmiede gründet nicht darauf.
+      # Bis 18.09.2026 lief das nirgends automatisch: tsukune-yakitori kam mit
+      # #138 in main und fehlte in der CSV — rezepte-to-kochwissen.test.mjs war
+      # damit auf main rot. Der Generator ist deterministisch und macht keinen
+      # API-Call; läuft er bei jedem Lauf mit, zieht eine hinterherhinkende CSV
+      # von selbst nach und erzeugt sonst keinen Diff. Deshalb ohne if-Guard.
+      - name: Kochwissen-Lieferung nachziehen
+        run: node scripts/rezepte-to-kochwissen.mjs
+
       # Vor dem PR-Schritt zählen: pr-statt-push committet, danach ist der
       # Arbeitsbaum sauber und nichts mehr messbar.
       - name: Lauf-Bilanz erheben
@@ -85,7 +95,7 @@ jobs:
         id: pr
         uses: ./.github/actions/pr-statt-push
         with:
-          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml
+          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml data/kochwissen
           branch-prefix: bot/rezept
           bot-name: recipe-bot
           commit-message: 'chore(rezepte): neue Rezepte + Hero-Bilder (automatisch) — zur Prüfung'
