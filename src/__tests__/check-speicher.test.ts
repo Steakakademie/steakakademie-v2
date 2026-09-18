@@ -120,13 +120,13 @@ describe('check-speicher: Ereignis fuers Glutbett', () => {
 
 describe('check-speicher: kaputte Daten legen nichts lahm', () => {
   it('unlesbarer Inhalt ergibt eine leere Menge statt eines Fehlers', () => {
-    (globalThis as { localStorage: SpeicherStub }).localStorage.setItem(SCHLUESSEL, '{kein json');
+    (globalThis as unknown as { localStorage: SpeicherStub }).localStorage.setItem(SCHLUESSEL, '{kein json');
     expect(() => ladeBestandeneChecks()).not.toThrow();
     expect(anzahlBestanden(STUFE_1)).toBe(0);
   });
 
   it('fremde Datentypen im Array werden aussortiert', () => {
-    (globalThis as { localStorage: SpeicherStub }).localStorage
+    (globalThis as unknown as { localStorage: SpeicherStub }).localStorage
       .setItem(SCHLUESSEL, JSON.stringify(['salzen', 42, null, { a: 1 }]));
     expect(anzahlBestanden(STUFE_1)).toBe(1);
   });
