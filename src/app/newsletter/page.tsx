@@ -3,6 +3,7 @@ import { Flame, Thermometer, BookOpen, Soup } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Der Wissens-Brief — BBQ-Tipps per Mail',
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
     'Jeden Freitag ein Stück BBQ-Wissen: Kerntemperaturen, Cuts, Technik — präzise und ehrlich. Kostenlos, jederzeit abmeldbar. Direkt in dein Postfach.',
   alternates: { canonical: 'https://steakakademie.de/newsletter' },
   openGraph: {
+    images: ogImages('Der Steakakademie Wissens-Brief'),
     title: 'Der Steakakademie Wissens-Brief',
     description: 'Jeden Freitag: ein Meister, eine Technik, ein Rezept. Kostenlos per Mail.',
     url: 'https://steakakademie.de/newsletter',

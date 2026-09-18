@@ -6,6 +6,7 @@ import fs                  from 'fs';
 import Header              from '@/components/layout/Header';
 import Footer              from '@/components/layout/Footer';
 import { ChevronRight, ArrowRight, Info, TrendingUp, Globe } from 'lucide-react';
+import { ogImages } from '@/lib/og';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -107,6 +108,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     keywords:    data.meta.keywords.join(', '),
     alternates:  { canonical: `https://steakakademie.de/eu-steuervergleich/${params.tier}` },
     openGraph: {
+      images: ogImages(data.meta.ogTitle),
       title:       data.meta.ogTitle,
       description: data.meta.ogDescription,
       url:         `https://steakakademie.de/eu-steuervergleich/${params.tier}`,

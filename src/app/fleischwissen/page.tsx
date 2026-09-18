@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 import { serie } from '@/lib/fleischwissen';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Fleischwissen — woher dein Steak wirklich kommt',
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
     'Dreiteilige Serie zur Herkunft: US-Feedlot gegen deutsche Bullenmast, Gras gegen Getreide, und was die letzten 48 Stunden im Leben des Tieres mit deinem Steak machen.',
   alternates: { canonical: 'https://steakakademie.de/fleischwissen' },
   openGraph: {
+    images: ogImages('Fleischwissen — woher dein Steak wirklich kommt'),
     title: 'Fleischwissen — woher dein Steak wirklich kommt',
     description:
       'Produktionssysteme, Fütterung, Schlachtstress: die drei Faktoren, die über die Qualität entscheiden, bevor das Fleisch die Theke erreicht. Mit belegten Zahlen.',

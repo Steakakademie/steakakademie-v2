@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AromaMatcher from '@/components/aroma-matcher/AromaMatcher';
 import { allCutSummaries, FREE_LIMIT, teaserCut } from '@/lib/aroma-matcher/data';
+import { ogImages } from '@/lib/og';
 
 // Statisch gerendert — Login-Status kommt im Client. Kein cookies() hier,
 // sonst fällt die Seite aus dem statischen Manifest (Lehre vom 27.08.).
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     'Welcher Rub, welches Holz, welcher Wein passt zu deinem Cut? Der Aroma-Matcher der Steakakademie kombiniert nach prägenden Schlüsselaromen — Ribeye, Brisket, Flank und mehr.',
   alternates: { canonical: 'https://steakakademie.de/aroma-matcher' },
   openGraph: {
+    images: ogImages('Aroma-Matcher — Smart-Pairing für Steak-Cuts'),
     title: 'Aroma-Matcher — Smart-Pairing für Steak-Cuts',
     description: 'Rubs, Räucherholz und Drinks, die zu deinem Cut passen — kuratiert nach prägenden Schlüsselaromen.',
     url: 'https://steakakademie.de/aroma-matcher',

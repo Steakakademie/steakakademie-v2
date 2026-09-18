@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
   alternates: { canonical: 'https://steakakademie.de/eigenregie' },
   openGraph: {
+    images: ogImages('Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.'),
     title: 'Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.',
     description:
       'Raus aus der Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     'Website live — aber niemand findet sie? In 72 Stunden: Google Search Console, On-Page-SEO, Keyword-Strategie, erste Backlinks, lokale Sichtbarkeit.',
   alternates: { canonical: 'https://steakakademie.de/seo-sprint' },
   openGraph: {
+    images: ogImages('SEO-Sprint — Google-Sichtbarkeit in 72h'),
     title: 'SEO-Sprint — Google-Sichtbarkeit in 72h',
     description:
       'Der logische nächste Schritt nach Eigenregie: deine fertige Website auf Google sichtbar machen. Schritt-für-Schritt, ohne Agentur.',
