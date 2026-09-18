@@ -1,10 +1,17 @@
 import type { ReactNode } from 'react';
-import { Zap, AlertTriangle, Lightbulb, Thermometer } from 'lucide-react';
+import { Zap, AlertTriangle, Lightbulb, Thermometer, HelpCircle, Hand } from 'lucide-react';
 
 /**
  * Wiederverwendbare MDX-Callouts gegen „Textwüsten".
  * In MDX: <Schnelluebersicht>…</Schnelluebersicht>, <Achtung>…</Achtung>,
- * <ProTipp>…</ProTipp>, <TempBox>…</TempBox>
+ * <ProTipp>…</ProTipp>, <TempBox>…</TempBox>, <Leitfrage>…</Leitfrage>,
+ * <Handgriff>…</Handgriff>
+ *
+ * Leitfrage und Handgriff (08.09.2026, Rahmenlehrplan §2.2): Die sieben
+ * Kurs-Produktionsbuecher beginnen jede Einheit mit einer Frage an die
+ * Teilnehmer und lassen bei jedem wichtigen Schritt alle selbst Hand anlegen.
+ * Online heisst das: eine Frage am Anfang, eine Aufgabe am eigenen Grill mit
+ * Selbstkontrolle am Ende. Nie reiner Fliesstext.
  */
 
 function Box({
@@ -45,4 +52,14 @@ export function ProTipp({ children }: { children: ReactNode }) {
 
 export function TempBox({ children }: { children: ReactNode }) {
   return <Box icon={<Thermometer size={15} />} label="Kerntemperatur" accent="#C8882A">{children}</Box>;
+}
+
+/** Eroeffnet eine Lektion: die Frage, die der Lernende am Ende selbst beantworten kann. */
+export function Leitfrage({ children }: { children: ReactNode }) {
+  return <Box icon={<HelpCircle size={15} />} label="Leitfrage" accent="#C8882A">{children}</Box>;
+}
+
+/** Aufgabe am eigenen Grill, mit Selbstkontrolle — der Teil, den kein Text ersetzt. */
+export function Handgriff({ children }: { children: ReactNode }) {
+  return <Box icon={<Hand size={15} />} label="Handgriff — jetzt am Grill" accent="#E85018">{children}</Box>;
 }
