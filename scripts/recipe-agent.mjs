@@ -21,6 +21,7 @@ import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readFile, writeFile, mkdir, access } from 'fs/promises'
 import { existsSync, appendFileSync, readFileSync } from 'fs'
+import { execSync } from 'child_process'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
@@ -322,6 +323,62 @@ function alleSeeds() {
     zusammen.push(seed)
   }
   return zusammen
+}
+
+// ─── SLUGS AUS OFFENEN REZEPT-PRS ─────────────────────────────────────────────
+//
+// Der Lauf sieht sonst nur main: Der Cache (content/rezepte/.recipe-cache.json)
+// und die fertige .mdx werden im PR-Branch geschrieben, nicht in main. Solange
+// ein Rezept-PR auf Freigabe wartet, gilt sein Rezept beim naechsten Lauf also
+// als "noch nicht erzeugt" — und wird noch einmal erzeugt.
+//
+// Genau das ist am 15.-18.09.2026 passiert: vier Naechte hintereinander wurde
+// dasselbe Rezept (tsukune-yakitori) erzeugt, weil der PR vom 15.09. offen lag.
+// Ergebnis: vier PRs mit demselben Slug, drei davon mit Merge-Konflikt, und vier
+// mal FLUX-Bildkosten fuer ein einziges Rezept.
+//
+// Deshalb: vor der Auswahl zusaetzlich nachsehen, was in den bot/rezept-*-
+// Branches auf origin schon liegt. Faellt das aus (kein Netz, kein origin,
+// kein git), bleibt es beim alten Verhalten — das darf die Produktion nicht
+// blockieren.
+function slugsInOffenenRezeptPRs() {
+  const git = (args) => execSync(`git ${args}`, {
+    cwd: ROOT, encoding: 'utf-8', timeout: 30_000, stdio: ['ignore', 'pipe', 'ignore'],
+  })
+
+  let refs
+  try {
+    refs = git("ls-remote --heads origin 'refs/heads/bot/rezept-*'")
+      .split('\n').map(z => z.trim()).filter(Boolean)
+      .map(z => z.split('\t')[1]).filter(Boolean)
+  } catch {
+    console.warn('  ⚠ Offene Rezept-PRs nicht pruefbar (kein origin erreichbar) — nur main als Grundlage.')
+    return new Set()
+  }
+  if (refs.length === 0) return new Set()
+
+  const slugs = new Set()
+  for (const ref of refs) {
+    const name = ref.replace('refs/heads/', '')
+    try {
+      // Der CI-Checkout ist flach und kennt nur main — den Branch-Tip einzeln und
+      // flach nachholen, damit ls-tree seinen Baum lesen kann.
+      git(`fetch --depth=1 origin ${ref}:refs/remotes/rezept-pr-check/${name}`)
+      const dateien = git(`ls-tree -r --name-only refs/remotes/rezept-pr-check/${name} content/rezepte/`)
+      for (const datei of dateien.split('\n')) {
+        const treffer = datei.trim().match(/^content\/rezepte\/(.+)\.mdx$/)
+        if (!treffer) continue
+        // Ein Bot-Branch zweigt von main ab und enthaelt damit den kompletten
+        // Bestand. Interessant ist nur, was NUR dort liegt — alles andere faengt
+        // die Datei-Pruefung im Arbeitsverzeichnis ohnehin ab.
+        if (existsSync(join(REZEPTE, `${treffer[1]}.mdx`))) continue
+        slugs.add(treffer[1])
+      }
+    } catch {
+      console.warn(`  ⚠ Branch ${name} nicht lesbar — wird bei der Dublettenpruefung uebergangen.`)
+    }
+  }
+  return slugs
 }
 
 // ─── CACHE ────────────────────────────────────────────────────────────────────
@@ -796,11 +853,20 @@ async function main() {
     }
   }
 
+  // Wartet ein Rezept schon als PR auf Freigabe, darf es nicht noch einmal
+  // erzeugt werden (siehe slugsInOffenenRezeptPRs). Nur im echten Wachstums-Lauf
+  // nachsehen — --force/--slug/--dry-run sollen kein Netz brauchen.
+  const inOffenenPRs = (FORCE || SLUG_ONLY || DRY_RUN) ? new Set() : slugsInOffenenRezeptPRs()
+  if (inOffenenPRs.size > 0) {
+    console.log(`  ${inOffenenPRs.size} Rezept(e) warten in offenen PRs auf Freigabe — werden uebersprungen`)
+  }
+
   let toGenerate = FORCE
     ? seeds
     : seeds.filter(s => {
         const outFile = join(REZEPTE, `${s.slug}.mdx`)
-        return !cache[s.slug] && !existsSync(outFile)   // Cache ODER existierende Datei → skip
+        // Cache ODER existierende Datei ODER offener PR → skip
+        return !cache[s.slug] && !existsSync(outFile) && !inOffenenPRs.has(s.slug)
       })
   const pendingTotal = toGenerate.length
   if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT)   // „täglich 1" etc.
