@@ -73,6 +73,20 @@ export interface Cut {
   image: string; // /images/cuts/<slug>.jpg
   visualBrief: string; // EN-Briefing für die FLUX-Bildgenerierung
   hasGuide?: boolean; // true = es gibt eine ausführliche /cuts/<slug>-Seite
+  /**
+   * true = Bild wurde generativ ERZEUGT oder WESENTLICH VERÄNDERT und wird im
+   * Atlas gekennzeichnet (BildCredit/CutImage). Maßstab wie in BildCredit.tsx:
+   * reine Farb- und Tonwertkorrektur löst die Kennzeichnung NICHT aus.
+   *
+   * Der serienweite Ablauf aus `public/images/cuts/CREDITS.md` (Umgebung per
+   * nano-banana-pro/edit entfernt, danach einheitliches Studio-Relight) lässt die
+   * Anatomie unverändert und gilt deshalb als Bildbearbeitung, nicht als
+   * Erzeugung. Gekennzeichnet werden die beiden Fußnoten-Fälle: `porterhouse`
+   * (vollständig KI-erzeugt) und `roastbeef`/rumpsteak (Marmorierung ergänzt).
+   */
+  imageAI?: boolean;
+  /** Klartext-Herkunft wie im MDX-Frontmatter; Format siehe BildCredit.tsx. */
+  imageSource?: string;
 }
 
 export interface Primal {
@@ -334,6 +348,11 @@ export const BEEF_CUTS: Cut[] = [
     meatTypeMatch: ['roastbeef', 'rumpsteak', 'striploin', 'new york'],
     image: '/images/cuts/rumpsteak.jpg',
     visualBrief: 'a thick striploin / roastbeef steak with a firm white fat rim along one edge and a uniform lean muscle, raw',
+    // CREDITS.md Fußnote ¹: Marmorierung des mageren Muskels generativ ergänzt
+    // (Texturvorlage Unsplash CEsrs0WHOiw). Silhouette, Fettrand und Anschnitt
+    // stammen unverändert aus dem Quellfoto.
+    imageAI: true,
+    imageSource: 'Unsplash · ID CEsrs0WHOiw · sergey-kotenev · Marmorierung generativ ergaenzt (CREDITS.md Fussnote 1)',
   },
   {
     id: 'new-york-strip',
@@ -414,6 +433,10 @@ export const BEEF_CUTS: Cut[] = [
     meatTypeMatch: ['porterhouse', 'fiorentina'],
     image: '/images/cuts/porterhouse.jpg',
     visualBrief: 'a single thick porterhouse steak with a clearly visible T-shaped bone, a large striploin muscle on one side and a LARGE round tenderloin filet on the other side, raw',
+    // CREDITS.md Fußnote ²: vollständig KI-erzeugtes Eigenbild (Google Gemini),
+    // fachlich geprüft und freigegeben. Keine Fremdrechte berührt.
+    imageAI: true,
+    imageSource: 'Eigenbild · Google Gemini · vollstaendig KI-erzeugt (CREDITS.md Fussnote 2)',
   },
   {
     id: 'filet',

@@ -20,7 +20,8 @@ export function generateStaticParams() {
   return generateAllNLPages().map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const page = tryGenerate(params.slug);
   if (!page) return {};
   const { meta } = page;
@@ -40,7 +41,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-interface Props { params: { slug: string } }
+interface Props { params: Promise<{ slug: string }> }
 
 function tryGenerate(slug: string) {
   try { return generateNLPage(slug); } catch { return null; }
@@ -221,7 +222,8 @@ function SidebarCTA({ niche }: { niche: string }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function ZZPNichePage({ params }: Props) {
+export default async function ZZPNichePage(props: Props) {
+  const params = await props.params;
   const page = tryGenerate(params.slug);
   if (!page) notFound();
 

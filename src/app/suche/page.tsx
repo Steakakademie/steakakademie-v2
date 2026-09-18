@@ -21,11 +21,12 @@ export const metadata: Metadata = {
 };
 
 // Next 14: searchParams ist ein einfaches Objekt (erst Next 15 macht es zum Promise)
-export default function SuchePage({
-  searchParams,
-}: {
-  searchParams: { q?: string };
-}) {
+export default async function SuchePage(
+  props: {
+    searchParams: Promise<{ q?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const q = searchParams.q ?? '';
   const query = q.trim().slice(0, 80);
   const hits = query ? search(query) : [];

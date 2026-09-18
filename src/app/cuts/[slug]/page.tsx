@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -17,14 +18,15 @@ import BildCredit from '@/components/BildCredit';
 import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   return allCuts.map((cut) => ({ slug: cut.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const cut = allCuts.find((c) => c.slug === params.slug);
   if (!cut) return {};
 
@@ -127,7 +129,8 @@ const mdxComponents = {
   BBQPairing,
 };
 
-export default function CutPage({ params }: Props) {
+export default function CutPage(props: Props) {
+  const params = use(props.params);
   const cut = allCuts.find((c) => c.slug === params.slug);
   if (!cut) notFound();
 

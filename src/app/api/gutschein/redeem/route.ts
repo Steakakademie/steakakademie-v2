@@ -19,7 +19,7 @@ const NEXT_BY_SLUG: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json(

@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-13T10:17:29.897Z",
+ "aktualisiert": "2026-09-16T09:56:26.735Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -1712,6 +1712,30 @@
     "Everything BBQ Sauce"
    ],
    "gesehen": "2026-09-10",
+   "status": "neu"
+  },
+  {
+   "id": "heygrillhey:flying-dutchman-burger-in-n-out-copycat",
+   "quelle": "heygrillhey",
+   "quelleName": "Hey Grill Hey",
+   "quelleUrl": "https://heygrillhey.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Pellet-Grill, Familienküche, Feiertage, Saucen und Rubs",
+   "titel": "Flying Dutchman Burger (In-n-Out Copycat)",
+   "link": "https://heygrillhey.com/flying-dutchman-burger/",
+   "datum": "Mon, 14 Sep 2026 14:00:00 +0000",
+   "kategorien": [
+    "Beef",
+    "Burgers",
+    "Ground Beef",
+    "Recipes",
+    "Beef Rub",
+    "Beef Rub Menu"
+   ],
+   "gesehen": "2026-09-16",
    "status": "neu"
   }
  ]

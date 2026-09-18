@@ -91,7 +91,7 @@ const FAQ = [
 export default async function GruenderSchmiedePage() {
   let price: number | null = null;
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from('courses')
       .select('price')

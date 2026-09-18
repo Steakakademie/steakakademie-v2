@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -20,7 +21,7 @@ import AffiliateBox from '@/components/mdx/AffiliateBox';
 import { faqSchema } from '@/lib/schema';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 /**
@@ -45,7 +46,8 @@ export const dynamicParams = false;
 const ldJson = (obj: unknown) =>
   JSON.stringify(obj).replace(/</g, '\\u003c');
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const artikel = sichtbareArtikel(allArtikels).find((a) => a.slug === params.slug);
   if (!artikel) return {};
 
@@ -157,7 +159,8 @@ const mdxComponents = {
   ),
 };
 
-export default function ArtikelDetailPage({ params }: Props) {
+export default function ArtikelDetailPage(props: Props) {
+  const params = use(props.params);
   const artikel = sichtbareArtikel(allArtikels).find((a) => a.slug === params.slug);
   if (!artikel) notFound();
 

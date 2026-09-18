@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -19,7 +20,7 @@ import { sichtbareArtikel } from '@/lib/redaktion';
 import { Calendar, ChevronRight, RotateCcw, Scale, AlertTriangle, Sparkles } from 'lucide-react';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // sichtbareArtikel statt roher Collection (03.09.2026, Redaktionsvorbehalt).
@@ -32,7 +33,8 @@ export async function generateStaticParams() {
   return sichtbare().map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) return {};
   const title = doc.seoTitle ?? doc.title;
@@ -113,7 +115,8 @@ const mdxComponents = {
   ),
 };
 
-export default function StreitfallPage({ params }: Props) {
+export default function StreitfallPage(props: Props) {
+  const params = use(props.params);
   const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) notFound();
 

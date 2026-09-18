@@ -91,13 +91,14 @@ function rankEmoji(rank: number): string {
 
 // ─── Static generation ────────────────────────────────────────────────────────
 
-type Props = { params: { tier: string } };
+type Props = { params: Promise<{ tier: string }> };
 
 export function generateStaticParams() {
   return TIERS.map(tier => ({ tier }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const data = loadData(params.tier);
   if (!data) return {};
   return {
@@ -502,7 +503,8 @@ function FAQSection({ items }: { items: Array<{ question: string; answer: string
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function EUSteuervergleichPage({ params }: Props) {
+export default async function EUSteuervergleichPage(props: Props) {
+  const params = await props.params;
   const data = loadData(params.tier);
   if (!data) notFound();
 
