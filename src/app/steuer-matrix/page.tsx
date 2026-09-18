@@ -52,7 +52,7 @@ export default async function SteuerMatrixPage() {
   // Prüfen ob User bereits Zugang hat
   let hasAccess = false;
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data } = await supabase

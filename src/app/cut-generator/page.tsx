@@ -9,10 +9,11 @@ import { getCutsBySpecies, getCutById, ALL_CUTS } from '@/lib/cuts-catalog';
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
 interface PageProps {
-  searchParams: { cut?: string };
+  searchParams: Promise<{ cut?: string }>;
 }
 
-export function generateMetadata({ searchParams }: PageProps): Metadata {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const cut = searchParams.cut ? getCutById(searchParams.cut) : undefined;
   const title = cut
     ? `Mein perfekter Cut: ${cut.nameDE}`

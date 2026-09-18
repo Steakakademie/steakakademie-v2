@@ -29,7 +29,7 @@ type Card = {
 const PITMASTER_SEAL = 85;
 
 export default async function CommunityIndexPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from('user_recipes')
     .select('slug, title, description, portions, prep_time, image_url, author_name, quality_score')

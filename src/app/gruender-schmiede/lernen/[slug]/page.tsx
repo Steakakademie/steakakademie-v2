@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -11,14 +12,15 @@ import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return allSprintModuls.map((m) => ({ slug: m.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const m = allSprintModuls.find((x) => x.slug === params.slug);
   if (!m) return {};
   return {
@@ -83,7 +85,8 @@ const mdxComponents = {
   TempBox,
 };
 
-export default function SprintModulPage({ params }: Props) {
+export default function SprintModulPage(props: Props) {
+  const params = use(props.params);
   const modul = allSprintModuls.find((m) => m.slug === params.slug);
   if (!modul) notFound();
 

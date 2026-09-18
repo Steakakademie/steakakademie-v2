@@ -43,12 +43,12 @@ import { dienstClient, produziere } from '@/lib/urkunde/produktion';
  * Auth: admin_auth-Cookie === ADMIN_PASSWORD, wie bei /api/admin/drafts.
  */
 
-function authed(): boolean {
-  return istAdminPasswort(cookies().get('admin_auth')?.value);
+async function authed(): Promise<boolean> {
+  return istAdminPasswort((await cookies()).get('admin_auth')?.value);
 }
 
 export async function GET() {
-  if (!authed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await authed())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const db = dienstClient();
   if (!db) return NextResponse.json({ error: 'Supabase-Dienstschlüssel fehlt.' }, { status: 503 });
@@ -64,7 +64,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  if (!authed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await authed())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { id, aktion } = (await req.json().catch(() => ({}))) as { id?: string; aktion?: string };
   if (!id || !aktion) return NextResponse.json({ error: 'Bad request' }, { status: 400 });

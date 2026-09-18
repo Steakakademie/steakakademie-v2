@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -17,14 +18,15 @@ import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   return allVergleiches.map((v) => ({ slug: v.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const vergleich = allVergleiches.find((v) => v.slug === params.slug);
   if (!vergleich) return {};
   const title = vergleich.seoTitle ?? vergleich.title;
@@ -120,7 +122,8 @@ const mdxComponents = {
   },
 };
 
-export default function VergleichPage({ params }: Props) {
+export default function VergleichPage(props: Props) {
+  const params = use(props.params);
   const vergleich = allVergleiches.find((v) => v.slug === params.slug);
   if (!vergleich) notFound();
 

@@ -23,11 +23,12 @@ import { LektionAbschluss, LektionBalken } from '@/components/relaunch/LektionFo
  * Die Kontrollfrage des Prototyps hat in den Lektionen keine Datenbasis — an
  * ihrer Stelle steht der prüfungsrelevante Merksatz (Feld `merksatz`).
  */
-type Props = { params: { stufe: string; lektion: string } };
+type Params = { stufe: string; lektion: string };
+type Props = { params: Promise<Params> };
 
 const url = (l: { stufe: number; lektionSlug: string }) => `/relaunch/diplome/lernen/stufe-${l.stufe}/${l.lektionSlug}`;
 
-function finde(params: Props['params']) {
+function finde(params: Params) {
   const n = Number(params.stufe.replace('stufe-', ''));
   return allDiplomLektions.find((l) => l.stufe === n && l.lektionSlug === params.lektion);
 }
@@ -36,7 +37,8 @@ export function generateStaticParams() {
   return allDiplomLektions.map((l) => ({ stufe: `stufe-${l.stufe}`, lektion: l.lektionSlug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const l = finde(params);
   if (!l) return {};
   return { title: l.seoTitle ?? l.title, description: l.seoDescription ?? l.excerpt };
@@ -48,7 +50,8 @@ export function generateMetadata({ params }: Props): Metadata {
  * weil useMDXComponent ein Hook ist. diplomZugang() nur fuer Bezahlstufen,
  * damit Stufe 1 statisch bleibt.
  */
-export default async function LektionSeite({ params }: Props) {
+export default async function LektionSeite(props: Props) {
+  const params = await props.params;
   const l = finde(params);
   if (!l) notFound();
   const gesperrt = istBezahlstufe(l.stufe) ? !(await diplomZugang()).zugang : false;
