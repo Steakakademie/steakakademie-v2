@@ -617,9 +617,15 @@ export default function DatenschutzPage() {
                 <strong className="text-text-primary">Drittlandübermittlung:</strong> USA — abgesichert
                 über EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
               </p>
-              <p>
+              <p className="mb-3">
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
                 funktionierenden Wissenssuche und Rezept-Generierung).
+              </p>
+              <p>
+                <strong className="text-text-primary">Widerspruchsrecht (Art. 21 DSGVO):</strong> Du
+                hast das Recht, aus Gründen, die sich aus deiner besonderen Situation ergeben,
+                jederzeit gegen diese auf Art. 6 Abs. 1 lit. f DSGVO gestützte Verarbeitung
+                Widerspruch einzulegen.
               </p>
             </section>
 
