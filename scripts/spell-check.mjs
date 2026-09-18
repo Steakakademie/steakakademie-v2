@@ -8,9 +8,13 @@
  * data/rechtschreib-whitelist.txt löst keinen Alarm aus.
  *
  * INKREMENTELL: geprüfte, saubere Dateien werden mit Inhalts-Hash in
- * data/spell-check-cache.json vermerkt (committet). Im Netlify-postbuild
- * werden dadurch nur neue/geänderte Dateien geprüft — der Normalfall sind
- * null bis wenige API-Requests pro Build.
+ * data/spell-check-cache.json vermerkt (committet). Dadurch werden nur
+ * neue/geänderte Dateien geprüft — der Normalfall sind null bis wenige
+ * API-Requests pro Lauf. Korrektur 13.09.2026: Hier stand, der Lauf hänge
+ * im Netlify-postbuild. Das war zuletzt falsch — `postbuild` in package.json
+ * ruft next-sitemap, validate-frontmatter und check-links auf, aber KEIN
+ * spell:check; Netlify ist ausserdem abgebaut. Aufruf ist manuell
+ * (`npm run spell:check`) bzw. in CI mit --strict.
  *
  * REPORT-ONLY: Standard-Exitcode ist 0, auch bei Funden — Tippfehler dürfen
  * keinen Deploy blocken (--strict erzwingt Exitcode 1 bei Funden).

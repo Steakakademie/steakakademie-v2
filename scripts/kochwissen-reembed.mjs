@@ -18,7 +18,7 @@
  *
  * DANACH (Reihenfolge wichtig, sonst sucht die Query mit dem falschen Modell):
  *   1. VOYAGE_MODEL=voyage-4 in .env.local aktiv (macht dieses Skript-Setup bereits)
- *   2. Netlify-Env VOYAGE_MODEL=voyage-4 + Redeploy (macht Claude nach deinem Zuruf)
+ *   2. Vercel-Env VOYAGE_MODEL=voyage-4 + Redeploy (Produktion laeuft auf Vercel)
  *
  * Env (.env.local): NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VOYAGE_API_KEY
  */
@@ -99,4 +99,4 @@ for (let i = 0; i < rows.length; i += BATCH) {
 }
 
 console.log(`\n🏁 Fertig: ${done} Embeddings auf ${MODEL} (seit ${startedAt}).`)
-console.log('   Naechster Schritt: Claude Bescheid geben → Netlify-Env + Redeploy.\n')
+console.log('   Naechster Schritt: VOYAGE_MODEL im Vercel-Projekt setzen + Redeploy.\n')

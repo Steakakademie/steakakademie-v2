@@ -10,7 +10,7 @@
  *
  * Deshalb ist dieses Gate blockierend und laeuft VOR `next build`: Ein
  * postbuild-Check (wie validate-frontmatter) meldet den Defekt erst, wenn das
- * Artefakt bereits existiert und Netlify unter Umstaenden schon deployed hat.
+ * Artefakt bereits existiert und Vercel unter Umstaenden schon deployed hat.
  * Bei einer Rechtsposition ist das der falsche Zeitpunkt.
  *
  * Geprueft werden alle .mdx-Dateien unter content/:
