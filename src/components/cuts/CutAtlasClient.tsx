@@ -8,6 +8,7 @@ import AnimalDiagram from './AnimalDiagram';
 import BullButcherMap from './BullButcherMap';
 import CutDnaRadar from './CutDnaRadar';
 import CutImage from './CutImage';
+import BildCredit from '@/components/BildCredit';
 import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
@@ -344,6 +345,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                   label={cut.nameDE}
                   accent={primalById[cut.primal]?.color ?? '#C8882A'}
                   className="aspect-[4/3]"
+                  ai={cut.imageAI}
                 />
                 <div className="p-3">
                   <h3 className="font-serif font-bold text-text-light text-sm leading-tight">{cut.nameDE}</h3>
@@ -410,7 +412,15 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
         label={cut.nameDE}
         accent={accent}
         className="w-full aspect-[16/9]"
+        ai={cut.imageAI}
       />
+      {/* Kennzeichnung mit Verweis auf /ki-disclaimer — hier moeglich, weil die
+          Detailansicht (anders als die Atlas-Kachel) kein <button> ist. */}
+      {(cut.imageAI || cut.imageSource) && (
+        <div className="px-6 sm:px-8">
+          <BildCredit source={cut.imageSource} ai={cut.imageAI} variant="inline" />
+        </div>
+      )}
 
       <div className="p-6 sm:p-8">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
