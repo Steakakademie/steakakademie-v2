@@ -4,6 +4,7 @@ import { ChevronRight, TrendingUp, FileText, Zap, CheckCircle, ArrowRight } from
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
     'Reproduzierbares Betriebssystem für Solo-Selbstständige, entwickelt beim Aufbau von steakakademie.de. Drei Säulen: Gründung, Steuern, Agentur-Unabhängigkeit.',
   alternates: { canonical: 'https://steakakademie.de/ehrliches-system' },
   openGraph: {
+    images: ogImages('Das Ehrliche System'),
     title: 'Das Ehrliche System',
     description:
       'Kein Hype. Keine vagen Versprechen. Ein reproduzierbares KI-Business-Betriebssystem, das wir live beim Aufbau von steakakademie.de entwickelt haben.',

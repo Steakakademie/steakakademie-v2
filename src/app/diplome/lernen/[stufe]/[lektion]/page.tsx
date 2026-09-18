@@ -13,6 +13,7 @@ import LektionFortschritt from '@/components/diplome/LektionFortschritt';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
+import { ogImages } from '@/lib/og';
 
 type Params = { stufe: string; lektion: string };
 interface Props {
@@ -44,6 +45,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `https://steakakademie.de${l.url}` },
     openGraph: {
+      images: ogImages(l.title),
       title,
       description,
       url: `https://steakakademie.de${l.url}`,

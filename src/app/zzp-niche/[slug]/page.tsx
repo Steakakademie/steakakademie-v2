@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { generateNLPage, generateAllNLPages, type PageSection, type SectionId } from '@/services/pageGenerator';
+import { ogImages } from '@/lib/og';
 import {
   ChevronRight,
   TrendingUp,
@@ -31,6 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     keywords:    meta.keywords.join(', '),
     alternates:  { canonical: meta.canonical },
     openGraph: {
+      images: ogImages(meta.ogTitle),
       title:       meta.ogTitle,
       description: meta.ogDescription,
       url:         meta.canonical,

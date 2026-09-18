@@ -10,6 +10,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -35,6 +36,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `https://steakakademie.de${entry.url}` },
     openGraph: {
+      images: ogImages(entry.title),
       title,
       description,
       url: `https://steakakademie.de${entry.url}`,
