@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -14,7 +15,7 @@ import { serie, teilBySlug, nachbarn } from '@/lib/fleischwissen';
 import { Calendar, Clock, ChevronRight, ChevronLeft, RotateCcw } from 'lucide-react';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Alle drei Teile sind live und indexierbar. Eine frueher hier gebaute
@@ -24,7 +25,8 @@ export async function generateStaticParams() {
   return serie().map((d) => ({ slug: d.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const doc = teilBySlug(params.slug);
   if (!doc) return {};
 
@@ -113,7 +115,8 @@ const mdxComponents = {
   ),
 };
 
-export default function FleischwissenArtikel({ params }: Props) {
+export default function FleischwissenArtikel(props: Props) {
+  const params = use(props.params);
   const doc = teilBySlug(params.slug);
   if (!doc) notFound();
 

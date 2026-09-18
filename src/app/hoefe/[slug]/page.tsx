@@ -12,9 +12,10 @@ import { adresseZeile, entfernungLabel, fleischStatus, fleischartenLabel, hostAu
 export const revalidate = 3600;
 export const dynamicParams = true;
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const hof = await hofPerSlug(params.slug);
   // Kein "| Steakakademie" in den Titeln — das haengt das title.template im Root-Layout an.
   if (!hof) return { title: 'Hof nicht gefunden', robots: { index: false, follow: false } };
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function HofPage({ params }: Props) {
+export default async function HofPage(props: Props) {
+  const params = await props.params;
   const hof = await hofPerSlug(params.slug);
   if (!hof) notFound();
 

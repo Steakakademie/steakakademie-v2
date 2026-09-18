@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default async function PlanPage() {
   const { user } = await requireCourseAccess('mein-protokoll', '/mein-protokoll/plan');
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: row } = await supabase
     .from('protokolle')
     .select('id, plan, created_at')

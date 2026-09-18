@@ -64,7 +64,7 @@ export default function DiplomeSeite() {
               </Link>
             </li>
           </ol>
-          <p className="sk-meta sk-meta--14" style={{ marginTop: 14 }}>Bestandene Prüfung = Bronze-Zertifikat als PDF und Freischaltung von Stufe 2.</p>
+          <p className="sk-meta sk-meta--14" style={{ marginTop: 14 }}>Bestandene Prüfung = Grad Grillmeister Bronze und Freischaltung von Stufe 2.</p>
         </div>
 
         <div className="sk-pfad">

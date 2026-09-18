@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -9,9 +10,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Eine Liste fuer alles auf dieser Seite — statische Pfade, Metadaten, Inhalt
@@ -23,7 +25,8 @@ export async function generateStaticParams() {
   return sichtbareBegriffe.map(g => ({ slug: g.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) return {};
   const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar`;
@@ -33,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `https://steakakademie.de${entry.url}` },
     openGraph: {
+      images: ogImages(entry.title),
       title,
       description,
       url: `https://steakakademie.de${entry.url}`,
@@ -78,7 +82,8 @@ const mdxComponents = {
   ),
 };
 
-export default function GlossarEntryPage({ params }: Props) {
+export default function GlossarEntryPage(props: Props) {
+  const params = use(props.params);
   const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) notFound();
 

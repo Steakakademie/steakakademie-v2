@@ -15,8 +15,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function DiagnoseResultPage({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+export default async function DiagnoseResultPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

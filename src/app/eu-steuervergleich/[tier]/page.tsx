@@ -6,6 +6,7 @@ import fs                  from 'fs';
 import Header              from '@/components/layout/Header';
 import Footer              from '@/components/layout/Footer';
 import { ChevronRight, ArrowRight, Info, TrendingUp, Globe } from 'lucide-react';
+import { ogImages } from '@/lib/og';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -91,13 +92,14 @@ function rankEmoji(rank: number): string {
 
 // ─── Static generation ────────────────────────────────────────────────────────
 
-type Props = { params: { tier: string } };
+type Props = { params: Promise<{ tier: string }> };
 
 export function generateStaticParams() {
   return TIERS.map(tier => ({ tier }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const data = loadData(params.tier);
   if (!data) return {};
   return {
@@ -106,6 +108,7 @@ export function generateMetadata({ params }: Props): Metadata {
     keywords:    data.meta.keywords.join(', '),
     alternates:  { canonical: `https://steakakademie.de/eu-steuervergleich/${params.tier}` },
     openGraph: {
+      images: ogImages(data.meta.ogTitle),
       title:       data.meta.ogTitle,
       description: data.meta.ogDescription,
       url:         `https://steakakademie.de/eu-steuervergleich/${params.tier}`,
@@ -502,7 +505,8 @@ function FAQSection({ items }: { items: Array<{ question: string; answer: string
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function EUSteuervergleichPage({ params }: Props) {
+export default async function EUSteuervergleichPage(props: Props) {
+  const params = await props.params;
   const data = loadData(params.tier);
   if (!data) notFound();
 
