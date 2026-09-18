@@ -124,7 +124,7 @@ export default function DiplomSimulation() {
                 className="w-full text-center">
                 <StepLabel text="Steakakademie · Das System" />
                 <h1 className="font-serif text-3xl lg:text-4xl font-bold text-text-light mb-4 leading-tight">
-                  10 Level.<br />Von den Grundlagen<br />bis zum Meister-Diplom.
+                  10 Level.<br />Von den Grundlagen<br />bis zur Meisterklasse.
                 </h1>
                 <p className="font-body text-text-light/55 mb-10 max-w-md mx-auto leading-relaxed">
                   Jedes Level baut auf dem vorherigen auf. Kein Raten, kein Durchklicken —
@@ -434,7 +434,7 @@ export default function DiplomSimulation() {
                   Dein Bronze-Diplom.<br />Offiziell. Gedruckt. Per Post.
                 </h2>
                 <p className="font-body text-text-light/55 text-sm mb-10 max-w-md mx-auto leading-relaxed">
-                  Nach dem Abschluss-Test erhältst du dein Bronze-Zertifikat —
+                  Nach dem Abschluss-Test erreichst du den Grad Grillmeister Bronze —
                   digital zum Teilen kostenlos, auf Wunsch gedruckt per Post ({urkundePreisMitVersand()}).
                 </p>
 
