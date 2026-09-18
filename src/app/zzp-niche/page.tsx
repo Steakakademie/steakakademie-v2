@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { generateAllNLPages, type NLPageContent } from '@/services/pageGenerator';
 import { ChevronRight, TrendingUp, Euro, ShieldCheck, Users } from 'lucide-react';
+import { ogImages } from '@/lib/og';
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
     'Bereken exact wat jij als ZZP netto overhoudt per beroep. Actuele belastingberekeningen voor 10+ freelance niches in Nederland — inclusief zelfstandigenaftrek, MKB-winstvrijstelling en Zorgverzekering.',
   robots: { index: false, follow: false },
   openGraph: {
+    images: ogImages('ZZP Netto Inkomen per Beroep 2024 | Nederland'),
     title: 'ZZP Netto Inkomen per Beroep 2024 | Nederland',
     description: 'Exacte netto-inkomen berekeningen voor ZZP-freelancers in Nederland. Actuele belastingcijfers per beroep — snel inzicht in jouw echte take-home pay.',
     url: 'https://steakakademie.nl/zzp-niche',

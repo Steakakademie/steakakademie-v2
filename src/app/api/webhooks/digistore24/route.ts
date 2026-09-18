@@ -36,8 +36,40 @@ export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
 
 import { timingSafeEqual } from 'node:crypto';
+import * as Sentry from '@sentry/nextjs';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { digistoreSignature } from '@/lib/digistore/signature';
+
+/**
+ * Kassieren-ohne-Auslieferung-Alarm (17.09.2026, DB-Audit vom 07.09.)
+ * ====================================================================
+ * Digistore verkauft, was dort aktiv ist — unabhaengig davon, ob die DB einen
+ * Kurs dafuer kennt. Produkt 695900 (Eigenregie, 37/497 EUR) hat KEINE
+ * digistore_products-Zeile; 696396/696399 haben eine, zeigen aber auf einen
+ * Kurs mit published=false. In beiden Faellen zahlt der Kaeufer und bekommt
+ * nichts. Abschalten in Digistore ist blockiert (API nur lesend, Backend-UI
+ * wirft 400/CSRF). Bis das geloest ist, muss ein solcher Kauf SOFORT jemanden
+ * erreichen, statt still als Zeile in digistore_orders zu liegen: Sentry
+ * (Server-SDK, sentry.server.config.ts) legt ein neues Issue an und mailt.
+ * Fingerprint pro Produkt, damit jede Bestellung im selben Issue landet und
+ * nicht als Rauschen untergeht.
+ */
+function alarmKassiertOhneAuslieferung(
+  grund: 'kein-mapping' | 'kurs-unpublished',
+  info: { productId: string; orderId: string; event: string; courseSlug?: string | null },
+) {
+  const text =
+    grund === 'kein-mapping'
+      ? `Digistore-Bestellung fuer unbekanntes Produkt ${info.productId} — kassiert ohne Auslieferung`
+      : `Digistore-Bestellung fuer Produkt ${info.productId} → Kurs "${info.courseSlug}" ist NICHT veroeffentlicht — Kaeufer sieht nichts`;
+  console.error('[ds-webhook] ALARM', grund, info);
+  Sentry.captureMessage(text, {
+    level: 'error',
+    fingerprint: ['ds-webhook', grund, info.productId],
+    tags: { ds_product_id: info.productId, ds_event: info.event, grund },
+    extra: { orderId: info.orderId, courseSlug: info.courseSlug ?? null },
+  });
+}
 
 const TOOL_REDIRECT: Record<string, string> = {
   'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
@@ -200,13 +232,22 @@ export async function POST(req: Request) {
   // 1) Produkt → Mapping aus DB (Kurs, Gutschein, Credits)
   const { data: mapping } = await supabase
     .from('digistore_products')
-    .select('course_id, is_voucher, voucher_credit_amount, credit_amount, courses(slug, title)')
+    .select('course_id, is_voucher, voucher_credit_amount, credit_amount, courses(slug, title, published)')
     .eq('ds_product_id', productId)
     .maybeSingle();
 
-  const courseId      = mapping?.course_id ?? null;
-  const courseSlug    = (mapping?.courses as any)?.slug  ?? null;
-  const courseTitle   = (mapping?.courses as any)?.title ?? null;
+  const courseId       = mapping?.course_id ?? null;
+  const courseSlug     = (mapping?.courses as any)?.slug  ?? null;
+  const courseTitle    = (mapping?.courses as any)?.title ?? null;
+  const coursePublished = (mapping?.courses as any)?.published as boolean | null | undefined;
+
+  // Latenter Fall (696396 Mein Protokoll, 696399 BBQ-Grundkurs): Mapping da,
+  // Kurs aber unveroeffentlicht. Die Buchung wird trotzdem angelegt (Zugang
+  // greift, sobald Uwe veroeffentlicht) — aber jemand muss es JETZT erfahren.
+  // Nur bei echten Kaufereignissen; Rueckerstattungen loesen keinen Alarm aus.
+  if (courseId && coursePublished === false && (event === 'payment' || event === 'rebill' || event === 'rebill_resumed')) {
+    alarmKassiertOhneAuslieferung('kurs-unpublished', { productId, orderId, event, courseSlug });
+  }
   const isVoucher     = mapping?.is_voucher ?? false;
   const voucherCredit = mapping?.voucher_credit_amount ?? null;  // gesetzt = Credit-Gutschein
   const creditAmount  = (mapping?.credit_amount as number | null) ?? null;
@@ -247,7 +288,13 @@ export async function POST(req: Request) {
   const orderRow = { id: rec.id };
 
   if (!courseId) {
-    console.error('[ds-webhook] unknown product_id', productId);
+    // Bis 07.09.2026 nur console.error — auf Vercel sieht das niemand, die
+    // Bestellung lag still in digistore_orders (processing_status 'failed').
+    if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
+      alarmKassiertOhneAuslieferung('kein-mapping', { productId, orderId, event });
+    } else {
+      console.error('[ds-webhook] unknown product_id', productId, event);
+    }
     return new Response('OK (unknown product logged)', { status: 200 });
   }
 
@@ -356,11 +403,14 @@ async function handleCreditProduct(
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
       const userId = await ensureUser(supabase, email, courseSlug);
 
-      const { error: grantErr } = await supabase.rpc('grant_diagnose_credits', {
-        p_user_id: userId,
-        p_amount:  creditAmount,
+      // Je Order genau einmal: scheitert danach die Mail und Digistore stellt erneut zu,
+      // schreibt der zweite Lauf nichts mehr gut (grant_diagnose_credits allein addiert).
+      const { error: grantErr } = await supabase.rpc('grant_order_credits', {
+        p_order_id: orderRow.id,
+        p_user_id:  userId,
+        p_amount:   creditAmount,
       });
-      if (grantErr) throw new Error(`grant_diagnose_credits failed: ${grantErr.message}`);
+      if (grantErr) throw new Error(`grant_order_credits failed: ${grantErr.message}`);
 
       await sendMagicLink(supabase, email, courseSlug, courseTitle ?? 'deiner Steak-Beichte');
 
@@ -525,10 +575,15 @@ async function sendVoucherEmail(email: string, code: string, courseTitle: string
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+/**
+ * Konto per E-Mail direkt in auth.users (RPC). NICHT listUsers: das liefert eine Seite,
+ * und jeder Bestandskunde ausserhalb davon galt als neu (Kauf → email_exists → 500,
+ * Refund → Zugang blieb). Ein Lesefehler wirft — lieber 500 und Retry als ein Doppelkonto.
+ */
 async function findUserId(supabase: SupabaseClient, email: string): Promise<string | null> {
-  const { data } = await supabase.auth.admin.listUsers({ page: 1, perPage: 200 });
-  const found    = data?.users?.find((u) => u.email?.toLowerCase() === email);
-  return found?.id ?? null;
+  const { data, error } = await supabase.rpc('find_user_id_by_email', { p_email: email });
+  if (error) throw new Error(`find_user_id_by_email failed: ${error.message}`);
+  return (data as string | null) ?? null;
 }
 
 async function ensureUser(

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Website erreichbar",
+    "typ": "http",
+    "basis": "https://steakakademie.de",
+    "pfade": [
+      "/",
+      "/rezepte",
+      "/diplome",
+      "/cuts"
+    ],
+    "erlaubt": [
+      200
+    ],
+    "maxTage": 0,
+    "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Notbehelf: steakakademie-de.netlify.app liefert noch aus (Stand vor 13.08.2026)."
+  },
+  {
+    "name": "Rezept-Produktion",
+    "typ": "git",
+    "pfad": "content/rezepte",
+    "maxTage": 4,
+    "hinweis": "recipe-grow läuft täglich 03:30 UTC und soll 1 Rezept/Tag als PR liefern. Kein neuer Commit = entweder Seed-Vorrat leer (scripts/recipe-seeds.mjs prüfen) oder die PRs werden nicht gemergt."
+  },
+  {
+    "name": "Rezept-Workflow",
+    "typ": "workflow",
+    "datei": "recipe-grow.yml",
+    "maxTage": 2,
+    "hinweis": "Der Workflow selbst hat nicht mehr gestartet. GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft nur ein manueller Start oder ein Commit."
+  },
+  {
+    "name": "Glossar",
+    "typ": "git",
+    "pfad": "content/glossar",
+    "maxTage": 14,
+    "hinweis": "glossary-grow zieht neue Begriffe AUS dem Content. Steht die Rezept- und Artikelproduktion, läuft das Glossar zwangsläufig mit leer — erst die Quelle prüfen, dann den Glossar-Agenten."
+  },
+  {
+    "name": "Content-Entwürfe (Scout + Saison)",
+    "typ": "supabase",
+    "tabelle": "content_drafts",
+    "spalte": "created_at",
+    "maxTage": 10,
+    "hinweis": "content-grow (sonntags) und saison-grow (alle 5 Tage) schreiben Entwürfe nach content_drafts. Freigabe in /admin/review."
+  },
+  {
+    "name": "Content-Freigaben",
+    "typ": "supabase",
+    "tabelle": "content_drafts",
+    "spalte": "updated_at",
+    "filter": "status=neq.draft",
+    "wennLeer": {
+      "spalte": "created_at",
+      "filter": "status=in.(draft,review)"
+    },
+    "maxTage": 21,
+    "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen (bzw. noch nie, und der älteste Entwurf wartet länger als die Frist). Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
+  },
+  {
+    "name": "Ideen-Radar",
+    "typ": "git",
+    "pfad": "data/ideen-backlog.json",
+    "maxTage": 7,
+    "hinweis": "ideen-radar läuft alle 3 Tage und aktualisiert den Backlog per PR mit Auto-Merge."
+  },
+  {
+    "name": "Affiliate-Link-Prüfung",
+    "typ": "workflow",
+    "datei": "check-affiliate-links.yml",
+    "maxTage": 10,
+    "hinweis": "Läuft montags. Tote Partnerlinks kosten direkt Umsatz — der Ausfall dieser Prüfung fällt sonst nirgends auf."
+  }
+]

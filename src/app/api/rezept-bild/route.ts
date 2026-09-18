@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const { slug } = guard.body;
 
   // 2) Auth: Login-Pflicht — Shape { error, needsLogin } NICHT ändern (GenerateImageButton.tsx).
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: 'Bitte melde dich an.', needsLogin: true }, { status: 401 });

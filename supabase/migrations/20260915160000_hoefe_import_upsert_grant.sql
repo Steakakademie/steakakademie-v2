@@ -1,0 +1,11 @@
+-- hoefe_import_upsert(jsonb) hatte nach der REVOKE-Haertung in
+-- 20260913120000_hoefe.sql (REVOKE ALL ... FROM public, anon, authenticated)
+-- auch fuer service_role kein EXECUTE mehr -- die Funktion war nie mit
+-- SECURITY DEFINER/GRANT an service_role abgesichert, sondern lief nur ueber
+-- den impliziten PUBLIC-Default, der mit dem REVOKE ALL FROM public mit-
+-- entfernt wurde. Folge: jeder hoefe-import.mjs-Lauf (GitHub Actions, nutzt
+-- SUPABASE_SERVICE_ROLE_KEY) schlug mit
+-- "permission denied for function hoefe_import_upsert" fehl -- reproduziert
+-- im Job-Log von Run #1 (14./15.09.2026, 6068 brauchbare OSM-Elemente
+-- geparst, 0 Zeilen geschrieben). Tabelle hoefe blieb leer.
+GRANT EXECUTE ON FUNCTION hoefe_import_upsert(jsonb) TO service_role;

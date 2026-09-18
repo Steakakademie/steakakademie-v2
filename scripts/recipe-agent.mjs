@@ -20,15 +20,20 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readFile, writeFile, mkdir, access } from 'fs/promises'
-import { existsSync, appendFileSync } from 'fs'
+import { existsSync, appendFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
+import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
 const REZEPTE    = join(ROOT, 'content', 'rezepte')
 const CACHE_FILE = join(REZEPTE, '.recipe-cache.json')
+// Nachschub-Liste: wird von scripts/recipe-seeds.mjs gepflegt und liegt bewusst
+// als Daten-Datei im Repo — die fest verdrahtete SEED_RECIPES-Liste unten war am
+// 26.08.2026 abgearbeitet, danach lief recipe-grow 17 Tage grün und ohne Ergebnis.
+const NACHSCHUB   = join(ROOT, 'data', 'rezept-seeds.json')
 
 dotenv.config({ path: join(ROOT, '.env.local') })
 
@@ -220,7 +225,7 @@ const SEED_RECIPES = [
   { slug: 'gruener-spargel-grill', kategorie: 'beilagen', title: 'Gruener Spargel vom Grill mit Parmesan', meatType: 'Grüner Spargel', cookingMethod: 'Direkt, quer zum Rost', difficulty: 'Einfach', concept: 'Gruener Spargel, holzige Enden entfernt, in Olivenoel gewendet, quer ueber den heissen Rost rund 4–6 Minuten mit klaren dunklen Grillstreifen, Spitzen leicht knusprig, Stangen bissfest. Parmesan-Spaene, Meersalz-Flocken, Zitrone. Herkunft: mediterran.' },
   { slug: 'lammkarree-grillen', kategorie: 'fleisch', title: 'Lammkarree / Lammkrone vom Grill', meatType: 'Lammkarree', cookingMethod: 'Indirekt + Sear', difficulty: 'Mittel', concept: 'Festtags-Cut: Lammkarree mit Fettdeckel indirekt auf 56 Grad, dann scharf. Mediterrane Kraeuterkruste. Herkunft: Schottland.' },
   { slug: 'lammkoteletts-mediterran', kategorie: 'fleisch', title: 'Lammkoteletts mediterran', meatType: 'Lammkoteletts', cookingMethod: 'Direkt, kurz', difficulty: 'Einfach', concept: 'Schnell und aromatisch: Lammkoteletts in Rosmarin-Knoblauch-Olivenoel marinieren, heiss kurz grillen auf medium. Herkunft: Schottland.' },
-  { slug: 'lammkeule-drehspiess', kategorie: 'fleisch', title: 'Lammkeule am Drehspiess', meatType: 'Lammkeule', cookingMethod: 'Rotisserie', difficulty: 'Fortgeschritten', concept: 'Ganze Lammkeule am Rotisserie-Spiess gleichmaessig indirekt auf 60 Grad, aussen knusprig. Herkunft: Neuseeland.' },
+  { slug: 'lammkeule-drehspiess', kategorie: 'fleisch', title: 'Lammkeule am Drehspiess', meatType: 'Lammkeule', cookingMethod: 'Rotisserie', difficulty: 'Fortgeschritten', concept: 'Ganze Lammkeule am Rotisserie-Spiess gleichmaessig indirekt auf 70 Grad Kern (durchgegart), aussen knusprig. Herkunft: Neuseeland.' },
   { slug: 'beer-can-chicken', kategorie: 'fleisch', title: 'Beer Can Chicken', meatType: 'Ganzes Haehnchen', cookingMethod: 'Indirekt, aufrecht', difficulty: 'Einfach', concept: 'US-Grillklassiker: ganzes Haehnchen aufrecht auf einer halbvollen Bierdose indirekt garen bis 74 Grad Kern in der Brust, knusprige Haut. Herkunft: USA.' },
   { slug: 'spatchcock-haehnchen', kategorie: 'fleisch', title: 'Spatchcock-Haehnchen (Butterfly)', meatType: 'Ganzes Haehnchen', cookingMethod: 'Flach, indirekt', difficulty: 'Einfach', concept: 'Haehnchen flachgedrueckt (Rueckgrat entfernt) gart gleichmaessig und schneller, indirekt bis 74 Grad Kern. Herkunft: USA.' },
   { slug: 'pulled-chicken', kategorie: 'fleisch', title: 'Pulled Chicken vom Smoker', meatType: 'Haehnchenschenkel', cookingMethod: 'Low and Slow', difficulty: 'Einfach', concept: 'Saftige Alternative zu Pulled Pork: Haehnchenschenkel niedrig raeuchern bis 90 Grad, zupfen, in leichter Sauce. Herkunft: USA.' },
@@ -238,7 +243,7 @@ const SEED_RECIPES = [
 
   // ── AUSTRALIEN ────────────────────────────────────────────────────────────
   { slug: 'barramundi-grill', kategorie: 'fisch', title: 'Barramundi vom Grill', meatType: 'Barramundi', cookingMethod: 'Direkt, Holzkohle', difficulty: 'Mittel', concept: 'Australiens Lieblingsfisch: Barramundi-Filet mit Haut direkt ueber Holzkohle, Haut zuerst, bis sie knusprig ist. Zartes weisses Fleisch, milde Butter-Note. Dazu Macadamia-Salsa. Herkunft: Australien.' },
-  { slug: 'aussie-lamb-leg-butterflied', kategorie: 'fleisch', title: 'Butterflied Leg of Lamb — Australisches Lammfest', meatType: 'Lammkeule', cookingMethod: 'Indirekt', difficulty: 'Fortgeschritten', concept: 'Australischer Klassiker: Lammkeule aufgeklappt (butterflied), mariniert in Knoblauch, Rosmarin, Olivenoel und Zitrone, indirekt gegrillt auf 63 Grad Kern. Gleichmaessige Garung, weniger Zeit als ganze Keule. Herkunft: Australien.' },
+  { slug: 'aussie-lamb-leg-butterflied', kategorie: 'fleisch', title: 'Butterflied Leg of Lamb — Australisches Lammfest', meatType: 'Lammkeule', cookingMethod: 'Indirekt', difficulty: 'Fortgeschritten', concept: 'Australischer Klassiker: Lammkeule aufgeklappt (butterflied), mariniert in Knoblauch, Rosmarin, Olivenoel und Zitrone, indirekt gegrillt auf 70 Grad Kern (durchgegart). Gleichmaessige Garung, weniger Zeit als ganze Keule. Herkunft: Australien.' },
   { slug: 'australische-riesengarnelen-barbie', kategorie: 'fisch', title: 'Prawns on the Barbie', meatType: 'Riesengarnelen', cookingMethod: 'Direkt', difficulty: 'Einfach', concept: 'Australisches Kultsymbol: Riesengarnelen in der Schale direkt ueber heisser Glut 2-3 Minuten. Butter-Knoblauch-Glasur, Zitrone. Schnell, einfach, spektakulaer. Herkunft: Australien.' },
 
   // ── TUERKEI — Mangal/Kebab ────────────────────────────────────────────────
@@ -274,6 +279,50 @@ const SEED_RECIPES = [
   { slug: 'maple-glazed-spareribs-kanada', kategorie: 'fleisch', title: 'Maple-Glazed Spareribs — Kanadische Ahornsirup-Ribs', meatType: 'Schweinerippchen', cookingMethod: 'Indirekt, low & slow', difficulty: 'Fortgeschritten', concept: 'Kanadas BBQ-Signatur: Spareribs niedrig und langsam indirekt gegart, in den letzten 30 Minuten mit echtem kanadischem Ahornsirup glasiert. Suesser Karamell-Abschluss, der mit dem Rauch harmoniert. Herkunft: Kanada.' },
   { slug: 'smoked-arctic-char-kanada', kategorie: 'fisch', title: 'Smoked Arctic Char — Kanadischer Geraeucherter Seesaibling', meatType: 'Seesaibling', cookingMethod: 'Kaltrauch + Heissrauch', difficulty: 'Fortgeschritten', concept: 'Kanadas arktischer Edelfisch: Seesaibling erst kalt geraeuchert unter 30 Grad, dann heiss bei 65-70 Grad bis Kern 62 Grad. Lachs-aehnlicher Geschmack, rosaes Fleisch, eleganter Rauchgeschmack. Herkunft: Kanada.' },
 ]
+
+/**
+ * Seed-Liste = fest verdrahtete Startliste + Nachschub aus data/rezept-seeds.json.
+ * Der Nachschub wird von scripts/recipe-seeds.mjs aufgefuellt und durchlaeuft
+ * denselben PR-Review wie die Rezepte selbst. Kaputte oder unvollstaendige
+ * Eintraege werden uebersprungen statt den Lauf abzubrechen.
+ */
+const SEED_PFLICHT = ['slug', 'kategorie', 'title', 'meatType', 'cookingMethod', 'difficulty', 'concept']
+
+function ladeNachschub() {
+  if (!existsSync(NACHSCHUB)) return []
+  let roh
+  try {
+    roh = JSON.parse(readFileSync(NACHSCHUB, 'utf-8'))
+  } catch (err) {
+    console.warn(`  ⚠ data/rezept-seeds.json ist kein gueltiges JSON (${err.message}) — Nachschub ignoriert.`)
+    return []
+  }
+  if (!Array.isArray(roh)) {
+    console.warn('  ⚠ data/rezept-seeds.json enthaelt kein Array — Nachschub ignoriert.')
+    return []
+  }
+  const ok = []
+  for (const eintrag of roh) {
+    const fehlend = SEED_PFLICHT.filter(f => !eintrag?.[f])
+    if (fehlend.length) {
+      console.warn(`  ⚠ Nachschub-Seed uebersprungen (fehlt: ${fehlend.join(', ')}): ${eintrag?.slug ?? '???'}`)
+      continue
+    }
+    ok.push(eintrag)
+  }
+  return ok
+}
+
+function alleSeeds() {
+  const gesehen = new Set()
+  const zusammen = []
+  for (const seed of [...SEED_RECIPES, ...ladeNachschub()]) {
+    if (gesehen.has(seed.slug)) continue
+    gesehen.add(seed.slug)
+    zusammen.push(seed)
+  }
+  return zusammen
+}
 
 // ─── CACHE ────────────────────────────────────────────────────────────────────
 
@@ -328,7 +377,23 @@ function buildMdx(data) {
     `author: ${yamlStr(data.author)}`,
     `authorSlug: ${yamlStr(data.authorSlug)}`,
     `image: ${yamlStr(data.image)}`,
+    `imageAI: true`,
+    `imageSource: ${yamlStr(IMAGE_SOURCE)}`,
     `imageAlt: ${yamlStr(data.imageAlt)}`,
+    // Bild-Briefing fuer scripts/recipe-images.mjs — dort Prioritaet 1, vor dem
+    // Protein-Anker. Ohne dieses Feld gewinnt der Anker: Lauf #102 (14.09.2026)
+    // lieferte fuer Yakitori (meatType "Haehnchenschenkel") ein Bild ganzer
+    // gegrillter Haehnchenkeulen — der Alt-Text sprach von Spiessen, das Bild
+    // zeigte keinen einzigen. 85 der 113 Bestandsrezepte tragen das Feld; der
+    // Agent hat es bis heute nie gesetzt.
+    data.imagePrompt ? `imagePrompt: ${yamlStr(data.imagePrompt)}` : null,
+    // Redaktionsvorbehalt (Art. 50 Abs. 4 KI-VO, compliance/ai-act-einstufung.md).
+    // Entscheidung Uwe 13.09.2026: Bei Rezepten IST der PR-Merge die Freigabe.
+    // Auto-Merge ist in recipe-grow.yml ausdruecklich aus — ein Rezept kann main
+    // nicht erreichen, ohne dass Uwe den PR von Hand mergt; der Merge-Commit ist
+    // der datierte Pruefnachweis. `reviewedAt` setzt weiterhin NUR Uwe von Hand.
+    `status: "published"`,
+    `reviewed: true`,
     `prepTime: ${yamlStr(data.prepTime)}`,
     `cookTime: ${yamlStr(data.cookTime)}`,
     `totalTime: ${yamlStr(data.totalTime)}`,
@@ -369,8 +434,68 @@ Ton: direkt, präzise, leidenschaftlich. Kein Fülltext. Kein Clickbait. Echter 
 Zielgruppe: ambitionierte BBQ-Enthusiasten, 30–55 Jahre, die wissen wollen WARUM etwas funktioniert.
 Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).`
 
+// ─── KERNTEMPERATUR-REFERENZ (Regel 8c) ──────────────────────────────────────
+// Bis 15.09.2026 las der Agent die Referenz nie: Die Temperaturen kamen aus den
+// Seed-Konzepten und aus dem Modell, validate() pruefte keine einzige. Zwei offene
+// Seeds lagen dadurch unter den Sicherheits-Mindestwerten (Putenbrust 71 °C,
+// Schweinelachs 62 °C) und waeren unveraendert erzeugt worden.
+const REFERENZ_PFAD = join(ROOT, 'data', 'kerntemperatur-referenz.yaml')
+let referenzCache = null
+function referenz () {
+  if (!referenzCache) {
+    const text = readFileSync(REFERENZ_PFAD, 'utf-8')
+    referenzCache = { text: text.trim(), daten: yaml.load(text) }
+  }
+  return referenzCache
+}
+
+/**
+ * System-Prompt MIT der kompletten Referenz. Wortgleich bei jedem Aufruf, damit
+ * das Praefix cachebar bleibt — nichts Veraenderliches hier hinein.
+ */
+function systemPrompt () {
+  return `${SYSTEM}
+
+KERNTEMPERATUREN (verbindlich, Regel 8c): Nenne Kerntemperaturen ausschließlich gemäß der folgenden Referenz. Die Werte unter "sicherheit" sind Mindestwerte und dürfen nie unterschritten werden — auch dann nicht, wenn das Rezept-Konzept einen niedrigeren Wert nennt. Deckt die Referenz ein Lebensmittel nicht ab, nenne den üblichen Wert und keine Garstufe, die ihm widerspricht.
+
+### QUELLE: data/kerntemperatur-referenz.yaml
+${referenz().text}`
+}
+
+// Welche Sicherheits-Mindestwerte der Referenz ein Seed beruehrt. Treffen mehrere
+// zu (Haehnchenhack = Gefluegel UND Hack), gilt der hoechste. Ente/Gans bewusst
+// nicht als Gefluegel: Die Referenz erlaubt Entenbrust rosa (duck_breast).
+const SICHERHEITS_MUSTER = {
+  gefluegel:   /h(?:ä|ae)hnchen|huhn|h(?:ü|ue)hner|chicken|pute|truthahn|turkey|gefl(?:ü|ue)gel|wachtel|stubenk(?:ü|ue)ken|poularde/,
+  schwein:     /schwein|pork|spare ?ribs|(?<!lamm|kalbs|kalb)kotelett|porchetta|kassler|spanferkel/,
+  hackfleisch: /hack|burger|w(?:u|ü|ue)rst|sausage|\blinks\b|[cć]evap|kofta|k(?:ö|oe)fte|frikadell|tsukune/,
+  wildschwein: /wildschwein|wild boar/,
+}
+
+function sicherheitsKlasse (seed) {
+  const text = `${seed.meatType ?? ''} ${seed.title ?? ''}`.toLowerCase()
+  const minima = referenz().daten.sicherheit
+  let treffer = null
+  for (const [klasse, muster] of Object.entries(SICHERHEITS_MUSTER)) {
+    if (!muster.test(text) || typeof minima[klasse] !== 'number') continue
+    if (!treffer || minima[klasse] > treffer.min) treffer = { klasse, min: minima[klasse] }
+  }
+  return treffer
+}
+
 // ─── STRUKTURIERTES TEXT-FORMAT PARSER ───────────────────────────────────────
 // Kein JSON-Parsing — Schlüssel:Wert-Format ist 100% zuverlässig
+
+/** Aufzaehlungs-Praefixe und Fettmarkierung am Titelanfang entfernen — wiederholt. */
+function entnummeriere(titel) {
+  let t = titel
+  for (let i = 0; i < 4; i++) {
+    const vorher = t
+    t = t.replace(/^\s*(?:\*\*|__)?\s*(?:\d+[.)]|[-*•])\s*(?:\*\*|__)?\s*/, '')
+    if (t === vorher) break
+  }
+  return t.replace(/^(?:\*\*|__)/, '').replace(/(?:\*\*|__)$/, '').trim()
+}
 
 function parseStructuredText(text) {
   const data = {
@@ -399,7 +524,7 @@ function parseStructuredText(text) {
     if (kv && section !== 'body') {
       const key = kv[1], val = kv[2].trim()
       const map = {
-        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', LAND: 'land',
+        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', IMAGE_PROMPT: 'imagePrompt', LAND: 'land',
         PREP_TIME: 'prepTime', COOK_TIME: 'cookTime', TOTAL_TIME: 'totalTime',
         SERVINGS: 'servings', CALORIES: 'calories',
         SEO_TITLE: 'seoTitle', SEO_DESCRIPTION: 'seoDescription',
@@ -410,6 +535,12 @@ function parseStructuredText(text) {
       }
       if (map[key]) {
         data[map[key]] = ['SERVINGS', 'CALORIES'].includes(key) ? Number(val) : val
+        section = null
+      } else if (key === 'CORE_TEMP') {
+        // Ziel-Kerntemperatur fuer validate(); "keine" bei Beilagen & Co. Wird nicht
+        // ins MDX geschrieben (buildMdx liest nur benannte Felder).
+        const grad = val.match(/\d{2,3}/)
+        data.coreTemp = grad ? Number(grad[0]) : null
         section = null
       }
       continue
@@ -436,15 +567,35 @@ function parseStructuredText(text) {
     }
 
     // Schritte: N. Titel | Dauer | Beschreibung | Tipp(optional)
-    if (/^\d+\./.test(line) && section === 'steps') {
-      const withoutNum = line.replace(/^\d+\.\s*/, '')
-      const parts = withoutNum.split(' | ')
+    //
+    // Trennung an '|' OHNE erzwungene Leerzeichen (14.09.2026). Vorher stand hier
+    // split(' | '): schrieb das Modell 'Titel|Dauer|Text' statt 'Titel | Dauer | Text',
+    // ergab das EIN Teil, der Schritt fiel weg und die Validierung brach mit
+    // „Zu wenige Schritte" ab — Lauf #100 genau daran gescheitert. Die Zutaten
+    // daneben wurden schon immer mit split('|') gelesen und kamen deshalb durch;
+    // dieselbe Datei, zwei Strenge-Grade, ein stiller Ausfall.
+    // Ebenfalls erlaubt: '1)' statt '1.'. Ein '|' im Tipp bleibt erhalten, weil
+    // alles ab dem vierten Teil wieder zusammengefügt wird.
+    // Lauf #101 (14.09.2026) scheiterte erneut an „Zu wenige Schritte", obwohl der
+    // Trennzeichen-Fix drin war. Deshalb haengt die Erkennung jetzt NICHT mehr an
+    // der Nummerierung: Innerhalb der STEPS-Sektion gilt jede Zeile mit mindestens
+    // zwei Pipes als Schritt — ob sie mit '1.', '1)', '- ', '*' oder gar nichts
+    // beginnt. Das Format, das das Modell waehlt, darf die Produktion nicht mehr
+    // entscheiden.
+    if (section === 'steps' && line.split('|').length >= 3) {
+      const parts = line.split('|').map(t => t.trim())
+      // Lauf #102 (14.09.2026), das erste gelieferte Rezept: vier von fuenf
+      // Schritt-Titeln kamen als "2. Spiesse bestuecken" an — die Nummer klebte am
+      // Titel, und CookCoach.tsx setzt davor noch "Schritt 2". Also: Praefixe so
+      // lange abstreifen, bis keins mehr da ist (auch "- 2." oder "**3.**"), und
+      // zwar nur am Titel — in Beschreibung und Tipp sind Zahlen Inhalt.
+      parts[0] = entnummeriere(parts[0])
       if (parts.length >= 3) {
         data.steps.push({
-          title:       parts[0].trim(),
-          duration:    parts[1].trim(),
-          description: parts[2].trim(),
-          tip:         parts[3]?.trim() || undefined,
+          title:       parts[0],
+          duration:    parts[1],
+          description: parts[2],
+          tip:         parts.slice(3).join(' | ').trim() || undefined,
         })
       }
       continue
@@ -467,7 +618,9 @@ Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 TITLE: [Titel max. 70 Zeichen]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
+IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
+CORE_TEMP: [Ziel-Kerntemperatur des Hauptprodukts in °C als Zahl, gemessen vor dem Ruhen, gemäß Kerntemperatur-Referenz — bei Beilagen, Saucen, Desserts und Getränken: keine]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
 TOTAL_TIME: [ISO8601]
@@ -517,13 +670,26 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
 
   const metaResp = await generateText({
     model:    anthropic('claude-haiku-4-5-20251001'),
-    maxTokens: 2000,
-    system:   SYSTEM,
+    // 4000 statt 2000 (14.09.2026): Der Block endet mit STEPS. Reisst der Deckel
+    // vorher, fehlt genau der Teil, den die Validierung braucht — die teuerste
+    // Stelle fuer eine Kuerzung. Ausgeschoepft wird das Budget ohnehin nicht.
+    maxTokens: 4000,
+    system:   systemPrompt(),
     messages: [{ role: 'user', content: metaPrompt }],
   })
 
   const data = parseStructuredText(metaResp.text)
-  data.image     = `/images/articles/${seed.slug}.webp`
+  // Rohantwort mitführen: Scheitert die Validierung, stand im Log bisher nur
+  // „Zu wenige Schritte" — ohne die Modellantwort war nicht zu sehen, ob das
+  // Modell gepatzt hat oder der Parser. Wird nie ins MDX geschrieben
+  // (buildMdx liest ausschließlich benannte Felder).
+  data.__rohantwort = metaResp.text
+  data.__finishReason = metaResp.finishReason
+  // Muss der Konvention des Bestands folgen UND dem, was scripts/recipe-images.mjs
+  // erzeugt (public/images/rezepte/<slug>.jpg). Vorher stand hier
+  // /images/articles/<slug>.webp — ein Pfad, den nichts erzeugt. Der
+  // Frontmatter-Validator haette jedes neue Rezept deshalb hart abgelehnt.
+  data.image     = `/images/rezepte/${seed.slug}.jpg`
   data.kategorie = seed.kategorie
   data.meatType  = seed.meatType
   data.cookingMethod = seed.cookingMethod
@@ -548,7 +714,7 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
   const bodyResp = await generateText({
     model: anthropic('claude-sonnet-4-6'),
     maxTokens: 1800,
-    system: SYSTEM,
+    system: systemPrompt(),
     messages: [{ role: 'user', content: promptBody }],
   })
 
@@ -558,8 +724,20 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
 
 // ─── VALIDIERUNG ──────────────────────────────────────────────────────────────
 
+/**
+ * KI-Kennzeichnung des Hero-Bildes. `imageAI` und `imageSource` sind seit dem
+ * Stichtag 18.08.2026 harte Pflichtfelder (scripts/validate-frontmatter.mjs) und
+ * zugleich die Offenlegung nach Art. 50 KI-VO. Der Agent hat sie nie gesetzt —
+ * jedes neu erzeugte Rezept waere am Content-Gate gescheitert.
+ *
+ * Bewusst NICHT "C2PA-belegt" wie beim geprueften Altbestand: Diese Zusage stammt
+ * aus einem Metadaten-Scan (docs/bild-audit-rezepte-2026-08-18.md), der hier nicht
+ * laeuft. Wir nennen, was wir wissen — nicht, was plausibel klingt.
+ */
+const IMAGE_SOURCE = 'KI-generiert (FLUX.1 dev via fal.ai, scripts/recipe-images.mjs)'
+
 const REQUIRED = ['title', 'description', 'author', 'authorSlug', 'image', 'imageAlt',
-  'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
+  'land', 'imagePrompt', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
   'meatType', 'cookingMethod', 'difficulty', 'ingredients', 'steps']
 
 const VALID_KATEGORIEN = new Set(['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'])
@@ -577,6 +755,14 @@ function validate(data, seed) {
   if (!/^PT/.test(data.prepTime || '')) errors.push(`prepTime kein ISO 8601: ${data.prepTime}`)
   if (!/^PT/.test(data.cookTime  || '')) errors.push(`cookTime kein ISO 8601: ${data.cookTime}`)
   if (!/^PT/.test(data.totalTime || '')) errors.push(`totalTime kein ISO 8601: ${data.totalTime}`)
+  const sicherheit = sicherheitsKlasse(seed)
+  if (sicherheit) {
+    if (!Number.isFinite(data.coreTemp)) {
+      errors.push(`Kerntemperatur fehlt (CORE_TEMP) — Pflicht bei ${sicherheit.klasse}`)
+    } else if (data.coreTemp < sicherheit.min) {
+      errors.push(`Kerntemperatur ${data.coreTemp} °C liegt unter dem Sicherheits-Mindestwert ${sicherheit.klasse} (${sicherheit.min} °C, data/kerntemperatur-referenz.yaml)`)
+    }
+  }
   // Kategorie aus Seed erzwingen (Modell weicht manchmal ab)
   data.kategorie = seed.kategorie
   data.difficulty = seed.difficulty
@@ -600,7 +786,7 @@ async function main() {
   if (!DRY_RUN) await mkdir(REZEPTE, { recursive: true })
 
   const cache   = await loadCache()
-  let seeds = SEED_RECIPES
+  let seeds = alleSeeds()
 
   if (SLUG_ONLY) {
     seeds = seeds.filter(s => s.slug === SLUG_ONLY)
@@ -621,8 +807,11 @@ async function main() {
 
   // Seed-Liste trockengelaufen → Signal für CI-Benachrichtigung (Jira),
   // damit Uwe neue Cuts nachlegt. Nur im echten Wachstums-Lauf (nicht --force/--slug).
-  if (!FORCE && !SLUG_ONLY && pendingTotal === 0 && process.env.GITHUB_OUTPUT) {
-    appendFileSync(process.env.GITHUB_OUTPUT, 'seeds_exhausted=true\n')
+  if (!FORCE && !SLUG_ONLY && process.env.GITHUB_OUTPUT) {
+    // pendingTotal = wie viele Seeds noch unerledigt sind. Wird im Workflow zur
+    // Vorwarnung genutzt — nicht erst bei null, sondern schon bei knappem Vorrat.
+    appendFileSync(process.env.GITHUB_OUTPUT, `seeds_remaining=${pendingTotal}\n`)
+    if (pendingTotal === 0) appendFileSync(process.env.GITHUB_OUTPUT, 'seeds_exhausted=true\n')
   }
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)
@@ -636,23 +825,52 @@ async function main() {
 
   let success = 0, failed = 0
 
+  // Zwei Anläufe je Seed. Das Modell ist nicht deterministisch: Lauf #100
+  // (14.09.2026) scheiterte an einer einzelnen Antwort, die das Schritt-Format
+  // verfehlte — und damit fiel die Tagesproduktion komplett aus. Ein zweiter
+  // Versuch kostet ein paar Sekunden und rettet genau diesen Fall.
+  const VERSUCHE = 2
+
   for (const seed of toGenerate) {
-    process.stdout.write(`  Generiere: ${c.bold(seed.slug)}... `)
+    let data = null
+    let letzteFehler = []
 
-    let data
-    try {
-      data = await generateRecipe(seed)
-    } catch (err) {
-      console.log(c.red('FEHLER'))
-      console.error(c.dim(`    ${err.message}`))
-      failed++
-      continue
-    }
+    for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
+      const anlauf = versuch > 1 ? c.dim(` (Versuch ${versuch}/${VERSUCHE})`) : ''
+      process.stdout.write(`  Generiere: ${c.bold(seed.slug)}${anlauf}... `)
 
-    const errors = validate(data, seed)
-    if (errors.length > 0) {
+      let kandidat
+      try {
+        kandidat = await generateRecipe(seed)
+      } catch (err) {
+        console.log(c.red('FEHLER'))
+        console.error(c.dim(`    ${err.message}`))
+        letzteFehler = [err.message]
+        continue
+      }
+
+      const errors = validate(kandidat, seed)
+      if (errors.length === 0) { data = kandidat; break }
+
       console.log(c.yellow('VALIDIERUNGSFEHLER'))
       errors.forEach(e => console.error(c.dim(`    ✗ ${e}`)))
+      letzteFehler = errors
+      // Nur beim letzten Anlauf ausgeben — sonst flutet es das Log.
+      if (versuch === VERSUCHE) {
+        // Der Kopf der Antwort half bei Lauf #101 nicht weiter: Die 1500 Zeichen
+        // waren nach dem Metadaten-Block aufgebraucht, und genau das Ende — wo
+        // STEPS steht — fehlte. Deshalb: Abbruchgrund, Laenge, und das ENDE.
+        const roh = kandidat.__rohantwort ?? ''
+        console.error(c.dim(`    ── Modellantwort: ${roh.length} Zeichen, finishReason=${kandidat.__finishReason ?? '?'} ──`))
+        console.error(c.dim(`    Enthält "STEPS:": ${roh.includes('STEPS:')}`))
+        console.error(c.dim('    ── letzte 1800 Zeichen ──'))
+        console.error(c.dim(roh.slice(-1800) || '(keine)'))
+        console.error(c.dim('    ─────────────────────────'))
+      }
+    }
+
+    if (!data) {
+      console.error(c.red(`  ✗ ${seed.slug} nach ${VERSUCHE} Versuchen aufgegeben: ${letzteFehler.join('; ')}`))
       failed++
       continue
     }
@@ -677,9 +895,23 @@ async function main() {
   if (success > 0) console.log(c.green(`  ✓ ${success} Rezept(e) generiert`))
   if (failed  > 0) console.log(c.red(  `  ✗ ${failed} Fehler`))
   console.log()
+
+  // Kein einziges Rezept durchgekommen, obwohl welche anstanden → das ist ein
+  // Ausfall, kein Normalzustand. Vorher endete der Lauf hier gruen und still.
+  if (success === 0 && failed > 0) {
+    console.error(c.red(`  Alle ${failed} Generierungen fehlgeschlagen — Lauf wird als Fehler gewertet.`))
+    process.exitCode = 1
+  }
 }
 
-main().catch(err => {
-  console.error(c.red(`\n  Agent-Fehler: ${err.message}\n`))
-  process.exit(1)
-})
+// Nur beim direkten Aufruf laufen lassen — sonst startet schon der Import im Test
+// einen echten Generierungslauf. Gleiches Muster wie scripts/ops-alert-to-jira.mjs.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(err => {
+    console.error(c.red(`\n  Agent-Fehler: ${err.message}\n`))
+    process.exit(1)
+  })
+}
+
+// Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
+export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt }

@@ -33,6 +33,83 @@ const GLOSSAR_DIR  = join(CONTENT_DIR, 'glossar')
 const CACHE_FILE   = join(GLOSSAR_DIR, '.processed.json')
 const TERMS_INDEX  = join(GLOSSAR_DIR, 'terms.json')
 const SCAN_DIRS    = ['artikel', 'cuts', 'methoden', 'vergleich', 'persoenlichkeiten']
+const REFERENZ_PFAD = join(ROOT, 'data', 'kerntemperatur-referenz.yaml')
+
+// ─── TEMPERATUR-PLAUSIBILITAET (Regel 8c, Plan C2) ───────────────────────────
+// Bis 18.09.2026 pruefte dieser Agent keine einzige Temperatur: Claude erzeugte
+// den Text, der Workflow schrieb ihn weg. Der recipe-agent liest die Referenz
+// seit dem 15.09. (recipe-agent.mjs, Abschnitt KERNTEMPERATUR-REFERENZ) — hier
+// fehlte das Gegenstueck, obwohl Glossar-Eintraege wie "Medium Rare" oder
+// "Kerntemperatur" genau solche Werte nennen.
+//
+// Der Check ist bewusst schlicht: Er liest jede °C-Angabe im erzeugten Eintrag
+// und schlaegt an, wenn sie ausserhalb des plausiblen Bereichs liegt oder einen
+// Sicherheits-Mindestwert der Referenz unterschreitet. Er korrigiert NICHT —
+// ein Treffer markiert den Eintrag und haelt ihn aus dem Bestand heraus, damit
+// keine erfundene Zahl still im Glossar landet.
+
+let referenzCache = null
+async function referenz () {
+  if (!referenzCache) {
+    const text = await readFile(REFERENZ_PFAD, 'utf-8')
+    referenzCache = YAML.parse(text)
+  }
+  return referenzCache
+}
+
+/** Sicherheits-Mindestwerte je Lebensmittelgruppe, gleiche Muster wie im recipe-agent. */
+const SICHERHEITS_MUSTER = {
+  gefluegel:   /h(?:ä|ae)hnchen|huhn|h(?:ü|ue)hner|chicken|pute|truthahn|turkey|gefl(?:ü|ue)gel|poularde/i,
+  schwein:     /schwein|pork|spare ?ribs|kassler|spanferkel/i,
+  hackfleisch: /hack|burger|w(?:u|ü|ue)rst|sausage|frikadell|[cć]evap|k(?:ö|oe)fte/i,
+  wildschwein: /wildschwein|wild boar/i,
+}
+
+/**
+ * Prueft alle °C-Angaben eines erzeugten Eintrags.
+ * @returns {Promise<string[]>} Liste der Beanstandungen; leer = plausibel.
+ */
+async function pruefeTemperaturen (entry) {
+  const ref = await referenz()
+  const text = [entry.title, entry.shortDefinition, entry.background, entry.praxistipp]
+    .filter(Boolean).join(' ')
+  const werte = [...text.matchAll(/(-?\d{1,3})(?:\s*[-–bis]+\s*(\d{1,3}))?\s*°\s*C/gi)]
+    .flatMap((m) => [Number(m[1]), m[2] ? Number(m[2]) : null].filter((n) => n !== null))
+  if (!werte.length) return []
+
+  const mangel = []
+  // 1. Grober Rahmen: unter 0 °C oder ueber 300 °C ist in einem Glossar-Eintrag
+  //    ueber Fleisch keine Kerntemperatur mehr, sondern ein Tippfehler oder eine
+  //    Garraum-Angabe ohne Kennzeichnung.
+  for (const w of werte) {
+    if (w < 0 || w > 300) mangel.push(`${w} °C liegt ausserhalb des plausiblen Bereichs (0-300 °C)`)
+  }
+
+  // 2. Sicherheits-Mindestwerte: nennt der Eintrag Gefluegel, Schwein, Hack oder
+  //    Wildschwein UND eine Kerntemperatur unter dem Mindestwert, ist das ein
+  //    Lebensmittelsicherheits-Fehler.
+  const minima = ref.sicherheit ?? {}
+  for (const [klasse, muster] of Object.entries(SICHERHEITS_MUSTER)) {
+    const min = minima[klasse]
+    if (typeof min !== 'number' || !muster.test(text)) continue
+    // Nur Werte im Kerntemperatur-Fenster pruefen (bis 100 °C) — Garraum- und
+    // Raeucher-Temperaturen liegen darueber und sind keine Kerntemperaturen.
+    for (const w of werte.filter((x) => x > 0 && x <= 100)) {
+      if (w < min) mangel.push(`${w} °C unterschreitet den Mindestwert ${min} °C fuer ${klasse}`)
+    }
+  }
+
+  // 3. Rind medium rare: der Kanon steht in garstufen_rind / badges.beef_mr.
+  const mr = ref.badges?.beef_mr?.range
+  if (Array.isArray(mr) && /medium\s*rare/i.test(text)) {
+    for (const w of werte.filter((x) => x >= 40 && x <= 80)) {
+      if (w < mr[0] - 2 || w > mr[1] + 2) {
+        mangel.push(`${w} °C passt nicht zu Medium Rare (Referenz ${mr[0]}-${mr[1]} °C)`)
+      }
+    }
+  }
+  return mangel
+}
 
 // ─── SEED TERMS ───────────────────────────────────────────────────────────────
 // Garantierter Grundbestand unabhängig vom Content
@@ -409,7 +486,7 @@ async function main() {
   }
 
   // ── Schritt 2+3: Einträge generieren & speichern ────────────────────────────
-  let created = 0, skipped = 0, errors = 0
+  let created = 0, skipped = 0, errors = 0, tempAbgelehnt = 0
 
   if (newTerms.length > 0) console.log()
 
@@ -431,6 +508,17 @@ async function main() {
     try {
       process.stdout.write(`${prefix} ${term}... `)
       const entry   = await generateEntry(term)
+
+      // Regel 8c: keine erfundene Temperatur in den Bestand. Ein beanstandeter
+      // Eintrag wird NICHT geschrieben und NICHT im Cache vermerkt — der naechste
+      // Lauf versucht ihn erneut, und der Begriff bleibt sichtbar offen.
+      const mangel = await pruefeTemperaturen(entry)
+      if (mangel.length) {
+        tempAbgelehnt++
+        console.log(c.red(`✗  Temperatur-Check: ${mangel.join('; ')}`))
+        continue
+      }
+
       const mdxBody = buildMdxContent(entry, slug)
       await writeFile(outPath, mdxBody, 'utf-8')
       cache.add(slug)
@@ -449,7 +537,7 @@ async function main() {
   await saveCache(cache)
   const termsIndex = await buildTermsIndex()
 
-  console.log(`\n${c.dim('📚')} Glossar: ${c.green(`${created} erstellt`)}, ${c.dim(`${skipped} übersprungen`)}${errors ? ', ' + c.red(`${errors} Fehler`) : ''}`)
+  console.log(`\n${c.dim('📚')} Glossar: ${c.green(`${created} erstellt`)}, ${c.dim(`${skipped} übersprungen`)}${tempAbgelehnt ? ', ' + c.red(`${tempAbgelehnt} wegen Temperatur-Check verworfen`) : ''}${errors ? ', ' + c.red(`${errors} Fehler`) : ''}`)
   console.log(`${c.dim('📑')} terms.json: ${termsIndex.length} Einträge → content/glossar/terms.json`)
 
   // ── Schritt 5: Auto-Verlinkung (opt-in) ────────────────────────────────────

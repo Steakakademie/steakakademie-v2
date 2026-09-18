@@ -16,19 +16,21 @@ import Katalog from '@/components/relaunch/Katalog';
  * sind echte Links, weil jeder Katalog eine eigene URL hat — der Zustand
  * `katalog` des Prototyps ist hier der Routen-Parameter.
  */
-type Props = { params: { katalog: string } };
+type Props = { params: Promise<{ katalog: string }> };
 
 export function generateStaticParams() {
   return KATALOG_REIHENFOLGE.map((katalog) => ({ katalog }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   if (!istKatalogKey(params.katalog)) return {};
   const k = KATALOGE[params.katalog];
   return { title: k.titel, description: k.lead };
 }
 
-export default function UebersichtSeite({ params }: Props) {
+export default async function UebersichtSeite(props: Props) {
+  const params = await props.params;
   if (!istKatalogKey(params.katalog)) notFound();
   const k = KATALOGE[params.katalog];
 

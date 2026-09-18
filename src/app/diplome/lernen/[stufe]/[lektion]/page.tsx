@@ -7,18 +7,22 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb, Lock } from 'lucide-react';
-import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
 import LektionFortschritt from '@/components/diplome/LektionFortschritt';
+import LektionsCheck from '@/components/diplome/LektionsCheck';
+import Glutbett from '@/components/diplome/Glutbett';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
+import { ogImages } from '@/lib/og';
 
+type Params = { stufe: string; lektion: string };
 interface Props {
-  params: { stufe: string; lektion: string };
+  params: Promise<Params>;
 }
 
-function lessonFrom(params: Props['params']) {
+function lessonFrom(params: Params) {
   const stufeNum = Number(params.stufe.replace('stufe-', ''));
   return allDiplomLektions.find(
     (l) => l.stufe === stufeNum && l.lektionSlug === params.lektion,
@@ -32,7 +36,8 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const l = lessonFrom(params);
   if (!l) return {};
   const title = l.seoTitle ?? l.title;
@@ -42,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `https://steakakademie.de${l.url}` },
     openGraph: {
+      images: ogImages(l.title),
       title,
       description,
       url: `https://steakakademie.de${l.url}`,
@@ -73,7 +79,7 @@ const mdxComponents = {
     <blockquote className="border-l-4 border-brand-gold pl-5 my-6 font-body text-lg italic text-text-secondary" {...p} />
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
-  Schnelluebersicht, Achtung, ProTipp, TempBox,
+  Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff,
 };
 
 /**
@@ -81,7 +87,8 @@ const mdxComponents = {
  * (LektionSeite) bleibt synchron, weil useMDXComponent ein Hook ist und Hooks
  * in async-Komponenten nicht erlaubt sind.
  */
-export default async function DiplomLektionPage({ params }: Props) {
+export default async function DiplomLektionPage(props: Props) {
+  const params = await props.params;
   const lektion = lessonFrom(params);
   if (!lektion) notFound();
 
@@ -171,6 +178,17 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
             <p className="font-body text-lg text-text-light/60 leading-relaxed max-w-2xl">
               {lektion.excerpt}
             </p>
+
+            {/* Glutbett — je bestandenem Lektions-Check glueht eine Kohle mehr.
+                Steht im Kopfband statt in der Seitenspalte, damit man den
+                eigenen Stand sieht, bevor man liest, und nicht erst danach.
+                Nur bei freien Stufen: Hinter der Bezahlschranke saehe man ein
+                dunkles Bett ohne Weg, es zu fuellen. */}
+            {!locked && (
+              <div className="mt-7">
+                <Glutbett slugs={siblings.map((l) => l.lektionSlug)} color={meta.color} />
+              </div>
+            )}
           </div>
         </section>
 
@@ -246,6 +264,19 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                 </p>
               </div>
 
+              {/* Verstaendnis-Check (09.09.2026). Steht bewusst VOR dem
+                  Abhaken-Knopf: erst pruefen, ob es sitzt, dann abhaken. Der
+                  Check traegt auch den Weiter-Weg — deshalb bekommt der Knopf
+                  darunter kein naechsteUrl mehr, sonst staenden zwei
+                  konkurrierende „Weiter" nebeneinander. Wer den Check
+                  ueberspringt, nutzt die Prev/Next-Karten am Seitenende. */}
+              <LektionsCheck
+                lektionSlug={lektion.lektionSlug}
+                color={meta.color}
+                naechsteUrl={next?.url ?? null}
+                naechsterTitel={next?.title ?? null}
+              />
+
               {/* Lektion abhaken — schreibt lesson_progress (Konto) bzw. localStorage */}
               <div className="mt-6">
                 <LektionFortschritt
@@ -254,7 +285,7 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                   alleSlugs={siblings.map((l) => l.lektionSlug)}
                   color={meta.color}
                   variant="knopf"
-                  naechsteUrl={next?.url ?? null}
+                  naechsteUrl={null}
                 />
               </div>
               </>)}

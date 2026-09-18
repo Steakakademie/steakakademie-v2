@@ -1,0 +1,269 @@
+---
+# ─────────────────────────────────────────────────────────────────────────────
+# Pipeline-Lauf 14.09.2026, Frage #5 der 25-Fragen-Warteschlange.
+# FREIGEGEBEN durch Uwe am 17.09.2026: „ENTWÜRFE — VERÖFFENTLICHEN, ICH HABE
+# GEGEN GELESEN." reviewedAt dokumentiert genau diese menschliche Prüfung
+# (AI Act Art. 50 Abs. 4), nicht das Datum der Faktenchecks.
+# Fachliche Verantwortung: Uwe Yendell (src/lib/authors.ts).
+#
+# SLUG-VERTRAG: stall-plateauphase-beim-smoken.mdx verlinkt zweimal auf diesen
+# Artikel, dieser dreimal zurück. Wer einen Slug ändert, muss den anderen
+# mitändern — tote interne Links brechen den Build (check-links.mjs).
+#
+# HERO-BILD: erzeugt am 17.09.2026, Runde 2 abgenommen (Runde 1 hatte eine
+# Person, einen Knochengriff und keine sichtbare Faltung — Lehren im Brief
+# art-texas-crutch in scripts/hero-images.mjs notiert). Eintrag in
+# data/bildregister.yaml (status ki). Kennzeichnung wie im Schwesterartikel.
+# Offen: Die Papierfaltung ist im Motiv nicht zu sehen, das Brisket liegt auf
+# dem Bogen statt halb darin. Für die Bildaussage (Papier oder Folie?) trägt
+# es, für eine wörtliche Illustration des Crutch bräuchte es Runde 3.
+#
+# Temperaturen gegen data/kerntemperatur-referenz.yaml geprüft:
+#   beef_lowslow 90–96 °C · pork_lowslow 88–95 °C — beide im Fazit genannt.
+# Blonders 88-°C-Hinweis liegt UNTER dem Hauskorridor und ist deshalb im Text
+# sichtbar als Quellenaussage von der Hausempfehlung getrennt (Regel 8c).
+#
+# NICHT ZITIERT, obwohl gefunden: SSRN-Preprint 7219678 (Cha 2026) zum Texas
+# Crutch. Kein Peer Review, Volltext und Abstract gesperrt, Tierart/Cut/
+# Stichprobe unbekannt. Bleibt draußen, bis jemand den Volltext liest.
+#
+# Zwei Prüfrunden durch Subagenten, 6 + 3 kritische Blocker behoben
+# (Protokoll: Content-Pipeline/PIPELINE-25-FRAGEN.md, Lauf 14.09.2026).
+# ─────────────────────────────────────────────────────────────────────────────
+title: "Texas Crutch: Folie, Butcher Paper oder gar nichts?"
+excerpt: "Einwickeln spart Stunden — das ist gemessen. Alles andere, was über Folie und Papier erzählt wird, ist Erfahrung oder Erfindung. Wir haben sortiert, was davon welches ist."
+publishedAt: "2026-10-09"
+author: Marco
+authorSlug: marco
+category: "Grundlagen-Werkstatt"
+categorySlug: "grundlagen-werkstatt"
+image: "/images/artikel/texas-crutch.jpg"
+imageAlt: "Ein geräuchertes Brisket mit dunkler Rinde liegt von oben gesehen auf einem Bogen rosa Butcher Paper, daneben eine Rolle Alufolie"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA) — Brief art-texas-crutch in scripts/hero-images.mjs"
+imageAI: true
+tags:
+  - "Low and Slow"
+  - "Texas Crutch"
+  - "Brisket"
+  - "Pulled Pork"
+  - "Butcher Paper"
+  - "Bark"
+  - "Stall"
+readingTime: 10
+seoTitle: "Texas Crutch: Wann Brisket einwickeln — Folie oder Butcher Paper?"
+seoDescription: "Folie spart am Brisket rund vier Stunden, Papier lässt mehr Feuchtigkeit durch. Was beim Texas Crutch gemessen ist, was Erfahrung ist und was niemand weiß — mit Quellen."
+status: "published"
+reviewed: true
+reviewedAt: "2026-09-17"
+faq:
+  - question: "Bei welcher Kerntemperatur soll ich das Brisket einwickeln?"
+    answer: "Es gibt keinen belegten Wert. Die verbreiteten Empfehlungen reichen von 65 bis 71 Grad (früh, maximaler Zeitgewinn) über 82 Grad (spät, festere Bark) bis zu Aaron Franklins Vorgehen, sich nicht an einer Zahl zu orientieren, sondern am Fleisch selbst — Tastprobe am Flat, und eine an Stellen aufreißende Rinde als Zeichen für ausgeschmolzenes Fett. Der sachliche Auslöser ist die Bark: Wickle ein, wenn sie steht — die Kerntemperatur ist nur ein grober Stellvertreter dafür."
+  - question: "Folie oder Butcher Paper — was ist besser?"
+    answer: "Folie hält Feuchtigkeit fast vollständig zurück und spart die meiste Zeit, weicht aber die Bark auf. Butcher Paper lässt messbar mehr Feuchtigkeit entweichen und schont die Bark, spart dafür weniger Zeit. Welche Variante besser schmeckt, ist nie mit ausreichender Stichprobe gemessen worden — das bleibt Geschmackssache."
+  - question: "Wickle ich mit Butcher Paper wirklich „atmungsaktiv“?"
+    answer: "Teilweise. In der einzigen vorliegenden Durchlässigkeitsmessung liegt Kraftpapier zwischen Folie und offenem Garen, mit dem etwas kleineren Abstand zum offenen Garen. Papier lässt also spürbar Feuchtigkeit durch, ist aber trotzdem keine offene Garung. Backpapier verhält sich in derselben Messung übrigens exakt wie Alufolie und ist deshalb kein Ersatz für Butcher Paper."
+  - question: "Wie viel Zeit spart das Einwickeln?"
+    answer: "An drei Brisket Points von je 2,7 Kilo bei 107 Grad rund vier Stunden. An einem halbierten Schweinenacken bei 110 Grad etwa die Hälfte der Garzeit. An Hähnchenbrust bei 177 Grad gar nichts — dort macht Einwickeln zeitlich keinen Unterschied. Die Zahl hängt an Tierart, Stückgröße und Garraumtemperatur und lässt sich nicht übertragen."
+  - question: "Warum fällt die Kerntemperatur, wenn ich das Paket öffne?"
+    answer: "Weil die Verdunstungskühlung sofort wieder einsetzt. Der Abfall ist physikalisch zwingend und kann bis in den Bereich um 79 Grad reichen. Deshalb erst bei Zieltemperatur auspacken — oder, wenn du die Bark zurückwillst, bewusst und nur kurz vor dem Ende."
+  - question: "Darf ich saure Flüssigkeit in die Alufolie geben?"
+    answer: "Das Bundesinstitut für Risikobewertung schreibt, dass Aluminiumfolien für das Erhitzen und Warmhalten säure- und salzhaltiger Lebensmittel nicht geeignet und nicht bestimmt sind, und nennt mariniertes Fleisch ausdrücklich als Beispiel; fürs Grillen in Aluschalen empfiehlt es, erst am Ende zu salzen und zu würzen. Für die konkreten Crutch-Bedingungen — mehrere Stunden bei 110 Grad — liegen keine Messungen vor. Wer die Frage umgehen will, nimmt Butcher Paper oder lässt die saure Zugabe weg."
+  - question: "Ist Butcher Paper lebensmittelecht?"
+    answer: "Nur das richtige. Gewachstes oder silikonisiertes Metzgerpapier gehört nach gängiger Praxisregel nicht in den Smoker. In der EU gibt es für Papier im Lebensmittelkontakt keine harmonisierte Einzelregelung; die einschlägige BfR-Empfehlung XXXVI schließt Papiere ein, die für Temperaturen bis 90 Grad bestimmt sind, und verweist für höhere Bereiche auf Spezial-Empfehlungen. Ein Smoker läuft darüber. Achte deshalb auf Papier, das ausdrücklich für den Temperaturbereich deklariert ist."
+---
+Irgendwann in der sechsten Stunde steht jeder vor derselben Entscheidung. Das Fleisch hängt im [Stall](/artikel/stall-plateauphase-beim-smoken), die Gäste kommen um sieben, und auf der Arbeitsplatte liegen zwei Rollen: Alufolie links, rosa Butcher Paper rechts.
+
+Über diese Entscheidung wird mehr geschrieben als über fast jeden anderen Handgriff im BBQ. Und das meiste davon ist Behauptung.
+
+Wir machen es deshalb anders und sortieren jede Aussage in eine von drei Schubladen: **Das ist gemessen. Das ist Erfahrung. Das weiß niemand.** Am Ende steht keine Regel, sondern ein bewusster Tausch — und der ist am Ende mehr wert als eine Zahl, die jemand in einem Forum aufgeschnappt hat.
+
+---
+
+## Was der Crutch tut: gemessen
+
+Fangen wir mit dem Teil an, der solide ist.
+
+Beim Smoken verdunstet ständig Wasser aus der Fleischoberfläche, und Verdunstung kühlt. Ab einem bestimmten Punkt kühlt sie genau so stark, wie der Smoker heizt — die Kerntemperatur steht still. Das ist der Stall, und die Physik dahinter haben wir [im eigenen Artikel](/artikel/stall-plateauphase-beim-smoken) auseinandergenommen.
+
+Einwickeln unterbindet diese Verdunstung. Damit fällt die Kühlung weg, und die Temperatur läuft weiter. Meathead Goldwyns Bild dafür ist das beste, das je jemand gefunden hat: **Es ist, als würdest du einen Marathon im Regenmantel laufen.**
+
+Die Zahlen dazu, jeweils mit dem Stück, an dem sie gemessen wurden:
+
+| Versuch | Woran | Bedingungen | Ergebnis |
+|---|---|---|---|
+| Blonder 2013 | **3 × Brisket Point, je 2,7 kg** | Pelletsmoker 107 °C, Wrap bei 66 °C | eingewickelt **rund 4 Stunden schneller** als nackt |
+| Blonder 2013 | **3 × Schweineschulter, je 1,8 kg** | Umluft 107 °C | fest gewickelt schneller; **locker gewickelt fast wie nackt** |
+| Blonder / Goldwyn | **Schweinenacken 2,7 kg, halbiert** | 110 °C, eine Hälfte ab Stall in Folie | gewickelt **82 °C in etwa der halben Zeit**; die ungewickelte Hälfte war vier Stunden später immer noch nicht dort |
+| Blonder | **Hähnchenbrust, 227 g** | Ofen 177 °C | **kein Zeitunterschied** zwischen offen und in Folie |
+
+Eine Einschränkung zur ersten Zeile, die wir selbst nennen, bevor es jemand anders tut: Die eingewickelten Points liefen bis 95 Grad, das nackte nur bis 91 Grad. Der Vergleich hat also nicht exakt denselben Endpunkt — die vier Stunden sind eher eine Ober- als eine Untergrenze.
+
+Die letzte Zeile ist die wichtigste in diesem Artikel. Derselbe Forscher, dieselbe Methode, dieselbe Frage — und der Crutch bringt zeitlich **null**. Der Grund: Bei 177 Grad kann Feuchtigkeit gar nicht schnell genug an die Oberfläche nachwandern, um nennenswert zu kühlen. Wo keine Verdunstungskühlung ist, lässt sich auch keine abschalten.
+
+Wer also eine Zeitersparnis-Zahl irgendwo liest, muss vier Dinge dazu wissen: welche Tierart, welcher Cut, welches Gewicht, welche Garraumtemperatur. Fehlt eines davon, ist die Zahl wertlos.
+
+---
+
+## Dichtigkeit schlägt Material: auch gemessen, und meist übersehen
+
+Bevor es um Folie gegen Papier geht, kommt ein Faktor, über den fast niemand spricht — obwohl er der am besten belegte von allen ist.
+
+Blonder hat vier gleiche, nasse Baumwollrollen bei 107 Grad gegart. Eine davon hat er im laufenden Versuch zweimal umgewickelt — erst lief sie nackt, dann locker in Folie, dann mit fest angedrückter Folie. Sie stallte daraufhin **dreimal hintereinander, jedes Mal höher**:
+
+| Wickelung derselben Rolle | Stall bei |
+|---|---|
+| nackt | **57 °C** |
+| locker gewickelt, Naht undicht | **68 °C** |
+| Folie fest angedrückt | **93 °C** |
+
+Die übrigen Rollen liefen mit je einer festen Wickelung durch und rahmen das Bild nach oben und unten ein:
+
+| Wickelung | Stall bei |
+|---|---|
+| ein Zoll Luftspalt, kleines Leck | **82 °C** |
+| perfekt versiegelt, kein Luftspalt | **rund 100 °C** |
+
+Dass sich allein durch unterschiedlich enges Einwickeln derselben Rolle drei Plateaus erzeugen lassen, ist nebenbei die beste Erklärung dafür, warum manche Leute von einem „zweiten Stall“ berichten.
+
+Daraus hat er eine Faustregel abgeleitet: **Etwa ein Quadratzoll aufsummierte Leckfläche — rund 6,5 Quadratzentimeter — senkt die Stall-Temperatur um ungefähr 11 Kelvin.** Zur Einordnung: Eine Aluschale von 30 mal 20 Zentimetern, über die ein Deckel mit einem Millimeter Spalt ringsum liegt, kommt rechnerisch auf rund 10 Quadratzentimeter Leckfläche — also deutlich mehr, als es braucht.
+
+Drei praktische Folgerungen, alle direkt aus dieser Messung:
+
+1. **Die Naht gehört nach oben**, oberhalb des Flüssigkeitsspiegels. Unten zieht der austretende Saft sie auf.
+2. **Der Fühler sticht von oben ein**, und die Folie wird um ihn herum angedrückt. Ein Loch im Boden ist ein Dauerleck.
+3. **Sackt die Temperatur mitten im Crutch ab, ist das fast immer mechanisch** — aufgegangene Naht, Loch, geschrumpftes Fleisch. Nicht das Fleisch spinnt, das Paket ist offen.
+
+Und noch ein Befund, der erklärt, warum bei Rind und Schwein Unterschiedliches passiert: Bei Blonders Briskets füllte der austretende Saft — gut 340 Gramm pro Stück — die Luftspalte auf und stellte den Wärmekontakt selbst her. Deshalb war locker gewickelt fast so schnell wie fest. Die Schweineschulter gibt weniger Saft ab; dort blieben die Lecks offen, und locker gewickelt verhielt sich fast wie nackt.
+
+Genau deshalb wirkt übrigens auch der Schuss Flüssigkeit, den viele ins Paket geben — aber nicht aus dem Grund, den man üblicherweise liest. Er erzeugt **keinen Dampf**; die Flüssigkeit im Paket simmert stundenlang unterhalb des Siedepunkts. Was sie tut: isolierende Luftspalte füllen und damit die Wärmeleitung von der Folie ins Fleisch verbessern.
+
+<DiplomCTA
+  modul="fleischkunde"
+  headline="Handgriffe kann man abschreiben. Entscheidungen nicht."
+  text="Ob du einwickelst, wann und womit, hängt am Cut: Wie viel Saft gibt er ab, wie dick ist er, wie viel Bindegewebe steckt drin. Im Diplom-Level zu Cuts und Anatomie lernst du, jedes Stück Fleisch zu lesen — und dann die Entscheidung selbst zu treffen, auch bei einem Cut, für den es kein Rezept gibt."
+  cta="Zum Diplom"
+/>
+
+---
+
+## Folie gegen Papier: die eine Messung, die es gibt
+
+Hier wird die Luft dünn. Es existiert **keine kontrollierte, wiederholte Studie** zum Vergleich der Wickelmaterialien beim Brisket. Was es gibt, ist eine einzige saubere Materialmessung — und die ist aufschlussreich.
+
+Blonder hat verschiedene Materialien über ein Wasserbad gespannt und bei 121 Grad Ofentemperatur gemessen, wie warm das Wasser darunter wird. Je weniger verdunsten kann, desto höher steigt die Temperatur:
+
+| Material | Wassertemperatur darunter |
+|---|---|
+| offen, ohne Abdeckung | **77 °C** |
+| Fritteusen-Filterpapier | 83 °C |
+| Kraftpapier, eine Lage | 86 °C |
+| Kraftpapier, zwei Lagen | 88 °C |
+| Backpapier | **101 °C** |
+| Alufolie | **101 °C** |
+
+Zwei Dinge stehen damit fest — und das zweite dürfte die meisten überraschen.
+
+**Papier liegt wirklich dazwischen — aber näher am offenen Garen als an der Folie.** Der Abstand von Kraftpapier zur Folie beträgt rund 13 bis 15 Kelvin, der Abstand zum offenen Garen nur rund 9 bis 11 Kelvin. Papier lässt also spürbar Feuchtigkeit durch. Trotzdem ist der Unterschied zum offenen Garen messbar: Wer sagt, im Papier gare es „praktisch wie offen“, überzeichnet es.
+
+**Backpapier ist kein Ersatz für Butcher Paper.** Es verhält sich exakt wie Alufolie. Wer aus Ermangelung von Butcher Paper zum Backpapier greift, hat damit keine Papier-Variante gewählt, sondern eine Folien-Variante ohne Aluminium.
+
+Und die ehrliche Einschränkung dazu, die in keinem deutschen Artikel steht: Gemessen wurde **Kraftpapier**, nicht Butcher Paper. Blonder weist selbst darauf hin, dass Metzgerpapiere stärker geleimt und damit dichter sind als einfaches Kraftpapier. Die Richtung der Aussage stimmt also, der exakte Zahlenwert gilt für die rosa Rolle aus dem BBQ-Laden **nicht**.
+
+---
+
+## Was Erfahrung ist — und als solche gekennzeichnet gehört
+
+Alles Folgende ist Praxiswissen erfahrener Leute. Das ist nicht wertlos, im Gegenteil. Es ist nur keine Messung, und es hilft, den Unterschied zu kennen.
+
+**Die Bark.** Der Konsens lautet: Folie weicht sie auf, Papier ist gnädiger, offen ist am besten. Instrumentell gemessen — Schnittkraft, Textur, Wasseraktivität der Kruste — hat das nie jemand. Der einzige öffentlich dokumentierte Dreiervergleich ist ein Videotest eines einzelnen Grillers an je einem ganzen Brisket: Folie neun Stunden, Papier zehn, offen elf. Bei der Rinde widerspricht sich der Bericht darüber allerdings selbst — an einer Stelle steht, das folierte Stück habe die dunklere Rinde gehabt, an anderer, das nackte habe die mit Abstand beste. Ein Stück pro Gruppe, kein kontrollierter Aufbau. Die Zeiten sind zitierbar, die Bark-Aussage nicht.
+
+**Der Zeitpunkt.** Hier ist die Spannweite der Empfehlungen größer, als die Bestimmtheit vermuten lässt, mit der sie jeweils vorgetragen werden:
+
+| Empfehlung | Wer | Logik dahinter |
+|---|---|---|
+| 65–71 °C, nach zwei bis vier Stunden im Rauch | Meathead Goldwyn | maximaler Zeitgewinn |
+| 60–66 °C, sobald die Rinde tief mahagonifarben ist | Sterling Ball, zitiert bei Goldwyn | Farbe als Auslöser, nicht Zahl |
+| 82 °C, Stall bewusst aussitzen | zwei Moderatoren im AmazingRibs-Forum | Bark steht fester, kürzere Schmorphase |
+| kein Temperaturwert — Tastprobe am Flat, aufreißende Rinde als Zeichen für ausgeschmolzenes Fett | Aaron Franklin | das Fleisch entscheidet |
+
+Der oft genannte Wert 74 Grad begegnet uns in Ratgebern regelmäßig, ohne dass wir eine Quelle dafür gefunden hätten, die ihn begründet. Behandle ihn als Konvention, nicht als Erkenntnis.
+
+Wenn wir daraus eine Empfehlung ableiten, dann diese: **Der Auslöser ist die Bark, nicht die Zahl.** Die Kerntemperatur ist nur ein grober Stellvertreter für „die Kruste steht jetzt“. Wer früh wickelt, gewinnt Zeit und verliert Bark und Aroma. Wer spät wickelt, behält beides und gewinnt weniger Zeit. Das ist ein Tausch — such ihn dir aus, aber such ihn bewusst.
+
+**Rippchen sind ein Sonderfall.** Sowohl Goldwyn als auch Sterling Ball widersprechen der 3-2-1-Methode ausdrücklich: Zwei Stunden in Folie machen Rippchen matschig, 30 bis 60 Minuten genügen. Das ist Erfahrung — aber die Physik stützt sie, denn Rippchen sind dünn und laufen im Paket schnell über die Marke, ab der es vom Zarten ins Breiige kippt.
+
+**Auspacken lässt die Temperatur fallen.** Das ist wiederum zwingend, weil die Verdunstung sofort wieder einsetzt; die Größenordnung — ein Rückfall bis in den Bereich um 79 Grad — ist Erfahrungsangabe. Praktische Folge: erst bei Zieltemperatur öffnen. Wer die Bark zurückholen will, packt bewusst kurz vor Schluss aus und trocknet nach, nicht mittendrin aus Neugier.
+
+---
+
+## Eine Materialfrage, die in deutschen Artikeln fehlt
+
+Zwei Punkte, die nichts mit Geschmack zu tun haben, aber zur Materialwahl gehören. Beide sachlich, beide mit Quelle.
+
+**Alufolie und Säure.** Das Bundesinstitut für Risikobewertung schreibt, Aluminiumfolien seien „nicht für das Aufbewahren und Erhitzen sowie Warmhalten von säurehaltigen oder salzhaltigen Lebensmitteln und Speisen geeignet und bestimmt“, und nennt mariniertes Fleisch ausdrücklich als Beispiel. Für das Grillen mit Aluschalen empfiehlt dasselbe Papier, erst am Ende des Grillvorgangs zu salzen und zu würzen, und gibt wiederverwendbaren Schalen aus Edelstahl den Vorzug.
+
+Für die konkreten Crutch-Bedingungen — mehrere Stunden bei 110 Grad, mit Rub-Salz und oft einem Schuss Apfelsaft — **liegen keine Messungen vor**. Wir rechnen auch nichts hoch. Die praktische Konsequenz ist simpel und kostet nichts: Butcher Paper nehmen, oder die saure Zugabe weglassen.
+
+**Nicht jedes Metzgerpapier taugt.** Gewachstes oder silikonisiertes Papier gehört nach gängiger Praxisregel nicht in den Smoker — eine Messung dazu haben wir nicht gefunden, die Begründung ist schlicht, dass die Beschichtung bei Smoker-Temperatur nichts im Fleischkontakt zu suchen hat. Belastbar ist dagegen der regulatorische Rahmen: In der EU gibt es für Papier im Lebensmittelkontakt keine harmonisierte Einzelregelung; einschlägig ist die BfR-Empfehlung XXXVI, und die schließt ihrem Wortlaut nach Papiere ein, die für Temperaturen **bis 90 Grad** bestimmt sind — für höhere Temperaturbereiche verweist sie auf eigene Spezial-Empfehlungen. Ein Smoker läuft bei 110 bis 135 Grad. Übersetzt für den Einkauf: „lebensmittelecht“ auf der Rolle sagt dir nichts über den Smoker. Frag nach dem deklarierten Temperaturbereich.
+
+---
+
+## Was niemand weiß
+
+Damit die dritte Schublade nicht leer bleibt — und sie ist die vollste:
+
+- **Ob Einwickeln den Garverlust senkt.** Blonder behauptet sogar das Gegenteil: Ein gut pariertes Brisket verliere rund ein Drittel seines Gewichts an Flüssigkeit, und zwar unabhängig davon, ob nackt oder gecrutcht gegart. Der Crutch verändere demnach nur, *wo* der Saft landet — konzentriert im Fleisch oder verdünnt im Päckchen. Für diese Aussage gibt es kein Messprotokoll und keine Wiederholungen. Sie ist plausibel und unbelegt.
+- **Wie stark Butcher Paper die Bark tatsächlich schont.** Nie instrumentell gemessen.
+- **Ob durch Papier weiter Rauch ins Fleisch zieht.** In beide Richtungen unbelegt. Physikalisch spricht dagegen, dass sich Raucharomen bevorzugt an feuchten Oberflächen anlagern — und ab dem Wickeln ist die feuchte Oberfläche das Papier, nicht das Fleisch.
+- **Ob die oft genannten 30 bis 60 Minuten Zeitunterschied zwischen Papier und Folie stimmen.** Der einzige Datenpunkt ist der oben genannte Dreiervergleich mit einer Stunde Differenz, an je einem Stück. Das ist keine Zahl, das ist eine Anekdote mit Uhr.
+
+---
+
+## Fazit: Es gibt keine richtige Antwort, aber eine ehrliche
+
+Die Spitzenbetriebe in Texas machen es unterschiedlich — Franklin Barbecue Papier, andere Folie, wieder andere beides nacheinander. Eine Umfrage, die beim Camp Brisket der Texas A&M vorgestellt wurde, ergab eine klare Tendenz: Wettkampfteams greifen zur Folie, Restaurants zum Papier. Gegenbeispiele gibt es auf beiden Seiten. Wenn sich die Besten der Welt nicht einig sind, ist das ein ziemlich starkes Indiz dafür, dass die Frage keine eindeutige Antwort hat.
+
+Was wir dir stattdessen mitgeben:
+
+- **Willst du Zeit?** Folie, fest gewickelt, früh im Stall. Der Zeitgewinn ist der am besten belegte Effekt im ganzen Thema.
+- **Willst du Bark?** Butcher Paper, und wickle spät. Oder gar nicht, wenn du die Stunden hast.
+- **Willst du beides halbwegs?** Papier, spät gewickelt, und am Schluss ausgepackt und nachgetrocknet.
+- **Und in jedem Fall:** dicht wickeln. Von allen Stellschrauben ist die Dichtigkeit die am klarsten vermessene — und die einzige, die nichts kostet.
+
+Die Zieltemperatur bleibt dieselbe wie ohne Crutch: **Brisket 90 bis 96 Grad, Pulled Pork 88 bis 95 Grad.** Ein Hinweis dazu aus den Quellen, den wir bewusst als solchen kennzeichnen, weil er unter unserem Korridor liegt: Blonder schreibt in seiner Stall-Untersuchung, wer das Brisket längere Zeit über 88 Grad halte, ende bei einem Ergebnis, das grau und matschig schmecke. Unsere Hausempfehlung bleibt der Korridor oben — aber wenn dein Ergebnis regelmäßig ins Breiige geht, weißt du jetzt, an welcher Schraube du zuerst drehst.
+
+Feuer ist keine Technik. Feuer ist Erinnerung. Und ein Stück Alufolie ist kein Betrug, sondern ein Werkzeug — solange du weißt, was es tut.
+
+<AffiliateBox
+  id="thermapen-one"
+  headline="Beim Crutch zählt jeder Einstich"
+  text="Ein Kabel, das dauerhaft aus dem Paket führt, ist beim Wickeln genau das, was du nicht willst: eine Stelle, an der die Naht nie richtig dicht wird. Ein Einstichthermometer, das in einer Sekunde abliest, misst punktuell — einmal rein, Wert, raus, Paket wieder zu. Für alles, was in Papier oder Folie steckt, ist das die sauberere Methode."
+  cta="Zum Angebot"
+/>
+
+---
+
+## Weiterlesen
+
+- [Der Stall: warum dein Brisket sechs Stunden stehen bleibt](/artikel/stall-plateauphase-beim-smoken) — die Physik, gegen die du hier anwickelst
+- [Smoken — Low & Slow](/methoden/smoken-low-and-slow) — das Verfahren von Grund auf
+- [Cut-Porträt: Brisket](/cuts/brisket) — Anatomie, Zuschnitt, Bezugsquellen
+- [Temperatur-Guide](/temperatur-guide) — die kanonischen Kerntemperaturen der Steakakademie
+- [Glossar: Texas Crutch](/glossar/texas-crutch) und [Glossar: Bark](/glossar/bark) — die Kurzfassungen
+
+---
+
+## Quellen
+
+1. Blonder, G. (2013): *Texas crutch.* genuineideas.com — Brisket-Point- und Schweineschulter-Versuche, Baumwollrollen-Modell, Leck-Faustregel, Gewichtsverlust-Aussage. [genuineideas.com](https://genuineideas.com/ArticlesIndex/thecrutch.html)
+2. Blonder, G. (2011): *Foiling and basting.* genuineideas.com — Durchlässigkeitsmessung Folie / Backpapier / Kraftpapier / Filterpapier, Hähnchenbrust-Versuch, Funktion der Flüssigkeit im Paket. [genuineideas.com](https://genuineideas.com/ArticlesIndex/foil.html)
+3. Blonder, G.: *BBQ stall explained.* genuineideas.com — Grundlagenmessungen zur Verdunstungskühlung; Quelle des Hinweises zu Textur oberhalb 88 °C. Die Seite selbst trägt kein Datum; die erste öffentliche Berichterstattung darüber stammt von Oktober 2011. [genuineideas.com](https://genuineideas.com/ArticlesIndex/stallbbq.html)
+4. Goldwyn, M.: *The Texas crutch: wrap in foil or butcher paper.* AmazingRibs.com — Praxisempfehlungen, Materialhinweise, Rippchen-Einwand. [amazingribs.com](https://amazingribs.com/more-technique-and-science/more-cooking-science/texas-crutch/)
+5. Goldwyn, M.: *What causes the BBQ stall.* AmazingRibs.com — Schweinenacken-Versuch, Regenmantel-Bild, Temperaturabfall nach dem Auspacken. [amazingribs.com](https://amazingribs.com/more-technique-and-science/more-cooking-science/understanding-and-beating-barbecue-stall/)
+6. Modernist Cuisine Team: *The chemistry of the barbecue „stall“.* Modernist Cuisine Blog, 30.08.2012 — Versuchspaar offen/vakuumiert im Umluftofen; Beleg dafür, dass ohne Verdunstung kein Stall entsteht. [modernistcuisine.com](https://modernistcuisine.com/mc/barbecue-stall/)
+7. Clements, J.: *Guide to wrapping brisket.* Smoked BBQ Source — eingebetteter Videotest von T-Roy Cooks (je ein ganzes Brisket, unkontrolliert); Quelle der Zeiten 9/10/11 Stunden und der beiden einander widersprechenden Bark-Aussagen. [smokedbbqsource.com](https://www.smokedbbqsource.com/guide-to-wrapping-brisket/)
+8. MasterClass: *How to smoke brisket with barbecue pitmaster Aaron Franklin* — Franklins Wickelkriterium: Tastprobe am Flat und eine an Stellen aufreißende Rinde als Zeichen für ausgeschmolzenes Fett. [masterclass.com](https://www.masterclass.com/articles/how-to-smoke-brisket-with-barbeque-pitmaster-aaron-franklin)
+9. Allingham, C.: *Camp brisket 2020 trip report.* The Virtual Weber Bullet — Mitschrift des Camp Brisket der Texas A&M; die Tendenz Wettkampf = Folie, Restaurant = Papier stammt dort aus einer im Vortrag von Jess Pryles vorgestellten Umfrage, nicht aus einer eigenen Erhebung des Autors. [virtualweberbullet.com](https://www.virtualweberbullet.com/camp-brisket-2020-trip-report/)
+10. Bundesinstitut für Risikobewertung: *Fragen und Antworten zu Aluminium in Lebensmitteln und verbrauchernahen Produkten*, FAQ vom 20.07.2020 — Eignung von Aluminiumfolie bei säure- und salzhaltigen Lebensmitteln, Empfehlung zum Salzen am Ende des Grillvorgangs. [bfr.bund.de](https://www.bfr.bund.de/assets/01_Ver%C3%B6ffentlichungen/Fragen_und_Antworten_zu_Aluminium_in_Lebensmitteln_und_verbrauchernahen_Produkten.pdf)
+11. Bundesinstitut für Risikobewertung: *Empfehlung XXXVI — Papiere, Kartons und Pappen für den Lebensmittelkontakt* — Anwendungsbereich bis 90 °C, Verweis auf Spezial-Empfehlungen für höhere Temperaturen. [empfehlungen.bfr.bund.de](https://empfehlungen.bfr.bund.de/recommendations/360/pdf)
+12. Kerntemperatur-Referenz der Steakakademie, `data/kerntemperatur-referenz.yaml` — Zielkorridore Brisket 90–96 °C und Pulled Pork 88–95 °C.

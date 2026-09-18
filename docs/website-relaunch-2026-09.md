@@ -150,7 +150,8 @@ Live-Übersicht `/vergleich`.
 - **Fakten in `katalog.ts`:** gegen `data/kerntemperatur-referenz.yaml` abgeglichen, zwei
   Werte korrigiert (Schweinefilet 63 °C, Ziehtemperatur 52 °C). Die Prototyp-Tabelle der
   Garstufen (Rare 48–52 usw.) wurde NICHT übernommen — sie widerspricht der Referenz
-  (Medium Rare 54–58) und hat in den Lektionen keine Datenbasis.
+  (Medium Rare 52–55, Standard 54; bestätigte Skala `garstufen_rind` seit 07.09.) und hat
+  in den Lektionen keine Datenbasis.
 - **Startseiten-Doktrin** (CLAUDE.md § 2 Regel 8) gilt für `src/app/page.tsx`; das
   Gate prüft `/relaunch` nicht. Ob die Reihenfolge Value-Prop → HERO → Artikel →
   Mitglieder-CTA auf das neue Layout übertragen wird, entscheidet Uwe.
@@ -183,6 +184,32 @@ Live-Übersicht `/vergleich`.
 Root-Layout, `[katalog]` wird `/cuts` … — die bestehenden Routen bleiben, nur ihr Layout
 wechselt), `noindex` entfernen, Vorschau-Leiste entfernen, `AB_HOME`-Middleware
 stilllegen. Erst dann wird `/home-b` unerreichbar — und bleibt trotzdem im Archiv.
+
+### Offen: Was aus dem alten Root-Layout mitgeht (Nachtrag 17.09.2026, Entscheidung Uwe)
+
+„Layout wird Root-Layout" ist nicht vollständig beschrieben. `src/app/layout.tsx` trägt heute
+mehr als Schriften und Rahmen. Ersetzt das Relaunch-Layout es wörtlich, fällt alles unten
+**stillschweigend** weg. Bleibt das Relaunch-Layout dagegen darunter geschachtelt (wie heute
+unter `/relaunch`), läuft alles weiter — auch das, was nach dem Handoff wegfallen soll.
+Keine der beiden Varianten ist entschieden. Jeder Punkt braucht vor dem Umschalten ein
+„mitnehmen" oder „weglassen":
+
+| Teil im alten Root-Layout | Was er tut | Vorschlag, nicht entschieden |
+|---|---|---|
+| `LayoutExtras` | Marco-Chat + Exit-Intent | mitnehmen — die Relaunch-Suche setzt Marco als Auffangnetz voraus: `MarcoStarter` feuert `sk:marco`, zuhören tut nur `MarcoWidget`, und das lädt ausschließlich `LayoutExtras` |
+| `PlausibleScript` | cookielose Reichweite | mitnehmen |
+| `WebVitals` | Core Web Vitals → eigene DB | mitnehmen — Kriterium 5 (Lighthouse) braucht danach Felddaten |
+| `JsErrors` | Browser-Fehler → eigene DB (Sentry-Ersatz) | mitnehmen |
+| `ConsentBanner` + `ClarityScript` | Einwilligung + Clarity nach Opt-in | mitnehmen, Banner auf hellem Grund prüfen (Kontrast) |
+| `organizationSchema()`, `websiteSchema()` | globales JSON-LD inkl. SearchAction | mitnehmen — SEO-Bedingung „nichts verlieren" |
+| `metadata` (`metadataBase`, `title.template`, Open Graph, Twitter, `robots: index`) | Grund-Metadaten aller Seiten | mitnehmen; das Relaunch-`metadata` (Vorschau-Titel, `noindex`, Canonical auf `/`) **darf nicht** Root werden |
+| `MotionProvider` | Reduced-Motion-Vertrag für Framer Motion (`plans/002`) | für Relaunch-Seiten nicht nötig (kein `framer-motion` in `src/app/relaunch`, `src/components/relaunch`, Stand 17.09.); nur für live gebliebene Alt-Seiten und übernommene Alt-Komponenten, die Framer nutzen |
+| `globals.css` + Schriften Playfair/Source Serif/DM Sans, `html`-Hintergrund `#17100B` | Alt-Design | nicht mitnehmen für Relaunch-Seiten — **aber** Cut- und Technik-Detailseiten bleiben vorerst live im Alt-Design (Kriterium 3) und brauchen es, solange es sie gibt |
+| `EmberGlow` | reaktiver Glut-Schein auf **jeder** Seite (`position: fixed`, `z-index: 1`) | weglassen — Handoff: die Glut im Hero (`EmberCanvas`) ist das *einzige* bewegte Element. Heute nur verdeckt (`relaunch.css:59`, `.sk { z-index: 2 }`), der Scroll-Listener läuft unsichtbar weiter |
+| `SmokeEffect.tsx` (nicht eingebunden) | Revert-Reserve für `EmberGlow` | mit `EmberGlow` löschen (bleibt im Archiv-Tag) |
+
+Folgearbeit beim Weglassen von `EmberGlow`: den `z-index`-Kommentar in `relaunch.css:59`
+anpassen und `plans/006` als überholt markieren.
 
 ## Branch nachziehen (Uwe, eigenes Terminal)
 

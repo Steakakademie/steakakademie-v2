@@ -51,6 +51,21 @@ EXIF-Daten bleiben erhalten und sind der Herkunftsnachweis.
 | spareribs-3-2-1 | `spareribs-3-2-1-bark.jpg` (Schrittbild) | Uwe Yendell, 19.08.2026, Samsung SM-G985F | links/rechts beschnitten (Gehäusekante, Kamera-Wasserzeichen), Sättigung 0,88, Kontrast 1,08, Schärfung sigma 1,2. Ohne „Essen"-Modus aufgenommen |
 
 
+## Korrektur 16.09.2026 (Compliance-Scan)
+
+- `picanha-churrasco` — am 18.08.2026 (Commit 2d1a48f) als „vermutlich echtes Foto"
+  eingestuft und bewusst OHNE `imageAI` getaggt (Begründung: natürliche
+  Fettkappen-Textur). Der damalige Befund hatte die eingebetteten Metadaten nicht
+  ausgewertet und stattdessen nach visuellem Eindruck entschieden. Erneute Prüfung
+  16.09.2026 (Metadaten direkt am Original-Bild verifiziert): `picanha-churrasco.jpg`
+  trägt eingebettet `DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/
+  trainedAlgorithmicMedia"` und `photoshop:Credit="Made with Google AI"` — eindeutige,
+  maschinenlesbare KI-Herkunft (Google AI / Nano Banana), keine Kamera-EXIF.
+  `picanha-churrasco-hero.jpg` trägt dieselbe Aufnahme ohne diese Metadaten
+  (vermutlich beim Grading/Export gestrippt, vgl. `compliance/ai-act-einstufung.md`).
+  Frontmatter korrigiert: `imageAI: true` + `imageSource` gesetzt. Damit rendert das
+  „KI-Symbolbild"-Badge (RecipeTemplate.tsx) korrekt.
+
 ## Offener Befund
 
 - `cedar-plank-lachs` — Bild am 19.08.2026 ersetzt, der Audit-Befund

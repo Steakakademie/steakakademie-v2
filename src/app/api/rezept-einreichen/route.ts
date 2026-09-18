@@ -89,7 +89,7 @@ export async function POST(req: Request) {
   const input = guard.body;
 
   // 2) Auth — Shape { error, needsLogin } NICHT ändern (RecipeSubmitModal.tsx).
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json(
