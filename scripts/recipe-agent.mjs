@@ -24,6 +24,7 @@ import { existsSync, appendFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
+import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
@@ -224,7 +225,7 @@ const SEED_RECIPES = [
   { slug: 'gruener-spargel-grill', kategorie: 'beilagen', title: 'Gruener Spargel vom Grill mit Parmesan', meatType: 'Grüner Spargel', cookingMethod: 'Direkt, quer zum Rost', difficulty: 'Einfach', concept: 'Gruener Spargel, holzige Enden entfernt, in Olivenoel gewendet, quer ueber den heissen Rost rund 4–6 Minuten mit klaren dunklen Grillstreifen, Spitzen leicht knusprig, Stangen bissfest. Parmesan-Spaene, Meersalz-Flocken, Zitrone. Herkunft: mediterran.' },
   { slug: 'lammkarree-grillen', kategorie: 'fleisch', title: 'Lammkarree / Lammkrone vom Grill', meatType: 'Lammkarree', cookingMethod: 'Indirekt + Sear', difficulty: 'Mittel', concept: 'Festtags-Cut: Lammkarree mit Fettdeckel indirekt auf 56 Grad, dann scharf. Mediterrane Kraeuterkruste. Herkunft: Schottland.' },
   { slug: 'lammkoteletts-mediterran', kategorie: 'fleisch', title: 'Lammkoteletts mediterran', meatType: 'Lammkoteletts', cookingMethod: 'Direkt, kurz', difficulty: 'Einfach', concept: 'Schnell und aromatisch: Lammkoteletts in Rosmarin-Knoblauch-Olivenoel marinieren, heiss kurz grillen auf medium. Herkunft: Schottland.' },
-  { slug: 'lammkeule-drehspiess', kategorie: 'fleisch', title: 'Lammkeule am Drehspiess', meatType: 'Lammkeule', cookingMethod: 'Rotisserie', difficulty: 'Fortgeschritten', concept: 'Ganze Lammkeule am Rotisserie-Spiess gleichmaessig indirekt auf 60 Grad, aussen knusprig. Herkunft: Neuseeland.' },
+  { slug: 'lammkeule-drehspiess', kategorie: 'fleisch', title: 'Lammkeule am Drehspiess', meatType: 'Lammkeule', cookingMethod: 'Rotisserie', difficulty: 'Fortgeschritten', concept: 'Ganze Lammkeule am Rotisserie-Spiess gleichmaessig indirekt auf 70 Grad Kern (durchgegart), aussen knusprig. Herkunft: Neuseeland.' },
   { slug: 'beer-can-chicken', kategorie: 'fleisch', title: 'Beer Can Chicken', meatType: 'Ganzes Haehnchen', cookingMethod: 'Indirekt, aufrecht', difficulty: 'Einfach', concept: 'US-Grillklassiker: ganzes Haehnchen aufrecht auf einer halbvollen Bierdose indirekt garen bis 74 Grad Kern in der Brust, knusprige Haut. Herkunft: USA.' },
   { slug: 'spatchcock-haehnchen', kategorie: 'fleisch', title: 'Spatchcock-Haehnchen (Butterfly)', meatType: 'Ganzes Haehnchen', cookingMethod: 'Flach, indirekt', difficulty: 'Einfach', concept: 'Haehnchen flachgedrueckt (Rueckgrat entfernt) gart gleichmaessig und schneller, indirekt bis 74 Grad Kern. Herkunft: USA.' },
   { slug: 'pulled-chicken', kategorie: 'fleisch', title: 'Pulled Chicken vom Smoker', meatType: 'Haehnchenschenkel', cookingMethod: 'Low and Slow', difficulty: 'Einfach', concept: 'Saftige Alternative zu Pulled Pork: Haehnchenschenkel niedrig raeuchern bis 90 Grad, zupfen, in leichter Sauce. Herkunft: USA.' },
@@ -242,7 +243,7 @@ const SEED_RECIPES = [
 
   // ── AUSTRALIEN ────────────────────────────────────────────────────────────
   { slug: 'barramundi-grill', kategorie: 'fisch', title: 'Barramundi vom Grill', meatType: 'Barramundi', cookingMethod: 'Direkt, Holzkohle', difficulty: 'Mittel', concept: 'Australiens Lieblingsfisch: Barramundi-Filet mit Haut direkt ueber Holzkohle, Haut zuerst, bis sie knusprig ist. Zartes weisses Fleisch, milde Butter-Note. Dazu Macadamia-Salsa. Herkunft: Australien.' },
-  { slug: 'aussie-lamb-leg-butterflied', kategorie: 'fleisch', title: 'Butterflied Leg of Lamb — Australisches Lammfest', meatType: 'Lammkeule', cookingMethod: 'Indirekt', difficulty: 'Fortgeschritten', concept: 'Australischer Klassiker: Lammkeule aufgeklappt (butterflied), mariniert in Knoblauch, Rosmarin, Olivenoel und Zitrone, indirekt gegrillt auf 63 Grad Kern. Gleichmaessige Garung, weniger Zeit als ganze Keule. Herkunft: Australien.' },
+  { slug: 'aussie-lamb-leg-butterflied', kategorie: 'fleisch', title: 'Butterflied Leg of Lamb — Australisches Lammfest', meatType: 'Lammkeule', cookingMethod: 'Indirekt', difficulty: 'Fortgeschritten', concept: 'Australischer Klassiker: Lammkeule aufgeklappt (butterflied), mariniert in Knoblauch, Rosmarin, Olivenoel und Zitrone, indirekt gegrillt auf 70 Grad Kern (durchgegart). Gleichmaessige Garung, weniger Zeit als ganze Keule. Herkunft: Australien.' },
   { slug: 'australische-riesengarnelen-barbie', kategorie: 'fisch', title: 'Prawns on the Barbie', meatType: 'Riesengarnelen', cookingMethod: 'Direkt', difficulty: 'Einfach', concept: 'Australisches Kultsymbol: Riesengarnelen in der Schale direkt ueber heisser Glut 2-3 Minuten. Butter-Knoblauch-Glasur, Zitrone. Schnell, einfach, spektakulaer. Herkunft: Australien.' },
 
   // ── TUERKEI — Mangal/Kebab ────────────────────────────────────────────────
@@ -433,6 +434,55 @@ Ton: direkt, präzise, leidenschaftlich. Kein Fülltext. Kein Clickbait. Echter 
 Zielgruppe: ambitionierte BBQ-Enthusiasten, 30–55 Jahre, die wissen wollen WARUM etwas funktioniert.
 Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).`
 
+// ─── KERNTEMPERATUR-REFERENZ (Regel 8c) ──────────────────────────────────────
+// Bis 15.09.2026 las der Agent die Referenz nie: Die Temperaturen kamen aus den
+// Seed-Konzepten und aus dem Modell, validate() pruefte keine einzige. Zwei offene
+// Seeds lagen dadurch unter den Sicherheits-Mindestwerten (Putenbrust 71 °C,
+// Schweinelachs 62 °C) und waeren unveraendert erzeugt worden.
+const REFERENZ_PFAD = join(ROOT, 'data', 'kerntemperatur-referenz.yaml')
+let referenzCache = null
+function referenz () {
+  if (!referenzCache) {
+    const text = readFileSync(REFERENZ_PFAD, 'utf-8')
+    referenzCache = { text: text.trim(), daten: yaml.load(text) }
+  }
+  return referenzCache
+}
+
+/**
+ * System-Prompt MIT der kompletten Referenz. Wortgleich bei jedem Aufruf, damit
+ * das Praefix cachebar bleibt — nichts Veraenderliches hier hinein.
+ */
+function systemPrompt () {
+  return `${SYSTEM}
+
+KERNTEMPERATUREN (verbindlich, Regel 8c): Nenne Kerntemperaturen ausschließlich gemäß der folgenden Referenz. Die Werte unter "sicherheit" sind Mindestwerte und dürfen nie unterschritten werden — auch dann nicht, wenn das Rezept-Konzept einen niedrigeren Wert nennt. Deckt die Referenz ein Lebensmittel nicht ab, nenne den üblichen Wert und keine Garstufe, die ihm widerspricht.
+
+### QUELLE: data/kerntemperatur-referenz.yaml
+${referenz().text}`
+}
+
+// Welche Sicherheits-Mindestwerte der Referenz ein Seed beruehrt. Treffen mehrere
+// zu (Haehnchenhack = Gefluegel UND Hack), gilt der hoechste. Ente/Gans bewusst
+// nicht als Gefluegel: Die Referenz erlaubt Entenbrust rosa (duck_breast).
+const SICHERHEITS_MUSTER = {
+  gefluegel:   /h(?:ä|ae)hnchen|huhn|h(?:ü|ue)hner|chicken|pute|truthahn|turkey|gefl(?:ü|ue)gel|wachtel|stubenk(?:ü|ue)ken|poularde/,
+  schwein:     /schwein|pork|spare ?ribs|(?<!lamm|kalbs|kalb)kotelett|porchetta|kassler|spanferkel/,
+  hackfleisch: /hack|burger|w(?:u|ü|ue)rst|sausage|\blinks\b|[cć]evap|kofta|k(?:ö|oe)fte|frikadell|tsukune/,
+  wildschwein: /wildschwein|wild boar/,
+}
+
+function sicherheitsKlasse (seed) {
+  const text = `${seed.meatType ?? ''} ${seed.title ?? ''}`.toLowerCase()
+  const minima = referenz().daten.sicherheit
+  let treffer = null
+  for (const [klasse, muster] of Object.entries(SICHERHEITS_MUSTER)) {
+    if (!muster.test(text) || typeof minima[klasse] !== 'number') continue
+    if (!treffer || minima[klasse] > treffer.min) treffer = { klasse, min: minima[klasse] }
+  }
+  return treffer
+}
+
 // ─── STRUKTURIERTES TEXT-FORMAT PARSER ───────────────────────────────────────
 // Kein JSON-Parsing — Schlüssel:Wert-Format ist 100% zuverlässig
 
@@ -485,6 +535,12 @@ function parseStructuredText(text) {
       }
       if (map[key]) {
         data[map[key]] = ['SERVINGS', 'CALORIES'].includes(key) ? Number(val) : val
+        section = null
+      } else if (key === 'CORE_TEMP') {
+        // Ziel-Kerntemperatur fuer validate(); "keine" bei Beilagen & Co. Wird nicht
+        // ins MDX geschrieben (buildMdx liest nur benannte Felder).
+        const grad = val.match(/\d{2,3}/)
+        data.coreTemp = grad ? Number(grad[0]) : null
         section = null
       }
       continue
@@ -564,6 +620,7 @@ DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
 IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
+CORE_TEMP: [Ziel-Kerntemperatur des Hauptprodukts in °C als Zahl, gemessen vor dem Ruhen, gemäß Kerntemperatur-Referenz — bei Beilagen, Saucen, Desserts und Getränken: keine]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
 TOTAL_TIME: [ISO8601]
@@ -617,7 +674,7 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
     // vorher, fehlt genau der Teil, den die Validierung braucht — die teuerste
     // Stelle fuer eine Kuerzung. Ausgeschoepft wird das Budget ohnehin nicht.
     maxTokens: 4000,
-    system:   SYSTEM,
+    system:   systemPrompt(),
     messages: [{ role: 'user', content: metaPrompt }],
   })
 
@@ -657,7 +714,7 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
   const bodyResp = await generateText({
     model: anthropic('claude-sonnet-4-6'),
     maxTokens: 1800,
-    system: SYSTEM,
+    system: systemPrompt(),
     messages: [{ role: 'user', content: promptBody }],
   })
 
@@ -698,6 +755,14 @@ function validate(data, seed) {
   if (!/^PT/.test(data.prepTime || '')) errors.push(`prepTime kein ISO 8601: ${data.prepTime}`)
   if (!/^PT/.test(data.cookTime  || '')) errors.push(`cookTime kein ISO 8601: ${data.cookTime}`)
   if (!/^PT/.test(data.totalTime || '')) errors.push(`totalTime kein ISO 8601: ${data.totalTime}`)
+  const sicherheit = sicherheitsKlasse(seed)
+  if (sicherheit) {
+    if (!Number.isFinite(data.coreTemp)) {
+      errors.push(`Kerntemperatur fehlt (CORE_TEMP) — Pflicht bei ${sicherheit.klasse}`)
+    } else if (data.coreTemp < sicherheit.min) {
+      errors.push(`Kerntemperatur ${data.coreTemp} °C liegt unter dem Sicherheits-Mindestwert ${sicherheit.klasse} (${sicherheit.min} °C, data/kerntemperatur-referenz.yaml)`)
+    }
+  }
   // Kategorie aus Seed erzwingen (Modell weicht manchmal ab)
   data.kategorie = seed.kategorie
   data.difficulty = seed.difficulty
@@ -849,4 +914,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { parseStructuredText, validate, alleSeeds }
+export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt }

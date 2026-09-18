@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
     // A2-Fix: source + userGroup wandern in den Token, damit /confirm sie kennt.
     const config = SOURCE_CONFIG[source] ?? SOURCE_CONFIG.default;
     // A/B-Messung Startseite: B-Besucher (Editorial Ember, Cookie aus
-    // src/middleware.ts) bekommen "-vb" an die source — in Loops damit je
+    // src/proxy.ts) bekommen "-vb" an die source — in Loops damit je
     // Variante auszählbar. Config-Lookup läuft bewusst auf der Basis-source.
     const abVariant = req.cookies.get('sa_ab_home')?.value;
     const trackedSource = abVariant === 'b' ? `${source}-vb` : source;

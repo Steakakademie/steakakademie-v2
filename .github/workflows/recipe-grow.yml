@@ -85,7 +85,7 @@ jobs:
         id: pr
         uses: ./.github/actions/pr-statt-push
         with:
-          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json
+          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml
           branch-prefix: bot/rezept
           bot-name: recipe-bot
           commit-message: 'chore(rezepte): neue Rezepte + Hero-Bilder (automatisch) — zur Prüfung'

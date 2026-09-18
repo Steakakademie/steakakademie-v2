@@ -9,10 +9,8 @@ import { activeMeatPartner, buildMeatTargetUrl } from '@/lib/cut-affiliate';
  * Spiegelt /go/[product-slug]: Plausible-Event (server-side, cookieless) + 302.
  * Ziel ist der aktive Fleischpartner (Primär falls live, sonst Amazon-Fallback).
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { cut: string } }
-) {
+export async function GET(request: NextRequest, props0: { params: Promise<{ cut: string }> }) {
+  const params = await props0.params;
   const cut = getCutById(params.cut);
 
   if (!cut) {

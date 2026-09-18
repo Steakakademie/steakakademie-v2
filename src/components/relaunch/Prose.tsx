@@ -4,7 +4,7 @@ import MDXProductCard from '@/components/mdx/MDXProductCard';
 import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
 import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
 import BBQPairing from '@/components/article/BBQPairing';
-import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
 
 /**
  * MDX-Komponenten für Lesetext auf der hellen Ebene des Relaunches.
@@ -27,6 +27,8 @@ export const skMdx = {
   Achtung,
   ProTipp,
   TempBox,
+  Leitfrage,
+  Handgriff,
   h2: (p: React.HTMLAttributes<HTMLHeadingElement>) => <h2 className="sk-h sk-prose__h2" {...p} />,
   h3: (p: React.HTMLAttributes<HTMLHeadingElement>) => <h3 className="sk-h sk-prose__h3" {...p} />,
   p: (p: React.HTMLAttributes<HTMLParagraphElement>) => <p className="sk-prose__p" {...p} />,

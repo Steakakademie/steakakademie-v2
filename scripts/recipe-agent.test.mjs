@@ -6,13 +6,16 @@
 // Zutaten daneben wurden schon immer mit split('|') gelesen — dieselbe Datei,
 // zwei Strenge-Grade, ein stiller Ausfall der Tagesproduktion.
 import { describe, it, expect } from 'vitest'
-import { parseStructuredText, validate } from './recipe-agent.mjs'
+import { readFileSync } from 'node:fs'
+import yaml from 'js-yaml'
+import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt } from './recipe-agent.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
 DESCRIPTION: Testbeschreibung fuer den Parser
 IMAGE_ALT: Spiesse ueber Glut
 IMAGE_PROMPT: Yakitori skewers of chicken thigh cubes alternating with leek on bamboo sticks over glowing binchotan charcoal. Not: whole chicken legs, no bones.
 LAND: Japan
+CORE_TEMP: 74
 PREP_TIME: PT25M
 COOK_TIME: PT10M
 TOTAL_TIME: PT35M
@@ -107,5 +110,113 @@ describe('validate', () => {
     const daten = parseStructuredText(KOPF + '1. Tare | 15 Min | Einkochen.')
     daten.image = '/images/rezepte/x.jpg'
     expect(validate(daten, SEED)).toContain('Zu wenige Schritte')
+  })
+})
+
+// Regel 8c: Kerntemperaturen kommen aus data/kerntemperatur-referenz.yaml.
+// Anlass (15.09.2026): Der Agent las die Referenz nie, validate() pruefte keine
+// Temperatur, und zwei offene Seeds lagen unter den Sicherheits-Mindestwerten
+// (Putenbrust 71 °C, Schweinelachs 62 °C) — sie waeren unveraendert erzeugt worden.
+const REFERENZ = yaml.load(readFileSync(new URL('../data/kerntemperatur-referenz.yaml', import.meta.url), 'utf8'))
+
+function datensatz (kopf, seed) {
+  const daten = parseStructuredText(kopf + SCHRITT_FORMATE['ohne Leerzeichen'])
+  daten.image = `/images/rezepte/${seed.slug}.jpg`
+  daten.kategorie = seed.kategorie
+  daten.meatType = seed.meatType
+  daten.cookingMethod = seed.cookingMethod
+  daten.difficulty = seed.difficulty
+  return daten
+}
+
+const PUTE    = { slug: 'pute', kategorie: 'fleisch', difficulty: 'Mittel', meatType: 'Putenbrust', cookingMethod: 'Indirekt', title: 'Putenbrust' }
+const SCHWEIN = { slug: 'bacon', kategorie: 'fleisch', difficulty: 'Mittel', meatType: 'Schweinelachs / Kotelettstrang', cookingMethod: 'Direkt', title: 'Peameal Bacon' }
+const BEILAGE = { slug: 'kartoffeln', kategorie: 'beilagen', difficulty: 'Einfach', meatType: 'Kartoffeln', cookingMethod: 'Smoker', title: 'Smoked Potatoes' }
+
+describe('parseStructuredText — CORE_TEMP', () => {
+  it.each([
+    ['74', 74],
+    ['74 °C', 74],
+    ['72°C', 72],
+    ['keine', null],
+  ])('liest "%s" als %s', (roh, erwartet) => {
+    const daten = parseStructuredText(KOPF.replace('CORE_TEMP: 74', `CORE_TEMP: ${roh}`) + SCHRITT_FORMATE['ohne Leerzeichen'])
+    expect(daten.coreTemp).toBe(erwartet)
+  })
+})
+
+describe('sicherheitsKlasse', () => {
+  it.each([
+    [{ meatType: 'Putenbrust' },                              'gefluegel',   72],
+    [{ meatType: 'Haehnchenschenkel' },                       'gefluegel',   72],
+    [{ meatType: 'Hähnchenhack', title: 'Tsukune — Japanische Hähnchen-Hackspieße' }, 'gefluegel', 72],
+    [{ meatType: 'Schweinelachs / Kotelettstrang' },          'schwein',     63],
+    [{ meatType: 'Schweine- und Rindfleisch', title: 'Texas Hot Links — Scharfe Grobwurst aus dem Smoker' }, 'hackfleisch', 70],
+    [{ meatType: 'Rinderhack', title: 'Smash Burger' },       'hackfleisch', 70],
+    [{ meatType: 'Wildschweinkeule' },                        'wildschwein', 70],
+  ])('%o → %s ab %i °C', (seed, klasse, min) => {
+    expect(sicherheitsKlasse(seed)).toEqual({ klasse, min })
+  })
+
+  it.each([
+    [{ meatType: 'Entrecôte' }],
+    [{ meatType: 'Entenbrust' }],   // Sonderfall der Referenz: darf rosa bleiben (duck_breast 56–62)
+    [{ meatType: 'Lammkoteletts' }], // "kotelett" allein heisst nicht Schwein
+    [{ meatType: 'Lachs' }],
+    [{ meatType: 'Kartoffeln' }],
+  ])('%o hat keinen Sicherheits-Mindestwert', (seed) => {
+    expect(sicherheitsKlasse(seed)).toBeNull()
+  })
+})
+
+describe('validate — Kerntemperatur gegen die Referenz', () => {
+  it('lehnt Gefluegel unter 72 °C ab', () => {
+    const fehler = validate(datensatz(KOPF.replace('CORE_TEMP: 74', 'CORE_TEMP: 71'), PUTE), PUTE)
+    expect(fehler).toContain('Kerntemperatur 71 °C liegt unter dem Sicherheits-Mindestwert gefluegel (72 °C, data/kerntemperatur-referenz.yaml)')
+  })
+
+  it('laesst Gefluegel mit genau 72 °C durch', () => {
+    expect(validate(datensatz(KOPF.replace('CORE_TEMP: 74', 'CORE_TEMP: 72'), PUTE), PUTE)).toEqual([])
+  })
+
+  it('lehnt Schwein unter 63 °C ab', () => {
+    const fehler = validate(datensatz(KOPF.replace('CORE_TEMP: 74', 'CORE_TEMP: 62'), SCHWEIN), SCHWEIN)
+    expect(fehler).toContain('Kerntemperatur 62 °C liegt unter dem Sicherheits-Mindestwert schwein (63 °C, data/kerntemperatur-referenz.yaml)')
+  })
+
+  it('verlangt eine Kerntemperatur, wenn die Referenz einen Mindestwert fuehrt', () => {
+    const fehler = validate(datensatz(KOPF.replace('CORE_TEMP: 74\n', ''), SCHWEIN), SCHWEIN)
+    expect(fehler).toContain('Kerntemperatur fehlt (CORE_TEMP) — Pflicht bei schwein')
+  })
+
+  it('verlangt keine Kerntemperatur bei Beilagen', () => {
+    expect(validate(datensatz(KOPF.replace('CORE_TEMP: 74\n', ''), BEILAGE), BEILAGE)).toEqual([])
+  })
+})
+
+describe('Seed-Daten gegen die Referenz', () => {
+  // Kern-Bezug wie in den Konzepten formuliert: "bis 74 Grad Kern", "Kern 48°C", "Ziel 93°C"
+  const KERN = /(?:(?:Kern(?:temperatur)?|Ziel|auf|bis)\s*(\d{2,3})\s*(?:°C|Grad)(?:\s*Kern)?|(\d{2,3})\s*(?:°C|Grad)\s*(?:Kern(?:temperatur)?|in der Brust))/gi
+
+  it('keine Seed-Idee nennt eine Kerntemperatur unter dem Sicherheits-Mindestwert', () => {
+    const verstoesse = []
+    for (const seed of alleSeeds()) {
+      const sicherheit = sicherheitsKlasse(seed)
+      if (!sicherheit) continue
+      for (const m of (seed.concept || '').matchAll(KERN)) {
+        const grad = Number(m[1] || m[2])
+        if (grad < sicherheit.min) verstoesse.push(`${seed.slug}: ${grad} °C < ${sicherheit.klasse} ${sicherheit.min} °C`)
+      }
+    }
+    expect(verstoesse).toEqual([])
+  })
+})
+
+describe('systemPrompt', () => {
+  it('traegt die Sicherheits-Mindestwerte der Referenz ins Modell', () => {
+    const prompt = systemPrompt()
+    for (const [klasse, grad] of Object.entries(REFERENZ.sicherheit)) {
+      expect(prompt).toContain(`${klasse}: ${grad}`)
+    }
   })
 })

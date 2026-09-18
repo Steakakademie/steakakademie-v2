@@ -37,7 +37,8 @@ async function getVoucher(code: string): Promise<VoucherRow | null> {
   return (data as unknown as VoucherRow) ?? null;
 }
 
-export default async function VoucherPage({ params }: { params: { code: string } }) {
+export default async function VoucherPage(props: { params: Promise<{ code: string }> }) {
+  const params = await props.params;
   const code = decodeURIComponent(params.code).toUpperCase();
   const voucher = await getVoucher(code);
 

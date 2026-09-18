@@ -29,7 +29,7 @@ type CommunityRecipe = {
 };
 
 async function getRecipe(slug: string): Promise<CommunityRecipe | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from('user_recipes')
     .select('slug, title, description, portions, prep_time, ingredients, steps, image_url, author_name, quality_score, published_at')
@@ -39,7 +39,8 @@ async function getRecipe(slug: string): Promise<CommunityRecipe | null> {
   return (data as CommunityRecipe | null) ?? null;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const r = await getRecipe(params.slug);
   if (!r) return { title: 'Rezept nicht gefunden' };
   return {
@@ -56,7 +57,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function CommunityRecipePage({ params }: { params: { slug: string } }) {
+export default async function CommunityRecipePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const r = await getRecipe(params.slug);
   if (!r) notFound();
 

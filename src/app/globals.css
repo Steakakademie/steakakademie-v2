@@ -432,4 +432,38 @@ nav a, header button, .nav-sharp {
 .leaflet-control-attribution { background: rgba(15, 10, 6, .85) !important; color: #947D6C !important; font-size: 10px; }
 .leaflet-control-attribution a { color: #C4A882 !important; }
 .leaflet-bar a { background: #1E1410 !important; color: #E6D5C3 !important; border-color: #3A2A1E !important; }
-.theme-ember .leaflet-container { background: #F1EDE4; }
+.theme-ember .leaflet-container { background: #F1EDE4; }/* ── GLUTBETT (09.09.2026) ───────────────────────────────────────────────
+   Fortschritt in Stufe 1 als Kohlebett: je bestandenem Lektions-Check
+   entzuendet sich eine Kohle. Belohnung und Orientierung im selben Bild —
+   anders als Konfetti nutzt sie sich nicht ab, weil sie sich sammelt.
+
+   Bewusst nur transform, opacity und filter: Diese drei laufen im Compositor
+   und loesen kein Layout aus. Die Startseite misst LCP um 845 ms; eine
+   Animation, die Layout anfasst, waere hier der teuerste Weg zu einem
+   kleinen Effekt.
+
+   Die Funken bekommen ihre Richtung ueber --sa-funke-x aus dem Markup,
+   damit nicht acht Keyframe-Saetze noetig sind. */
+@keyframes sa-glut-zuenden {
+  0%   { transform: scale(1);    filter: brightness(0.55); }
+  18%  { transform: scale(1.28); filter: brightness(1.9); }
+  45%  { transform: scale(1.05); filter: brightness(1.35); }
+  100% { transform: scale(1);    filter: brightness(1); }
+}
+
+@keyframes sa-funke {
+  0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+  12%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--sa-funke-x, 0px), -34px) scale(0.3); }
+}
+
+.sa-glut-zuendet { animation: sa-glut-zuenden 1200ms ease-out; }
+.sa-funke { animation: sa-funke 1100ms ease-out forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Der Endzustand bleibt — nur die Bewegung entfaellt. Die Kohle glueht
+     also trotzdem, sie zuendet nur nicht sichtbar. Information geht nicht
+     verloren, und genau darum geht es bei dieser Einstellung. */
+  .sa-glut-zuendet { animation: none; }
+  .sa-funke { display: none; }
+}

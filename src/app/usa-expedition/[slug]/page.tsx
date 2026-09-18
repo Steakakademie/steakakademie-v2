@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -10,14 +11,15 @@ import Footer from '@/components/layout/Footer';
 import { ChevronRight, MapPin, Flame } from 'lucide-react';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   return allUsaBbqStyles.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const entry = allUsaBbqStyles.find((s) => s.slug === params.slug);
   if (!entry) return {};
 
@@ -106,7 +108,8 @@ const mdxComponents = {
 
 // ── PAGE ──────────────────────────────────────────────────────────────────────
 
-export default function UsaExpeditionSlugPage({ params }: Props) {
+export default function UsaExpeditionSlugPage(props: Props) {
+  const params = use(props.params);
   const entry = allUsaBbqStyles.find((s) => s.slug === params.slug);
   if (!entry) notFound();
 

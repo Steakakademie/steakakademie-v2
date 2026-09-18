@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -25,20 +26,22 @@ import { KATALOGE } from '@/lib/relaunch/katalog';
  * Datenbasis; an seiner Stelle steht die bestehende Umfrage (dunkler Block auf
  * hellem Grund — dieselbe Anmutung).
  */
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 const sichtbare = () => sichtbareArtikel(allStreitfalls);
 
 export function generateStaticParams() {
   return sichtbare().map((s) => ({ slug: s.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) return {};
   return { title: doc.seoTitle ?? doc.title, description: doc.seoDescription ?? doc.excerpt };
 }
 
-export default function StreitfallSeite({ params }: Props) {
+export default function StreitfallSeite(props: Props) {
+  const params = use(props.params);
   const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) notFound();
   // Die redaktionelle Nummer („Nr. 5") kommt aus dem Katalog des Handoffs, wenn

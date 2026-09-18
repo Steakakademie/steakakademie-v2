@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { allGlossars } from 'contentlayer/generated';
 import { sichtbareArtikel } from '@/lib/redaktion';
 import { breadcrumbSchema, collectionPageSchema, definedTermSetSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
 
 export const metadata: Metadata = {
   // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     'Von Maillard-Reaktion bis Plateauphase: das vollständige BBQ- und Grill-Lexikon. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund.',
   alternates: { canonical: 'https://steakakademie.de/glossar' },
   openGraph: {
+    images: ogImages('BBQ-Glossar'),
     title: 'BBQ-Glossar',
     description: 'Das komplette Fachbegriff-Lexikon für Grillmeister. Maillard-Reaktion, Reverse Sear, Dry Aging — alles erklärt.',
     url: 'https://steakakademie.de/glossar',

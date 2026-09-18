@@ -45,7 +45,7 @@ jobs:
       - name: Geänderte Bilder als PR (Review-Gate, KEIN direkter Push)
         uses: ./.github/actions/pr-statt-push
         with:
-          pfade: public/images/rezepte
+          pfade: public/images/rezepte data/bildregister.yaml
           branch-prefix: bot/rezeptbilder
           bot-name: recipe-bot
           commit-message: 'chore(rezepte): Hero-Bilder neu generiert (neue Prompt-Doktrin) — zur Prüfung'

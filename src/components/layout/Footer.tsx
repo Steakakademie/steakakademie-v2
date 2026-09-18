@@ -20,9 +20,10 @@ const FOOTER_LINKS = {
   Cuts: [
     { label: 'Ribeye', href: '/cuts/ribeye' },
     { label: 'Brisket', href: '/cuts/brisket' },
-    { label: 'Pulled Pork', href: '/cuts/pulled-pork' },
+    // Uwe, 17.09.2026: Aroma-Matcher bewusst HIER statt unter "Sonstiges" — das
+    // Werkzeug startet mit der Cut-Wahl, gehört thematisch zu den Cuts.
+    { label: 'Aroma-Matcher', href: '/aroma-matcher' },
     { label: 'Alle Cuts', href: '/cuts' },
-    { label: 'Hofladen-Radar', href: '/hoefe' },
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
@@ -52,8 +53,15 @@ const FOOTER_LINKS = {
   'Wissens-Brief': [
     { label: 'Kerntemperatur-Spickzettel', href: '/kerntemperatur-spickzettel' },
     { label: 'Wissens-Brief abonnieren', href: '/newsletter' },
-    { label: 'Geschenkgutscheine', href: '/gutschein' },
     { label: 'Steak-Beichte', href: '/steak-beichte' },
+  ],
+  // Neue Sammelspalte (16.09.2026, auf Uwes Hinweis): Hofladen-Radar (Tool, kein Cut)
+  // und Geschenkgutscheine (Shop-Feature, kein Wissens-Brief-Inhalt) lagen an
+  // kategorisch falschen Stellen. Pulled Pork wurde ersatzlos aus der Cuts-Kurzliste
+  // entfernt statt hierher verschoben — bleibt aber über "Alle Cuts" erreichbar.
+  Sonstiges: [
+    { label: 'Hofladen-Radar', href: '/hoefe' },
+    { label: 'Geschenkgutscheine', href: '/gutschein' },
   ],
 };
 
