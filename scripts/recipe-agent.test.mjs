@@ -5,10 +5,10 @@
 // die Pipe; schrieb das Modell 'Titel|Dauer|Text', fiel der Schritt weg. Die
 // Zutaten daneben wurden schon immer mit split('|') gelesen — dieselbe Datei,
 // zwei Strenge-Grade, ein stiller Ausfall der Tagesproduktion.
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt } from './recipe-agent.mjs'
+import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs } from './recipe-agent.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
 DESCRIPTION: Testbeschreibung fuer den Parser
@@ -218,5 +218,92 @@ describe('systemPrompt', () => {
     for (const [klasse, grad] of Object.entries(REFERENZ.sicherheit)) {
       expect(prompt).toContain(`${klasse}: ${grad}`)
     }
+  })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Dublettenpruefung gegen offene Rezept-PRs.
+//
+// Anlass (15.-18.09.2026): Der naechtliche Lauf erzeugte vier Mal dasselbe
+// Rezept (tsukune-yakitori), weil Cache und .mdx nur im PR-Branch entstehen,
+// der CI-Lauf aber main auscheckt. Vier PRs mit demselben Slug, drei davon mit
+// Merge-Konflikt, vier Mal FLUX-Bildkosten.
+//
+// Geprueft wird gegen einen gestubbten fetch, damit der Test ohne Netz und ohne
+// GitHub-Rate-Limit laeuft und das Verhalten im Fehlerfall festnagelbar ist.
+describe('slugsInOffenenRezeptPRs', () => {
+  const echterFetch = globalThis.fetch
+  const echtesRepo = process.env.GITHUB_REPOSITORY
+
+  const stub = (routen) => {
+    globalThis.fetch = async (url) => {
+      const pfad = String(url).replace('https://api.github.com/repos/Steakakademie/steakakademie-v2', '')
+      const treffer = Object.entries(routen).find(([p]) => pfad.startsWith(p))
+      if (!treffer) return { ok: false, status: 404, json: async () => ({}) }
+      const wert = treffer[1]
+      if (wert instanceof Error) throw wert
+      if (typeof wert === 'number') return { ok: false, status: wert, json: async () => ({}) }
+      return { ok: true, status: 200, json: async () => wert }
+    }
+  }
+
+  beforeEach(() => { process.env.GITHUB_REPOSITORY = 'Steakakademie/steakakademie-v2' })
+  afterEach(() => {
+    globalThis.fetch = echterFetch
+    if (echtesRepo === undefined) delete process.env.GITHUB_REPOSITORY
+    else process.env.GITHUB_REPOSITORY = echtesRepo
+  })
+
+  it('meldet den Slug, der in einem offenen Rezept-PR liegt', async () => {
+    stub({
+      '/pulls?state=open': [{ number: 116, head: { ref: 'bot/rezept-20260916-0847' } }],
+      '/pulls/116/files': [
+        { filename: 'content/rezepte/tsukune-yakitori.mdx' },
+        { filename: 'public/images/rezepte/tsukune-yakitori.jpg' },
+        { filename: 'data/bildregister.yaml' },
+      ],
+    })
+    expect([...await slugsInOffenenRezeptPRs()]).toEqual(['tsukune-yakitori'])
+  })
+
+  // Die Dateiliste enthaelt hier bewusst eine Rezept-MDX: sonst bliebe der Test
+  // auch dann gruen, wenn der Branch-Filter fehlt (per Mutationstest geprueft).
+  // Ein Hand-PR, der ein bestehendes Rezept korrigiert, ist kein Bot-Nachschub.
+  it('ignoriert PRs, die keine Rezept-PRs sind — auch wenn sie ein Rezept anfassen', async () => {
+    stub({
+      '/pulls?state=open': [{ number: 142, head: { ref: 'fix/kochwissen-csv-nachziehen' } }],
+      '/pulls/142/files': [{ filename: 'content/rezepte/tsukune-yakitori.mdx' }],
+    })
+    expect((await slugsInOffenenRezeptPRs()).size).toBe(0)
+  })
+
+  // Der eigentliche Grund fuer die API statt der Branch-Liste: ein geschlossener
+  // PR laesst seinen Branch stehen. Wer Branches liest, haelt dessen Rezept fuer
+  // ewig "in Arbeit" und erzeugt es nie wieder. state=open kennt den Unterschied.
+  it('meldet nichts, wenn kein Rezept-PR offen ist (geschlossene Branches zaehlen nicht)', async () => {
+    stub({ '/pulls?state=open': [] })
+    expect((await slugsInOffenenRezeptPRs()).size).toBe(0)
+  })
+
+  it('gibt bei API-Fehler eine leere Menge zurueck, statt den Lauf abzubrechen', async () => {
+    stub({ '/pulls?state=open': 503 })
+    await expect(slugsInOffenenRezeptPRs()).resolves.toEqual(new Set())
+  })
+
+  it('faengt auch einen Netzwerkfehler ab', async () => {
+    stub({ '/pulls?state=open': new Error('getaddrinfo ENOTFOUND') })
+    await expect(slugsInOffenenRezeptPRs()).resolves.toEqual(new Set())
+  })
+
+  it('uebergeht einen PR, dessen Dateiliste nicht lesbar ist, und wertet die anderen aus', async () => {
+    stub({
+      '/pulls?state=open': [
+        { number: 116, head: { ref: 'bot/rezept-20260916-0847' } },
+        { number: 121, head: { ref: 'bot/rezept-20260917-0849' } },
+      ],
+      '/pulls/116/files': 500,
+      '/pulls/121/files': [{ filename: 'content/rezepte/saba-shioyaki.mdx' }],
+    })
+    expect([...await slugsInOffenenRezeptPRs()]).toEqual(['saba-shioyaki'])
   })
 })
