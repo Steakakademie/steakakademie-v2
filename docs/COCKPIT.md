@@ -183,8 +183,8 @@ mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).
 *07.09.:* Verteilplan für Reel 1 liegt (`Projects/Steakakademie/Marketing/VERTEILPLAN-Reel-1-2026-09-06.md`,
 0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
-**Offen, nur Uwe:** Claim „Geiler Scheiss" — Reel als Einzelstück oder Marke (Befund liegt); Digistore-
-Produkt fürs Diplom anlegen und in `digistore_products` auf `grillmeister-diplom` mappen. **Nebenbefund:**
+**Offen, nur Uwe:** Digistore-Produkt fürs Diplom anlegen und in `digistore_products` auf
+`grillmeister-diplom` mappen. **Nebenbefund:**
 Digistore-Produkt 695900 (Agentur-Killer-Sprint, aktiv, approved) hat keine Zeile in `digistore_products`
 und keinen Kurs — ein Kauf dort würde derzeit nichts freischalten.
 
