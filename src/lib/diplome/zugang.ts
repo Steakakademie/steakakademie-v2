@@ -26,7 +26,7 @@ export type DiplomZugang = {
  * lernen/[stufe]/[lektion]/page.tsx.
  */
 export async function diplomZugang(): Promise<DiplomZugang> {
-  const admin = istAdminPasswort(cookies().get('admin_auth')?.value);
+  const admin = istAdminPasswort((await cookies()).get('admin_auth')?.value);
 
   // Ohne Supabase-Umgebung (Build-Gate, frische Preview) gibt es keine
   // Buchungspruefung — dann zaehlt nur der Admin-Cookie. Nie werfen: die
@@ -36,7 +36,7 @@ export async function diplomZugang(): Promise<DiplomZugang> {
   }
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { userId: null, admin, zugang: admin };
     if (admin) return { userId: user.id, admin, zugang: true };

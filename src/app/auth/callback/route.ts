@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   if (errParam) return fail(errParam);
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 1) Magic-Link / E-Mail-OTP (token_hash → verifyOtp; funktioniert geräteübergreifend, kein Code-Verifier nötig)
   if (tokenHash && type) {

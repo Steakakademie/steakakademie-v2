@@ -22,7 +22,7 @@ export async function requireCourseAccess(
   courseSlug: string,
   routePath:  string,
 ): Promise<CourseAccess> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

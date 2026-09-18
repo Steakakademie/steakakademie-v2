@@ -8,7 +8,7 @@ import { getAllProducts } from '@/lib/products';
 import type { ProductCategory } from '@/types';
 
 interface Props {
-  params: { slug: string; recipe: string };
+  params: Promise<{ slug: string; recipe: string }>;
 }
 
 const EQUIPMENT_CATEGORY: Partial<Record<string, ProductCategory>> = {
@@ -26,7 +26,8 @@ export async function generateStaticParams() {
   return allRecipes.map((r) => ({ slug: r.kategorie, recipe: r.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const recipe = allRecipes.find(
     (r) => r.kategorie === params.slug && r.slug === params.recipe
   );
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function RecipePage({ params }: Props) {
+export default async function RecipePage(props: Props) {
+  const params = await props.params;
   const recipe = allRecipes.find(
     (r) => r.kategorie === params.slug && r.slug === params.recipe
   );

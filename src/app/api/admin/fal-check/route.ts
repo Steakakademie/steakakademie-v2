@@ -9,7 +9,7 @@ import { cookies } from 'next/headers';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  if (!istAdminPasswort(cookies().get('admin_auth')?.value)) {
+  if (!istAdminPasswort((await cookies()).get('admin_auth')?.value)) {
     return NextResponse.json({ error: 'Unauthorized — erst /admin/login' }, { status: 401 });
   }
   const k = process.env.FAL_KEY ?? '';

@@ -15,6 +15,19 @@
 > sonst — die frueher dafuer genutzte memory.md ist am 27.08.2026 entfernt (§ 6).
 
 **Bauen und Pruefen**
+- **Next 16 seit 17.09.2026 (PR chore/nextjs-16-upgrade), vorher 14.2.35 (EOL).**
+  Was sich fuer jede Session aendert: (1) `npm run build` und `npm run dev` laufen
+  **mit `--webpack`** — Turbopack ist in Next 16 Standard, aber `next-contentlayer2`
+  loest `contentlayer/generated` darunter nicht auf (offenes Issue timlrx/contentlayer2#74).
+  Nie das `--webpack` aus den Scripts entfernen, ohne das Issue geprueft zu haben.
+  (2) `next lint` gibt es nicht mehr, `next build` lintet nicht mehr: Linting ist
+  `npm run lint` (ESLint 9 Flat Config, `eslint.config.mjs`, nur `src/`). ESLint 10
+  bricht mit dem gebuendelten eslint-plugin-react — auf 9.x bleiben.
+  (3) `src/middleware.ts` heisst `src/proxy.ts` (Export `proxy`, Runtime Node).
+  (4) `cookies()`, `headers()`, `params`, `searchParams` sind **asynchron** —
+  `await createClient()` fuer den Supabase-Server-Client, `await props.params` in
+  Pages. (5) `next dev` schreibt nach `.next/dev`, `next build` nach `.next` — die
+  alte Regel „nach dem Build `.next` loeschen, bevor `dev` startet" ist damit hinfaellig.
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
   Binaries (esbuild, swc) starten unter Linux nicht. **Im Arbeitsbaum selbst** kann
   eine Linux-Session deshalb nur lesen, aendern und Skripte pruefen.
@@ -356,7 +369,7 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Variante B (`/home-b`) hat ein eigenes Layout und ist von diesem Tausch nicht
    berührt.
    **A/B-Test „Editorial Ember" (seit 26.08.2026):** `/` wird per Cookie `sa_ab_home`
-   50/50 gesplittet (src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
+   50/50 gesplittet (src/proxy.ts, bis Next 16 src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
    (noindex, Canonical auf `/`): dieselbe page.tsx, eingehüllt in den hellen
    `.theme-ember`-Layer (globals.css, Palette aus texasmonthly-ref/ideas.md „Editorial
    Ember"). Inhalte + Doktrin-Reihenfolge identisch — das Gate prüft weiterhin die eine

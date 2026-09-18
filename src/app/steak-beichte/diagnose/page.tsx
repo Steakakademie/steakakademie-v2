@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const ROUTE = '/steak-beichte/diagnose';
 
 export default async function DiagnosePage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

@@ -10,14 +10,15 @@ import { nurVeroeffentlicht } from '@/lib/redaktion';
 import { breadcrumbSchema, FOUNDER_ID, ORGANIZATION_ID } from '@/lib/schema';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
   return getAllAuthors().map((a) => ({ slug: a.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const author = getAuthorBySlug(params.slug);
   if (!author) return {};
   return {
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function AutorPage({ params }: Props) {
+export default async function AutorPage(props: Props) {
+  const params = await props.params;
   const author = getAuthorBySlug(params.slug);
   if (!author) notFound();
 

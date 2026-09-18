@@ -1,3 +1,4 @@
+import { use } from "react";
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,7 +34,8 @@ import { skMdx, Crumbs, Weiche } from '@/components/relaunch/Prose';
  * Nicht übernommen (Entscheidung offen, Handoff schweigt): CookCoach,
  * AromaPairing, BBQPairing, Rezept-Einreichung. Siehe docs/website-relaunch-2026-09.md.
  */
-type Props = { params: { kategorie: string; slug: string } };
+type Params = { kategorie: string; slug: string };
+type Props = { params: Promise<Params> };
 
 const EQUIPMENT_CATEGORY: Record<string, ProductCategory> = {
   thermometer: 'thermometer', grill: 'grill', smoker: 'smoker', 'sous-vide': 'sous-vide',
@@ -50,7 +52,7 @@ function dauer(iso: string): string {
   return `${min} Min.`;
 }
 
-function finde(params: Props['params']) {
+function finde(params: Params) {
   return allRecipes.find((r) => r.kategorie === params.kategorie && r.slug === params.slug);
 }
 
@@ -58,13 +60,15 @@ export function generateStaticParams() {
   return allRecipes.map((r) => ({ kategorie: r.kategorie, slug: r.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const r = finde(params);
   if (!r) return {};
   return { title: r.seoTitle ?? r.title, description: r.seoDescription ?? r.description };
 }
 
-export default function RezeptSeite({ params }: Props) {
+export default function RezeptSeite(props: Props) {
+  const params = use(props.params);
   const r = finde(params);
   if (!r) notFound();
   const MDXContent = useMDXComponent(r.body.code);

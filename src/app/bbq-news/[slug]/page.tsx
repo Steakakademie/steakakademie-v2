@@ -36,7 +36,7 @@ export const revalidate = 3600;
 export const dynamicParams = true;
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -44,7 +44,8 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const item = await getNewsBySlug(params.slug);
   if (!item) return {};
   const url = `https://steakakademie.de/bbq-news/${item.slug}`;
@@ -64,7 +65,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BbqNewsDetailPage({ params }: Props) {
+export default async function BbqNewsDetailPage(props: Props) {
+  const params = await props.params;
   const item = await getNewsBySlug(params.slug);
   if (!item) notFound();
 

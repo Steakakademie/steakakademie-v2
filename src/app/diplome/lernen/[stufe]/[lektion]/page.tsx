@@ -14,11 +14,12 @@ import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 
+type Params = { stufe: string; lektion: string };
 interface Props {
-  params: { stufe: string; lektion: string };
+  params: Promise<Params>;
 }
 
-function lessonFrom(params: Props['params']) {
+function lessonFrom(params: Params) {
   const stufeNum = Number(params.stufe.replace('stufe-', ''));
   return allDiplomLektions.find(
     (l) => l.stufe === stufeNum && l.lektionSlug === params.lektion,
@@ -32,7 +33,8 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const l = lessonFrom(params);
   if (!l) return {};
   const title = l.seoTitle ?? l.title;
@@ -81,7 +83,8 @@ const mdxComponents = {
  * (LektionSeite) bleibt synchron, weil useMDXComponent ein Hook ist und Hooks
  * in async-Komponenten nicht erlaubt sind.
  */
-export default async function DiplomLektionPage({ params }: Props) {
+export default async function DiplomLektionPage(props: Props) {
+  const params = await props.params;
   const lektion = lessonFrom(params);
   if (!lektion) notFound();
 

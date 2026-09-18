@@ -112,7 +112,7 @@ export default async function EhrlichesSystemPage() {
   // Preise aus Supabase — niemals hardcoden (Preisangabenverordnung)
   let courseData: Record<string, Course> = {};
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from('courses')
       .select('slug, price, published')
