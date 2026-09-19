@@ -6,7 +6,7 @@
 
 ## Was es ist
 
-Umkreissuche nach Hofläden/Direktvermarktern in Deutschland — Ort oder PLZ eingeben,
+Umkreissuche nach Hofläden/Direktvermarktern in Deutschland, Österreich und der Schweiz (seit 19.09.2026) — Ort oder PLZ eingeben,
 Radius 10/25/50/100 km, Filter „nur Höfe mit belegtem Fleischangebot", Trefferliste
 mit Entfernung, Karte (Klick-zum-Laden), Profilseite je Hof (`/hoefe/[slug]`).
 Datenbasis: OpenStreetMap `shop=farm`, wöchentlich importiert. **Stand 13.09.2026
@@ -100,3 +100,10 @@ meldete `hoefe_touch_geaendert()` als einzige der drei Funktionen ohne festes
   Consent-Overlay rendern auch ohne). Vitest: 12 Tests grün.
 - Verhalten des Import-Workflows in GitHub Actions (nur lokaler Trockenlauf +
   Upsert gegen PG 16 mit den 5.974 echten Zeilen).
+
+## Erweiterung DACH (19.09.2026)
+
+- Overpass-Abfrage: `area["ISO3166-1"~"^(DE|AT|CH)$"]` statt nur DE; Plausibilitäts-Box `imDachRaum()` (45,5–55,5° N / 5,5–17,5° O) in `scripts/lib/hoefe-osm.mjs` und `src/lib/hoefe/geocode.ts` — beide gleich halten.
+- Geocoding: MapTiler `country=de,at,ch`, Nominatim `countrycodes=de,at,ch`. Reine PLZ: 5-stellig → DE, 4-stellig → AT/CH (mehrdeutig, z. B. 1010 Wien vs. 1010 Lausanne — der Geocoder nimmt den bekanntesten Treffer, das Label zeigt das Land; Nominatim-Test: 1010 → Wien, 8001 → Zürich, 6020 → Innsbruck).
+- Karte: maxBounds Ost auf 17,5° (Burgenland).
+- Keine DB-Änderung nötig (Umkreis-RPC ist länderneutral). AT/CH-Höfe erscheinen nach dem nächsten Import-Lauf.

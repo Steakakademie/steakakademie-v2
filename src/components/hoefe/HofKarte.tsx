@@ -25,9 +25,9 @@ export const MAPTILER_STYLE = 'streets-v2-dark';
 // im Free-Tier (5.000 Sessions/Monat), siehe project_hofladen_radar_* .
 const DACH_BOUNDS: L.LatLngBoundsExpression = [
   [45.5, 4.5], // Suedwest
-  [55.5, 16.5], // Nordost
+  [55.5, 17.5], // Nordost (Burgenland reicht bis 17,2° O)
 ];
-const MIN_ZOOM = 6; // zeigt noch ganz Deutschland
+const MIN_ZOOM = 6; // zeigt noch den ganzen DACH-Raum
 const MAX_ZOOM = 17; // Strassenebene reicht fuer Hofladen-Adressen
 
 const ICON_STANDARD = L.divIcon({
