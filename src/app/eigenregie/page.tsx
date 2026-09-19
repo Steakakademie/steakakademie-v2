@@ -1,510 +1,302 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  ChevronRight, CheckCircle, ArrowRight, Clock, Shield,
-  Github, Globe, Code2, Zap, Lock, Unlock,
-} from 'lucide-react';
+import { ChevronRight, CheckCircle2, XCircle, ArrowRight, Lock, CalendarClock, Users } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ogImages } from '@/lib/og';
+import { angebotFuer, euro, CHECKOUT_URL, PILOT_ENDE, PILOT_PLAETZE, PILOT_PREIS, REGULAERER_PREIS } from '@/lib/eigenregie/angebot';
+import { vergebenePlaetze } from '@/lib/eigenregie/plaetze.server';
+import { KOSTEN } from '@/lib/eigenregie/diagnose';
+import { allEigenregieModuls } from 'contentlayer/generated';
 
 export const metadata: Metadata = {
-  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
-  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut. CLAUDE.md Abschnitt 10.
   robots: { index: false, follow: false },
-  title: 'Eigenregie: Full-Ownership in 72h',
+  title: 'Eigenregie: Deine Website in deiner Hand',
   description:
-    'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
+    'Geführter Selbstbau-Kurs: Du holst deine Website in ein eigenes Projekt — eigene Konten, eigener Code, eigene Domain. Diagnose plus sechs Module mit prüfbaren Ergebnissen.',
   alternates: { canonical: 'https://steakakademie.de/eigenregie' },
   openGraph: {
     images: ogImages('Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.'),
     title: 'Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.',
-    description:
-      'Raus aus der Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
+    description: 'Eigene Konten, eigener Code, eigene Domain. Geführter Selbstbau mit Claude Code — ehrlich kalkuliert.',
     url: 'https://steakakademie.de/eigenregie',
     type: 'website',
   },
 };
 
-const DELIVERABLES = [
-  {
-    Icon: Github,
-    title: 'GitHub-Ownership aufsetzen',
-    desc: 'Dein Repository, dein Code, deine Zugangsdaten. Nie wieder darauf angewiesen sein, dass jemand anderes dir den Zugang gewährt.',
-  },
-  {
-    Icon: Code2,
-    title: 'Website-Migration zu Next.js',
-    desc: 'Von WordPress, Webflow, Wix oder einer beliebigen Agentur-Lösung zu einem sauberen Next.js-Projekt — in deiner Hand, im eigenen Repo.',
-  },
-  {
-    Icon: Globe,
-    title: 'Vercel-Deployment + DNS',
-    desc: 'Hosting auf Vercel (EU-Rechenzentrum, DSGVO-konform), Cloudflare für DNS und CDN. Kostenlos bis zu ehrlichen Traffic-Volumen.',
-  },
-  {
-    Icon: Zap,
-    title: 'Claude Code als dauerhaftes Werkzeug',
-    desc: 'Einrichtung und Nutzung von Claude Code als dein persönlicher Entwicklungspartner. Änderungen ohne Agentur — auch ohne Programmierkenntnisse.',
-  },
-  {
-    Icon: Shield,
-    title: 'Rechtssichere Basisstruktur',
-    desc: 'Impressum, Datenschutzerklärung, Cookie-Hinweis — DSGVO-konform in die neue Website integriert. Nicht "irgendwie", sondern korrekt.',
-  },
-  {
-    Icon: CheckCircle,
-    title: 'Übergabe-Protokoll',
-    desc: 'Du bist der Administrator. Schritt-für-Schritt-Dokumentation: wie du Änderungen vornimmst, wie du deployed, wie du Probleme eigenständig löst.',
-  },
+/** Preis/Plätze serverseitig, alle 5 Minuten neu — für jeden Besucher identisch. */
+export const revalidate = 300;
+
+/**
+ * Verkauf erst an, wenn der Testkauf durch ist (Uwe, 19.09.2026: „Ein Testkauf, dann wieder aktiv schalten“).
+ * Schalter: Vercel-Env NEXT_PUBLIC_EIGENREGIE_VERKAUF=an (alle Umgebungen) + Redeploy.
+ */
+const VERKAUF_AN = process.env.NEXT_PUBLIC_EIGENREGIE_VERKAUF === 'an';
+/** Redaktionsvorbehalt: ohne Freigabe aller sechs Module kein Kaufbutton — egal, was der Schalter sagt. */
+const INHALT_FREIGEGEBEN =
+  allEigenregieModuls.length === 6 && allEigenregieModuls.every((m) => m.status === 'published' && m.reviewed);
+
+const MODULE = [
+  { nr: 0, titel: 'Diagnose und Zielbild', ergebnis: 'Dein persönlicher Weg: Reihenfolge, Zeitplan, Werkzeugkosten.' },
+  { nr: 1, titel: 'Ownership: Konten, Domain, Repository', ergebnis: 'Alle Zugänge nachweislich in deiner Hand, eigenes Code-Repository.' },
+  { nr: 2, titel: 'Migration in ein eigenes Projekt', ergebnis: 'Deine Seite läuft lokal in neuer Form, alle alten Adressen abgebildet.' },
+  { nr: 3, titel: 'Live gehen ohne Ausfall', ergebnis: 'Deine Domain zeigt auf dein Projekt — E-Mail und Weiterleitungen geprüft.' },
+  { nr: 4, titel: 'Claude Code als dauerhaftes Werkzeug', ergebnis: 'Drei Änderungen selbst umgesetzt und veröffentlicht.' },
+  { nr: 5, titel: 'Rechtssichere Basis', ergebnis: 'Impressum, Datenschutz, Einwilligung und Verträge mit Dienstleistern sauber aufgestellt.' },
+  { nr: 6, titel: 'Übergabe an dich selbst', ergebnis: 'Dein Betriebs-Handbuch, Sicherungen und eine 30-Minuten-Monatsroutine.' },
 ];
 
-const COMPARISON = [
-  { aspect: 'Monatliche Kosten', mit: 'Wartungsvertrag: 300–800€/Monat', ohne: '0€ — vollständig self-hosted' },
-  { aspect: 'Änderungen', mit: 'Ticket stellen, warten, zahlen', ohne: 'Sofort selbst vornehmen' },
-  { aspect: 'Code-Zugang', mit: 'Liegt bei der Agentur', ohne: 'Dein GitHub-Repository' },
-  { aspect: 'Agenturwechsel', mit: 'Projekt neu beginnen, Daten verlieren', ohne: 'Du hast alles — kein Wechsel nötig' },
-  { aspect: 'Weiterentwicklung', mit: 'Budget beantragen, Angebot einholen', ohne: 'Claude Code, sofort' },
+const FUER_DICH = [
+  'Du bist selbstständig und willst deine Website selbst ändern können — ohne Ticket und Wartezeit.',
+  'Du willst Domain, Code und Zugänge im eigenen Besitz haben.',
+  'Du hast 2–5 Stunden pro Woche und scheust dich nicht vor neuen Werkzeugen.',
+];
+const NICHT_FUER_DICH = [
+  'Du willst gar nicht selbst bauen — dann ist eine Umsetzung durch einen Dienstleister ehrlicher.',
+  'Du brauchst einen großen Shop mit Warenwirtschaft oder ein Mitgliederportal.',
+  'Du hast noch kein Gewerbe angemeldet — dann zuerst die Gründung.',
 ];
 
 const FAQ = [
-  {
-    q: 'Muss ich programmieren können?',
-    a: 'Nein. Du brauchst keine Programmierkenntnisse. Claude Code übernimmt die technische Umsetzung. Du lernst, wie du Aufgaben stellst — nicht wie du Code schreibst.',
-  },
-  {
-    q: 'Was passiert mit meinem bestehenden Design?',
-    a: 'Das bestehende Design wird in die neue Struktur übertragen. Der Fokus liegt auf Ownership — nicht auf einem neuen Look. Deine Marke bleibt.',
-  },
-  {
-    q: 'Wie lange dauert die Migration wirklich?',
-    a: 'Bei einem normalen Business-Auftritt (5–15 Seiten) drei fokussierte Arbeitstage. Komplexere Shops oder Portale dauern länger — Eigenregie deckt die Infrastruktur und Basisseiten.',
-  },
-  {
-    q: 'Mein Hosting-Vertrag läuft noch — was tue ich?',
-    a: 'Das ist kein Hindernis. Die neue Infrastruktur kann parallel aufgebaut werden. Der Umzug der Domain erfolgt dann zum gewünschten Zeitpunkt — ohne Downtime.',
-  },
-  {
-    q: 'Was ist mit WordPress-Seiten?',
-    a: 'WordPress-Inhalte lassen sich exportieren und in Next.js überführen. Eigenregie hat einen klaren Fokus auf statische und semi-dynamische Unternehmenswebsites — kein komplexes LMS oder Membership-System.',
-  },
-  {
-    q: 'Gibt es Support nach der Umstellung?',
-    a: 'Direkter E-Mail-Kontakt über info@steakakademie.de. Du bekommst außerdem Zugang zum vollständigen Übergabe-Protokoll — damit du bei zukünftigen Fragen eigenständig agieren kannst.',
-  },
+  { q: 'Muss ich programmieren können?', a: 'Nein. Claude Code schreibt den Code, du lernst, klare Aufträge zu geben und Ergebnisse zu prüfen. Sicherer Umgang mit dem Computer reicht; die Diagnose sagt dir vorab, wie viel Zeit das bei dir braucht.' },
+  { q: 'Was kostet das neben dem Kurs?', a: `Claude Code läuft nur mit einem kostenpflichtigen Claude-Tarif (Pro, ca. ${KOSTEN.claudePro} €/Monat, Preis in US-Dollar, Stand 09/2026). Hosting kostet 0 € (Netlify Free, gewerblich erlaubt, Kontingent begrenzt) oder ca. ${KOSTEN.hostingMax} €/Monat (Vercel Pro — der kostenlose Vercel-Tarif ist nur für private Seiten erlaubt). GitHub, Cloudflare und Bitwarden laufen kostenlos. Deine Domain bezahlst du wie bisher.` },
+  { q: 'Wie lange dauert das wirklich?', a: 'Bei einem Auftritt mit 5–15 Seiten meist 15–25 Arbeitsstunden, verteilt auf einige Wochen. Die Diagnose rechnet dir das mit deiner verfügbaren Zeit aus — ohne Schönfärberei.' },
+  { q: 'Mein Vertrag mit dem bisherigen Anbieter läuft noch — was tun?', a: 'Kein Hindernis. Du baust parallel auf und schaltest um, wenn alles steht. Modul 3 zeigt den Umschaltplan inklusive Rückweg, damit Website und E-Mail durchgehend erreichbar bleiben.' },
+  { q: 'Was bedeutet „Pilotgruppe“?', a: `Die ersten ${PILOT_PLAETZE} Teilnehmer bekommen während ihres Durchlaufs Rückfragen per E-Mail direkt beantwortet. Dafür bitten wir um ehrliches Feedback. Die Begrenzung ist echt: Mehr lässt sich persönlich nicht begleiten.` },
+  { q: 'Bekomme ich Rechtsberatung?', a: 'Nein. Modul 5 zeigt, welche Pflichten es gibt und wie du sie umsetzt — aus der Praxis, nicht als Rechtsberatung. Bei Unsicherheit gehört die Frage zu Anwalt, IHK oder Handwerkskammer.' },
 ];
 
-export default async function EigenregiePage() {
-  // Preisabruf und eur() entfernt (04.09.2026): Seit die Preisangabe raus ist,
-  // hat die Supabase-Abfrage keinen Abnehmer mehr und lief pro Aufruf ins Leere.
-  // Gleiches Vorgehen wie bei /erste-kunden-sprint und /seo-sprint (2f27717).
-
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: FAQ.map(({ q, a }) => ({
-      '@type': 'Question',
-      name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
-    })),
-  };
+export default async function EigenregiePage(props: { searchParams: Promise<{ locked?: string }> }) {
+  const { locked } = await props.searchParams;
+  const verkauft = await vergebenePlaetze();
+  const angebot = angebotFuer(new Date(), verkauft);
+  const endeText = PILOT_ENDE.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Berlin' });
+  const kaufbar = VERKAUF_AN && INHALT_FREIGEGEBEN && !angebot.ausverkauft;
 
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Eigenregie',
-    description:
-      'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel in 72 Stunden.',
+    description: 'Geführter Selbstbau-Kurs: Website in ein eigenes Projekt holen — eigene Konten, eigener Code, eigene Domain.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      // PreOrder (04.09.2026, Verifier-Befund): InStock war eine strukturierte
-      // Falschangabe — der Checkout fuer 695900 ist bewusst aus ("wuerde
-      // kassieren ohne Auslieferung", siehe src/app/mein-system/page.tsx), und
-      // Schema.org wird nicht nur von Googlebot gelesen, noindex schuetzt davor
-      // nicht. Am 03.09. zunaechst auf Discontinued gesetzt; das widerspricht
-      // aber der Seite selbst, die "In Vorbereitung" und "bald buchbar" sagt.
-      // Massstab ist dasselbe Kriterium wie bei /erste-kunden-sprint: in
-      // Vorbereitung = PreOrder, eingestellt = Discontinued.
-      // Preis bleibt raus: kein Preis fuer etwas, das man nicht kaufen kann.
-      availability: 'https://schema.org/PreOrder',
+      price: angebot.preis,
+      ...(angebot.pilot ? { priceValidUntil: '2026-10-31' } : {}),
+      availability: kaufbar ? 'https://schema.org/InStock' : angebot.ausverkauft ? 'https://schema.org/SoldOut' : 'https://schema.org/PreOrder',
+      url: 'https://steakakademie.de/eigenregie',
     },
   };
-
-  const breadcrumbSchema = {
+  const faqJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://steakakademie.de' },
-      { '@type': 'ListItem', position: 2, name: 'Das Ehrliche System', item: 'https://steakakademie.de/ehrliches-system' },
-      { '@type': 'ListItem', position: 3, name: 'Eigenregie', item: 'https://steakakademie.de/eigenregie' },
-    ],
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   };
 
   return (
     <>
       <Header />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <main className="bg-surface-base">
+        {locked ? (
+          <div className="bg-brand-gold/10 border-b border-brand-gold/30">
+            <p className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3 font-sans text-sm text-text-primary flex items-center gap-2">
+              <Lock size={14} /> Der Kursbereich ist nur mit gekauftem Zugang erreichbar. Schon gekauft? Melde dich mit der E-Mail-Adresse deiner Bestellung an.
+            </p>
+          </div>
+        ) : null}
 
-        {/* ── Hero ──────────────────────────────────────────────────────────── */}
-        <section className="bg-surface-dark border-b border-brand-gold/15">
+        {/* Hero */}
+        <section className="bg-surface-dark border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <nav
-              className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-8"
-              aria-label="Breadcrumb"
-            >
-              <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/50 mb-8" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-brand-gold">Start</Link>
               <ChevronRight size={12} />
-              <Link href="/ehrliches-system" className="hover:text-brand-gold transition-colors">
-                Das Ehrliche System
-              </Link>
-              <ChevronRight size={12} />
-              <span className="text-text-light/65">Eigenregie</span>
+              <span>Eigenregie</span>
             </nav>
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-gold mb-4">Geführter Selbstbau · Diagnose + 6 Module</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.05] mb-6">
+              Dein Business „KOMPLETT“<br />in Eigenregie.
+            </h1>
+            <p className="font-body text-lg lg:text-xl text-text-light/75 max-w-2xl leading-relaxed mb-8">
+              Deine Website, dein Code, deine Zugänge. Du holst deinen Auftritt Schritt für Schritt in ein eigenes Projekt —
+              und änderst ihn danach selbst, mit Claude Code als Werkzeug.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/eigenregie/diagnose" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-white font-sans font-bold">
+                Kostenlose Diagnose starten <ArrowRight size={16} />
+              </Link>
+              <a href="#kaufen" className="inline-flex items-center gap-2 px-6 py-3 border border-text-light/30 text-text-light font-sans font-bold hover:border-brand-gold">
+                Preis und Pilotgruppe
+              </a>
+            </div>
+          </div>
+        </section>
 
-            <div className="max-w-3xl">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Säule III — Eigenregie
-              </span>
-              <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
-                Dein Business „KOMPLETT“<br className="hidden lg:block" />
-                in Eigenregie.
-              </h1>
-              <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                Deine Website. Dein Code. Unabhängig in 72 Stunden. Kein Wartungsvertrag
-                mehr, keine monatlichen Gebühren, keine Agentur, die dir deinen eigenen
-                Code verweigert.
+        {/* Problem */}
+        <section className="border-b border-border-subtle">
+          <div className="max-w-content mx-auto px-4 sm:px-6 py-16">
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">Worum es geht</p>
+            <h2 className="font-serif text-3xl font-bold text-text-primary mb-6">Wer die Zugänge hat, hat die Kontrolle.</h2>
+            <div className="space-y-4 font-body text-lg text-text-secondary leading-relaxed">
+              <p>
+                Viele Selbstständige wissen nicht genau, wo ihre Domain registriert ist, wer das Passwort zum Hosting hat und wo der
+                Code ihrer Seite liegt. Solange alles läuft, fällt das nicht auf. Beim ersten Wechsel, Streit oder Ausfall schon.
               </p>
-              <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Full-Ownership-Migration zu GitHub, Next.js und Vercel. Einmal aufgesetzt —
-                für immer unabhängig. Claude Code als dein dauerhaftes Werkzeug für alle
-                zukünftigen Änderungen.
+              <p>
+                Eigenregie ändert genau das: Zuerst holst du alle Zugänge zu dir. Dann baust du deine Seite in einem Projekt nach, das
+                dir gehört — und lernst, sie selbst zu pflegen. Nicht als Theorie, sondern mit einem prüfbaren Ergebnis am Ende jedes Moduls.
               </p>
+            </div>
+          </div>
+        </section>
 
-              <div className="flex flex-wrap gap-6">
-                {[
-                  { icon: <Unlock size={14} />, text: 'Vollständige Code-Kontrolle ab Tag 1' },
-                  { icon: <Clock size={14} />, text: 'Migration in 72 Arbeitsstunden' },
-                  { icon: <Lock size={14} />, text: 'Nie wieder Agentur-Abhängigkeit' },
-                ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/55">
-                    <span className="text-brand-gold">{icon}</span>
-                    {text}
-                  </div>
+        {/* Module */}
+        <section className="border-b border-border-subtle bg-surface-card/40">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">Der Aufbau</p>
+            <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">Sieben Schritte. Jeder endet mit einem Ergebnis.</h2>
+            <ol className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {MODULE.map((m) => (
+                <li key={m.nr} className="border border-border-subtle bg-surface-base p-6">
+                  <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-2">Modul {m.nr}</p>
+                  <h3 className="font-serif text-lg font-bold text-text-primary mb-2">{m.titel}</h3>
+                  <p className="flex items-start gap-2 font-body text-sm text-text-secondary">
+                    <CheckCircle2 size={16} className="text-brand-gold shrink-0 mt-0.5" /> {m.ergebnis}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Für wen */}
+        <section className="border-b border-border-subtle">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-text-primary mb-5">Passt, wenn …</h2>
+              <ul className="space-y-3">
+                {FUER_DICH.map((t) => (
+                  <li key={t} className="flex items-start gap-3 font-body text-text-secondary"><CheckCircle2 size={18} className="text-brand-gold shrink-0 mt-0.5" /> {t}</li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </div>
-        </section>
-
-        {/* ── Problem ───────────────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Das Problem
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-text-primary mb-8">
-                Du bezahlst jeden Monat —<br />
-                für deine eigene Website.
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
-                <div className="space-y-4">
-                  <p>
-                    Wartungsvertrag 300 Euro im Monat. Für was genau? Damit die Seite online
-                    bleibt. Damit du nicht selbst rein musst. Damit jemand anderes die Kontrolle
-                    behält — über deinen Auftritt, deine Inhalte, deinen Code.
-                  </p>
-                  <p>
-                    Eine Textänderung? Ticket stellen. Drei Tage warten. Rechnung über
-                    80 Euro. Eine neue Seite? Angebot einholen. Vier Wochen warten.
-                    Rechnung über 1.200 Euro.
-                  </p>
-                </div>
-                <div className="space-y-4">
-                  <p>
-                    Das Schlimmste: Bei einem Agenturwechsel verlierst du alles. Der Code
-                    liegt auf deren Servern. Das Repository gehört ihnen. Du fängst von vorne an.
-                  </p>
-                  <p>
-                    Das muss nicht so sein. Moderne Infrastruktur — GitHub, Next.js, Vercel —
-                    kostet null Euro im Monat und gibt dir die vollständige Kontrolle.
-                    Eigenregie zeigt dir wie.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Vergleich ─────────────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle bg-surface-dark">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-6">
-                Der Unterschied
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-text-light mb-8">
-                Mit Agentur vs. in Eigenregie
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-border-subtle">
-                      <th className="text-left py-3 pr-6 text-xs font-sans font-bold tracking-[0.12em] uppercase text-text-muted w-1/3">Aspekt</th>
-                      <th className="text-left py-3 pr-6 text-xs font-sans font-bold tracking-[0.12em] uppercase text-text-muted w-1/3">
-                        <span className="text-red-400/70">Mit Agentur</span>
-                      </th>
-                      <th className="text-left py-3 text-xs font-sans font-bold tracking-[0.12em] uppercase text-text-muted w-1/3">
-                        <span className="text-green-400/70">In Eigenregie</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border-subtle/40">
-                    {COMPARISON.map(({ aspect, mit, ohne }) => (
-                      <tr key={aspect}>
-                        <td className="py-4 pr-6 text-sm font-sans font-medium text-text-light/70">{aspect}</td>
-                        <td className="py-4 pr-6 text-sm font-body text-text-light/40">{mit}</td>
-                        <td className="py-4 text-sm font-body text-green-400/80">{ohne}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Was du bekommst ───────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="mb-12">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
-                Was du bekommst
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-text-primary mb-3">
-                Sechs Module. Ein Ergebnis: Unabhängigkeit.
-              </h2>
-              <p className="font-body text-text-secondary max-w-xl">
-                Jedes Modul schließt mit einem greifbaren Ergebnis. Am Ende der drei Tage
-                bist du Administrator deiner eigenen digitalen Infrastruktur.
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-text-primary mb-5">Passt nicht, wenn …</h2>
+              <ul className="space-y-3">
+                {NICHT_FUER_DICH.map((t) => (
+                  <li key={t} className="flex items-start gap-3 font-body text-text-secondary"><XCircle size={18} className="text-text-muted shrink-0 mt-0.5" /> {t}</li>
+                ))}
+              </ul>
+              <p className="font-body text-sm text-text-muted mt-5">
+                Unsicher? Die <Link href="/eigenregie/diagnose" className="text-brand-fire underline">Diagnose</Link> sagt es dir in drei Minuten — auch, wenn ein anderer Weg besser passt.
               </p>
             </div>
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {DELIVERABLES.map(({ Icon, title, desc }, i) => (
-                <div
-                  key={title}
-                  className="bg-surface-card border border-border-subtle p-6 flex flex-col gap-3"
-                >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="shrink-0 w-8 h-8 flex items-center justify-center font-sans text-xs font-bold"
-                      style={{ background: 'rgba(200,136,42,0.12)', color: '#C8882A' }}
-                    >
-                      {String(i + 1).padStart(2, '0')}
-                    </div>
-                    <Icon size={18} className="text-brand-gold shrink-0 mt-0.5" />
-                  </div>
-                  <h3 className="font-serif text-base font-bold text-text-primary">{title}</h3>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed">{desc}</p>
+        {/* Kosten ehrlich */}
+        <section className="border-b border-border-subtle bg-surface-dark">
+          <div className="max-w-content mx-auto px-4 sm:px-6 py-16">
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-gold mb-3">Ehrlich kalkuliert</p>
+            <h2 className="font-serif text-3xl font-bold text-text-light mb-8">Was es insgesamt kostet</h2>
+            <table className="w-full text-sm">
+              <tbody className="divide-y divide-text-light/10">
+                <tr><td className="py-3 pr-4 font-sans font-bold text-text-light">Kurs Eigenregie</td><td className="py-3 font-body text-text-light/80">einmalig {euro(angebot.preis)}{angebot.pilot ? ` (Pilotpreis, danach ${euro(REGULAERER_PREIS)})` : ''}</td></tr>
+                <tr><td className="py-3 pr-4 font-sans font-bold text-text-light">Claude Pro (für Claude Code)</td><td className="py-3 font-body text-text-light/80">ca. {KOSTEN.claudePro} €/Monat — Pflicht</td></tr>
+                <tr><td className="py-3 pr-4 font-sans font-bold text-text-light">Hosting</td><td className="py-3 font-body text-text-light/80">0 € (Netlify Free) bis ca. {KOSTEN.hostingMax} €/Monat (Vercel Pro)</td></tr>
+                <tr><td className="py-3 pr-4 font-sans font-bold text-text-light">GitHub, Cloudflare, Bitwarden</td><td className="py-3 font-body text-text-light/80">0 €</td></tr>
+                <tr><td className="py-3 pr-4 font-sans font-bold text-text-light">Domain</td><td className="py-3 font-body text-text-light/80">wie bisher</td></tr>
+              </tbody>
+            </table>
+            <p className="font-body text-xs text-text-light/50 mt-4">Werkzeugpreise der Anbieter in US-Dollar, gerundet, Stand 09/2026. Prüfe sie vor der Buchung beim Anbieter.</p>
+          </div>
+        </section>
+
+        {/* Wer */}
+        <section className="border-b border-border-subtle">
+          <div className="max-w-content mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row gap-8 items-start">
+            <Image src="/images/uwe-yendell.jpg" alt="Uwe Yendell" width={128} height={128} className="w-28 h-28 object-cover border border-brand-gold/30" />
+            <div>
+              <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">Wer dahintersteht</p>
+              <h2 className="font-serif text-2xl font-bold text-text-primary mb-3">Uwe Yendell</h2>
+              <p className="font-body text-text-secondary leading-relaxed">
+                Gründer der Steakakademie, Profi-Koch mit Hintergrund in IT und Online-Marketing. Die Steakakademie läuft genau auf dem
+                Weg, den dieser Kurs zeigt: eigenes Repository, Next.js, Cloudflare, gepflegt mit Claude Code — ohne Agentur. Die Fallen,
+                in die man dabei läuft, sind im Kurs als „Umweg vermieden“ an genau der Stelle eingebaut, an der sie auftreten.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Preis + CTA */}
+        <section id="kaufen" className="border-b border-brand-gold/20 bg-brand-gold/5 scroll-mt-20">
+          <div className="max-w-content mx-auto px-4 sm:px-6 py-16">
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">{angebot.pilot ? 'Pilotgruppe' : 'Einmaliger Zugang'}</p>
+            <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">Eigenregie — {euro(angebot.preis)}</h2>
+            {angebot.pilot ? (
+              <div className="font-body text-text-secondary space-y-2 mb-8">
+                <p>
+                  Pilotpreis bis einschließlich {endeText} für höchstens {PILOT_PLAETZE} Teilnehmer — danach {euro(REGULAERER_PREIS)}.
+                  Der Grund für die Begrenzung: Die Pilotgruppe bekommt Rückfragen während des Durchlaufs persönlich beantwortet.
+                </p>
+                <p className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-text-primary">
+                  <span className="inline-flex items-center gap-1.5"><CalendarClock size={15} className="text-brand-fire" /> endet am {endeText}</span>
+                  {angebot.freiePlaetze !== null ? (
+                    <span className="inline-flex items-center gap-1.5"><Users size={15} className="text-brand-fire" /> {angebot.freiePlaetze} von {PILOT_PLAETZE} Plätzen frei</span>
+                  ) : null}
+                </p>
+              </div>
+            ) : (
+              <p className="font-body text-text-secondary mb-8">Einmalzahlung, dauerhafter Zugang zu Diagnose und allen sechs Modulen.</p>
+            )}
+
+            {kaufbar ? (
+              <a href={CHECKOUT_URL} className="inline-flex items-center gap-2 px-8 py-4 bg-brand-fire text-white font-sans font-bold text-base" rel="nofollow">
+                Jetzt für {euro(angebot.preis)} starten <ArrowRight size={18} />
+              </a>
+            ) : (
+              <div>
+                <span className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-base border border-brand-gold/40 text-text-muted cursor-not-allowed" aria-disabled="true">
+                  {angebot.ausverkauft ? 'Pilotplätze vergeben' : 'Verkaufsstart in Kürze'}
+                </span>
+                <p className="font-body text-sm text-text-muted mt-3">
+                  Bis dahin: Mach die <Link href="/eigenregie/diagnose" className="text-brand-fire underline">kostenlose Diagnose</Link>.
+                </p>
+              </div>
+            )}
+
+            <p className="font-body text-xs text-text-muted mt-8 leading-relaxed">
+              Alle Preise inkl. MwSt. Verkauf und Rechnung über Digistore24. <strong className="text-text-primary">Widerrufsrecht:</strong> Bei
+              digitalen Inhalten erlischt das Widerrufsrecht erst, wenn du beim Kauf ausdrücklich zustimmst, dass der Zugang sofort
+              beginnt, und bestätigst, dass du dadurch dein Widerrufsrecht verlierst. Das wird im Bestellvorgang abgefragt.
+            </p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-b border-border-subtle">
+          <div className="max-w-content mx-auto px-4 sm:px-6 py-16">
+            <h2 className="font-serif text-3xl font-bold text-text-primary mb-8">Häufige Fragen</h2>
+            <div className="divide-y divide-border-subtle">
+              {FAQ.map(({ q, a }) => (
+                <div key={q} className="py-5">
+                  <h3 className="font-serif text-lg font-bold text-text-primary mb-2">{q}</h3>
+                  <p className="font-body text-text-secondary leading-relaxed">{a}</p>
                 </div>
               ))}
             </div>
+            <p className="font-body text-xs text-text-muted mt-8">
+              Zum Vergleich der Pilotpreis: {euro(PILOT_PREIS)} gegenüber {euro(REGULAERER_PREIS)} regulär ab 1. November 2026.
+            </p>
           </div>
         </section>
-
-        {/* ── Differenziator ───────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle bg-surface-dark">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <blockquote className="border-l-4 border-brand-gold pl-6 py-2">
-                <p className="font-serif text-xl lg:text-2xl text-text-light italic leading-relaxed">
-                  „72 Stunden von Agentur-Abhängigkeit zu vollständiger Code-Kontrolle.
-                  Das ist kein Versprechen — das ist die Timeline, nach der steakakademie.de
-                  aufgebaut wurde.&quot;
-                </p>
-                <footer className="mt-4 text-sm font-sans text-text-muted">
-                  — Uwe Yendell, Gründer Steakakademie.de
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Autor ────────────────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-6">
-                Wer steckt dahinter
-              </span>
-              <div className="flex flex-col sm:flex-row gap-8 items-start">
-                <div className="shrink-0">
-                  <div
-                    className="w-24 h-24 sm:w-32 sm:h-32 overflow-hidden"
-                    style={{ border: '1px solid rgba(200,136,42,0.28)' }}
-                  >
-                    <Image
-                      src="/images/uwe-yendell.jpg"
-                      alt="Uwe Yendell"
-                      width={128}
-                      height={128}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary mb-1">Uwe Yendell</h3>
-                  <p className="text-sm font-sans text-brand-gold mb-4">
-                    Profi-Koch · Zertifizierter Marketing-Manager · Sport- & Gymnastiklehrer
-                  </p>
-                  <div className="space-y-3 font-body text-sm text-text-secondary leading-relaxed max-w-xl">
-                    <p>
-                      Steakakademie.de läuft auf Next.js, Vercel und Cloudflare — ohne
-                      Agentur, ohne Wartungsvertrag, ohne monatliche Kosten. Dieser Stack
-                      betreibt die Seite, die du gerade liest.
-                    </p>
-                    <p>
-                      Ich habe eine Eventküche verloren, eine Domain verloren, Systeme verloren —
-                      weil sie nicht in meiner Hand lagen. Eigenregie ist die
-                      Konsequenz aus diesen Erfahrungen: ein System, das dir gehört.
-                    </p>
-                    <p>
-                      Kein theoretisches Modell. Das, was ich selbst anwende — dokumentiert,
-                      reproduzierbar, übergeben.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Preis + CTA ──────────────────────────────────────────────────── */}
-        <section
-          id="kaufen"
-          className="border-b border-brand-gold/15"
-          style={{ background: 'linear-gradient(180deg, rgba(200,136,42,0.06) 0%, transparent 100%)' }}
-        >
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
-                <div>
-                  <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
-                    Einmaliger Zugang
-                  </span>
-                  <h2 className="font-serif text-3xl font-bold text-text-primary">
-                    Eigenregie
-                  </h2>
-                  {/* Preis und "Sofortzugang" entfernt (04.09.2026, Verifier-Befund):
-                      Der Checkout fuer 695900 ist aus, die Seite sagt selbst "In
-                      Vorbereitung" — eine Preisangabe mit Zugangsversprechen davor ist
-                      ein Kaufversprechen ohne Kaufweg. Beides kommt mit dem Verkauf
-                      zurueck; der Preis steht weiter in der courses-Tabelle. */}
-                  <p className="text-sm font-sans text-text-muted mt-1">
-                    Preis und Buchung folgen mit dem Verkaufsstart.
-                  </p>
-                </div>
-                <div className="shrink-0">
-                  <span
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base cursor-not-allowed select-none"
-                    style={{ background: 'rgba(200,136,42,0.12)', color: '#9a8a72', border: '1px solid rgba(200,136,42,0.25)' }}
-                    aria-disabled="true"
-                  >
-                    In Vorbereitung
-                  </span>
-                  <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Eigenregie wird derzeit fertiggestellt — bald buchbar.
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="border px-5 py-4"
-                style={{ borderColor: 'rgba(200,136,42,0.2)', background: 'rgba(200,136,42,0.04)' }}
-              >
-                <p className="text-xs font-sans text-text-secondary leading-relaxed">
-                  <strong className="text-text-primary">Hinweis zum Widerrufsrecht:</strong>{' '}
-                  Bei digitalen Inhalten, die nach Zahlung sofort zugänglich gemacht werden,
-                  erlischt das gesetzliche 14-tägige Widerrufsrecht mit Beginn der Bereitstellung,
-                  sofern du dem ausdrücklich zugestimmt hast. Dies wird beim Checkout abgefragt.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-        <section className="border-b border-border-subtle bg-surface-dark">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-content mx-auto">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Häufige Fragen
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-text-light mb-10">FAQ</h2>
-
-              <div className="divide-y divide-border-subtle">
-                {FAQ.map(({ q, a }) => (
-                  <div key={q} className="py-6">
-                    <h3 className="font-serif text-base font-bold text-text-light mb-2">{q}</h3>
-                    <p className="font-body text-sm text-text-light/60 leading-relaxed">{a}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Navigation ───────────────────────────────────────────────────── */}
-        <section>
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="max-w-content mx-auto">
-              <h3 className="font-sans text-xs font-bold tracking-[0.14em] uppercase text-text-muted mb-6">
-                Alle Säulen
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {[
-                  { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: false },
-                  { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
-                  { label: 'Säule III — Eigenregie', href: '/eigenregie', active: true },
-                ].map(({ label, href, active }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="flex items-center gap-2 text-sm font-sans py-3 px-4 border transition-colors"
-                    style={{
-                      borderColor: active ? 'rgba(200,136,42,0.4)' : 'rgba(200,136,42,0.12)',
-                      background: active ? 'rgba(200,136,42,0.08)' : 'transparent',
-                      color: active ? '#C8882A' : 'rgba(255,255,255,0.5)',
-                    }}
-                  >
-                    <ChevronRight size={12} />
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
       </main>
-
       <Footer />
     </>
   );

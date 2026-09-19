@@ -74,10 +74,10 @@ function alarmKassiertOhneAuslieferung(
 const TOOL_REDIRECT: Record<string, string> = {
   'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
   'gruender-schmiede':     'https://steakakademie.de/auth/callback?next=/mein-system',
-  'eigenregie':            'https://steakakademie.de/auth/callback?next=/mein-system',
+  'eigenregie':            'https://steakakademie.de/auth/callback?next=/eigenregie/lernen',
   // Legacy-Slug (Umbenennung 07.09.2026): faellt weg, sobald die Migration
   // ueberall gelaufen ist — bis dahin darf ein Kauf nicht ins Leere laufen.
-  'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/mein-system',
+  'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/eigenregie/lernen',
   'mein-protokoll':        'https://steakakademie.de/auth/callback?next=/mein-protokoll/fragebogen',
   'steak-beichte':         'https://steakakademie.de/auth/callback?next=/steak-beichte/diagnose',
 };

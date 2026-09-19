@@ -483,6 +483,31 @@ export const SprintModul = defineDocumentType(() => ({
 }));
 
 
+// ── EIGENREGIE (19.09.2026, Konzept freigegeben) ─────────────────────────────
+// Kurs hinter requireCourseAccess('eigenregie') — Digistore 695900.
+export const EigenregieModul = defineDocumentType(() => ({
+  name: 'EigenregieModul',
+  filePathPattern: 'eigenregie/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:       { type: 'string', required: true },
+    order:       { type: 'number', required: true },
+    excerpt:     { type: 'string', required: true },
+    dauer:       { type: 'string', required: true },
+    lernziel:    { type: 'string', required: true },
+    ergebnis:    { type: 'string', required: true },
+    publishedAt: { type: 'date',   required: true },
+    // Redaktionsvorbehalt: Verkauf erst, wenn ALLE Module published + reviewed (src/app/eigenregie/page.tsx).
+    status:      { type: 'enum', options: ['draft', 'review', 'published'], default: 'draft' },
+    reviewed:    { type: 'boolean', default: false },
+    reviewedAt:  { type: 'date' },
+  },
+  computedFields: {
+    slug: { type: 'string', resolve: (doc) => doc._raw.flattenedPath.replace('eigenregie/', '') },
+    url:  { type: 'string', resolve: (doc) => `/eigenregie/lernen/${doc._raw.flattenedPath.replace('eigenregie/', '')}` },
+  },
+}));
+
 // ── STREITFAELLE ──────────────────────────────────────────────────────────────
 // Wiederkehrendes Format fuer strittige Grillfragen. Kern des Typs sind die drei
 // Felder `streitfrage`, `entscheidung` und `merksatz`: Sie stehen bewusst im
@@ -616,7 +641,7 @@ export default makeSource({
   // sonst meldet Contentlayer sie als "problem" → Warn-Rauschen, das echte
   // Build-Fehler verdeckt (siehe KAN-26: 33 stille Rezept-404s).
   contentDirExclude: ['glossar/terms.json', '_archiv'],
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Fleischwissen, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Fleischwissen, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul, EigenregieModul],
   mdx: {
     // GitHub Flavored Markdown — sonst rendern Markdown-Tabellen als roher
     // Pipe-Text statt als <table> (KAN-28). Aktiviert auch Task-Lists/Autolinks.
