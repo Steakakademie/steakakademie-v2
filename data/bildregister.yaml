@@ -533,3 +533,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-09-18
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/saba-shioyaki.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/saba-shioyaki.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-19
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft

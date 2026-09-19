@@ -11,13 +11,31 @@ import type { GeocodeTreffer } from './types';
 
 const CACHE = { next: { revalidate: 60 * 60 * 24 * 30 } } as const;
 const UA = 'steakakademie.de Hofladen-Radar (kontakt via steakakademie.de/kontakt)';
+const LAENDER = 'de,at,ch';
+
+/** Grobe Box DE + AT + CH — muss zu imDachRaum() in scripts/lib/hoefe-osm.mjs passen. */
+export function imDachRaum(lat: number, lng: number): boolean {
+  return lat >= 45.5 && lat <= 55.5 && lng >= 5.5 && lng <= 17.5;
+}
+
+/**
+ * Reine Postleitzahl → Suchtext + Laenderfilter.
+ * 5-stellig = Deutschland. 4-stellig = Oesterreich ODER Schweiz (z. B. 1010 Wien
+ * und 1010 Lausanne) — der Geocoder nimmt den besten Treffer, das Label zeigt das
+ * Land; wer es genau will, tippt „8001 Zürich".
+ */
+export function plzSuche(q: string): { text: string; laender: string } {
+  if (/^\d{5}$/.test(q)) return { text: `${q} Deutschland`, laender: 'de' };
+  if (/^\d{4}$/.test(q)) return { text: q, laender: 'at,ch' };
+  return { text: q, laender: LAENDER };
+}
 
 export function normalisiereOrt(q: string): string {
   return q.trim().replace(/\s+/g, ' ').slice(0, 80);
 }
 
-async function maptiler(q: string, key: string): Promise<GeocodeTreffer | null> {
-  const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(q)}.json?key=${encodeURIComponent(key)}&country=de&language=de&limit=1`;
+async function maptiler(q: string, key: string, laender: string): Promise<GeocodeTreffer | null> {
+  const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(q)}.json?key=${encodeURIComponent(key)}&country=${laender}&language=de&limit=1`;
   const res = await fetch(url, CACHE);
   if (!res.ok) return null;
   const json = (await res.json()) as {
@@ -28,8 +46,8 @@ async function maptiler(q: string, key: string): Promise<GeocodeTreffer | null> 
   return { lng: f.center[0], lat: f.center[1], label: f.place_name_de ?? f.place_name ?? f.text ?? q };
 }
 
-async function nominatim(q: string): Promise<GeocodeTreffer | null> {
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=de&limit=1&q=${encodeURIComponent(q)}`;
+async function nominatim(q: string, laender: string): Promise<GeocodeTreffer | null> {
+  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=${laender}&limit=1&q=${encodeURIComponent(q)}`;
   const res = await fetch(url, { ...CACHE, headers: { 'User-Agent': UA, 'Accept-Language': 'de' } });
   if (!res.ok) return null;
   const json = (await res.json()) as { lat: string; lon: string; display_name: string }[];
@@ -41,14 +59,14 @@ async function nominatim(q: string): Promise<GeocodeTreffer | null> {
 export async function geocode(query: string): Promise<GeocodeTreffer | null> {
   const q = normalisiereOrt(query);
   if (q.length < 2) return null;
-  // Reine PLZ: "Deutschland" anhaengen, sonst trifft der Geocoder Hausnummern.
-  const suchtext = /^\d{5}$/.test(q) ? `${q} Deutschland` : q;
+  // Reine PLZ: Land festlegen, sonst trifft der Geocoder Hausnummern.
+  const { text: suchtext, laender } = plzSuche(q);
   const key = process.env.NEXT_PUBLIC_MAPTILER_KEY;
   try {
-    const treffer = key ? await maptiler(suchtext, key) : await nominatim(suchtext);
+    const treffer = key ? await maptiler(suchtext, key, laender) : await nominatim(suchtext, laender);
     if (!treffer) return null;
-    // Nur Deutschland — der Radar kennt nichts anderes.
-    if (treffer.lat < 47 || treffer.lat > 56 || treffer.lng < 5 || treffer.lng > 16) return null;
+    // Nur DACH — der Radar kennt nichts anderes.
+    if (!imDachRaum(treffer.lat, treffer.lng)) return null;
     return treffer;
   } catch {
     return null;

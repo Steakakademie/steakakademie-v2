@@ -1,0 +1,259 @@
+---
+title: "Ownership: Konten, Domain, Repository"
+order: 1
+excerpt: "Bevor du eine Zeile baust, holst du dir alle Zugänge in die eigene Hand. Am Ende dieses Moduls gehören dir Domain, DNS und ein eigenes Repository – nachweislich."
+dauer: "90 Min"
+lernziel: "Du besitzt alle Zugänge zu deinem Webauftritt selbst und kannst das belegen."
+ergebnis: "Ein eigenes privates GitHub-Repository und deine Domain nachweislich im eigenen Konto – alle sechs Zugänge dokumentiert im Passwortmanager."
+publishedAt: "2026-09-19"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Wenn morgen dein Dienstleister nicht mehr erreichbar wäre: Könntest du deine Website ändern, umziehen oder abschalten – ohne jemanden um Erlaubnis zu fragen?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- **Sechs Zugänge** entscheiden, wem ein Webauftritt wirklich gehört: Registrar, DNS, Hosting, Code-Repository, E-Mail, Analyse und Sonstiges.
+- Du legst ein **Konten-Inventar** im Passwortmanager an – ein Eintrag je Zugang, mit Beleg.
+- Du erstellst ein **GitHub-Konto mit Zwei-Faktor-Schutz** und ein **privates Repository**.
+- Du prüfst, ob die **Domain auf dich** eingetragen ist und wer den **DNS** steuert.
+- Wo etwas fehlt, forderst du es mit einem **sachlichen Musterschreiben** zurück.
+- Gekündigt wird in diesem Modul **nichts**. Umgeschaltet wird erst in Modul 3.
+
+</Schnelluebersicht>
+
+## Warum Ownership vor allem anderen kommt
+
+Eine Website ist keine einzelne Sache, sondern eine Kette. Die Domain zeigt über den DNS – das Adressbuch des Internets – auf einen Server. Dort liegt Code, der aus einem Repository stammt, also einem Archiv mit jeder Version deiner Dateien. Nebenher laufen E-Mail-Postfächer und Dienste wie die Google Search Console. Wer ein Glied dieser Kette kontrolliert, kann dich ausbremsen – ohne böse Absicht, einfach weil eine Rechnung liegen bleibt oder ein Ansprechpartner wechselt.
+
+Deshalb beginnt Eigenregie nicht beim Design, sondern bei den Zugängen. Alles, was du in den folgenden Modulen baust, steht auf diesem Fundament.
+
+## Das Konten-Inventar: sechs Zugänge
+
+Die Auswahl folgt einer einfachen Frage: Mit welchem Zugang könnte jemand anderes deine Seite abschalten, umleiten oder deine Kunden von dir abschneiden? Genau sechs Stellen beantworten das.
+
+| Nr. | Zugang | Was er entscheidet | Nachweis, dass er dir gehört |
+|---|---|---|---|
+| 1 | **Domain-Registrar** | Wem die Adresse gehört und ob sie verlängert wird | Du bist als Inhaber eingetragen und hast ein eigenes Login |
+| 2 | **DNS** | Wohin die Adresse zeigt – Website und E-Mail | Du kannst Einträge im eigenen Konto sehen und ändern |
+| 3 | **Hosting** | Wo die Seite läuft | Eigenes Konto, Rechnung auf deinen Namen |
+| 4 | **Code-Repository** | Wer den Quellcode hat und jede Änderung nachvollziehen kann | Repository liegt in deinem GitHub-Konto |
+| 5 | **E-Mail** | Wer Kundenpost und Passwort-Zurücksetzungen empfängt | Eigenes Admin-Login beim Mailanbieter |
+| 6 | **Analyse und Sonstiges** | Sichtbarkeit und Historie: Search Console, Unternehmensprofil bei Google, Statistik, Social-Media-Seiten | Du bist Inhaber, nicht nur Nutzer |
+
+Nummer 5 wird am häufigsten unterschätzt. Jedes andere Konto lässt sich über „Passwort vergessen“ zurückholen – aber nur, wenn die Wiederherstellungs-E-Mail bei dir ankommt. Liegt dein Postfach bei jemand anderem, liegt faktisch alles bei jemand anderem.
+
+### Passwortmanager einrichten
+
+Das Inventar gehört an genau einen Ort, und dieser Ort ist verschlüsselt. Eine Excel-Liste auf dem Desktop ist kein Inventar, sondern ein Risiko.
+
+<Werkzeug>
+
+**Bitwarden** – Passwortmanager mit Zero-Knowledge-Verschlüsselung, also so, dass selbst der Anbieter deine Daten nicht lesen kann.
+**Kosten:** Gratis-Tarif mit unbegrenzt vielen Passwörtern und Geräten. Premium kostet 19,80 US-Dollar im Jahr, Stand 09/2026 – für dieses Modul nicht nötig.
+**Was es nicht kann:** Im Gratis-Tarif erzeugt Bitwarden keine Zwei-Faktor-Codes. Dafür nutzt du eine separate, kostenlose Authenticator-App auf dem Smartphone. Und: Bitwarden ersetzt kein Backup deines Master-Passworts – das notierst du einmal auf Papier und verwahrst es sicher.
+
+</Werkzeug>
+
+So legst du es an:
+
+1. Konto auf **bitwarden.com** erstellen, Browser-Erweiterung und Smartphone-App installieren.
+2. Einen Ordner **Website** anlegen.
+3. Für jeden der sechs Zugänge einen Eintrag anlegen – auch für die, die du noch nicht hast.
+4. In das Notizfeld jedes Eintrags schreibst du: Anbieter, Login-Adresse, auf wen das Konto läuft, Wiederherstellungs-E-Mail, Zwei-Faktor aktiv ja oder nein, Vertragslaufzeit und Kündigungsfrist.
+
+Leere Einträge sind gewollt. Sie zeigen dir auf einen Blick, wo noch Arbeit liegt.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Zugangsdaten an zwei Orten gepflegt – im Passwortmanager und in einer zweiten Liste – laufen auseinander, und bei der Fehlersuche weißt du nicht mehr, welcher Stand gilt.
+
+**Was du stattdessen tust:** Du führst genau ein Inventar, im Passwortmanager, und löschst jede andere Liste, sobald ihr Inhalt übertragen ist.
+
+**Dein Vorteil:** Jede Zugangsfrage beantwortest du in unter einer Minute, statt zwei Listen abzugleichen – und du suchst nie einen Fehler, der nur aus einem veralteten Stand stammt.
+
+</Umweg>
+
+## GitHub-Konto und privates Repository anlegen
+
+GitHub ist der Ort, an dem dein Code künftig lebt. Jede Änderung wird dort mit Datum gespeichert, und du kannst jederzeit zu einem früheren Stand zurück.
+
+<Werkzeug>
+
+**GitHub** – Plattform für Code-Repositories mit Versionsgeschichte.
+**Kosten:** Der Free-Tarif enthält unbegrenzt viele öffentliche und private Repositories, Stand 09/2026. Mehr brauchst du nicht.
+**Was es nicht kann:** GitHub zeigt deine Website nicht öffentlich an. Das übernimmt in Modul 3 der Hoster. GitHub ist das Archiv, nicht das Schaufenster.
+
+</Werkzeug>
+
+### Konto erstellen
+
+1. Öffne **github.com** und klicke auf **Sign up**.
+2. Gib eine E-Mail-Adresse an, die dir dauerhaft gehört – keine Adresse, die über einen Dienstleister läuft.
+3. Wähle einen Benutzernamen. Er erscheint in jeder Repository-Adresse, also schlicht und geschäftstauglich, etwa dein Firmenname.
+4. Bestätige den Code, den GitHub dir per E-Mail schickt.
+5. Lege den Eintrag sofort in Bitwarden an.
+
+### Zwei-Faktor-Authentifizierung aktivieren
+
+Zwei-Faktor bedeutet: Zum Anmelden brauchst du neben dem Passwort einen Code vom Smartphone. Wer nur dein Passwort erbeutet, kommt nicht hinein.
+
+1. Klicke oben rechts auf dein **Profilbild → Settings**.
+2. Im Seitenmenü unter **Access** wählst du **Password and authentication**.
+3. Im Abschnitt **Two-factor authentication** klickst du auf **Enable two-factor authentication**.
+4. Scanne den QR-Code mit deiner Authenticator-App und gib den sechsstelligen Code ein.
+5. GitHub zeigt dir jetzt **Recovery Codes** – Wiederherstellungscodes für den Fall, dass dein Smartphone verloren geht. Klicke auf **Download**, öffne die Datei und kopiere die Codes in das Notizfeld deines GitHub-Eintrags in Bitwarden. Dateianhänge gibt es dort erst im Premium-Tarif – das Notizfeld reicht.
+6. Bestätige mit **I have saved my recovery codes**.
+
+<Achtung>
+
+Recovery Codes „später“ speichern. Wer das Smartphone verliert und keine Codes hat, sperrt sich selbst aus dem eigenen Code aus. Die Codes gehören in den Passwortmanager, bevor du die Seite verlässt.
+
+</Achtung>
+
+### Privates Repository anlegen
+
+1. Klicke oben rechts auf das **Plus-Symbol → New repository**.
+2. Unter **Owner** steht dein eigenes Konto. Prüfe das.
+3. Bei **Repository name** trägst du einen kurzen Namen ein, nur Kleinbuchstaben, Ziffern und Bindestriche, zum Beispiel `website`.
+4. Wähle bei der Sichtbarkeit **Private**. Nur du siehst den Inhalt.
+5. Setze **keinen** Haken bei **Add a README file** und wähle keine weiteren Vorlagen. Das Projekt, das du in Modul 2 anlegst, bringt diese Dateien selbst mit – ein leeres Repository nimmt es ohne Konflikt auf.
+6. Klicke auf **Create repository**.
+
+GitHub zeigt dir nun eine Seite mit Befehlen zum Hochladen. Kopiere die Adresse, die mit `https://github.com/` beginnt, in deinen Bitwarden-Eintrag. Du brauchst sie in Modul 2.
+
+## Domain-Inhaberschaft prüfen
+
+Hier trennt sich „ich habe eine Website“ von „mir gehört meine Website“. Entscheidend ist, wer als **Domaininhaber** eingetragen ist – nicht, wer die Rechnung bezahlt.
+
+### Warum die Whois-Abfrage oft nichts zeigt
+
+Früher konnte jeder über die Whois-Abfrage nachsehen, wem eine Domain gehört. Seit die DSGVO gilt, zeigt die DENIC – die zentrale Registrierungsstelle für .de-Domains – bei **natürlichen Personen** keine Inhaberdaten mehr öffentlich an. Das betrifft auch Einzelunternehmer. Bei juristischen Personen, etwa einer GmbH, sind Name und Anschrift weiterhin sichtbar.
+
+Für deine eigenen Daten gibt es einen Weg:
+
+1. Öffne auf **denic.de** die Domainabfrage und gib deine Domain ein.
+2. Wähle die Option, die eigenen Inhaberdaten anzufordern, und gib deine Postleitzahl oder E-Mail-Adresse an.
+3. Stimmen die Angaben mit den hinterlegten Daten überein, schickt die DENIC einen Link an die hinterlegte E-Mail-Adresse. Über ihn siehst du die Daten zeitlich begrenzt.
+
+Kommt keine Mail an, ist das bereits ein Befund: Dann ist vermutlich nicht deine Adresse hinterlegt. Für Endungen wie .com oder .eu hilft die Abfrage über **lookup.icann.org** – auch dort sind private Daten meist geschwärzt, dann bleibt nur der Weg über den Registrar.
+
+### Das Registrar-Login
+
+Der Registrar ist der Anbieter, bei dem die Domain gebucht wurde. Das kann ein reiner Domainhändler sein, ein Hoster oder ein Baukasten-Anbieter. Prüfe:
+
+- Hast du ein **eigenes Login**, nicht das deines Dienstleisters?
+- Ist im Konto **dein Name** als Inhaber eingetragen?
+- Läuft die **Rechnung** auf dich, und ist die automatische Verlängerung aktiv?
+
+### Auth-Code für einen späteren Umzug
+
+Willst du die Domain später zu einem anderen Registrar umziehen, brauchst du einen **Auth-Code** – bei .de heißt er **AuthInfo**, ein Passwort für genau diesen Umzug. Den erzeugt der bisherige Anbieter auf Wunsch des Inhabers. Der AuthInfo ist 30 Tage gültig und kann nur für einen einzigen Wechsel verwendet werden.
+
+Ist der bisherige Anbieter nicht mehr erreichbar, gibt es einen zweiten Weg: Der neue Anbieter fordert den AuthInfo bei der DENIC an, und die DENIC schickt ihn per Einschreiben an die Inhaberanschrift. Auch deshalb muss die Anschrift in den Domaindaten deine sein.
+
+<ProTipp>
+
+Fordere den Auth-Code erst an, wenn du ihn wirklich brauchst. Nach 30 Tagen ist er verfallen. In diesem Modul reicht es, zu wissen, wie du ihn bekommst, und dass der Inhabereintrag stimmt.
+
+</ProTipp>
+
+## DNS-Kontrolle prüfen
+
+Der DNS entscheidet, wohin deine Domain zeigt – für die Website und für deine E-Mails. Oft liegt er nicht beim Registrar, sondern beim Hoster oder einem dritten Dienst. Welcher das ist, verraten die **Nameserver**.
+
+Öffne ein Terminal (Windows: **Start → „Terminal“** eintippen; Mac: **Programme → Dienstprogramme → Terminal**) und gib ein:
+
+```bash
+nslookup -type=NS deinedomain.de
+```
+
+Die Antwort nennt zwei oder mehr Nameserver. Deren Name verrät den Anbieter, etwa ein Hoster oder Cloudflare. Bei genau diesem Anbieter brauchst du ein eigenes Login.
+
+Dann sicherst du den Ist-Zustand:
+
+1. Melde dich beim DNS-Anbieter an und öffne die DNS-Einträge deiner Domain.
+2. Exportiere die Einträge oder fotografiere die Liste vollständig ab.
+3. Markiere besonders die **MX-Einträge** – sie steuern, wohin deine E-Mails zugestellt werden.
+4. Speichere den Export im Ordner **Website-Belege** (siehe unten) und kopiere die MX-Einträge zusätzlich als Text in die Notiz deines DNS-Eintrags.
+
+Dieser Stand ist deine Versicherung für Modul 3. Wer beim Umschalten die MX-Einträge vergisst, hat eine neue Website und kein Postfach mehr.
+
+## Rückholung von der Agentur
+
+Fehlt dir einer der sechs Zugänge, forderst du ihn an. Sachlich, schriftlich, mit Frist. Häufig liegt es nicht an fehlendem Willen, sondern daran, dass nie jemand danach gefragt hat.
+
+<Achtung>
+
+Mit der Rückforderung gleichzeitig kündigen. Solange die neue Seite nicht live ist, brauchst du die alte. Kündigungsfristen notierst du im Inventar; gekündigt wird erst nach erfolgreichem Umschalten in Modul 3.
+
+</Achtung>
+
+Das Musterschreiben – passe die Punkte an, die bei dir fehlen:
+
+```text
+Betreff: Übergabe der Zugangsdaten zu [deinedomain.de]
+
+Hallo [Name],
+
+vielen Dank für die bisherige Betreuung meiner Website.
+Ich ordne gerade meine Unterlagen und möchte künftig alle
+Zugänge selbst verwalten. Bitte sende mir bis zum [Datum,
+14 Tage] Folgendes:
+
+1. Bestätigung, wer bei der Domain als Inhaber eingetragen
+   ist. Falls nicht ich: Bitte leitet einen Inhaberwechsel
+   auf mich ein – [Name, Anschrift].
+2. Eigene Zugangsdaten zum Registrar-Konto oder die
+   Übertragung der Domain in mein Konto.
+3. Zugang zur DNS-Verwaltung oder einen vollständigen Export
+   der aktuellen DNS-Einträge.
+4. Administrator-Zugang zu Hosting und Redaktionssystem sowie
+   eine vollständige Sicherung der Website (Dateien und
+   Datenbank).
+5. Admin-Zugang zu den E-Mail-Postfächern meiner Domain.
+6. Übertragung der Inhaberrechte an Google Search Console,
+   Unternehmensprofil und Statistik-Diensten auf mein Konto.
+7. Eine Liste der verwendeten Lizenzen (Schriften, Bilder,
+   Erweiterungen) mit Angabe, auf wen sie laufen.
+
+Am bestehenden Vertrag ändert sich damit vorerst nichts.
+Bei Rückfragen erreichst du mich unter [Telefon].
+
+Vielen Dank und viele Grüße
+[Name]
+```
+
+<Rechtlich>
+
+Ob dir Domain, Code und Design gehören, regelt dein Vertrag mit dem Dienstleister. Am Design und am Code können Urheberrechte des Erstellers bestehen; welche Nutzungsrechte dir eingeräumt wurden, ergibt sich aus der Vereinbarung (§ 31 UrhG). Ist die Domain auf den Dienstleister eingetragen und verweigert er den Inhaberwechsel, hol dir anwaltlichen Rat. Keine Rechtsberatung – diese Hinweise ersetzen keine Prüfung deines Einzelfalls.
+
+</Rechtlich>
+
+Trage das Versanddatum und die Frist in Bitwarden ein. Kommt nach Fristablauf nichts, erinnere einmal freundlich, wieder schriftlich.
+
+## Ergebnis-Prüfung
+
+Jeder Punkt gilt erst als erledigt, wenn du einen Screenshot als Beleg hast. Lege dafür einen Ordner **Website-Belege** an, in deinem eigenen Cloud-Speicher oder auf dem Rechner mit Sicherung, und benenne die Screenshots nach Zugang, etwa `1-registrar.png`.
+
+<Ergebnis>
+
+- [ ] **Registrar:** Eigenes Login, dein Name als Inhaber sichtbar – Screenshot abgelegt.
+- [ ] **DNS:** Nameserver ermittelt, eigenes Login beim DNS-Anbieter, alle Einträge inklusive MX exportiert.
+- [ ] **Hosting:** Eigenes Konto oder schriftlich angefordert, Kündigungsfrist notiert.
+- [ ] **Code-Repository:** GitHub-Konto mit aktivem Zwei-Faktor-Schutz, Recovery Codes gespeichert, privates Repository angelegt.
+- [ ] **E-Mail:** Admin-Zugang zum Postfach deiner Domain; alle Wiederherstellungs-Adressen zeigen auf dich.
+- [ ] **Analyse und Sonstiges:** Inhaberrechte an Search Console, Unternehmensprofil und Statistik geprüft oder angefordert.
+- [ ] Alle sechs Einträge liegen in **einem** Passwortmanager, keine zweite Liste existiert.
+- [ ] Nichts wurde gekündigt.
+
+</Ergebnis>
+
+Sind alle sechs Zugänge in deiner Hand – oder zumindest schriftlich angefordert –, geht es weiter. In Modul 2 holst du deine Inhalte aus dem bisherigen Auftritt und baust sie in dein eigenes Projekt um, das in genau diesem Repository landet.

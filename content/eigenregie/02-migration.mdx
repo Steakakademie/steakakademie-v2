@@ -1,0 +1,340 @@
+---
+title: "Migration: vom bestehenden Auftritt zum eigenen Projekt"
+order: 2
+excerpt: "Du ziehst deine Inhalte aus dem bisherigen Auftritt in ein eigenes Next.js-Projekt um – Seite für Seite, mit vollständiger URL-Liste und sauberen Weiterleitungen. Am Ende läuft deine Seite lokal in neuer Form."
+dauer: "240 Min"
+lernziel: "Du überführst deine bestehenden Inhalte in ein eigenes Next.js-Projekt, ohne eine alte Adresse zu verlieren."
+ergebnis: "Die alte Seite läuft lokal in neuer Form, gesichert im eigenen Repository; jede alte URL ist abgebildet oder bewusst umgeleitet."
+publishedAt: "2026-09-19"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Welche Adressen deiner bisherigen Website kennen Google, deine Kunden und deine Visitenkarten – und was passiert mit ihnen, wenn die neue Seite live geht?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- Du wählst deinen **Pfad nach Ausgangslage**: nichts vorhanden, WordPress, Baukasten oder Seite ohne Zugriff.
+- Du machst eine **Inhalts-Inventur**: jede Seite, jeder Text, jedes Bild, jedes Formular.
+- Du exportierst die **URL-Liste aus der Sitemap** – sie ist die Messlatte für das ganze Modul.
+- Du installierst **Node.js**, legst mit einem Befehl ein **Next.js-Projekt** an und startest es lokal.
+- Mit **Claude Code** überträgst du Struktur und Inhalte, richtest **Weiterleitungen** ein und übernimmst **Bilder** komprimiert.
+- Jeder fertige Schritt wird **in dein GitHub-Repository gesichert**.
+
+</Schnelluebersicht>
+
+## Dein Pfad nach Ausgangslage
+
+Die Diagnose in Modul 0 hat gefragt, was du heute hast. Daraus ergibt sich, wie du an deine Inhalte kommst.
+
+| Ausgangslage | So holst du die Inhalte | Darauf achtest du |
+|---|---|---|
+| **Noch nichts** | Keine Übernahme. Du schreibst die Texte neu, auf Basis deines Zielbilds aus Modul 0. | Keine Weiterleitungen nötig. Springe zu „Projekt anlegen“. |
+| **WordPress bei einer Agentur** | Mit Admin-Zugang: **Werkzeuge → Daten exportieren** liefert eine XML-Datei mit allen Texten. Bilder liegen im Ordner `wp-content/uploads` beim Hoster. | URLs enden meist mit Schrägstrich. Die Sitemap liegt unter `/wp-sitemap.xml` oder bei Yoast unter `/sitemap_index.xml`. |
+| **Baukasten** (Wix, Jimdo, Squarespace) | Wix sieht keinen Export der Seite vor – sie läuft nur auf Wix-Servern. Squarespace exportiert unter **Settings → Import & Export Content** nur Teile als XML. Rechne damit, Inhalte von der öffentlichen Seite zu übernehmen. | Die Domain ist oft beim Baukasten gebucht. Abo erst nach Modul 3 kündigen. |
+| **Eigene Seite ohne Zugriff** | Alles, was öffentlich sichtbar ist, liest Claude Code direkt von der Seite aus. | Die Rechte an Bildern klären, bevor du sie übernimmst. |
+
+<Achtung>
+
+Den alten Auftritt abschalten, sobald das neue Projekt steht. Bis die Domain in Modul 3 umgeschaltet ist, bleibt die alte Seite online und unverändert. Sie ist deine Quelle und dein Rückweg.
+
+</Achtung>
+
+## Inhalts-Inventur
+
+Bevor du baust, weißt du, was du hast. Lege eine Tabelle an – Google Sheets reicht, kostenlos – mit diesen Spalten:
+
+| Alte URL | Seitentitel | Texte | Bilder | Formular | Entscheidung | Neue URL | Status |
+|---|---|---|---|---|---|---|---|
+| `/leistungen/` | Leistungen | ja | 6 | nein | übernehmen | `/leistungen` | offen |
+| `/anfahrt.html` | Anfahrt | ja | 1 | nein | zusammenlegen mit Kontakt | `/kontakt` | offen |
+| `/aktion-2023/` | Aktion 2023 | ja | 2 | nein | weglassen | `/` | offen |
+
+Für jede Seite triffst du eine von drei Entscheidungen: **übernehmen**, **zusammenlegen** oder **weglassen**. Auch weggelassene Seiten bekommen eine neue URL – nämlich das Ziel ihrer Weiterleitung. Keine Zeile bleibt ohne Ziel.
+
+Zähle außerdem alle Formulare: Kontakt, Terminanfrage, Rückruf, Newsletter. Notiere je Formular die Felder, den Empfänger und was nach dem Absenden passiert.
+
+## URL-Liste aus der Sitemap
+
+Die Sitemap ist eine Datei, in der eine Website alle ihre Seiten für Suchmaschinen auflistet. Fast jedes System erzeugt sie automatisch. Rufe im Browser auf:
+
+- `deinedomain.de/sitemap.xml` – Standard bei Wix, Jimdo und Squarespace
+- `deinedomain.de/wp-sitemap.xml` – WordPress ohne Zusatz-Plugin
+- `deinedomain.de/sitemap_index.xml` – WordPress mit Yoast
+
+Oft ist die erste Datei nur ein Verzeichnis weiterer Sitemaps, etwa für Seiten, Beiträge und Produkte. Du brauchst alle. Diese Arbeit übernimmt Claude Code, sobald dein Projekt steht – der Auftrag dafür folgt weiter unten.
+
+<ProTipp>
+
+Die Sitemap kennt nicht jede Adresse, die draußen im Umlauf ist. Ergänze die Liste um Adressen von Flyern, Visitenkarten, deinem Google-Unternehmensprofil und Social-Media-Profilen. Hast du Zugriff auf die Google Search Console, exportiere unter **Leistung → Seiten** alle Seiten, die in den letzten Monaten Klicks bekommen haben.
+
+</ProTipp>
+
+## Projekt anlegen mit Next.js und Claude Code
+
+Next.js ist ein kostenloses, quelloffenes Framework – ein Baukasten für Programmierer, der aus Dateien fertige Webseiten macht. Du musst ihn nicht programmieren können. Claude Code schreibt den Code, du gibst die Richtung vor und prüfst.
+
+<Werkzeug>
+
+**Next.js** (Stand 09/2026: Version 16) und **Node.js** – das Framework und die Laufzeitumgebung, die es auf deinem Rechner ausführt.
+**Kosten:** 0 €, beide quelloffen.
+**Claude Code** – der KI-Assistent, der im Terminal Code schreibt und Befehle ausführt. Kosten: Voraussetzung ist ein bezahlter Claude-Tarif; Pro kostet 20 US-Dollar im Monat oder 17 US-Dollar im Monat bei jährlicher Zahlung, Stand 09/2026. Der kostenlose Claude-Tarif enthält Claude Code nicht.
+**Was es nicht kann:** Claude Code weiß nicht, welche Seiten dir wichtig sind und welche Aussagen stimmen. Diese Entscheidungen bleiben bei dir – deshalb die Inventur vorab.
+
+</Werkzeug>
+
+### Schritt 1: Werkzeuge installieren
+
+1. **Node.js:** Lade auf **nodejs.org** die Version mit der Bezeichnung **LTS** herunter – das ist die langfristig unterstützte Version, Stand 09/2026 Node.js 24. Next.js verlangt mindestens Version 20.9. Installiere mit den vorgeschlagenen Einstellungen.
+2. **Git:** Unter Windows installierst du **Git for Windows** von **git-scm.com**. Auf dem Mac gibst du im Terminal `git --version` ein; fehlt Git, bietet macOS die Installation der Entwicklerwerkzeuge an.
+3. **GitHub CLI:** Lade sie von **cli.github.com**. Sie übernimmt die Anmeldung bei GitHub, kostenlos.
+4. **Claude Code:** Die Installationsbefehle stehen unter **code.claude.com/docs** im Abschnitt **Setup**. Für Windows PowerShell lautet er:
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+Für Mac und Linux:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Schließe danach das Terminal, öffne es neu und prüfe alles auf einmal:
+
+```bash
+node -v
+git --version
+gh --version
+claude --version
+```
+
+Jeder Befehl muss eine Versionsnummer ausgeben. Dann sagst du Git einmalig, wer du bist – dieser Name steht später an jeder Sicherung:
+
+```bash
+git config --global user.name "Vorname Nachname"
+git config --global user.email "deine@adresse.de"
+```
+
+Anschließend meldest du die GitHub CLI einmalig an:
+
+```bash
+gh auth login
+```
+
+Wähle **GitHub.com**, dann **HTTPS**, bestätige die Frage nach der Git-Anmeldung mit **Yes** und wähle **Login with a web browser**.
+
+### Schritt 2: Projekt anlegen
+
+Wechsle im Terminal in deinen Dokumente-Ordner und lege das Projekt an. Der Name entspricht deinem Repository aus Modul 1:
+
+```bash
+cd Documents
+npx create-next-app@latest website
+```
+
+Auf die Frage **Would you like to use the recommended Next.js defaults?** wählst du **Yes, use recommended defaults**. Damit bekommst du TypeScript, Tailwind CSS für die Gestaltung, den App Router und eine Anleitungsdatei für KI-Assistenten. Nach ein bis drei Minuten ist das Projekt fertig.
+
+<ProTipp>
+
+Leg das Projekt nicht in einen Ordner, der von OneDrive, iCloud oder Dropbox synchronisiert wird. Das Projekt enthält Zehntausende kleiner Dateien, und die Synchronisierung bremst oder stört die Arbeit. Gesichert wird über GitHub.
+
+</ProTipp>
+
+### Schritt 3: lokal starten
+
+```bash
+cd website
+npm run dev
+```
+
+Öffne im Browser `http://localhost:3000`. Du siehst die Startseite von Next.js. „Localhost“ heißt: Die Seite läuft nur auf deinem Rechner, niemand sonst sieht sie. Lass dieses Terminal offen.
+
+### Schritt 4: sofort sichern
+
+Öffne ein zweites Terminal im Ordner `website` und verbinde das Projekt mit deinem Repository. Ersetze `DEINNAME` durch deinen GitHub-Benutzernamen:
+
+```bash
+git remote add origin https://github.com/DEINNAME/website.git
+git branch -M main
+git push -u origin main
+```
+
+Lade die Repository-Seite auf GitHub neu. Deine Projektdateien sind jetzt dort.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Arbeit, die nur auf dem eigenen Rechner liegt, ist mit einem Festplattenfehler oder einem falschen Befehl weg.
+
+**Was du stattdessen tust:** Nach jeder fertigen Seite bittest du Claude Code: „Sichere den aktuellen Stand mit einer kurzen Beschreibung und lade ihn zu GitHub hoch.“
+
+**Dein Vorteil:** Im ungünstigsten Fall verlierst du die Arbeit seit der letzten Sicherung – Minuten statt einer ganzen fertigen Seite.
+
+</Umweg>
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Eine zweite Kopie des Projektordners „zum Ausprobieren“ läuft neben der ersten her, und fertige Arbeit landet in der Kopie, die später gelöscht wird.
+
+**Was du stattdessen tust:** Es gibt genau einen Projektordner. Wer etwas ausprobieren will, sichert vorher und nimmt die Änderung bei Nichtgefallen über Git zurück.
+
+**Dein Vorteil:** Keine Stunde mit der Frage, welcher Ordner der richtige ist – und keine fertige Arbeit, die mit einer Kopie verschwindet.
+
+</Umweg>
+
+## Struktur und URLs übernehmen
+
+In Next.js ist die Ordnerstruktur die URL-Struktur. Der Ordner `app/leistungen` mit einer Datei `page.tsx` darin ergibt die Adresse `/leistungen`. Die Grundregel: **Behalte alte Adressen bei, wo es geht.** Jede Adresse, die gleich bleibt, braucht keine Weiterleitung.
+
+Ändere eine Adresse nur, wenn die alte technisch ist oder nicht mehr passt – etwa `/anfahrt.html`, `/index.php/kontakt` oder `/?page_id=42`.
+
+Starte im zweiten Terminal Claude Code mit `claude` und gib ihm zuerst die URL-Liste als Auftrag:
+
+```text
+Lies https://deinedomain.de/sitemap.xml und alle darin verlinkten
+Unter-Sitemaps. Schreib jede Seiten-URL in die Datei urls-alt.csv,
+eine pro Zeile, nur den Pfad ohne Domain. Ergänze diese Adressen:
+[Adressen von Flyern, Profilen usw.]
+```
+
+Danach überträgst du Seite für Seite:
+
+```text
+Lies https://deinedomain.de/leistungen/ und lege die Seite
+/leistungen an. Übernimm Überschriften und Texte wörtlich,
+erfinde nichts hinzu, lass Bilder vorerst als Platzhalter.
+Kopf- und Fußbereich gelten für alle Seiten gemeinsam.
+```
+
+Prüfe jede Seite im Browser unter `http://localhost:3000/leistungen`, vergleiche sie mit dem Original, trag in der Inventur „erledigt“ ein – und sichere.
+
+## Weiterleitungen einrichten
+
+Eine Weiterleitung sagt Browser und Suchmaschine: Diese Seite ist dauerhaft umgezogen, hier ist die neue Adresse. Ohne sie landen Besucher auf einer Fehlerseite, und Google verliert die Verbindung zwischen alter und neuer Seite.
+
+Weiterleitungen stehen in der Datei `next.config.ts` im Hauptordner deines Projekts:
+
+```ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // alte Einzelseite mit Dateiendung
+      { source: '/anfahrt.html', destination: '/kontakt', statusCode: 301 },
+      // umbenannte Seite
+      { source: '/ueber-uns', destination: '/team', statusCode: 301 },
+      // ganzer Bereich: jede Unterseite von /blog wandert nach /ratgeber
+      { source: '/blog/:slug', destination: '/ratgeber/:slug', statusCode: 301 },
+      // weggelassene Seite zur thematisch nächsten
+      { source: '/aktion-2023', destination: '/', statusCode: 301 },
+    ]
+  },
+}
+
+export default nextConfig
+```
+
+Zwei Hinweise dazu. Next.js kennt statt `statusCode: 301` auch `permanent: true`; das erzeugt den Code 308, den Google laut eigener Dokumentation genauso als dauerhafte Weiterleitung wertet wie 301. Beides zugleich geht nicht – nimm eines und bleib dabei. Zweitens leitet Next.js Adressen mit abschließendem Schrägstrich wie `/ueber-uns/` von sich aus auf die Form ohne Schrägstrich weiter. Für WordPress-Adressen musst du dafür keine eigene Regel anlegen.
+
+Du musst die Datei nicht selbst schreiben. Gib Claude Code deine Inventur und den Auftrag, für jede Zeile mit abweichender neuer URL eine Weiterleitung mit `statusCode: 301` anzulegen. Vercel, der Hoster aus Modul 3, verarbeitet bis zu 2.048 solcher Regeln in der Konfiguration, Stand 09/2026 – für einen Unternehmensauftritt mehr als genug.
+
+## Bilder übernehmen und komprimieren
+
+Bilder sind meist der größte Bremsklotz einer Website. Beim Umzug bringst du sie in Form.
+
+1. **Originale holen:** Bei WordPress aus `wp-content/uploads`, sonst die größte verfügbare Version von der öffentlichen Seite.
+2. **Umbenennen:** Kleinbuchstaben, keine Umlaute, keine Leerzeichen – `werkstatt-aussen.jpg` statt `IMG_4711 Kopie.JPG`.
+3. **Komprimieren** mit Squoosh (siehe unten): Breite auf 1.600 bis 2.000 Pixel begrenzen, Format **WebP** wählen.
+4. **Ablegen** im Projektordner unter `public/bilder`.
+5. **Einbauen lassen:** Claude Code bindet sie mit der Bildkomponente von Next.js ein, die Größe und Ladezeitpunkt automatisch optimiert. Verlange zu jedem Bild einen beschreibenden Alternativtext.
+
+<Werkzeug>
+
+**Squoosh** (squoosh.app) – Bildkomprimierung im Browser.
+**Kosten:** 0 €. Die Bilder verlassen deinen Rechner nicht, die Verarbeitung läuft lokal.
+**Was es nicht kann:** Squoosh bearbeitet ein Bild nach dem anderen. Bei mehr als etwa zwanzig Bildern bittest du Claude Code, die Komprimierung für den ganzen Ordner per Skript zu erledigen.
+
+</Werkzeug>
+
+<Rechtlich>
+
+Bilder sind urheberrechtlich geschützt. Hat dein Dienstleister Fotos aus einer Bilddatenbank lizenziert, läuft die Lizenz womöglich auf ihn, nicht auf dich – prüfe das anhand der Lizenzliste aus dem Musterschreiben in Modul 1, bevor du ein Bild übernimmst. Keine Rechtsberatung – im Zweifel klärst du die Rechte mit dem Lizenzgeber oder einer Anwältin.
+
+</Rechtlich>
+
+## Formulare
+
+Formulare sind der Teil, der beim Umzug am leichtesten still ausfällt: Die Seite sieht fertig aus, aber Anfragen kommen nirgends an. Gehe deshalb in zwei Stufen vor.
+
+1. **Jetzt, lokal:** Claude Code baut jedes Formular mit denselben Feldern nach, einschließlich Pflichtfeldern und Bestätigungstext nach dem Absenden.
+2. **Beim Live-Gang in Modul 3:** Der Versand wird angeschlossen und mit einer echten Testanfrage geprüft. Bis dahin bleibt das alte Formular auf der alten Seite in Betrieb.
+
+<Rechtlich>
+
+Ein Kontaktformular verarbeitet personenbezogene Daten. Nach Art. 13 DSGVO musst du bei der Erhebung darüber informieren, in der Regel über die Datenschutzerklärung. Frage im Formular nur ab, was du für die Anfrage wirklich brauchst. Die Rechtstexte richtest du in Modul 5 ein. Keine Rechtsberatung.
+
+</Rechtlich>
+
+## Ergebnis-Prüfung
+
+Zum Schluss prüfst du nicht, ob das Projekt „läuft“, sondern ob jede einzelne alte Adresse ankommt.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Eine fehlerfreie Startseite gilt als Beweis, dass alles funktioniert – während einzelne Unterseiten eine Fehlermeldung liefern.
+
+**Was du stattdessen tust:** Du lässt jede Adresse aus der Liste einzeln aufrufen und prüfst die Antwort.
+
+**Dein Vorteil:** Du findest fehlerhafte Seiten lokal in wenigen Minuten, statt dass Kunden sie nach dem Live-Gang finden.
+
+</Umweg>
+
+Gib Claude Code bei laufendem `npm run dev` diesen Auftrag:
+
+```text
+Rufe jeden Pfad aus urls-alt.csv unter http://localhost:3000 auf,
+folge Weiterleitungen und schreib in pruefung.csv: alter Pfad,
+erster Statuscode, Ziel, End-Statuscode. Markiere jede Zeile,
+die nicht mit 200 endet.
+```
+
+Einzelne Adressen prüfst du selbst so – unter Windows mit `curl.exe`, auf dem Mac mit `curl`:
+
+```bash
+curl -I http://localhost:3000/anfahrt.html
+```
+
+Die Antwort muss `301` und darunter `location: /kontakt` zeigen. Das Ergebnis hältst du als Tabelle alt → neu fest:
+
+| Alter Pfad | Neuer Pfad | Art | End-Status |
+|---|---|---|---|
+| `/leistungen/` | `/leistungen` | gleich, nur Schrägstrich | 200 |
+| `/anfahrt.html` | `/kontakt` | Weiterleitung 301 | 200 |
+| `/aktion-2023/` | `/` | bewusst umgeleitet | 200 |
+
+<Ergebnis>
+
+- [ ] Node.js, Git, GitHub CLI und Claude Code zeigen eine Versionsnummer.
+- [ ] Das Next.js-Projekt läuft unter `http://localhost:3000`.
+- [ ] Alle Seiten mit der Entscheidung „übernehmen“ sind angelegt und mit dem Original verglichen.
+- [ ] `urls-alt.csv` enthält alle Adressen aus Sitemap und Zusatzquellen.
+- [ ] `pruefung.csv` zeigt für jede alte Adresse den End-Status 200 – keine Zeile ist markiert.
+- [ ] Bilder liegen komprimiert unter `public/bilder`, jedes mit Alternativtext, Rechte geklärt.
+- [ ] Jedes Formular ist mit allen Feldern nachgebaut und in der Inventur mit Empfänger notiert.
+- [ ] Der aktuelle Stand liegt in deinem GitHub-Repository; es gibt genau einen Projektordner.
+- [ ] Die alte Seite ist weiterhin online und unverändert.
+
+</Ergebnis>
+
+Deine Seite läuft jetzt in neuer Form – aber nur auf deinem Rechner. In Modul 3 bringst du sie ins Netz: mit Vorschau-Umgebung, Umschaltplan und einem Rückweg, falls etwas nicht stimmt.

@@ -1,0 +1,256 @@
+---
+title: "Live gehen: Deployment, DNS, Umschalten ohne Ausfall"
+order: 3
+excerpt: "Du bringst dein Projekt ins Netz, ziehst den DNS zu Cloudflare um und schaltest deine Domain nach Plan um – mit Vorschau-Umgebung, geprüfter E-Mail und einem Rückweg, falls etwas nicht stimmt."
+dauer: "180 Min"
+lernziel: "Du schaltest die neue Seite um, ohne dass die alte ausfällt."
+ergebnis: "Deine eigene Domain zeigt auf dein eigenes Projekt – Erreichbarkeit, Weiterleitungen und E-Mail nachweislich geprüft."
+publishedAt: "2026-09-19"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Wie bringst du deine neue Seite ins Netz, ohne dass dabei ein Besucher, eine Anfrage oder eine einzige E-Mail verloren geht?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- Du verbindest dein GitHub-Repository mit **Vercel**. Ab jetzt wird jede Sicherung automatisch veröffentlicht.
+- Jeder Branch – ein Seitenzweig deines Projekts – bekommt eine eigene **Vorschau-Adresse**.
+- Zugangsschlüssel stehen als **Umgebungsvariablen** beim Hoster, nie im Code.
+- Du ziehst den **DNS zu Cloudflare** um, mit allen Einträgen 1:1 – die Website zeigt dabei noch auf die alte Seite.
+- Du schließt den **Formular-Versand** an.
+- Erst dann schaltest du **nach Plan mit Uhrzeit** um und prüfst alles mit einer festen Liste.
+
+</Schnelluebersicht>
+
+## Die Reihenfolge, die Ausfälle verhindert
+
+Ausfälle entstehen meist, wenn DNS-Anbieter und Website gleichzeitig wechseln – dann ist unklar, welcher Schritt den Fehler verursacht. Deshalb trennst du beides in drei Stufen:
+
+| Stufe | Was passiert | Was Besucher merken |
+|---|---|---|
+| 1 | Neue Seite läuft bei Vercel unter einer Test-Adresse | nichts |
+| 2 | DNS zieht zu Cloudflare um, alle Einträge zeigen weiter auf die alte Seite | nichts |
+| 3 | Ein einziger Eintrag wird umgestellt: Die Domain zeigt auf Vercel | die neue Seite |
+
+Zwischen Stufe 2 und 3 liegen mindestens 24 Stunden. So ist jede Stufe einzeln prüfbar und umkehrbar.
+
+## Stufe 1: das Projekt mit Vercel verbinden
+
+Vercel baut Next.js-Projekte direkt aus GitHub und liefert sie aus. Die Steakakademie läuft selbst dort.
+
+<Werkzeug>
+
+**Vercel** – Hosting mit automatischer Veröffentlichung aus GitHub, Vorschau-Adressen und Rückgängig-Funktion.
+**Kosten:** Der Hobby-Tarif ist kostenlos, aber laut Vercels Fair-Use-Richtlinien **nur für nicht-kommerzielle, private Nutzung** erlaubt. Als kommerziell gilt ausdrücklich jede Seite, die ein Produkt oder eine Dienstleistung bewirbt – also jede Firmenwebsite. Für deinen Betrieb brauchst du den **Pro-Tarif: 20 US-Dollar im Monat zuzüglich Umsatzsteuer, mit 20 US-Dollar Nutzungsguthaben inklusive**, Stand 09/2026. Was darüber hinausgeht, wird nach Verbrauch abgerechnet; den Stand siehst du im Dashboard unter **Usage**. Vercel bietet eine kostenlose Pro-Testphase an.
+**Was es nicht kann:** Vercel verwaltet in diesem Kurs weder deinen DNS noch deine E-Mail. Im Hobby-Tarif kannst du nur zur jeweils vorherigen Version zurückspringen.
+
+</Werkzeug>
+
+<Werkzeug>
+
+**Netlify** – gleichwertige Alternative: Veröffentlichung aus GitHub, Vorschau je Branch, eigene Domain.
+**Kosten:** Der Free-Tarif kostet 0 € und darf laut Netlify-Support gewerblich genutzt werden. Er enthält 300 Credits im Monat; jede Veröffentlichung der Live-Seite kostet 15 Credits, jedes Gigabyte Datenverkehr 20. Der Personal-Tarif kostet 9 US-Dollar im Monat mit 1.000 Credits, Stand 09/2026.
+**Was es nicht kann:** Sind die Credits aufgebraucht, **pausiert die Seite bis zum nächsten Monat**. Die Klickwege in diesem Modul beziehen sich auf Vercel; bei Netlify heißen die Menüs ähnlich.
+
+</Werkzeug>
+
+So verbindest du dein Projekt:
+
+1. Öffne **vercel.com**, klicke auf **Sign Up** und wähle **Continue with GitHub**. So brauchst du kein weiteres Passwort. Trag das Konto trotzdem in Bitwarden ein.
+2. Im Dashboard klickst du auf **Add New → Project**.
+3. Unter **Import Git Repository** erlaubst du Vercel den Zugriff auf GitHub. Wähle dabei **Only select repositories** und nur dein Repository `website` – Vercel braucht nichts anderes.
+4. Klicke neben deinem Repository auf **Import**.
+5. Vercel erkennt Next.js selbst. Ändere nichts und klicke auf **Deploy**.
+6. Nach ein bis drei Minuten erscheint eine Adresse, die auf `.vercel.app` endet. Öffne sie und klicke dich durch alle Seiten.
+
+Danach stellst du den Ort ein, an dem Serverfunktionen laufen – etwa dein Kontaktformular. Standard ist Washington in den USA. Unter **Settings → Functions → Function Regions** wählst du **Frankfurt** (`fra1`). Deine Seite ist für Besucher in Europa dann auch schneller.
+
+<Rechtlich>
+
+Vercel und Cloudflare haben ihren Sitz in den USA. Wer dort personenbezogene Daten verarbeiten lässt – schon Zugriffsprotokolle mit IP-Adressen zählen dazu –, braucht einen Auftragsverarbeitungsvertrag nach Art. 28 DSGVO, englisch DPA. Vercels DPA gilt laut eigenem Text nur im Pro- und Enterprise-Tarif. Prüfe außerdem, ob der Anbieter unter dem EU-US Data Privacy Framework zertifiziert ist; Vercel ist es nach eigener Angabe. Details folgen in Modul 5. Keine Rechtsberatung – diese Hinweise ersetzen keine Prüfung deines Einzelfalls.
+
+</Rechtlich>
+
+### Vorschau-Deployments: jeder Branch hat seine eigene Adresse
+
+Ab jetzt gilt eine einfache Regel: Was im Branch `main` landet, geht live. Jeder andere Branch bekommt bei jedem Hochladen eine eigene Vorschau-Adresse. Dort prüfst du Änderungen, bevor sie jemand sieht. Wie du damit täglich arbeitest, zeigt Modul 4.
+
+Unter **Settings → Deployment Protection** prüfst du, dass **Standard Protection** mit **Vercel Authentication** aktiv ist. Dann sehen nur angemeldete Vercel-Nutzer deine Vorschau-Seiten, nicht die Öffentlichkeit und nicht Google.
+
+### Umgebungsvariablen: Schlüssel gehören nicht in den Code
+
+Eine Umgebungsvariable ist ein benannter Wert, den dein Projekt beim Hoster abholt – etwa der Schlüssel für den Formular-Versand. Stünde er im Code, läge er in jeder Kopie deines Repositorys.
+
+1. Öffne **Settings → Environment Variables**.
+2. Trag bei **Key** den Namen ein, zum Beispiel `RESEND_API_KEY`, bei **Value** den Wert.
+3. Wähle die Umgebungen: **Production** für die Live-Seite, **Preview** für die Vorschau.
+4. Schalte **Sensitive** ein, damit der Wert nach dem Speichern nicht mehr angezeigt wird.
+5. Klicke auf **Save**.
+
+Eine neue oder geänderte Variable wirkt erst in der **nächsten** Veröffentlichung. Öffne deshalb **Deployments**, klicke beim obersten Eintrag auf die drei Punkte und dann auf **Redeploy**.
+
+Auf deinem Rechner stehen dieselben Werte in der Datei `.env.local`. Sie ist in `.gitignore` eingetragen und wird deshalb nie zu GitHub hochgeladen – prüfe das einmal.
+
+## Stufe 2: den DNS zu Cloudflare umziehen
+
+Cloudflare wird dein DNS-Anbieter, also das Adressbuch, das sagt, wohin Website und E-Mail zeigen. In dieser Stufe änderst du **keinen einzigen Wert** – du ziehst nur das Adressbuch um.
+
+<Werkzeug>
+
+**Cloudflare** – DNS-Verwaltung mit schneller Übernahme von Änderungen.
+**Kosten:** Der Free-Tarif kostet 0 € und reicht für alles in diesem Kurs, Stand 09/2026.
+**Was es nicht kann:** Cloudflare liest deine alten Einträge nur teilweise automatisch ein. Einträge unter ungewöhnlichen Namen – typisch für die E-Mail-Signatur DKIM – findet der Scan oft nicht. Die Vollständigkeit prüfst du selbst.
+
+</Werkzeug>
+
+### Vorbereitung am Vortag
+
+1. **Export bereitlegen:** Hol den DNS-Export aus Modul 1 aus deinem Ordner **Website-Belege**. Ist er älter als eine Woche, exportiere neu.
+2. **TTL senken:** Die TTL ist die Zeit, die ein Eintrag zwischengespeichert wird. Setze sie beim bisherigen DNS-Anbieter für alle Website-Einträge auf den kleinsten erlaubten Wert, idealerweise 300 Sekunden. Die Senkung wirkt erst, wenn die alte TTL abgelaufen ist – deshalb am Vortag.
+3. **DNSSEC prüfen:** DNSSEC ist eine Signatur für DNS-Einträge. Ist sie beim Registrar aktiv, schalte sie **vor** dem Nameserver-Wechsel ab. Sonst ist deine Domain nach dem Wechsel nicht erreichbar. Cloudflare schreibt das ausdrücklich vor.
+
+### Domain bei Cloudflare anlegen
+
+1. Konto auf **cloudflare.com** anlegen, Zwei-Faktor-Schutz aktivieren, in Bitwarden eintragen.
+2. Unter **Domains** auf **Onboard a domain** klicken und deine Domain ohne `www` eingeben.
+3. Als Methode die automatische Suche nach Einträgen wählen. Bietet dein bisheriger Anbieter einen Export als Zonendatei an, lädst du stattdessen diese hoch – sie ist vollständig.
+4. Den **Free**-Tarif wählen.
+5. Jetzt vergleichst du Zeile für Zeile mit deinem Export. Achte besonders auf:
+
+| Typ | Wofür | Worauf du achtest |
+|---|---|---|
+| **A** und **CNAME** für die Domain und `www` | Website | Zeigen vorerst auf den **alten** Server |
+| **MX** | Empfang von E-Mails | Alle Einträge mit gleicher Priorität übernehmen |
+| **TXT** mit `v=spf1` | SPF, die Liste erlaubter Absender | Genau ein SPF-Eintrag, Wortlaut exakt |
+| **TXT** oder **CNAME** unter `…._domainkey` | DKIM, die Signatur deiner Mails | Fehlt fast immer nach dem Scan – von Hand ergänzen |
+| **TXT** unter `_dmarc` | DMARC, die Regel für gefälschte Mails | übernehmen, falls vorhanden |
+| **TXT** mit Bestätigungscodes | Google, Microsoft und andere | übernehmen |
+
+6. Stell bei **allen** Einträgen die orange Wolke auf grau – **DNS only**. Die orange Wolke leitet den Verkehr über Cloudflare um und verändert damit das Verhalten deiner alten Seite. Vercel rät ausdrücklich davon ab, Cloudflare als Zwischenstation zu nutzen.
+
+<Achtung>
+
+Einen fehlenden MX-, SPF- oder DKIM-Eintrag. Die Website sieht danach normal aus, aber E-Mails kommen nicht an oder landen im Spam – oft bemerkt erst Tage später. Jeder Eintrag aus dem Export muss in Cloudflare stehen, bevor du die Nameserver änderst.
+
+</Achtung>
+
+### Nameserver beim Registrar ändern
+
+1. Cloudflare zeigt dir zwei Nameserver, etwa `anna.ns.cloudflare.com` und `bob.ns.cloudflare.com`. Deine heißen anders – kopiere sie exakt.
+2. Melde dich beim Registrar an, öffne die Nameserver-Einstellung deiner Domain, entferne die alten und trag die beiden neuen ein.
+3. Warte. Cloudflare nennt bis zu 24 Stunden. Der Status unter **Domains** wechselt von **Pending** auf **Active**, und du bekommst eine Bestätigungsmail.
+
+Manche Paketanbieter erlauben keine fremden Nameserver. Dann ziehst du die Domain zuerst mit dem AuthInfo aus Modul 1 zu einem Registrar um, der das erlaubt.
+
+Prüfe danach im Terminal, ob die Welt die neuen Nameserver und deine Mail-Einträge sieht:
+
+```bash
+nslookup -type=NS deinedomain.de 1.1.1.1
+nslookup -type=MX deinedomain.de 1.1.1.1
+```
+
+Schick dir von einem fremden Konto eine Mail an deine Geschäftsadresse und antworte darauf. Erst wenn beides ankommt, ist Stufe 2 abgeschlossen. Die Seite, die Besucher sehen, ist immer noch die alte.
+
+## Den Formular-Versand anschließen
+
+Deine in Modul 2 nachgebauten Formulare brauchen jetzt einen Versandweg: einen **Formular-Dienst**, der die Eingaben an dich weiterleitet, oder eine **E-Mail-Schnittstelle**, über die dein Projekt selbst Mails verschickt.
+
+| Dienst | Art | Gratis-Umfang, Stand 09/2026 | Grenze |
+|---|---|---|---|
+| **Web3Forms** | Formular-Dienst | 250 Einsendungen im Monat | keine Dateianhänge im Gratis-Tarif; Pro 12 US-Dollar im Monat |
+| **Formspree** | Formular-Dienst | 50 Einsendungen im Monat | Einsendungen nur 30 Tage gespeichert |
+| **Resend** | E-Mail-Schnittstelle | 3.000 Mails im Monat, höchstens 100 am Tag | braucht eigene DNS-Einträge; Senderegion in der EU wählbar |
+
+Für die meisten Betriebe reicht **Web3Forms**: Du trägst deine E-Mail-Adresse ein, bekommst einen Zugangsschlüssel und gibst Claude Code diesen Auftrag:
+
+```text
+Schließe das Kontaktformular an Web3Forms an. Der Zugangsschlüssel
+steht in .env.local als NEXT_PUBLIC_WEB3FORMS_KEY. Nach dem Absenden
+erscheint der bisherige Bestätigungstext, bei einem Fehler ein
+Hinweis mit Telefonnummer. Füge den Spamschutz von Web3Forms hinzu.
+```
+
+Dieser Schlüssel ist bei Web3Forms bewusst öffentlich; er erlaubt nur das Einsenden an deine Adresse. Trag ihn zusätzlich bei Vercel ein, denn `.env.local` wird nicht hochgeladen. Bei Resend ist der Schlüssel geheim und gehört als **Sensitive** zu Vercel; die DNS-Einträge, mit denen Resend deine Domain bestätigt, trägst du in Cloudflare ein.
+
+Test: Sende über die Vorschau-Adresse eine echte Anfrage. Erst wenn sie in deinem Posteingang liegt, nicht im Spam, ist das Formular angeschlossen.
+
+## Stufe 3: Umschalten nach Plan
+
+Jetzt stellst du genau zwei Einträge um. Wähle einen Zeitpunkt mit wenig Betrieb, nach dem du zwei Stunden verfügbar bist – etwa einen Dienstagabend, nicht vor Wochenende oder Urlaub.
+
+| Wann | Was |
+|---|---|
+| **T minus 1 Tag** | Stufe 2 ist abgeschlossen, Mail geprüft. Letzte Version liegt in `main`, Vercel-Adresse vollständig durchgeklickt. |
+| **T, 19:30 Uhr** | In Vercel unter **Settings → Domains → Add Domain** deine Domain eingeben. Vercel schlägt vor, `www` mit anzulegen – bestätigen. |
+| **T, 19:40 Uhr** | Vercel zeigt je Domain den nötigen Eintrag: einen **A-Eintrag** für die Domain ohne `www`, einen **CNAME-Eintrag** für `www`. Werte exakt so übernehmen, wie Vercel sie anzeigt. |
+| **T, 20:00 Uhr** | In Cloudflare unter **DNS → Records** die beiden alten Website-Einträge **bearbeiten**, nicht löschen: neuer Wert von Vercel, Wolke grau, TTL **Auto** (fünf Minuten). Alte Werte vorher in Bitwarden notieren. |
+| **T, 20:10 Uhr** | In Vercel unter **Settings → Domains** bei `www` auf **Edit** klicken und bei **Redirect to** die Domain ohne `www` wählen. |
+| **T, 20:15–21:30 Uhr** | Prüfliste unten abarbeiten. |
+| **T plus 1 Tag** | Prüfliste wiederholen, Search Console ansehen. |
+
+Zur `www`-Frage: Behalte die Form, die deine alte Seite benutzt hat. Lief sie mit `www`, drehst du die Weiterleitung um. Vercel selbst empfiehlt die Variante mit `www`; beide funktionieren. Wichtig ist genau eine Hauptadresse.
+
+Hat deine Domain einen **CAA-Eintrag** – eine Liste, welche Stellen Sicherheitszertifikate ausstellen dürfen –, muss darin `letsencrypt.org` stehen. Sonst bekommt Vercel kein Zertifikat für `https`.
+
+### Der Rückweg
+
+Bevor du umschaltest, weißt du, wie du zurückkommst:
+
+- **Die neue Seite hat einen Fehler, den du nicht sofort beheben kannst:** In Cloudflare die beiden Website-Einträge auf die alten Werte aus Bitwarden zurücksetzen. Dank fünf Minuten TTL sehen die meisten Besucher bald wieder die alte Seite – deshalb läuft der alte Vertrag weiter.
+- **Eine spätere Änderung hat die Seite beschädigt:** In Vercel auf der Projektübersicht **Instant Rollback** wählen. Im Pro-Tarif geht das zu jeder früheren Live-Version. Neue Sicherungen gehen danach erst wieder automatisch live, wenn du **Undo Rollback** klickst.
+- **E-Mail kommt nicht an:** Die Mail-Einträge hast du nicht angefasst. Vergleiche sie mit dem Export – der Fehler liegt dann in Stufe 2, nicht beim Umschalten.
+
+## Die Prüfliste nach dem Umschalten
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Ein grüner Haken bei Vercel gilt als Beweis, dass die Seite läuft – dabei zeigt er nur, dass der Bau geklappt hat, und Seiten, die erst beim Aufruf erzeugt werden, können trotzdem mit Fehler 500 antworten.
+
+**Was du stattdessen tust:** Du rufst nach jeder Veröffentlichung die Live-Seite selbst auf – mindestens Startseite, Kontaktseite und eine Unterseite – und schickst das Formular ab.
+
+**Dein Vorteil:** Du findest eine Störung in fünf Minuten selbst, statt dass ein Kunde sie dir Tage später meldet.
+
+</Umweg>
+
+Arbeite diese Liste ab, am besten im privaten Browserfenster und zusätzlich am Smartphone im Mobilfunknetz:
+
+1. **https:** `https://deinedomain.de` öffnet die neue Seite mit Schloss-Symbol, ohne Warnung.
+2. **http wird https:** Im Terminal liefert `curl -I http://deinedomain.de` eine Weiterleitung auf `https://` – unter Windows `curl.exe`.
+3. **www wird Hauptadresse:** `curl -I https://www.deinedomain.de` zeigt eine Weiterleitung auf die Hauptadresse.
+4. **Alte URLs:** Lass Claude Code die Prüfung aus Modul 2 wiederholen, diesmal gegen die Live-Adresse: jede Zeile aus `urls-alt.csv`, End-Status 200.
+5. **Formular:** Eine echte Anfrage über die Live-Seite abschicken, Eingang prüfen.
+6. **Mail empfangen:** Von einem fremden Konto an deine Geschäftsadresse schreiben.
+7. **Mail senden:** Von deiner Geschäftsadresse an ein fremdes Konto schreiben. Kommt sie im Posteingang an, nicht im Spam? Der kostenlose Test auf **mail-tester.com** zeigt dir zusätzlich, ob SPF und DKIM greifen.
+
+Mach von jedem Ergebnis einen Screenshot für deinen Ordner **Website-Belege**.
+
+### Erst danach: alte Verträge
+
+Kündige den alten Hosting-Vertrag frühestens, wenn die Prüfliste zwei Tage lang sauber war. Prüfe vorher, ob dein Postfach Teil dieses Vertrags ist – viele Pakete bündeln Webspace und E-Mail. Dann ziehst du zuerst die E-Mail um und passt die MX-Einträge in Cloudflare an.
+
+## Ergebnis-Prüfung
+
+<Ergebnis>
+
+- [ ] Das Repository ist mit Vercel verbunden; ein Hochladen in `main` löst eine Veröffentlichung aus.
+- [ ] Der passende Tarif ist gewählt und begründet: Vercel Pro oder Netlify Free für eine gewerbliche Seite.
+- [ ] Funktionsregion Frankfurt eingestellt, Vorschau-Seiten geschützt.
+- [ ] Alle Schlüssel stehen als Umgebungsvariablen bei Vercel und in `.env.local`, nicht im Code.
+- [ ] Cloudflare zeigt den Status **Active**; jeder Eintrag aus dem Export ist vorhanden, alle Wolken grau.
+- [ ] Die Domain und `www` zeigen auf Vercel; es gibt genau eine Hauptadresse, die andere leitet um.
+- [ ] `https` funktioniert ohne Warnung, `http` leitet auf `https` um.
+- [ ] Jede alte URL endet live mit Status 200.
+- [ ] Eine Testanfrage über das Live-Formular ist angekommen.
+- [ ] Mail senden und empfangen mit der Geschäftsadresse nachweislich geprüft, Screenshots abgelegt.
+- [ ] Die alten Website-Einträge sind in Bitwarden notiert; der alte Vertrag ist noch nicht gekündigt.
+
+</Ergebnis>
+
+Deine Domain zeigt jetzt auf dein eigenes Projekt, und jede Sicherung in `main` geht automatisch live. Das ist Freiheit – und eine Verantwortung. In Modul 4 lernst du, wie du mit Claude Code dauerhaft Änderungen machst: in kleinen Schritten, immer gesichert, immer erst in der Vorschau.

@@ -1,0 +1,307 @@
+---
+title: "Claude Code als dauerhaftes Werkzeug"
+order: 4
+excerpt: "Du richtest Claude Code so ein, dass es dein Projekt kennt, und arbeitest in einem festen Ablauf: sichern, beauftragen, Plan prüfen, ausführen, in der Vorschau kontrollieren, veröffentlichen. Am Ende hast du drei Änderungen selbst live gebracht."
+dauer: "150 Min"
+lernziel: "Du änderst deine Seite selbst – ohne Programmierkenntnisse und ohne Agentur."
+ergebnis: "Drei selbst durchgeführte Änderungen – ein Text, eine neue Seite, ein getauschtes Bild – sind live und in der Versionsgeschichte nachvollziehbar."
+publishedAt: "2026-09-19"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Wenn du morgen einen Satz, eine Öffnungszeit oder ein Foto auf deiner Website ändern willst: Wie lange dauert das – und woher weißt du, dass dabei nichts anderes kaputtgeht?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- Du prüfst die **Einrichtung** von Claude Code aus Modul 2 und meldest dich an.
+- Du schreibst deine **CLAUDE.md** – das Projektgedächtnis, das Claude Code bei jedem Start liest.
+- Du arbeitest in **acht festen Takten**, von der Sicherung bis zur Live-Prüfung.
+- Vor jeder Änderung steht ein **eigener Branch** und ein sauberer Stand.
+- Du weißt, was du **nie blind freigibst**: Zugangsdaten, Löschbefehle, Rechtstexte.
+- Du bringst **drei Übungsänderungen** live.
+
+</Schnelluebersicht>
+
+## Einrichtung prüfen und anmelden
+
+Claude Code hast du in Modul 2 installiert. Prüfe im Terminal, ob alles in Ordnung ist:
+
+```bash
+claude --version
+claude doctor
+```
+
+`claude doctor` zeigt, ob die Installation gesund ist und ob automatische Updates laufen. Fehlt Claude Code auf einem Rechner, installierst du es auf dem offiziellen Weg aus **code.claude.com/docs**, Abschnitt **Setup**.
+
+Windows, in der PowerShell:
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+macOS, im Terminal:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Es gibt weitere Wege über WinGet und Homebrew. Die aktualisieren sich aber nicht von selbst, du müsstest Updates von Hand anstoßen.
+
+Mit den beiden Befehlen oben aktualisiert sich Claude Code selbst im Hintergrund. Unter Windows empfiehlt die Dokumentation zusätzlich **Git for Windows**, das du aus Modul 2 bereits hast. Voraussetzung sind Windows 10 ab Version 1809 oder macOS 13.
+
+Zum Anmelden startest du `claude` einmal in deinem Projektordner und folgst dem Browserfenster.
+
+<Werkzeug>
+
+**Claude Code** – ein KI-Assistent, der in deinem Projektordner Dateien liest, ändert und Befehle ausführt.
+**Kosten:** Voraussetzung ist mindestens der Tarif **Claude Pro: 20 US-Dollar im Monat oder 17 US-Dollar im Monat bei jährlicher Zahlung** (200 US-Dollar im Voraus), Stand 09/2026. Der kostenlose Claude-Tarif enthält Claude Code nicht. Claude Code teilt sich die Nutzungsgrenzen mit deinem übrigen Claude-Tarif. Erreichst du die Grenze, wartest du, bis sie sich zurücksetzt, oder wechselst in einen Max-Tarif ab 100 US-Dollar im Monat.
+**Was es nicht kann:** Claude Code weiß nicht, was fachlich und rechtlich stimmt, und es sieht deine Seite nicht mit deinen Augen. Es kann sich irren und klingt dabei immer überzeugt. Die Prüfung bleibt deine Aufgabe.
+
+</Werkzeug>
+
+<ProTipp>
+
+Das Terminal ist dir unangenehm? Claude Code gibt es auch in der **Claude Desktop-App** für Windows und macOS, mit Fenstern statt Befehlszeilen. Die Arbeitsweise in diesem Modul gilt dort genauso.
+
+</ProTipp>
+
+## Die CLAUDE.md: das Gedächtnis deines Projekts
+
+Jede Sitzung mit Claude Code beginnt ohne Erinnerung an die letzte. Was dauerhaft gelten soll – wer du bist, wie deine Seite aufgebaut ist, was tabu ist –, steht deshalb in einer Datei namens `CLAUDE.md` im Hauptordner deines Projekts. Claude Code liest sie bei jedem Start.
+
+Next.js hat beim Anlegen deines Projekts in Modul 2 bereits zwei Dateien erzeugt: `AGENTS.md` mit Hinweisen zur Next.js-Version und `CLAUDE.md` mit nur einer Zeile, `@AGENTS.md`. Diese Zeile bindet die erste Datei ein. Die `AGENTS.md` pflegt Next.js selbst – du lässt sie unverändert. **Deine eigenen Regeln schreibst du unter diese eine Zeile in die `CLAUDE.md`.**
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Grundregeln stehen in zwei Dateien – etwa in der `CLAUDE.md` und zusätzlich in einer eigenen Regel-Datei –, laufen mit der Zeit auseinander, und Claude Code bekommt widersprüchliche Anweisungen, deren Folgen du im Kreis suchst.
+
+**Was du stattdessen tust:** Es gibt genau einen Ort für deine Regeln: die `CLAUDE.md`. Wird eine Regel geändert, wird sie dort geändert – und nirgendwo sonst neu angelegt.
+
+**Dein Vorteil:** Wenn Claude Code etwas anders macht als gedacht, schaust du an einer Stelle nach, statt eine Stunde lang zwei Dateien abzugleichen.
+
+</Umweg>
+
+Die Vorlage der Steakakademie, angepasst für einen Unternehmensauftritt. Ersetze alles in eckigen Klammern:
+
+```markdown
+@AGENTS.md
+
+# [Firmenname] – Website
+
+## Worum es geht
+Website von [Firmenname], [Branche] in [Ort].
+Ziel der Seite: [z. B. Anfragen für Badsanierungen im Umkreis von 30 km].
+Zielgruppe: [z. B. Eigenheimbesitzer, 40–65 Jahre].
+
+## Technik
+- Next.js, Tailwind CSS, gehostet bei Vercel, DNS bei Cloudflare
+- Live: https://[deinedomain.de]
+- Live geht nur, was im Branch main landet.
+- Bilder liegen in public/bilder, immer WebP, immer mit Alternativtext.
+
+## Stil
+- Anrede: [Sie/du]. Ton: [z. B. sachlich, freundlich, ohne Werbesprech].
+- Farben: [Primär-HEX], [Akzent-HEX]. Schrift: [Name].
+- Keine erfundenen Zahlen, Kundenstimmen oder Auszeichnungen.
+
+## Arbeitsweise
+- Vor jeder Änderung: Plan zeigen und auf mein Okay warten.
+- Jede Änderung auf einem eigenen Branch, nie direkt auf main.
+- Nach jeder Änderung: npm run build ausführen und Fehler melden.
+- Kurze Antworten, auf Deutsch.
+
+## Tabu ohne ausdrückliche Rückfrage
+- Impressum, Datenschutzerklärung, Cookie-Hinweis: Text nie selbst
+  formulieren oder ändern, nur von mir gelieferten Text einsetzen.
+- Keine Dateien löschen, keine Branches löschen, kein git push --force,
+  kein git reset --hard.
+- Keine Zugangsdaten in Dateien schreiben, die zu GitHub gehen.
+- Keine neuen Pakete installieren, ohne Grund und Kosten zu nennen.
+```
+
+Speichere die Datei und sichere sie gleich mit – sie gehört ins Repository. Halte sie kurz: Die Dokumentation empfiehlt weniger als 200 Zeilen, weil lange Dateien schlechter befolgt werden. Ob Claude Code sie gelesen hat, siehst du in einer Sitzung mit dem Befehl `/context` unter **Memory files**.
+
+Merkst du bei der Arbeit, dass Claude Code etwas immer wieder falsch macht, ergänzt du eine Regel. So wächst die Datei mit deinem Projekt.
+
+## Die Arbeitsweise: acht Takte
+
+Jede Änderung, ob ein Komma oder eine neue Seite, läuft durch dieselben acht Takte. Das wirkt anfangs umständlich. Mit jeder Wiederholung geht es schneller, weil die Takte zur Gewohnheit werden.
+
+| Takt | Was du tust | Woran du erkennst, dass er fertig ist |
+|---|---|---|
+| 1. Sichern | sauberen Stand herstellen, eigenen Branch anlegen | `git status` meldet nichts Offenes |
+| 2. Auftrag | eine Sache, klar beschrieben | der Auftrag passt in drei bis fünf Sätze |
+| 3. Plan ansehen | Claude Code sagt, was es ändern will | du verstehst jede Zeile des Plans |
+| 4. Ausführen lassen | Plan freigeben | Claude Code meldet fertig, der Build läuft fehlerfrei |
+| 5. Lokal prüfen | `http://localhost:3000` im Browser | die Änderung ist sichtbar, der Rest unverändert |
+| 6. Committen | Stand mit Beschreibung sichern | ein neuer Eintrag in `git log` |
+| 7. Pushen und Vorschau prüfen | Branch zu GitHub hochladen | Vercel-Vorschau zeigt die Änderung |
+| 8. Live | Branch in `main` zusammenführen | Live-Seite selbst aufgerufen |
+
+### Takt 1: Sichern
+
+Öffne das Terminal im Projektordner und prüfe, ob der letzte Stand sauber gesichert ist:
+
+```bash
+git switch main
+git pull
+git status
+```
+
+Meldet `git status` **nothing to commit, working tree clean**, legst du einen Branch für genau diese Änderung an:
+
+```bash
+git switch -c text-oeffnungszeiten
+```
+
+Der Name beschreibt die Änderung, in Kleinbuchstaben mit Bindestrichen. Meldet `git status` offene Änderungen, sicherst du diese zuerst oder fragst Claude Code, was sie bedeuten.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Eine Änderung beginnt auf einem ungesicherten Stand, geht schief, und beim Zurücknehmen verschwindet mit ihr auch fertige Arbeit, die noch nicht gesichert war.
+
+**Was du stattdessen tust:** Vor jedem Auftrag steht ein sauberer Stand und ein eigener Branch. Misslingt die Änderung, wechselst du zurück auf `main` – dort ist alles wie vorher.
+
+**Dein Vorteil:** Ein misslungener Versuch kostet dich nur die Minuten dieses Versuchs, nie die Arbeit davor.
+
+</Umweg>
+
+Claude Code hat zusätzlich eine eigene Rückgängig-Funktion: Mit `/rewind` oder zweimal **Esc** springst du zu einem früheren Punkt der Sitzung. Sie erfasst aber nur Dateien, die Claude Code direkt bearbeitet hat – keine Änderungen durch Befehle wie Verschieben oder Löschen. Die Dokumentation sagt selbst, dass sie Git nicht ersetzt. Git ist deine Sicherung, `/rewind` ist die Abkürzung für Kleinigkeiten.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Du arbeitest mal am Büro-Rechner, mal am Laptop oder in zwei Claude-Code-Fenstern zugleich, und fertige Arbeit aus der einen Arbeitskopie wird von der anderen überschrieben oder geht verloren.
+
+**Was du stattdessen tust:** Pro Rechner gibt es genau einen Projektordner, und in ihm läuft genau eine Claude-Code-Sitzung. Jede Arbeit beginnt mit `git pull` und endet mit `git push`.
+
+**Dein Vorteil:** GitHub hält immer den einen gültigen Stand – du musst nie herausfinden, welche Kopie die richtige ist.
+
+</Umweg>
+
+### Takt 2 und 3: Auftrag und Plan
+
+Starte Claude Code direkt im Planmodus. Darin liest es nur und schlägt vor, ändert aber nichts:
+
+```bash
+claude --permission-mode plan
+```
+
+Mit **Umschalt + Tab** wechselst du innerhalb einer Sitzung zwischen den Modi; unten im Terminal steht, welcher gerade aktiv ist. Für einen einzelnen Auftrag kannst du auch `/plan` vor den Text setzen. Im Tarif Pro startet Claude Code sonst in einem Modus, der viele Aktionen ohne Rückfrage ausführt – für die ersten Wochen ist der Planmodus der sichere Weg.
+
+Ein guter Auftrag nennt **was**, **wo** und **was nicht**. Den Plan liest du vollständig. Nennt er Dateien, die mit deinem Auftrag nichts zu tun haben, fragst du nach, bevor du freigibst.
+
+### Takt 4 bis 8: ausführen, prüfen, veröffentlichen
+
+1. **Freigeben:** Stimmt der Plan, bestätigst du ihn. Claude Code arbeitet und meldet, wenn es fertig ist.
+2. **Lokal prüfen:** In einem zweiten Terminal läuft `npm run dev`. Öffne `http://localhost:3000`, prüfe die geänderte Stelle und klicke kurz durch zwei, drei andere Seiten.
+3. **Committen und pushen:** Sag Claude Code: „Sichere die Änderung mit einer kurzen deutschen Beschreibung und lade den Branch zu GitHub hoch.“ Lies den vorgeschlagenen Befehl, bevor du ihn freigibst.
+4. **Vorschau prüfen:** Öffne auf **github.com** dein Repository. Oben erscheint ein Hinweis zu deinem Branch – klicke auf **Compare & pull request** und dann auf **Create pull request**. Ein Pull Request ist ein Antrag, den Branch in `main` zu übernehmen. Nach ein bis zwei Minuten schreibt Vercel einen Kommentar mit dem Link zur Vorschau. Öffne ihn und prüfe die Änderung dort, auch am Smartphone.
+5. **Live:** Stimmt alles, klickst du auf **Merge pull request** und **Confirm merge**. Vercel veröffentlicht. Rufe danach die Live-Seite selbst auf – wie in Modul 3.
+
+Wer Netlify Free nutzt, bündelt hier: Vorschauen kosten keine Credits, jede Veröffentlichung der Live-Seite schon. Sammle kleine Änderungen deshalb auf einem Branch und führe sie gemeinsam zusammen.
+
+## Was du Claude Code nicht blind überlässt
+
+Claude Code arbeitet schnell und meist gut. Genau deshalb gibt es Bereiche, in denen du jede Aktion selbst liest, bevor du sie freigibst.
+
+| Bereich | Warum | So gehst du vor |
+|---|---|---|
+| **Zugangsdaten** | Ein Schlüssel im Code landet in jeder Kopie und in der Versionsgeschichte | Schlüssel trägst du selbst in `.env.local` und bei Vercel ein, statt sie in den Chat zu kopieren |
+| **Löschbefehle** | `rm`, `git reset --hard`, `git push --force` oder das Löschen von Branches lassen sich teils nicht zurückholen | ablehnen und nachfragen, was erreicht werden soll |
+| **Rechtstexte** | Impressum, Datenschutzerklärung und Cookie-Hinweis sind Pflichtangaben mit Haftung | nur Text aus geprüfter Quelle einsetzen lassen, nie formulieren lassen |
+| **DNS, Domain, Tarife** | Ein falscher Eintrag legt Website oder E-Mail lahm | nur selbst ändern, nach dem Plan aus Modul 3 |
+| **Formular-Empfänger** | Eine falsche Adresse fällt erst auf, wenn Anfragen fehlen | nach jeder Änderung eine Testanfrage schicken |
+
+<Achtung>
+
+Einen Befehl freigeben, den du nicht verstehst. Frag stattdessen: „Was bewirkt dieser Befehl, und lässt er sich rückgängig machen?“ Claude Code erklärt es dir in einfachen Worten. Die Frage kostet dich eine Minute; ein unverstandener Löschbefehl im falschen Ordner kann dich einen Tag kosten.
+
+</Achtung>
+
+<Rechtlich>
+
+Für Impressum und Datenschutzerklärung haftest du als Betreiber, auch wenn eine KI den Text eingesetzt hat. Die Pflichtangaben für das Impressum regelt § 5 DDG, die Informationspflichten zum Datenschutz Art. 13 DSGVO. Wie du beides korrekt einbindest, folgt in Modul 5. Keine Rechtsberatung – diese Hinweise ersetzen keine Prüfung deines Einzelfalls.
+
+</Rechtlich>
+
+## Drei Übungsänderungen
+
+Jetzt machst du drei echte Änderungen – jede durch alle acht Takte, jede auf einem eigenen Branch. Nimm echte Inhalte deiner Seite, keine Testtexte.
+
+### Übung 1: einen Text ändern
+
+Branch: `text-oeffnungszeiten`. Auftrag:
+
+```text
+Ändere auf der Kontaktseite die Öffnungszeiten: Montag bis Freitag
+7:30 bis 17:00 Uhr, Samstag nach Vereinbarung. Wenn die Öffnungszeiten
+noch an anderer Stelle stehen, etwa im Fußbereich, nenne mir diese
+Stellen zuerst. Ändere sonst nichts.
+```
+
+Prüfung: Die Zeiten stimmen überall, wo sie vorkommen. Das ist der Kern dieser Übung – eine Angabe, die an zwei Stellen steht, soll nur an einer gepflegt werden. Schlägt Claude Code vor, sie an einer Stelle zentral abzulegen, ist das ein guter Vorschlag.
+
+### Übung 2: eine neue Seite anlegen
+
+Branch: `seite-leistung-wartung`. Auftrag:
+
+```text
+Lege eine neue Seite /leistungen/wartung an. Aufbau wie die anderen
+Leistungsseiten. Inhalt: den Text aus der Datei wartung.txt im
+Hauptordner wörtlich übernehmen, nichts hinzuerfinden. Titel und
+Meta-Beschreibung für Suchmaschinen schlägst du mir vor, bevor du sie
+einträgst. Verlinke die Seite in der Übersicht unter /leistungen und
+nimm sie in die Sitemap auf.
+```
+
+Den Text schreibst du vorher selbst in `wartung.txt`. So bleibt die Aussage deine. Prüfung: Seite erreichbar, verlinkt, auf dem Smartphone lesbar, in `deinedomain.de/sitemap.xml` enthalten. Die Datei `wartung.txt` löschst du danach selbst.
+
+### Übung 3: ein Bild tauschen
+
+Branch: `bild-startseite`. Komprimiere das neue Foto vorher mit Squoosh wie in Modul 2 und lege es unter `public/bilder` ab, etwa als `team-2026.webp`. Auftrag:
+
+```text
+Ersetze auf der Startseite das Bild im oberen Bereich durch
+public/bilder/team-2026.webp. Alternativtext: „Das Team von
+[Firmenname] vor der Werkstatt in [Ort]“. Das alte Bild bleibt im
+Ordner liegen. Prüfe, ob es noch an anderer Stelle verwendet wird,
+und sag mir das Ergebnis.
+```
+
+Prüfung: Das Bild erscheint in der Vorschau scharf und ohne Verzerrung, am Smartphone und am Rechner. Das alte Bild löschst du erst, wenn Claude Code bestätigt hat, dass es nirgends mehr verwendet wird – und dann in einem eigenen, kleinen Schritt.
+
+<ProTipp>
+
+Schreib nach jeder Übung einen Satz in deine `CLAUDE.md`, wenn dir etwas aufgefallen ist – etwa „Öffnungszeiten stehen zentral in der Datei für Firmendaten“. So muss Claude Code das beim nächsten Mal nicht neu herausfinden.
+
+</ProTipp>
+
+## Ergebnis-Prüfung
+
+<Ergebnis>
+
+- [ ] `claude --version` und `claude doctor` laufen ohne Fehler, du bist angemeldet.
+- [ ] Die `CLAUDE.md` enthält unter `@AGENTS.md` deine eigenen Regeln inklusive Tabu-Liste und liegt im Repository.
+- [ ] Es gibt keine zweite Datei mit Grundregeln für Claude Code.
+- [ ] Du hast jede Änderung im Planmodus begonnen und den Plan vor der Freigabe gelesen.
+- [ ] Übung 1 ist live: Die Öffnungszeiten stimmen an jeder Stelle der Seite.
+- [ ] Übung 2 ist live: Die neue Seite ist erreichbar, verlinkt und in der Sitemap.
+- [ ] Übung 3 ist live: Das neue Bild erscheint mit Alternativtext.
+- [ ] Auf GitHub gibt es drei zusammengeführte Pull Requests mit je einer Vercel-Vorschau.
+- [ ] Nach jedem Zusammenführen hast du die Live-Seite selbst aufgerufen.
+- [ ] `git status` auf `main` meldet einen sauberen Stand.
+
+</Ergebnis>
+
+Du änderst deine Seite jetzt selbst – gesichert, geprüft, in deinem Tempo. Bevor mehr Besucher kommen, bringst du in Modul 5 die rechtliche Basis in Ordnung: Impressum, Datenschutzerklärung, Einwilligungsbanner und die Verträge mit deinen Dienstleistern.

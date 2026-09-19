@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Zap, AlertTriangle, Lightbulb, Thermometer, HelpCircle, Hand } from 'lucide-react';
+import { Zap, AlertTriangle, Lightbulb, Thermometer, HelpCircle, Hand, CornerDownRight, Wrench, CheckSquare, Scale } from 'lucide-react';
 
 /**
  * Wiederverwendbare MDX-Callouts gegen „Textwüsten".
@@ -62,4 +62,26 @@ export function Leitfrage({ children }: { children: ReactNode }) {
 /** Aufgabe am eigenen Grill, mit Selbstkontrolle — der Teil, den kein Text ersetzt. */
 export function Handgriff({ children }: { children: ReactNode }) {
   return <Box icon={<Hand size={15} />} label="Handgriff — jetzt am Grill" accent="#E85018">{children}</Box>;
+}
+
+/* ── Eigenregie (19.09.2026, KONZEPT-Eigenregie Abschnitt 6) ───────────────── */
+
+/** Falle, die der Nutzer an genau dieser Stelle umgeht — als Vorteil formuliert, nie als Anekdote. */
+export function Umweg({ children }: { children: ReactNode }) {
+  return <Box icon={<CornerDownRight size={15} />} label="Umweg vermieden" accent="#2F7D5B">{children}</Box>;
+}
+
+/** Werkzeug: Zweck, Kosten (Gratis-Variante zuerst), Grenzen. */
+export function Werkzeug({ children }: { children: ReactNode }) {
+  return <Box icon={<Wrench size={15} />} label="Werkzeug" accent="#5A6B7B">{children}</Box>;
+}
+
+/** Prüfbares Ergebnis eines Abschnitts oder Moduls. */
+export function Ergebnis({ children }: { children: ReactNode }) {
+  return <Box icon={<CheckSquare size={15} />} label="Ergebnis — erst dann weiter" accent="#C8882A">{children}</Box>;
+}
+
+/** Rechtlicher Hinweis — immer mit „keine Rechtsberatung“. */
+export function Rechtlich({ children }: { children: ReactNode }) {
+  return <Box icon={<Scale size={15} />} label="Rechtlich — keine Rechtsberatung" accent="#7A5C99">{children}</Box>;
 }

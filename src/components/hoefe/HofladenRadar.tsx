@@ -166,7 +166,7 @@ export default function HofladenRadar({ apiKey }: { apiKey: string }) {
               name="ort"
               value={ort}
               onChange={(e) => setOrt(e.target.value)}
-              placeholder="Ort oder PLZ, z. B. 42279 oder Wuppertal"
+              placeholder="Ort oder PLZ, z. B. Wuppertal, 8001 Zürich, 1010 Wien"
               inputMode="search"
               autoComplete="postal-code"
               className="w-full rounded-lg border border-border-subtle bg-surface-base px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold focus:outline-none"
