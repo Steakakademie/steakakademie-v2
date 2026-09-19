@@ -2,7 +2,10 @@ import 'server-only';
 import { createClient } from '@supabase/supabase-js';
 
 /**
- * Anzahl vergebener Pilotplätze = aktive Buchungen auf den Kurs „eigenregie“.
+ * Anzahl vergebener Pilotplätze = nicht widerrufene Buchungen auf den Kurs „eigenregie“.
+ * 20.09.2026: zählte nur status='active' — die Live-Fassung von grant_course_access
+ * legte Käufe aber als 'pending' an → Zähler blieb bei 0. Jetzt: jeder Status außer
+ * cancelled/refunded, solange revoked_at leer ist.
  * Service-Role, weil bookings per RLS nur der eigene Nutzer sieht.
  * Fehler → null (Seite zeigt dann keine Zahl, statt eine falsche).
  * Achtung: Uwes Testkauf zählt mit — Test-Buchung danach widerrufen (revoked_at).
@@ -22,7 +25,7 @@ export async function vergebenePlaetze(): Promise<number | null> {
       .from('bookings')
       .select('id', { count: 'exact', head: true })
       .eq('course_id', course.id)
-      .eq('status', 'active')
+      .in('status', ['active', 'confirmed', 'pending'])
       .is('revoked_at', null);
     if (error) return null;
     return count ?? 0;
