@@ -18,6 +18,9 @@ import { sichtbareArtikel, istEntwurf } from '@/lib/redaktion';
 // bekannten Namen, nicht pro Route (CLAUDE.md §4, MDX-Komponenten-Gate).
 import DiplomCTA from '@/components/mdx/DiplomCTA';
 import AffiliateBox from '@/components/mdx/AffiliateBox';
+// 19.09.2026: Callouts registriert — der Pökel-Artikel nutzt <Schnelluebersicht>/<Achtung>;
+// als Entwurf unsichtbar, nach Freigabe brach der Vercel-Build (Expected component `Achtung`).
+import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
 import { faqSchema } from '@/lib/schema';
 
 interface Props {
@@ -79,6 +82,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 const mdxComponents = {
   DiplomCTA,
   AffiliateBox,
+  Schnelluebersicht,
+  Achtung,
+  ProTipp,
+  TempBox,
+  Leitfrage,
+  Handgriff,
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mt-10 mb-4 leading-tight border-b border-border-subtle pb-3"
