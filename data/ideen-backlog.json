@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-16T09:56:26.735Z",
+ "aktualisiert": "2026-09-19T09:29:26.683Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -1736,6 +1736,50 @@
     "Beef Rub Menu"
    ],
    "gesehen": "2026-09-16",
+   "status": "neu"
+  },
+  {
+   "id": "vindulge:gluten-free-pizza-dough-recipe-neapolitan-style",
+   "quelle": "vindulge",
+   "quelleName": "Vindulge",
+   "quelleUrl": "https://www.vindulge.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Wein-Begleitung, Holzfeuer, gehobene Küche",
+   "titel": "Gluten-Free Pizza Dough Recipe (Neapolitan Style)",
+   "link": "https://www.vindulge.com/gluten-free-pizza-dough-recipe/?adt_ei={$email}",
+   "datum": "Wed, 16 Sep 2026 17:59:09 +0000",
+   "kategorien": [
+    "Food Recipes",
+    "Pizza Recipes"
+   ],
+   "gesehen": "2026-09-19",
+   "status": "neu"
+  },
+  {
+   "id": "heygrillhey:dill-burger-sauce-in-n-out-spread-copycat",
+   "quelle": "heygrillhey",
+   "quelleName": "Hey Grill Hey",
+   "quelleUrl": "https://heygrillhey.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Pellet-Grill, Familienküche, Feiertage, Saucen und Rubs",
+   "titel": "Dill Burger Sauce (In-N-Out Spread Copycat)",
+   "link": "https://heygrillhey.com/dill-burger-sauce/",
+   "datum": "Fri, 18 Sep 2026 14:00:00 +0000",
+   "kategorien": [
+    "Condiments",
+    "Everything Else",
+    "No Cooking",
+    "Recipes",
+    "Sides",
+    "Beef Rub"
+   ],
+   "gesehen": "2026-09-19",
    "status": "neu"
   }
  ]
