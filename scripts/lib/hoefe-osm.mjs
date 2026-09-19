@@ -11,9 +11,9 @@
 // Suffix — `(?i)` ist dort ein statischer Fehler (am 13.09.2026 belegt).
 export const OVERPASS_QUERY = `
 [out:json][timeout:180];
-area["ISO3166-1"="DE"][admin_level=2]->.de;
+area["ISO3166-1"~"^(DE|AT|CH)$"][admin_level=2]->.dach;
 (
-  nwr["shop"="farm"](area.de);
+  nwr["shop"="farm"](area.dach);
 );
 out center tags;
 `.trim();
@@ -51,6 +51,15 @@ export function fleischAusTags(tags = {}) {
   return { verkauft_fleisch: null, fleischarten: [] };
 }
 
+/**
+ * Grobe Bounding-Box DE + AT + CH (inkl. Liechtenstein, das mittendrin liegt).
+ * DE 47,3–55,1 N / 5,9–15,0 E · AT 46,4–49,0 N / 9,5–17,2 E · CH 45,8–47,8 N / 6,0–10,5 E.
+ * Genauer filtert die Overpass-Abfrage (Landesgrenzen); das hier faengt nur Ausreisser.
+ */
+export function imDachRaum(lat, lng) {
+  return lat >= 45.5 && lat <= 55.5 && lng >= 5.5 && lng <= 17.5;
+}
+
 export function slugAusName(name, osmId) {
   const basis = String(name)
     .toLowerCase()
@@ -83,7 +92,7 @@ export function hofAusElement(el) {
   const lat = el.lat ?? el.center?.lat;
   const lng = el.lon ?? el.center?.lon;
   if (typeof lat !== 'number' || typeof lng !== 'number') return null;
-  if (lat < 47 || lat > 56 || lng < 5 || lng > 16) return null;
+  if (!imDachRaum(lat, lng)) return null;
 
   // Ohne Namen ist ein Hof im Radar wertlos (kein Profil, keine Suche).
   const name = (tags.name ?? tags['name:de'] ?? '').trim();

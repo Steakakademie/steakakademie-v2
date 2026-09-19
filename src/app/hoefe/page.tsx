@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   // Kein "| Steakakademie" — das haengt das title.template im Root-Layout an.
   title: 'Hofladen-Radar: Fleisch direkt vom Erzeuger finden',
   description:
-    'Hofläden und Direktvermarkter in deiner Nähe — mit Umkreissuche nach Ort oder PLZ. Rind, Schwein, Lamm, Geflügel direkt vom Hof, Bio-Höfe markiert.',
+    'Hofläden und Direktvermarkter in deiner Nähe — in Deutschland, Österreich und der Schweiz. Umkreissuche nach Ort oder PLZ, Rind, Schwein, Lamm, Geflügel direkt vom Hof, Bio-Höfe markiert.',
   alternates: { canonical: 'https://steakakademie.de/hoefe' },
   openGraph: {
     images: ogImages('Hofladen-Radar — Fleisch direkt vom Erzeuger'),
     title: 'Hofladen-Radar — Fleisch direkt vom Erzeuger',
-    description: 'Hofläden in deiner Nähe finden: Umkreissuche nach Ort oder PLZ, Fleischangebot und Bio auf einen Blick.',
+    description: 'Hofläden in deiner Nähe finden — Deutschland, Österreich, Schweiz: Umkreissuche nach Ort oder PLZ, Fleischangebot und Bio auf einen Blick.',
     url: 'https://steakakademie.de/hoefe',
     type: 'website',
   },
@@ -49,7 +49,7 @@ export default async function HoefePage() {
             <p className="mt-3 font-body text-[1rem] leading-relaxed text-text-secondary">
               Das beste Steak beginnt vor dem Grill: beim Tier, beim Hof, beim Menschen, der es großgezogen hat.
               Gib Ort oder Postleitzahl ein und finde Direktvermarkter in deiner Nähe
-              {zahlen.gesamt > 0 ? ` — ${zahlen.gesamt.toLocaleString('de-DE')} Höfe in Deutschland, ${zahlen.fleisch.toLocaleString('de-DE')} davon mit belegtem Fleischangebot.` : '.'}
+              {zahlen.gesamt > 0 ? ` — ${zahlen.gesamt.toLocaleString('de-DE')} Höfe in Deutschland, Österreich und der Schweiz, ${zahlen.fleisch.toLocaleString('de-DE')} davon mit belegtem Fleischangebot.` : '.'}
             </p>
           </div>
 

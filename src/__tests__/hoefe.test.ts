@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { adresseZeile, entfernungLabel, fleischStatus, sichereUrl, hostAusUrl, zahlAusParam } from '@/lib/hoefe/format';
+import { plzSuche } from '@/lib/hoefe/geocode';
 // .mjs ohne eigene Typen — tsc erlaubt den Import (allowJs), vitest laedt es direkt
 import { fleischAusTags, slugAusName, hofAusElement, hoefeAusElementen, OVERPASS_QUERY } from '../../scripts/lib/hoefe-osm.mjs';
 
@@ -59,7 +60,7 @@ describe('scripts/lib/hoefe-osm', () => {
     expect(slugAusName('!!!', 'n9')).toBe('hofladen-9');
   });
 
-  it('hofAusElement: Node mit Tags → Zeile; ohne Name oder ausserhalb DE → null', () => {
+  it('hofAusElement: Node mit Tags → Zeile; ohne Name oder ausserhalb DACH → null', () => {
     const el = {
       type: 'node', id: 248215031, lat: 52.24, lon: 10.588,
       tags: { name: 'Hofladen Bosse', produce: 'beef', organic: 'yes', 'addr:street': 'Kleegasse', 'addr:housenumber': '1', 'addr:postcode': '38126', 'addr:city': 'Braunschweig', website: 'hofladen-bosse.de', phone: '+49 531 62557' },
@@ -68,6 +69,25 @@ describe('scripts/lib/hoefe-osm', () => {
     expect(h).toMatchObject({ osm_id: 'n248215031', slug: 'hofladen-bosse-248215031', bio: true, verkauft_fleisch: true, strasse: 'Kleegasse 1', plz: '38126', website: 'https://hofladen-bosse.de' });
     expect(hofAusElement({ type: 'node', id: 1, lat: 52, lon: 10, tags: {} })).toBeNull();
     expect(hofAusElement({ type: 'node', id: 1, lat: 40, lon: 10, tags: { name: 'X' } })).toBeNull();
+  });
+
+  it('hofAusElement: Hoefe in Oesterreich und der Schweiz werden uebernommen', () => {
+    // Burgenland (Ostrand AT), Wallis (Suedrand CH), Vorarlberg
+    expect(hofAusElement({ type: 'node', id: 11, lat: 47.85, lon: 16.95, tags: { name: 'Hof Pannonia' } })).not.toBeNull();
+    expect(hofAusElement({ type: 'node', id: 12, lat: 46.05, lon: 7.4, tags: { name: 'Alp Hof' } })).not.toBeNull();
+    expect(hofAusElement({ type: 'node', id: 13, lat: 47.4, lon: 9.75, tags: { name: 'Hof am See' } })).not.toBeNull();
+    // Budapest liegt ausserhalb
+    expect(hofAusElement({ type: 'node', id: 14, lat: 47.5, lon: 19.04, tags: { name: 'X' } })).toBeNull();
+  });
+
+  it('OVERPASS_QUERY fragt DE, AT und CH ab', () => {
+    expect(OVERPASS_QUERY).toContain('^(DE|AT|CH)$');
+  });
+
+  it('plzSuche: 5-stellig = DE, 4-stellig = AT/CH, Ortsname = DACH', () => {
+    expect(plzSuche('42279')).toEqual({ text: '42279 Deutschland', laender: 'de' });
+    expect(plzSuche('8001')).toEqual({ text: '8001', laender: 'at,ch' });
+    expect(plzSuche('Graz')).toEqual({ text: 'Graz', laender: 'de,at,ch' });
   });
 
   it('hofAusElement: Way nutzt center', () => {
