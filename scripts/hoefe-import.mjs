@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Hofladen-Radar — Wochenimport aller Hoflaeden (shop=farm) in Deutschland
+ * Hofladen-Radar — Wochenimport aller Hoflaeden (shop=farm) in Deutschland, Oesterreich und der Schweiz
  * aus OpenStreetMap (Overpass) nach Supabase (Tabelle hoefe).
  *
  * Aufruf:
