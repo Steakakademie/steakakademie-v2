@@ -1,0 +1,272 @@
+---
+title: "Übergabe an dich selbst: Betrieb, Sicherung, Wiederanlauf"
+order: 6
+excerpt: "Du schreibst dein eigenes Betriebs-Handbuch, richtest Sicherungen und Sicherheitsupdates ein, übst den Rückweg nach einem Fehler und legst eine Monats-Routine von 30 Minuten fest. Am Ende steht der Abschlusscheck über alle sechs Module."
+dauer: "150 Min"
+lernziel: "Du kannst deine Seite dauerhaft allein betreiben – und weißt, wann du dir Hilfe holst."
+ergebnis: "Ein ausgefülltes Betriebs-Handbuch im eigenen Repository, eine getestete Sicherung, ein einmal geübter Rückweg, aktive Sicherheitsupdates und eine Monats-Routine im Kalender."
+publishedAt: "2026-09-19"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Wenn deine Seite in einem halben Jahr an einem Freitagabend einen Fehler zeigt: Weißt du dann noch, wo du hinschaust, was du zurücknimmst und wen du anrufst – ohne dieses Kursmaterial?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- Du schreibst ein **Betriebs-Handbuch** als Datei im Repository: Zugänge, Aufbau, Ändern, Veröffentlichen, Zurückrollen, Notfallkontakte.
+- Du ordnest deine **Sicherungen**: Git sichert den Code, alles andere sicherst du bewusst – nach der **3-2-1-Regel**.
+- Du übst den **Wiederanlauf**: Rückkehr zur letzten funktionierenden Version bei Vercel und Rücknahme im Code mit Git.
+- Du schaltest **Dependabot** ein, den kostenlosen Sicherheitsdienst von GitHub.
+- Du legst eine **Monats-Routine von 30 Minuten** fest und trägst sie in den Kalender ein.
+- Du weißt, **wann externe Hilfe sinnvoll ist** – und wann nicht.
+
+</Schnelluebersicht>
+
+## Warum ein eigenes Handbuch
+
+Bisher hat dich dieser Kurs geführt. Ab jetzt führst du. Das Wissen aus den Modulen 1 bis 5 steckt in deinem Kopf, in Bitwarden, in deiner `CLAUDE.md` und in vielen kleinen Entscheidungen. In sechs Monaten ist davon die Hälfte verblasst.
+
+Das Betriebs-Handbuch hält fest, was du im Ernstfall brauchst – nicht als Lehrbuch, sondern als Spickzettel für dein späteres Ich oder für eine Vertretung. Die `CLAUDE.md` aus Modul 4 bleibt, was sie ist: die Arbeitsanweisung für Claude Code. Das Handbuch ist die Anleitung für Menschen. Wo sich beide berühren, verweist das Handbuch auf die `CLAUDE.md`, statt Regeln doppelt aufzuschreiben.
+
+## Das Betriebs-Handbuch
+
+Lege im Hauptordner deines Projekts die Datei `BETRIEB.md` an – oder lass Claude Code das tun – und fülle diese Vorlage aus. Sie liegt damit im privaten Repository, versioniert und auf jedem Rechner verfügbar, auf dem du dein Projekt öffnest.
+
+```markdown
+# Betriebs-Handbuch – deinedomain.de
+Stand: [Datum] · Verantwortlich: [Name]
+
+## 1. Zugänge
+Alle Zugangsdaten liegen in Bitwarden, Ordner „Website“.
+Hier stehen KEINE Passwörter, nur wo was liegt:
+- Registrar: [Anbieter] – Domain läuft bis [Datum], Verlängerung automatisch: ja/nein
+- DNS: Cloudflare, Konto [E-Mail]
+- Hosting: Vercel, Projekt [Name], Tarif [Hobby/Pro]
+- Code: github.com/[Name]/website (privat)
+- E-Mail: [Anbieter]
+- Formular-Dienst: [Anbieter]
+- Rechtstexte: [Generator], erstellt am [Datum]
+- Umgebungsvariablen bei Vercel: [nur die NAMEN, z. B. FORM_API_KEY]
+
+## 2. Aufbau in fünf Zeilen
+1. Die Domain zeigt über Cloudflare-DNS auf Vercel.
+2. Vercel baut die Seite automatisch aus dem Zweig main auf GitHub.
+3. Der Code ist ein Next.js-Projekt, Texte liegen in [Ordner].
+4. Das Kontaktformular sendet über [Dienst] an [Postfach].
+5. Firmendaten stehen zentral in [Datei].
+
+## 3. Wie ich etwas ändere
+Terminal im Projektordner öffnen → claude starten →
+Auftrag in einem Satz → lokal prüfen (npm run dev) → sichern.
+Regeln für Claude Code: siehe CLAUDE.md
+
+## 4. Wie ich veröffentliche
+Sicherung zu GitHub hochladen (push auf main).
+Vercel baut automatisch. Danach Seite aufrufen und
+die geänderte Stelle live prüfen.
+
+## 5. Wie ich zurückrolle
+Sofort: Vercel → Projekt → Instant Rollback.
+Danach: Claude Code nimmt die Änderung mit git revert zurück,
+hochladen, dann bei Vercel „Undo Rollback“.
+
+## 6. Notfallkontakte
+- Vercel-Support: vercel.com/help
+- Status-Seiten: cloudflarestatus.com, vercel-status.com
+- Vertrauensperson (weiß, wo das Master-Passwort liegt): [Name]
+- Registrar-Hotline: [Nummer]
+- Technische Begleitung: [Name, Kontakt]
+- Rechtsfragen: [Kanzlei oder Kammer]
+
+## 7. Letzte Monats-Routine
+[Datum] – erledigt, Auffälligkeiten: [keine / …]
+```
+
+### Die Probe: Versteht jemand anderes dein Handbuch?
+
+Ein Handbuch taugt nur, wenn es ohne dich funktioniert. Prüfe das auf zwei Wegen.
+
+1. **Die Maschinen-Probe:** Starte Claude Code in einer neuen Sitzung und gib ihm den Auftrag: „Lies BETRIEB.md. Stell dir vor, du müsstest die Seite morgen ohne weitere Hilfe betreuen. Welche Fragen bleiben offen? Ändere nichts.“ Jede Frage, die zurückkommt, beantwortest du im Handbuch.
+2. **Die Menschen-Probe:** Gib das Handbuch einer Person deines Vertrauens – Partnerin, Kollege, Mitarbeiterin. Sie muss es nicht umsetzen können. Sie muss nur verstehen, wo was liegt und wen sie im Notfall anruft.
+
+Dazu gehört eine Frage, die viele Selbstständige verschieben: Was passiert, wenn du selbst ausfällst? Dein Master-Passwort für Bitwarden steht auf Papier (Modul 1). Lege fest, wer im Ernstfall weiß, wo dieses Papier liegt – etwa in einem verschlossenen Umschlag bei einer Vertrauensperson oder in den Unterlagen bei deiner Steuerberatung. Trag den Namen dieser Person im Handbuch unter Notfallkontakte ein, nicht das Passwort.
+
+<Achtung>
+
+Passwörter, API-Schlüssel oder Recovery Codes ins Handbuch schreiben. Auch ein privates Repository ist kein Tresor: Es wird auf Rechner geklont, an Werkzeuge angebunden und vielleicht irgendwann jemandem freigegeben. Im Handbuch steht nur, **wo** etwas liegt.
+
+</Achtung>
+
+## Sicherungen: was Git abdeckt und was nicht
+
+Git und GitHub sichern alles, was im Projektordner liegt und hochgeladen ist: Code, Texte in Dateien, Bilder unter `public`, das Handbuch. Jede Version seit dem ersten Tag ist wiederherstellbar. Das ist deine Code-Sicherung, und sie läuft bei jedem Hochladen mit.
+
+Nicht in Git liegen:
+
+| Was | Wo es liegt | Wie du es sicherst |
+|---|---|---|
+| Umgebungsvariablen und Schlüssel | Vercel, lokal in `.env.local` | Werte in Bitwarden, Namen im Handbuch |
+| Formular-Anfragen | Postfach, eventuell Formular-Dienst | Postfach-Sicherung des Mailanbieters prüfen |
+| Datenbank-Inhalte, falls vorhanden | beim Datenbank-Anbieter | Export monatlich, Ablage extern |
+| DNS-Einträge | Cloudflare | Export nach jeder Änderung in **Website-Belege** |
+| Rechtstexte-Zugang, Verträge, AVV | Generator, Ordner **Website-Belege** | Cloud-Speicher mit Versionsverlauf |
+
+Für all das gilt die **3-2-1-Regel**: drei Kopien deiner Daten, auf zwei verschiedenen Speichermedien, eine davon an einem anderen Ort. Für eine Unternehmensseite heißt das ganz praktisch: GitHub ist eine Kopie, dein Rechner die zweite, und einmal im Quartal ziehst du eine dritte auf eine externe Festplatte, die nicht dauerhaft angeschlossen ist. Den Code bekommst du dafür auf GitHub unter **Code → Download ZIP**.
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Eine Schutzmaßnahme sieht eingerichtet aus, ist aber leer – eine Sicherung, die sich nicht zurückspielen lässt, eine Regel ohne eingetragene Prüfung, ein Spam-Schutz, der nie auslöst.
+
+**Was du stattdessen tust:** Du löst jeden Schutz einmal tatsächlich aus: Du entpackst die ZIP-Sicherung in einen leeren Ordner und startest sie mit `npm install` und `npm run dev`, du machst zu einer ruhigen Tageszeit eine Probe-Rückrollung und hebst sie wieder auf, du schickst eine Testanfrage durchs Formular.
+
+**Dein Vorteil:** Du erfährst in einer halben Stunde, ob dein Schutz hält – nicht im Ernstfall, wenn es zu spät ist.
+
+</Umweg>
+
+Ein Hinweis zu Schutzregeln bei GitHub: Geschützte Zweige, die ungeprüfte Änderungen am Hauptzweig blockieren, stehen laut GitHub-Dokumentation im kostenlosen Tarif nur für öffentliche Repositories zur Verfügung, nicht für private. Verlass dich also nicht auf eine Regel, die du in den Einstellungen siehst – dein Schutz ist die Arbeitsweise aus Modul 4: kleine Schritte, lokal prüfen, dann hochladen.
+
+## Wiederanlauf nach Fehlern
+
+Irgendwann geht eine Änderung schief. Das ist normal. Entscheidend ist, dass du den Rückweg einmal geübt hast, bevor du ihn brauchst.
+
+### Fall 1: Die Seite ist live kaputt
+
+Erst stabilisieren, dann reparieren.
+
+1. Öffne bei Vercel dein Projekt. Auf der Übersichtsseite siehst du die Kachel mit dem aktuellen Produktiv-Stand.
+2. Klicke dort auf **Instant Rollback**, wähle die vorherige Version und bestätige mit **Confirm Rollback**. Vercel zeigt deine Domain sofort wieder auf diesen Stand. Im kostenlosen Hobby-Tarif geht das laut Dokumentation nur zur unmittelbar vorherigen Version, im Pro-Tarif zu jeder früheren Produktiv-Version, Stand 09/2026.
+3. Prüfe die Seite im Browser.
+
+<Achtung>
+
+Nach der Rückrollung einfach weiterarbeiten. Vercel schaltet danach die automatische Veröffentlichung ab: Neue Änderungen gehen **nicht** mehr live, bis du auf der Projektkachel **Undo Rollback** klickst und einen Stand bestätigst. Genau diesen Schritt schreibst du ins Handbuch.
+
+</Achtung>
+
+### Fall 2: Die Änderung muss aus dem Code
+
+Die Rückrollung bei Vercel ändert nichts an GitHub – der fehlerhafte Stand liegt dort weiter. Deshalb nimmst du ihn im Code zurück. Gib Claude Code den Auftrag:
+
+```text
+Die letzte Änderung hat die Seite beschädigt. Nimm sie mit
+git revert zurück, prüfe lokal, dass die Seite wieder läuft,
+und lade den Stand hoch. Lösche keine Versionsgeschichte.
+```
+
+`git revert` legt eine neue Version an, die die fehlerhafte aufhebt – nichts wird gelöscht, die Geschichte bleibt nachvollziehbar. Selbst ausgeführt sieht das so aus:
+
+```bash
+git revert HEAD
+git push
+```
+
+Danach klickst du bei Vercel auf **Undo Rollback** und wählst die neue, reparierte Version.
+
+### Fall 3: Der Bau schlägt fehl
+
+Scheitert bei Vercel der Bau, bleibt die alte Version online – dein Besucher merkt nichts. Öffne unter **Deployments** den fehlgeschlagenen Eintrag, kopiere die Fehlermeldung aus dem Protokoll und gib sie Claude Code. Hast du nur eine Umgebungsvariable geändert, genügt ein neuer Bau: in der Liste **Deployments** über das Drei-Punkte-Menü **Redeploy**.
+
+### Fall 4: Die Seite ist gar nicht erreichbar
+
+Zeigt der Browser keine Fehlerseite deines Projekts, sondern gar nichts oder eine Meldung des Browsers, liegt das Problem meist vor Vercel. Prüfe in dieser Reihenfolge: Ist die Domain beim Registrar noch aktiv und bezahlt? Stehen die DNS-Einträge bei Cloudflare noch so, wie sie in deinem letzten Export stehen? Melden **cloudflarestatus.com** oder **vercel-status.com** eine Störung? In den ersten beiden Fällen hilft dir dein DNS-Export, im dritten hilft nur Abwarten – und ein kurzer Hinweis an Kunden, die gerade anfragen wollten.
+
+## Sicherheitsupdates mit Dependabot
+
+Dein Projekt nutzt Hunderte fremder Pakete. Wird in einem eine Sicherheitslücke bekannt, meldet Dependabot das und schlägt die Aktualisierung als fertige Änderung vor – einen sogenannten Pull Request, also einen Änderungsvorschlag, den du annimmst oder ablehnst.
+
+<Werkzeug>
+
+**Dependabot** – Sicherheitsdienst von GitHub, der deine Abhängigkeiten überwacht.
+**Kosten:** 0 €, laut GitHub für alle Repositories verfügbar, Stand 09/2026.
+**Was es nicht kann:** Dependabot prüft nicht, ob deine Seite nach dem Update noch funktioniert. Das tust du – über die Vorschau-Umgebung aus Modul 3.
+
+</Werkzeug>
+
+So schaltest du ihn ein:
+
+1. Öffne dein Repository auf GitHub und klicke auf **Settings**.
+2. Wähle im Seitenmenü **Advanced Security**.
+3. Klicke neben **Dependabot alerts** auf **Enable**.
+4. Klicke neben **Dependabot security updates** auf **Enable**.
+
+Kommt ein Vorschlag, erzeugt Vercel dafür automatisch eine Vorschau. Öffne sie, klicke drei, vier Seiten und das Formular durch, und nimm den Vorschlag erst dann an. Unsicher? Frag Claude Code: „Erkläre mir diesen Dependabot-Vorschlag und ob er etwas an meiner Seite ändert.“
+
+## Die Monats-Routine: 30 Minuten
+
+Trag dir einen festen Termin ein, etwa den ersten Montag im Monat. Hake ab und notiere das Datum im Handbuch unter Punkt 7.
+
+| Nr. | Aufgabe | So geht es | Min |
+|---|---|---|---|
+| 1 | Seite aufrufen | Startseite, zwei Unterseiten, Impressum, Datenschutz – am Rechner und am Smartphone | 5 |
+| 2 | Formular testen | Testanfrage absenden, Eingang im Postfach prüfen | 3 |
+| 3 | Abhängigkeiten aktualisieren | Claude Code: „Prüfe mit npm outdated und npm audit, aktualisiere, was sicher ist, teste lokal und sichere.“ | 10 |
+| 4 | Domain-Ablauf | Beim Registrar Ablaufdatum und automatische Verlängerung prüfen | 2 |
+| 5 | Rechnungen der Dienste | Abrechnungen von Vercel, Registrar, Claude, Mail prüfen: Stimmen Tarif und Betrag? | 3 |
+| 6 | Search Console | **Indexierung → Seiten**: neue Fehler? **Leistung**: Auffälligkeiten? | 5 |
+| 7 | Festhalten | Datum und Befund im Handbuch, sichern | 2 |
+
+Einmal im Quartal kommen hinzu: die dritte Sicherungskopie auf die externe Festplatte und ein Blick in die Datenschutzerklärung – stimmt die Diensteliste noch?
+
+<Umweg>
+
+**Umweg vermieden.** Hier wäre fast Zeit verlorengegangen.
+
+**Was passiert wäre:** Eine Angabe wie die Programmversion – oder deine Telefonnummer – steht fest verdrahtet an 21 Stellen, und bei der nächsten Aktualisierung bleibt ein Treffer unbemerkt alt.
+
+**Was du stattdessen tust:** Du lässt Claude Code einmal suchen, wo dieselbe Angabe mehrfach im Code steht, und sie an einer einzigen Stelle ablegen, aus der alle anderen lesen. Diese Stelle trägst du im Handbuch unter „Aufbau“ ein.
+
+**Dein Vorteil:** Jede Aktualisierung ist eine Zeile statt 21 Dateien – und keine Seite läuft still auseinander.
+
+</Umweg>
+
+## Wann externe Hilfe sinnvoll ist
+
+Eigenregie heißt nicht, alles allein zu machen. Es heißt, selbst zu entscheiden, wann du Hilfe holst – und dabei die Zugänge zu behalten. Ehrlich betrachtet gibt es Fälle, in denen Unterstützung Zeit und Risiko spart:
+
+- **Online-Shop mit Zahlung.** Zahlungsabwicklung, Widerruf, Rechnungen und Steuern greifen ineinander. Fehler kosten hier direkt Geld und Vertrauen.
+- **Sensible Daten.** Gesundheitsangaben, Kundenkonten mit Login, Dokumenten-Upload: Hier lohnt eine fachkundige Prüfung, technisch wie rechtlich.
+- **Große Umbauten.** Neues Design über alle Seiten, Mehrsprachigkeit, Anbindung an eine Warenwirtschaft – Vorhaben, die über viele kleine Schritte hinausgehen.
+- **Rechtsfragen.** Die gehören zu Anwältin, Anwalt oder Kammer, nicht in einen Kurs.
+
+Für alles dazwischen – wenn du an einer Stelle feststeckst, eine Entscheidung abwägen willst oder einen Blick von außen auf dein Projekt brauchst – gibt es die **Einzeleinheiten-Begleitung** der Steakakademie: 129 € je Einheit, Stand 09/2026. Du bestimmst Thema und Takt. Die Einheit ist Begleitung, keine Auftragsarbeit: Gezeigt und gemeinsam gelöst wird an deinem Projekt, die Hand an der Tastatur bleibt deine. Wer sie nicht braucht, braucht sie nicht – das Handbuch ist genau dafür da.
+
+## Ergebnis-Prüfung
+
+Dies ist der Abschlusscheck über den ganzen Kurs. Hake nur ab, was du belegen kannst.
+
+<Ergebnis>
+
+**Modul 1 – Ownership**
+- [ ] Alle sechs Zugänge laufen auf dich und stehen in einem einzigen Passwortmanager; GitHub mit Zwei-Faktor-Schutz.
+- [ ] Die Domain ist nachweislich auf dich eingetragen.
+
+**Modul 2 – Migration**
+- [ ] Jede alte URL ist abgebildet oder bewusst weitergeleitet; die Prüfliste zeigt keinen Fehler.
+
+**Modul 3 – Live gehen**
+- [ ] Deine Domain zeigt auf dein Vercel-Projekt, E-Mail funktioniert, das Kontaktformular stellt zu.
+- [ ] Der alte Vertrag ist erst nach erfolgreichem Umschalten gekündigt.
+
+**Modul 4 – Claude Code**
+- [ ] Deine `CLAUDE.md` ist aktuell, und du hast mindestens eine Änderung selbst umgesetzt und veröffentlicht.
+
+**Modul 5 – Rechtssichere Basis**
+- [ ] Impressum und Datenschutzerklärung sind auf jeder Seite erreichbar; das Banner funktioniert oder ist bewusst nicht nötig; die AVV liegen ab.
+
+**Modul 6 – Übergabe**
+- [ ] `BETRIEB.md` ist ausgefüllt und hochgeladen – ohne ein einziges Passwort; Maschinen- und Menschen-Probe sind bestanden, eine Vertrauensperson ist eingetragen.
+- [ ] Die ZIP-Sicherung wurde einmal in einen leeren Ordner entpackt und lief dort.
+- [ ] Eine Probe-Rückrollung bei Vercel ist durchgeführt und mit **Undo Rollback** wieder aufgehoben.
+- [ ] Dependabot-Warnungen und -Sicherheitsupdates sind aktiv.
+- [ ] Die Monats-Routine steht als wiederkehrender Termin im Kalender, der erste Durchlauf ist im Handbuch notiert.
+
+</Ergebnis>
+
+Damit ist die Übergabe vollzogen. Du besitzt deine Domain, deinen Code und deine Zugänge. Du kannst deine Seite ändern, veröffentlichen und im Fehlerfall zurückholen. Du weißt, welche Regeln gelten, und hast aufgeschrieben, wie dein Betrieb läuft. Das ist keine Kleinigkeit. Ab hier gehört die Seite nicht nur dir. Du führst sie auch.
