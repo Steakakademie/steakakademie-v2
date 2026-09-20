@@ -1,4 +1,4 @@
--- NOCH NICHT ANGEWENDET (Stand 20.09.2026) — Anwendung per Supabase-MCP apply_migration nach Uwes Freigabe; danach Datei auf Ledger-Version umbenennen.
+-- Am 20.09.2026 per Supabase-MCP angewendet (Freigabe Uwe); Dateiname = Ledger-Version 20260920061927.
 -- Kauf -> Zugang: Buchungsstatus und Widerruf reparieren (20.09.2026).
 -- Befund beim Eigenregie-Testkauf: Die LIVE-Fassung von grant_course_access
 -- setzte keinen Status (Spalten-Default 'pending'), anders als 009_rpc_v2.sql.
