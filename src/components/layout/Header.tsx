@@ -10,44 +10,33 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import AccountLink from './AccountLink';
 
-const NAV_CATEGORIES = [
-  {
-    name: 'Grilltechniken',
-    href: '/methoden',
-    sub: [
-      { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
-      { label: 'Direktes Grillen', href: '/methoden/direktes-grillen' },
-      { label: 'Indirektes Grillen', href: '/methoden/indirektes-grillen' },
-      { label: 'Smoken Low & Slow', href: '/methoden/smoken-low-and-slow' },
-      { label: 'Searing — perfekte Kruste', href: '/methoden/searing-perfekte-kruste' },
-      { label: 'Sous-vide', href: '/methoden/sous-vide' },
-      { label: 'Alle Grilltechniken', href: '/methoden' },
-    ],
-  },
-  {
-    name: 'Cuts & Fleischkunde',
-    href: '/cuts',
-    sub: [
-      { label: '★ Cut-Generator', href: '/cut-generator' },
-      { label: 'Cut-Atlas', href: '/cuts' },
-      { label: 'Ribeye', href: '/cuts/ribeye' },
-      { label: 'Brisket', href: '/cuts/brisket' },
-      { label: 'Tomahawk', href: '/cuts#tomahawk' },
-    ],
-  },
+type NavSub = { label: string; href: string };
+type NavCategory = { name: string; href: string; sub: NavSub[]; wide?: boolean };
+
+// Umbau 20.09.2026 (7-Tage-Abgleich): 8 Rubriken → 6 Bereiche. Vorher waren fertige
+// Seiten nur ueber Umwege erreichbar (/artikel, /suche, /aroma-matcher nur im Footer,
+// /terroir, /rettung, /menue, /fleischpass nur aus zweiter Ebene). Jetzt hat jedes
+// Werkzeug einen Platz im Menue „Tools", das Wissen eine zweispaltige Liste.
+// Alte Rubriken bleiben als Unterpunkte erreichbar (Grilltechniken, Cuts, USA-Expedition).
+const NAV_CATEGORIES: NavCategory[] = [
   {
     name: 'Wissen',
     href: '/wissen',
+    wide: true,
     sub: [
+      { label: 'Grilltechniken', href: '/methoden' },
+      { label: 'Cuts & Fleischkunde', href: '/cuts' },
       { label: 'Kerntemperaturen', href: '/temperatur-guide' },
       { label: '★ Kerntemperatur-Spickzettel (gratis)', href: '/kerntemperatur-spickzettel' },
-      { label: 'Streitfälle am Grill', href: '/streitfaelle' },
-      // Freigegeben am 03.09.2026 — alle drei Serienteile stehen auf published,
-      // der Menuepunkt fuehrt wieder auf echte Inhalte (war vom 30.08. bis
-      // 03.09. auskommentiert, weil /fleischwissen nur den Leerzustand zeigte).
+      // Freigegeben am 03.09.2026 — alle drei Serienteile stehen auf published.
       { label: 'Fleischwissen', href: '/fleischwissen' },
-      { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
+      { label: 'Meat Terroir — Herkunft & Geschmack', href: '/terroir' },
+      { label: 'Steak-Rettung: 6 Grillfehler', href: '/rettung' },
+      { label: 'Streitfälle am Grill', href: '/streitfaelle' },
+      { label: 'BBQ-Lexikon', href: '/glossar' },
+      { label: 'USA-Expedition', href: '/usa-expedition' },
+      { label: 'Alle Artikel', href: '/artikel' },
     ],
   },
   {
@@ -60,6 +49,23 @@ const NAV_CATEGORIES = [
       { label: 'Saucen, Rubs & Injektionen', href: '/rezepte/saucen-rubs' },
       { label: 'Fire-Desserts', href: '/rezepte/desserts' },
       { label: 'Wine, Spirits & Cocktails', href: '/rezepte/wine-spirits' },
+      { label: 'Menü-Planer mit Einkaufsliste', href: '/menue' },
+      { label: 'Community-Rezepte', href: '/rezepte/community' },
+    ],
+  },
+  {
+    name: 'Tools',
+    href: '/#werkzeuge',
+    sub: [
+      { label: '★ Aroma-Matcher', href: '/aroma-matcher' },
+      { label: 'Cut-Atlas', href: '/cuts' },
+      { label: 'Cut-Generator', href: '/cut-generator' },
+      { label: 'Foodpairing', href: '/#werkzeuge' },
+      { label: 'Rezept-Schmiede', href: '/#werkzeuge' },
+      { label: 'Hofladen-Radar', href: '/hoefe' },
+      { label: 'Fleischpass — Grill-Logbuch', href: '/fleischpass' },
+      { label: 'Menü-Planer', href: '/menue' },
+      { label: 'Suche', href: '/suche' },
     ],
   },
   {
@@ -70,26 +76,20 @@ const NAV_CATEGORIES = [
       { label: 'Oberhitzegrills', href: '/vergleich/oberhitzegrill-vergleich' },
       { label: 'Dry-Ager', href: '/vergleich/dry-aging-kuehlschrank-vergleich' },
       { label: 'Küchenmaschinen', href: '/vergleich/kuechenmaschine-vergleich' },
+      { label: 'Alle Tests', href: '/vergleich' },
     ],
   },
   {
-    name: 'Community',
+    // Hiess bis 20.09.2026 „Community" — es gibt aber (noch) keine Community-Seite;
+    // die Unterpunkte sind Magazin-Rubriken. Ehrlicher Name, gleiche Ziele.
+    name: 'Magazin',
     href: '/bbq-news',
     sub: [
       { label: 'BBQ-News', href: '/bbq-news' },
       { label: 'Grillstil — Frauen & Lifestyle', href: '/grillstil' },
       { label: 'Pflanzlich & Vegan', href: '/pflanzlich' },
       { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
-    ],
-  },
-  {
-    name: 'USA-Expedition',
-    href: '/usa-expedition',
-    sub: [
-      { label: 'Texas Style', href: '/usa-expedition/texas-style' },
-      { label: 'Kansas City', href: '/usa-expedition/kansas-city' },
-      { label: 'Memphis', href: '/usa-expedition/memphis' },
-      { label: 'Carolinas', href: '/usa-expedition/carolinas' },
+      { label: 'USA-Expedition', href: '/usa-expedition' },
     ],
   },
   {
@@ -287,8 +287,8 @@ export default function Header() {
             <ul className="flex items-center justify-end">
               {NAV_CATEGORIES.map((cat) => {
                 const isActive =
-                  pathname === cat.href ||
-                  pathname.startsWith(`${cat.href}/`);
+                  !cat.href.includes('#') &&
+                  (pathname === cat.href || pathname.startsWith(`${cat.href}/`));
                 return (
                   <li key={cat.href} className="group relative">
                     <Link
@@ -311,7 +311,12 @@ export default function Header() {
 
                     {/* Dropdown */}
                     {cat.sub.length > 0 && (
-                      <div className="absolute top-full left-0 bg-surface-elevated border border-brand-gold/15 shadow-[0_8px_32px_rgba(0,0,0,0.45)] min-w-[200px] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-[opacity,visibility,transform] duration-150 translate-y-1 group-hover:translate-y-0">
+                      <div
+                        className={cn(
+                          'absolute top-full left-0 bg-surface-elevated border border-brand-gold/15 shadow-[0_8px_32px_rgba(0,0,0,0.45)] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-[opacity,visibility,transform] duration-150 translate-y-1 group-hover:translate-y-0',
+                          cat.wide ? 'grid grid-cols-2 min-w-[460px]' : 'min-w-[200px]'
+                        )}
+                      >
                         {cat.sub.map((sub) => (
                           <Link
                             key={sub.href + sub.label}
@@ -358,6 +363,27 @@ export default function Header() {
                   </li>
                 ))}
               </ul>
+              {/* Werkzeuge auch mobil direkt erreichbar (20.09.2026) — vorher fuehrte
+                  auf dem Handy kein Menuepunkt zu Aroma-Matcher, Hofladen-Radar & Co. */}
+              {NAV_CATEGORIES.filter((c) => c.name === 'Tools').map((tools) => (
+                <div key="tools-mobile" className="mt-6">
+                  <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-3">
+                    Werkzeuge
+                  </p>
+                  <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
+                    {tools.sub.map((sub) => (
+                      <li key={sub.href + sub.label}>
+                        <Link
+                          href={sub.href}
+                          className="block text-sm font-sans text-text-light/70 hover:text-brand-gold transition-colors"
+                        >
+                          {sub.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
               <div className="mt-8 space-y-4">
                 {/* Leadmagnet zuerst — mobil war der Trichter bis zum Audit 15.08.2026
                     komplett geschlossen (Exit-Intent feuert auf Touch-Geräten nie). */}

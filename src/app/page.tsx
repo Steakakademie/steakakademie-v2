@@ -10,6 +10,7 @@ import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import FrischSaisonal from '@/components/home/FrischSaisonal';
 import ToolBoxes from '@/components/home/ToolBoxes';
+import { FREE_LIMIT as AROMA_FREE_LIMIT } from '@/lib/aroma-matcher/data';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
@@ -184,8 +185,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── WERKZEUGE — Head-Boxen (Cut-Atlas · Foodpairing · Rezept-Schmiede) ── */}
-        <ToolBoxes />
+        {/* ── WERKZEUGE — 6 Kacheln (Aroma-Matcher zuerst) · Marco-Band · VIP-Zeile ── */}
+        <ToolBoxes freeLimit={AROMA_FREE_LIMIT} />
 
         {/* ── LEADMAGNET — nach dem redaktionellen Einstieg (Uwe, 16.08.2026) ──
             Entscheidung: erst Inhalt beweisen, dann Geschenk anbieten (Reziprozitaet,

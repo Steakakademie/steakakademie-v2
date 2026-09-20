@@ -1,8 +1,15 @@
 'use client';
 
 /**
- * Drei Werkzeug-Boxen im Head-Bereich der Startseite (User-Magnete):
- *   🔥 Cut-Generator · 🧪 Foodpairing · 🍳 Rezept-Schmiede (⭐-Stufen) · 📍 Hofladen-Radar
+ * Werkzeuge-Sektion der Startseite (Position 5, Konzept Uwe 19.09.2026,
+ * Design-Canvas „Aroma-Matcher – Darstellung", Artboard „Startseite-B"):
+ *   6 Kacheln 3×2 — Aroma-Matcher (Platz 1, Bild, Gold-Rahmen, NEU + VIP) ·
+ *   Cut-Atlas · Foodpairing · Rezept-Schmiede · Hofladen-Radar · Räucherholz-Finder (BALD, VIP)
+ *   darunter das Marco-Band „Sommelier am Grill" (öffnet den Chat per sk:marco-Event)
+ *   darunter die ruhige VIP-Zeile → /vip (Warteliste).
+ *
+ * Hintergrund: Der Aroma-Matcher war vom 17.–20.09. nur im Footer verlinkt —
+ * 0 Abfragen in drei Tagen. „Footer-Link als einziger Zugang geht gar nicht" (Uwe).
  *
  * „Jetzt mit Fallback": Foodpairing & Rezept-Schmiede rufen ihre Endpoints
  * (/api/foodpairing, /api/kochwissen/generieren) live auf. Solange die
@@ -12,8 +19,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus, Radar } from 'lucide-react';
+import Image from 'next/image';
+import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus, Radar, Wine, Trees, Crown } from 'lucide-react';
 import LazyMarkdown from '@/components/ui/LazyMarkdown';
+import MarcoStarter from '@/components/relaunch/MarcoStarter';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
@@ -400,7 +409,32 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
   );
 }
 
-export default function ToolBoxes() {
+const KACHEL =
+  'group flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold transition-colors';
+
+function Badge({ children, filled = false, muted = false }: { children: React.ReactNode; filled?: boolean; muted?: boolean }) {
+  return (
+    <span
+      className={`inline-block px-2 py-0.5 text-[10px] font-sans font-bold tracking-[0.18em] uppercase ${
+        filled
+          ? 'bg-brand-gold text-ink'
+          : muted
+            ? 'border border-border-subtle text-text-muted'
+            : 'border border-brand-gold text-brand-gold'
+      }`}
+    >
+      {children}
+    </span>
+  );
+}
+
+const MARCO_FRAGEN = [
+  'Welcher Wein zum Dry-Aged Ribeye?',
+  'Welches Bier zum Brisket?',
+  'Alkoholfrei zum Tomahawk für 6 Gäste?',
+];
+
+export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
   // Verkettung: Foodpairing → Rezept-Schmiede (nonce, damit auch gleiche Vorgabe erneut auslöst).
   const [seed, setSeed] = useState<{ auftrag: string; nonce: number } | null>(null);
 
@@ -424,12 +458,43 @@ export default function ToolBoxes() {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {/* Cut-Generator → bestehende Cut-Welt */}
+        {/* 6 Kacheln, 3×2 — Aroma-Matcher auf Platz 1 (Uwe, 19.09.2026) */}
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {/* Aroma-Matcher — Platz 1, Bild, Gold-Rahmen, NEU + VIP */}
           <Link
-            href="/cuts"
-            className="group flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold transition-colors"
+            href="/aroma-matcher"
+            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated transition-colors"
           >
+            <div className="relative h-32 w-full">
+              <Image
+                src="/images/cuts/ribeye.jpg"
+                alt="Dry-Aged Ribeye — Ausgangspunkt des Aroma-Matchers"
+                fill
+                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <div className="mb-2 flex gap-2">
+                <Badge>Neu</Badge>
+                <Badge filled>VIP</Badge>
+              </div>
+              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+                <Wine size={18} />
+                <h3 className="font-serif text-lg font-bold text-text-light">Aroma-Matcher</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-2">
+                Was passt zu deinem Cut? Rub, Holz und das passende Glas — mit einem Satz, warum.
+              </p>
+              <p className="text-[11px] text-text-muted mb-4">{freeLimit} Cuts gratis · VIP ohne Limit</p>
+              <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+                Cut wählen <ChevronRight size={14} />
+              </span>
+            </div>
+          </Link>
+
+          {/* Cut-Atlas → bestehende Cut-Welt */}
+          <Link href="/cuts" className={KACHEL}>
             <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
               <Flame size={18} />
               <h3 className="font-serif text-lg font-bold text-text-light">Cut-Atlas</h3>
@@ -448,22 +513,98 @@ export default function ToolBoxes() {
           <RezeptSchmiedeBox seed={seed} />
 
           {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe) */}
-          <Link
-            href="/hoefe"
-            className="group flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold transition-colors"
-          >
+          <Link href="/hoefe" className={KACHEL}>
             <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
               <Radar size={18} />
               <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
             </div>
             <p className="text-xs text-text-secondary mb-4">
               Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
+              Deutschland, Österreich und die Schweiz.
             </p>
             <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
               Höfe finden <ChevronRight size={14} />
             </span>
           </Link>
+
+          {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
+          <div className="flex flex-col rounded-xl border border-border-subtle bg-surface-card/60 p-5" aria-label="Räucherholz-Finder — bald verfügbar">
+            <div className="mb-2 flex gap-2">
+              <Badge muted>Bald</Badge>
+              <Badge filled>VIP</Badge>
+            </div>
+            <div className="flex items-center gap-2 mb-1.5 text-text-muted">
+              <Trees size={18} />
+              <h3 className="font-serif text-lg font-bold text-text-light/80">Räucherholz-Finder</h3>
+            </div>
+            <p className="text-xs text-text-secondary mb-4">
+              Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
+            </p>
+            <span className="mt-auto text-[11px] text-text-muted">Erscheint für VIP-SteakAkademiker.</span>
+          </div>
         </div>
+
+        {/* Marco-Band „Sommelier am Grill" — plakativ, aber dezent (Uwe, 19.09.2026) */}
+        <div className="mt-6 grid overflow-hidden rounded-xl border border-brand-gold/60 bg-surface-card lg:grid-cols-12">
+          <div className="flex items-start gap-5 p-6 sm:p-8 lg:col-span-7">
+            <Image
+              src="/images/authors/marco-richter.jpg"
+              alt="Marco — KI-Grillmeister der Steakakademie"
+              width={96}
+              height={96}
+              className="h-20 w-20 shrink-0 rounded-full border-2 border-brand-gold object-cover sm:h-24 sm:w-24"
+            />
+            <div>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-gold">
+                <Wine size={12} /> Sommelier am Grill
+              </span>
+              <h3 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-text-light">
+                Frag Marco, was ins Glas gehört.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                Wein, Bier, Cocktail oder alkoholfrei: Marco empfiehlt, was zu Cut, Garstufe, Rub und Sauce
+                passt — und sagt dir, warum. Zu jedem Drink gibt es eine alkoholfreie Alternative.
+              </p>
+              <p className="mt-3 text-[11px] text-text-muted">
+                KI-Grillmeister · fachlich verantwortet von Uwe Yendell
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center gap-2 border-t border-brand-gold/20 p-6 sm:p-8 lg:col-span-5 lg:border-l lg:border-t-0">
+            {MARCO_FRAGEN.map((frage) => (
+              <MarcoStarter
+                key={frage}
+                frage={frage}
+                className="rounded-lg border border-border-subtle bg-surface-base px-4 py-2.5 text-left text-sm text-text-light hover:border-brand-gold hover:text-brand-gold transition-colors"
+              >
+                „{frage}“
+              </MarcoStarter>
+            ))}
+            <MarcoStarter
+              frage=""
+              className="mt-1 rounded-lg bg-brand-fire px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-white hover:opacity-90 transition-opacity"
+            >
+              Marco fragen
+            </MarcoStarter>
+          </div>
+        </div>
+
+        {/* VIP-Zeile — ruhig, ganz unten; führt auf die Warteliste (/vip) */}
+        <Link
+          href="/vip"
+          className="group mt-4 flex flex-col gap-3 rounded-xl border border-border-subtle border-l-[3px] border-l-brand-gold bg-surface-card/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between hover:border-brand-gold/60 transition-colors"
+        >
+          <span className="flex items-center gap-3 text-sm text-text-secondary">
+            <Badge filled>VIP</Badge>
+            <span>
+              <span className="font-semibold text-text-light">VIP-SteakAkademiker:</span> Aroma-Matcher ohne Limit,
+              Räucherholz-Finder komplett, Profi-Rezepte grammgenau.
+            </span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+            <Crown size={13} /> 49 € im Jahr · Mehr erfahren <ChevronRight size={14} />
+          </span>
+        </Link>
       </div>
     </section>
   );
