@@ -58,10 +58,18 @@ SPRACHREGISTER SOCIAL (Uwe, 20.09.2026 — verbindlich):
         simp, ghosten, tea, stan, gaslight — und jeder weitere Gen-Z-Slang.
         Grund: Zielgruppe 30–55 versteht ihn nicht oder erkennt die
         Anbiederung; Wörter altern in 12–18 Monaten, Inhalte sollen rotieren.
-    PLATZIERUNG: Maximal EIN Kraftausdruck je Video — entweder als Hook
-        (Sekunde 0–3) oder als Payoff-Line nach dem Fachwissen (Regel vom
-        07.09.), nie beides. Die Formel: derber Einstieg → präziser Beweis →
-        ruhiger Abschluss. Der Kontrast trägt, nicht das Wort.
+    PLATZIERUNG: Kraftausdruck NUR als Payoff-Line NACH dem Fachwissen
+        (Register 07.09., bestätigt 20.09.) — nie als Hook in Sekunde 0–3.
+        Maximal einer je Video. Die Formel:
+            nüchterne Behauptung → präziser Beweis → Kraftausdruck als Pointe.
+        Der Hook zieht über Widerspruch, Mythos oder Preisschmerz
+        (Vokabular-Gruppe A), nie über Lautstärke.
+        Begründung: Über die Reichweite entscheidet die Watch-Time, nicht die
+        Stopp-Rate. Ein lauter Einstieg ohne Informationslücke bringt Abbrüche
+        ab Sekunde 4. Als Signature am Ende bleibt das Wort wiedererkennbar
+        statt sich abzunutzen, hält Cover und ersten Frame sauber (Moderation,
+        Ads) und stützt die Autoritätswahrnehmung, von der Diplom- und
+        Affiliate-Conversion lebt.
     KAMPAGNENVOKABULAR (trägt jedes Reel, Slang ist nur Würze):
         A Schmerz (Sek. 0–2): grau, zäh, trocken, versaut, verbrannt,
           Schuhsohle, Fehlkauf, 40 Euro verbrannt, vor Gästen blamiert
