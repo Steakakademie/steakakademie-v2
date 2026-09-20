@@ -198,7 +198,7 @@ KI-Disclaimer nach EU AI Act, Existenzgründungs-Paket für das Jobcenter vollst
 (Businessplan, Lebenslauf, Finanzplan, §16c-Antrag 4.100 €, Anschreiben, Checkliste).
 
 **Hängt:** Re-Prüfung der behobenen Anwalts-Mängel durch RAin Nieweg steht aus ·
-Wortmarke „Steakakademie" — Gebühr offen · Berufsgenossenschaft/Unfallversicherung
+Berufsgenossenschaft/Unfallversicherung
 erst nach Gewerbeanmeldung klärbar.
 
 **Nächster Schritt (real, nur Uwe):** Gewerbe **erst nach** ESG-Antragseingang anmelden,

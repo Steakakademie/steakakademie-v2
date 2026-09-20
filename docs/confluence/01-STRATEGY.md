@@ -22,7 +22,7 @@
 
 ## Markenschutz (Stand 02.06.2026, DPMA + TMview)
 
-- **Wortmarke „Steakakademie" = KERN** — AZ 3020262290701, Anmeldetag 27.05.2026, Klassen 35/41/42, Anmelder Uwe Yendell. Status „Anmeldung eingegangen". ⏰ **Gebühr OFFEN — Frist ~27.08.2026** (sonst Priorität verloren). → Jira KAN-17.
+- **Wortmarke „Steakakademie" = KERN** — AZ 3020262290701, Anmeldetag 27.05.2026, Klassen 35/41/42, Anmelder Uwe Yendell. Status „Anmeldung eingegangen". ✅ **Gebühr gezahlt** (Uwe, bestätigt 20.09.2026) — Frist ~27.08.2026 erledigt (sonst Priorität verloren). → Jira KAN-17.
 - **Wort-/Bildmarke (Logo-Badge)** — AZ 3020262285325. Bewusst auslaufen lassen (NICHT zahlen).
 - Kein Fremdrecht „Steakakademie" gefunden. Grillakademie Ruhr führt „Steakakademie®" ohne eingetragene Marke → ® mutmaßlich unberechtigt.
 

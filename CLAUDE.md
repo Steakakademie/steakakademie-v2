@@ -654,7 +654,8 @@ Analytics & Data · CRM & Monetization.
 3. **Community:** Supabase Auth (OAuth + Magic Link) ist **live** — offen ist nur
    noch der Community-Teil.
 4. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
-5. **Marken-Frist:** Wortmarke „Steakakademie" — Gebühr offen, Frist ~27.08.2026 (KAN-17).
+5. **Wortmarke „Steakakademie":** AZ 3020262290701 — **Gebühr gezahlt** (Uwe, bestätigt 20.09.2026).
+   Damit ist die Frist ~27.08.2026 (KAN-17) erledigt; die Prioritaet vom 27.05.2026 steht.
 
 **Manuelle Restpunkte, übernommen aus den gelöschten `STATUS.md`/`ROADMAP.md`
 (Stand dort Mai 2026, seither NICHT nachgeprüft — 03.09.2026):** Digistore24
