@@ -145,7 +145,9 @@ async function hatDiplomBuchung(db: SupabaseClient, userId: string): Promise<boo
     .select('status')
     .eq('course_id', courseId)
     .eq('user_id', userId)
+    .is('revoked_at', null)
     .maybeSingle();
   const status = (booking as { status?: string } | null)?.status;
-  return status === 'active' || status === 'confirmed';
+  // 'pending' = per Webhook gewährt (siehe src/lib/diplome/zugang.ts, 20.09.2026).
+  return status === 'active' || status === 'confirmed' || status === 'pending';
 }

@@ -46,6 +46,10 @@ export async function requireCourseAccess(
     .from('bookings')
     .select('id, status')
     .eq('course_id', course.id)
+    // 20.09.2026: Widerruf (Rückgabe/Chargeback) setzt revoked_at; eine der beiden
+    // SELECT-Policies prüfte das nicht → Zugang blieb nach Rückgabe. Hier explizit.
+    .is('revoked_at', null)
+    .in('status', ['active', 'confirmed', 'pending'])
     .maybeSingle();
 
   if (!booking) {

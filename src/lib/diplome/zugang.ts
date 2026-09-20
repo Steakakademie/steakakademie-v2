@@ -53,9 +53,12 @@ export async function diplomZugang(): Promise<DiplomZugang> {
       .select('status')
       .eq('course_id', course.id)
       .eq('user_id', user.id)
+      .is('revoked_at', null)
       .maybeSingle();
 
-    const aktiv = booking?.status === 'active' || booking?.status === 'confirmed';
+    // 20.09.2026: Käufe landeten live als 'pending' (grant_course_access ohne Status).
+    // 'pending' kann nur der Webhook (service_role) anlegen — authenticated hat kein INSERT.
+    const aktiv = booking?.status === 'active' || booking?.status === 'confirmed' || booking?.status === 'pending';
     return { userId: user.id, admin, zugang: aktiv };
   } catch {
     return { userId: null, admin, zugang: admin };
