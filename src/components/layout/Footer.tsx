@@ -9,7 +9,8 @@ const FOOTER_LINKS = {
     { label: 'Grilltechniken', href: '/methoden' },
     { label: 'BBQ-Lexikon', href: '/glossar' },
     { label: 'Streitfälle am Grill', href: '/streitfaelle' },
-    { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
+    { label: 'Steak-Rettung: 6 Grillfehler', href: '/rettung' },
+    { label: 'Alle Artikel', href: '/artikel' },
   ],
   Tests: [
     { label: 'Fleischthermometer', href: '/vergleich/fleischthermometer' },
@@ -22,8 +23,21 @@ const FOOTER_LINKS = {
     { label: 'Brisket', href: '/cuts/brisket' },
     // Uwe, 17.09.2026: Aroma-Matcher bewusst HIER statt unter "Sonstiges" — das
     // Werkzeug startet mit der Cut-Wahl, gehört thematisch zu den Cuts.
+    // Seit 20.09. zusaetzlich in der Spalte „Tools" (Fund: nur der Footer-Link
+    // brachte in drei Tagen 0 Abfragen).
     { label: 'Aroma-Matcher', href: '/aroma-matcher' },
+    { label: 'Meat Terroir', href: '/terroir' },
     { label: 'Alle Cuts', href: '/cuts' },
+  ],
+  // Neue Spalte 20.09.2026 (7-Tage-Abgleich): Werkzeuge waren fertig, gemergt und
+  // live — aber ohne Einstieg. /suche und /artikel hatten site-weit keinen Link.
+  Tools: [
+    { label: 'Aroma-Matcher', href: '/aroma-matcher' },
+    { label: 'Cut-Generator', href: '/cut-generator' },
+    { label: 'Hofladen-Radar', href: '/hoefe' },
+    { label: 'Fleischpass — Grill-Logbuch', href: '/fleischpass' },
+    { label: 'Menü-Planer', href: '/menue' },
+    { label: 'Suche', href: '/suche' },
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
@@ -33,6 +47,8 @@ const FOOTER_LINKS = {
     // verschenkter Platz und fuer den Nutzer eine Enttaeuschung beim zweiten Klick.
     { label: 'Autoren & Redaktion', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
+    { label: 'Privé — Premium & Corporate', href: '/prive' },
+    { label: 'VIP-SteakAkademiker', href: '/vip' },
   ],
   // Uwe, 30.08.2026: Spalte "Ehrliches System" ausgebaut — dieselbe Entscheidung
   // wie im Header, dort steht die ausfuehrliche Begruendung. Kurz: CLAUDE.md
@@ -60,8 +76,8 @@ const FOOTER_LINKS = {
   // kategorisch falschen Stellen. Pulled Pork wurde ersatzlos aus der Cuts-Kurzliste
   // entfernt statt hierher verschoben — bleibt aber über "Alle Cuts" erreichbar.
   Sonstiges: [
-    { label: 'Hofladen-Radar', href: '/hoefe' },
     { label: 'Geschenkgutscheine', href: '/gutschein' },
+    { label: 'Community-Rezepte', href: '/rezepte/community' },
   ],
 };
 
@@ -83,10 +99,10 @@ export default function Footer() {
 
       {/* Main footer */}
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
 
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-3 lg:col-span-1">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <Link href="/" className="inline-block">
               <span className="font-serif font-black text-2xl tracking-tight text-white hover:text-brand-gold transition-colors">
                 Steakakademie

@@ -41,6 +41,8 @@ const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
   'mein-protokoll-plan': { userGroup: 'protokoll_active' },
   'footer': { userGroup: 'newsletter' },
   'homepage-banner': { userGroup: 'newsletter' },
+  // /vip (20.09.2026): Warteliste fuer den VIP-Pass — Launch-Mail geht an diese Gruppe.
+  'vip-warteliste': { userGroup: 'vip_warteliste' },
   default: { userGroup: 'newsletter' },
 };
 
