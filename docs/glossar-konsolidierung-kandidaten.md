@@ -169,3 +169,24 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 
 **Nicht zusammenlegen**, solange ein Eintrag Impressionen hat oder intern verlinkt ist —
 die Links stammen aus dem C1-Sprint und zeigen, welche Begriffe im Fliesstext wirklich vorkommen.
+
+---
+
+## Nachtrag 21.09.2026 — Synonym-Paare (Praefix-Clustering findet sie nicht)
+
+Die Cluster oben entstehen ueber gemeinsame Slug-Praefixe. Zwei Eintraege, die
+dasselbe erklaeren aber verschieden heissen, fallen dabei durch. Der
+Semantik-Lauf vom 21.09.2026 hat diese Paare gemeldet:
+
+| Paar | Befund | Vorschlag |
+|---|---|---|
+| `packer-brisket` / `packer-cut` | Beide definieren die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | Hub: `packer-cut` (gelaeufigerer Handelsbegriff), 301 von `packer-brisket` |
+| `stall` / `plateauphase` | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | Hub: `stall` (dazu gibt es bereits den Artikel `artikel/stall-plateauphase-beim-smoken`), 301 von `plateauphase` |
+
+Fuer beide Paare gilt dieselbe Sperre wie oben: **erst GSC-Daten (B2), dann
+zusammenlegen.** `stall` ist ausserdem frisch veroeffentlicht (Pipeline W2,
+Commit 8eb3962) — die Impressionen brauchen ohnehin Vorlauf.
+
+Ebenfalls aus demselben Lauf, bereits durch die Cluster oben abgedeckt:
+`kerntemperatur-*` (6 Eintraege, Cluster `kerntemperatur`) und `kollagen-*`
+(4 Eintraege, Cluster `kollagen`).

@@ -802,12 +802,21 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
 
   const bodyResp = await generateText({
     model: anthropic('claude-sonnet-4-6'),
-    maxTokens: 1800,
+    // 4000 statt 1800 (21.09.2026): Der Prompt verlangt mindestens 500 Woerter in
+    // vier bis fuenf Abschnitten. Deutscher Fliesstext liegt bei rund 1,7 Token je
+    // Wort — 1800 Token reichten dafuer nie. Folge: 54 von 115 Rezepten brachen
+    // mitten im letzten Abschnitt ab, meist in "## Variationen", teils mitten im
+    // Wort. Gemeldet vom Semantik-Lauf am 21.09.2026.
+    maxTokens: 4000,
     system: systemPrompt(),
     messages: [{ role: 'user', content: promptBody }],
   })
 
   data.body = bodyResp.text.trim()
+  // Zweite Absicherung neben dem groesseren Budget: Reisst der Deckel trotzdem,
+  // darf der Entwurf NICHT geschrieben werden. validate() macht daraus einen
+  // Fehler, der Versuchs-Loop erzeugt das Rezept neu.
+  data.__bodyFinishReason = bodyResp.finishReason
   return data
 }
 
@@ -852,6 +861,19 @@ function validate(data, seed) {
       errors.push(`Kerntemperatur ${data.coreTemp} °C liegt unter dem Sicherheits-Mindestwert ${sicherheit.klasse} (${sicherheit.min} °C, data/kerntemperatur-referenz.yaml)`)
     }
   }
+  // Abgeschnittener Artikeltext (21.09.2026). Zwei unabhaengige Signale, weil
+  // finishReason je nach Provider-Pfad fehlen kann: der gemeldete Abbruchgrund und
+  // das Satzende. Ein Body, der nicht auf Satzzeichen endet, ist im Bestand immer
+  // ein Abbruch gewesen — nie eine Stilentscheidung.
+  if (data.__bodyFinishReason === 'length') {
+    errors.push('Artikeltext abgeschnitten (finishReason=length)')
+  } else if (typeof data.body === 'string' && data.body.trim()) {
+    const ende = data.body.trim().slice(-1)
+    if (!'.!?:»"\u201c\u201d)'.includes(ende)) {
+      errors.push(`Artikeltext endet ohne Satzzeichen ("...${data.body.trim().slice(-40)}") — vermutlich abgeschnitten`)
+    }
+  }
+
   // Kategorie aus Seed erzwingen (Modell weicht manchmal ab)
   data.kategorie = seed.kategorie
   data.difficulty = seed.difficulty
