@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/affiliate/ProductCard';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getProductsByCategory } from '@/lib/products';
+import KeyFacts from '@/components/KeyFacts';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
@@ -158,6 +159,24 @@ export default function TemperaturGuidePage() {
                 und der einzig zuverlässige Indikator für den gewünschten Gargrad und die Lebensmittelsicherheit.
                 Während Farbe, Festigkeit und Zeit als Hilfsmittel dienen können, ist nur das Thermometer präzise.
               </p>
+
+              {/* Kurz & knapp (Plan C3) — alle Werte aus data/kerntemperatur-referenz.yaml:
+                  badges.beef_mr, sicherheit.*, meta.ruhen, meta.carryover, meta.messen.
+                  Keine Zahl hier ohne Entsprechung dort (Regel 8c). */}
+              <KeyFacts
+                variant="dark"
+                quelle="Werte aus der kanonischen Kerntemperatur-Referenz der Steakakademie — gemessen im dicksten Punkt, vor dem Ruhen."
+                facts={[
+                  { label: 'Rind, Medium Rare', value: '52–55 °C · Steakakademie-Standard 54 °C' },
+                  { label: 'Schwein, Mindestwert', value: '63 °C — Lebensmittelhygiene' },
+                  { label: 'Geflügel, Mindestwert', value: '72 °C — Salmonellen, immer durchgaren' },
+                  { label: 'Hackfleisch, Mindestwert', value: '70 °C — durch das Wolfen sind Keime innen' },
+                  { label: 'Nachziehen', value: '+2–5 °C · rund 3 °C vor Ziel vom Grill nehmen' },
+                  { label: 'Ruhen', value: 'Steaks 3–5 Min., große Braten 10–20 Min.' },
+                  { label: 'Richtig messen', value: 'Einstich in den dicksten Punkt, nicht am Knochen' },
+                  { label: 'Low & Slow', value: '90–96 °C · Kollagen wird zu Gelatine' },
+                ]}
+              />
 
               {/* Meta strip */}
               <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/50">
