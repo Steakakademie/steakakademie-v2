@@ -172,7 +172,7 @@ export default function TemperaturGuidePage() {
                   { label: 'Geflügel, Mindestwert', value: '72 °C — Salmonellen, immer durchgaren' },
                   { label: 'Hackfleisch, Mindestwert', value: '70 °C — durch das Wolfen sind Keime innen' },
                   { label: 'Nachziehen', value: '+2–5 °C · rund 3 °C vor Ziel vom Grill nehmen' },
-                  { label: 'Ruhen', value: 'Steaks 3–5 Min., große Braten 10–20 Min.' },
+                  { label: 'Ruhen', value: 'Steaks 5–7 Min. auf vorgewärmter Unterlage (rund 85 °C) · große Braten 10–20 Min.' },
                   { label: 'Richtig messen', value: 'Einstich in den dicksten Punkt, nicht am Knochen' },
                   { label: 'Low & Slow', value: '90–96 °C · Kollagen wird zu Gelatine' },
                 ]}
