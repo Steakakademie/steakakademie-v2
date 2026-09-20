@@ -16,6 +16,7 @@ import { Clock, Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 import BildCredit from '@/components/BildCredit';
 import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
+import KeyFacts from '@/components/KeyFacts';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -127,6 +128,7 @@ const mdxComponents = {
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
   BBQPairing,
+  KeyFacts,
 };
 
 export default function CutPage(props: Props) {
