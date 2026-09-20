@@ -19,7 +19,9 @@ MARKEN-DNA (NICHT VERHANDELBAR)
 ════════════════════════════════════════════════════════════════
 
 Name:                  Steakakademie.de
-Claim:                 Deutschlands führende BBQ-Wissensplattform
+Claim:                 FEUER · WISSEN · GENUSS
+                       (keine Alleinstellungsbehauptung — „führende",
+                       „Nr. 1", „beste" — ohne belegbare Quelle; § 5 UWG)
 Positioning:           Premium, autoritativ, leidenschaftlich
 Referenz:              Texas Monthly — Qualitätsjournalismus trifft Handwerk
 Stil:                  "High-Tech & Smoke" — Bourbon-Dunkel, Glut-Orange, Präzision
@@ -42,6 +44,46 @@ ZWEITES REGISTER — KRAFTAUSDRUCK ALS CLAIM (Uwe, 07.09.2026):
                bezahlte Anzeigen ohne Einzelprüfung (siehe WERBEKENNZEICHNUNG).
     SCHREIBWEISE: „Scheiß" mit ß; „SCHEISS" nur als Versal-Zitat des Reel-Claims.
     Volltext: .agents/product-marketing.md → Brand Voice.
+
+SPRACHREGISTER SOCIAL (Uwe, 20.09.2026 — verbindlich):
+    Gilt für Reels, Shorts, TikTok, Captions, Hooks. Nicht für Lektionen,
+    Rezepte, Produktseiten, Rechtstexte, Newsletter.
+    FREIGEGEBEN (nur diese zehn):
+        geil · krass · Scheiß (nur als Verstärker, nie gegen Zuschauer) ·
+        fett · hammer · nice · läuft · oldschool ·
+        fresh (nur wörtlich: frisches Fleisch) · Alter (Voiceover)
+    GESPERRT (keine Ausnahme, auch nicht „einmal zum Test"):
+        Digga, flexen, vibe, cringe, wtf, lol, epic, lit, random, drip,
+        sus, based, cap, slay, rizz, sigma, mid, ratio, delulu, brainrot,
+        simp, ghosten, tea, stan, gaslight — und jeder weitere Gen-Z-Slang.
+        Grund: Zielgruppe 30–55 versteht ihn nicht oder erkennt die
+        Anbiederung; Wörter altern in 12–18 Monaten, Inhalte sollen rotieren.
+    PLATZIERUNG: Kraftausdruck NUR als Payoff-Line NACH dem Fachwissen
+        (Register 07.09., bestätigt 20.09.) — nie als Hook in Sekunde 0–3.
+        Maximal einer je Video. Die Formel:
+            nüchterne Behauptung → präziser Beweis → Kraftausdruck als Pointe.
+        Der Hook zieht über Widerspruch, Mythos oder Preisschmerz
+        (Vokabular-Gruppe A), nie über Lautstärke.
+        Begründung: Über die Reichweite entscheidet die Watch-Time, nicht die
+        Stopp-Rate. Ein lauter Einstieg ohne Informationslücke bringt Abbrüche
+        ab Sekunde 4. Als Signature am Ende bleibt das Wort wiedererkennbar
+        statt sich abzunutzen, hält Cover und ersten Frame sauber (Moderation,
+        Ads) und stützt die Autoritätswahrnehmung, von der Diplom- und
+        Affiliate-Conversion lebt.
+    KAMPAGNENVOKABULAR (trägt jedes Reel, Slang ist nur Würze):
+        A Schmerz (Sek. 0–2): grau, zäh, trocken, versaut, verbrannt,
+          Schuhsohle, Fehlkauf, 40 Euro verbrannt, vor Gästen blamiert
+        B Beweis (Sek. 3–10): Kerntemperatur, 54 °C, Maillard, Rückwärts-
+          garen, Ruhezeit, direkte/indirekte Zone, Anschnitt, Marmorierung
+        C Status (Abschluss): Diplom, Stufe, Grillmeister, Urkunde, Rang,
+          Funke, Glut, Flamme, Feuer, bestanden
+        D Genuss (Bild/Ton): Kruste, Saft, Biss, Röstaroma, Rauch, Zischen
+        Jedes Reel: ein Hook aus A, mindestens ein Beleg aus B, Ende mit C/D.
+    QUELLENPFLICHT: Kein Hook geht in Produktion, den der eigene Inhalt
+        widerlegt. Jeder Hook wird vor dem Dreh gegen die verlinkte Lektion,
+        den Streitfall oder die Methode geprüft (Beispiel: „Jeder liegt
+        falsch" beim Salzen — der eigene Streitfall sagt: beide haben recht).
+    Volltext + geprüfte Hooks: OneDrive Marketing/Wortliste-Kampagne-1-2026-09-20.md
 
 ════════════════════════════════════════════════════════════════
 GRÜNDER-PROFIL (für Über-uns-Texte & B2B-Copy)
@@ -147,7 +189,7 @@ CONTENT-FRAMEWORK
 ════════════════════════════════════════════════════════════════
 
 HOOK-FORMEL (Social):
-    [Konkretes Problem / Überraschende Zahl]
+    [Konkretes Problem / belegte Zahl mit Quelle — nie geschätzt]
     [Schmerz benennen — kurz, präzise]
     [Lösung anteasern, nicht vollständig verraten]
     [CTA: Link in Bio / Kommentar / Speichern]
@@ -310,7 +352,8 @@ KOMMUNIKATIONSREGELN FÜR ALLE OUTPUTS
 ════════════════════════════════════════════════════════════════
 
 - Outputs sofort einsatzbereit — keine Platzhalter wie [HIER EINFÜGEN]
-- Zahlen immer konkret — "3 von 10 Grillern" statt "viele"
+- Zahlen nur mit Quelle — eine belegte Zahl schlägt "viele"; ohne Quelle
+  keine Zahl. Erfundene Statistiken ("3 von 10 Grillern") sind § 5 UWG
 - Korrekte deutsche Rechtschreibung und Kommasetzung
 - SEO-Titel: maximal 60 Zeichen
 - Social-Headlines: maximal 12 Wörter
