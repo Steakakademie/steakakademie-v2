@@ -1,7 +1,365 @@
 # SEO-Monitoring-Log — Steakakademie
 
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
-> Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
+> Neuester Eintrag oben.
+> **Methodenwechsel ab KW39 (20.09.2026):** Leitmessung ist der in der Claude-App
+> eingebaute Browser auf google.de (`hl=de&gl=de`, echter DE-Standort, anonym) —
+> Position wird aus dem DOM gezählt. **Einträge bis einschließlich KW38 stammen aus
+> einer US-basierten WebSearch und liefern eine Trefferliste, keine deutsche
+> SERP-Position.** Vergleiche über diese Grenze hinweg sind nicht 1:1 belastbar.
+
+## KW39 — 21.09.2026 (Lauf 2)
+
+> **Kalendarischer Hinweis:** Dieser Lauf kommt nur **1 Tag** nach dem vorherigen Eintrag
+> (20.09.). Grund: Der Scheduled Task wurde am Sonntag, 20.09., neu angelegt (Cron
+> `0 8 * * 1` Europe/Berlin = Montag) und feuerte offenbar sofort einmal testweise —
+> **dies hier ist der erste reguläre Montags-Lauf** nach dem neuen Rhythmus
+> (`next_run_at` nach diesem Lauf: 28.09.2026). Deltas gegen den Vortag sind entsprechend
+> **kein Wochenvergleich**, sondern ein Ein-Tages-Vergleich — bei den meisten Kennzahlen
+> ist "kein Unterschied" der informativste Befund.
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ Vortag (20.09.) | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz 34** (Seite 4, Position 7) | `steakakademie.de/temperatur-guide` | 🟡 −1 (Vortag: 33) — innerhalb der selbst gesetzten Unschärfe von ±2 | ⚪ nicht vergleichbar |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 8** organischen Treffern (nur Seite 1 geprüft — Minimalvorgabe „mindestens Seite 1") | — | ⚪ nicht vergleichbar (Vortag: Seiten 1–5 / 44 Treffer geprüft, diese Woche nur Seite 1 — **geringere Prüftiefe, kein Rankingvergleich**) | = (Baseline: nicht in Top 10) |
+| Brand-Query „Steakakademie" | **Platz 1** | `steakakademie.de/` | = unverändert | = (Baseline: Platz 1) |
+
+**Zählweise Leit-Query:** Seite 1: 7 organische Treffer · Seite 2: 10 · Seite 3: 10 · Seite 4: Position 7 → 7+10+10+7 = **34**. Deckt sich methodisch mit der Vortagesmessung (33); die Differenz von 1 liegt im eigenen Toleranzband.
+
+**Brand-Befund:** Wie am Vortag keine GitHub-Seite unter den ersten Treffern. Reihenfolge: 1. `steakakademie.de/` · 2.–3. grillkonzept.de (fremde Kurstermine) · 4. Facebook Steakakademie Bochum (fremd) · 5. `steakakademie.de/diplome` · danach weitere fremde Treffer (Facebook, WR.de Dortmund).
+
+### Google AI Overview
+
+**Leit-Query:** vorhanden, zitiert **`shop.block-house.de` + `Grillfürst` (+2 weitere)**. `steakakademie.de` wird **nicht** zitiert — geprüft über `document.body.innerText`, AIO-Text extrahiert und auf „steakakademie" durchsucht (Treffer: keiner). Δ Vortag (zitierte damals `shop.block-house.de` +1): im Wesentlichen gleich, minimal mehr Quellen sichtbar.
+
+**Kopf-Keyword „Kerntemperatur Steak":** ebenfalls ein AI Overview vorhanden, zitiert **`Don Carne` +1**. Auch hier keine Nennung von uns. Der Vortagseintrag hatte das AIO nur pauschal vermerkt („auch dort keine Nennung von uns") ohne Zitat-Quelle — das ist hiermit nachgetragen.
+
+### Traffic (Microsoft Clarity, 7 Tage, Non-Bot-Sessions)
+
+| Quelle | Sessions | Δ Vortag |
+|---|---|---|
+| Direct | 33 | −2 |
+| **bing** | **13** | +1 |
+| google | 2 | −1 |
+| chatgpt.com | 1 | = |
+| www.checkout-ds24.com | 1 | = |
+
+Bing schlägt Google heute **13:2** (≈6,5-fach), am Vortag war es 12:3 (4-fach) — der Abstand hat sich vergrößert, nicht verkleinert.
+
+**Top-Seiten (7 Tage):** `/hoefe` **22** (=) · `/` 6 (Vortag 8, −2) · `/temperatur-guide` 5 (Vortag 6, −1) ·
+`/diplome/lernen/stufe-1/dry-rubs-marinaden` 2 (=) · `/methoden/sous-vide` 2 (**neu in den Top 10** — Vortag
+nicht gelistet) · danach je 1 (`/diplome`, `/persoenlichkeiten/tom-heinzle`, `/beratung`,
+`/diplome/lernen/stufe-1/sicherheit-brandschutz`, `/diplome/lernen/stufe-1/salzen`).
+`/glossar/mop-sauce` ist aus den Top 10 gefallen (Vortag: 1 Session).
+
+**Methodik-Hinweis (Wiederholungsbefund):** Die beiden Clarity-Abfragen liefen wieder mit **leicht
+unterschiedlichem Fenster** (Quellen-Abfrage 15.–21.09., Seiten-Abfrage 14.–21.09. — 1 Tag Differenz).
+Das exakt gleiche Problem wurde bereits in `docs/geo-baseline.md` (Messung 5) für Clarity-Abfragen
+dokumentiert. Für die absoluten Zahlen ist das bei Fallzahlen um 50 kaum relevant, aber es sollte beim
+nächsten Lauf behoben werden (identisches Startdatum für beide Abfragen).
+
+**Einordnung, nicht Statistik:** ~50 Sessions/Woche, enthält Uwes eigene Aufrufe.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de` (WebSearch): **0 echte externe Backlinks — unverändert.**
+
+Treffer weiterhin ausschließlich Namensvettern/fremde Kursanbieter: Facebook Steakakademie Bochum ·
+Smokefire Grillakademie (Gutschein-Produktseiten) · Beisser (Fleischerei) · GrillKonzept (Kurstermine) ·
+Wikipedia „Akademie" (themenfremd) — sowie **neu in der Trefferliste:** `butchery-lehel.de`
+(„Steak-Akademie — München", ein weiterer fremder Namensvetter, keine Verlinkung auf uns).
+
+Da dieser Lauf nur 1 Tag nach dem letzten liegt, wird die „Wochen in Folge ohne Backlink"-Zählung
+**nicht** hochgezählt: es bleibt bei **11 Wochen** (Stand Vortag), nicht 12 — es ist keine neue Kalenderwoche
+vergangen. Keine nofollow-Prüfung nötig, da kein Link existiert.
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ Vortag |
+|---|---|---|---|
+| www → non-www Redirect | `curl -w '%{http_code} %{num_redirects}'` gegen `https://www.steakakademie.de/`: **HTTP 200, 0 Redirects** — die www-Variante liefert den vollen Seiteninhalt direkt aus, statt auf non-www weiterzuleiten. Im HTML steht `<link rel="canonical" href="https://steakakademie.de"/>`, aber das ist **kein Ersatz für einen Redirect**: beide URLs sind live erreichbar und indexierbar → Duplicate-Content-Risiko. **Unabhängig doppelt geprüft** (Cloud-Container-Proxy UND Uwes lokaler Rechner, identisches Ergebnis) — kein Mess-Artefakt. **Nachtrag 21.09.: Ursache ermittelt, es ist kein Regress — siehe „Auflösung" unten.** | 🔴 **offen** | ⚪ **Verhalten unverändert** — die „🟢" der Vorwochen belegten keinen Statuscode |
+| `/llms.txt` erreichbar | `HTTP 200`, `content-type: text/plain`, 1.533 Byte, vollständiger Inhalt (Kern-Referenzen, Weitere Inhalte, Über) | 🟢 ok | = |
+| `/robots.txt` endet mit Sitemap-Zeile | Letzte Zeile `Sitemap: https://steakakademie.de/sitemap.xml`; AI-Crawler weiterhin erlaubt | 🟢 ok | = |
+
+**Auflösung des Redirect-Befunds (Nachtrag 21.09.2026).** Die oben offen gelassene Frage — seit heute
+kaputt oder seit Wochen falsch gemeldet — ist beantwortet: **weder noch im Sinne einer Regression.**
+Die Regel in `vercel.json` greift für jeden Pfad, nur nicht für die blanke Wurzel-URL. Gemessen gegen
+die Produktion:
+
+| URL | Ergebnis |
+|---|---|
+| `www/glossar/wagyu` | 308 → `steakakademie.de/glossar/wagyu` |
+| `www/rezepte` | 308 → `steakakademie.de/rezepte` |
+| `www/temperatur-guide` | 308 → `steakakademie.de/temperatur-guide` |
+| `www/` | **200, keine Weiterleitung** |
+
+Ursache ist das Muster `source: "/:path*"` in `vercel.json`: es trifft in Vercels Router jeden Pfad
+**außer** der Wurzel. Der Monitoring-Check prüft genau diese eine URL.
+
+Zwei naheliegende Verdächtige sind ausgeschlossen:
+
+- **Cloudflare nicht schuld.** `www` läuft über den Cloudflare-Proxy (104.21.91.231), die Apex direkt
+  über Vercel (216.150.1.193) — der Verdacht lag also nahe. Umgeht man Cloudflare per `--resolve` und
+  schickt `Host: www.steakakademie.de` direkt an die Vercel-Anycast-IP, kommt derselbe 200er.
+- **`vercel.json` wird ausgewertet.** Die beiden Glossar-Redirects aus derselben Datei antworten in der
+  Produktion mit 308.
+
+Damit ist die Bewertung „Regression gegenüber mind. 6 Wochen 🟢" **sachlich falsch**: Das Verhalten hat
+sich nicht geändert, nur die Messung. Erst dieser Lauf hat mit `curl -w '%{num_redirects}'` den
+Statuscode geprüft; davor galt „Seite lädt vollständig" als Beleg — und genau so sieht ein 200 auf www
+aus. Die Wurzel-URL war mit hoher Wahrscheinlichkeit nie weitergeleitet.
+
+**Lehre für die Methodik:** Ein Redirect-Check muss den Statuscode prüfen, nicht den Seiteninhalt, und
+er muss die Wurzel-URL *und* mindestens eine Unterseite abdecken — dieser Befund wäre sechs Wochen
+früher aufgefallen. Gehört in die noch fehlende `docs/seo-monitoring-methodik.md`.
+
+**Fix:** zusätzliche Regel für `/` in `vercel.json`, PR #160 (die vorhandene Regel bleibt unangetastet,
+sie funktioniert für alle Unterseiten). Nach dem Merge zu prüfen:
+`curl -sI -o /dev/null -w '%{http_code}\n' https://www.steakakademie.de/` → erwartet 308.
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig.** Korrektur zum Vortagseintrag: Der dort genannte Termin „~29.09.2026"
+  (berechnet aus Messung 4 + 4 Wochen) ist überholt. `docs/geo-baseline.md` nennt im Abschnitt
+  „Re-Check-Rhythmus" explizit **„Nächste Fälligkeit: 18.10.2026"** — das ist der maßgebliche Wert,
+  da er direkt aus der Datei stammt und neuer ist als die im Vortagseintrag verwendete Herleitung.
+  Zuständig bleibt der Monats-Task `geo-recheck-baseline`.
+- Bing Webmaster Tools weiterhin nicht angebunden (siehe Handlungsempfehlung).
+- `docs/seo-monitoring-methodik.md` **existiert weiterhin nicht** — wie im Vortagseintrag festgehalten,
+  verweist der Auftrag verbindlich auf diese Datei, sie fehlt aber im Repo (`docs/` enthält u. a.
+  `geo-baseline.md`, `geo-llm-ranking-factors.md`, `geo-manager-agent.md`, aber keine
+  `seo-monitoring-methodik.md`). Dieser Lauf wurde erneut nach der im Auftragstext selbst beschriebenen
+  Methode durchgeführt. Die Datei sollte aus den beiden KW39-Einträgen heraus angelegt werden, sonst
+  bleibt die Lücke bei jedem Lauf bestehen.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Platz 34 für die Leit-Query, unverändert innerhalb der Unschärfe. Brand auf 1 gesund. Kopf-Keyword diese Woche nur oberflächlich geprüft. |
+| AI Overview / GEO | 🔴 | Beide geprüften AIOs zitieren uns nicht (block-house.de bzw. Don Carne). |
+| Traffic | 🟡 | ~50 Sessions/Woche. Bing-Vorsprung vor Google hat sich von 4:1 auf 6,5:1 vergrößert, weiterhin ungemessen in eigenen Tools. |
+| Off-Page | 🔴 | 0 Backlinks, unverändert 11 Wochen. |
+| Technik | 🔴 | **Neu gemessen (kein Regress):** www-Redirect fehlt auf der Wurzel-URL (HTTP 200 statt 301/308), auf allen Unterseiten greift er. Ursache ermittelt, Fix in PR #160. Die „🟢 ok" der Vorwochen prüften keinen Statuscode. llms.txt und robots.txt weiterhin sauber. |
+
+### Handlungsempfehlung (eine)
+
+**Bing Webmaster Tools anbinden.** 0 €, ~10 Minuten. *Pflicht-Prüfung der Grundannahme, weil die
+Empfehlung damit zum zweiten Mal unerledigt im Log steht:* Die Annahme „Bing ist bei uns stärker als
+Google" ist mit dieser Messung **nicht entkräftet, sondern bestätigt und verschärft** — das Verhältnis
+ist von 4:1 (Vortag) auf 6,5:1 (heute) gewachsen, bei ähnlicher Fallzahl. Die Empfehlung bleibt damit
+stehen, unverändert in der Begründung: für Bing existieren weiterhin null Messdaten (Impressionen,
+Positionen, CTR), die Anbindung ist kostenlos und schnell.
+
+*Nachrichtlich, nicht als zweite Empfehlung gezählt:* Der neue Technik-Befund (www-Redirect fehlt auf
+der Wurzel-URL) ist streng genommen dringlicher als Bing, weil er ein aktives Duplicate-Content-Risiko
+ist statt einer fehlenden Messung — wird hier bewusst nicht als Handlungsempfehlung geführt, um die
+Vorgabe „max. 1" einzuhalten, aber im Ampel-Status und oben im Technik-Abschnitt klar als Fix-Kandidat
+markiert. **Nachtrag 21.09.: erledigt, Fix in PR #160 — Prüfung steht nach dem Deploy aus.**
+
+Danach unverändert: (2) Google Search Console per API; (3) echte Backlinks (kein spamfreier
+15-Minuten-Weg, Regel 5).
+
+### Trend in einem Satz
+
+Ein-Tages-Vergleich bestätigt Stabilität bei Rankings, Off-Page und Traffic-Verhältnis — die einzige
+echte Bewegung ist kein Rückschritt, sondern ein bislang unentdeckter Altbestand: der www→non-www-Redirect
+greift auf der Wurzel-URL nicht, wodurch dort zwei parallel erreichbare URLs existieren. Aufgefallen ist
+das erst, weil dieser Lauf zum ersten Mal den Statuscode statt des Seiteninhalts geprüft hat.
+
+### Was NICHT geprüft wurde
+
+- **Kopf-Keyword nur Seite 1** (8 Treffer) statt Seiten 1–5 wie im Vortagslauf — Minimalvorgabe erfüllt,
+  aber kein vollständiger Vergleich zu den 44 Treffern vom Vortag möglich.
+- **Keine Bing- oder ChatGPT-/Perplexity-Messung** — gehören in den GEO-Re-Check (18.10.2026).
+- **Keine nofollow-Prüfung**, da kein Backlink existiert.
+- **Kein vollständiges Aufklappen der AIO-Quellenliste** („Mehr anzeigen") — nur die inline sichtbaren
+  Domains ausgezählt.
+- **`/hoefe`-Traffic weiterhin nicht attribuiert** (Uwe selbst, Bot oder echte Besucher — aus Clarity
+  nicht entscheidbar).
+- **Keine Klickrate/Impressionen/Durchschnittsposition** — fehlt weiterhin die Search-Console-Anbindung.
+- ~~**Ursache des fehlenden www-Redirects nicht ermittelt**~~ — **nachgetragen 21.09.2026: ermittelt.**
+  Muster `source: "/:path*"` in `vercel.json` trifft die Wurzel-URL nicht; Cloudflare und eine
+  Deploy-Regression sind beide ausgeschlossen. Siehe „Auflösung" im Technik-Abschnitt, Fix in PR #160.
+  Offen bleibt nur die Bestätigung nach dem Deploy.
+- **Nichts committet.** Diese Datei ist geändert, aber nicht eingecheckt — wie angewiesen.
+
+---
+
+## KW39 — 20.09.2026
+
+> **Erster Lauf mit der neuen Leitmessung (In-App-Browser, google.de).** Damit gibt es
+> nach zehn Wochen zum ersten Mal echte Positionszahlen statt Listenplätze.
+> Kalendarischer Hinweis: Der Vorwochen-Eintrag „KW38 — 14.09." liegt nach ISO in
+> derselben Woche wie heute (Mo 14.09.–So 20.09. = KW38). Dieser Eintrag heißt
+> trotzdem KW39, weil der Auftrag ihn so führt; Abstand zur Vormessung **6 Tage**.
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ KW38 | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz 33** (Seite 4, Position 6 auf der Seite) | `steakakademie.de/temperatur-guide` | ⚪ nicht vergleichbar (KW38 = US-Trefferliste) | ⚪ nicht vergleichbar |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 44** gezählten organischen Treffern (Seiten 1–5 durchgegangen) | — | ⚪ (KW38: „nicht in der Trefferliste" — gleiche Richtung, andere Methode) | = (Baseline: nicht in Top 10) |
+| Brand-Query „Steakakademie" | **Platz 1** | `steakakademie.de/` | ⚪ (KW38 meldete „Rang 5" aus der US-Liste — kein belastbarer Vergleich) | = (Baseline: Platz 1) |
+
+**Zählweise, damit die 33 nachprüfbar ist:** gezählte organische Treffer je Seite
+7 (S1) + 10 (S2) + 10 (S3) = 27, dazu Position 6 auf Seite 4 → **33**. Die Zahl auf
+Seite 1 schwankt mit den SERP-Features (AI Overview, Anzeigen, Video-Block), deshalb
+ist 33 auf ±2 genau, nicht auf ±0.
+
+**Unabhängiger Konsistenzbeleg:** `docs/geo-baseline.md`, Messung 3 vom 09.08.2026,
+notiert für die Leit-Query „Seite 4 (~Platz 33)" — erhoben von Uwe manuell im
+DE-Inkognito-Fenster. Die heutige automatische Messung trifft denselben Wert. Zwei
+unabhängige Erhebungen, ein Ergebnis: **Platz 33 ist belastbar, und er hat sich in
+sechs Wochen nicht bewegt.**
+
+**Brand-Befund — der GitHub-Ärger von KW38 ist weg:** In den ersten 8 Treffern zu
+„Steakakademie" erscheint **keine github.com-Seite mehr**. Reihenfolge heute:
+1. `steakakademie.de/` · 2.–3. grillkonzept.de (fremde Kurstermine) · 4. Facebook
+Steakakademie Bochum (fremd) · 5. grillkonzept.de · 6. **`steakakademie.de/diplome`**
+· 7. Facebook Bochum · 8. wr.de (Dortmunder Steak-Akademie, fremd). Zwei eigene
+Seiten in den Top 6. **Achtung bei der Deutung:** Ob GitHub tatsächlich verschwunden
+ist oder in KW38 nur ein Artefakt der US-Liste war, lässt sich nicht entscheiden —
+die beiden Messungen sind nicht vergleichbar. Als Fakt bleibt nur: **heute, in der
+echten DE-SERP, steht GitHub nicht in den Top 8.**
+
+### Google AI Overview (Leit-Query)
+
+**Vorhanden** („Übersicht mit KI"), zitiert **`shop.block-house.de` +1**.
+**steakakademie.de wird nicht zitiert** — geprüft über `document.body.innerText`,
+nicht über den Ergebnis-Container (der AIO steht dort nicht drin).
+Inhaltlich sagt der AIO 54–58 °C, Zielwert ~56 °C — deckungsgleich mit unserer
+Referenz. Wir liefern also die richtige Antwort und werden trotzdem nicht gefragt.
+Δ geo-baseline Messung 3 (09.08., „nicht zitiert"): **unverändert**.
+
+Auch beim Kopf-Keyword „Kerntemperatur Steak" steht ein AI Overview; auch dort keine
+Nennung von uns.
+
+### Traffic (Microsoft Clarity, 7 Tage, Non-Bot-Sessions)
+
+| Quelle | Sessions |
+|---|---|
+| Direct | 35 |
+| **bing** | **12** |
+| google | 3 |
+| chatgpt.com | 1 |
+| www.checkout-ds24.com | 1 |
+
+**Bing liefert das Vierfache von Google** (12 : 3).
+*Präzisierung gegen einen naheliegenden Zähl-Fehler:* Die im Auftrag genannte Zahl
+„am 20.09. lieferte Bing 12, Google 3" ist **diese Messung hier**, keine frühere.
+Es gibt also genau **einen** Messpunkt für dieses Verhältnis, nicht zwei. In den
+Einträgen bis KW38 wurde Bing überhaupt nicht erhoben — eine Zeitreihe beginnt erst
+mit dem nächsten Lauf.
+
+**Top-Seiten (7 Tage):** `/hoefe` **22** · `/` 8 · `/temperatur-guide` 6 ·
+`/diplome/lernen/stufe-1/dry-rubs-marinaden` 2 · danach je 1 (`/diplome`,
+`/persoenlichkeiten/tom-heinzle`, `/diplome/lernen/stufe-1/sicherheit-brandschutz`,
+`/beratung`, `/glossar/mop-sauce`, `/diplome/lernen/stufe-1/salzen`).
+
+**Einordnung, nicht Statistik:** Rund 52 Sessions in 7 Tagen, darin Uwes eigene
+Aufrufe. `/hoefe` als mit Abstand stärkste Seite bei gleichzeitig 35 Direct-Sessions
+sieht nach **eigener Nutzung / Entwicklungsarbeit am Hofladen-Radar** aus, nicht nach
+organischer Nachfrage — belegen lässt sich das aus Clarity heraus **nicht**. Wer die
+22 als Traffic-Erfolg liest, überschreitet die Datenlage. Bemerkenswert dagegen:
+`/temperatur-guide` steht mit 6 Sessions auf Platz 3 — genau die Seite, die auf
+Platz 33 rankt.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de` (WebSearch, für Umfeldrecherche
+weiterhin zulässig): **0 echte externe Backlinks — jetzt 11 Wochen in Folge.**
+
+Treffer sind durchweg Namensvettern und fremde Kursanbieter, keiner verlinkt auf uns:
+facebook.com/steakakademie (Bochum, fremd) · smokefire-grillakademie.de (in KW38 nicht
+gelistet, jetzt wieder — Listen-Rauschen) · oberpfalz-beef.de · grillkonzept.de ·
+**akademie-der-kochenden-kuenste.de (neu in der Liste, fremder Kochkursanbieter,
+2 Treffer)** · Wikipedia „Nordakademie" und „Theaterakademie Mannheim" (themenfremd).
+
+**Δ KW38 (0) = 0. Δ Baseline (0) = 0.** Keine nofollow-Prüfung nötig — es gibt
+keinen Link zu prüfen.
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW38 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/`, Seite lädt vollständig, Canonical `https://steakakademie.de`, `meta-robots: index, follow` | 🟢 ok | = |
+| `/llms.txt` erreichbar | vollständig als `text/plain`: Kern-Referenzen, Weitere Inhalte, Über | 🟢 ok | = (6. Woche sauber) |
+| `/robots.txt` endet mit Sitemap-Zeile | letzte Zeile `Sitemap: https://steakakademie.de/sitemap.xml`; AI-Crawler (GPTBot, ClaudeBot, PerplexityBot u. a.) ausdrücklich erlaubt | 🟢 ok | = |
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig.** Letzte Messung in `docs/geo-baseline.md` ist
+  Messung 4 vom **01.09.2026**, Rhythmus 4 Wochen → nächster Termin **~29.09.2026**.
+  Zuständig ist der eigene Monats-Task `geo-recheck-baseline`, nicht dieser Lauf.
+- **Perplexity-Stabilitätsfrage weiter offen** (seit Messung 3, 09.08.): Der eine
+  beobachtete Perplexity-Treffer ist bis heute nicht als Ranking bestätigt.
+- **Bing Webmaster Tools nicht angebunden** — siehe Empfehlung.
+- **`docs/seo-monitoring-methodik.md` existiert nicht.** Der Auftrag verweist auf
+  diese Datei als verbindliche Verfahrensbeschreibung („LIES DIESE DATEI ZUERST") —
+  im Repo ist sie nicht vorhanden (`docs/` enthält nur `geo-baseline.md`,
+  `geo-llm-ranking-factors.md`, `geo-manager-agent.md`). Der Lauf wurde nach der
+  im Auftragstext selbst beschriebenen Methode durchgeführt. **Die Datei fehlt und
+  sollte aus diesem Eintrag heraus angelegt werden**, sonst fällt der nächste Lauf
+  wieder auf dieselbe Lücke.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Platz 33 für die Leit-Query ist belegt und stabil — aber weit außerhalb jeder Klickreichweite. Kopf-Keyword nicht in den ersten 44. Brand auf 1 ist gesund. |
+| AI Overview / GEO | 🔴 | AIO steht bei beiden geprüften Queries und zitiert uns bei keiner. Die Antwort im AIO ist fachlich unsere — die Nennung geht an block-house. |
+| Traffic | 🟡 | ~52 Sessions/Woche, überwiegend Direct. Bing schlägt Google 4:1 und wird nach wie vor nicht gemessen. |
+| Off-Page | 🔴 | 0 Backlinks, elfte Woche. Unveränderter Kernblocker. |
+| Technik | 🟢 | Alle drei Spot-Checks sauber, sechste Woche ohne Befund. |
+
+### Handlungsempfehlung (eine)
+
+**Bing Webmaster Tools anbinden.** 0 €, ~10 Minuten, und es ist der einzige Punkt auf
+der Liste, den belegte Zahlen stützen: Bing liefert viermal so viele Sessions wie
+Google (12 : 3) und ist der einzige relevante Kanal, für den es **keinerlei**
+Messdaten gibt — weder Impressionen noch Positionen noch Klickrate. Wir optimieren
+seit Wochen blind auf Google und ignorieren dabei den stärkeren Kanal.
+
+*Prüfung der Grundannahme (Pflicht, weil die Empfehlung wiederholt wird):* Die
+Annahme lautet „Bing ist bei uns stärker als Google". Belegt ist sie aus **einem**
+Messpunkt (12 : 3, heute) bei kleiner Fallzahl — das ist dünn und wird hier nicht
+als gesichertes Muster verkauft. Sie trägt die Empfehlung trotzdem, aber aus einem
+anderen Grund als der Zahl: Für Bing existieren **null** Messdaten, die Anbindung
+kostet 0 € und zehn Minuten, und selbst wenn Bing nur gleichauf läge, wäre ein
+unvermessener Hauptkanal ein Blindflug. Der Aufwand ist so gering, dass die
+Beweislast dafür nicht hoch sein muss. Bleibt Empfehlung #1 — aber wenn der
+nächste Lauf ein anderes Verhältnis zeigt, gehört das hier vermerkt.
+
+Danach in dieser Reihenfolge: (2) Google Search Console per API — die Property
+existiert (ohne www) und liefert echte Durchschnittspositionen, Impressionen und CTR;
+(3) echte Backlinks — hat weiterhin keinen 15-Minuten-Weg, der nicht Spam wäre
+(Regel 5).
+
+### Trend in einem Satz
+
+Zum ersten Mal steht eine belastbare Zahl statt eines Listenplatzes — und sie
+bestätigt, was zu befürchten war: Platz 33 seit sechs Wochen unverändert, null
+Backlinks in elf Wochen, und der AI Overview gibt unsere Antwort unter fremdem Namen.
+
+### Was NICHT geprüft wurde
+
+- **Keine Positionsmessung für „Ribeye", „Reverse Sear", „Brisket Anleitung".** Der
+  neue Auftrag nennt diese drei nicht mehr; bei den Vorgängern lieferten sie ohnehin
+  eine US/EN-SERP. Die Zeitreihe zu ihnen **bricht hier ab** — bewusst, nicht
+  versehentlich.
+- **Keine Bing- oder ChatGPT-/Perplexity-Messung.** AI Overview wurde geprüft, die
+  übrigen Antwortmaschinen nicht — die gehören in den GEO-Re-Check (~29.09.).
+- **Keine nofollow-Prüfung**, da kein Backlink existiert.
+- **Kein Vergleich gegen KW38 bei den Rankings**, weil die Methoden nicht
+  vergleichbar sind. Wo oben ⚪ steht, steht bewusst keine Zahl.
+- **`/hoefe`-Traffic nicht attribuiert.** Ob die 22 Sessions Uwe selbst, ein Bot oder
+  echte Besucher sind, ist aus Clarity heraus nicht entscheidbar.
+- **Keine Messung der Klickrate, Impressionen oder Durchschnittsposition** — dafür
+  fehlt die Search-Console-Anbindung (Empfehlung 2).
+- **Nichts committet.** Diese Datei ist geändert, aber nicht eingecheckt.
 
 ## KW38 — 14.09.2026
 

@@ -264,7 +264,212 @@ Messanordnung, die Entity-Signal von Index-Reifung trennt. Wer hier Kausalität 
 (US-Werkzeug = Indikator, nicht Position) hat sich in diesem Lauf bestätigt und wird
 nicht abgeschwächt.
 
+## Messung 5 — 20.09.2026 (Re-Check, erstmals vollständig selbst erhoben)
+
+**Methodik-Wechsel, ab hier verbindlich:** Die AI-Abfragen werden nicht mehr an Uwe
+delegiert, sondern im eingebauten Browser der Claude-App selbst erhoben (echter
+DE-Standort, anonym, kein Login). Grund: Messung 2 und Messung 4 haben über sechs Wochen
+**nur leere Zeilen** produziert, weil die manuelle Erhebung ausblieb — grüner Lauf ohne
+Ergebnis, exakt der Fall aus CLAUDE.md Regel 10. Google-Positionen werden jetzt aus dem
+DOM gezählt (`#search a h3` → `closest('a')`, Google-eigene Links gefiltert), nicht mehr
+aus einer US-Websuchliste geschätzt.
+
+Maßnahme seit Baseline unverändert: Wikidata-Item **Q140455747** live + in `sameAs` des
+Organization-Markups (Commit `bf19328`). **Keine gezielte neue GEO-Maßnahme.**
+
+### 1. Google DE organisch (Leitmessung) — exakte Position
+
+Query wörtlich: „Was ist die richtige Kerntemperatur für ein Steak medium",
+`google.de?hl=de&gl=de&num=10`, Seiten 1–5 über `&start=0/10/20/30/40`.
+
+| Query | Position | URL / Titel | Δ ggü. Messung 3 (09.08.) |
+|---|---|---|---|
+| „Was ist die richtige Kerntemperatur für ein Steak medium" | **~36** (Seite 4, 6. Treffer der Seite) | `steakakademie.de/temperatur-guide` — „Kerntemperaturen Fleisch — Tabelle 2026 - Steakakademie" | 🟡 Seite 4 gehalten (09.08.: ~33–34). Differenz im Rahmen der Zählunschärfe, **keine Trendaussage** |
+| „Kerntemperatur Steak" (Kopf-Keyword) | **nicht auf Seite 1** | — | ⚪ unverändert seit Baseline |
+
+Umfeld Seite 1 der Leit-Query: Grillfürst (1), shop.block-house.de (2), Grillcenter Nord
+(3), little-london.de (4), grillclub.amainfo.at (5). Direkt um Position 36 herum:
+die-frau-am-grill.de (34), Facebook (35), **steakakademie.de (36)**, REWE (37).
+
+⚠️ **Zählunschärfe ehrlich benannt:** Position = `start` + Index innerhalb der Seite.
+Seite 1 lieferte nur 7 organische Treffer (Rest: Anzeigen, „Weitere Fragen", Videoblöcke),
+Seite 4 nur 9. Die absolute Zahl ist damit auf **±3 genau**, die Seitenangabe („Seite 4")
+ist belastbar. Für den Trend zählt die Seite, nicht die Nachkommastelle.
+
+### 2. Google AI Overview (auf derselben SERP, via `document.body.innerText`)
+
+| | Befund |
+|---|---|
+| AIO ausgeliefert? | ✅ ja, bei **beiden** Queries |
+| Genannter Wert (Leit-Query) | Medium **54–58 °C**, Zielwert ~56 °C |
+| Inline zitierte Domains (Leit-Query) | **shop.block-house.de** (dominant, 5 Link-Vorkommen im AIO-Block) + **der-ludwig.de** (das verdeckte „+1") |
+| Inline zitierte Domains (Kopf-Keyword) | **doncarne.de** „+1", **Grillfürst** „+3"; Wert ebenfalls 54–58 °C |
+| steakakademie.de zitiert? | ❌ nein, in keinem der beiden AIO |
+
+Methodik-Notiz zum Nachmachen: Das AI Overview steht **nicht** im Text, den eine
+Extraktion des Suchergebnis-Containers (`#search`/`#rso`) liefert. Wer nur dort schaut,
+meldet fälschlich „kein AIO". Geprüft wurde über `document.body.innerText` plus gezielte
+Link-Auszählung innerhalb des AIO-Containers — dadurch wird auch das verdeckte „+1"
+sichtbar, das im Screenshot nicht lesbar ist.
+
+### 3. Perplexity — zwei unabhängige Läufe, gleiches Ergebnis
+
+Ohne Login, normaler Suchmodus (**nicht** „Computer"-Modus — dort läuft kein Retrieval,
+die Messung wäre ungültig, siehe Messung 3).
+
+| | Lauf A (17:25) | Lauf B (17:26) |
+|---|---|---|
+| Quellenanzahl | 10 | 10 |
+| **steakakademie.de gelistet?** | ✅ ja, **Position 6 von 10** | ✅ ja, **Position 6 von 10** |
+| **Inline zitiert?** | ❌ nein | ❌ nein |
+| Genannter Wert | 55–60 °C | 55–60 °C |
+
+Quellenliste (identische Reihenfolge in beiden Läufen): biggreenegg.eu, tfa-dostmann.de,
+burnhard.com, oberpfalz-beef.de, shop.block-house.de, **steakakademie.de/temperatur-guide**,
+meat-nomade.de, grillclub.amainfo.at, santosgrills.de, grillcenter-nord.de.
+
+🟢 **Das ist der belastbarste Einzelbefund dieser Messung:** Der Perplexity-Treffer vom
+09.08. war **kein Einmalereignis**. Er ist sechs Wochen später da, und zwei Läufe im
+Minutenabstand liefern dieselbe Liste in derselben Reihenfolge. Die von Messung 3
+gestellte Stabilitätsfrage — offen seit sechs Wochen, in Messung 4 unbeantwortet — ist
+damit **beantwortet: stabil.**
+
+⚠️ **Zur Inline-Frage: „nein" ist hier kein Befund über Steakakademie.** Perplexity hat in
+beiden Läufen eine 1–2-Satz-Kurzantwort **ganz ohne Inline-Zitate** ausgeliefert — für
+**keine** Domain, auch nicht für die Quellen 1–5. Der Antworttext enthielt DOM-geprüft
+null externe Links. Die Frage „prägt Steakakademie die Antwort?" ist in diesem Lauf
+deshalb **nicht entscheidbar**, nicht „verneint". Wer das als Rückschritt liest, vergleicht
+zwei verschiedene Antwortformate.
+
+### 4. ChatGPT — Kontrollmessung
+
+Ohne Login, `chatgpt.com/?q=…`. Antwort aus Modellwissen (Medium 54–57 °C), **kein
+Quellen-Panel, kein Retrieval, keine Domain zitiert**. Das ist der **vierte** Lauf in Folge
+mit diesem Ergebnis (07.07., 09.08., 20.09. laut Auftragsstand, 20.09. hier). Befund
+unverändert: Bei dieser Frage ist der Kanal für **jede** Domain zu — kein
+Steakakademie-Problem, strukturell nicht adressierbar. Keine Ressourcen darauf verwenden.
+
+### 5. Zugriffsdaten (Microsoft Clarity)
+
+**Sessions nach Quelle, 14.–20.09.2026:**
+
+| Quelle | Sessions |
+|---|---|
+| Direct | 35 |
+| **bing** | **12** |
+| google | 3 |
+| chatgpt.com | 1 |
+| www.checkout-ds24.com | 1 |
+
+**Top-Seiten, 13.–20.09.2026** (Clarity hat für diese Abfrage ein um einen Tag weiteres
+Fenster gewählt — nicht 1:1 mit der Quellen-Tabelle vergleichbar):
+
+| Seite | Sessions |
+|---|---|
+| `/hoefe` | **22** |
+| `/` | 8 |
+| `/temperatur-guide` | 6 |
+| `/diplome/lernen/stufe-1/dry-rubs-marinaden` | 2 |
+| Rest (7 Seiten) | je 1 |
+
+**Zwei Befunde, die nichts mit der GEO-Query zu tun haben und trotzdem wichtiger sind:**
+
+1. **Bing liefert viermal so viel wie Google** (12 : 3). Das ist kein Detail: Bing ist der
+   Index hinter Copilot und hinter der ChatGPT-Websuche. Ein GEO-Programm, das nur Google
+   misst, misst am stärkeren der beiden messbaren Kanäle vorbei. **Ab Messung 6 gehört
+   eine Bing-Positionsmessung in die Leitmessung** — sie fehlt hier noch (siehe unten).
+2. **`/hoefe` ist mit 22 Sessions die meistbesuchte Seite** — fast dreimal so viel wie die
+   Startseite und fast viermal so viel wie `/temperatur-guide`, auf das sich dieses ganze
+   Monitoring konzentriert. Ob das organische Nachfrage oder ein einzelner Verweis ist, ist
+   **nicht geprüft**. Wenn es Nachfrage ist, wird hier seit Monaten die falsche Seite
+   optimiert. Das gehört vor der nächsten Content-Entscheidung geklärt.
+3. Ein Zugriff kam über **chatgpt.com** — bei nachweislich fehlendem Retrieval auf die
+   Kernfrage also über einen Link in einem Chat, nicht über eine Zitierung. Zahl zu klein
+   für jede Aussage, nur der Vollständigkeit halber notiert.
+
+### Gesamt-Fazit Messung 5
+
+| Kanal | Messung 3 (09.08.) | Messung 4 (01.09.) | Messung 5 (20.09.) | Δ |
+|---|---|---|---|---|
+| Google DE organisch | Seite 4 (~33) | nicht erhoben | **Seite 4 (~36)** | 🟡 gehalten, ohne Klick-Relevanz |
+| Google AI Overview | nicht zitiert | nicht erhoben | **nicht zitiert** | ⚪ unverändert |
+| **Perplexity (gelistet)** | ✅ erstmals | nicht erhoben | ✅ **Position 6/10, 2× reproduziert** | 🟢 **stabil bestätigt** |
+| Perplexity (inline) | ❌ (Inline ging an block-house) | nicht erhoben | ⚪ **nicht entscheidbar** (Antwort ohne Inline-Zitate) | ⚪ |
+| ChatGPT | kein Retrieval | nicht erhoben | **kein Retrieval** | ⚪ Kanal strukturell zu |
+| Bing (Traffic) | nie gemessen | nie gemessen | **12 Sessions, stärkster Suchkanal** | 🆕 blinder Fleck |
+
+**Die strategische Ableitung aus Messung 3 hält — mit einer Korrektur:** Der Kanal-Split
+(Perplexity belohnt Passung, Google AI Overview belohnt Autorität, ChatGPT ist zu) ist
+durch diese Messung gestützt, nicht widerlegt. **Neu ist der vierte Kanal:** Bing wurde nie
+gemessen, liefert aber real den meisten Suchtraffic. Das war in vier Messungen ein blinder
+Fleck.
+
+**Wikidata-Wirkung:** unverändert **nicht kausal belegbar**. Es gibt weiterhin keine
+Messanordnung, die Entity-Signal von Index-Reifung trennt — zwei Datenpunkte (09.08.,
+20.09.) zeigen, *dass* Perplexity zitiert, nicht *warum*. Wer hier Kausalität behauptet,
+überschreibt Regel 7.
+
+### Widerruf / Korrektur früherer Einschätzungen
+
+- **Messung 3, „Exakte Rangposition unsicher":** aufgelöst. Die Panel-Position ist jetzt
+  DOM-gezählt und über zwei Läufe reproduziert — Position 6 von 10, keine Schätzung mehr.
+- **Messung 3 + 4, „Perplexity-Erfolg einmalig beobachtet, nicht als bestätigtes Ranking":**
+  hiermit **aufgehoben**. Zwei reproduzierte Läufe sechs Wochen später machen daraus einen
+  bestätigten, wiederholbaren Treffer.
+- **Messung 4, US-Websuche als Indikator:** entfällt ersatzlos. Ab Messung 5 wird
+  ausschließlich aus dem DE-DOM gezählt. Die Zeilen in Messung 4 bleiben unverändert
+  stehen, sind aber methodisch überholt.
+- **Kein Widerruf** bei den Sachbefunden der Messungen 1–4.
+
+### ⚠️ Abweichung zum Auftragstext — bewusst nicht stillschweigend übernommen
+
+Der Task-Auftrag nennt unter „Stand zum Vergleich" eine **Messung 5 vom 20.09.2026** mit
+abweichenden Werten: Google Platz **39**, Perplexity **Quelle 1 von 10 und INLINE zitiert**.
+Dazu drei Feststellungen, ohne Spekulation:
+
+1. **Diese Messung 5 steht nicht in dieser Datei.** Letzter Commit auf `geo-baseline.md`
+   war `3c2cb5d` (Messung 4). Die genannten Werte existieren nur im Auftragstext.
+2. **Die Clarity-Zahlen stimmen exakt überein** (Direct 35 / bing 12 / google 3 /
+   chatgpt.com 1) — die Werte stammen also mit hoher Wahrscheinlichkeit aus einer
+   **zweiten Erhebung desselben Tages**, die nie eingetragen wurde.
+3. **Bei Perplexity weichen beide Erhebungen erheblich ab** (Position 1 + inline vs.
+   Position 6 + kein Inline). Beide können stimmen: Perplexity liefert nachweislich
+   unterschiedliche Antwortformate. Belegt ist nur, was hier gemessen wurde.
+
+**Konsequenz, nicht verhandelbar:** Eine Zahl, die nur im Auftragstext steht, wird nicht
+als Messung eingetragen. Die Tabellen oben enthalten ausschließlich eigene Erhebung. Die
+Perplexity-Position ist damit **innerhalb eines Tages nicht stabil** — die Listung ist es,
+die Rangposition nicht. Messung 6 sollte deshalb **zwei Läufe zu verschiedenen Tageszeiten**
+fahren, nicht zwei im Minutenabstand.
+
+### ❌ Was NICHT erhoben wurde (Berichtspflicht, CLAUDE.md Abschnitt A)
+
+| Nicht erhoben | Warum | Was es gebraucht hätte |
+|---|---|---|
+| **Bing-Position** für dieselbe Query | Bing steht bis heute in keiner Messanordnung — Versäumnis der Methodik, kein technisches Hindernis | ein Aufruf von `bing.com/search?q=…&setlang=de&cc=DE` mit derselben DOM-Zählung; ab Messung 6 einplanen |
+| **Screenshots** nach `docs/geo-baseline-screenshots/` | Erhebung lief DOM-basiert; die extrahierten Werte sind präziser als ein Bild, aber es gibt keinen Bildbeleg | `computer{action:"screenshot"}` je Kanal, Ablage im genannten Ordner |
+| **Brand-Query** „steakakademie.de Kerntemperatur" | seit Messung 2 durchgängig ausgelassen, hier ebenfalls | ein weiterer Google-Aufruf; niedrige Priorität, Brand-Queries messen keine generische Sichtbarkeit |
+| **Vollständige AIO-Quellenliste** hinter „Mehr anzeigen" | nur die inline verdrahteten Domains wurden ausgezählt; das Panel wurde nicht aufgeklappt | Klick auf „Alle anzeigen" im AIO-Block vor der Link-Auszählung |
+| **Ursache der `/hoefe`-Zugriffe** | außerhalb des Auftrags dieser Messung | Clarity-Abfrage „Referrer für /hoefe, letzte 7 Tage" |
+| `docs/seo-monitoring-methodik.md` | **Datei existiert nicht** — der Auftrag verweist auf sie als verbindliche Verfahrensquelle | Die Datei muss angelegt werden; das Verfahren dieser Messung ist oben inline dokumentiert und taugt als Vorlage |
+
 ## Re-Check-Rhythmus
 
-Alle 4 Wochen dieselben 3 Google-Queries + 3 AI-Abfragen wiederholen und hier
-eintragen. Erwartung: Bewegung erst NACH Wikidata-Item + ersten Backlinks.
+Alle 4 Wochen erheben und hier als neue Sektion anhängen — **nie überschreiben**.
+
+**Nächste Fälligkeit: 18.10.2026.** (Ops-Heartbeat `maxTage: 32` hängt an der Änderung
+dieser Datei; bleibt sie aus, wird der tägliche Heartbeat-Lauf rot — so gewollt.)
+
+Messanordnung ab Messung 6 — gegenüber Messung 5 **erweitert**:
+
+1. Google DE organisch, Seiten 1–5, DOM-gezählt (Leit-Query + Kopf-Keyword)
+2. Google AI Overview auf derselben SERP, geprüft über `document.body.innerText`
+3. **Bing DE, dieselbe Query, DOM-gezählt** — neu, siehe Messung 5 Abschnitt 5
+4. Perplexity, **zwei Läufe zu verschiedenen Tageszeiten**, Listung und Inline getrennt
+5. ChatGPT, Kontrollmessung (nur: Retrieval ja/nein)
+6. Clarity: Sessions nach Quelle + Top-Seiten, **7 Tage, identisches Fenster für beide
+   Abfragen** (in Messung 5 differierten sie um einen Tag)
+
+Erwartung unverändert: Auf Google bewegt sich ohne Backlinks nichts. Auf Perplexity ist die
+Listung erreicht — die nächste Stufe ist das Inline-Zitat, und die lässt sich nur an einer
+Antwort messen, die überhaupt inline zitiert.
