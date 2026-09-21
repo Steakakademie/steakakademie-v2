@@ -947,6 +947,7 @@ damit ueberholt.
 - Updates to the graph are ONLY permitted when explicitly requested by the user (e.g. via `/graphify update`).
 - Always query the existing graph in `graphify-out/graph.json` via the graphify tool during regular coding and analysis tasks.
 - Semantic extraction SHOULD use subagents; Gemini has a measurably lower yield on this corpus (21.09.2026: 279 vs 1,009 nodes).
+- When running an authorized `/graphify update`, remove the read-only attribute BEFORE the run (`attrib -r graphify-out\graph.json`) and restore it IMMEDIATELY after completion (`attrib +r graphify-out\graph.json`).
 
 ### Git-Wartung
 
