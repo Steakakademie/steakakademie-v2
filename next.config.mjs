@@ -184,6 +184,16 @@ const nextConfig = {
         destination: '/glossar/bark',
         permanent: true,
       },
+      // Bark-Cluster abgeschlossen (21.09.2026): "Bark-Bildung" beschrieb
+      // denselben Gegenstand wie "Bark" — nur den Vorgang statt das Ergebnis,
+      // mit abweichender Temperaturangabe (110-130 gegen 107-121 Grad C).
+      // Inhalt ist in /glossar/bark aufgegangen, die vier internen Verweise
+      // zeigen direkt dorthin; der Redirect faengt externe Links und Lesezeichen.
+      {
+        source: '/glossar/bark-bildung',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
     ];
   },
 };
