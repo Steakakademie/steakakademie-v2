@@ -115,13 +115,46 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 | `kollagen-anteil` | Fleischkunde | 110 | 1 | pruefen |
 | `kollagen-transformation` | Chemie & Physik | 107 | 1 | pruefen |
 
-### `bark` — 3 Eintraege
+### ~~`bark`~~ — **abgeschlossen 21.09.2026** ✅
 
-| Slug | Kategorie | Woerter | Links | Vorschlag |
-|---|---|--:|--:|---|
-| `bark-bildung` | Chemie & Physik | 137 | 4 | pruefen |
-| `bark` | Chemie & Physik | 110 | 2 | **Hub** |
-| `bark-killer` | Techniken & Methoden | 100 | 1 | pruefen |
+| Slug | Kategorie | Stand |
+|---|---|---|
+| `bark` | Chemie & Physik | **Hub — kanonischer Eintrag** |
+| `bark-killer` | Techniken & Methoden | **eigenstaendig, bleibt** (Entscheidung Uwe) |
+| ~~`bark-aussage`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+| ~~`bark-aussagen`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+| ~~`bark-bildung`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+
+Aus fuenf Eintraegen sind zwei geworden. Kein offener Punkt mehr.
+
+**Schritt 1 — `bark-aussage` und `bark-aussagen` (21.09.2026).** Beide am 19.09.
+angelegt, Titel „Bark", `status: draft`, nahezu wortgleiche Definition, dazu
+widersprechende Temperaturangaben (110–130 gegen 107–121 °C). „aussage"/
+„aussagen" ist ein Fuellwort im Sinne von `data/taxonomie.yaml`; bei vorhandenem
+Hauptbegriff darf so ein Slug gar nicht erst entstehen. Uebernommen wurden
+Polyphenol-Einlagerung, Texturspanne und das Spritz-Verbot waehrend der
+Bark-Phase.
+
+**Schritt 2 — `bark-bildung` (21.09.2026).** Beschrieb denselben Gegenstand wie
+`bark`, nur den Vorgang statt das Ergebnis — mit erneut abweichender
+Temperaturangabe (110–130 °C). Uebernommen wurden die Karamellisierung der
+oberflaechlichen Zucker, die Farb- und Texturbeschreibung („dunkelbraun bis
+schwarz, texturiert"), der Dry Rub vor dem Raeuchern und der Hinweis, die
+fertige Kruste nicht abzukratzen. Der Begriff „Bark-Bildung" selbst steht jetzt
+im Definitionsabsatz von `bark`, damit die Suchphrase nicht verloren geht.
+Die vier eingehenden internen Verweise (`cuts/brisket`, `cuts/pulled-pork`,
+`methoden/smoken-low-and-slow`, `rezepte/spareribs-3-2-1`) zeigen direkt auf
+`/glossar/bark`; der 301 faengt externe Links und Lesezeichen.
+
+**Nicht konsolidiert — und das bleibt so:** `bark-killer` beschreibt nicht die
+Kruste, sondern ihr Scheitern, und gehoert deshalb in „Techniken & Methoden".
+`bark` und `bark-killer` verweisen seit dem 21.09. gegenseitig aufeinander. Die
+AMBIGUOUS-Kante, die der Wissensgraph zwischen der Kategorie-Angabe hier und
+`bark` zieht, bleibt bewusst stehen: Sie bildet die Kategorie-Differenz ab, und
+die ist real, nicht fehlerhaft.
+
+301-Weiterleitungen fuer alle drei geloeschten Slugs in `next.config.mjs`,
+Synonyme in `data/taxonomie.yaml`.
 
 ### `infrarot` — 3 Eintraege
 

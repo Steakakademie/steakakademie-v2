@@ -167,6 +167,33 @@ const nextConfig = {
         destination: '/eigenregie',
         permanent: true,
       },
+      // Glossar-Dubletten zusammengelegt (21.09.2026): "Bark" gab es dreimal —
+      // unter /glossar/bark, /glossar/bark-aussage und /glossar/bark-aussagen.
+      // Gleicher Titel, nahezu wortgleiche Definition, widersprechende
+      // Temperaturangaben (110-130 gegen 107-121 Grad C) und beide Permutationen
+      // standen auf status: draft. "aussage"/"aussagen" ist ein Fuellwort im
+      // Sinne von data/taxonomie.yaml; der Hauptbegriff ueberlebt, die beiden
+      // Permutationen leiten dauerhaft dorthin.
+      {
+        source: '/glossar/bark-aussage',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
+      {
+        source: '/glossar/bark-aussagen',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
+      // Bark-Cluster abgeschlossen (21.09.2026): "Bark-Bildung" beschrieb
+      // denselben Gegenstand wie "Bark" — nur den Vorgang statt das Ergebnis,
+      // mit abweichender Temperaturangabe (110-130 gegen 107-121 Grad C).
+      // Inhalt ist in /glossar/bark aufgegangen, die vier internen Verweise
+      // zeigen direkt dorthin; der Redirect faengt externe Links und Lesezeichen.
+      {
+        source: '/glossar/bark-bildung',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
     ];
   },
 };

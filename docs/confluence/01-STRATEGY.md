@@ -41,4 +41,6 @@ Glaubwürdigkeits-Fundament: wuppercoach.de (verloren durch private Trennung), G
 
 Premium, autoritativ, leidenschaftlich — deutsche Präzision trifft Texas-Seele. Referenz: Texas Monthly. Kein Massenmarkt, kein Clickbait. Substanz > Masse, ausnahmslos.
 
-**Design-Paradigma „High-Tech & Smoke":** Bourbon-Dunkel, Tabak-Matte, glühendes Ember-Orange. Farben: Gold `#F5A623`, Schwarz `#0D0D0D`, Feuer-Orange `#B43C00`.
+**Design-Paradigma „High-Tech & Smoke":** Bourbon-Dunkel, Tabak-Matte, glühendes Ember-Orange. Farben: Gold `#C8882A` (Whiskey-Gold), Feuer-Orange `#E85018` (Glut-Orange), Dunkel `#120C07` (Bourbon).
+
+> Diese Werte sind mit `marketing_agent.txt` und dem ausgelieferten Code identisch. Bis 21.09.2026 standen hier abweichende Werte (`#F5A623`, `#0D0D0D`, `#B43C00`); sie waren nirgends implementiert ausser auf der Dankeseite des eingestellten BBQ-Grundkurses. Massgeblich ist, was ausgeliefert wird: `#C8882A` steht in 66 Dateien, `#E85018` in 31, `#120C07` in 6.
