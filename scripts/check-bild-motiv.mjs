@@ -45,6 +45,15 @@
  * Erst wenn einer der beiden Wege die Quote belegt, gehoert --strict in
  * .github/workflows/content-gates.yml.
  *
+ * ERSTER BELEGTER LAUF (21.09.2026, Weg a, 10 Bilder aus --bereich vergleich +
+ * --bereich cuts, jede Ablehnung von Hand am Originalbild gegengeprueft):
+ * Bedingung NICHT erfuellt — 5 von 7 Ablehnungen waren falsch positiv (u. a. ein
+ * Stufe-2-Selbstwiderspruch bei messer.mdx: das Modell "widerlegte" eine
+ * Behauptung, die der Alt-Text gar nicht enthielt). Die zwei echten Treffer
+ * (kuechenmaschine-vergleich, oberhitzegrill-vergleich) waren bereits vorher
+ * bekannt. --strict bleibt deshalb aus. Vollstaendige Tabelle und Einordnung:
+ * docs/bild-motiv-check-log.md — dort auch jeder weitere Beleg-Lauf ergaenzt.
+ *
  * Usage:
  *   node scripts/check-bild-motiv.mjs --geaendert [--basis origin/main]   # CI
  *   node scripts/check-bild-motiv.mjs --bereich vergleich                 # ganzer Ordner
