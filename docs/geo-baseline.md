@@ -451,7 +451,7 @@ fahren, nicht zwei im Minutenabstand.
 | **Brand-Query** „steakakademie.de Kerntemperatur" | seit Messung 2 durchgängig ausgelassen, hier ebenfalls | ein weiterer Google-Aufruf; niedrige Priorität, Brand-Queries messen keine generische Sichtbarkeit |
 | **Vollständige AIO-Quellenliste** hinter „Mehr anzeigen" | nur die inline verdrahteten Domains wurden ausgezählt; das Panel wurde nicht aufgeklappt | Klick auf „Alle anzeigen" im AIO-Block vor der Link-Auszählung |
 | **Ursache der `/hoefe`-Zugriffe** | außerhalb des Auftrags dieser Messung | Clarity-Abfrage „Referrer für /hoefe, letzte 7 Tage" |
-| `docs/seo-monitoring-methodik.md` | **Datei existiert nicht** — der Auftrag verweist auf sie als verbindliche Verfahrensquelle | Die Datei muss angelegt werden; das Verfahren dieser Messung ist oben inline dokumentiert und taugt als Vorlage |
+| ~~`docs/seo-monitoring-methodik.md`~~ | ~~**Datei existiert nicht**~~ — **erledigt 21.09.2026: angelegt.** Sie bündelt das Verfahren des **wöchentlichen SEO-Laufs** (Leitmessung, Technik-Checks, Clarity, Off-Page, Berichtsregeln) | Die Methodik des 4-wöchigen GEO-Re-Checks bleibt bewusst hier in dieser Datei — die neue Datei verweist darauf, statt sie zu doppeln |
 
 ## Re-Check-Rhythmus
 
