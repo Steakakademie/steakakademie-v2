@@ -115,13 +115,29 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 | `kollagen-anteil` | Fleischkunde | 110 | 1 | pruefen |
 | `kollagen-transformation` | Chemie & Physik | 107 | 1 | pruefen |
 
-### `bark` — 3 Eintraege
+### `bark` — 3 Eintraege · **teilkonsolidiert 21.09.2026**
 
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `bark-bildung` | Chemie & Physik | 137 | 4 | pruefen |
-| `bark` | Chemie & Physik | 110 | 2 | **Hub** |
+| `bark` | Chemie & Physik | 110 | 2 | **Hub — konsolidiert** |
 | `bark-killer` | Techniken & Methoden | 100 | 1 | pruefen |
+| ~~`bark-aussage`~~ | ~~Chemie & Physik~~ | — | 0 | **erledigt → `bark`** |
+| ~~`bark-aussagen`~~ | ~~Chemie & Physik~~ | — | 0 | **erledigt → `bark`** |
+
+**Erledigt am 21.09.2026:** `bark-aussage` und `bark-aussagen` sind in `bark`
+aufgegangen und geloescht. Beide waren am 19.09. angelegt worden, trugen den
+Titel „Bark", standen auf `status: draft` und hatten eine nahezu wortgleiche
+Definition — dazu widersprechende Temperaturangaben (110–130 gegen 107–121 °C).
+„aussage"/„aussagen" ist ein Fuellwort im Sinne von `data/taxonomie.yaml`; bei
+vorhandenem Hauptbegriff darf so ein Slug gar nicht erst entstehen. Die
+fachlichen Ergaenzungen der beiden (Polyphenol-Einlagerung, Texturspanne,
+Spritz-Verbot waehrend der Bark-Phase) sind in `bark` uebernommen.
+301-Weiterleitungen in `next.config.mjs`, Synonyme in `data/taxonomie.yaml`.
+
+Offen bleibt der eigentliche Cluster: `bark-bildung` (137 Woerter, 4 Links) und
+`bark-killer` (andere Kategorie, moeglicherweise eigenstaendiger Begriff) sind
+**nicht** angefasst und brauchen eine eigene Entscheidung.
 
 ### `infrarot` — 3 Eintraege
 
