@@ -194,6 +194,18 @@ const nextConfig = {
         destination: '/glossar/bark',
         permanent: true,
       },
+      // packer-Paar zusammengelegt (21.09.2026): "Packer-Cut" und
+      // "Packer-Brisket" beschrieben denselben Zuschnitt. packer-brisket
+      // ueberlebt — so stand es schon in data/taxonomie.yaml und in der
+      // Quality-Baseline. Der geloeschte Eintrag trug zwei Fehler, die NICHT
+      // uebernommen wurden: "12-16 kg" (gemeint waren 12-16 lb) und die
+      // Etymologie "die Firma Packers" (es sind die Schlachtbetriebe,
+      // packing houses, die den Zuschnitt so verpacken).
+      {
+        source: '/glossar/packer-cut',
+        destination: '/glossar/packer-brisket',
+        permanent: true,
+      },
     ];
   },
 };
