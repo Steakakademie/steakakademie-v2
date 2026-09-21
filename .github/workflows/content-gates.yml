@@ -6,6 +6,11 @@ name: Content-Gates
 #   • check-mdx-komponenten.mjs      — unbekannte JSX-Tags in content/
 #   • validate-frontmatter.mjs
 #   • check-links.mjs                — tote interne Links
+#   • check-content-qualitaet.mjs    — Quality-Gate (21.09.2026): Abbrüche, Wort-
+#     dopplungen, Fahrenheit-Reste, Kerntemperatur < Sicherheitswert, Tierart-
+#     Konflikte, Glossar-Dubletten. Ratchet: Altbestand in
+#     data/content-qualitaet-baseline.json blockiert nicht, NEUE Befunde schon.
+#     Bewusst NICHT im prebuild (Architektur-Audit 27.08., Regel 5).
 #
 # STAND 31.08.2026 (Uwe): Die ersten drei laufen wieder im `prebuild` und
 # blockieren damit den Vercel-Deploy — der frueher hier stehende Satz "der
@@ -105,3 +110,36 @@ jobs:
           name: rechtschreib-report
           path: data/spell-check-report.json
           if-no-files-found: ignore
+
+  # Vision-Stufe fuer Hero-Bilder (21.09.2026). Text-Regeln sehen nicht, dass
+  # oberhitzegrill-vergleich eine Seebruecke zeigt — der Alt-Text behauptet das
+  # richtige Geraet. Nur Seiten/Bilder, die der PR aendert; ~0,1 Cent pro Bild.
+  # Nur Bericht (continue-on-error + Skript ohne --strict): ein Modellurteil ist
+  # kein Beweis. Scharf schalten erst mit belegter Trefferquote.
+  bild-motiv:
+    name: Bild-Motiv (Vision, nur Bericht)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      # sharp 0.34 kommt als Prebuilt (@img/sharp-linux-x64), braucht kein
+      # Install-Skript — lokal mit --ignore-scripts verifiziert (21.09.2026).
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Geaenderte Hero-Bilder pruefen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/check-bild-motiv.mjs --geaendert --basis origin/${{ github.base_ref }}
