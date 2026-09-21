@@ -255,7 +255,33 @@ for (const file of files) {
 }
 
 if (!DRY) {
-  await writeFile(CACHE_FILE, JSON.stringify(cache, null, 1) + '\n')
+  // Verwaiste Schluessel entfernen, bevor der Cache zurueckgeschrieben wird.
+  // Ohne das waechst die Datei monoton: Oben werden nur Eintraege ergaenzt oder
+  // aktualisiert, geloescht wurde nie — ein Eintrag einer entfernten Datei blieb
+  // also fuer immer stehen (Stand 21.09.2026: sieben Leichen, u. a. sechs
+  // diplom-lektionen und ein konsolidierter Glossar-Slug).
+  //
+  // Geprueft wird gegen die Platte, NICHT gegen die gerade durchlaufene
+  // Dateiliste. Das ist der Unterschied, auf den es ankommt: Mit `--dir` laeuft
+  // das Skript nur ueber einen Teilbaum; wuerde man gegen `files` pruefen,
+  // loeschte ein Lauf mit `--dir content/glossar` die Eintraege aller anderen
+  // Ordner mit. Existiert die Datei, bleibt ihr Eintrag — egal ob dieser Lauf
+  // sie angesehen hat.
+  const verwaist = Object.keys(cache).filter((rel) => !existsSync(join(ROOT, rel)))
+  for (const rel of verwaist) delete cache[rel]
+  if (verwaist.length) {
+    console.log(c.d(`   ${verwaist.length} verwaiste Cache-Eintrag/-Eintraege entfernt (Datei existiert nicht mehr)`))
+  }
+
+  // Sortiert schreiben. Die Reihenfolge entstand bisher aus der Reihenfolge des
+  // Verzeichnisdurchlaufs und haengt damit am `--dir`-Parameter: Ein Lauf ueber
+  // content/usa ordnete die Datei anders als einer ueber content/. Ergebnis war,
+  // dass JEDER Lauf alle ~390 Zeilen umschrieb — sechs echte Loeschungen
+  // versteckten sich am 21.09.2026 in einem Diff von 784 Zeilen. Sortiert ist
+  // die Reihenfolge stabil, und ein Diff zeigt nur noch, was sich wirklich
+  // geaendert hat.
+  const sortiert = Object.fromEntries(Object.keys(cache).sort().map((k) => [k, cache[k]]))
+  await writeFile(CACHE_FILE, JSON.stringify(sortiert, null, 1) + '\n')
   const topWoerter = Object.entries(wortFrequenz).sort((a, b) => b[1] - a[1])
   await writeFile(join(ROOT, 'data', 'spell-check-report.json'),
     JSON.stringify({ stand: new Date().toISOString(), modus: GRAMMAR ? 'grammatik' : 'nur-rechtschreibung',
