@@ -943,8 +943,10 @@ damit ueberholt.
 
 ### GRAPHIFY PROTECTED
 
-- DO NOT create, modify, overwrite, or delete any files in `graphify-out/` or `graphify.json`.
-- Always query the existing graph in `graphify-out/graph.json` via the graphify tool instead of rescanning raw codebase files.
+- DO NOT create, modify, overwrite, or delete any files in `graphify-out/` or `graphify.json` as a side effect of unrelated work.
+- Updates to the graph are ONLY permitted when explicitly requested by the user (e.g. via `/graphify update`).
+- Always query the existing graph in `graphify-out/graph.json` via the graphify tool during regular coding and analysis tasks.
+- Semantic extraction SHOULD use subagents; Gemini has a measurably lower yield on this corpus (21.09.2026: 279 vs 1,009 nodes).
 
 ### Git-Wartung
 
