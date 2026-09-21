@@ -3,18 +3,6 @@
   "stand": "2026-09-21",
   "befunde": [
     {
-      "id": "f6cdcb003f1e9a79",
-      "regel": "glossar-dublette",
-      "datei": "content/glossar/bark-aussage.mdx",
-      "text": "Singular/Plural-Variante von „bark-aussagen\""
-    },
-    {
-      "id": "98e08abbff248380",
-      "regel": "fahrenheit-verdacht",
-      "datei": "content/glossar/bark-aussagen.mdx",
-      "text": "Low-&-Slow-Kontext mit über 200 °C — Celsius/Fahrenheit-Verwechslung?"
-    },
-    {
       "id": "1b8e32163783c599",
       "regel": "glossar-dublette",
       "datei": "content/glossar/kerntemperatur-kontrolle.mdx",

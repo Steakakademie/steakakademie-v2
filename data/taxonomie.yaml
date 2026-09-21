@@ -77,6 +77,8 @@ tierart_signale:
 # eingecheckte Variante. Bestehende Dubletten stehen in der Baseline und in
 # docs/glossar-konsolidierung-kandidaten.md (Zusammenlegung erst mit GSC-Daten).
 glossar_synonyme:
+  bark-aussage: bark
+  bark-aussagen: bark
   packer-cut: packer-brisket
   plateauphase: stall
   the-stall: stall
