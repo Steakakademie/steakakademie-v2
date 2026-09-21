@@ -111,9 +111,17 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `kollagen` | Fleischkunde | 117 | 14 | **Hub** |
-| `kollagen-umwandlung` | Chemie & Physik | 100 | 2 | pruefen |
-| `kollagen-anteil` | Fleischkunde | 110 | 1 | pruefen |
-| `kollagen-transformation` | Chemie & Physik | 107 | 1 | pruefen |
+| `kollagen-umwandlung` | Chemie & Physik | 100 | 2 | pruefen → Ziel `kollagen-transformation` |
+| `kollagen-anteil` | Fleischkunde | 110 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
+| `kollagen-transformation` | Chemie & Physik | 107 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
+
+**Angeglichen 21.09.2026 (Entscheidung Uwe):** `data/taxonomie.yaml` fuehrt
+`kollagen-anteil` (← `kollagen-anteile`) und `kollagen-transformation`
+(← `kollagen-umwandlung`) als Hauptbegriffe. Die urspruengliche Zeile, beide in
+`kollagen` einzuschmelzen, widersprach dem und ist hinfaellig. Die Taxonomie ist
+maßgeblich; `scripts/check-taxonomy.mjs` (in `npm run check`) meldet solche
+Widersprueche kuenftig automatisch. Offen bleibt nur `kollagen-umwandlung` —
+Zusammenlegung in `kollagen-transformation` weiter erst mit GSC-Daten (B2).
 
 ### ~~`bark`~~ — **abgeschlossen 21.09.2026** ✅
 
