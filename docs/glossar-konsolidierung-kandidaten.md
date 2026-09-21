@@ -213,37 +213,42 @@ Semantik-Lauf vom 21.09.2026 hat diese Paare gemeldet:
 
 | Paar | Befund | Vorschlag |
 |---|---|---|
-| `packer-brisket` / `packer-cut` | Beide definieren die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | ⚠️ **Richtung strittig, nicht ohne Lesen der Warnung unten umsetzen.** Dieser Vorschlag lautete: Hub `packer-cut` (gelaeufigerer Handelsbegriff), 301 von `packer-brisket`. |
+| `packer-brisket` / `packer-cut` | Beide definieren die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | **Hub: `packer-brisket`** (Entscheidung Uwe, 21.09.2026), 301 von `packer-cut`. Richtung entschieden — Zusammenlegung steht noch aus, siehe unten. |
 | `stall` / `plateauphase` | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | Hub: `stall` (dazu gibt es bereits den Artikel `artikel/stall-plateauphase-beim-smoken`), 301 von `plateauphase` |
 
 Fuer beide Paare gilt dieselbe Sperre wie oben: **erst GSC-Daten (B2), dann
 zusammenlegen.** `stall` ist ausserdem frisch veroeffentlicht (Pipeline W2,
 Commit 8eb3962) — die Impressionen brauchen ohnehin Vorlauf.
 
-> ⚠️ **Konflikt beim packer-Paar (vermerkt 21.09.2026).** Der Vorschlag oben
-> zeigt in die **entgegengesetzte** Richtung zu dem, was bereits durchgesetzt
-> wird:
+> ✅ **Richtung beim packer-Paar entschieden (Uwe, 21.09.2026): Hub ist
+> `packer-brisket`.** Der urspruengliche Vorschlag dieser Tabelle lautete
+> umgekehrt — Hub `packer-cut` mit der Begruendung „gelaeufigerer
+> Handelsbegriff". Er ist damit hinfaellig.
+>
+> Die Entscheidung bestaetigt, was ohnehin schon durchgesetzt wurde, und
+> beseitigt den Widerspruch:
 >
 > | Quelle | kanonisch | Status |
 > |---|---|---|
-> | `data/taxonomie.yaml:83` — `packer-cut: packer-brisket` | `packer-brisket` | **operativ**, gelesen von Gate und Generatoren |
-> | `data/content-qualitaet-baseline.json` | `packer-brisket` | `packer-cut.mdx` steht dort als bekannte Dublette im Ratchet |
-> | diese Zeile | `packer-cut` | Vorschlag, nicht umgesetzt |
+> | `data/taxonomie.yaml:83` — `packer-cut: packer-brisket` | `packer-brisket` | operativ, **unveraendert** — die Zeile stand bereits richtig |
+> | `data/content-qualitaet-baseline.json` | `packer-brisket` | `packer-cut.mdx` als bekannte Dublette im Ratchet, **unveraendert** |
+> | diese Zeile | `packer-brisket` | **angeglichen** |
 >
-> Wer den Vorschlag abarbeitet, ohne das zu wissen, dreht die Synonymrichtung um
-> und legt damit genau den Slug wieder an, den das Gate als Dublette meldet.
+> Es war also nichts umzustellen: Gate, Generatoren und Baseline zeigten von
+> Anfang an auf `packer-brisket`. Allein die Vorschlagszeile wies in die
+> Gegenrichtung.
 >
-> **Die Richtungsentscheidung bleibt offen und gehoert an die GSC-Daten** — die
-> Sperre oben gilt unveraendert. Wird zugunsten von `packer-cut` entschieden,
-> muessen `taxonomie.yaml` und der Baseline-Eintrag im selben Commit mitgedreht
-> werden, sonst widersprechen sich Gate und Doku.
+> **Noch offen ist die Zusammenlegung selbst** — `content/glossar/packer-cut.mdx`
+> existiert weiter, ein 301 auf `/glossar/packer-brisket` fehlt, und
+> `content/cuts/brisket.mdx` verlinkt in Zeile 126 noch auf den Slug. Dafuer
+> gilt die Sperre oben unveraendert: **erst GSC-Daten (B2).** Entschieden ist
+> die Richtung, nicht der Zeitpunkt.
 >
 > Belegt am 21.09.2026: beide Eintraege sind praktisch gleichwertig
 > (174 gegen 181 Woerter, beide vom 23.05.2026, beide Kategorie
 > „Cuts & Teilstuecke", je ein eingehender Link). Beide Begriffe stehen
 > nebeneinander im Fliesstext von `content/cuts/brisket.mdx` — Zeile 35
-> „Ein volles Packer-Brisket …", Zeile 126 „… kein Packer-Cut". Ein Redirect
-> existiert fuer keinen von beiden.
+> „Ein volles Packer-Brisket …", Zeile 126 „… kein Packer-Cut".
 >
 > Das Paar `stall` / `plateauphase` ist **nicht** betroffen: `taxonomie.yaml`
 > fuehrt dort `plateauphase: stall` und stimmt mit dem Vorschlag ueberein.
