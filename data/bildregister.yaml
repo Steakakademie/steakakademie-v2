@@ -480,8 +480,26 @@ bilder:
     namensnennung: false
     hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
   images/uwe-yendell.jpg: { status: offen }
-  images/vergleich/dry-aging-kuehlschrank-vergleich.jpg: { status: offen }
-  images/vergleich/dry-aging-kuehlschrank-vergleich.webp: { status: offen }
+  images/vergleich/dry-aging-kuehlschrank-vergleich.jpg:
+    status: lizenz
+    quelle: Unsplash (ID W-M0h1FJD0M)
+    urheber: Kyle Mackie
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/W-M0h1FJD0M
+    erworben_am: 2026-09-21
+    namensnennung: false
+    hinweis: Ersetzt das themenfremde Alt-Motiv (Echtfoto Reifeschrank statt Platzhalter, siehe CREDITS.md); Herkunft auch im MDX-Frontmatter (imageSource)
+  images/vergleich/dry-aging-kuehlschrank-vergleich.webp:
+    status: lizenz
+    quelle: Unsplash (ID W-M0h1FJD0M)
+    urheber: Kyle Mackie
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/W-M0h1FJD0M
+    erworben_am: 2026-09-21
+    namensnennung: false
+    hinweis: Ersetzt das themenfremde Alt-Motiv (Echtfoto Reifeschrank statt Platzhalter, siehe CREDITS.md); Herkunft auch im MDX-Frontmatter (imageSource)
   images/vergleich/fleischthermometer.jpg:
     status: lizenz
     quelle: Unsplash (ID ZASXYTnkP-U)
@@ -503,7 +521,20 @@ bilder:
     namensnennung: false
     hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
   images/vergleich/kuechenmaschine-vergleich.jpg: { status: offen }
-  images/vergleich/kuechenmaschine-vergleich.webp: { status: offen }
+  images/vergleich/kuechenmaschine-vergleich.webp:
+    status: offen
+    motiv_strittig: true
+    motiv_hinweis: >-
+      21.09.2026 — zeigt eine Felsinsel im Meer, keine Küchenmaschine. Bestätigt
+      per scripts/check-bild-motiv.mjs (Blindbeschreibung: "Felsformation im Meer
+      unter blauem Himmel") UND per Sichtprüfung des Bildes selbst. Bereits am
+      21.09.2026 in public/images/vergleich/CREDITS.md als "noch falsch (Meer)"
+      dokumentiert — kein passendes Motiv im Bestand (Fundgrube), keine
+      Neubeschaffung in dieser Änderung. Seite bleibt bis zu einem echten Foto
+      der KitchenAid Artisan mit diesem Platzhalter online; Entfernen des
+      Bildfelds wäre schlechter als ein falsches Bild, da die Seite ein Bild
+      erwartet. Auswahl eines Ersatzmotivs ist eine Publishing-Entscheidung
+      (CLAUDE.md Regel 4) und bleibt Uwe vorbehalten.
   images/vergleich/messer.jpg:
     status: lizenz
     quelle: Unsplash (ID M8COBu-_Va8)
@@ -515,9 +546,21 @@ bilder:
     namensnennung: false
     hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
   images/vergleich/oberhitzegrill-vergleich.jpg: { status: offen }
-  images/vergleich/oberhitzegrill-vergleich.webp: { status: offen }
-  images/vergleich/premium-fleischthermometer.jpg: { status: offen }
-  images/vergleich/premium-fleischthermometer.webp: { status: offen }
+  images/vergleich/oberhitzegrill-vergleich.webp:
+    status: offen
+    motiv_strittig: true
+    motiv_hinweis: >-
+      21.09.2026 — zeigt einen Seesteg mit Laterne und Windfahne, keinen
+      Oberhitzegrill. Bestätigt per scripts/check-bild-motiv.mjs (Blind-
+      beschreibung: "Langer Steg über Wasser mit Lampe, Windfahne und
+      Geländer") UND per Sichtprüfung des Bildes selbst. Bereits am 21.09.2026
+      in public/images/vergleich/CREDITS.md als "noch falsch (Seebrücke)"
+      dokumentiert — kein passendes Motiv im Bestand (Fundgrube). Laut
+      docs/bildprogramm.md gilt für Geräte-Seiten Echtfoto-Pflicht, ein
+      KI-Bild (z. B. methoden/oberhitze-grillen.jpg) wäre ein Regelbruch, keine
+      Lösung. Seite bleibt bis zu einem echten Foto eines Oberhitzegrills mit
+      diesem Platzhalter online; Auswahl eines Ersatzmotivs ist eine
+      Publishing-Entscheidung (CLAUDE.md Regel 4) und bleibt Uwe vorbehalten.
   images/wine-spirits-hero.webp: { status: offen }
   images/rezepte/yakitori-negima.jpg:
     status: ki

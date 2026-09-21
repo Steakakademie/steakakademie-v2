@@ -148,6 +148,10 @@ jobs:
       # ist, insbesondere ohne falsch positive Ablehnungen. Wie der Nachweis
       # entsteht — der Report taugt dafuer nicht, er wird je Lauf ueberschrieben
       # und ist gitignored — steht im Kopf von scripts/check-bild-motiv.mjs.
+      #
+      # ERSTER BELEGTER LAUF (21.09.2026): Bedingung NICHT erfuellt, 5 von 7
+      # Ablehnungen waren falsch positiv. --strict bleibt deshalb aus.
+      # Vollstaendige Auswertung: docs/bild-motiv-check-log.md.
       - name: Geaenderte Hero-Bilder pruefen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
