@@ -111,6 +111,40 @@ describe('validate', () => {
     daten.image = '/images/rezepte/x.jpg'
     expect(validate(daten, SEED)).toContain('Zu wenige Schritte')
   })
+
+  // Anlass (21.09.2026): 54 von 115 Rezepten endeten mitten im Satz, weil das
+  // Token-Budget fuer den Artikeltext bei 1800 lag. Ab jetzt faellt so ein
+  // Entwurf durch die Validierung, statt als fertiges Rezept live zu gehen.
+  const vollstaendig = () => {
+    const daten = parseStructuredText(KOPF + SCHRITT_FORMATE['ohne Leerzeichen'])
+    daten.image = '/images/rezepte/yakitori-negima.jpg'
+    daten.kategorie = SEED.kategorie
+    daten.meatType = SEED.meatType
+    daten.cookingMethod = SEED.cookingMethod
+    daten.difficulty = SEED.difficulty
+    return daten
+  }
+
+  it('meldet einen abgeschnittenen Artikeltext ueber finishReason', () => {
+    const daten = vollstaendig()
+    daten.body = 'Ein vollstaendiger Satz.'
+    daten.__bodyFinishReason = 'length'
+    expect(validate(daten, SEED)).toContain('Artikeltext abgeschnitten (finishReason=length)')
+  })
+
+  it('meldet einen Artikeltext, der ohne Satzzeichen endet', () => {
+    const daten = vollstaendig()
+    daten.body = '## Variationen\n\n**Gemischte Masse** aus Rind und Lamm ist in manchen Regionen'
+    const fehler = validate(daten, SEED)
+    expect(fehler.some(f => f.startsWith('Artikeltext endet ohne Satzzeichen'))).toBe(true)
+  })
+
+  it('laesst einen Artikeltext mit sauberem Satzende durch', () => {
+    const daten = vollstaendig()
+    daten.body = '## Variationen\n\n**Gemischte Masse** aus Rind und Lamm funktioniert in vielen Regionen.'
+    daten.__bodyFinishReason = 'stop'
+    expect(validate(daten, SEED)).toEqual([])
+  })
 })
 
 // Regel 8c: Kerntemperaturen kommen aus data/kerntemperatur-referenz.yaml.
