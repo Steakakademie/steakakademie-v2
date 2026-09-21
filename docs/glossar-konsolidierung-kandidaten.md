@@ -213,12 +213,14 @@ Semantik-Lauf vom 21.09.2026 hat diese Paare gemeldet:
 
 | Paar | Befund | Vorschlag |
 |---|---|---|
-| `packer-brisket` / `packer-cut` | Beide definieren die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | **Hub: `packer-brisket`** (Entscheidung Uwe, 21.09.2026), 301 von `packer-cut`. Richtung entschieden — Zusammenlegung steht noch aus, siehe unten. |
+| ~~`packer-brisket` / `packer-cut`~~ | Beide definierten die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | ✅ **Erledigt 21.09.2026.** Hub `packer-brisket`, `packer-cut` geloescht, 301 gesetzt. |
 | `stall` / `plateauphase` | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | Hub: `stall` (dazu gibt es bereits den Artikel `artikel/stall-plateauphase-beim-smoken`), 301 von `plateauphase` |
 
-Fuer beide Paare gilt dieselbe Sperre wie oben: **erst GSC-Daten (B2), dann
-zusammenlegen.** `stall` ist ausserdem frisch veroeffentlicht (Pipeline W2,
-Commit 8eb3962) — die Impressionen brauchen ohnehin Vorlauf.
+Fuer `stall` / `plateauphase` gilt die Sperre wie oben weiter: **erst
+GSC-Daten (B2), dann zusammenlegen.** `stall` ist ausserdem frisch
+veroeffentlicht (Pipeline W2, Commit 8eb3962) — die Impressionen brauchen
+ohnehin Vorlauf. Das packer-Paar ist von der Sperre ausgenommen worden und
+abgeschlossen (siehe unten).
 
 > ✅ **Richtung beim packer-Paar entschieden (Uwe, 21.09.2026): Hub ist
 > `packer-brisket`.** Der urspruengliche Vorschlag dieser Tabelle lautete
@@ -238,11 +240,27 @@ Commit 8eb3962) — die Impressionen brauchen ohnehin Vorlauf.
 > Anfang an auf `packer-brisket`. Allein die Vorschlagszeile wies in die
 > Gegenrichtung.
 >
-> **Noch offen ist die Zusammenlegung selbst** — `content/glossar/packer-cut.mdx`
-> existiert weiter, ein 301 auf `/glossar/packer-brisket` fehlt, und
-> `content/cuts/brisket.mdx` verlinkt in Zeile 126 noch auf den Slug. Dafuer
-> gilt die Sperre oben unveraendert: **erst GSC-Daten (B2).** Entschieden ist
-> die Richtung, nicht der Zeitpunkt.
+> **Zusammenlegung ausgefuehrt am 21.09.2026** (Freigabe Uwe, bewusst ohne die
+> GSC-Daten abzuwarten — die Sperre galt der Richtungsfrage, und die war
+> entschieden). `content/glossar/packer-cut.mdx` ist geloescht, der Verweis in
+> `content/cuts/brisket.mdx` Zeile 126 zeigt auf `/glossar/packer-brisket`,
+> der 301 steht in `next.config.mjs`.
+>
+> Uebernommen wurde aus dem geloeschten Eintrag: der englische Begriff „Fat
+> Cap", der Trimm-Korridor 6–8 mm statt pauschal 6 mm, die Gelatinisierung
+> beider Muskeln beim Low-and-Slow-Garen und die Spritz-Regel ab 65 °C
+> Kerntemperatur. Der Begriff „Packer-Cut" selbst steht jetzt im
+> Definitionsabsatz von `packer-brisket`, damit die Suchphrase nicht mit dem
+> Slug verschwindet.
+>
+> **Zwei Fehler wurden bewusst NICHT uebernommen:**
+> - „Das komplette Packer-Brisket wiegt 12-16 kg" — gemeint sind 12–16 lb.
+>   Derselbe Einheitenfehler war am selben Tag schon in `packer-brisket.mdx`
+>   korrigiert worden; im Zwillingseintrag stand er noch.
+> - „die Firma Packers standardisierte dieses Zuschnittformat" — es gibt keine
+>   Firma dieses Namens. Der Name kommt von den Schlachtbetrieben (packing
+>   houses), die das Bruststueck so verpacken. `packer-brisket.mdx` hatte die
+>   richtige Herleitung bereits.
 >
 > Belegt am 21.09.2026: beide Eintraege sind praktisch gleichwertig
 > (174 gegen 181 Woerter, beide vom 23.05.2026, beide Kategorie

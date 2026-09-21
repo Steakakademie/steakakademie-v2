@@ -51,12 +51,6 @@
       "text": "Synonym von „kollagen-transformation\" (data/taxonomie.yaml)"
     },
     {
-      "id": "29fd0d7903f08164",
-      "regel": "glossar-dublette",
-      "datei": "content/glossar/packer-cut.mdx",
-      "text": "Synonym von „packer-brisket\" (data/taxonomie.yaml)"
-    },
-    {
       "id": "d908b88bcc2f1136",
       "regel": "glossar-dublette",
       "datei": "content/glossar/plateauphase.mdx",
