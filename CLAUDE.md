@@ -103,6 +103,16 @@
   Merke: Ein aktivierter Schutzschalter ohne Inhalt sieht im UI genauso aus wie
   ein scharfer. Wer sich auf einen Riegel verlaesst, sieht einmal nach, ob eine
   Liste dahinter steht.
+- **Content-Quality-Gate seit 21.09.2026** (`scripts/check-content-qualitaet.mjs`,
+  Regeln in `scripts/lib/content-qualitaet.mjs`, Vokabular in `data/taxonomie.yaml`):
+  haengt in `npm run check` und blockiert damit ueber `P0-Gates pruefen` —
+  Abbrueche, Wortdopplungen, Fahrenheit-Reste, Kerntemperatur unter Sicherheitswert,
+  Tierart-Konflikte, Glossar-Dubletten. Dieselben Regeln laufen im recipe-agent und
+  glossary-agent VOR dem Schreiben. Altbestand steht in
+  `data/content-qualitaet-baseline.json` (Ratchet): **beheben, nie von Hand
+  eintragen**; nach einer Korrektur `npm run check:qualitaet:baseline`. Bewusst
+  nicht im prebuild (Audit 27.08., Regel 5). Vision-Check der Hero-Bilder
+  (`check-bild-motiv.mjs`) laeuft im PR nur als Bericht.
 - **Vercel wurde erst am 05.09.2026 Pflicht — der Punkt darueber hat es seit
   dem 04.09. faelschlich behauptet.** Was die Luecke gekostet hat: PR #52
   (Ideen-Radar, Bot-PR mit Auto-Merge) wurde am 05.09. um 14:38:14 UTC gemergt,

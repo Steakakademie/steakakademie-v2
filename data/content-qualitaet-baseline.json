@@ -1,0 +1,150 @@
+{
+  "hinweis": "Bekannte Befunde beim Einführen des Gates. Nicht von Hand ergänzen — beheben statt eintragen. Neu schreiben: node scripts/check-content-qualitaet.mjs --update-baseline",
+  "stand": "2026-09-21",
+  "befunde": [
+    {
+      "id": "f6cdcb003f1e9a79",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/bark-aussage.mdx",
+      "text": "Singular/Plural-Variante von „bark-aussagen\""
+    },
+    {
+      "id": "98e08abbff248380",
+      "regel": "fahrenheit-verdacht",
+      "datei": "content/glossar/bark-aussagen.mdx",
+      "text": "Low-&-Slow-Kontext mit über 200 °C — Celsius/Fahrenheit-Verwechslung?"
+    },
+    {
+      "id": "1b8e32163783c599",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kerntemperatur-kontrolle.mdx",
+      "text": "Füllwort-Permutation von „kerntemperatur\" (-kontrolle)"
+    },
+    {
+      "id": "3ff90c7acbe55744",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kerntemperatur-prinzip.mdx",
+      "text": "Füllwort-Permutation von „kerntemperatur\" (-prinzip)"
+    },
+    {
+      "id": "6c67b65d739ba17d",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kerntemperatur-referenz.mdx",
+      "text": "Füllwort-Permutation von „kerntemperatur\" (-referenz)"
+    },
+    {
+      "id": "44e9f7348e2644e0",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kerntemperatur-wissen.mdx",
+      "text": "Füllwort-Permutation von „kerntemperatur\" (-wissen)"
+    },
+    {
+      "id": "1b39d6aeea6fb366",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kerntemperatur-ziel.mdx",
+      "text": "Füllwort-Permutation von „kerntemperatur\" (-ziel)"
+    },
+    {
+      "id": "cb86bdd755ea484d",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kollagen-anteil.mdx",
+      "text": "Singular/Plural-Variante von „kollagen-anteile\""
+    },
+    {
+      "id": "4d9a70c3add3198c",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kollagen-anteile.mdx",
+      "text": "Synonym von „kollagen-anteil\" (data/taxonomie.yaml)"
+    },
+    {
+      "id": "b595a704195e83e4",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/kollagen-umwandlung.mdx",
+      "text": "Synonym von „kollagen-transformation\" (data/taxonomie.yaml)"
+    },
+    {
+      "id": "29fd0d7903f08164",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/packer-cut.mdx",
+      "text": "Synonym von „packer-brisket\" (data/taxonomie.yaml)"
+    },
+    {
+      "id": "d908b88bcc2f1136",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/plateauphase.mdx",
+      "text": "Synonym von „stall\" (data/taxonomie.yaml)"
+    },
+    {
+      "id": "56e5e7809898fa2d",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/glossar/presa.mdx",
+      "text": "schwein: 58–62 °C unter Minimum 63 °C"
+    },
+    {
+      "id": "bdb8644588fe85e2",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/glossar/secreto.mdx",
+      "text": "schwein: 58–62 °C unter Minimum 63 °C"
+    },
+    {
+      "id": "dd06dd73e9f114bc",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/wagyu-farm.mdx",
+      "text": "Füllwort-Permutation von „wagyu\" (-farm)"
+    },
+    {
+      "id": "d7d311905337e691",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/wagyu-kenner.mdx",
+      "text": "Füllwort-Permutation von „wagyu\" (-kenner)"
+    },
+    {
+      "id": "d9aca15681c946ce",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/wagyu-pioneer.mdx",
+      "text": "Füllwort-Permutation von „wagyu\" (-pioneer)"
+    },
+    {
+      "id": "04125f68ec877d24",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/wagyu-wissen.mdx",
+      "text": "Füllwort-Permutation von „wagyu\" (-wissen)"
+    },
+    {
+      "id": "f5da5e1787d0cd1e",
+      "regel": "glossar-dublette",
+      "datei": "content/glossar/wagyu-zubereitungen.mdx",
+      "text": "Füllwort-Permutation von „wagyu\" (-zubereitungen)"
+    },
+    {
+      "id": "ddd3dc67541e1674",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/rezepte/iberico-pluma.mdx",
+      "text": "schwein: 58–62 °C unter Minimum 63 °C"
+    },
+    {
+      "id": "5f6d23230e802bef",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/rezepte/iberico-presa.mdx",
+      "text": "schwein: 62 °C unter Minimum 63 °C"
+    },
+    {
+      "id": "21f191f923417cb6",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/rezepte/iberico-secreto.mdx",
+      "text": "schwein: 58–62 °C unter Minimum 63 °C"
+    },
+    {
+      "id": "5b15f276a156602e",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/rezepte/wagyu-burger.mdx",
+      "text": "hack: 55–57 °C unter Minimum 70 °C"
+    },
+    {
+      "id": "06677c340117621c",
+      "regel": "kerntemperatur-sicherheit",
+      "datei": "content/rezepte/wagyu-burger.mdx",
+      "text": "hack: 55 °C unter Minimum 70 °C"
+    }
+  ]
+}
