@@ -27,6 +27,24 @@
  * Der Gyutan-Fall zeigt beide Richtungen: das Urteil kann falsch negativ sein,
  * und es war hier falsch positiv.
  *
+ * WANN --strict (Entscheidung Uwe, 21.09.2026): einschalten, sobald der Check
+ * ueber mindestens ZEHN geaenderte Bilder gelaufen ist und die Trefferquote
+ * belegt ist — insbesondere ohne falsch positive Ablehnungen. Ein Gate, das auf
+ * einer Stichprobe von eins scharf geschaltet wird, blockiert beim ersten
+ * Fehlurteil einen berechtigten PR.
+ *
+ * ACHTUNG, der Nachweis geht NICHT aus data/bild-motiv-report.json: Die Datei
+ * ist gitignored (.gitignore:189) und wird bei jedem Lauf ueberschrieben — sie
+ * haelt immer nur den letzten Lauf, in der CI lebt sie nur im Job-Container.
+ * Zehn Laeufe sammeln sich dort nirgends an. Zwei gangbare Wege:
+ *   a) Stichprobe in EINEM Lauf erzeugen, seit dem .env.local-Fix lokal moeglich:
+ *        node scripts/check-bild-motiv.mjs --bereich rezepte
+ *      Danach data/bild-motiv-report.json auswerten und jede Ablehnung von Hand
+ *      gegenpruefen — das ist die Trefferquote, und sie ist in einem Zug da.
+ *   b) den Report in der CI als Artefakt hochladen und ueber mehrere PRs sammeln.
+ * Erst wenn einer der beiden Wege die Quote belegt, gehoert --strict in
+ * .github/workflows/content-gates.yml.
+ *
  * Usage:
  *   node scripts/check-bild-motiv.mjs --geaendert [--basis origin/main]   # CI
  *   node scripts/check-bild-motiv.mjs --bereich vergleich                 # ganzer Ordner
