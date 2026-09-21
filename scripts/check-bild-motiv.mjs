@@ -45,14 +45,20 @@
  * Erst wenn einer der beiden Wege die Quote belegt, gehoert --strict in
  * .github/workflows/content-gates.yml.
  *
- * ERSTER BELEGTER LAUF (21.09.2026, Weg a, 10 Bilder aus --bereich vergleich +
- * --bereich cuts, jede Ablehnung von Hand am Originalbild gegengeprueft):
- * Bedingung NICHT erfuellt — 5 von 7 Ablehnungen waren falsch positiv (u. a. ein
- * Stufe-2-Selbstwiderspruch bei messer.mdx: das Modell "widerlegte" eine
- * Behauptung, die der Alt-Text gar nicht enthielt). Die zwei echten Treffer
- * (kuechenmaschine-vergleich, oberhitzegrill-vergleich) waren bereits vorher
- * bekannt. --strict bleibt deshalb aus. Vollstaendige Tabelle und Einordnung:
- * docs/bild-motiv-check-log.md — dort auch jeder weitere Beleg-Lauf ergaenzt.
+ * BELEGTE LAEUFE (21.09.2026, Weg a): Lauf 1 (10 Bilder, --bereich vergleich +
+ * --bereich cuts, jede Ablehnung von Hand am Originalbild gegengeprueft) — 5
+ * von 7 Ablehnungen falsch positiv, u. a. ein Stufe-2-Selbstwiderspruch bei
+ * messer.mdx (das Modell "widerlegte" eine Behauptung, die der Alt-Text gar
+ * nicht enthielt). Lauf 2 (167 Bilder, --bereich rezepte) — 134 Ablehnungen
+ * (80 %), Stichprobe von 8 gegengeprueft: 8 von 8 falsch positiv. Zwei
+ * strukturelle Ursachen ueber beide Laeufe belegt: Stufe-2-Context-Pollution
+ * (Seitentitel statt reinem Alt-Text als Erwartungsquelle) und Stufe-1-
+ * Negativ-Fehlschluss (Nicht-Erwaehnung eines Merkmals gilt als dessen
+ * Abwesenheit). Recall ueber alle bekannten echten Faelle (inkl. des historisch
+ * unter der alten Einstufen-Fassung verpassten gyutan-sendai.jpg) ist 2/3.
+ * Bedingung fuer --strict NICHT erfuellt, bleibt deshalb aus. Vollstaendige
+ * Tabellen und Einordnung: docs/bild-motiv-check-log.md — dort auch jeder
+ * weitere Beleg-Lauf ergaenzt.
  *
  * Usage:
  *   node scripts/check-bild-motiv.mjs --geaendert [--basis origin/main]   # CI

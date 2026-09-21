@@ -149,8 +149,9 @@ jobs:
       # entsteht — der Report taugt dafuer nicht, er wird je Lauf ueberschrieben
       # und ist gitignored — steht im Kopf von scripts/check-bild-motiv.mjs.
       #
-      # ERSTER BELEGTER LAUF (21.09.2026): Bedingung NICHT erfuellt, 5 von 7
-      # Ablehnungen waren falsch positiv. --strict bleibt deshalb aus.
+      # BELEGTE LAEUFE (21.09.2026): Lauf 1 (10 Bilder) 5/7 Ablehnungen falsch
+      # positiv, Lauf 2 (167 Rezeptbilder) 134 Ablehnungen, Stichprobe 8/8
+      # falsch positiv. Bedingung NICHT erfuellt, --strict bleibt deshalb aus.
       # Vollstaendige Auswertung: docs/bild-motiv-check-log.md.
       - name: Geaenderte Hero-Bilder pruefen
         env:
