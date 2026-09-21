@@ -26,6 +26,7 @@ import { join, dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 import yaml from 'js-yaml'
+import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
@@ -970,6 +971,17 @@ async function main() {
       }
 
       const errors = validate(kandidat, seed)
+      // Quality-Gate VOR dem Schreiben (21.09.2026): dieselben Regeln wie
+      // `npm run check` (scripts/lib/content-qualitaet.mjs) — Wortdopplung,
+      // Fahrenheit-Reste, Kerntemperatur unter Sicherheitswert, Tierart-Konflikt,
+      // Abbruch. Ein Fehler fuehrt in den naechsten Anlauf statt ins Repo;
+      // Warnungen (Ziehwerte) nicht. Erst wenn die Pflichtfelder stehen, sonst
+      // wirft buildMdx auf halben Daten.
+      if (errors.length === 0) {
+        for (const b of pruefeDokument(buildMdx(kandidat), { bereich: 'rezepte', slug: seed.slug })) {
+          if (b.schwere === 'fehler') errors.push(`Quality-Gate [${b.regel}] ${b.text}${b.auszug ? ` — „${b.auszug.slice(0, 80)}"` : ''}`)
+        }
+      }
       if (errors.length === 0) { data = kandidat; break }
 
       console.log(c.yellow('VALIDIERUNGSFEHLER'))
@@ -1034,4 +1046,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs }
+export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx }

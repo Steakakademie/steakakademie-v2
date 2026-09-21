@@ -8,7 +8,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs } from './recipe-agent.mjs'
+import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx } from './recipe-agent.mjs'
+import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
 DESCRIPTION: Testbeschreibung fuer den Parser
@@ -339,5 +340,28 @@ describe('slugsInOffenenRezeptPRs', () => {
       '/pulls/121/files': [{ filename: 'content/rezepte/saba-shioyaki.mdx' }],
     })
     expect([...await slugsInOffenenRezeptPRs()]).toEqual(['saba-shioyaki'])
+  })
+})
+
+// Quality-Gate im Agenten (21.09.2026): buildMdx muss auf einem validierten
+// Kandidaten laufen und parsebares MDX liefern — sonst verwirft der Agent jedes
+// Rezept am Gate statt an echten Inhaltsfehlern.
+describe('Quality-Gate auf dem gebauten MDX', () => {
+  const kandidat = () => {
+    const d = parseStructuredText(KOPF + '1. Tare | 15 Min | Einkochen bis sirupartig.\n2. Spiesse | 10 Min | Abwechselnd aufziehen.')
+    Object.assign(d, SEED, { author: 'Marco', authorSlug: 'marco', image: '/images/rezepte/x.jpg',
+      body: 'Yakitori lebt von der Glut. Die Schenkel bleiben saftig, wenn sie bei 74 °C Kerntemperatur vom Rost kommen.' })
+    return d
+  }
+  it('sauberer Kandidat: keine Gate-Fehler', () => {
+    const fehler = pruefeDokument(buildMdx(kandidat()), { bereich: 'rezepte', slug: SEED.slug }).filter(b => b.schwere === 'fehler')
+    expect(fehler).toEqual([])
+  })
+  it('abgeschnittener Body und Fahrenheit werden am Gate gefangen', () => {
+    const d = kandidat()
+    d.body = 'Grill auf 225°F bringen. Die Tare aus Yuzu-'
+    const regeln = pruefeDokument(buildMdx(d), { bereich: 'rezepte', slug: SEED.slug }).map(b => b.regel)
+    expect(regeln).toContain('fahrenheit')
+    expect(regeln).toContain('abgeschnitten')
   })
 })

@@ -186,3 +186,4 @@ training/cut-review/
 # es kollidiert mit nichts — kein getrackter Pfad enthaelt "outputs".
 Claude outputs/
 outputs/
+data/bild-motiv-report.json

@@ -22,6 +22,7 @@ import YAML from 'yaml'
 import { join, extname, dirname, basename } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
+import { pruefeDokument, glossarDublette } from './lib/content-qualitaet.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
@@ -486,7 +487,11 @@ async function main() {
   }
 
   // ── Schritt 2+3: Einträge generieren & speichern ────────────────────────────
-  let created = 0, skipped = 0, errors = 0, tempAbgelehnt = 0
+  let created = 0, skipped = 0, errors = 0, tempAbgelehnt = 0, dubletten = 0, gateAbgelehnt = 0
+  // Kontrolliertes Vokabular (data/taxonomie.yaml): Bestand fuer den Dubletten-
+  // Check. Waechst im Lauf mit, damit zwei neue Varianten desselben Begriffs sich
+  // nicht gegenseitig durchwinken.
+  const bestand = new Set((await readdir(GLOSSAR_DIR)).filter(f => f.endsWith('.mdx')).map(f => f.replace(/\.mdx$/, '')))
 
   if (newTerms.length > 0) console.log()
 
@@ -505,6 +510,18 @@ async function main() {
       continue
     } catch { /* Datei existiert noch nicht → generieren */ }
 
+    // Synonym, Singular/Plural oder Fuellwort-Permutation eines vorhandenen
+    // Begriffs (kerntemperatur-wissen, packer-cut, smoker-fans)? Dann KEIN neuer
+    // Eintrag — genau so sind die Cluster aus docs/glossar-konsolidierung-kandidaten.md
+    // entstanden. Im Cache vermerken: die Entscheidung ist endgueltig, kein Retry.
+    const dublette = glossarDublette(slug, bestand)
+    if (dublette) {
+      dubletten++
+      cache.add(slug)
+      console.log(`${prefix} ${c.dim(term)} ${c.dim(`(Dublette: ${dublette.grund})`)}`)
+      continue
+    }
+
     try {
       process.stdout.write(`${prefix} ${term}... `)
       const entry   = await generateEntry(term)
@@ -520,7 +537,17 @@ async function main() {
       }
 
       const mdxBody = buildMdxContent(entry, slug)
+      // Quality-Gate vor dem Schreiben (21.09.2026) — dieselben Regeln wie
+      // `npm run check`. Abgelehnt = nicht geschrieben, nicht im Cache → Retry
+      // im naechsten Lauf, der Begriff bleibt sichtbar offen.
+      const gate = pruefeDokument(mdxBody, { bereich: 'glossar', slug }).filter(b => b.schwere === 'fehler')
+      if (gate.length) {
+        gateAbgelehnt++
+        console.log(c.red(`✗  Quality-Gate: ${gate.map(b => `[${b.regel}] ${b.text}`).join('; ')}`))
+        continue
+      }
       await writeFile(outPath, mdxBody, 'utf-8')
+      bestand.add(slug)
       cache.add(slug)
       created++
       console.log(c.green('✓'))
@@ -537,7 +564,7 @@ async function main() {
   await saveCache(cache)
   const termsIndex = await buildTermsIndex()
 
-  console.log(`\n${c.dim('📚')} Glossar: ${c.green(`${created} erstellt`)}, ${c.dim(`${skipped} übersprungen`)}${tempAbgelehnt ? ', ' + c.red(`${tempAbgelehnt} wegen Temperatur-Check verworfen`) : ''}${errors ? ', ' + c.red(`${errors} Fehler`) : ''}`)
+  console.log(`\n${c.dim('📚')} Glossar: ${c.green(`${created} erstellt`)}, ${c.dim(`${skipped} übersprungen`)}${tempAbgelehnt ? ', ' + c.red(`${tempAbgelehnt} wegen Temperatur-Check verworfen`) : ''}${dubletten ? ', ' + c.dim(`${dubletten} Dubletten nicht angelegt`) : ''}${gateAbgelehnt ? ', ' + c.red(`${gateAbgelehnt} am Quality-Gate verworfen`) : ''}${errors ? ', ' + c.red(`${errors} Fehler`) : ''}`)
   console.log(`${c.dim('📑')} terms.json: ${termsIndex.length} Einträge → content/glossar/terms.json`)
 
   // ── Schritt 5: Auto-Verlinkung (opt-in) ────────────────────────────────────

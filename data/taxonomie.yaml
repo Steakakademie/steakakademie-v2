@@ -1,0 +1,127 @@
+# ════════════════════════════════════════════════════════════════════════════
+# Kontrolliertes Vokabular — Single Source of Truth für das Content-Quality-Gate
+#
+# Gelesen von scripts/lib/content-qualitaet.mjs, das von drei Stellen genutzt wird:
+#   • scripts/check-content-qualitaet.mjs  (npm run check → CI, Workflow Content-Gates)
+#   • scripts/recipe-agent.mjs             (vor dem Schreiben eines Rezepts)
+#   • scripts/glossary-agent.mjs           (vor dem Anlegen eines Glossar-Begriffs)
+#
+# Eine Änderung hier wirkt also sofort auf Gate UND Generatoren. Keine zweite Liste.
+# Angelegt 21.09.2026 nach dem Semantik-Lauf (Iberico als Rind, Glossar-Permutationen).
+# ════════════════════════════════════════════════════════════════════════════
+
+# ─── Tierart-Zuordnung ───────────────────────────────────────────────────────
+# Nur EINDEUTIGE Begriffe. „Short Ribs", „Bauch", „Nacken" gibt es bei mehreren
+# Tieren — die stehen hier bewusst nicht, sonst meldet das Gate Unsinn.
+# Match: ganzes Wort, Groß/klein und Akzente egal (ibérico = iberico).
+tierart:
+  schwein:
+    - iberico
+    - presa
+    - pluma
+    - secreto
+    - carrillera
+    - pata negra
+    - pulled pork
+    - baby back ribs
+    - spareribs
+    - st. louis ribs
+    - porchetta
+    - krustenbraten
+    - schweinenacken
+    - schweinebauch
+    - kassler
+  rind:
+    - brisket
+    - picanha
+    - ribeye
+    - rib-eye
+    - entrecote
+    - tri-tip
+    - flank steak
+    - skirt steak
+    - hanger steak
+    - flat iron
+    - tomahawk
+    - t-bone
+    - porterhouse
+    - roastbeef
+    - tafelspitz
+    - ochsenbacke
+    - ochsenschwanz
+  lamm:
+    - lammkeule
+    - lammkotelett
+    - lammkoteletts
+    - lammrücken
+    - lammschulter
+  gefluegel:
+    - hähnchen
+    - hähnchenbrust
+    - pute
+    - putenbrust
+    - chicken wings
+
+# Wörter, an denen die Tierart-Angabe eines Dokuments erkannt wird (meatType,
+# Titel, Glossar-shortDefinition). Kollidiert ein eindeutiger Begriff von oben
+# mit einer ANDEREN Tierart hier — und die eigene Tierart fehlt —, schlägt das Gate an.
+tierart_signale:
+  schwein: [schwein, schweine, schweinefleisch, pork, iberico-schwein]
+  rind: [rind, rinder, rindfleisch, ochse, beef]
+  lamm: [lamm, lammfleisch, lamb]
+  gefluegel: [geflügel, hähnchen, huhn, pute, chicken]
+
+# ─── Glossar: Synonyme → Hauptbegriff ────────────────────────────────────────
+# Links: Variante, rechts: kanonischer Slug. Der Glossar-Agent legt eine Variante
+# nie neu an, wenn der Hauptbegriff existiert; das Gate meldet eine neu
+# eingecheckte Variante. Bestehende Dubletten stehen in der Baseline und in
+# docs/glossar-konsolidierung-kandidaten.md (Zusammenlegung erst mit GSC-Daten).
+glossar_synonyme:
+  packer-cut: packer-brisket
+  plateauphase: stall
+  the-stall: stall
+  smoker-temp: smoker-temperatur
+  kerntemp: kerntemperatur
+  kollagen-anteile: kollagen-anteil
+  kollagen-umwandlung: kollagen-transformation
+  maillard-effekt: maillard-reaktion
+
+# ─── Glossar: Füllwort-Suffixe ───────────────────────────────────────────────
+# „<hauptbegriff>-<füllwort>" ist fast immer eine KI-Permutation ohne eigenen
+# Begriffsinhalt (kerntemperatur-wissen, smoker-fans, wagyu-kenner). Existiert
+# der Hauptbegriff, wird so ein Slug nicht neu angelegt.
+glossar_fuellwort_suffixe:
+  - wissen
+  - prinzip
+  - kontrolle
+  - ziel
+  - referenz
+  - grundlagen
+  - basics
+  - fans
+  - enthusiasten
+  - kenner
+  - test
+  - designs
+  - setup
+  - aufbau
+  - finish
+  - monitoring
+  - zubereitungen
+  - tipps
+  - guide
+  - pioneer
+  - farm
+
+# ─── Wortdopplung: erlaubte Wendungen ────────────────────────────────────────
+# „X und X" ist sonst ein Fehler (Hot-Spots und Hot-Spots). Diese sind Deutsch.
+wortdopplung_erlaubt:
+  - mehr und mehr
+  - immer und immer
+  - nach und nach
+  - durch und durch
+  - hin und hin
+  - wieder und wieder
+  - stunde um stunde
+  - schritt für schritt
+  - seite an seite
