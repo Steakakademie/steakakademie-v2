@@ -79,16 +79,45 @@ vergangen. Keine nofollow-Prüfung nötig, da kein Link existiert.
 
 | Check | Ergebnis | Status | Δ Vortag |
 |---|---|---|---|
-| www → non-www Redirect | `curl -w '%{http_code} %{num_redirects}'` gegen `https://www.steakakademie.de/`: **HTTP 200, 0 Redirects** — die www-Variante liefert den vollen Seiteninhalt direkt aus, statt auf non-www weiterzuleiten. Im HTML steht `<link rel="canonical" href="https://steakakademie.de"/>`, aber das ist **kein Ersatz für einen Redirect**: beide URLs sind live erreichbar und indexierbar → Duplicate-Content-Risiko. **Unabhängig doppelt geprüft** (Cloud-Container-Proxy UND Uwes lokaler Rechner, identisches Ergebnis) — kein Mess-Artefakt. | 🔴 **Regression** | 🔴 **von 🟢 auf 🔴** — alle bisherigen Log-Einträge (mind. 6 Wochen) meldeten hier einen funktionierenden Redirect |
+| www → non-www Redirect | `curl -w '%{http_code} %{num_redirects}'` gegen `https://www.steakakademie.de/`: **HTTP 200, 0 Redirects** — die www-Variante liefert den vollen Seiteninhalt direkt aus, statt auf non-www weiterzuleiten. Im HTML steht `<link rel="canonical" href="https://steakakademie.de"/>`, aber das ist **kein Ersatz für einen Redirect**: beide URLs sind live erreichbar und indexierbar → Duplicate-Content-Risiko. **Unabhängig doppelt geprüft** (Cloud-Container-Proxy UND Uwes lokaler Rechner, identisches Ergebnis) — kein Mess-Artefakt. **Nachtrag 21.09.: Ursache ermittelt, es ist kein Regress — siehe „Auflösung" unten.** | 🔴 **offen** | ⚪ **Verhalten unverändert** — die „🟢" der Vorwochen belegten keinen Statuscode |
 | `/llms.txt` erreichbar | `HTTP 200`, `content-type: text/plain`, 1.533 Byte, vollständiger Inhalt (Kern-Referenzen, Weitere Inhalte, Über) | 🟢 ok | = |
 | `/robots.txt` endet mit Sitemap-Zeile | Letzte Zeile `Sitemap: https://steakakademie.de/sitemap.xml`; AI-Crawler weiterhin erlaubt | 🟢 ok | = |
 
-**Zur Einordnung des Redirect-Befunds:** Ob der Redirect erst seit heute fehlt oder in den Vorwochen nie
-wirklich per HTTP-Redirect, sondern nur per Canonical-Tag gelöst war und das fälschlich als „🟢 ok"
-durchgewunken wurde, lässt sich aus der Ferne **nicht** rekonstruieren — dafür fehlt der Blick auf die
-frühere Serverkonfiguration bzw. ein Deploy-Log. Fakt ist nur der heutige, zweifach bestätigte Zustand.
-Empfehlenswert: In Next.js/Vercel per `next.config` oder Vercel-Redirect-Regel einen echten 301 von
-`www.steakakademie.de` auf `steakakademie.de` einrichten (0 €, Code-Änderung).
+**Auflösung des Redirect-Befunds (Nachtrag 21.09.2026).** Die oben offen gelassene Frage — seit heute
+kaputt oder seit Wochen falsch gemeldet — ist beantwortet: **weder noch im Sinne einer Regression.**
+Die Regel in `vercel.json` greift für jeden Pfad, nur nicht für die blanke Wurzel-URL. Gemessen gegen
+die Produktion:
+
+| URL | Ergebnis |
+|---|---|
+| `www/glossar/wagyu` | 308 → `steakakademie.de/glossar/wagyu` |
+| `www/rezepte` | 308 → `steakakademie.de/rezepte` |
+| `www/temperatur-guide` | 308 → `steakakademie.de/temperatur-guide` |
+| `www/` | **200, keine Weiterleitung** |
+
+Ursache ist das Muster `source: "/:path*"` in `vercel.json`: es trifft in Vercels Router jeden Pfad
+**außer** der Wurzel. Der Monitoring-Check prüft genau diese eine URL.
+
+Zwei naheliegende Verdächtige sind ausgeschlossen:
+
+- **Cloudflare nicht schuld.** `www` läuft über den Cloudflare-Proxy (104.21.91.231), die Apex direkt
+  über Vercel (216.150.1.193) — der Verdacht lag also nahe. Umgeht man Cloudflare per `--resolve` und
+  schickt `Host: www.steakakademie.de` direkt an die Vercel-Anycast-IP, kommt derselbe 200er.
+- **`vercel.json` wird ausgewertet.** Die beiden Glossar-Redirects aus derselben Datei antworten in der
+  Produktion mit 308.
+
+Damit ist die Bewertung „Regression gegenüber mind. 6 Wochen 🟢" **sachlich falsch**: Das Verhalten hat
+sich nicht geändert, nur die Messung. Erst dieser Lauf hat mit `curl -w '%{num_redirects}'` den
+Statuscode geprüft; davor galt „Seite lädt vollständig" als Beleg — und genau so sieht ein 200 auf www
+aus. Die Wurzel-URL war mit hoher Wahrscheinlichkeit nie weitergeleitet.
+
+**Lehre für die Methodik:** Ein Redirect-Check muss den Statuscode prüfen, nicht den Seiteninhalt, und
+er muss die Wurzel-URL *und* mindestens eine Unterseite abdecken — dieser Befund wäre sechs Wochen
+früher aufgefallen. Gehört in die noch fehlende `docs/seo-monitoring-methodik.md`.
+
+**Fix:** zusätzliche Regel für `/` in `vercel.json`, PR #160 (die vorhandene Regel bleibt unangetastet,
+sie funktioniert für alle Unterseiten). Nach dem Merge zu prüfen:
+`curl -sI -o /dev/null -w '%{http_code}\n' https://www.steakakademie.de/` → erwartet 308.
 
 ### Offene Punkte
 
@@ -113,7 +142,7 @@ Empfehlenswert: In Next.js/Vercel per `next.config` oder Vercel-Redirect-Regel e
 | AI Overview / GEO | 🔴 | Beide geprüften AIOs zitieren uns nicht (block-house.de bzw. Don Carne). |
 | Traffic | 🟡 | ~50 Sessions/Woche. Bing-Vorsprung vor Google hat sich von 4:1 auf 6,5:1 vergrößert, weiterhin ungemessen in eigenen Tools. |
 | Off-Page | 🔴 | 0 Backlinks, unverändert 11 Wochen. |
-| Technik | 🔴 | **Neu:** www-Redirect fehlt nachweislich (HTTP 200 statt 301/302) — Regression gegenüber mind. 6 Wochen „🟢 ok". llms.txt und robots.txt weiterhin sauber. |
+| Technik | 🔴 | **Neu gemessen (kein Regress):** www-Redirect fehlt auf der Wurzel-URL (HTTP 200 statt 301/308), auf allen Unterseiten greift er. Ursache ermittelt, Fix in PR #160. Die „🟢 ok" der Vorwochen prüften keinen Statuscode. llms.txt und robots.txt weiterhin sauber. |
 
 ### Handlungsempfehlung (eine)
 
@@ -124,10 +153,11 @@ ist von 4:1 (Vortag) auf 6,5:1 (heute) gewachsen, bei ähnlicher Fallzahl. Die E
 stehen, unverändert in der Begründung: für Bing existieren weiterhin null Messdaten (Impressionen,
 Positionen, CTR), die Anbindung ist kostenlos und schnell.
 
-*Nachrichtlich, nicht als zweite Empfehlung gezählt:* Der neue Technik-Befund (www-Redirect fehlt) ist
-streng genommen dringlicher als Bing, weil er ein aktives Duplicate-Content-Risiko ist statt einer
-fehlenden Messung — wird hier bewusst nicht als Handlungsempfehlung geführt, um die Vorgabe „max. 1"
-einzuhalten, aber im Ampel-Status und oben im Technik-Abschnitt klar als Fix-Kandidat markiert.
+*Nachrichtlich, nicht als zweite Empfehlung gezählt:* Der neue Technik-Befund (www-Redirect fehlt auf
+der Wurzel-URL) ist streng genommen dringlicher als Bing, weil er ein aktives Duplicate-Content-Risiko
+ist statt einer fehlenden Messung — wird hier bewusst nicht als Handlungsempfehlung geführt, um die
+Vorgabe „max. 1" einzuhalten, aber im Ampel-Status und oben im Technik-Abschnitt klar als Fix-Kandidat
+markiert. **Nachtrag 21.09.: erledigt, Fix in PR #160 — Prüfung steht nach dem Deploy aus.**
 
 Danach unverändert: (2) Google Search Console per API; (3) echte Backlinks (kein spamfreier
 15-Minuten-Weg, Regel 5).
@@ -135,8 +165,9 @@ Danach unverändert: (2) Google Search Console per API; (3) echte Backlinks (kei
 ### Trend in einem Satz
 
 Ein-Tages-Vergleich bestätigt Stabilität bei Rankings, Off-Page und Traffic-Verhältnis — die einzige
-echte Bewegung ist ein bislang unentdeckter technischer Rückschritt: der www→non-www-Redirect liefert
-heute nachweislich keinen Redirect mehr, sondern zwei parallel erreichbare URLs.
+echte Bewegung ist kein Rückschritt, sondern ein bislang unentdeckter Altbestand: der www→non-www-Redirect
+greift auf der Wurzel-URL nicht, wodurch dort zwei parallel erreichbare URLs existieren. Aufgefallen ist
+das erst, weil dieser Lauf zum ersten Mal den Statuscode statt des Seiteninhalts geprüft hat.
 
 ### Was NICHT geprüft wurde
 
@@ -149,8 +180,10 @@ heute nachweislich keinen Redirect mehr, sondern zwei parallel erreichbare URLs.
 - **`/hoefe`-Traffic weiterhin nicht attribuiert** (Uwe selbst, Bot oder echte Besucher — aus Clarity
   nicht entscheidbar).
 - **Keine Klickrate/Impressionen/Durchschnittsposition** — fehlt weiterhin die Search-Console-Anbindung.
-- **Ursache des fehlenden www-Redirects nicht ermittelt** — ob Config-Änderung, Deploy-Regression oder
-  seit Wochen falsch gemeldet, ist von hier aus nicht entscheidbar.
+- ~~**Ursache des fehlenden www-Redirects nicht ermittelt**~~ — **nachgetragen 21.09.2026: ermittelt.**
+  Muster `source: "/:path*"` in `vercel.json` trifft die Wurzel-URL nicht; Cloudflare und eine
+  Deploy-Regression sind beide ausgeschlossen. Siehe „Auflösung" im Technik-Abschnitt, Fix in PR #160.
+  Offen bleibt nur die Bestätigung nach dem Deploy.
 - **Nichts committet.** Diese Datei ist geändert, aber nicht eingecheckt — wie angewiesen.
 
 ---
