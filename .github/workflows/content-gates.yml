@@ -139,6 +139,15 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
+      # Bewusst OHNE --strict: der Schritt berichtet nur, Exit bleibt 0. Ein gruenes
+      # Haekchen an diesem Job sagt deshalb nichts ueber das Urteil — es steht im
+      # Job-Log und in der Step-Summary.
+      #
+      # --strict ergaenzen (Entscheidung Uwe, 21.09.2026), sobald der Check ueber
+      # mindestens ZEHN geaenderte Bilder gelaufen ist und die Trefferquote belegt
+      # ist, insbesondere ohne falsch positive Ablehnungen. Wie der Nachweis
+      # entsteht — der Report taugt dafuer nicht, er wird je Lauf ueberschrieben
+      # und ist gitignored — steht im Kopf von scripts/check-bild-motiv.mjs.
       - name: Geaenderte Hero-Bilder pruefen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
