@@ -751,27 +751,26 @@ Sicherungskopien lagen unter `_to_delete/graphify-hooks/` (am 05.09. gelöscht;
 wieder einspielen ginge mit `graphify hook install` — das ist aber genau der
 Zustand, den wir verlassen haben).
 
-**`graphify watch` laeuft absichtlich (Uwe, 10.09.2026).** Der Watcher baut den
-Graphen bei Dateiaenderungen von selbst neu und sichert den Vorzustand nach
-`graphify-out/<datum>/`. Seine Ausgabe beginnt mit `[graphify watch]` — wer die
-sieht, hat den Rebuild NICHT selbst ausgeloest. Ein manuelles `graphify update .`
-ist damit meist ueberfluessig; die drei Punkte darunter bleiben es aber nicht:
+**Der Graph wird ausschliesslich von Hand aktualisiert (21.09.2026).** `graphify
+watch` wird nicht mehr betrieben. Ein selbsttaetiger Rebuild widerspricht der
+Regel in GRAPHIFY PROTECTED — Updates nur auf ausdrueckliche Anfrage —, scheitert
+am Schreibschutz von `graph.json` (niemand hebt vorher `attrib -r` auf) und
+verbraucht unbemerkt Token. Aktualisiert wird nur ueber ein explizites
+`/graphify update`.
 
-1. **`label` macht der Watcher nicht.** Er meldet stattdessen „community set
-   changed since labeling" und benennt die neuen Communities mechanisch nach
-   ihrem Hub — am 10.09. waren das 47 von 681. Der sprechende Name kommt erst
-   mit dem Befehl unten.
-2. **Der Watcher indexiert, was auf der Platte liegt — nicht, was im Repo
+Zwei Eigenheiten gelten fuer jeden Lauf, auch den manuellen:
+
+1. **Der Lauf indexiert, was auf der Platte liegt — nicht, was im Repo
    existiert.** Am 10.09. stand der Arbeitsbaum auf einem von `origin/main`
    abgezweigten Branch; die 60 Dateien des Diplom-Branches waren deshalb nicht
    im Graphen, obwohl sie committet und gepusht waren. Der Lauf war korrekt,
    die Erwartung falsch. Vor einer Aussage ueber den Graphen also erst
    `git branch --show-current` fragen.
-3. **Der MCP-Server merkt vom Watcher nichts.** Er liest `graph.json` beim
-   Start; nach einem Rebuild antwortet er weiter aus der alten Fassung, ohne
-   Fehlermeldung. Client neu starten (Details im Abschnitt MCP-Server).
+2. **Der MCP-Server merkt von einem Rebuild nichts.** Er liest `graph.json` beim
+   Start; danach antwortet er weiter aus der alten Fassung, ohne Fehlermeldung.
+   Client neu starten (Details im Abschnitt MCP-Server).
 
-Von Hand, aus PowerShell — `update` nur ohne laufenden Watcher noetig:
+Von Hand, aus PowerShell:
 
 ```powershell
 graphify update .                                     # AST-Struktur, keine API-Kosten
