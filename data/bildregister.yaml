@@ -554,3 +554,16 @@ bilder:
     namensnennung: false
     erworben_am: 2026-09-21
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    motiv_strittig: true
+    motiv_hinweis: >-
+      21.09.2026 — das Bild zeigt aufgeschnittenes Muskelfleisch, keine Rinderzunge.
+      Erkannt an der Fettkante an einzelnen Scheiben (Uwe); Zunge hat keine.
+      Drei Neugenerierungen mit geschaerftem Prompt scheiterten, jede an einem
+      anderen Merkmal: Fettkante, dann roh wirkende Oberflaeche, dann Faserverlauf
+      und Gittermuster ("Carpaccio oder Roastbeef"). FLUX.1 dev hat offenbar kein
+      belastbares Konzept von aufgeschnittener Zunge und liefert verlaesslich
+      Muskelfleischscheiben. Weiteres Nachsteuern am Prompt ist aussichtslos —
+      BRAUCHT EIN ECHTFOTO. Der verschaerfte imagePrompt in der MDX bleibt stehen,
+      damit ein spaeterer Versuch nicht bei null anfaengt.
+      Der urspruengliche Bild-Motiv-Check hatte das Bild bestaetigt; erst die
+      Blindpruefung (PR #178) meldet es als unpassend.
