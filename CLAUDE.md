@@ -111,7 +111,9 @@
   glossary-agent VOR dem Schreiben. Altbestand steht in
   `data/content-qualitaet-baseline.json` (Ratchet): **beheben, nie von Hand
   eintragen**; nach einer Korrektur `npm run check:qualitaet:baseline`. Bewusst
-  nicht im prebuild (Audit 27.08., Regel 5). Vision-Check der Hero-Bilder
+  nicht im prebuild — `docs/ARCHITEKTUR-AUDIT-2026-08-27.md`, Abschnitt 3.2,
+  Regel 5: „Werkzeuge werden nie blockiert, Builds nie durch Inhalt" (NICHT §2
+  Regel 5 dieser Datei, die etwas anderes regelt). Vision-Check der Hero-Bilder
   (`check-bild-motiv.mjs`) laeuft im PR nur als Bericht.
 - **Vercel wurde erst am 05.09.2026 Pflicht — der Punkt darueber hat es seit
   dem 04.09. faelschlich behauptet.** Was die Luecke gekostet hat: PR #52
