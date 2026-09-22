@@ -1,4 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 
 // Modell per Env überschreibbar: gemini-2.5-flash wurde am 17.09.2026 von Google mit
 // 404 „no longer available to new users" abgelehnt (Empfehlung im Fehlertext: gemini-3.6-flash).
@@ -11,6 +13,28 @@ export const dynamic = 'force-dynamic';
 
 type ChatMessage = { role: 'user' | 'assistant' | 'system' | 'data'; content: string };
 
+// Login-Pflicht (22.09.2026, Uwe): Marco war komplett anonym erreichbar — jeder
+// Besucher konnte ohne Anmeldung chatten UND Bilder analysieren lassen (Gemini-Kosten
+// pro Aufruf). Guard erzwingt jetzt same-origin + Rate-Limit + eingeloggten Nutzer
+// ODER Admin-Cookie — exakt das Muster von /api/kochwissen/generieren.
+const MarcoBody = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant', 'system', 'data']),
+        content: z.string().max(4_000),
+      }),
+    )
+    .max(30)
+    .optional(),
+  message: z.string().max(4_000).optional(),
+  data: z
+    .object({
+      image: z.string().max(8_000_000).optional(), // Base64, ~6 MB Bild-Obergrenze
+      mimeType: z.string().max(64).optional(),
+    })
+    .optional(),
+});
 
 const MARCO_SYSTEM_PROMPT = `
 Du bist Marco, der exklusive Grill- und Fleischexperte von steakakademie.de.
@@ -52,13 +76,24 @@ export async function POST(request: Request) {
     return new Response('Marco ist kurz am Grill – bitte versuche es gleich noch einmal.', { status: 500 });
   }
 
+  const guard = await guardRequest(request, {
+    key: 'marco',
+    rate: { limit: 20, windowMs: 10 * 60_000 },
+    schema: MarcoBody,
+    maxBodyBytes: 8 * 1024 * 1024, // Bild-Upload (Base64) braucht mehr als das 16-KiB-Default
+    auth: 'user-or-admin',
+  });
+  if (!guard.ok) return guard.response;
+
   try {
-    const body = await request.json();
+    const body = guard.body;
 
     // useChat schickt den gesamten Verlauf — Marco bekommt ihn komplett, nicht nur die letzte Frage.
     const history: ChatMessage[] = Array.isArray(body.messages)
-      ? body.messages.filter((m: ChatMessage) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-      : body.message ? [{ role: 'user', content: String(body.message) }] : [];
+      ? body.messages.filter((m) => m.role === 'user' || m.role === 'assistant')
+      : body.message
+        ? [{ role: 'user', content: body.message }]
+        : [];
 
     const last = history[history.length - 1];
     const prompt = last?.role === 'user' ? last.content : '';
