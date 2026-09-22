@@ -22,16 +22,38 @@
 export interface Redaktionsstatus {
   status?: string | null;
   reviewed?: boolean | null;
+  publishedAt?: string | null;
 }
 
-/** Alles, was nicht Entwurf und nicht ausdruecklich ungeprueft ist. */
+/**
+ * True, wenn `publishedAt` gesetzt, parsebar und noch in der Zukunft ist.
+ *
+ * 22.09.2026: `nurVeroeffentlicht` pruefte bisher nur status/reviewed — ein
+ * freigegebener Artikel mit zukuenftigem `publishedAt` (fuer den gestaffelten
+ * Rollout, 2 Artikel/Woche ab 01.10.2026) ging deshalb sofort live statt am
+ * vorgesehenen Datum. Gleiches Prinzip wie oben: fehlt das Feld oder ist es
+ * nicht parsebar, gilt das Dokument als faellig (Altbestand ohne Datum bleibt
+ * sichtbar) — der teurere Fehler waere, still gar nichts mehr zu zeigen.
+ */
+function nochNichtFaellig(d: Redaktionsstatus): boolean {
+  if (!d.publishedAt) return false;
+  const datum = new Date(d.publishedAt).getTime();
+  return !Number.isNaN(datum) && datum > Date.now();
+}
+
+/** True, wenn dieses Dokument nur wegen der Entwicklungsumgebung sichtbar ist. */
+export function istEntwurf<T extends Redaktionsstatus>(doc: T): boolean {
+  return doc.status === 'draft' || doc.status === 'review' || doc.reviewed === false || nochNichtFaellig(doc);
+}
+
+/** Alles, was nicht Entwurf, nicht ausdruecklich ungeprueft und nicht erst kuenftig faellig ist. */
 export function nurVeroeffentlicht<T extends Redaktionsstatus>(docs: readonly T[]): T[] {
-  return docs.filter((d) => d.status !== 'draft' && d.status !== 'review' && d.reviewed !== false);
+  return docs.filter((d) => !istEntwurf(d));
 }
 
 /** Gegenstueck fuer Vorschau-/Redaktionsansichten. */
 export function nurEntwuerfe<T extends Redaktionsstatus>(docs: readonly T[]): T[] {
-  return docs.filter((d) => d.status === 'draft' || d.status === 'review' || d.reviewed === false);
+  return docs.filter((d) => istEntwurf(d));
 }
 
 /**
@@ -47,9 +69,4 @@ export function nurEntwuerfe<T extends Redaktionsstatus>(docs: readonly T[]): T[
  */
 export function sichtbareArtikel<T extends Redaktionsstatus>(docs: readonly T[]): T[] {
   return process.env.NODE_ENV === 'production' ? nurVeroeffentlicht(docs) : [...docs];
-}
-
-/** True, wenn dieses Dokument nur wegen der Entwicklungsumgebung sichtbar ist. */
-export function istEntwurf<T extends Redaktionsstatus>(doc: T): boolean {
-  return doc.status === 'draft' || doc.status === 'review' || doc.reviewed === false;
 }
