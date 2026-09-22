@@ -76,26 +76,86 @@ auftauchten, sind damit als Muster erkennbar:
    einmal beobachtet, hier über die 8-von-8-Stichprobe als wiederkehrendes
    Muster bestätigt.
 
-## Recall-Korrektur (über alle bekannten Fälle, nicht nur Lauf 1)
+## Lauf 3 — 22.09.2026, Stabilitätsmessung (`gyutan-sendai.jpg`, identischer Input, `temperature: 0`)
 
-Die Recall-Angabe aus Lauf 1 („2/2") war zu eng gefasst — sie zählte nur die in
-Lauf 1 selbst gefundenen Treffer. Über alle bislang bekannten echten
-Motiv-Fehler zählt zusätzlich `gyutan-sendai.jpg`: der **ursprüngliche,
-einstufige** Bild-Motiv-Check hatte dieses Bild bestätigt (falsch negativ) —
-erst die zweistufige Blindprüfung aus PR #178 hat es richtig als unpassend
-erkannt (wörtlich aus dem `motiv_hinweis` in `data/bildregister.yaml`: „Der
-urspruengliche Bild-Motiv-Check hatte das Bild bestaetigt; erst die
-Blindpruefung (PR #178) meldet es als unpassend."). Über die drei bislang
-bekannten echten Fälle (`gyutan-sendai`, `kuechenmaschine-vergleich`,
-`oberhitzegrill-vergleich`) ergibt das:
+Bisher prüften Lauf 1 und 2 die Präzision — dieselben Bilder gegen
+unterschiedliche Motive. Lauf 3 prüft etwas anderes: **dasselbe Bild gegen sich
+selbst**, an aufeinanderfolgenden Tagen, ohne jede Änderung an Bild, Alt-Text,
+Titel oder Skript. `temperature: 0` steht in beiden `callClaude`-Aufrufen in
+`scripts/check-bild-motiv.mjs` fest verdrahtet — die Erwartung war
+Reproduzierbarkeit.
 
-**Recall = 2/3** — zwei von drei bekannten Motiv-Fehlern wurden von der
-jeweils aktuellen Fassung des Checks erkannt, einer (gyutan, unter der alten
-Einstufen-Fassung) nicht.
+**Von Uwe berichtet:** gestern 3× `passt`, heute 6× `unpassend` — bei
+identischem Bild, identischem Alt-Text, identischem Titel, identischer
+`temperature: 0`.
+
+**Zur Bestätigung selbst nachgestellt** (22.09.2026, sechs Läufe
+`node scripts/check-bild-motiv.mjs content/rezepte/gyutan-sendai.mdx`
+hintereinander, wenige Minuten auseinander): **1× `passt`, 5× `unpassend`.**
+Nicht-Determinismus bei `temperature: 0` ist damit nicht nur über Tage,
+sondern schon innerhalb einer einzigen Sitzung reproduzierbar — die
+Zeitspanne allein erklärt es nicht.
+
+| Lauf | Urteil | Stufe-1-Merkmal „Fettkante" | Stufe-2-Begründung |
+|---|---|---|---|
+| 1 | passt | „Keine Fettkante sichtbar" | „Alle Merkmale passen" |
+| 2 | unpassend | „Keine sichtbare Fettkante" | „Keine Fettkante typisch für Rinderzunge. Eher Rinderfilet oder Roastbeef." |
+| 3 | unpassend | „Keine Fettkante vorhanden" | „Keine Fettkante typisch für Rinderzunge. Regelmäßiger Faserverlauf spricht für Muskelfleisch wie Roastbeef." |
+| 4 | unpassend | „Keine sichtbare Fettkante" | „Keine sichtbare Fettkante typisch für Rinderzunge. Merkmale deuten auf Roastbeef oder Carpaccio." |
+| 5 | unpassend | „Keine sichtbare Fettkante" | „Keine sichtbare Fettkante typisch für Rinderzunge. Merkmale deuten auf Roastbeef oder Carpaccio." |
+| 6 | unpassend | „Keine sichtbare Fettkante" | „Keine Fettkante typisch für Rinderzunge. Eher Roastbeef oder Carpaccio." |
+
+**Einordnung, wo die Varianz sitzt:** Uwes Befund (gestern/heute) führt sie auf
+Stufe 1 zurück — eine zwischen Sitzungen schwankende Merkmalsliste. In meinen
+sechs Läufen war ausgerechnet das Merkmal „Fettkante" in Stufe 1 durchgehend
+stabil (alle sechs Läufe melden „keine/keine sichtbare Fettkante") — variiert
+hat stattdessen, wie Stufe 2 dieselbe Stufe-1-Aussage bewertet: einmal als
+neutral/passend (Lauf 1), fünfmal als Ablehnungsgrund (Läufe 2–6). Beide
+Beobachtungen widersprechen sich nicht — sie zeigen zwei verschiedene
+Varianzquellen (Stufe 1 UND Stufe 2), je nachdem, welche Stichprobe man zieht.
+Für die Schlussfolgerung ist das ohne Belang: **ob die Varianz in Stufe 1,
+Stufe 2 oder beiden sitzt — bei identischem Input darf ein Gate nicht
+zwischen bestanden und abgelehnt wechseln.** Das ist unabhängig vom
+Präzisionsproblem aus Lauf 1/2 ein eigenständiges, fundamentales Argument
+gegen `--strict`: selbst ein perfekt präziser Check wäre als Gate untauglich,
+wenn er bei unverändertem Bild von Lauf zu Lauf das Urteil wechselt — ein PR
+würde dann nicht am Inhalt scheitern, sondern an der Sekunde, in der die CI
+zufällig lief.
+
+## Korrektur zur Recall-Begründung aus #183 (Logik-Inversion bei `gyutan-sendai.jpg`)
+
+\#183 zählte `gyutan-sendai.jpg` als vom zweistufigen Check „richtig erkannt"
+und leitete daraus **Recall = 2/3** ab. Die Zahl selbst bleibt zutreffend für
+den damals ausgewerteten Lauf (der hat tatsächlich `unpassend` ausgegeben,
+passend zum bekannten echten Fehler) — **die Begründung dahinter war falsch.**
+\#183 suggerierte „saubere Merkmalserkennung". Lauf 3 zeigt: das war sie nicht.
+
+**Der fachliche Fehler:** Rinderzunge hat anatomisch KEINE Fettkante — das ist
+seit PR #179 als Ground Truth im Repo dokumentiert (`motiv_hinweis` in
+`data/bildregister.yaml`: „Erkannt an der Fettkante an einzelnen Scheiben
+[Uwe]; Zunge hat keine."). Die Stufe-2-Begründungen aus Lauf 3 (Tabelle oben)
+argumentieren aber durchgehend in die andere Richtung: „Keine Fettkante
+typisch für Rinderzunge" wird als Grund GEGEN die Rinderzungen-Behauptung
+verwendet, mit der Schlussfolgerung „eher Roastbeef/Carpaccio" — also
+funktional so, als würde das Modell eine Fettkante für Rinderzunge ERWARTEN
+und ihr Fehlen als Widerspruch werten. Genau umgekehrt zur fachlichen
+Tatsache: Das Fehlen einer Fettkante spricht FÜR Rinderzunge, nicht dagegen.
+
+**Zusammen mit der in Lauf 3 belegten Instabilität ergibt sich:** Das Modell
+hat `gyutan-sendai.jpg` nicht durch saubere Merkmalserkennung als unpassend
+erkannt, sondern durch ein fachlich umgekehrtes Argument (Fettkante-Erwartung
+bei einem Cut, der keine hat), das je nach Lauf mal zum — zufällig richtigen —
+Urteil „unpassend" führt und mal nicht. Der 2/3-Recall aus #183 ist damit kein
+Beleg für einen funktionierenden Erkennungsmechanismus bei diesem Bild,
+sondern ein Schnappschuss eines Laufs, dessen Begründung falsch und dessen
+Ausgang instabil ist. Für andere Bilder (`kuechenmaschine-vergleich`,
+`oberhitzegrill-vergleich`) gilt das nicht — dort war die Stufe-1-Beschreibung
+selbst eindeutig themenfremd (Meer, Steg), keine fachlich umgekehrte
+Einzelargumentation.
 
 ## Entscheidung
 
-**Bedingung aus PR #180 ist NICHT erfüllt — nach zwei Läufen deutlicher als
+**Bedingung aus PR #180 ist NICHT erfüllt — nach drei Läufen deutlicher als
 nach einem.** Sie verlangt eine belegte Trefferquote „insbesondere ohne falsch
 positive Ablehnungen". Lauf 1 lieferte fünf falsch positive Ablehnungen von
 sieben; Lauf 2 lieferte acht von acht in der Stichprobe, bei einer
@@ -104,21 +164,34 @@ Ablehnungsquote von 80 % über 167 Bilder. `--strict` bleibt aus in
 in Lauf 2 den Großteil aller Rezept-PRs blockiert, ohne dass in der Stichprobe
 auch nur ein einziger Treffer echt war.
 
+**Lauf 3 macht die Ablehnung von `--strict` kategorisch, nicht nur graduell.**
+Selbst wenn die Präzisionsprobleme aus Lauf 1/2 eines Tages behoben wären: ein
+Check, der bei `temperature: 0` und unverändertem Bild zwischen `passt` und
+`unpassend` wechselt (belegt sowohl über Tage — Uwes 3×/6×-Befund — als auch
+innerhalb einer Sitzung — die sechs Läufe oben), kann kein Gate tragen. Ein
+Gate muss bei gleichem Input gleich urteilen; dieses tut es nicht.
+
 **Was die Läufe trotzdem wert waren:** Lauf 1 hat die zwei bereits über
 `CREDITS.md` bekannten Bugs (`kuechenmaschine-vergleich`,
-`oberhitzegrill-vergleich`) reproduzierbar bestätigt. Über alle bislang
-bekannten echten Fälle liegt der Recall bei **2/3** (siehe Korrektur oben,
-`gyutan-sendai.jpg` zählt als falsch negativ unter der alten Einstufen-Fassung).
-Das Präzisionsproblem liegt in der Abgleich-Logik, nicht in der Grundidee.
+`oberhitzegrill-vergleich`) reproduzierbar bestätigt — dort war die
+Stufe-1-Beschreibung eindeutig themenfremd, kein Grenzfall. Der dritte bekannte
+Fall (`gyutan-sendai.jpg`) zählt weiterhin formal als Treffer (Recall **2/3**),
+aber mit der in Lauf 3 belegten Einschränkung: kein sauberer Fund, sondern ein
+fachlich umgekehrtes Argument plus Instabilität (Details oben). Das
+Präzisionsproblem liegt in der Abgleich-Logik, nicht in der Grundidee — die
+Instabilität liegt tiefer, im Modellverhalten bei `temperature: 0` selbst.
 
-**Offen, bevor ein dritter Beleg-Lauf sich lohnt:** zwei strukturelle Ursachen
-sind jetzt über beide Läufe hinweg belegt, nicht nur vermutet — Stufe-2-Context-
-Pollution (Seitentitel statt reinem Alt-Text als Erwartungsquelle) und
-Stufe-1-Negativ-Fehlschluss (Nicht-Erwähnung eines Merkmals wird als dessen
-Abwesenheit gewertet). Ein Fix dafür ist nicht Teil dieser Änderung
-(Verhaltensänderung am Prompt ist ein eigener Schritt, keiner, der beim
-Beleg-Lauf nebenbei passiert) — aber beide Ursachen sind jetzt konkret genug,
-um sie gezielt anzugehen, statt weiter nur Stichproben zu ziehen.
+**Offen, bevor ein vierter Beleg-Lauf sich lohnt:** drei strukturelle Ursachen
+sind jetzt belegt, nicht nur vermutet — Stufe-2-Context-Pollution (Seitentitel
+statt reinem Alt-Text als Erwartungsquelle), Stufe-1-Negativ-Fehlschluss
+(Nicht-Erwähnung eines Merkmals wird als dessen Abwesenheit gewertet) und
+Nicht-Determinismus bei `temperature: 0` (Lauf 3). Ein Fix dafür ist nicht Teil
+dieser Änderung (Verhaltensänderung am Prompt bzw. an der Modellkonfiguration
+ist ein eigener Schritt, keiner, der beim Beleg-Lauf nebenbei passiert) — aber
+alle drei Ursachen sind jetzt konkret genug, um sie gezielt anzugehen, statt
+weiter nur Stichproben zu ziehen. Ein weiterer Beleg-Lauf lohnt sich erst,
+wenn mindestens die Instabilität angegangen ist — sonst misst jeder weitere
+Lauf nur wieder Rauschen.
 
 Die zwei echten Bugs sind in `data/bildregister.yaml` als
 `motiv_strittig: true` geführt (bisher stand das nur in `CREDITS.md`), damit sie
