@@ -55,7 +55,15 @@
  * (Seitentitel statt reinem Alt-Text als Erwartungsquelle) und Stufe-1-
  * Negativ-Fehlschluss (Nicht-Erwaehnung eines Merkmals gilt als dessen
  * Abwesenheit). Recall ueber alle bekannten echten Faelle (inkl. des historisch
- * unter der alten Einstufen-Fassung verpassten gyutan-sendai.jpg) ist 2/3.
+ * unter der alten Einstufen-Fassung verpassten gyutan-sendai.jpg) ist 2/3 —
+ * ACHTUNG, dieser Treffer ist selbst kein sauberer Fund: Lauf 3 (22.09.2026,
+ * gyutan-sendai.jpg wiederholt bei identischem Input UND temperature: 0)
+ * belegt sowohl Nicht-Determinismus (1x passt, 5x unpassend in sechs
+ * Wiederholungen derselben Sitzung) als auch ein fachlich umgekehrtes
+ * Stufe-2-Argument (das Modell erwartet eine Fettkante bei Rinderzunge, die
+ * anatomisch keine hat). Nicht-Determinismus bei temperature: 0 ist ein
+ * eigenstaendiges, von der Praezision unabhaengiges Argument gegen --strict:
+ * ein Gate darf bei gleichem Input nicht zwischen passt/unpassend wechseln.
  * Bedingung fuer --strict NICHT erfuellt, bleibt deshalb aus. Vollstaendige
  * Tabellen und Einordnung: docs/bild-motiv-check-log.md — dort auch jeder
  * weitere Beleg-Lauf ergaenzt.
