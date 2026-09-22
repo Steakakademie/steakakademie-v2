@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-19T09:29:26.683Z",
+ "aktualisiert": "2026-09-22T09:56:12.116Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -1780,6 +1780,147 @@
     "Beef Rub"
    ],
    "gesehen": "2026-09-19",
+   "status": "neu"
+  },
+  {
+   "id": "heygrillhey:jerk-pork-and-pineapple-kabobs",
+   "quelle": "heygrillhey",
+   "quelleName": "Hey Grill Hey",
+   "quelleUrl": "https://heygrillhey.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Pellet-Grill, Familienküche, Feiertage, Saucen und Rubs",
+   "titel": "Jerk Pork and Pineapple Kabobs",
+   "link": "https://heygrillhey.com/jerk-pork-and-pineapple-kabobs/",
+   "datum": "Mon, 21 Sep 2026 14:00:00 +0000",
+   "kategorien": [
+    "Pork",
+    "Recipes",
+    "Tenderloin",
+    "Beef Rub",
+    "Everything BBQ Sauce",
+    "Grilled"
+   ],
+   "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:back-to-basics-corned-beef-hash-breakfast-burritos-on-the-griddle",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Back to Basics: Corned Beef Hash Breakfast Burritos on the Griddle",
+   "link": "https://barbecuebible.com/2026/09/21/corned-beef-breakfast-burrito/",
+   "datum": "Mon, 21 Sep 2026 10:00:39 +0000",
+   "kategorien": [
+    "Back to Barbecue Basics",
+    "Breakfast",
+    "Homepage Feature",
+    "breakfast",
+    "Corned Beef Hash Breakfast Burrito",
+    "Griddle"
+   ],
+   "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:tailgating-essentials-2026-gear-for-game-day-grilling",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Tailgating Essentials 2026: Gear for Game Day Grilling",
+   "link": "https://barbecuebible.com/2026/09/17/tailgating-essentials-2026/",
+   "datum": "Thu, 17 Sep 2026 10:00:20 +0000",
+   "kategorien": [
+    "Gift Guides",
+    "Homepage Feature",
+    "Tailgating Essentials 2026"
+   ],
+   "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:kick-off-tailgating-season-with-rotisserie-tri-tip",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Kick Off Tailgating Season with Rotisserie Tri-Tip",
+   "link": "https://barbecuebible.com/2026/09/15/rotisserie-tri-tip-tailgating/",
+   "datum": "Tue, 15 Sep 2026 13:14:12 +0000",
+   "kategorien": [
+    "Beef",
+    "Gear",
+    "Homepage Feature",
+    "Recipes",
+    "Monument Eminence 605",
+    "Monument Grills"
+   ],
+   "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:baconpalooza-9-ways-to-grill-with-bacon",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Baconpalooza: 9 Ways to Grill With Bacon",
+   "link": "https://barbecuebible.com/2026/09/11/baconpalooza-ways-to-grill-with-bacon/",
+   "datum": "Fri, 11 Sep 2026 10:00:22 +0000",
+   "kategorien": [
+    "Homepage Feature",
+    "Pork",
+    "Recipes",
+    "bacon"
+   ],
+   "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:now-everyone-can-celebrate-national-quesadilla-day",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Now Everyone Can Celebrate National Quesadilla Day!",
+   "link": "https://barbecuebible.com/2026/09/09/gluten-free-grilled-quesadillas/",
+   "datum": "Wed, 09 Sep 2026 11:37:40 +0000",
+   "kategorien": [
+    "Chicken",
+    "Poultry",
+    "Recipes"
+   ],
+   "gesehen": "2026-09-22",
    "status": "neu"
   }
  ]
