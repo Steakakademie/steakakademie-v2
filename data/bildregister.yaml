@@ -610,3 +610,10 @@ bilder:
       damit ein spaeterer Versuch nicht bei null anfaengt.
       Der urspruengliche Bild-Motiv-Check hatte das Bild bestaetigt; erst die
       Blindpruefung (PR #178) meldet es als unpassend.
+  images/rezepte/vacio-asado-argentino.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/vacio-asado-argentino.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-22
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
