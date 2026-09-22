@@ -6,6 +6,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Paperclip } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import MarcoAvatar from './MarcoAvatar';
 import { useAvatarStateMachine } from '@/hooks/useAvatarStateMachine';
 
@@ -23,7 +24,14 @@ export default function MarcoWidget() {
   const [open, setOpen] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{ base64: string; mimeType: string; preview: string } | null>(null);
-  
+
+  // Login-Pflicht (22.09.2026, Uwe): Marco ist Mitgliedern vorbehalten — der Server
+  // (/api/marco, guardRequest auth:'user-or-admin') verweigert Anonymen ohnehin mit
+  // 401; hier zusätzlich die UI sperren, damit Anonyme gar nicht erst chatten können.
+  const [authed, setAuthed] = useState<boolean | null>(null);
+  const pathname = usePathname();
+  const lastStatusRef = useRef<number | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevIsLoading = useRef(false);
@@ -34,7 +42,30 @@ export default function MarcoWidget() {
     api: '/api/marco',
     // /api/marco streamt Klartext (Gemini), nicht das Data-Stream-Protokoll der AI-SDK.
     streamProtocol: 'text',
+    onResponse: (res) => {
+      lastStatusRef.current = res.status;
+      if (!res.ok) throw new Error(res.status === 401 ? 'marco-auth-required' : 'marco-http-error');
+    },
+    onError: () => {
+      if (lastStatusRef.current === 401) setAuthed(false);
+    },
   });
+
+  useEffect(() => {
+    // Gleiche schnelle Cookie-Prüfung wie AccountLink — kein unnötiger
+    // supabase-js-Import (~47 kB) für den ganz überwiegenden anonymen Fall.
+    if (!/(^|;\s*)sb-[^=;]*-auth-token(\.\d+)?=/.test(document.cookie)) {
+      setAuthed(false);
+      return;
+    }
+    let active = true;
+    import('@/lib/supabase/client').then(({ createClient }) => {
+      if (!active) return;
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => { if (active) setAuthed(!!data.user); }).catch(() => { if (active) setAuthed(false); });
+    }).catch(() => { if (active) setAuthed(false); });
+    return () => { active = false; };
+  }, []);
 
   const handleToggle = useCallback(() => {
     if (!open) {
@@ -103,6 +134,7 @@ export default function MarcoWidget() {
   const handleFormSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
+      if (authed === false) return; // Login-Pflicht — UI ist ohnehin gesperrt, doppelt hält besser
       if (!input.trim() && !selectedImage) return;
 
       handleSubmit(e, {
@@ -113,7 +145,7 @@ export default function MarcoWidget() {
       if (fileInputRef.current) fileInputRef.current.value = '';
       send('SUBMIT');
     },
-    [handleSubmit, input, selectedImage, send]
+    [authed, handleSubmit, input, selectedImage, send]
   );
 
   useEffect(() => {
@@ -226,7 +258,22 @@ export default function MarcoWidget() {
               />
             </div>
 
-            <div
+            {authed === false ? (
+              <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-10 text-center" style={{ minHeight: '200px' }}>
+                <p className="text-sm font-sans text-white/80">
+                  Marco ist Mitgliedern vorbehalten — melde dich kostenlos an, dann steht dir dein
+                  BBQ-Guide für Fragen und Foto-Analysen zur Verfügung.
+                </p>
+                <Link
+                  href={`/auth/login?redirectTo=${encodeURIComponent(pathname || '/')}`}
+                  className="rounded-lg bg-brand-fire px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+                >
+                  Jetzt kostenlos anmelden
+                </Link>
+              </div>
+            ) : (
+              <>
+                            <div
               className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
               style={{ minHeight: '200px', maxHeight: '340px' }}
             >
@@ -339,6 +386,8 @@ export default function MarcoWidget() {
                 <Send size={14} />
               </button>
             </form>
+              </>
+            )}
 
             <p className="px-4 pb-3 text-center text-[11px] font-sans" style={{ color: 'rgba(255,255,255,0.6)' }}>
               🤖 Marco ist ein KI-Assistent — keine Rechts-, Gesundheits- oder Steuerberatung.{' '}
