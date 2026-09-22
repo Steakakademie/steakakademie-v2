@@ -611,9 +611,12 @@ bilder:
       Der urspruengliche Bild-Motiv-Check hatte das Bild bestaetigt; erst die
       Blindpruefung (PR #178) meldet es als unpassend.
   images/rezepte/vacio-asado-argentino.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/vacio-asado-argentino.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
-    namensnennung: false
+    status: lizenz
+    quelle: Pexels (ID 36948100)
+    urheber: Andres Idda Bianchi
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/delicious-outdoor-argentinian-bbq-by-campfire-36948100/
     erworben_am: 2026-09-22
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    namensnennung: false
+    hinweis: Ersetzt fruehere FLUX-KI-Fehlgenerierung (zeigte kein Asado, PR #186). Alternative Collage aus pexels-eduard-perez-37086927 + pexels-davincidelasfotos-36948100 (via Gemini) verworfen -- Ersteres zeigt erkennbare Person + fremdes Marken-Branding (TECHCARNES / La Cueva de Ruco) auf der Schuerze, verstoesst gegen Pexels-Lizenzklausel "kein implizierter Endorsement" und Recht am eigenen Bild. Nur das unbeteiligte Feuerstellen-Foto (36948100) verwendet, oben/unten leicht beschnitten (Decke/Pflaster raus, Gericht vollstaendig im Bild).
