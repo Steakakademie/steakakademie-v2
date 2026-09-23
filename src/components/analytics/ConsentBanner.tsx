@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { CONSENT_OPEN_EVENT, getConsent, setConsent } from '@/lib/consent';
+import { istTuwasHost } from '@/lib/marken-host';
 
 /**
  * DSGVO-Consent-Banner (Opt-in). Erscheint, bis eine Entscheidung getroffen wurde,
@@ -24,6 +25,8 @@ export default function ConsentBanner() {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // tuwasduwillst.de laedt nichts Einwilligungspflichtiges (Clarity nur auf steakakademie.de).
+    if (istTuwasHost()) return;
     if (getConsent() === null) setOpen(true);
     const reopen = () => setOpen(true);
     window.addEventListener(CONSENT_OPEN_EVENT, reopen);

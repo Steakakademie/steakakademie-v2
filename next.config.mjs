@@ -145,8 +145,43 @@ const nextConfig = {
       },
     ];
   },
+  // tuwasduwillst.de (Eigenregie, eigene Marke — Uwe 23.09.2026): gleiche App,
+  // eigene Domain. Bis die Landingpage steht, zeigt jede Adresse dort den
+  // Platzhalter /tuwasduwillst. Assets (_next), APIs und der Platzhalter selbst
+  // sind ausgenommen. beforeFiles, damit auch Dateien aus /public (robots.txt,
+  // Bilder) auf dieser Domain nicht als Steakakademie-Inhalt erscheinen.
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'tuwasduwillst.de' }],
+          destination: '/tuwasduwillst',
+        },
+        {
+          source: '/:pfad((?!_next/|api/|tuwasduwillst).+)',
+          has: [{ type: 'host', value: 'tuwasduwillst.de' }],
+          destination: '/tuwasduwillst',
+        },
+      ],
+    };
+  },
   async redirects() {
     return [
+      // tuwasduwillst.de: www auf die nackte Domain; der Platzhalter ist unter
+      // steakakademie.de nicht erreichbar (Preview-Adressen bleiben frei).
+      {
+        source: '/:pfad*',
+        has: [{ type: 'host', value: 'www.tuwasduwillst.de' }],
+        destination: 'https://tuwasduwillst.de/:pfad*',
+        permanent: true,
+      },
+      {
+        source: '/tuwasduwillst',
+        has: [{ type: 'host', value: '(www\\.)?steakakademie\\.de' }],
+        destination: 'https://tuwasduwillst.de/',
+        permanent: false,
+      },
       // Glossar-Duplikat zusammengelegt (27.08.2026): "Smoker-Temperatur" gab es
       // zweimal, unter /glossar/smoker-temp und /glossar/smoker-temperatur —
       // gleicher Titel, widersprechende Werte (100-130 gegen 100-150 Grad C) und
