@@ -39,6 +39,16 @@
  * PRs zeigen, nicht die des Bestands. Verglichen wird per Drei-Punkt-Diff
  * (`<ref>...HEAD`) gegen den Abzweigpunkt, damit Commits, die seitdem auf main
  * gelandet sind, nicht mitzaehlen. Der Cache gilt zusaetzlich.
+ *
+ * --cache-merge <pfad> (23.09.2026): zweiter Cache, der ZUSAETZLICH zum
+ * committeten gilt. Anlass: actions/cache legte den CI-Cache direkt ueber
+ * data/spell-check-cache.json und ueberschrieb damit den frisch committeten
+ * Stand aus #195 — 127 statt 58 Dateien wurden geprueft. "Juenger" ist bei
+ * einem Hash-Cache kein Datum, sondern: der Eintrag passt zum aktuellen
+ * Dateiinhalt. Deshalb kein Vorrang einer Fassung, sondern die Vereinigung —
+ * eine Datei ist gecacht, wenn EINE der beiden Fassungen ihren Hash kennt.
+ * Passende Eintraege aus dem Zusatz-Cache wandern in den geschriebenen Cache.
+ * Fehlt die Datei (erster Lauf, Cache verfallen), laeuft es ohne sie weiter.
  */
 
 import { readFile, writeFile, readdir, rename } from 'fs/promises'
@@ -58,6 +68,8 @@ const DIR     = String(flag('dir', 'content'))
 const GRAMMAR = !!flag('grammar', false)
 const SEIT    = flag('seit', null)
 if (SEIT === true) { console.error('--seit braucht eine Git-Referenz, z. B. --seit origin/main'); process.exit(2) }
+const CACHE_MERGE = flag('cache-merge', null)
+if (CACHE_MERGE === true) { console.error('--cache-merge braucht einen Dateipfad'); process.exit(2) }
 const API     = process.env.LANGUAGETOOL_API_URL || 'https://api.languagetool.org/v2/check'
 const WAIT_MS = parseInt(flag('throttle-ms', '3200'), 10)
 const MAX_REQ_CHARS = 18000 // < 20-KB-Limit der freien API
@@ -184,6 +196,16 @@ async function walk (dir, out = []) {
 
 const whitelist = await loadWhitelist()
 const cache = existsSync(CACHE_FILE) ? JSON.parse(await readFile(CACHE_FILE, 'utf8')) : {}
+let zusatzCache = {}
+if (CACHE_MERGE) {
+  const pfad = join(ROOT, CACHE_MERGE)
+  if (existsSync(pfad)) {
+    zusatzCache = JSON.parse(await readFile(pfad, 'utf8'))
+    console.log(c.d(`   Zusatz-Cache ${CACHE_MERGE}: ${Object.keys(zusatzCache).length} Eintraege`))
+  } else {
+    console.log(c.d(`   Zusatz-Cache ${CACHE_MERGE} nicht vorhanden — nur der committete Cache gilt`))
+  }
+}
 let files = await walk(join(ROOT, DIR))
 if (SEIT) {
   // Eine unbekannte Referenz ist ein Konfigurationsfehler, kein "nichts geaendert":
@@ -230,7 +252,7 @@ for (const file of files) {
   const rel = relative(ROOT, file).replace(/\\/g, '/')
   const raw = await readFile(file, 'utf8')
   const hash = createHash('sha256').update(raw).digest('hex').slice(0, 16)
-  if (!FORCE && cache[rel] === hash) { skipped++; continue }
+  if (!FORCE && (cache[rel] === hash || zusatzCache[rel] === hash)) { cache[rel] = hash; skipped++; continue }
   const { text, lecks } = extractText(raw)
   // Ein durchgesickerter Bezeichner ist ein Fehler der Maske, kein Tippfehler.
   // Laut melden, statt ihn LanguageTool als Wort vorzulegen.
