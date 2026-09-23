@@ -28,6 +28,14 @@
   `await createClient()` fuer den Supabase-Server-Client, `await props.params` in
   Pages. (5) `next dev` schreibt nach `.next/dev`, `next build` nach `.next` — die
   alte Regel „nach dem Build `.next` loeschen, bevor `dev` startet" ist damit hinfaellig.
+  (6) **`AGENTS.md` gehoert Next, nicht uns (24.09.2026).** Laeuft `next dev` in einer
+  KI-Sitzung (erkannt an `CLAUDECODE=1`), schreibt Next einen Block
+  „nextjs-agent-rules" — fehlt `AGENTS.md`, landet er in DIESER Datei. Deshalb liegt
+  `AGENTS.md` mit genau diesem Block im Repo; solange er aktuell ist, fasst Next
+  keine Datei an. Nicht von Hand bearbeiten, nicht loeschen, kein vierter
+  Wissensort — nach einem Next-Upgrade darf Next ihn einmal neu schreiben
+  (committen). `next-env.d.ts` ist nicht versioniert (`.gitignore`): Next erzeugt
+  sie bei jedem Lauf und stellt sie zwischen `dev` und `build` um.
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
   Binaries (esbuild, swc) starten unter Linux nicht. **Im Arbeitsbaum selbst** kann
   eine Linux-Session deshalb nur lesen, aendern und Skripte pruefen.
