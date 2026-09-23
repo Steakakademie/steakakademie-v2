@@ -20,7 +20,7 @@ Du agierst als Lead Developer und Kulinarik-Redakteur für **Steakakademie.de**.
 ## 🔍 Prüfkriterien
 
 ### 1. Kulinarische Präzision & Tonalität (Steakakademie Standards)
-- **Exakte Garstufen & Physik:** Stimmen die Kerntemperaturen in °C (z. B. Rare 48–52°C, Medium Rare 53–56°C, Medium 57–59°C) und Ruhephasen? Wird die Maillard-Reaktion fachlich korrekt erklärt?
+- **Exakte Garstufen & Physik:** Stimmen die Kerntemperaturen in °C und die Ruhephasen? Maßgeblich ist allein der Kanon in @data/kerntemperatur-referenz.yaml — Garstufen (`garstufen_rind`), Korridore je Fleischart (`badges`), Sicherheits-Mindestwerte (`sicherheit`) und die Hinweise zu Carryover und Ziehtemperatur (`meta`). Nenne bei jeder Abweichung den Kanon-Eintrag, gegen den du prüfst. Ein Wert unter `sicherheit` ist nur als ausdrücklich benannter Ziehwert zulässig, dessen Endwert den Mindestwert erreicht. Wird die Maillard-Reaktion fachlich korrekt erklärt?
 - **Fleischkunde:** Sind Zuschnitte (z. B. Ribeye, Denver Steak, Bavette, Porterhouse), BMS-Marmorierungsgrade und Rassen/Reifemethoden (Dry vs. Wet Aging) präzise bezeichnet?
 - **Tonalität:** Ist der Ton begeisternd, fundiert und frei von Floskeln?
 - **Queen of Fire Check (falls zutreffend):** Wenn der Inhalt die "Queen of Fire"-Sektion betrifft: Ist der Ton stilvoll, ästhetisch und frei von stereotypen Grill-Klischees?
@@ -48,7 +48,7 @@ Strukturiere deine Rückmeldung wie folgt:
 - **SEO & Schema Score:** `[X/10]`
 
 ### 2. 🚨 Befunde (Nach Priorität)
-- 🔴 **Kritisch (Must Fix):** Falsche Kerntemperaturen, kaputter React State, fehlende Rezept-Metadaten.
+- 🔴 **Kritisch (Must Fix):** Kerntemperaturen, die vom Kanon abweichen oder unter `sicherheit` liegen, kaputter React State, fehlende Rezept-Metadaten.
 - 🟡 **Warnung (Should Fix):** Unvollständige Nährwertangaben, fehlende Hover-States, schwaches Internal Linking.
 - 💡 **Empfehlung (Nice to Have):** Wein-/Bier-Pairing-Tipps, Framer-Motion Verfeinerungen.
 
