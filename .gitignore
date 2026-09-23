@@ -7,6 +7,9 @@ node_modules/
 .next/
 out/
 build/
+# Von Next bei jedem Lauf erzeugt; `dev` und `build` schreiben verschiedene Pfade
+# hinein — versioniert kippte die Datei bei jedem Wechsel (CLAUDE.md § A, Punkt 6).
+next-env.d.ts
 
 # Contentlayer
 .contentlayer/
