@@ -4,6 +4,7 @@ import { useState, Suspense }  from 'react';
 import Link                    from 'next/link';
 import { useSearchParams }     from 'next/navigation';
 import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
+import OAuthButtons from '@/components/auth/OAuthButtons';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
 
@@ -159,6 +160,18 @@ function LoginForm() {
               </div>
             )}
 
+            {/* Social Login — landet wie die anderen Wege in /auth/callback */}
+            <OAuthButtons
+              redirectTo={redirectTo}
+              disabled={status === 'loading'}
+              onError={msg => { setStatus('error'); setMessage(msg); }}
+            />
+
+            <div className="flex items-center gap-3 my-5" aria-hidden="true">
+              <span className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.22)' }} />
+              <span className="font-sans text-xs uppercase tracking-wider text-text-muted">oder per E-Mail</span>
+              <span className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.22)' }} />
+            </div>
             <form onSubmit={mode === 'magic' ? handleMagicLink : handlePassword} className="space-y-4">
               <div>
                 <label htmlFor="email" className="font-sans text-xs font-bold uppercase tracking-wider text-text-muted block mb-2">

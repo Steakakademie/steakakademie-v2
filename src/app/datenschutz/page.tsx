@@ -411,6 +411,28 @@ export default function DatenschutzPage() {
                 <li>Lernfortschritt und Diplom-Status</li>
               </ul>
               <p className="mb-3">
+                <strong className="text-text-primary">Anmeldung mit Google oder Amazon (Social Login):</strong>{' '}
+                Wahlweise kannst du dich mit einem bestehenden Google- oder Amazon-Konto anmelden.
+                Dabei wirst du zum jeweiligen Anbieter weitergeleitet; erst nach deiner Freigabe
+                dort erhalten wir von Google LLC bzw. Amazon.com, Inc. (beide USA) deine
+                E-Mail-Adresse, deinen Namen und eine Konto-Kennung, bei Google gegebenenfalls
+                auch dein Profilbild — sonst nichts. Diese Daten werden deinem Nutzerkonto bei
+                Supabase zugeordnet; ein Passwort wird bei uns dann nicht gespeichert. Welche
+                Daten der Anbieter selbst bei der Anmeldung verarbeitet, regeln dessen
+                Datenschutzhinweise:{' '}
+                <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  policies.google.com/privacy
+                </a>{' '}
+                und{' '}
+                <a href="https://www.amazon.de/gp/help/customer/display.html?nodeId=201909010" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  amazon.de (Datenschutzerklärung)
+                </a>
+                . Die Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss zum
+                EU-US Data Privacy Framework (Art. 45 DSGVO); die Zertifizierung der Anbieter
+                ist unter dataprivacyframework.gov einsehbar. Rechtsgrundlage der Anmeldung
+                selbst: Art. 6 Abs. 1 lit. b DSGVO.
+              </p>
+              <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Konto- und
                 Kursdaten werden für die Dauer des Nutzerkontos gespeichert und nach dessen
                 Löschung innerhalb von <strong className="text-text-primary">30 Tagen</strong>{' '}
