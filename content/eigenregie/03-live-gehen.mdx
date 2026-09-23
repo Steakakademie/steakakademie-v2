@@ -62,14 +62,14 @@ Vercel baut Next.js-Projekte direkt aus GitHub und liefert sie aus. Die Steakaka
 
 So verbindest du dein Projekt:
 
-1. Öffne **vercel.com**, klicke auf **Sign Up** und wähle **Continue with GitHub**. So brauchst du kein weiteres Passwort. Trag das Konto trotzdem in Bitwarden ein.
-2. Im Dashboard klickst du auf **Add New → Project**.
-3. Unter **Import Git Repository** erlaubst du Vercel den Zugriff auf GitHub. Wähle dabei **Only select repositories** und nur dein Repository `website` – Vercel braucht nichts anderes.
-4. Klicke neben deinem Repository auf **Import**.
-5. Vercel erkennt Next.js selbst. Ändere nichts und klicke auf **Deploy**.
+1. Öffne **vercel.com**, klicke auf `Sign Up` und wähle `Continue with GitHub`. So brauchst du kein weiteres Passwort. Trag das Konto trotzdem in Bitwarden ein.
+2. Im Dashboard klickst du auf `Add New → Project`.
+3. Unter `Import Git Repository` erlaubst du Vercel den Zugriff auf GitHub. Wähle dabei `Only select repositories` und nur dein Repository `website` – Vercel braucht nichts anderes.
+4. Klicke neben deinem Repository auf `Import`.
+5. Vercel erkennt Next.js selbst. Ändere nichts und klicke auf `Deploy`.
 6. Nach ein bis drei Minuten erscheint eine Adresse, die auf `.vercel.app` endet. Öffne sie und klicke dich durch alle Seiten.
 
-Danach stellst du den Ort ein, an dem Serverfunktionen laufen – etwa dein Kontaktformular. Standard ist Washington in den USA. Unter **Settings → Functions → Function Regions** wählst du **Frankfurt** (`fra1`). Deine Seite ist für Besucher in Europa dann auch schneller.
+Danach stellst du den Ort ein, an dem Serverfunktionen laufen – etwa dein Kontaktformular. Standard ist Washington in den USA. Unter `Settings → Functions → Function Regions` wählst du `Frankfurt` (`fra1`). Deine Seite ist für Besucher in Europa dann auch schneller.
 
 <Rechtlich>
 
@@ -81,19 +81,19 @@ Vercel und Cloudflare haben ihren Sitz in den USA. Wer dort personenbezogene Dat
 
 Ab jetzt gilt eine einfache Regel: Was im Branch `main` landet, geht live. Jeder andere Branch bekommt bei jedem Hochladen eine eigene Vorschau-Adresse. Dort prüfst du Änderungen, bevor sie jemand sieht. Wie du damit täglich arbeitest, zeigt Modul 4.
 
-Unter **Settings → Deployment Protection** prüfst du, dass **Standard Protection** mit **Vercel Authentication** aktiv ist. Dann sehen nur angemeldete Vercel-Nutzer deine Vorschau-Seiten, nicht die Öffentlichkeit und nicht Google.
+Unter `Settings → Deployment Protection` prüfst du, dass `Standard Protection` mit `Vercel Authentication` aktiv ist. Dann sehen nur angemeldete Vercel-Nutzer deine Vorschau-Seiten, nicht die Öffentlichkeit und nicht Google.
 
 ### Umgebungsvariablen: Schlüssel gehören nicht in den Code
 
 Eine Umgebungsvariable ist ein benannter Wert, den dein Projekt beim Hoster abholt – etwa der Schlüssel für den Formular-Versand. Stünde er im Code, läge er in jeder Kopie deines Repositorys.
 
-1. Öffne **Settings → Environment Variables**.
+1. Öffne `Settings → Environment Variables`.
 2. Trag bei **Key** den Namen ein, zum Beispiel `RESEND_API_KEY`, bei **Value** den Wert.
-3. Wähle die Umgebungen: **Production** für die Live-Seite, **Preview** für die Vorschau.
-4. Schalte **Sensitive** ein, damit der Wert nach dem Speichern nicht mehr angezeigt wird.
-5. Klicke auf **Save**.
+3. Wähle die Umgebungen: `Production` für die Live-Seite, `Preview` für die Vorschau.
+4. Schalte `Sensitive` ein, damit der Wert nach dem Speichern nicht mehr angezeigt wird.
+5. Klicke auf `Save`.
 
-Eine neue oder geänderte Variable wirkt erst in der **nächsten** Veröffentlichung. Öffne deshalb **Deployments**, klicke beim obersten Eintrag auf die drei Punkte und dann auf **Redeploy**.
+Eine neue oder geänderte Variable wirkt erst in der **nächsten** Veröffentlichung. Öffne deshalb `Deployments`, klicke beim obersten Eintrag auf die drei Punkte und dann auf `Redeploy`.
 
 Auf deinem Rechner stehen dieselben Werte in der Datei `.env.local`. Sie ist in `.gitignore` eingetragen und wird deshalb nie zu GitHub hochgeladen – prüfe das einmal.
 
@@ -118,7 +118,7 @@ Cloudflare wird dein DNS-Anbieter, also das Adressbuch, das sagt, wohin Website 
 ### Domain bei Cloudflare anlegen
 
 1. Konto auf **cloudflare.com** anlegen, Zwei-Faktor-Schutz aktivieren, in Bitwarden eintragen.
-2. Unter **Domains** auf **Onboard a domain** klicken und deine Domain ohne `www` eingeben.
+2. Unter `Domains` auf `Onboard a domain` klicken und deine Domain ohne `www` eingeben.
 3. Als Methode die automatische Suche nach Einträgen wählen. Bietet dein bisheriger Anbieter einen Export als Zonendatei an, lädst du stattdessen diese hoch – sie ist vollständig.
 4. Den **Free**-Tarif wählen.
 5. Jetzt vergleichst du Zeile für Zeile mit deinem Export. Achte besonders auf:
@@ -144,7 +144,7 @@ Einen fehlenden MX-, SPF- oder DKIM-Eintrag. Die Website sieht danach normal aus
 
 1. Cloudflare zeigt dir zwei Nameserver, etwa `anna.ns.cloudflare.com` und `bob.ns.cloudflare.com`. Deine heißen anders – kopiere sie exakt.
 2. Melde dich beim Registrar an, öffne die Nameserver-Einstellung deiner Domain, entferne die alten und trag die beiden neuen ein.
-3. Warte. Cloudflare nennt bis zu 24 Stunden. Der Status unter **Domains** wechselt von **Pending** auf **Active**, und du bekommst eine Bestätigungsmail.
+3. Warte. Cloudflare nennt bis zu 24 Stunden. Der Status unter `Domains` wechselt von `Pending` auf `Active`, und du bekommst eine Bestätigungsmail.
 
 Manche Paketanbieter erlauben keine fremden Nameserver. Dann ziehst du die Domain zuerst mit dem AuthInfo aus Modul 1 zu einem Registrar um, der das erlaubt.
 
@@ -176,7 +176,7 @@ erscheint der bisherige Bestätigungstext, bei einem Fehler ein
 Hinweis mit Telefonnummer. Füge den Spamschutz von Web3Forms hinzu.
 ```
 
-Dieser Schlüssel ist bei Web3Forms bewusst öffentlich; er erlaubt nur das Einsenden an deine Adresse. Trag ihn zusätzlich bei Vercel ein, denn `.env.local` wird nicht hochgeladen. Bei Resend ist der Schlüssel geheim und gehört als **Sensitive** zu Vercel; die DNS-Einträge, mit denen Resend deine Domain bestätigt, trägst du in Cloudflare ein.
+Dieser Schlüssel ist bei Web3Forms bewusst öffentlich; er erlaubt nur das Einsenden an deine Adresse. Trag ihn zusätzlich bei Vercel ein, denn `.env.local` wird nicht hochgeladen. Bei Resend ist der Schlüssel geheim und gehört als `Sensitive` zu Vercel; die DNS-Einträge, mit denen Resend deine Domain bestätigt, trägst du in Cloudflare ein.
 
 Test: Sende über die Vorschau-Adresse eine echte Anfrage. Erst wenn sie in deinem Posteingang liegt, nicht im Spam, ist das Formular angeschlossen.
 
@@ -187,10 +187,10 @@ Jetzt stellst du genau zwei Einträge um. Wähle einen Zeitpunkt mit wenig Betri
 | Wann | Was |
 |---|---|
 | **T minus 1 Tag** | Stufe 2 ist abgeschlossen, Mail geprüft. Letzte Version liegt in `main`, Vercel-Adresse vollständig durchgeklickt. |
-| **T, 19:30 Uhr** | In Vercel unter **Settings → Domains → Add Domain** deine Domain eingeben. Vercel schlägt vor, `www` mit anzulegen – bestätigen. |
+| **T, 19:30 Uhr** | In Vercel unter `Settings → Domains → Add Domain` deine Domain eingeben. Vercel schlägt vor, `www` mit anzulegen – bestätigen. |
 | **T, 19:40 Uhr** | Vercel zeigt je Domain den nötigen Eintrag: einen **A-Eintrag** für die Domain ohne `www`, einen **CNAME-Eintrag** für `www`. Werte exakt so übernehmen, wie Vercel sie anzeigt. |
-| **T, 20:00 Uhr** | In Cloudflare unter **DNS → Records** die beiden alten Website-Einträge **bearbeiten**, nicht löschen: neuer Wert von Vercel, Wolke grau, TTL **Auto** (fünf Minuten). Alte Werte vorher in Bitwarden notieren. |
-| **T, 20:10 Uhr** | In Vercel unter **Settings → Domains** bei `www` auf **Edit** klicken und bei **Redirect to** die Domain ohne `www` wählen. |
+| **T, 20:00 Uhr** | In Cloudflare unter `DNS → Records` die beiden alten Website-Einträge **bearbeiten**, nicht löschen: neuer Wert von Vercel, Wolke grau, TTL `Auto` (fünf Minuten). Alte Werte vorher in Bitwarden notieren. |
+| **T, 20:10 Uhr** | In Vercel unter `Settings → Domains` bei `www` auf `Edit` klicken und bei `Redirect to` die Domain ohne `www` wählen. |
 | **T, 20:15–21:30 Uhr** | Prüfliste unten abarbeiten. |
 | **T plus 1 Tag** | Prüfliste wiederholen, Search Console ansehen. |
 
@@ -203,7 +203,7 @@ Hat deine Domain einen **CAA-Eintrag** – eine Liste, welche Stellen Sicherheit
 Bevor du umschaltest, weißt du, wie du zurückkommst:
 
 - **Die neue Seite hat einen Fehler, den du nicht sofort beheben kannst:** In Cloudflare die beiden Website-Einträge auf die alten Werte aus Bitwarden zurücksetzen. Dank fünf Minuten TTL sehen die meisten Besucher bald wieder die alte Seite – deshalb läuft der alte Vertrag weiter.
-- **Eine spätere Änderung hat die Seite beschädigt:** In Vercel auf der Projektübersicht **Instant Rollback** wählen. Im Pro-Tarif geht das zu jeder früheren Live-Version. Neue Sicherungen gehen danach erst wieder automatisch live, wenn du **Undo Rollback** klickst.
+- **Eine spätere Änderung hat die Seite beschädigt:** In Vercel auf der Projektübersicht `Instant Rollback` wählen. Im Pro-Tarif geht das zu jeder früheren Live-Version. Neue Sicherungen gehen danach erst wieder automatisch live, wenn du **Undo Rollback** klickst.
 - **E-Mail kommt nicht an:** Die Mail-Einträge hast du nicht angefasst. Vergleiche sie mit dem Export – der Fehler liegt dann in Stufe 2, nicht beim Umschalten.
 
 ## Die Prüfliste nach dem Umschalten
@@ -244,7 +244,7 @@ Kündige den alten Hosting-Vertrag frühestens, wenn die Prüfliste zwei Tage la
 - [ ] Der passende Tarif ist gewählt und begründet: Vercel Pro oder Netlify Free für eine gewerbliche Seite.
 - [ ] Funktionsregion Frankfurt eingestellt, Vorschau-Seiten geschützt.
 - [ ] Alle Schlüssel stehen als Umgebungsvariablen bei Vercel und in `.env.local`, nicht im Code.
-- [ ] Cloudflare zeigt den Status **Active**; jeder Eintrag aus dem Export ist vorhanden, alle Wolken grau.
+- [ ] Cloudflare zeigt den Status `Active`; jeder Eintrag aus dem Export ist vorhanden, alle Wolken grau.
 - [ ] Die Domain und `www` zeigen auf Vercel; es gibt genau eine Hauptadresse, die andere leitet um.
 - [ ] `https` funktioniert ohne Warnung, `http` leitet auf `https` um.
 - [ ] Jede alte URL endet live mit Status 200.
