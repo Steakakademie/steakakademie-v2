@@ -39,9 +39,18 @@ badges:
   lamb_done:    { c: 70, range: [70, 75], label: "durch" }            # Keule durch
   lamb_rosa:    { c: 62, range: [60, 65], label: "rosa" }             # Keule rosa (Uwe, 15.09.2026) — zwischen lamb_mr und lamb_done; Rezepte lammkeule-drehspiess, aussie-lamb-leg-butterflied (#109)
   pork_juicy:   { c: 63, range: [63, 65], label: "saftig" }           # Untergrenze = sicherheit.schwein (63); vorher [60,65] und damit im Widerspruch zur eigenen Sicherheitsangabe — Audit 06.09.2026
+  # Ibérico (Pluma/Presa/Secreto) eigener Korridor (Uwe, 23.09.2026, Kurspraxis):
+  # 65–68 statt pork_juicy 63–65. Ziehwert 63–64, zieht in der Ruhe nach. Grund:
+  # das intramuskuläre Fett ist erst darüber vollständig geschmolzen, und deutsche
+  # Gäste nehmen Schwein bei 63–65 nicht an. Untergrenze bleibt >= sicherheit.schwein.
+  iberico:      { c: 66, range: [65, 68], label: "durch, saftig" }
   pork_lowslow: { c: 92, range: [88, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
   pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten
-  poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C)
+  poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C); Keule/Flügel 74–80
+  # Brust getrennt (Uwe, 23.09.2026, Kurspraxis): bei 68 °C vom Grill, zieht in der
+  # Ruhe auf 72 nach — darüber trocken. Der Endwert bleibt >= sicherheit.gefluegel;
+  # 68 ist ausdrücklich ZIEHwert, kein Serviertwert (im Text so formulieren).
+  poultry_breast: { c: 72, range: [72, 74], label: "durch, saftig" }
   duck_breast:  { c: 58, range: [56, 62], label: "rosa" }             # Sonderfall: Entenbrust darf rosa
   duck_whole:   { c: 75, range: [70, 80], label: "knusprig durch" }   # ganze Ente/Gans
   salmon:       { c: 52, range: [48, 52], label: "glasig" }
