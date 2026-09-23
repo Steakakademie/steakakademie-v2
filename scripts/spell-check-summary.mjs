@@ -49,7 +49,7 @@ try {
 
 const funde = Array.isArray(daten.funde) ? daten.funde : []
 const stand = daten.stand ? new Date(daten.stand).toISOString().replace('T', ' ').slice(0, 16) : 'unbekannt'
-const kopf = `## 🔤 Rechtschreibprüfung\n\nStand ${stand} · Modus: ${daten.modus ?? 'unbekannt'}`
+const kopf = `## 🔤 Rechtschreibprüfung\n\nStand ${stand} · Modus: ${daten.modus ?? 'unbekannt'}${daten.umfang ? ` · Umfang: ${daten.umfang}` : ''}`
 
 if (funde.length === 0) {
   await schreibe(`${kopf}\n\n✅ **Keine Funde.**`)

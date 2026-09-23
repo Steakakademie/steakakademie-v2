@@ -28,13 +28,35 @@
  *   node scripts/spell-check.mjs --strict          # CI-Modus, Exit 1 bei Funden
  *   node scripts/spell-check.mjs --dir docs        # anderes Verzeichnis
  *   node scripts/spell-check.mjs --dry-run         # nur zählen, keine API-Calls
+ *   node scripts/spell-check.mjs --seit origin/main # nur Dateien, die sich seit
+ *                                                   # dem Abzweig von origin/main
+ *                                                   # geaendert haben (PR-Modus)
+ *
+ * --seit (23.09.2026): Im PR lief die Pruefung ueber den ganzen Bestand. Der
+ * committete Cache stammte vom 05.09. und wurde in CI nie zurueckgeschrieben —
+ * an PR #158 galten deshalb 309 von 417 Dateien als neu, der Job lief nach
+ * 261 Dateien ins 30-Minuten-Limit. Ein PR-Bericht soll die Tippfehler DIESES
+ * PRs zeigen, nicht die des Bestands. Verglichen wird per Drei-Punkt-Diff
+ * (`<ref>...HEAD`) gegen den Abzweigpunkt, damit Commits, die seitdem auf main
+ * gelandet sind, nicht mitzaehlen. Der Cache gilt zusaetzlich.
+ *
+ * --cache-merge <pfad> (23.09.2026): zweiter Cache, der ZUSAETZLICH zum
+ * committeten gilt. Anlass: actions/cache legte den CI-Cache direkt ueber
+ * data/spell-check-cache.json und ueberschrieb damit den frisch committeten
+ * Stand aus #195 — 127 statt 58 Dateien wurden geprueft. "Juenger" ist bei
+ * einem Hash-Cache kein Datum, sondern: der Eintrag passt zum aktuellen
+ * Dateiinhalt. Deshalb kein Vorrang einer Fassung, sondern die Vereinigung —
+ * eine Datei ist gecacht, wenn EINE der beiden Fassungen ihren Hash kennt.
+ * Passende Eintraege aus dem Zusatz-Cache wandern in den geschriebenen Cache.
+ * Fehlt die Datei (erster Lauf, Cache verfallen), laeuft es ohne sie weiter.
  */
 
-import { readFile, writeFile, readdir } from 'fs/promises'
+import { readFile, writeFile, readdir, rename } from 'fs/promises'
 import { existsSync } from 'fs'
 import { join, dirname, relative } from 'path'
 import { fileURLToPath } from 'url'
 import { createHash } from 'crypto'
+import { execFileSync } from 'child_process'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const args = process.argv.slice(2)
@@ -44,6 +66,10 @@ const STRICT  = !!flag('strict', false)
 const DRY     = !!flag('dry-run', false)
 const DIR     = String(flag('dir', 'content'))
 const GRAMMAR = !!flag('grammar', false)
+const SEIT    = flag('seit', null)
+if (SEIT === true) { console.error('--seit braucht eine Git-Referenz, z. B. --seit origin/main'); process.exit(2) }
+const CACHE_MERGE = flag('cache-merge', null)
+if (CACHE_MERGE === true) { console.error('--cache-merge braucht einen Dateipfad'); process.exit(2) }
 const API     = process.env.LANGUAGETOOL_API_URL || 'https://api.languagetool.org/v2/check'
 const WAIT_MS = parseInt(flag('throttle-ms', '3200'), 10)
 const MAX_REQ_CHARS = 18000 // < 20-KB-Limit der freien API
@@ -170,8 +196,53 @@ async function walk (dir, out = []) {
 
 const whitelist = await loadWhitelist()
 const cache = existsSync(CACHE_FILE) ? JSON.parse(await readFile(CACHE_FILE, 'utf8')) : {}
-const files = await walk(join(ROOT, DIR))
-console.log(`\n📝 Rechtschreibprüfung (${DIR}/): ${files.length} Datei(en), Whitelist ${whitelist.size} Begriffe${DRY ? ' — dry-run' : ''}\n`)
+let zusatzCache = {}
+if (CACHE_MERGE) {
+  const pfad = join(ROOT, CACHE_MERGE)
+  if (existsSync(pfad)) {
+    zusatzCache = JSON.parse(await readFile(pfad, 'utf8'))
+    console.log(c.d(`   Zusatz-Cache ${CACHE_MERGE}: ${Object.keys(zusatzCache).length} Eintraege`))
+  } else {
+    console.log(c.d(`   Zusatz-Cache ${CACHE_MERGE} nicht vorhanden — nur der committete Cache gilt`))
+  }
+}
+let files = await walk(join(ROOT, DIR))
+if (SEIT) {
+  // Eine unbekannte Referenz ist ein Konfigurationsfehler, kein "nichts geaendert":
+  // still auf null Dateien zu fallen, saehe aus wie ein sauberer Lauf.
+  let geaendert
+  try {
+    geaendert = execFileSync('git', ['diff', '--name-only', '--diff-filter=d', `${SEIT}...HEAD`, '--', DIR],
+      { cwd: ROOT, encoding: 'utf8' })
+  } catch (err) {
+    console.error(c.r(`--seit ${SEIT}: git diff fehlgeschlagen — ${String(err.stderr || err.message).trim()}`))
+    process.exit(2)
+  }
+  const menge = new Set(geaendert.split(/\r?\n/).filter(Boolean))
+  files = files.filter((f) => menge.has(relative(ROOT, f).replace(/\\/g, '/')))
+}
+console.log(`\n📝 Rechtschreibprüfung (${DIR}/${SEIT ? `, geändert seit ${SEIT}` : ''}): ${files.length} Datei(en), Whitelist ${whitelist.size} Begriffe${DRY ? ' — dry-run' : ''}\n`)
+
+/* Sortiert schreiben. Die Reihenfolge entstand bisher aus der Reihenfolge des
+ * Verzeichnisdurchlaufs und haengt damit am `--dir`-Parameter: Ein Lauf ueber
+ * content/usa ordnete die Datei anders als einer ueber content/. Ergebnis war,
+ * dass JEDER Lauf alle ~390 Zeilen umschrieb — sechs echte Loeschungen
+ * versteckten sich am 21.09.2026 in einem Diff von 784 Zeilen. Sortiert ist
+ * die Reihenfolge stabil, und ein Diff zeigt nur noch, was sich wirklich
+ * geaendert hat.
+ *
+ * Zwischenstaende (23.09.2026): Der Cache wurde nur am Ende geschrieben. Lief
+ * ein grosser Rueckstand ins Zeitlimit, war die ganze Arbeit verloren, und der
+ * naechste Lauf begann wieder bei null — er konnte das Limit so nie schaffen.
+ * Jetzt alle ZWISCHENSTAND_ALLE sauberen Dateien, ueber eine Temp-Datei plus
+ * rename, damit ein Abbruch mitten im Schreiben keine halbe JSON hinterlaesst. */
+const ZWISCHENSTAND_ALLE = 20
+let seitZwischenstand = 0
+async function schreibeCache () {
+  const sortiert = Object.fromEntries(Object.keys(cache).sort().map((k) => [k, cache[k]]))
+  await writeFile(CACHE_FILE + '.tmp', JSON.stringify(sortiert, null, 1) + '\n')
+  await rename(CACHE_FILE + '.tmp', CACHE_FILE)
+}
 
 let checked = 0, skipped = 0, findings = 0, unpruefbar = 0, tagLecks = 0
 const report = []
@@ -181,7 +252,7 @@ for (const file of files) {
   const rel = relative(ROOT, file).replace(/\\/g, '/')
   const raw = await readFile(file, 'utf8')
   const hash = createHash('sha256').update(raw).digest('hex').slice(0, 16)
-  if (!FORCE && cache[rel] === hash) { skipped++; continue }
+  if (!FORCE && (cache[rel] === hash || zusatzCache[rel] === hash)) { cache[rel] = hash; skipped++; continue }
   const { text, lecks } = extractText(raw)
   // Ein durchgesickerter Bezeichner ist ein Fehler der Maske, kein Tippfehler.
   // Laut melden, statt ihn LanguageTool als Wort vorzulegen.
@@ -239,6 +310,7 @@ for (const file of files) {
   if (matches.length === 0) {
     cache[rel] = hash
     console.log(c.g(`  ✓ ${rel}`))
+    if (!DRY && ++seitZwischenstand >= ZWISCHENSTAND_ALLE) { await schreibeCache(); seitZwischenstand = 0 }
   } else {
     findings += matches.length
     console.log(c.r(`  ✗ ${rel} — ${matches.length} Fund(e)`))
@@ -255,10 +327,29 @@ for (const file of files) {
 }
 
 if (!DRY) {
-  await writeFile(CACHE_FILE, JSON.stringify(cache, null, 1) + '\n')
+  // Verwaiste Schluessel entfernen, bevor der Cache zurueckgeschrieben wird.
+  // Ohne das waechst die Datei monoton: Oben werden nur Eintraege ergaenzt oder
+  // aktualisiert, geloescht wurde nie — ein Eintrag einer entfernten Datei blieb
+  // also fuer immer stehen (Stand 21.09.2026: sieben Leichen, u. a. sechs
+  // diplom-lektionen und ein konsolidierter Glossar-Slug).
+  //
+  // Geprueft wird gegen die Platte, NICHT gegen die gerade durchlaufene
+  // Dateiliste. Das ist der Unterschied, auf den es ankommt: Mit `--dir` laeuft
+  // das Skript nur ueber einen Teilbaum; wuerde man gegen `files` pruefen,
+  // loeschte ein Lauf mit `--dir content/glossar` die Eintraege aller anderen
+  // Ordner mit. Existiert die Datei, bleibt ihr Eintrag — egal ob dieser Lauf
+  // sie angesehen hat.
+  const verwaist = Object.keys(cache).filter((rel) => !existsSync(join(ROOT, rel)))
+  for (const rel of verwaist) delete cache[rel]
+  if (verwaist.length) {
+    console.log(c.d(`   ${verwaist.length} verwaiste Cache-Eintrag/-Eintraege entfernt (Datei existiert nicht mehr)`))
+  }
+
+  await schreibeCache()
   const topWoerter = Object.entries(wortFrequenz).sort((a, b) => b[1] - a[1])
   await writeFile(join(ROOT, 'data', 'spell-check-report.json'),
     JSON.stringify({ stand: new Date().toISOString(), modus: GRAMMAR ? 'grammatik' : 'nur-rechtschreibung',
+      umfang: SEIT ? `geändert seit ${SEIT} (${files.length} Datei(en))` : `alle (${files.length} Datei(en))`,
       funde: report, haeufigste_unbekannte_woerter: topWoerter }, null, 1) + '\n')
   if (report.length) console.log(c.d(`   Voller Report: data/spell-check-report.json (${report.length} Funde)`))
 }

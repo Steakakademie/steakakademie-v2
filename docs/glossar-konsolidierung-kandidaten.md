@@ -111,17 +111,58 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `kollagen` | Fleischkunde | 117 | 14 | **Hub** |
-| `kollagen-umwandlung` | Chemie & Physik | 100 | 2 | pruefen |
-| `kollagen-anteil` | Fleischkunde | 110 | 1 | pruefen |
-| `kollagen-transformation` | Chemie & Physik | 107 | 1 | pruefen |
+| `kollagen-umwandlung` | Chemie & Physik | 100 | 2 | pruefen → Ziel `kollagen-transformation` |
+| `kollagen-anteil` | Fleischkunde | 110 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
+| `kollagen-transformation` | Chemie & Physik | 107 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
 
-### `bark` — 3 Eintraege
+**Angeglichen 21.09.2026 (Entscheidung Uwe):** `data/taxonomie.yaml` fuehrt
+`kollagen-anteil` (← `kollagen-anteile`) und `kollagen-transformation`
+(← `kollagen-umwandlung`) als Hauptbegriffe. Die urspruengliche Zeile, beide in
+`kollagen` einzuschmelzen, widersprach dem und ist hinfaellig. Die Taxonomie ist
+maßgeblich; `scripts/check-taxonomy.mjs` (in `npm run check`) meldet solche
+Widersprueche kuenftig automatisch. Offen bleibt nur `kollagen-umwandlung` —
+Zusammenlegung in `kollagen-transformation` weiter erst mit GSC-Daten (B2).
 
-| Slug | Kategorie | Woerter | Links | Vorschlag |
-|---|---|--:|--:|---|
-| `bark-bildung` | Chemie & Physik | 137 | 4 | pruefen |
-| `bark` | Chemie & Physik | 110 | 2 | **Hub** |
-| `bark-killer` | Techniken & Methoden | 100 | 1 | pruefen |
+### ~~`bark`~~ — **abgeschlossen 21.09.2026** ✅
+
+| Slug | Kategorie | Stand |
+|---|---|---|
+| `bark` | Chemie & Physik | **Hub — kanonischer Eintrag** |
+| `bark-killer` | Techniken & Methoden | **eigenstaendig, bleibt** (Entscheidung Uwe) |
+| ~~`bark-aussage`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+| ~~`bark-aussagen`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+| ~~`bark-bildung`~~ | ~~Chemie & Physik~~ | erledigt → `bark` |
+
+Aus fuenf Eintraegen sind zwei geworden. Kein offener Punkt mehr.
+
+**Schritt 1 — `bark-aussage` und `bark-aussagen` (21.09.2026).** Beide am 19.09.
+angelegt, Titel „Bark", `status: draft`, nahezu wortgleiche Definition, dazu
+widersprechende Temperaturangaben (110–130 gegen 107–121 °C). „aussage"/
+„aussagen" ist ein Fuellwort im Sinne von `data/taxonomie.yaml`; bei vorhandenem
+Hauptbegriff darf so ein Slug gar nicht erst entstehen. Uebernommen wurden
+Polyphenol-Einlagerung, Texturspanne und das Spritz-Verbot waehrend der
+Bark-Phase.
+
+**Schritt 2 — `bark-bildung` (21.09.2026).** Beschrieb denselben Gegenstand wie
+`bark`, nur den Vorgang statt das Ergebnis — mit erneut abweichender
+Temperaturangabe (110–130 °C). Uebernommen wurden die Karamellisierung der
+oberflaechlichen Zucker, die Farb- und Texturbeschreibung („dunkelbraun bis
+schwarz, texturiert"), der Dry Rub vor dem Raeuchern und der Hinweis, die
+fertige Kruste nicht abzukratzen. Der Begriff „Bark-Bildung" selbst steht jetzt
+im Definitionsabsatz von `bark`, damit die Suchphrase nicht verloren geht.
+Die vier eingehenden internen Verweise (`cuts/brisket`, `cuts/pulled-pork`,
+`methoden/smoken-low-and-slow`, `rezepte/spareribs-3-2-1`) zeigen direkt auf
+`/glossar/bark`; der 301 faengt externe Links und Lesezeichen.
+
+**Nicht konsolidiert — und das bleibt so:** `bark-killer` beschreibt nicht die
+Kruste, sondern ihr Scheitern, und gehoert deshalb in „Techniken & Methoden".
+`bark` und `bark-killer` verweisen seit dem 21.09. gegenseitig aufeinander. Die
+AMBIGUOUS-Kante, die der Wissensgraph zwischen der Kategorie-Angabe hier und
+`bark` zieht, bleibt bewusst stehen: Sie bildet die Kategorie-Differenz ab, und
+die ist real, nicht fehlerhaft.
+
+301-Weiterleitungen fuer alle drei geloeschten Slugs in `next.config.mjs`,
+Synonyme in `data/taxonomie.yaml`.
 
 ### `infrarot` — 3 Eintraege
 
@@ -180,12 +221,63 @@ Semantik-Lauf vom 21.09.2026 hat diese Paare gemeldet:
 
 | Paar | Befund | Vorschlag |
 |---|---|---|
-| `packer-brisket` / `packer-cut` | Beide definieren die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | Hub: `packer-cut` (gelaeufigerer Handelsbegriff), 301 von `packer-brisket` |
+| ~~`packer-brisket` / `packer-cut`~~ | Beide definierten die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | ✅ **Erledigt 21.09.2026.** Hub `packer-brisket`, `packer-cut` geloescht, 301 gesetzt. |
 | `stall` / `plateauphase` | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | Hub: `stall` (dazu gibt es bereits den Artikel `artikel/stall-plateauphase-beim-smoken`), 301 von `plateauphase` |
 
-Fuer beide Paare gilt dieselbe Sperre wie oben: **erst GSC-Daten (B2), dann
-zusammenlegen.** `stall` ist ausserdem frisch veroeffentlicht (Pipeline W2,
-Commit 8eb3962) — die Impressionen brauchen ohnehin Vorlauf.
+Fuer `stall` / `plateauphase` gilt die Sperre wie oben weiter: **erst
+GSC-Daten (B2), dann zusammenlegen.** `stall` ist ausserdem frisch
+veroeffentlicht (Pipeline W2, Commit 8eb3962) — die Impressionen brauchen
+ohnehin Vorlauf. Das packer-Paar ist von der Sperre ausgenommen worden und
+abgeschlossen (siehe unten).
+
+> ✅ **Richtung beim packer-Paar entschieden (Uwe, 21.09.2026): Hub ist
+> `packer-brisket`.** Der urspruengliche Vorschlag dieser Tabelle lautete
+> umgekehrt — Hub `packer-cut` mit der Begruendung „gelaeufigerer
+> Handelsbegriff". Er ist damit hinfaellig.
+>
+> Die Entscheidung bestaetigt, was ohnehin schon durchgesetzt wurde, und
+> beseitigt den Widerspruch:
+>
+> | Quelle | kanonisch | Status |
+> |---|---|---|
+> | `data/taxonomie.yaml:83` — `packer-cut: packer-brisket` | `packer-brisket` | operativ, **unveraendert** — die Zeile stand bereits richtig |
+> | `data/content-qualitaet-baseline.json` | `packer-brisket` | `packer-cut.mdx` als bekannte Dublette im Ratchet, **unveraendert** |
+> | diese Zeile | `packer-brisket` | **angeglichen** |
+>
+> Es war also nichts umzustellen: Gate, Generatoren und Baseline zeigten von
+> Anfang an auf `packer-brisket`. Allein die Vorschlagszeile wies in die
+> Gegenrichtung.
+>
+> **Zusammenlegung ausgefuehrt am 21.09.2026** (Freigabe Uwe, bewusst ohne die
+> GSC-Daten abzuwarten — die Sperre galt der Richtungsfrage, und die war
+> entschieden). `content/glossar/packer-cut.mdx` ist geloescht, der Verweis in
+> `content/cuts/brisket.mdx` Zeile 126 zeigt auf `/glossar/packer-brisket`,
+> der 301 steht in `next.config.mjs`.
+>
+> Uebernommen wurde aus dem geloeschten Eintrag: der englische Begriff „Fat
+> Cap", der Trimm-Korridor 6–8 mm statt pauschal 6 mm, die Gelatinisierung
+> beider Muskeln beim Low-and-Slow-Garen und die Spritz-Regel ab 65 °C
+> Kerntemperatur. Der Begriff „Packer-Cut" selbst steht jetzt im
+> Definitionsabsatz von `packer-brisket`, damit die Suchphrase nicht mit dem
+> Slug verschwindet.
+>
+> **Zwei Fehler wurden bewusst NICHT uebernommen:**
+> - „Das komplette Packer-Brisket wiegt 12-16 kg" — gemeint sind 12–16 lb.
+>   Derselbe Einheitenfehler war am selben Tag schon in `packer-brisket.mdx`
+>   korrigiert worden; im Zwillingseintrag stand er noch.
+> - „die Firma Packers standardisierte dieses Zuschnittformat" — es gibt keine
+>   Firma dieses Namens. Der Name kommt von den Schlachtbetrieben (packing
+>   houses), die das Bruststueck so verpacken. `packer-brisket.mdx` hatte die
+>   richtige Herleitung bereits.
+>
+> Belegt am 21.09.2026: beide Eintraege sind praktisch gleichwertig
+> (174 gegen 181 Woerter, beide vom 23.05.2026, beide Kategorie
+> „Cuts & Teilstuecke", je ein eingehender Link). Beide Begriffe stehen
+> nebeneinander im Fliesstext von `content/cuts/brisket.mdx` — Zeile 35
+> „Ein volles Packer-Brisket …", Zeile 126 „… kein Packer-Cut".
+>
+> Das Paar `stall` / `plateauphase` ist **nicht** betroffen: `taxonomie.yaml`
+> fuehrt dort `plateauphase: stall` und stimmt mit dem Vorschlag ueberein.
 
 Ebenfalls aus demselben Lauf, bereits durch die Cluster oben abgedeckt:
 `kerntemperatur-*` (6 Eintraege, Cluster `kerntemperatur`) und `kollagen-*`

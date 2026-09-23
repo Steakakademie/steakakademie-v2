@@ -134,6 +134,10 @@ bild-austausch/
 
 # Rechtschreib-Report (Arbeitsdatei, wird je Lauf neu erzeugt)
 data/spell-check-report.json
+# CI-Ablage des Rechtschreib-Caches (actions/cache, content-gates.yml). Liegt
+# bewusst NEBEN data/spell-check-cache.json, damit der CI-Stand den committeten
+# nicht ueberschreibt; das Skript vereinigt beide per --cache-merge.
+.spell-cache/
 
 # Git-Lock-Muell. Eine Linux-Session ueber die Ordner-Bruecke kann .git/index.lock
 # nicht loeschen (EPERM); die Datei wird stattdessen hierher verschoben, damit die

@@ -61,10 +61,10 @@ const PILLARS = [
     number: 'III',
     icon: '⚡',
     label: 'Eigenregie',
-    kicker: 'Full-Ownership in 72h',
+    kicker: 'Full-Ownership, Schritt für Schritt',
     tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel.',
     bullets: [
-      'Migration: Agentur-Website → GitHub-Ownership in 72h',
+      'Migration: bestehende Website → eigenes GitHub-Repository',
       'Next.js + Vercel: vollständige Code-Kontrolle',
       'Claude Code als dein dauerhaftes Werkzeug',
       'Einmal aufgesetzt — für immer unabhängig',

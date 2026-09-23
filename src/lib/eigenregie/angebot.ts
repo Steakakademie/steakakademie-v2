@@ -6,7 +6,9 @@
  *   Kein Cookie, kein localStorage, kein Zähler pro Besucher.
  * - Nach Ablauf gilt der reguläre Preis wirklich — auf der Seite UND bei Digistore
  *   (Zahlplan 1507371 = 999 € aus, 1507372 = 1.497 € an).
- * - Begründung der Begrenzung ist echt: die Pilotgruppe wird persönlich begleitet.
+ * - Begründung der Begrenzung ist echt: Pilotpreis für die ersten Käufer gegen Feedback-Fragebogen.
+ *   KEINE persönliche Betreuung/Beantwortung von Fragen im Kurspreis (FernUSG, BGH III ZR 109/24;
+ *   Entscheidung Uwe 23.09.2026). Coaching nur als eigenständiges, separat buchbares Produkt.
  */
 export const DS_PRODUCT_ID = '695900';
 export const CHECKOUT_URL = 'https://www.checkout-ds24.com/product/695900';

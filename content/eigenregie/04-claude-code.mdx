@@ -37,7 +37,7 @@ claude --version
 claude doctor
 ```
 
-`claude doctor` zeigt, ob die Installation gesund ist und ob automatische Updates laufen. Fehlt Claude Code auf einem Rechner, installierst du es auf dem offiziellen Weg aus **code.claude.com/docs**, Abschnitt **Setup**.
+`claude doctor` zeigt, ob die Installation gesund ist und ob automatische Updates laufen. Fehlt Claude Code auf einem Rechner, installierst du es auf dem offiziellen Weg aus **code.claude.com/docs**, Abschnitt `Setup`.
 
 Windows, in der PowerShell:
 
@@ -156,7 +156,7 @@ git pull
 git status
 ```
 
-Meldet `git status` **nothing to commit, working tree clean**, legst du einen Branch für genau diese Änderung an:
+Meldet `git status` `nothing to commit, working tree clean`, legst du einen Branch für genau diese Änderung an:
 
 ```bash
 git switch -c text-oeffnungszeiten
@@ -207,8 +207,8 @@ Ein guter Auftrag nennt **was**, **wo** und **was nicht**. Den Plan liest du vol
 1. **Freigeben:** Stimmt der Plan, bestätigst du ihn. Claude Code arbeitet und meldet, wenn es fertig ist.
 2. **Lokal prüfen:** In einem zweiten Terminal läuft `npm run dev`. Öffne `http://localhost:3000`, prüfe die geänderte Stelle und klicke kurz durch zwei, drei andere Seiten.
 3. **Committen und pushen:** Sag Claude Code: „Sichere die Änderung mit einer kurzen deutschen Beschreibung und lade den Branch zu GitHub hoch.“ Lies den vorgeschlagenen Befehl, bevor du ihn freigibst.
-4. **Vorschau prüfen:** Öffne auf **github.com** dein Repository. Oben erscheint ein Hinweis zu deinem Branch – klicke auf **Compare & pull request** und dann auf **Create pull request**. Ein Pull Request ist ein Antrag, den Branch in `main` zu übernehmen. Nach ein bis zwei Minuten schreibt Vercel einen Kommentar mit dem Link zur Vorschau. Öffne ihn und prüfe die Änderung dort, auch am Smartphone.
-5. **Live:** Stimmt alles, klickst du auf **Merge pull request** und **Confirm merge**. Vercel veröffentlicht. Rufe danach die Live-Seite selbst auf – wie in Modul 3.
+4. **Vorschau prüfen:** Öffne auf **github.com** dein Repository. Oben erscheint ein Hinweis zu deinem Branch – klicke auf `Compare & pull request` und dann auf `Create pull request`. Ein Pull Request ist ein Antrag, den Branch in `main` zu übernehmen. Nach ein bis zwei Minuten schreibt Vercel einen Kommentar mit dem Link zur Vorschau. Öffne ihn und prüfe die Änderung dort, auch am Smartphone.
+5. **Live:** Stimmt alles, klickst du auf `Merge pull request` und `Confirm merge`. Vercel veröffentlicht. Rufe danach die Live-Seite selbst auf – wie in Modul 3.
 
 Wer Netlify Free nutzt, bündelt hier: Vorschauen kosten keine Credits, jede Veröffentlichung der Live-Seite schon. Sammle kleine Änderungen deshalb auf einem Branch und führe sie gemeinsam zusammen.
 

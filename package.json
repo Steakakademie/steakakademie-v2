@@ -10,7 +10,7 @@
     "dev:full": "node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next dev --webpack",
     "prebuild": "node scripts/check-mdx-komponenten.mjs && node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs",
     "build": "next build --webpack",
-    "check": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs && node scripts/check-mdx-komponenten.mjs && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs && node scripts/check-content-qualitaet.mjs",
+    "check": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs && node scripts/check-mdx-komponenten.mjs && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs && node scripts/check-content-qualitaet.mjs && node scripts/check-taxonomy.mjs",
     "check:qualitaet": "node scripts/check-content-qualitaet.mjs",
     "check:qualitaet:baseline": "node scripts/check-content-qualitaet.mjs --update-baseline",
     "check:bild-motiv": "node scripts/check-bild-motiv.mjs",
@@ -72,7 +72,8 @@
     "wip": "node scripts/wip-autosave.mjs",
     "spell:check": "node scripts/spell-check.mjs",
     "spell:check:full": "node scripts/spell-check.mjs --force",
-    "heartbeat": "node scripts/ops-heartbeat.mjs --nur-bericht"
+    "heartbeat": "node scripts/ops-heartbeat.mjs --nur-bericht",
+    "check:taxonomie": "node scripts/check-taxonomy.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

@@ -142,12 +142,12 @@ Irgendwann geht eine Änderung schief. Das ist normal. Entscheidend ist, dass du
 Erst stabilisieren, dann reparieren.
 
 1. Öffne bei Vercel dein Projekt. Auf der Übersichtsseite siehst du die Kachel mit dem aktuellen Produktiv-Stand.
-2. Klicke dort auf **Instant Rollback**, wähle die vorherige Version und bestätige mit **Confirm Rollback**. Vercel zeigt deine Domain sofort wieder auf diesen Stand. Im kostenlosen Hobby-Tarif geht das laut Dokumentation nur zur unmittelbar vorherigen Version, im Pro-Tarif zu jeder früheren Produktiv-Version, Stand 09/2026.
+2. Klicke dort auf `Instant Rollback`, wähle die vorherige Version und bestätige mit `Confirm Rollback`. Vercel zeigt deine Domain sofort wieder auf diesen Stand. Im kostenlosen Hobby-Tarif geht das laut Dokumentation nur zur unmittelbar vorherigen Version, im Pro-Tarif zu jeder früheren Produktiv-Version, Stand 09/2026.
 3. Prüfe die Seite im Browser.
 
 <Achtung>
 
-Nach der Rückrollung einfach weiterarbeiten. Vercel schaltet danach die automatische Veröffentlichung ab: Neue Änderungen gehen **nicht** mehr live, bis du auf der Projektkachel **Undo Rollback** klickst und einen Stand bestätigst. Genau diesen Schritt schreibst du ins Handbuch.
+Nach der Rückrollung einfach weiterarbeiten. Vercel schaltet danach die automatische Veröffentlichung ab: Neue Änderungen gehen **nicht** mehr live, bis du auf der Projektkachel `Undo Rollback` klickst und einen Stand bestätigst. Genau diesen Schritt schreibst du ins Handbuch.
 
 </Achtung>
 
@@ -168,11 +168,11 @@ git revert HEAD
 git push
 ```
 
-Danach klickst du bei Vercel auf **Undo Rollback** und wählst die neue, reparierte Version.
+Danach klickst du bei Vercel auf `Undo Rollback` und wählst die neue, reparierte Version.
 
 ### Fall 3: Der Bau schlägt fehl
 
-Scheitert bei Vercel der Bau, bleibt die alte Version online – dein Besucher merkt nichts. Öffne unter **Deployments** den fehlgeschlagenen Eintrag, kopiere die Fehlermeldung aus dem Protokoll und gib sie Claude Code. Hast du nur eine Umgebungsvariable geändert, genügt ein neuer Bau: in der Liste **Deployments** über das Drei-Punkte-Menü **Redeploy**.
+Scheitert bei Vercel der Bau, bleibt die alte Version online – dein Besucher merkt nichts. Öffne unter `Deployments` den fehlgeschlagenen Eintrag, kopiere die Fehlermeldung aus dem Protokoll und gib sie Claude Code. Hast du nur eine Umgebungsvariable geändert, genügt ein neuer Bau: in der Liste `Deployments` über das Drei-Punkte-Menü **Redeploy**.
 
 ### Fall 4: Die Seite ist gar nicht erreichbar
 
@@ -192,10 +192,10 @@ Dein Projekt nutzt Hunderte fremder Pakete. Wird in einem eine Sicherheitslücke
 
 So schaltest du ihn ein:
 
-1. Öffne dein Repository auf GitHub und klicke auf **Settings**.
-2. Wähle im Seitenmenü **Advanced Security**.
-3. Klicke neben **Dependabot alerts** auf **Enable**.
-4. Klicke neben **Dependabot security updates** auf **Enable**.
+1. Öffne dein Repository auf GitHub und klicke auf `Settings`.
+2. Wähle im Seitenmenü `Advanced Security`.
+3. Klicke neben `Dependabot alerts` auf `Enable`.
+4. Klicke neben `Dependabot security updates` auf `Enable`.
 
 Kommt ein Vorschlag, erzeugt Vercel dafür automatisch eine Vorschau. Öffne sie, klicke drei, vier Seiten und das Formular durch, und nimm den Vorschlag erst dann an. Unsicher? Frag Claude Code: „Erkläre mir diesen Dependabot-Vorschlag und ob er etwas an meiner Seite ändert.“
 
@@ -210,7 +210,7 @@ Trag dir einen festen Termin ein, etwa den ersten Montag im Monat. Hake ab und n
 | 3 | Abhängigkeiten aktualisieren | Claude Code: „Prüfe mit npm outdated und npm audit, aktualisiere, was sicher ist, teste lokal und sichere.“ | 10 |
 | 4 | Domain-Ablauf | Beim Registrar Ablaufdatum und automatische Verlängerung prüfen | 2 |
 | 5 | Rechnungen der Dienste | Abrechnungen von Vercel, Registrar, Claude, Mail prüfen: Stimmen Tarif und Betrag? | 3 |
-| 6 | Search Console | **Indexierung → Seiten**: neue Fehler? **Leistung**: Auffälligkeiten? | 5 |
+| 6 | Search Console | `Indexierung → Seiten`: neue Fehler? `Leistung`: Auffälligkeiten? | 5 |
 | 7 | Festhalten | Datum und Befund im Handbuch, sichern | 2 |
 
 Einmal im Quartal kommen hinzu: die dritte Sicherungskopie auf die externe Festplatte und ein Blick in die Datenschutzerklärung – stimmt die Diensteliste noch?
@@ -236,7 +236,7 @@ Eigenregie heißt nicht, alles allein zu machen. Es heißt, selbst zu entscheide
 - **Große Umbauten.** Neues Design über alle Seiten, Mehrsprachigkeit, Anbindung an eine Warenwirtschaft – Vorhaben, die über viele kleine Schritte hinausgehen.
 - **Rechtsfragen.** Die gehören zu Anwältin, Anwalt oder Kammer, nicht in einen Kurs.
 
-Für alles dazwischen – wenn du an einer Stelle feststeckst, eine Entscheidung abwägen willst oder einen Blick von außen auf dein Projekt brauchst – gibt es die **Einzeleinheiten-Begleitung** der Steakakademie: 129 € je Einheit, Stand 09/2026. Du bestimmst Thema und Takt. Die Einheit ist Begleitung, keine Auftragsarbeit: Gezeigt und gemeinsam gelöst wird an deinem Projekt, die Hand an der Tastatur bleibt deine. Wer sie nicht braucht, braucht sie nicht – das Handbuch ist genau dafür da.
+Für alles dazwischen – wenn du an einer Stelle feststeckst, eine Entscheidung abwägen willst oder einen Blick von außen auf dein Projekt brauchst – holst du dir gezielt Hilfe von außen: eine Fachperson deines Vertrauens, deren Kontakt du oben unter „Technische Begleitung“ einträgst. Dieser Kurs selbst enthält keine persönliche Betreuung. Die Steakakademie bietet dafür ein eigenständiges Personal-Coaching an, das unabhängig von diesem Kurs gebucht und bezahlt wird. Wer es nicht braucht, braucht es nicht – das Handbuch ist genau dafür da.
 
 ## Ergebnis-Prüfung
 
@@ -264,7 +264,7 @@ Dies ist der Abschlusscheck über den ganzen Kurs. Hake nur ab, was du belegen k
 **Modul 6 – Übergabe**
 - [ ] `BETRIEB.md` ist ausgefüllt und hochgeladen – ohne ein einziges Passwort; Maschinen- und Menschen-Probe sind bestanden, eine Vertrauensperson ist eingetragen.
 - [ ] Die ZIP-Sicherung wurde einmal in einen leeren Ordner entpackt und lief dort.
-- [ ] Eine Probe-Rückrollung bei Vercel ist durchgeführt und mit **Undo Rollback** wieder aufgehoben.
+- [ ] Eine Probe-Rückrollung bei Vercel ist durchgeführt und mit `Undo Rollback` wieder aufgehoben.
 - [ ] Dependabot-Warnungen und -Sicherheitsupdates sind aktiv.
 - [ ] Die Monats-Routine steht als wiederkehrender Termin im Kalender, der erste Durchlauf ist im Handbuch notiert.
 

@@ -145,8 +145,43 @@ const nextConfig = {
       },
     ];
   },
+  // tuwasduwillst.de (Eigenregie, eigene Marke — Uwe 23.09.2026): gleiche App,
+  // eigene Domain. Bis die Landingpage steht, zeigt jede Adresse dort den
+  // Platzhalter /tuwasduwillst. Assets (_next), APIs und der Platzhalter selbst
+  // sind ausgenommen. beforeFiles, damit auch Dateien aus /public (robots.txt,
+  // Bilder) auf dieser Domain nicht als Steakakademie-Inhalt erscheinen.
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'tuwasduwillst.de' }],
+          destination: '/tuwasduwillst',
+        },
+        {
+          source: '/:pfad((?!_next/|api/|tuwasduwillst).+)',
+          has: [{ type: 'host', value: 'tuwasduwillst.de' }],
+          destination: '/tuwasduwillst',
+        },
+      ],
+    };
+  },
   async redirects() {
     return [
+      // tuwasduwillst.de: www auf die nackte Domain; der Platzhalter ist unter
+      // steakakademie.de nicht erreichbar (Preview-Adressen bleiben frei).
+      {
+        source: '/:pfad*',
+        has: [{ type: 'host', value: 'www.tuwasduwillst.de' }],
+        destination: 'https://tuwasduwillst.de/:pfad*',
+        permanent: true,
+      },
+      {
+        source: '/tuwasduwillst',
+        has: [{ type: 'host', value: '(www\\.)?steakakademie\\.de' }],
+        destination: 'https://tuwasduwillst.de/',
+        permanent: false,
+      },
       // Glossar-Duplikat zusammengelegt (27.08.2026): "Smoker-Temperatur" gab es
       // zweimal, unter /glossar/smoker-temp und /glossar/smoker-temperatur —
       // gleicher Titel, widersprechende Werte (100-130 gegen 100-150 Grad C) und
@@ -165,6 +200,45 @@ const nextConfig = {
       {
         source: '/agentur-killer-sprint',
         destination: '/eigenregie',
+        permanent: true,
+      },
+      // Glossar-Dubletten zusammengelegt (21.09.2026): "Bark" gab es dreimal —
+      // unter /glossar/bark, /glossar/bark-aussage und /glossar/bark-aussagen.
+      // Gleicher Titel, nahezu wortgleiche Definition, widersprechende
+      // Temperaturangaben (110-130 gegen 107-121 Grad C) und beide Permutationen
+      // standen auf status: draft. "aussage"/"aussagen" ist ein Fuellwort im
+      // Sinne von data/taxonomie.yaml; der Hauptbegriff ueberlebt, die beiden
+      // Permutationen leiten dauerhaft dorthin.
+      {
+        source: '/glossar/bark-aussage',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
+      {
+        source: '/glossar/bark-aussagen',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
+      // Bark-Cluster abgeschlossen (21.09.2026): "Bark-Bildung" beschrieb
+      // denselben Gegenstand wie "Bark" — nur den Vorgang statt das Ergebnis,
+      // mit abweichender Temperaturangabe (110-130 gegen 107-121 Grad C).
+      // Inhalt ist in /glossar/bark aufgegangen, die vier internen Verweise
+      // zeigen direkt dorthin; der Redirect faengt externe Links und Lesezeichen.
+      {
+        source: '/glossar/bark-bildung',
+        destination: '/glossar/bark',
+        permanent: true,
+      },
+      // packer-Paar zusammengelegt (21.09.2026): "Packer-Cut" und
+      // "Packer-Brisket" beschrieben denselben Zuschnitt. packer-brisket
+      // ueberlebt — so stand es schon in data/taxonomie.yaml und in der
+      // Quality-Baseline. Der geloeschte Eintrag trug zwei Fehler, die NICHT
+      // uebernommen wurden: "12-16 kg" (gemeint waren 12-16 lb) und die
+      // Etymologie "die Firma Packers" (es sind die Schlachtbetriebe,
+      // packing houses, die den Zuschnitt so verpacken).
+      {
+        source: '/glossar/packer-cut',
+        destination: '/glossar/packer-brisket',
         permanent: true,
       },
     ];

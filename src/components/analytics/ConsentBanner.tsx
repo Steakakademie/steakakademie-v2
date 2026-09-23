@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { CONSENT_OPEN_EVENT, getConsent, setConsent } from '@/lib/consent';
+import { istTuwasHost } from '@/lib/marken-host';
 
 /**
  * DSGVO-Consent-Banner (Opt-in). Erscheint, bis eine Entscheidung getroffen wurde,
@@ -24,6 +26,8 @@ export default function ConsentBanner() {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // tuwasduwillst.de laedt nichts Einwilligungspflichtiges (Clarity nur auf steakakademie.de).
+    if (istTuwasHost()) return;
     if (getConsent() === null) setOpen(true);
     const reopen = () => setOpen(true);
     window.addEventListener(CONSENT_OPEN_EVENT, reopen);
@@ -49,45 +53,58 @@ export default function ConsentBanner() {
     };
   }, [open]);
 
-  if (!open) return null;
-
   const decide = (statistics: boolean) => {
     setConsent(statistics);
     setOpen(false);
   };
 
+  // Das Banner kommt von unten herein und geht ueber dieselbe Kante wieder
+  // hinaus. Bewusst nur transform, keine opacity: ein unsichtbar startendes
+  // Element koennte den LCP-Zeitpunkt verschieben, ein verschobenes nicht.
+  // Die Buttons sind waehrend der Bewegung bereits klickbar. Bei
+  // prefers-reduced-motion entfernt MotionConfig die Verschiebung — das
+  // Banner steht dann sofort da wie bisher.
   return (
-    <div
-      ref={panelRef}
-      role="dialog"
-      aria-modal="false"
-      aria-label="Datenschutz-Einstellungen"
-      className="fixed inset-x-0 bottom-0 z-[70] p-3 sm:p-4"
-    >
-      <div className="mx-auto max-w-3xl rounded-lg border border-brand-gold/25 bg-surface-dark/95 backdrop-blur-sm p-5 shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
-        <h2 className="font-serif text-lg font-bold text-text-light">Deine Privatsphäre</h2>
-        <p className="mt-2 font-body text-sm leading-relaxed text-text-light/70">
-          Für die Grund-Reichweitenmessung nutzen wir <strong className="text-text-light/90">Plausible</strong> —
-          cookielos, anonym, ohne Einwilligung. Zusätzlich möchten wir mit <strong className="text-text-light/90">Microsoft
-          Clarity</strong> (Heatmaps &amp; Sitzungs-Analyse, mit Cookies) verstehen, wie die
-          Seite genutzt wird, um sie zu verbessern. Das laden wir nur mit deiner Zustimmung.
-          Du kannst deine Wahl jederzeit im Footer unter „Cookie-Einstellungen&quot; ändern.{' '}
-          <Link href="/datenschutz" className="text-brand-gold underline underline-offset-2 hover:text-brand-gold/80">
-            Datenschutzerklärung
-          </Link>
-        </p>
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="consent-banner"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="false"
+          aria-label="Datenschutz-Einstellungen"
+          className="fixed inset-x-0 bottom-0 z-[70] p-3 sm:p-4"
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%', transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
+          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <div className="mx-auto max-w-3xl rounded-lg border border-brand-gold/25 bg-surface-dark/95 backdrop-blur-sm p-5 shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
+            <h2 className="font-serif text-lg font-bold text-text-light">Deine Privatsphäre</h2>
+            <p className="mt-2 font-body text-sm leading-relaxed text-text-light/70">
+              Für die Grund-Reichweitenmessung nutzen wir <strong className="text-text-light/90">Plausible</strong> —
+              cookielos, anonym, ohne Einwilligung. Zusätzlich möchten wir mit <strong className="text-text-light/90">Microsoft
+              Clarity</strong> (Heatmaps &amp; Sitzungs-Analyse, mit Cookies) verstehen, wie die
+              Seite genutzt wird, um sie zu verbessern. Das laden wir nur mit deiner Zustimmung.
+              Du kannst deine Wahl jederzeit im Footer unter „Cookie-Einstellungen&quot; ändern.{' '}
+              <Link href="/datenschutz" className="text-brand-gold underline underline-offset-2 hover:text-brand-gold/80">
+                Datenschutzerklärung
+              </Link>
+            </p>
 
-        {/* Erste Ebene: zwei gleichwertige Buttons — identische Größe UND Farbe,
-            keiner wird hervorgehoben (kein Nudging). */}
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button onClick={() => decide(false)} className={CONSENT_BTN}>
-            Ablehnen
-          </button>
-          <button onClick={() => decide(true)} className={CONSENT_BTN}>
-            Alles akzeptieren
-          </button>
-        </div>
-      </div>
-    </div>
+            {/* Erste Ebene: zwei gleichwertige Buttons — identische Größe UND Farbe,
+                keiner wird hervorgehoben (kein Nudging). */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button onClick={() => decide(false)} className={CONSENT_BTN}>
+                Ablehnen
+              </button>
+              <button onClick={() => decide(true)} className={CONSENT_BTN}>
+                Alles akzeptieren
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

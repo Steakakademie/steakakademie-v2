@@ -76,8 +76,12 @@ jobs:
     timeout-minutes: 30
     continue-on-error: true
     steps:
+      # Volle Historie, damit `--seit origin/<base>...HEAD` den Abzweigpunkt
+      # findet. Bei einem flachen Klon fehlt die Merge-Basis, git diff bricht ab.
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Node.js einrichten
         uses: actions/setup-node@v5
@@ -88,11 +92,65 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
-      # Inkrementell ueber data/spell-check-cache.json: geprueft wird nur, was
-      # sich seit dem letzten Lauf geaendert hat. Ohne --strict, Exitcode bleibt
-      # 0 auch bei Funden; das `|| true` faengt zusaetzlich einen API-Ausfall ab.
+      # Der Cache (data/spell-check-cache.json) ist committet, wurde aber bis
+      # 23.09.2026 in CI nie zurueckgeschrieben: jeder Lauf begann beim letzten
+      # committeten Stand (05.09.), und die Zahl der "neuen" Dateien wuchs mit
+      # jedem Content-PR — an PR #158 309 von 417, Abbruch nach 30 Minuten.
+      # Jetzt reicht ihn actions/cache von Lauf zu Lauf weiter. Der Schluessel
+      # ist je Lauf eindeutig (ein Cache-Eintrag ist unveraenderlich), gelesen
+      # wird ueber restore-keys der juengste. Faellt der Cache weg, greift die
+      # committete Datei — schlechter, aber nicht falsch.
+      #
+      # Eigener Pfad, NICHT data/spell-check-cache.json: Der erste Lauf mit
+      # actions/cache (23.09.2026) legte den CI-Stand direkt ueber die Datei
+      # aus dem Checkout und ueberschrieb damit den frisch committeten Cache aus
+      # #195 — 127 statt 58 Dateien wurden geprueft. Jetzt liegen beide
+      # Fassungen nebeneinander, und das Skript nimmt per --cache-merge die
+      # Vereinigung: gecacht ist, was eine der beiden kennt.
+      - name: Rechtschreib-Cache laden
+        uses: actions/cache/restore@v4
+        with:
+          path: .spell-cache/spell-check-cache.json
+          key: spell-check-cache-v2-${{ github.run_id }}
+          restore-keys: spell-check-cache-v2-
+
+      # PR: nur die Dateien, die der PR aendert (--seit, Drei-Punkt-Diff gegen
+      # den Abzweigpunkt). Ein PR-Bericht zeigt die Tippfehler dieses PRs, nicht
+      # die des Bestands. Push auf main / manuell: inkrementell ueber den Cache.
+      # Ohne --strict, Exitcode bleibt 0 auch bei Funden; das `|| true` faengt
+      # zusaetzlich einen API-Ausfall ab.
+      # Eigenes Zeitlimit unter dem des Jobs: laeuft ein grosser Rueckstand
+      # hinein, scheitert nur dieser Schritt, und "Cache speichern" laeuft noch.
+      # Das Skript schreibt den Cache alle 20 sauberen Dateien zwischen, der
+      # naechste Lauf setzt also dort fort, statt wieder bei null zu beginnen.
       - name: npm run spell:check
-        run: npm run spell:check || true
+        timeout-minutes: 24
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          MERGE="--cache-merge .spell-cache/spell-check-cache.json"
+          if [ -n "$BASE_REF" ]; then
+            npm run spell:check -- $MERGE --seit "origin/$BASE_REF" || true
+          else
+            npm run spell:check -- $MERGE || true
+          fi
+
+      # Nur ausserhalb von PRs speichern: ein PR-Cache ist auf den PR-Ref
+      # beschraenkt und fuer main unsichtbar, er wuerde nur Speicher belegen.
+      # `!cancelled()` statt `success()`: auch nach dem Zeitlimit des
+      # Pruefschritts (Fehlschlag, kein Abbruch) wird der Zwischenstand gesichert.
+      # Gespeichert wird die vom Skript geschriebene Datei — sie enthaelt die
+      # Vereinigung aus committetem Stand, CI-Stand und diesem Lauf.
+      - name: Rechtschreib-Cache speichern
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
+        run: mkdir -p .spell-cache && cp data/spell-check-cache.json .spell-cache/spell-check-cache.json
+
+      - name: Rechtschreib-Cache ablegen
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
+        uses: actions/cache/save@v4
+        with:
+          path: .spell-cache/spell-check-cache.json
+          key: spell-check-cache-v2-${{ github.run_id }}
 
       # Macht die Zahl in der Job-Summary sichtbar, ohne zu blockieren. Ohne
       # diesen Schritt lag der Befund nur im Artefakt — eine Pruefung, deren
@@ -139,6 +197,23 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
+      # Bewusst OHNE --strict: der Schritt berichtet nur, Exit bleibt 0. Ein gruenes
+      # Haekchen an diesem Job sagt deshalb nichts ueber das Urteil — es steht im
+      # Job-Log und in der Step-Summary.
+      #
+      # --strict ergaenzen (Entscheidung Uwe, 21.09.2026), sobald der Check ueber
+      # mindestens ZEHN geaenderte Bilder gelaufen ist und die Trefferquote belegt
+      # ist, insbesondere ohne falsch positive Ablehnungen. Wie der Nachweis
+      # entsteht — der Report taugt dafuer nicht, er wird je Lauf ueberschrieben
+      # und ist gitignored — steht im Kopf von scripts/check-bild-motiv.mjs.
+      #
+      # BELEGTE LAEUFE (21.–22.09.2026): Lauf 1 (10 Bilder) 5/7 Ablehnungen
+      # falsch positiv, Lauf 2 (167 Rezeptbilder) 134 Ablehnungen, Stichprobe
+      # 8/8 falsch positiv, Lauf 3 (Stabilitaet) zeigt Nicht-Determinismus bei
+      # temperature: 0 — gleiches Bild, gleicher Input, wechselndes Urteil.
+      # Bedingung NICHT erfuellt, --strict bleibt deshalb aus, unabhaengig von
+      # der Praezision auch wegen der Instabilitaet. Vollstaendige Auswertung:
+      # docs/bild-motiv-check-log.md.
       - name: Geaenderte Hero-Bilder pruefen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
