@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   title: 'Eigenregie: Deine Website in deiner Hand',
   description:
-    'Geführter Selbstbau-Kurs: Du holst deine Website in ein eigenes Projekt — eigene Konten, eigener Code, eigene Domain. Diagnose plus sechs Module mit prüfbaren Ergebnissen.',
+    'Selbstlern-Kurs: Du holst deine Website in ein eigenes Projekt — eigene Konten, eigener Code, eigene Domain. Diagnose plus sechs Module mit prüfbaren Ergebnissen.',
   alternates: { canonical: 'https://steakakademie.de/eigenregie' },
   openGraph: {
     images: ogImages('Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.'),
     title: 'Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.',
-    description: 'Eigene Konten, eigener Code, eigene Domain. Geführter Selbstbau mit Claude Code — ehrlich kalkuliert.',
+    description: 'Eigene Konten, eigener Code, eigene Domain. Selbstbau mit Claude Code, Schritt für Schritt — ehrlich kalkuliert.',
     url: 'https://steakakademie.de/eigenregie',
     type: 'website',
   },
@@ -56,6 +56,7 @@ const FUER_DICH = [
 const NICHT_FUER_DICH = [
   'Du willst gar nicht selbst bauen — dann ist eine Umsetzung durch einen Dienstleister ehrlicher.',
   'Du brauchst einen großen Shop mit Warenwirtschaft oder ein Mitgliederportal.',
+  'Du erwartest persönliche Betreuung im Kurspreis — Eigenregie ist ein Kurs zum Selbstlernen.',
   'Du hast noch kein Gewerbe angemeldet — dann zuerst die Gründung.',
 ];
 
@@ -64,7 +65,8 @@ const FAQ = [
   { q: 'Was kostet das neben dem Kurs?', a: `Claude Code läuft nur mit einem kostenpflichtigen Claude-Tarif (Pro, ca. ${KOSTEN.claudePro} €/Monat, Preis in US-Dollar, Stand 09/2026). Hosting kostet 0 € (Netlify Free, gewerblich erlaubt, Kontingent begrenzt) oder ca. ${KOSTEN.hostingMax} €/Monat (Vercel Pro — der kostenlose Vercel-Tarif ist nur für private Seiten erlaubt). GitHub, Cloudflare und Bitwarden laufen kostenlos. Deine Domain bezahlst du wie bisher.` },
   { q: 'Wie lange dauert das wirklich?', a: 'Bei einem Auftritt mit 5–15 Seiten meist 15–25 Arbeitsstunden, verteilt auf einige Wochen. Die Diagnose rechnet dir das mit deiner verfügbaren Zeit aus — ohne Schönfärberei.' },
   { q: 'Mein Vertrag mit dem bisherigen Anbieter läuft noch — was tun?', a: 'Kein Hindernis. Du baust parallel auf und schaltest um, wenn alles steht. Modul 3 zeigt den Umschaltplan inklusive Rückweg, damit Website und E-Mail durchgehend erreichbar bleiben.' },
-  { q: 'Was bedeutet „Pilotgruppe“?', a: `Die ersten ${PILOT_PLAETZE} Teilnehmer bekommen während ihres Durchlaufs Rückfragen per E-Mail direkt beantwortet. Dafür bitten wir um ehrliches Feedback. Die Begrenzung ist echt: Mehr lässt sich persönlich nicht begleiten.` },
+  { q: 'Was bedeutet „Pilotgruppe“?', a: `Die ersten ${PILOT_PLAETZE} Käufer bekommen den Pilotpreis. Im Gegenzug bitten wir dich nach dem Durchlauf um ehrliches Feedback per kurzem Fragebogen — damit verbessern wir den Kurs, bevor der reguläre Preis gilt. Die Begrenzung ist echt und wird technisch gezählt.` },
+  { q: 'Bekomme ich persönliche Betreuung?', a: 'Nein. Eigenregie ist ein Kurs zum Selbstlernen: Diagnose, sechs Module, Checklisten und Vorlagen. Persönliche Betreuung, Korrekturen oder die Beantwortung von Einzelfragen sind nicht Teil des Kurses.' },
   { q: 'Bekomme ich Rechtsberatung?', a: 'Nein. Modul 5 zeigt, welche Pflichten es gibt und wie du sie umsetzt — aus der Praxis, nicht als Rechtsberatung. Bei Unsicherheit gehört die Frage zu Anwalt, IHK oder Handwerkskammer.' },
 ];
 
@@ -79,7 +81,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Eigenregie',
-    description: 'Geführter Selbstbau-Kurs: Website in ein eigenes Projekt holen — eigene Konten, eigener Code, eigene Domain.',
+    description: 'Selbstlern-Kurs: Website in ein eigenes Projekt holen — eigene Konten, eigener Code, eigene Domain.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
     offers: {
       '@type': 'Offer',
@@ -119,7 +121,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
               <ChevronRight size={12} />
               <span>Eigenregie</span>
             </nav>
-            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-gold mb-4">Geführter Selbstbau · Diagnose + 6 Module</p>
+            <p className="text-[11px] font-sans font-bold tracking-[0.18em] uppercase text-brand-gold mb-4">Selbstlern-Kurs · Diagnose + 6 Module</p>
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.05] mb-6">
               Dein Business „KOMPLETT“<br />in Eigenregie.
             </h1>
@@ -243,7 +245,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
               <div className="font-body text-text-secondary space-y-2 mb-8">
                 <p>
                   Pilotpreis bis einschließlich {endeText} für höchstens {PILOT_PLAETZE} Teilnehmer — danach {euro(REGULAERER_PREIS)}.
-                  Der Grund für die Begrenzung: Die Pilotgruppe bekommt Rückfragen während des Durchlaufs persönlich beantwortet.
+                  Der Grund für die Begrenzung: Die ersten {PILOT_PLAETZE} Käufer geben uns nach dem Durchlauf ehrliches Feedback per Fragebogen — damit verbessern wir den Kurs, bevor der reguläre Preis gilt.
                 </p>
                 <p className="flex flex-wrap gap-x-6 gap-y-1 font-sans text-sm text-text-primary">
                   <span className="inline-flex items-center gap-1.5"><CalendarClock size={15} className="text-brand-fire" /> endet am {endeText}</span>
