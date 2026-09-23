@@ -76,8 +76,12 @@ jobs:
     timeout-minutes: 30
     continue-on-error: true
     steps:
+      # Volle Historie, damit `--seit origin/<base>...HEAD` den Abzweigpunkt
+      # findet. Bei einem flachen Klon fehlt die Merge-Basis, git diff bricht ab.
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Node.js einrichten
         uses: actions/setup-node@v5
@@ -88,11 +92,51 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
-      # Inkrementell ueber data/spell-check-cache.json: geprueft wird nur, was
-      # sich seit dem letzten Lauf geaendert hat. Ohne --strict, Exitcode bleibt
-      # 0 auch bei Funden; das `|| true` faengt zusaetzlich einen API-Ausfall ab.
+      # Der Cache (data/spell-check-cache.json) ist committet, wurde aber bis
+      # 23.09.2026 in CI nie zurueckgeschrieben: jeder Lauf begann beim letzten
+      # committeten Stand (05.09.), und die Zahl der "neuen" Dateien wuchs mit
+      # jedem Content-PR — an PR #158 309 von 417, Abbruch nach 30 Minuten.
+      # Jetzt reicht ihn actions/cache von Lauf zu Lauf weiter. Der Schluessel
+      # ist je Lauf eindeutig (ein Cache-Eintrag ist unveraenderlich), gelesen
+      # wird ueber restore-keys der juengste. Faellt der Cache weg, greift die
+      # committete Datei — schlechter, aber nicht falsch.
+      - name: Rechtschreib-Cache laden
+        uses: actions/cache/restore@v4
+        with:
+          path: data/spell-check-cache.json
+          key: spell-check-cache-${{ github.run_id }}
+          restore-keys: spell-check-cache-
+
+      # PR: nur die Dateien, die der PR aendert (--seit, Drei-Punkt-Diff gegen
+      # den Abzweigpunkt). Ein PR-Bericht zeigt die Tippfehler dieses PRs, nicht
+      # die des Bestands. Push auf main / manuell: inkrementell ueber den Cache.
+      # Ohne --strict, Exitcode bleibt 0 auch bei Funden; das `|| true` faengt
+      # zusaetzlich einen API-Ausfall ab.
+      # Eigenes Zeitlimit unter dem des Jobs: laeuft ein grosser Rueckstand
+      # hinein, scheitert nur dieser Schritt, und "Cache speichern" laeuft noch.
+      # Das Skript schreibt den Cache alle 20 sauberen Dateien zwischen, der
+      # naechste Lauf setzt also dort fort, statt wieder bei null zu beginnen.
       - name: npm run spell:check
-        run: npm run spell:check || true
+        timeout-minutes: 24
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -n "$BASE_REF" ]; then
+            npm run spell:check -- --seit "origin/$BASE_REF" || true
+          else
+            npm run spell:check || true
+          fi
+
+      # Nur ausserhalb von PRs speichern: ein PR-Cache ist auf den PR-Ref
+      # beschraenkt und fuer main unsichtbar, er wuerde nur Speicher belegen.
+      # `!cancelled()` statt `success()`: auch nach dem Zeitlimit des
+      # Pruefschritts (Fehlschlag, kein Abbruch) wird der Zwischenstand gesichert.
+      - name: Rechtschreib-Cache speichern
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
+        uses: actions/cache/save@v4
+        with:
+          path: data/spell-check-cache.json
+          key: spell-check-cache-${{ github.run_id }}
 
       # Macht die Zahl in der Job-Summary sichtbar, ohne zu blockieren. Ohne
       # diesen Schritt lag der Befund nur im Artefakt — eine Pruefung, deren
