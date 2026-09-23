@@ -35,8 +35,8 @@ Die Diagnose in Modul 0 hat gefragt, was du heute hast. Daraus ergibt sich, wie 
 | Ausgangslage | So holst du die Inhalte | Darauf achtest du |
 |---|---|---|
 | **Noch nichts** | Keine Übernahme. Du schreibst die Texte neu, auf Basis deines Zielbilds aus Modul 0. | Keine Weiterleitungen nötig. Springe zu „Projekt anlegen“. |
-| **WordPress bei einer Agentur** | Mit Admin-Zugang: **Werkzeuge → Daten exportieren** liefert eine XML-Datei mit allen Texten. Bilder liegen im Ordner `wp-content/uploads` beim Hoster. | URLs enden meist mit Schrägstrich. Die Sitemap liegt unter `/wp-sitemap.xml` oder bei Yoast unter `/sitemap_index.xml`. |
-| **Baukasten** (Wix, Jimdo, Squarespace) | Wix sieht keinen Export der Seite vor – sie läuft nur auf Wix-Servern. Squarespace exportiert unter **Settings → Import & Export Content** nur Teile als XML. Rechne damit, Inhalte von der öffentlichen Seite zu übernehmen. | Die Domain ist oft beim Baukasten gebucht. Abo erst nach Modul 3 kündigen. |
+| **WordPress bei einer Agentur** | Mit Admin-Zugang: `Werkzeuge → Daten exportieren` liefert eine XML-Datei mit allen Texten. Bilder liegen im Ordner `wp-content/uploads` beim Hoster. | URLs enden meist mit Schrägstrich. Die Sitemap liegt unter `/wp-sitemap.xml` oder bei Yoast unter `/sitemap_index.xml`. |
+| **Baukasten** (Wix, Jimdo, Squarespace) | Wix sieht keinen Export der Seite vor – sie läuft nur auf Wix-Servern. Squarespace exportiert unter `Settings → Import & Export Content` nur Teile als XML. Rechne damit, Inhalte von der öffentlichen Seite zu übernehmen. | Die Domain ist oft beim Baukasten gebucht. Abo erst nach Modul 3 kündigen. |
 | **Eigene Seite ohne Zugriff** | Alles, was öffentlich sichtbar ist, liest Claude Code direkt von der Seite aus. | Die Rechte an Bildern klären, bevor du sie übernimmst. |
 
 <Achtung>
@@ -93,7 +93,7 @@ Next.js ist ein kostenloses, quelloffenes Framework – ein Baukasten für Progr
 1. **Node.js:** Lade auf **nodejs.org** die Version mit der Bezeichnung **LTS** herunter – das ist die langfristig unterstützte Version, Stand 09/2026 Node.js 24. Next.js verlangt mindestens Version 20.9. Installiere mit den vorgeschlagenen Einstellungen.
 2. **Git:** Unter Windows installierst du **Git for Windows** von **git-scm.com**. Auf dem Mac gibst du im Terminal `git --version` ein; fehlt Git, bietet macOS die Installation der Entwicklerwerkzeuge an.
 3. **GitHub CLI:** Lade sie von **cli.github.com**. Sie übernimmt die Anmeldung bei GitHub, kostenlos.
-4. **Claude Code:** Die Installationsbefehle stehen unter **code.claude.com/docs** im Abschnitt **Setup**. Für Windows PowerShell lautet er:
+4. **Claude Code:** Die Installationsbefehle stehen unter **code.claude.com/docs** im Abschnitt `Setup`. Für Windows PowerShell lautet er:
 
 ```powershell
 irm https://claude.ai/install.ps1 | iex
@@ -127,7 +127,7 @@ Anschließend meldest du die GitHub CLI einmalig an:
 gh auth login
 ```
 
-Wähle **GitHub.com**, dann **HTTPS**, bestätige die Frage nach der Git-Anmeldung mit **Yes** und wähle **Login with a web browser**.
+Wähle `GitHub.com`, dann `HTTPS`, bestätige die Frage nach der Git-Anmeldung mit `Yes` und wähle `Login with a web browser`.
 
 ### Schritt 2: Projekt anlegen
 
@@ -138,7 +138,7 @@ cd Documents
 npx create-next-app@latest website
 ```
 
-Auf die Frage **Would you like to use the recommended Next.js defaults?** wählst du **Yes, use recommended defaults**. Damit bekommst du TypeScript, Tailwind CSS für die Gestaltung, den App Router und eine Anleitungsdatei für KI-Assistenten. Nach ein bis drei Minuten ist das Projekt fertig.
+Auf die Frage `Would you like to use the recommended Next.js defaults?` wählst du `Yes, use recommended defaults`. Damit bekommst du TypeScript, Tailwind CSS für die Gestaltung, den App Router und eine Anleitungsdatei für KI-Assistenten. Nach ein bis drei Minuten ist das Projekt fertig.
 
 <ProTipp>
 
