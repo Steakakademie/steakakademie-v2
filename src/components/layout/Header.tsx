@@ -249,37 +249,50 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Search bar */}
-        {searchOpen && (
-          <div className="border-t border-brand-gold/15 bg-surface-elevated">
-            <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3">
-              <form onSubmit={handleSearch} className="flex items-center gap-3">
-                <Search size={16} className="text-text-light/40 shrink-0" />
-                <input
-                  ref={searchRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Brisket, Thermometer, Reverse Sear …"
-                  className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
-                />
-                <button
-                  type="submit"
-                  className="text-[11px] font-bold tracking-[0.12em] uppercase font-sans text-brand-fire hover:text-[#cc4412] transition-colors"
-                >
-                  Suchen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(false)}
-                  className="text-text-light/40 hover:text-text-light transition-colors"
-                >
-                  <X size={16} />
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+        {/* Search bar — blendet mit 4 px Versatz ein statt zu springen. Nur
+            opacity/transform, keine Hoehen-Animation: die Leiste schiebt den
+            Inhalt darunter weiterhin sofort, aber ohne Layout-Arbeit pro Frame.
+            Oeffnet nur per Klick; bekaeme sie ein Tastenkuerzel, gehoert die
+            Animation wieder raus (100+/Tag, Tastatur = keine Bewegung). */}
+        <AnimatePresence>
+          {searchOpen && (
+            <motion.div
+              key="search-bar"
+              className="border-t border-brand-gold/15 bg-surface-elevated"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4, transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } }}
+              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <form onSubmit={handleSearch} className="flex items-center gap-3">
+                  <Search size={16} className="text-text-light/40 shrink-0" />
+                  <input
+                    ref={searchRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Brisket, Thermometer, Reverse Sear …"
+                    className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    className="text-[11px] font-bold tracking-[0.12em] uppercase font-sans text-brand-fire hover:text-[#cc4412] transition-colors"
+                  >
+                    Suchen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(false)}
+                    className="text-text-light/40 hover:text-text-light transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                </form>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Category nav — desktop */}
         <nav className="border-t border-brand-gold/15 hidden md:block" aria-label="Hauptnavigation">
