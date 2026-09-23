@@ -620,3 +620,10 @@ bilder:
     erworben_am: 2026-09-22
     namensnennung: false
     hinweis: Ersetzt fruehere FLUX-KI-Fehlgenerierung (zeigte kein Asado, PR #186). Alternative Collage aus pexels-eduard-perez-37086927 + pexels-davincidelasfotos-36948100 (via Gemini) verworfen -- Ersteres zeigt erkennbare Person + fremdes Marken-Branding (TECHCARNES / La Cueva de Ruco) auf der Schuerze, verstoesst gegen Pexels-Lizenzklausel "kein implizierter Endorsement" und Recht am eigenen Bild. Nur das unbeteiligte Feuerstellen-Foto (36948100) verwendet, oben/unten leicht beschnitten (Decke/Pflaster raus, Gericht vollstaendig im Bild).
+  images/rezepte/provoleta-parrilla.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/provoleta-parrilla.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-23
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
