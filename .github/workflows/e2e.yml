@@ -1,0 +1,146 @@
+name: E2E
+
+# Playwright-Suite (tests/e2e/) gegen den Produktions-Build — Abteilung Systems & Ops.
+#
+# WARUM ES IHN GIBT (24.09.2026): Bis heute lief kein einziger E2E-Test in CI.
+# Die Suite lief nur, wenn jemand sie lokal startete — und war dabei unbemerkt
+# verrottet: 20 Tests in diplome-roadmap.spec.ts hingen seit dem Next-16-Upgrade
+# (17.09.) an `networkidle`, ein Marco-Test pruefte noch den Zustand vor der
+# Login-Pflicht (#185). Beides faellt mit diesem Workflow beim naechsten PR auf,
+# nicht Wochen spaeter.
+#
+# WAS ER PRUEFT: das Verhalten im Browser — Klicks, Zustaende, localStorage,
+# Consent-Banner, Navigation — auf dem Stand, den `next build` erzeugt.
+# WAS ER NICHT PRUEFT: alles, was Supabase oder andere Dienste braucht. Wie der
+# Build-Gate laeuft er bewusst OHNE Env (Begruendung dort); Supabase-gestuetzte
+# Bereiche sind leer, die Diplom-Pruefung meldet „nicht verfuegbar". Tests, die
+# daran haengen, sind mit test.fixme und Begruendung ausgesetzt.
+#
+# PFLICHT-CHECK: NEIN, noch nicht. Ob „E2E pruefen" in die Branch Protection
+# kommt, entscheidet Uwe (CLAUDE.md § A, Git). Vorher ein paar PRs lang zeigen,
+# dass er stabil gruen ist — ein wackelnder Pflicht-Check blockiert jeden PR.
+# Beim Eintragen den Namen aus einem echten Lauf abschreiben, nicht tippen.
+#
+# NODE-VERSION: aus `.nvmrc`, wie alle Workflows (siehe build-gate.yml).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  e2e:
+    # Dieser Name wird zum Status-Kontext. Wird er Pflicht, gilt dasselbe wie
+    # bei „Build pruefen": umbenennen nur zusammen mit der Protection.
+    name: E2E pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      # Wie build-gate.yml: A/B-Zuteilung aus, sonst ist das Ergebnis nicht
+      # reproduzierbar. Keine Platzhalter fuer Supabase & Co.
+      AB_HOME_ENABLED: '0'
+      NEXT_TELEMETRY_DISABLED: '1'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      # Ohne --ignore-scripts: next build braucht die nativen Pakete (sharp).
+      - name: Dependencies installieren
+        run: npm ci
+
+      # Eigener Schluessel-Praefix (-e2e-), damit sich dieser Job und
+      # build-gate.yml nicht gegenseitig beim Speichern in die Quere kommen.
+      - name: Next-Build-Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+            .contentlayer
+          key: ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-e2e-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-e2e-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-e2e-
+
+      # Die Browser-Version haengt an der installierten Playwright-Version,
+      # also am Lockfile.
+      - name: Playwright-Browser-Cache
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Chromium installieren
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # Bei Cache-Treffer fehlen trotzdem die System-Bibliotheken des Runners.
+      - name: Chromium-Systemabhaengigkeiten
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      # contentlayer VOR dem Build (CLAUDE.md § A). tsc laeuft hier nicht —
+      # das erledigt „Build pruefen", doppelt kostet nur Minuten.
+      - name: Contentlayer bauen
+        run: npx contentlayer2 build
+
+      - name: Next-Build
+        run: npx next build --webpack
+
+      # playwright.config.ts startet unter CI selbst `npm run start` (next start)
+      # und wartet, bis Port 3000 antwortet.
+      - name: Playwright-Tests
+        run: npx playwright test
+
+      # Gruen ohne Zahl ist kein Ergebnis (CLAUDE.md §2 Regel 10): Summary mit
+      # Zaehlern — und rot, wenn gar nichts gelaufen ist.
+      - name: Ergebnis zusammenfassen
+        if: always()
+        run: |
+          node -e '
+            const fs = require("fs");
+            const f = "playwright-report/results.json";
+            const out = process.env.GITHUB_STEP_SUMMARY;
+            if (!fs.existsSync(f)) {
+              fs.appendFileSync(out, "## E2E\n\nKein Ergebnisbericht — die Tests sind nicht gelaufen (Build oder Server-Start gescheitert?).\n");
+              process.exit(1);
+            }
+            const s = JSON.parse(fs.readFileSync(f, "utf8")).stats;
+            const zeilen = [
+              "## E2E",
+              "",
+              "| bestanden | fehlgeschlagen | wackelig | ausgesetzt | Dauer |",
+              "|---:|---:|---:|---:|---:|",
+              `| ${s.expected} | ${s.unexpected} | ${s.flaky} | ${s.skipped} | ${Math.round(s.duration / 1000)} s |`,
+              "",
+              s.skipped ? "_Ausgesetzt = test.fixme/test.skip, Begruendung steht jeweils im Spec._" : "",
+            ];
+            fs.appendFileSync(out, zeilen.join("\n") + "\n");
+            if (s.expected + s.unexpected + s.flaky === 0) {
+              console.error("Kein einziger Test ausgefuehrt.");
+              process.exit(1);
+            }
+          '
+
+      - name: Bericht hochladen
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

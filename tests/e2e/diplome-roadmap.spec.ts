@@ -2,11 +2,26 @@ import { test, expect, type Page } from '@playwright/test';
 
 const URL = '/diplome/roadmap';
 
+/**
+ * Wartet, bis die Roadmap geladen und sichtbar ist.
+ *
+ * Ersetzt `waitForLoadState('networkidle')` (24.09.2026): Seit dem Upgrade auf
+ * Next 16 (17.09.) lief jeder Test dieser Datei dort in den 15-s-Timeout, obwohl
+ * die Seite laengst fertig war — nach dem Reload feuert der Router rund 150
+ * Prefetch-Anfragen fuer die Navigationslinks. Warum `networkidle` dabei nie
+ * eintritt, ist nicht abschliessend belegt. Playwright raet von `networkidle`
+ * ohnehin ab; gewartet wird deshalb auf das, was der Test braucht.
+ */
+async function roadmapBereit(page: Page) {
+  await page.waitForLoadState('load');
+  await expect(page.getByText('Grillmeister-Ausbildung in 5 Stufen')).toBeVisible();
+}
+
 async function clearAndLoad(page: Page) {
   await page.goto(URL);
   await page.evaluate(() => window.localStorage.clear());
   await page.reload();
-  await page.waitForLoadState('networkidle');
+  await roadmapBereit(page);
 }
 
 async function openBronze(page: Page) {
@@ -39,12 +54,14 @@ test.describe('Phase 1 — Roadmap & Locks', () => {
     expect(text).not.toContain('🔒');
   });
 
-  test('Anatomie (Stufe 2) ist initial offen', async ({ page }) => {
+  // Stufe 2 steht hinter Stufe 1 — gewollt, siehe Kommentar an `requires` in
+  // RoadmapClient.tsx („Vorher fehlte `requires` bei Stufe 2"). Bis 24.09.2026
+  // erwartete dieser Test noch den alten, offenen Zustand.
+  test('Anatomie (Stufe 2) ist initial gesperrt', async ({ page }) => {
     await page.locator('button', { hasText: /Stufe 2/ }).first().click();
     const cta = page.getByRole('button', { name: /Modul öffnen.*Anatomie/ });
     await expect(cta).toBeVisible();
-    const text = await cta.textContent();
-    expect(text).not.toContain('🔒');
+    await expect(cta).toContainText('🔒');
   });
 
   test('Thermometer (Stufe 3) ist initial gesperrt', async ({ page }) => {
@@ -74,7 +91,7 @@ test.describe('Phase 1 — Roadmap & Locks', () => {
       );
     });
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await roadmapBereit(page);
 
     await expect(page.getByText('Fortschritt zurücksetzen')).toBeVisible();
   });
@@ -92,7 +109,7 @@ test.describe('Phase 1 — Roadmap & Locks', () => {
       );
     });
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await roadmapBereit(page);
 
     await page.locator('button', { hasText: /Stufe 3/ }).first().click();
     const cta = page.getByRole('button', { name: /Modul öffnen.*Kerntemperatur/ });
@@ -112,7 +129,7 @@ test.describe('Phase 1 — Roadmap & Locks', () => {
       );
     });
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await roadmapBereit(page);
 
     await page.locator('button', { hasText: /Stufe 3/ }).first().click();
     const cta = page.getByRole('button', { name: /Modul öffnen.*Kerntemperatur/ });
@@ -145,7 +162,14 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
     }
   });
 
-  test('Quiz: 5/5 korrekt schaltet Glut-Lehrling-Badge frei', async ({ page }) => {
+  // Die Pruefung kommt seit dem Audit vom 06.09.2026 vom Server
+  // (/api/diplome/pruefung/ziehung und /api/diplome/pruefung, Supabase-gestuetzt).
+  // Ohne diese Anbindung — lokal ohne Env und im CI-Workflow e2e.yml — zeigt der
+  // Quiz-Tab korrekt „Pruefung derzeit nicht verfuegbar". Die drei Tests unten
+  // klicken noch feste Antworttexte aus der alten Client-Pruefung an. Ausgesetzt
+  // statt geloescht: Wiederbeleben heisst, beide Routen per page.route() mit einer
+  // Fixture-Ziehung zu mocken (24.09.2026).
+  test.fixme('Quiz: 5/5 korrekt schaltet Glut-Lehrling-Badge frei', async ({ page }) => {
     await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
 
     const correctAnswers = [
@@ -176,7 +200,7 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
     expect(progress.streak_count).toBeGreaterThanOrEqual(5);
   });
 
-  test('Quiz: falsche Antwort bricht Streak', async ({ page }) => {
+  test.fixme('Quiz: falsche Antwort bricht Streak', async ({ page }) => {
     // Seed: streak = 4
     await page.goto(URL);
     await page.evaluate(() => {
@@ -191,7 +215,7 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
       );
     });
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await roadmapBereit(page);
     await openBronze(page);
     await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
 
@@ -205,7 +229,7 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
     expect(progress?.streak_count).toBe(0);
   });
 
-  test('Quiz: 2 richtige Antworten in Folge inkrementieren Streak', async ({ page }) => {
+  test.fixme('Quiz: 2 richtige Antworten in Folge inkrementieren Streak', async ({ page }) => {
     await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
 
     // Erste Frage: richtig
@@ -311,7 +335,7 @@ test.describe('Persistenz — Reload behält Fortschritt', () => {
       );
     });
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await roadmapBereit(page);
 
     // Stufe 3 jetzt offen
     await page.locator('button', { hasText: /Stufe 3/ }).first().click();
