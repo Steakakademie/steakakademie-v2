@@ -262,21 +262,28 @@
   deploy-preview) stammen aus der **Netlify-GitHub-App plus der Site-Konfiguration
   im Netlify-Dashboard**, nicht aus dem Repo. Sie verschwinden erst, wenn die
   Verbindung dort geloest ist — das ist ein Handgriff im Dashboard, kein Commit.
+  Stand 24.09.2026: erledigt, siehe unten.
 - Belegter Anlass: Das Netlify-Team hat am 13.09.2026 das Build-Minuten-Kontingent
   des Free-Plans aufgebraucht („builds will be paused"). Die Minuten gingen fuer
   Deploys drauf, die niemand ausliefert — die Produktion laeuft seit dem
   13.08.2026 auf Vercel.
 - **Zweiter Grund, wichtiger als die Minuten:** Die Netlify-Kopie
-  `steakakademie-de.netlify.app` ist am 13.09.2026 live und liefert
+  `steakakademie-de.netlify.app` war am 13.09.2026 live und lieferte
   `meta-robots: index, follow` — eine vollstaendige, crawlbare Zweitfassung der
-  Seite. Der Canonical zeigt auf die Hauptdomain, das ist der einzige Schutz.
-  Drei Wochen vor dem Launch gehoert diese Kopie offline, nicht nur pausiert.
-- **Was dazu im Dashboard noch zu tun ist** (nur Uwe, kein Commit moeglich):
-  Site in Netlify loeschen oder mindestens die GitHub-Verbindung trennen
-  (Site configuration → Build & deploy → Continuous deployment → „Unlink
-  repository"), danach die Netlify-App aus dem GitHub-Konto entfernen
-  (GitHub → Settings → Applications → Installed GitHub Apps → Netlify).
-  Erst dann verschwinden die Netlify-Checks aus neuen PRs.
+  Seite, nur durch den Canonical auf die Hauptdomain geschuetzt.
+- **Seit spaetestens 24.09.2026 offline (belegt, 24.09.2026 23:02 UTC):** `/`,
+  `/cuts/ribeye`, `/robots.txt` und `/sitemap.xml` liefern 404 — Netlifys
+  allgemeine „Not Found"-Seite (`Server: Netlify`), die erscheint, wenn unter der
+  Subdomain gar keine Site mehr haengt. Kein `meta-robots`, kein Canonical mehr.
+  Und PR #214 (24.09.) meldet keinen einzigen Netlify-Check mehr — nur GitHub
+  Actions und Vercel (per `gh api .../commits/<sha>/check-runs` + `/status`).
+  **Nicht belegt:** ob die Site im Dashboard geloescht ist oder nur unter anderem
+  Namen weiterlaeuft, und ob die Netlify-GitHub-App noch installiert ist (sie
+  meldet nichts, solange keine Site verknuepft ist). Nachsehen, falls je wieder
+  ein Netlify-Check an einem PR auftaucht: GitHub → Settings → Applications →
+  Installed GitHub Apps → Netlify entfernen.
+  Der Netlify-Connector in claude.ai (MCP) ist davon unabhaengig — er haengt am
+  claude.ai-Konto (Settings → Connectors), nicht am Repo.
 
 **Startseite**
 - Es gibt zwei Varianten. `/` = A (dunkel), `/home-b` = B (Editorial Ember,
