@@ -83,6 +83,13 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  // Bing Webmaster Tools Verifizierung (Uwe, 24.09.2026) — kein Next.js-Shorthand
+  // fuer Bing, daher ueber `other`. Property: https://steakakademie.de/
+  verification: {
+    other: {
+      'msvalidate.01': '839CD50CF0C01FB34C0B1400C8EFA525',
+    },
+  },
 };
 
 export default function RootLayout({
