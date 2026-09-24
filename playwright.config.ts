@@ -3,7 +3,13 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright E2E Config — Steakakademie
  * Default: lokaler Dev-Server, chromium-only, sequenziell.
+ *
+ * Unter CI (.github/workflows/e2e.yml, `CI=true` setzt GitHub Actions selbst):
+ * getestet wird der Produktions-Build per `next start` — derselbe Stand, den
+ * Vercel ausliefert, nicht der Dev-Server. Der Workflow baut vorher.
  */
+const CI = !!process.env.CI;
+
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
@@ -12,7 +18,13 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   retries: 0,
-  reporter: [['list']],
+  // Ein vergessenes test.only liesse in CI still den Rest der Suite aus.
+  forbidOnly: CI,
+  // results.json speist die Zahlen im Job-Summary (e2e.yml) — gruen ohne Zahl
+  // waere kein Ergebnis (CLAUDE.md §2 Regel 10).
+  reporter: CI
+    ? [['list'], ['github'], ['html', { open: 'never' }], ['json', { outputFile: 'playwright-report/results.json' }]]
+    : [['list']],
 
   use: {
     baseURL: 'http://localhost:3000',
@@ -36,7 +48,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run dev',
+    command: CI ? 'npm run start' : 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
     // Kaltstart nach sauberem Build (ohne .next-Cache) braucht deutlich laenger als 2 min.

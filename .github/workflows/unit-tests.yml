@@ -1,0 +1,88 @@
+name: Unit-Tests
+
+# Vitest-Suite (src/**/*.test.ts, scripts/**/*.test.mjs) — Abteilung Systems & Ops.
+#
+# WARUM ES IHN GIBT (24.09.2026): Bis heute lief keiner der Unit-Tests in CI.
+# Sie liefen nur, wenn jemand lokal `npm test` startete — ein roter Test haette
+# den Merge nicht aufgehalten. Darunter die Tests, an denen Geld und Recht
+# haengen: Pruefungsbewertung (diplom-pruefung), Digistore-Webhook,
+# Kerntemperatur-Referenz (Regel 8c), Content-Qualitaet.
+#
+# WAS ER BRAUCHT: nur `npm ci`. Kein contentlayer, kein Build, keine Env, kein
+# Netz — am 24.09.2026 in einer frischen Kopie von origin/main nachgeprueft
+# (232/232 gruen ohne .contentlayer). Tests, die Supabase oder Env brauchen,
+# mocken sie selbst (digistore-webhook.test.ts, recipe-agent.test.mjs).
+#
+# PFLICHT-CHECK: NEIN, noch nicht — dieselbe Abwaegung wie bei e2e.yml.
+# Bewusst eigener Workflow statt Schritt in build-gate.yml: dort haenge er unter
+# dem Pflicht-Kontext „Build pruefen" und wuerde ohne Entscheidung sofort jeden
+# PR sperren. Ob „Unit-Tests pruefen" Pflicht wird, entscheidet Uwe
+# (CLAUDE.md § A, Git). Den Namen beim Eintragen aus einem echten Lauf abschreiben.
+#
+# NODE-VERSION: aus `.nvmrc`, wie alle Workflows (siehe build-gate.yml).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: unit-tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  vitest:
+    # Wird zum Status-Kontext. Wird er Pflicht: umbenennen nur zusammen mit der
+    # Branch Protection (vgl. build-gate.yml).
+    name: Unit-Tests pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      # Ohne --ignore-scripts, wie build-gate.yml: so ist der Stand derselbe,
+      # gegen den die Suite lokal geprueft wurde.
+      - name: Dependencies installieren
+        run: npm ci
+
+      # Bericht nach runner.temp statt ins Repo — kein .gitignore-Eintrag noetig.
+      - name: Vitest
+        run: npx vitest run --reporter=default --reporter=json --outputFile.json="$RUNNER_TEMP/vitest-results.json"
+
+      # Gruen ohne Zahl ist kein Ergebnis (CLAUDE.md §2 Regel 10): Summary mit
+      # Zaehlern — und rot, wenn gar nichts gelaufen ist.
+      - name: Ergebnis zusammenfassen
+        if: always()
+        run: |
+          node -e '
+            const fs = require("fs");
+            const f = process.env.RUNNER_TEMP + "/vitest-results.json";
+            const out = process.env.GITHUB_STEP_SUMMARY;
+            if (!fs.existsSync(f)) {
+              fs.appendFileSync(out, "## Unit-Tests\n\nKein Ergebnisbericht — Vitest ist nicht gelaufen.\n");
+              process.exit(1);
+            }
+            const r = JSON.parse(fs.readFileSync(f, "utf8"));
+            const ausgesetzt = r.numPendingTests + r.numTodoTests;
+            fs.appendFileSync(out, [
+              "## Unit-Tests",
+              "",
+              "| Dateien | bestanden | fehlgeschlagen | ausgesetzt |",
+              "|---:|---:|---:|---:|",
+              `| ${r.testResults.length} | ${r.numPassedTests} | ${r.numFailedTests} | ${ausgesetzt} |`,
+              "",
+            ].join("\n"));
+            if (r.numPassedTests + r.numFailedTests === 0) {
+              console.error("Kein einziger Test ausgefuehrt.");
+              process.exit(1);
+            }
+          '
