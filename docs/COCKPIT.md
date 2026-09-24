@@ -29,8 +29,9 @@
 ## 1 · Systems & Ops
 
 **Läuft:** Vercel-Produktion (`steakakademie.de`), Supabase-Auth (Magic Link), Branch
-Protection auf `main` mit drei Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
-prüfen`, `Build pruefen` — alle aus GitHub Actions), 21 GitHub-Actions-Workflows,
+Protection auf `main` mit vier Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
+prüfen`, `Build pruefen`, `Unit-Tests pruefen` — alle aus GitHub Actions), dazu
+`E2E pruefen` (Playwright, noch nicht Pflicht), 25 GitHub-Actions-Workflows (Stand 24.09.2026),
 Sentry-Monitoring, Ops-Alert → Jira (KAN), **Ops-Heartbeat** (täglich 09:00 UTC,
 `docs/ops-heartbeat.md`) — prüft Ergebnisse statt Läufe und schlägt an, wenn eine
 Automation aufhört zu liefern, auch wenn sie grün bleibt.

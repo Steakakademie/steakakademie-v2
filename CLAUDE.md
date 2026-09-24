@@ -102,12 +102,20 @@
   darunter aber leer ("No required checks"). Ein roter Gate-Lauf haette den
   Merge-Button also nicht aufgehalten, und "Require branches to be up to date"
   war wirkungslos mit — das greift erst ab dem ersten eingetragenen Check.
-  **Pflicht sind seit dem Abend des 05.09.2026 diese drei** — die Namen exakt
+  **Pflicht sind seit dem 24.09.2026 diese vier** — die Namen exakt
   so, wie sie gemeldet werden: `P0-Gates pruefen`, `Stille Content-Defekte
-  prüfen` und `Build pruefen` (alle drei Quelle GitHub Actions, Check-Runs).
+  prüfen`, `Build pruefen` (seit dem Abend des 05.09.2026) und
+  `Unit-Tests pruefen` (seit 24.09.2026, `.github/workflows/unit-tests.yml`,
+  Vitest ohne Build/Env/Netz, unter 1 min). Alle vier Quelle GitHub Actions
+  (app_id 15368), Check-Runs; per `gh api .../protection` belegt.
   Bewusst NICHT Pflicht: "Rechtschreibung (nur Bericht)" — der Name ist
-  Programm, er meldet und blockiert nicht — sowie seit dem 05.09. auch
-  **Vercel** (siehe uebernaechster Punkt).
+  Programm, er meldet und blockiert nicht —; seit dem 05.09. auch
+  **Vercel** (siehe uebernaechster Punkt) und vorerst **`E2E pruefen`**
+  (`.github/workflows/e2e.yml`, Playwright gegen `next build` + `next start`,
+  rund 4,5 min, seit 24.09.2026): erst ein paar PRs lang stabil gruen sehen,
+  dann entscheidet Uwe. Ein wackelnder Pflicht-Check sperrt jeden PR.
+  Neuen Pflicht-Check erst eintragen, wenn sein Workflow auf main liegt —
+  sonst meldet ihn kein anderer PR und alle haengen.
   Merke: Ein aktivierter Schutzschalter ohne Inhalt sieht im UI genauso aus wie
   ein scharfer. Wer sich auf einen Riegel verlaesst, sieht einmal nach, ob eine
   Liste dahinter steht.
@@ -157,8 +165,10 @@
   Datenlage. Platzhalter waeren schaedlich — mit erfundenem Wert wuerde zur
   Bauzeit ein Host angefragt, den es nicht gibt.
 - **Node hat seit 05.09.2026 genau eine Quelle: `.nvmrc` (Inhalt `24`).** Alle
-  21 setup-node-Stellen in 20 Workflows lesen sie ueber `node-version-file:
-  .nvmrc` (auto-fix.yml nutzt kein setup-node), und `engines` in package.json
+  setup-node-Stellen lesen sie ueber `node-version-file: .nvmrc` — 26 in 24
+  Workflows am 24.09.2026 nachgezaehlt, am 05.09. waren es 21 in 20
+  (auto-fix.yml nutzt kein setup-node). Neue Workflows ebenso, nie eine Zahl.
+  Und `engines` in package.json
   grenzt sie mit **`>=24 <25`** nach oben ab. Vorher stand die Zahl 21-mal hart
   im Repo — ein Upgrade haette 21 Dateien angefasst und beim ersten vergessenen
   Treffer still auseinanderlaufen lassen. Anheben heisst jetzt: `.nvmrc` und die
@@ -189,8 +199,9 @@
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus
   genau dieser Vertauschung.
 - Die Frage, ob die Gates den Merge-Button sperren oder nur informativ laufen,
-  ist mit dem Punkt oben beantwortet: drei Kontexte sperren, alles andere laeuft
-  informativ mit ("Rechtschreibung", "Abmahn-Regressionen"). **Netlify stand hier
+  ist mit dem Punkt oben beantwortet: vier Kontexte sperren (seit 24.09.2026,
+  vorher drei), alles andere laeuft informativ mit ("Rechtschreibung",
+  "Abmahn-Regressionen", "E2E pruefen"). **Netlify stand hier
   bis 13.09.2026 mit in der Liste — die Anbindung ist seitdem abgebaut (§ 4).**
 - **Nie `git add -A`**, auch nicht auf ein Unterverzeichnis. Immer Pfade einzeln
   nennen — sonst wandert uncommitteter Fremdstand mit (Regel 9).
