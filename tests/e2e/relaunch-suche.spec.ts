@@ -72,17 +72,27 @@ test.describe('Relaunch · Suche', () => {
     expect(neu).toBe(alt);
   });
 
-  test('„Marco fragen" öffnet den Chat mit vorbereiteter Frage — ohne sie zu senden', async ({ page }) => {
+  // Seit #185 (22.09.2026) ist Marco Mitgliedern vorbehalten. Ein anonymer
+  // Besucher bekommt beim Öffnen den Anmelde-Hinweis statt des Eingabefelds —
+  // die frühere Erwartung (#marco-input mit vorbefüllter Frage) gilt nur noch
+  // eingeloggt und ist hier ohne Test-Login nicht prüfbar.
+  test('„Marco fragen" öffnet den Chat — anonym mit Anmelde-Hinweis, ohne API-Aufruf', async ({ page }) => {
+    const marcoAufrufe: string[] = [];
+    page.on('request', (r) => {
+      if (r.url().includes('/api/marco')) marcoAufrufe.push(r.url());
+    });
+
     await page.goto('/relaunch/suche?q=zzzqqxyz');
     await page.getByRole('button', { name: 'Marco fragen' }).click();
 
     // Marco hängt in DeferredMount + next/dynamic und ist beim Klick evtl. noch
     // nicht geladen — MarcoStarter wiederholt das Ereignis deshalb bis zu 3 s.
-    const feld = page.locator('#marco-input');
-    await expect(feld).toBeVisible({ timeout: 6000 });
-    await expect(feld).toHaveValue(/zzzqqxyz/);
-    // Die Frage steht im Feld, ist aber NICHT abgeschickt: keine Antwortblase,
-    // kein API-Aufruf ohne Zutun des Besuchers.
-    await expect(page.locator('#marco-input')).toBeFocused();
+    await expect(page.getByText('Marco ist Mitgliedern vorbehalten')).toBeVisible({ timeout: 6000 });
+    await expect(page.getByRole('link', { name: 'Jetzt kostenlos anmelden' })).toHaveAttribute(
+      'href',
+      `/auth/login?redirectTo=${encodeURIComponent('/relaunch/suche')}`,
+    );
+    await expect(page.locator('#marco-input')).toHaveCount(0);
+    expect(marcoAufrufe).toEqual([]);
   });
 });
