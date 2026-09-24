@@ -29,6 +29,104 @@ async function openBronze(page: Page) {
   await expect(page.getByRole('button', { name: /Zurück zur Roadmap/ })).toBeVisible();
 }
 
+// ── Pruefungs-Mocks ─────────────────────────────────────────────────────
+// Antwortformen wie in src/app/api/diplome/pruefung/ziehung/route.ts und
+// src/app/api/diplome/pruefung/route.ts. Aendert sich dort die Form, muss
+// dieser Block mit — sonst testen die Quiz-Tests eine API, die es nicht gibt.
+
+const MOCK_TOKEN = 'e2e-mock-token';
+
+// Fuenf Fragen: 5 -> Grenze 4 (bestehensgrenze, 80 %). Texte bewusst als
+// Testdaten erkennbar — hier wird der Ablauf geprueft, nicht der Fragenpool.
+const FIXTURE_FRAGEN = [1, 2, 3, 4, 5].map((n) => ({
+  id: `e2e-f${n}`,
+  q: `Testfrage ${n}`,
+  options: [`Antwort ${n}A`, `Antwort ${n}B`, `Antwort ${n}C`],
+  lektionSlug: 'grillarten',
+}));
+
+type Eingereicht = { modul: string; token: string; antworten: number[] };
+
+async function mockPruefung(page: Page, { bestanden }: { bestanden: boolean }) {
+  const eingereicht: Eingereicht[] = [];
+
+  await page.route('**/api/diplome/pruefung/ziehung', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ token: MOCK_TOKEN, exp: Date.now() + 60 * 60 * 1000, fragen: FIXTURE_FRAGEN }),
+    }),
+  );
+
+  await page.route('**/api/diplome/pruefung', (route) => {
+    eingereicht.push(route.request().postDataJSON() as Eingereicht);
+    // Nicht bestanden: Fragen 3–5 falsch -> 2 von 5, Grenze 4.
+    const ergebnisse = FIXTURE_FRAGEN.map((f, i) => {
+      const richtig = bestanden || i < 2;
+      return {
+        id: f.id,
+        richtig,
+        explain: richtig ? '' : `Erklaerung zu Frage ${i + 1}`,
+        lektionSlug: richtig ? '' : f.lektionSlug,
+      };
+    });
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        score: ergebnisse.filter((r) => r.richtig).length,
+        gesamt: FIXTURE_FRAGEN.length,
+        grenze: 4,
+        bestanden,
+        badge: bestanden ? 'Glut-Lehrling' : null,
+        ergebnisse,
+        gespeichert: false,
+        hinweis: 'Ohne Anmeldung wird das Ergebnis nicht gespeichert.',
+      }),
+    });
+  });
+
+  return { eingereicht };
+}
+
+/** Beantwortet jede Frage mit Option A und gibt die gewaehlten Indizes zurueck. */
+async function beantworteAlle(page: Page): Promise<number[]> {
+  const gewaehlt: number[] = [];
+  for (const frage of FIXTURE_FRAGEN) {
+    await expect(page.getByText(frage.q, { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: new RegExp(frage.options[0]) }).click();
+    gewaehlt.push(0);
+    await page.getByRole('button', { name: /Nächste Frage|Abgeben und Ergebnis sehen/ }).click();
+  }
+  return gewaehlt;
+}
+
+type Fortschritt = {
+  bestandene_module: string[];
+  quiz_scores: Record<string, number>;
+  badges: string[];
+  streak_count: number;
+};
+
+async function fortschritt(page: Page): Promise<Fortschritt> {
+  const raw = await page.evaluate(() => window.localStorage.getItem('steakakademie_progress'));
+  expect(raw, 'Fortschritt fehlt in localStorage').not.toBeNull();
+  return JSON.parse(raw!) as Fortschritt;
+}
+
+/** Setzt einen Anfangsfortschritt, laedt neu und oeffnet wieder das Bronze-Modul. */
+async function seedeFortschritt(page: Page, teil: Partial<Fortschritt>) {
+  await page.evaluate((stand) => {
+    window.localStorage.setItem(
+      'steakakademie_progress',
+      JSON.stringify({ bestandene_module: [], quiz_scores: {}, badges: [], streak_count: 0, ...stand }),
+    );
+  }, teil);
+  await page.reload();
+  await roadmapBereit(page);
+  await openBronze(page);
+}
+
 // ═════════════════════════════════════════════════════════════════════
 // PHASE 1 — Roadmap, Navigation, Locks, Banner
 // ═════════════════════════════════════════════════════════════════════
@@ -162,88 +260,74 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
     }
   });
 
-  // Die Pruefung kommt seit dem Audit vom 06.09.2026 vom Server
-  // (/api/diplome/pruefung/ziehung und /api/diplome/pruefung, Supabase-gestuetzt).
-  // Ohne diese Anbindung — lokal ohne Env und im CI-Workflow e2e.yml — zeigt der
-  // Quiz-Tab korrekt „Pruefung derzeit nicht verfuegbar". Die drei Tests unten
-  // klicken noch feste Antworttexte aus der alten Client-Pruefung an. Ausgesetzt
-  // statt geloescht: Wiederbeleben heisst, beide Routen per page.route() mit einer
-  // Fixture-Ziehung zu mocken (24.09.2026).
-  test.fixme('Quiz: 5/5 korrekt schaltet Glut-Lehrling-Badge frei', async ({ page }) => {
+  // ── Pruefung (seit 06./08.09.2026 serverseitig) ────────────────────────
+  // Die Fragen zieht /api/diplome/pruefung/ziehung (ohne Loesungen, dazu ein
+  // signiertes Token), das Ergebnis stellt /api/diplome/pruefung fest. Ohne
+  // Token-Secret (tokenSecret() in src/lib/diplome/pruefung-token.ts) — lokal
+  // ohne Env und im CI-Workflow e2e.yml — antwortet die Ziehung 503 und der
+  // Quiz-Tab zeigt „Pruefung nicht verfuegbar".
+  // Diese Tests mocken deshalb beide Routen in genau der Form, die die Routen
+  // liefern, und pruefen, was der CLIENT daraus macht: welche Antworten er mit
+  // welchem Token schickt und was er im Fortschritt verbucht. Die Bewertung
+  // selbst gehoert in Unit-Tests von src/lib/diplome/fragen.ts.
+  //
+  // Die Serie (streak_count) zaehlt seit der Server-Pruefung pro PRUEFUNG, nicht
+  // mehr pro Frage: bestanden -> +1, nicht bestanden -> 0. Die frueheren Tests
+  // („falsche Antwort bricht Streak", „2 richtige in Folge") prueften das alte
+  // Verhalten und liefen bis 24.09.2026 als test.fixme.
+
+  test('Quiz: bestandene Pruefung verbucht Modul, Badge und Serie', async ({ page }) => {
+    const pruefung = await mockPruefung(page, { bestanden: true });
+    await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
+    const gewaehlt = await beantworteAlle(page);
+
+    await expect(page.getByText('Modul bestanden!')).toBeVisible();
+    await expect(page.getByText(`${FIXTURE_FRAGEN.length} von ${FIXTURE_FRAGEN.length} richtig`)).toBeVisible();
+
+    // Der Client schickt genau die gewaehlten Antworten mit dem Token der Ziehung.
+    expect(pruefung.eingereicht).toEqual([{ modul: 'bronze', token: MOCK_TOKEN, antworten: gewaehlt }]);
+
+    const progress = await fortschritt(page);
+    expect(progress.bestandene_module).toContain('bronze');
+    expect(progress.quiz_scores.bronze).toBe(FIXTURE_FRAGEN.length);
+    expect(progress.badges).toContain('Glut-Lehrling');
+    expect(progress.streak_count).toBe(1);
+  });
+
+  test('Quiz: nicht bestandene Pruefung setzt die Serie zurueck und verbucht nichts', async ({ page }) => {
+    await seedeFortschritt(page, { streak_count: 4 });
+    await mockPruefung(page, { bestanden: false });
+    await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
+    await beantworteAlle(page);
+
+    await expect(page.getByText('Noch nicht bestanden')).toBeVisible();
+    await expect(page.getByText(/du brauchst mindestens 4/)).toBeVisible();
+    // Nachlesen: jede falsche Frage mit Erklaerung aus der Server-Antwort.
+    await expect(page.getByText('Nachlesen')).toBeVisible();
+    await expect(page.getByText(/Erklaerung zu Frage 3/)).toBeVisible();
+
+    const progress = await fortschritt(page);
+    expect(progress.streak_count).toBe(0);
+    expect(progress.bestandene_module).not.toContain('bronze');
+    expect(progress.badges).not.toContain('Glut-Lehrling');
+  });
+
+  test('Quiz: jede bestandene Pruefung erhoeht die Serie um genau 1', async ({ page }) => {
+    await seedeFortschritt(page, { streak_count: 2 });
+    await mockPruefung(page, { bestanden: true });
     await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
 
-    const correctAnswers = [
-      'Sobald ein grauer Aschefilm sichtbar ist',
-      '230-290 °C',
-      'Große Stücke schonend durchgaren',
-      'Deckel schließen',
-      '10-15 cm',
-    ];
-
-    for (let i = 0; i < correctAnswers.length; i++) {
-      await page.locator('button', { hasText: correctAnswers[i] }).first().click();
-      const next = page.locator('button', { hasText: /Nächste Frage|Ergebnis sehen/ });
-      await next.click();
+    // Waehrend der Pruefung aendert sich die Serie nicht — gezaehlt wird am Ende.
+    await page.getByRole('button', { name: new RegExp(FIXTURE_FRAGEN[0].options[0]) }).click();
+    expect((await fortschritt(page)).streak_count).toBe(2);
+    await page.getByRole('button', { name: /Nächste Frage/ }).click();
+    for (let i = 1; i < FIXTURE_FRAGEN.length; i++) {
+      await page.getByRole('button', { name: new RegExp(FIXTURE_FRAGEN[i].options[0]) }).click();
+      await page.getByRole('button', { name: /Nächste Frage|Abgeben und Ergebnis sehen/ }).click();
     }
 
     await expect(page.getByText('Modul bestanden!')).toBeVisible();
-
-    // Banner kurzzeitig — falls schon weg, prüfen wir localStorage
-    const progress = await page.evaluate(() => {
-      const raw = window.localStorage.getItem('steakakademie_progress');
-      return raw ? JSON.parse(raw) : null;
-    });
-    expect(progress).not.toBeNull();
-    expect(progress.bestandene_module).toContain('bronze');
-    expect(progress.quiz_scores.bronze).toBe(5);
-    expect(progress.badges).toContain('Glut-Lehrling');
-    expect(progress.streak_count).toBeGreaterThanOrEqual(5);
-  });
-
-  test.fixme('Quiz: falsche Antwort bricht Streak', async ({ page }) => {
-    // Seed: streak = 4
-    await page.goto(URL);
-    await page.evaluate(() => {
-      window.localStorage.setItem(
-        'steakakademie_progress',
-        JSON.stringify({
-          bestandene_module: [],
-          quiz_scores: {},
-          badges: [],
-          streak_count: 4,
-        }),
-      );
-    });
-    await page.reload();
-    await roadmapBereit(page);
-    await openBronze(page);
-    await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
-
-    // Erste Frage: falsche Antwort wählen (A = "Sobald die Flammen lodern")
-    await page.locator('button', { hasText: 'Sobald die Flammen lodern' }).first().click();
-
-    const progress = await page.evaluate(() => {
-      const raw = window.localStorage.getItem('steakakademie_progress');
-      return raw ? JSON.parse(raw) : null;
-    });
-    expect(progress?.streak_count).toBe(0);
-  });
-
-  test.fixme('Quiz: 2 richtige Antworten in Folge inkrementieren Streak', async ({ page }) => {
-    await page.getByRole('button', { name: /^.*Quiz.*$/ }).click();
-
-    // Erste Frage: richtig
-    await page.locator('button', { hasText: 'Sobald ein grauer Aschefilm sichtbar ist' }).first().click();
-    await page.locator('button', { hasText: /Nächste Frage/ }).click();
-
-    // Zweite Frage: richtig
-    await page.locator('button', { hasText: '230-290 °C' }).first().click();
-
-    const progress = await page.evaluate(() => {
-      const raw = window.localStorage.getItem('steakakademie_progress');
-      return raw ? JSON.parse(raw) : null;
-    });
-    expect(progress?.streak_count).toBe(2);
+    expect((await fortschritt(page)).streak_count).toBe(3);
   });
 });
 

@@ -70,5 +70,20 @@
     "datei": "check-affiliate-links.yml",
     "maxTage": 10,
     "hinweis": "Läuft montags. Tote Partnerlinks kosten direkt Umsatz — der Ausfall dieser Prüfung fällt sonst nirgends auf."
+  },
+  {
+    "name": "Wissensindex-Workflow",
+    "typ": "workflow",
+    "datei": "index-knowledge.yml",
+    "maxTage": 2,
+    "hinweis": "index-knowledge läuft täglich 05:30 UTC und hält den RAG-Index (Supabase knowledge_embeddings) aktuell. Kein Start seit 2 Tagen = GitHub hat den Cron abgeschaltet (60 Tage ohne Repo-Aktivität) oder der Workflow wurde entfernt/umbenannt — manuell per workflow_dispatch starten, dann Ursache suchen."
+  },
+  {
+    "name": "Wissensindex (RAG-Embeddings)",
+    "typ": "supabase",
+    "tabelle": "knowledge_embeddings",
+    "spalte": "indexed_at",
+    "maxTage": 7,
+    "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann melden Rezept und Glossar gleichzeitig. Manuell: npm run index:knowledge."
   }
 ]

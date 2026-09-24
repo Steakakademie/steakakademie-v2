@@ -1,0 +1,58 @@
+name: Wissensindex aktualisieren
+
+# Hält den RAG-Wissensindex (Supabase knowledge_embeddings) aktuell: bettet
+# geänderte Markdown-Dateien aus docs/ + content/ sowie Module aus src/lib per
+# Voyage AI neu ein und lädt sie nach Supabase.
+# Bis 24.09.2026 lief das ausschließlich von Hand (npm run index:knowledge) —
+# kein Workflow hat es je aufgerufen, der Index war deshalb 16 Tage alt.
+# Inkrementell: pro Datei ein Inhalts-Hash, Unverändertes wird übersprungen.
+# Läuft nach den Nacht-Agenten (Glossar 03:00, Rezept 03:30, Saison 04:30) und
+# vor dem ops-heartbeat (09:00), damit frisch gemergter Content mit hineinkommt.
+on:
+  schedule:
+    - cron: '30 5 * * *'   # Täglich 05:30 UTC (~06:30/07:30 Berlin)
+  workflow_dispatch:        # + manuell auslösbar
+
+jobs:
+  index-knowledge:
+    name: Embeddings für geänderte Dateien erzeugen
+    runs-on: ubuntu-latest
+    # Voyage Free Tier: 3 RPM / 10K TPM — das Skript wartet bei 429 selbst.
+    # Ein Tageslauf betrifft nur geänderte Dateien; 45 min sind Reserve für den
+    # ersten Lauf nach längerer Pause, nicht der Normalfall.
+    timeout-minutes: 45
+    permissions:
+      contents: read        # kein Commit — schreibt nur nach Supabase
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Wissensindex aktualisieren (identisch zum manuellen Aufruf)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: npm run index:knowledge
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Wissensindex-Lauf fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der nächtliche Wissensindex (index-knowledge) ist abgebrochen — der RAG-Index in Supabase veraltet ab jetzt. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-index-knowledge-failed'
+        run: node scripts/ops-alert-to-jira.mjs
