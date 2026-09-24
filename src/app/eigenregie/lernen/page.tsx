@@ -17,7 +17,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function EigenregieLernen() {
   await requireCourseAccess('eigenregie', '/eigenregie/lernen');
-  const kursModule = allEigenregieModuls.slice().sort((a, b) => a.order - b.order);
+  const alle = allEigenregieModuls.slice().sort((a, b) => a.order - b.order);
+  // Startkapitel (order 0) steht zwischen Diagnose und Modul 1; die nummerierten Module beginnen bei order 1.
+  const startkapitel = alle.filter((m) => m.order === 0);
+  const kursModule = alle.filter((m) => m.order > 0);
   const { preis } = angebotFuer(new Date(), null);
 
   return (
@@ -47,6 +50,27 @@ export default async function EigenregieLernen() {
             </p>
             <Diagnose kurspreis={preis} imKurs />
           </section>
+
+          {startkapitel.length > 0 && (
+            <section className="max-w-content mb-16 print:hidden" aria-labelledby="startkapitel">
+              <h2 id="startkapitel" className="font-serif text-2xl font-bold text-text-primary mb-6">Startkapitel</h2>
+              <ul className="grid grid-cols-1 gap-5">
+                {startkapitel.map((m) => (
+                  <li key={m.slug}>
+                    <Link href={m.url} className="block h-full border border-border-subtle bg-surface-card p-6 hover:border-brand-gold transition-colors">
+                      <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-2">Startkapitel</p>
+                      <h3 className="font-serif text-lg font-bold text-text-primary mb-2">{m.title}</h3>
+                      <p className="font-body text-sm text-text-secondary mb-3">{m.excerpt}</p>
+                      <p className="flex items-start gap-2 font-body text-sm text-text-primary mb-3">
+                        <CheckCircle2 size={16} className="text-brand-gold shrink-0 mt-0.5" /> {m.ergebnis}
+                      </p>
+                      <span className="inline-flex items-center gap-1 text-xs font-sans text-text-muted"><Clock size={12} /> {m.dauer}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section className="print:hidden" aria-labelledby="module">
             <h2 id="module" className="font-serif text-2xl font-bold text-text-primary mb-6">Die sechs Module</h2>

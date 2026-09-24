@@ -1,0 +1,319 @@
+---
+title: "KI und Prompten: dein Startkapitel"
+order: 0
+excerpt: "Du lernst, wie du einer KI Aufträge gibst, die brauchbare Ergebnisse liefern – mit einem Ablauf aus sechs Schritten, den du in jedem späteren Modul wieder verwendest. Und du lernst, wann du der Antwort nicht glaubst."
+dauer: "90 Min"
+lernziel: "Du formulierst Aufträge an eine KI so, dass das Ergebnis brauchbar ist, und prüfst jede Antwort, bevor du sie benutzt."
+ergebnis: "Ein eigener, verbesserter Prompt, eine kopierbare Prompt-Vorlage für deinen Betrieb und eine Prüfroutine für KI-Antworten."
+publishedAt: "2026-09-24"
+status: draft
+reviewed: false
+---
+
+<Leitfrage>
+
+Wenn du einer KI heute einen Auftrag gibst: Was hast du ihr mitgegeben, damit sie überhaupt gut antworten kann – und woher weißt du danach, dass die Antwort stimmt?
+
+</Leitfrage>
+
+<Schnelluebersicht>
+
+- Du verstehst in fünf Minuten, **was eine KI tut** und warum sie sich irrt, ohne es zu merken.
+- Du weißt, **was nie in einen Prompt gehört**: Zugangsdaten, Kundendaten, Vertrauliches.
+- Du arbeitest mit **sechs Schritten**: Rolle, Ziel, Aufgabe, Schrittweise, Nachbessern, Prüfen.
+- Du erkennst **schwache, überladene und starke Prompts** – und baust aus einem schwachen einen starken.
+- Du lässt die KI **Rückfragen stellen**, statt zu raten.
+- Du hast eine **Prüfroutine**, die erfundene Zahlen und Behauptungen findet.
+- Du nimmst eine **Prompt-Vorlage** für deinen Betrieb mit.
+
+</Schnelluebersicht>
+
+## Was eine KI tut – und was nicht
+
+Ein KI-Assistent wie Claude ist ein Sprachmodell. Es hat aus riesigen Textmengen gelernt, welche Wörter in welchem Zusammenhang wahrscheinlich folgen, und setzt deine Frage auf dieser Grundlage Wort für Wort fort. Das klingt nach wenig und reicht für erstaunlich viel: Texte entwerfen, Inhalte ordnen, Code schreiben, Unterlagen zusammenfassen, Fehler suchen.
+
+Daraus folgen drei Eigenschaften, die du in jedem Modul dieses Kurses brauchst.
+
+| Eigenschaft | Was das für dich heißt |
+|---|---|
+| **Sie kennt nur, was im Gespräch steht.** | Dein Betrieb, deine Preise, deine Kunden sind ihr unbekannt, solange du sie nicht mitgibst. Alles Fehlende füllt sie mit Plausiblem auf. |
+| **Sie klingt immer sicher.** | Eine erfundene Zahl sieht genauso aus wie eine belegte. Zweifel zeigt sie nicht von selbst. |
+| **Sie liefert bei jedem Versuch etwas anderes.** | Dieselbe Frage zweimal gestellt ergibt zwei verschiedene Antworten. Ein „Ergebnis“ ist ein Entwurf, keine Wahrheit. |
+
+Der Fachbegriff für erfundene Inhalte ist „Halluzination“. Das ist kein seltener Ausrutscher, sondern eine Folge der Funktionsweise: Die KI liefert das Wahrscheinlichste, nicht das Belegte.
+
+<Umweg>
+
+**Umweg vermieden.** Aus dem Aufbau der Steakakademie.
+
+**Was passiert wäre:** Marketing-Entwürfe enthielten „Nur noch N Plätze“ ohne echte Grenze und Prozentzahlen ohne Quelle. Solche Sätze liefert eine KI gern mit, wenn du sie nicht ausdrücklich bremst. Als irreführende Werbung können sie abgemahnt werden.
+
+**Was du stattdessen tust:** Du schreibst die Regel in den Prompt („keine erfundenen Zahlen, Auszeichnungen oder Kundenstimmen“) und prüfst danach jede Zahl selbst.
+
+**Dein Vorteil:** Die Entwürfe waren vor der Veröffentlichung sauber – und du lernst, dass die Prüfung nie an die KI abgegeben wird.
+
+</Umweg>
+
+<Werkzeug>
+
+**KI-Assistent** – z. B. Claude im Browser oder in der App.
+**Kosten:** Für alle Übungen dieses Moduls reicht ein kostenloser Tarif. Tageslimits können eine Übung unterbrechen, dann machst du später weiter. Ab Modul 4 brauchst du für Claude Code mindestens Claude Pro (20 US-Dollar im Monat, 17 US-Dollar bei jährlicher Zahlung, Stand 09/2026 – Details in Modul 4).
+**Was es nicht kann:** Es prüft weder Fakten noch Rechtslage für dich und kennt deinen Betrieb nicht. Es kann sich irren und klingt dabei überzeugt.
+
+</Werkzeug>
+
+## Was nie in einen Prompt gehört
+
+Alles, was du in ein Eingabefeld schreibst, verlässt deinen Rechner und geht an den Anbieter. Deshalb gilt vor jedem Prompt eine einfache Ampel.
+
+| Ampel | Was | Beispiele |
+|---|---|---|
+| **Rot – nie eingeben** | Zugangsdaten und Geheimnisse | Passwörter, API-Schlüssel, Auth-Codes, Bankdaten |
+| **Rot – nie eingeben** | Personenbezogene Daten Dritter | Namen, Adressen, Telefonnummern, Mailadressen von Kunden oder Mitarbeitern |
+| **Gelb – erst entfernen oder abwandeln** | Interna | Konkrete Kundenprojekte, Vertragsinhalte, unveröffentlichte Preise. Ersetze Namen durch Platzhalter wie „Kunde A“. |
+| **Grün – unbedenklich** | Öffentliches und Eigenes | Texte deiner Website, Leistungsbeschreibungen, allgemeine Fragen, eigene Entwürfe |
+
+Prüfe außerdem in den Datenschutzeinstellungen deines Tarifs, ob deine Eingaben zum Training verwendet werden dürfen, und stelle es bewusst ein. Die Voreinstellung unterscheidet sich je nach Anbieter und Tarif.
+
+<Rechtlich>
+
+Keine Rechtsberatung: Werden personenbezogene Daten in eine KI eingegeben, greift die DSGVO. Für Geschäftskunden kann ein Vertrag zur Auftragsverarbeitung nötig sein (siehe Modul 5, Abschnitt zu Art. 28 DSGVO). Im Zweifel fragst du eine Anwältin, einen Anwalt oder deinen Datenschutzbeauftragten. Die sichere Regel für dieses Modul: Du arbeitest nur mit Grün und mit abgewandeltem Gelb.
+
+</Rechtlich>
+
+## Die sechs Schritte
+
+Ein guter Prompt entsteht nicht aus einem Geistesblitz, sondern aus einem Ablauf. Die sechs Schritte sind eine Checkliste: Du gehst sie vor jedem wichtigen Auftrag durch und erkennst so, was in deinem Prompt noch fehlt. Bei kleinen Fragen reicht ein Teil davon.
+
+| Nr. | Schritt | Deine Frage | Beispiel-Satz im Prompt |
+|---|---|---|---|
+| 1 | **Rolle vergeben** | Aus welcher Perspektive soll die KI antworten? | „Du bist Texter für kleine Handwerksbetriebe. Du schreibst sachlich und freundlich.“ |
+| 2 | **Ziel definieren** | Wozu brauche ich das Ergebnis, und für wen? | „Die Seite soll Eigenheimbesitzer zwischen 40 und 65 zu einer Beratungsanfrage bewegen.“ |
+| 3 | **Aufgabe klären** | Was genau soll passieren: analysieren, schreiben, vergleichen, zusammenfassen? | „Schreibe den Einleitungstext, 80 bis 100 Wörter.“ |
+| 4 | **Schrittweise vorgehen** | Wie zerlege ich den Auftrag in Etappen? | „Stelle zuerst bis zu drei Rückfragen. Warte auf meine Antworten. Schreibe danach den Text.“ |
+| 5 | **Nachbessern** | Was ist am Ergebnis falsch, und wie sage ich es konkret? | „Kürzer. Streiche den zweiten Absatz. Der Ton soll ruhiger sein.“ |
+| 6 | **Prüfen** | Was davon stimmt nachweislich, und was darf so nicht veröffentlicht werden? | „Nenne jede Annahme, die du getroffen hast.“ Danach prüfst du selbst. |
+
+Das ist dieselbe Denkweise, die dieser Kurs überall verwendet: erst das Ziel, dann der Plan, dann die Ausführung, dann die Kontrolle.
+
+### Schritt 1: Die Rolle
+
+Die Rolle legt Perspektive und Tonfall fest. „Du bist Steuerberater“ liefert andere Formulierungen als „Du bist Texter für Handwerksbetriebe“. Beschreibe die Rolle knapp und ehrlich. Ausgeschmückte Superlative („preisgekrönt, mit 20 Jahren Erfahrung“) machen die Antworten nicht verlässlicher, sie machen sie nur selbstsicherer.
+
+### Schritt 2 und 3: Ziel und Aufgabe
+
+Das Ziel beantwortet „wozu“, die Aufgabe beantwortet „was“. Ohne Ziel liefert die KI irgendeinen Text, ohne Aufgabe irgendeine Form. Nenne dazu Umfang, Anrede, Tonfall und Format. Gib außerdem das Material mit, das sie verwenden darf, und sag ausdrücklich, dass sie nichts dazuerfinden soll.
+
+### Schritt 4: Schrittweise
+
+Je größer der Auftrag, desto eher geht etwas unter. Zerlege ihn: erst eine kurze Checkliste oder Gliederung, dann die Ausführung. Du kannst die KI auch bitten, vorab in zwei oder drei Punkten zu sagen, was sie tun wird, bevor sie loslegt. So korrigierst du die Richtung, bevor viel Text entstanden ist.
+
+### Schritt 5: Nachbessern
+
+Die erste Antwort ist ein Rohentwurf. Verbessere im selben Gespräch, statt neu zu beginnen: Die KI kennt dort deinen bisherigen Auftrag und ihre eigene Antwort. Sei konkret. „Mach es besser“ hilft nicht, „Kürze auf 80 Wörter und streiche den Satz mit der Garantie“ hilft.
+
+### Schritt 6: Prüfen
+
+Siehe eigener Abschnitt weiter unten. Er ist der wichtigste.
+
+## Schwach, überladen, stark
+
+Ein Beispiel für einen Sanitärbetrieb, der die Einleitung seiner Leistungsseite „Badsanierung“ braucht.
+
+**Schwach:**
+
+```
+Schreib was über unsere Badsanierung.
+```
+
+Die KI kennt weder Zielgruppe noch Umfang noch Tonfall noch Material. Du bekommst einen Text, der auf jeden Betrieb passt und damit auf keinen.
+
+**Überladen:**
+
+```
+Ich habe einen Sanitärbetrieb und will auch bei Google besser gefunden werden
+und mehr Anfragen bekommen, und ich brauche einen Text für die Badsanierung,
+aber auch gleich einen Vorschlag für die Startseite und drei Social-Media-
+Beiträge, und es soll professionell klingen, aber nicht zu steif, und bitte
+auch noch die Preise gut darstellen und die Vorteile gegenüber der
+Konkurrenz zeigen, und was ich sonst noch verbessern könnte.
+```
+
+Hier stecken fünf Aufträge in einem Satz. Die KI erfüllt jeden oberflächlich und erfindet dort, wo Angaben fehlen – die Preise und die „Vorteile gegenüber der Konkurrenz“ zum Beispiel. **Ein Auftrag pro Prompt.**
+
+**Stark:**
+
+```
+# Rolle
+Du bist Texter für kleine Handwerksbetriebe. Du schreibst sachlich,
+freundlich und ohne Werbesprech.
+
+# Ziel
+Die Leistungsseite „Badsanierung“ soll Eigenheimbesitzer zwischen 40 und 65
+Jahren dazu bringen, eine Beratung anzufragen.
+
+# Aufgabe
+Schreibe den Einleitungstext der Seite, 80 bis 100 Wörter.
+
+# Material – nur das darfst du verwenden
+- Sanitärbetrieb, sechs Mitarbeiter, seit 1998
+- Komplettsanierung aus einer Hand
+- Festpreisangebot nach Aufmaß
+- Einsatzgebiet: Umkreis 30 km
+
+# Regeln
+- Keine erfundenen Zahlen, Auszeichnungen oder Kundenstimmen.
+- Anrede: Sie.
+- Fehlen dir Angaben, frage nach, statt zu raten.
+
+# Vorgehen
+1. Stelle mir zuerst bis zu drei Rückfragen und warte auf meine Antworten.
+2. Schreibe dann den Text.
+3. Nenne zum Schluss in einem Satz jede Annahme, die du getroffen hast.
+```
+
+Die Überschriften sind kein Zwang, aber sie ordnen den Prompt so, dass die KI (und du) sofort sehen, was wohin gehört. Bei einem kleinen Auftrag genügen zwei Sätze.
+
+<ProTipp>
+
+Bei Planung, Listen und wiederkehrenden Abläufen helfen feste Strukturen wie Überschriften oder Tabellen, manche nutzen auch das Datenformat JSON. Für den eigentlichen Text – etwas Überzeugendes, Persönliches – schreibst du in freier Sprache. Faustregel: **Struktur für Planung und Organisation, freie Sprache für Inhalt.**
+
+</ProTipp>
+
+## Rückfragen erzwingen
+
+Der wirksamste Satz in vielen Prompts lautet: „Stelle mir zuerst bis zu drei Rückfragen, bevor du beginnst.“ Damit dreht sich die Situation um. Die KI raten zu lassen, was du meinst, ist der häufigste Grund für unbrauchbare Ergebnisse. Mit Rückfragen zeigt sie dir, welche Angaben dein Prompt vergessen hat – und du lernst, sie beim nächsten Mal gleich mitzugeben.
+
+Nutze das besonders bei Aufträgen, bei denen du nur eine ungefähre Vorstellung hast. Beantworte die Fragen kurz und schreibe dazu: „Wenn du danach noch etwas brauchst, frag erneut.“
+
+## Nachbessern: Vergleichen statt hoffen
+
+Wenn ein Prompt wichtig ist – etwa einer, den du später öfter benutzt –, testest du ihn:
+
+1. Formuliere zwei Versionen: die erste, wie du sie spontan schreiben würdest, und eine überarbeitete nach den sechs Schritten.
+2. Gib beide in neuen, getrennten Gesprächen ein.
+3. Vergleiche die Ergebnisse: Wo weicht die KI ab von dem, was du wolltest? Welche Angabe hat gefehlt?
+4. Halte in zwei Sätzen fest, was du gelernt hast, und ergänze es in deiner Vorlage.
+
+So wird deine Prompt-Sammlung mit jeder Runde besser. Fachlich heißt das Iteration: machen, hinsehen, verbessern.
+
+## Prüfen statt glauben
+
+Jede Antwort einer KI, die du veröffentlichst, verschickst oder als Grundlage einer Entscheidung nimmst, prüfst du. Dafür genügt eine feste Routine:
+
+| Frage | Was du tust |
+|---|---|
+| **1. Steht da eine Zahl?** | Suche die Quelle selbst. Findest du keine, streichst du die Zahl. |
+| **2. Steht da eine Behauptung über Recht, Preise oder Fristen?** | Prüfe sie beim Gesetzestext, beim Anbieter oder bei einer Fachstelle. Recht und Steuern bleiben Sache der Beratung. |
+| **3. Steht da ein Name, eine Auszeichnung, ein Zitat?** | Prüfe, ob es das gibt. Erfundene Zitate und Siegel sind ein klassischer Fehler. |
+| **4. Passt es zu deinem Betrieb?** | Lies mit der Frage: Würde ich das so sagen und halten können? |
+| **5. Klingt es zu perfekt?** | Dann suche gezielt nach dem, was nicht stimmt. |
+
+Du kannst die KI selbst zur Prüfung heranziehen, aber nie als letzte Instanz:
+
+```
+Lies den Text oben noch einmal. Nenne mir jede Zahl, jede Behauptung über
+Recht oder Preise und jede Eigenschaft, die du nicht aus meinem Material
+hast. Kennzeichne, was du angenommen oder ergänzt hast.
+```
+
+Eine zweite KI-Antwort ersetzt keine Quelle. Sie zeigt dir nur, wo du nachsehen musst.
+
+<Achtung>
+
+**Kennzeichnung:** Setzt du KI-Bilder oder einen KI-Chat auf deiner Seite ein, gelten Kennzeichnungspflichten (Art. 50 KI-Verordnung, siehe Modul 5). Ob KI-Texte gekennzeichnet werden müssen, hängt vom Einzelfall ab. Kläre das vor der Veröffentlichung.
+
+</Achtung>
+
+## Dauerhaft statt jedes Mal neu
+
+Ein Gespräch mit einer KI beginnt jedes Mal bei null. Alles, was immer gelten soll – dein Betrieb, dein Ton, deine Tabus –, gehört deshalb nicht in jeden Prompt, sondern in eine feste Anweisung, die die KI bei jedem Start liest. Bei Claude im Browser sind das die Projektanweisungen, bei Claude Code die Datei `CLAUDE.md`, die du in Modul 4 schreibst.
+
+Bis dahin baust du dir eine **Vorlage**, die du bei jedem neuen Auftrag kopierst. Sie ist die Vorstufe deiner `CLAUDE.md`.
+
+## Deine Prompt-Vorlage
+
+Kopiere sie in eine Textdatei und ersetze die Klammern. Speichere sie im Ordner **Website-Belege** aus Modul 1.
+
+```
+# Rolle
+Du bist [Rolle, z. B. Texter für Handwerksbetriebe]. Du schreibst [Ton].
+
+# Über meinen Betrieb
+[Branche, Ort, Größe, Leistungen – nur öffentliche Angaben]
+
+# Ziel
+[Wozu brauche ich das Ergebnis? Für wen?]
+
+# Aufgabe
+[Genau ein Auftrag. Umfang, Format, Anrede.]
+
+# Material – nur das darfst du verwenden
+[Fakten, die du selbst geprüft hast]
+
+# Regeln
+- Keine erfundenen Zahlen, Auszeichnungen, Zitate oder Kundenstimmen.
+- Fehlen dir Angaben, frage nach, statt zu raten.
+- [weitere Regeln, z. B. keine Werbeversprechen zu Preisen]
+
+# Vorgehen
+1. Stelle mir zuerst bis zu drei Rückfragen und warte auf meine Antworten.
+2. Führe dann die Aufgabe aus.
+3. Nenne zum Schluss jede Annahme, die du getroffen hast.
+```
+
+## Drei Übungen
+
+Die Übungen machst du allein. Es gibt keine Abgabe und keine Bewertung. Am Ende jeder Übung steht, woran du selbst erkennst, dass sie gelungen ist.
+
+### Übung 1: Einen schwachen Prompt verbessern
+
+Ausgangspunkt:
+
+```
+Schreib einen Text über die Vorteile meiner Leistung.
+```
+
+1. Schreibe auf, was fehlt: Rolle, Ziel, Aufgabe, Material, Regeln.
+2. Formuliere den Prompt nach den sechs Schritten neu, mit deiner echten Leistung.
+3. Gib beide Versionen in zwei getrennte Gespräche ein.
+4. Halte in zwei Sätzen fest, was der Unterschied war.
+
+**Gelungen, wenn:** Der starke Prompt liefert einen Text, der zu deinem Betrieb passt und keine erfundene Zahl enthält, und du kannst zwei konkrete Angaben benennen, die den Unterschied gemacht haben.
+
+### Übung 2: Rückfragen nutzen
+
+Gib der KI diesen Auftrag ohne weitere Angaben: „Ich brauche eine Leistungsbeschreibung für meine Website. Stelle mir zuerst bis zu drei Rückfragen.“
+
+1. Beantworte die Fragen kurz.
+2. Lass den Text schreiben.
+3. Notiere, welche Angaben du in Zukunft von Anfang an mitgibst.
+
+**Gelungen, wenn:** Du hast mindestens zwei Angaben notiert, die dir vorher nicht als nötig aufgefallen wären, und sie in deine Vorlage übernommen.
+
+### Übung 3: Eine Antwort prüfen
+
+Bitte die KI: „Schreibe drei Sätze über die Vorteile einer Badsanierung mit konkreten Zahlen.“ Nimm dafür bewusst ein Thema, ohne ihr Material zu geben.
+
+1. Markiere jede Zahl und jede Behauptung.
+2. Suche zu jeder eine Quelle mit der Prüfroutine oben.
+3. Streiche, was du nicht belegen kannst.
+
+**Gelungen, wenn:** Du hast mindestens eine Zahl oder Behauptung gefunden, die sich nicht belegen lässt, und sie gestrichen.
+
+## Ergebnis-Prüfung
+
+<Ergebnis>
+
+- [ ] Du kannst in eigenen Worten erklären, warum eine KI Dinge erfindet und warum sie dabei sicher klingt.
+- [ ] Du hast die Ampel verinnerlicht: Zugangsdaten und Kundendaten gehen nie in einen Prompt.
+- [ ] Du hast die Datenschutz-Einstellung deines KI-Tarifs geprüft und bewusst gesetzt.
+- [ ] Du kennst die sechs Schritte und wendest sie vor jedem wichtigen Auftrag an.
+- [ ] Übung 1: Ein schwacher Prompt ist verbessert, beide Versionen sind verglichen.
+- [ ] Übung 2: Du hast mit Rückfragen gearbeitet und deine Vorlage ergänzt.
+- [ ] Übung 3: Du hast mindestens eine unbelegte Aussage gefunden und gestrichen.
+- [ ] Deine Prompt-Vorlage liegt im Ordner Website-Belege.
+
+</Ergebnis>
+
+Du kannst jetzt einer KI Aufträge geben, die etwas taugen, und du weißt, was du danach kontrollierst. In Modul 1 nutzt du das gleich: Beim Sammeln deiner Zugänge und beim sachlichen Musterschreiben zur Rückholung hilft dir ein guter Prompt – und deine Prüfroutine.

@@ -34,9 +34,13 @@ export const revalidate = 300;
  * Schalter: Vercel-Env NEXT_PUBLIC_EIGENREGIE_VERKAUF=an (alle Umgebungen) + Redeploy.
  */
 const VERKAUF_AN = process.env.NEXT_PUBLIC_EIGENREGIE_VERKAUF === 'an';
-/** Redaktionsvorbehalt: ohne Freigabe aller sechs Module kein Kaufbutton — egal, was der Schalter sagt. */
+/**
+ * Redaktionsvorbehalt: ohne Freigabe aller Module kein Kaufbutton — egal, was der Schalter sagt.
+ * Gezählt werden die sechs nummerierten Module (order > 0); das Startkapitel (order 0) muss ebenfalls freigegeben sein.
+ */
 const INHALT_FREIGEGEBEN =
-  allEigenregieModuls.length === 6 && allEigenregieModuls.every((m) => m.status === 'published' && m.reviewed);
+  allEigenregieModuls.filter((m) => m.order > 0).length === 6 &&
+  allEigenregieModuls.every((m) => m.status === 'published' && m.reviewed);
 
 const MODULE = [
   { nr: 0, titel: 'Diagnose und Zielbild', ergebnis: 'Dein persönlicher Weg: Reihenfolge, Zeitplan, Werkzeugkosten.' },
