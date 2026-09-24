@@ -354,6 +354,23 @@ bilder:
   images/rezepte/mahi-mahi-grill.jpg: { status: offen }
   images/rezepte/maiskolben-elote.jpg: { status: offen }
   images/rezepte/maple-glazed-spareribs-kanada.jpg: { status: offen }
+  images/rezepte/matambre-a-la-pizza-pexels.jpg:
+    status: lizenz
+    quelle: Pexels (ID 20670978)
+    urheber: fabriziovelez (laut Download-Dateiname, auf Pexels nicht gegengeprueft)
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/20670978/
+    erworben_am: 2026-09-24
+    namensnennung: false
+    hinweis: Download-Datum aus dem Dateistempel; noch von keinem Rezept referenziert
+  images/rezepte/matambre-a-la-pizza.png:
+    status: ki
+    quelle: Magnific (Datei magnific_argentinischer-matambrela_w4WvBqd7EI.png)
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-24
+    hinweis: Kommerzielle Nutzung ueber den Magnific-Tarif nicht geprueft; C2PA-Marker nicht geprueft; noch von keinem Rezept referenziert
   images/rezepte/minutensteaks-apfel-chili-lake.jpg: { status: offen }
   images/rezepte/mollejas-asado.jpg: { status: offen }
   images/rezepte/moo-ping.jpg: { status: offen }
