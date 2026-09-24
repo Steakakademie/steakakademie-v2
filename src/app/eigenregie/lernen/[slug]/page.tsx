@@ -19,6 +19,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return { robots: { index: false, follow: false }, title: m ? `${m.title} | Eigenregie` : 'Eigenregie' };
 }
 
+/** Modul 0 heißt im Kurs „Startkapitel“ (die Diagnose trägt die Nummer 0 schon). */
+const modulLabel = (order: number) => (order === 0 ? 'Startkapitel' : `Modul ${order}`);
+
 function Body({ code }: { code: string }) {
   const MDX = useMDXComponent(code);
   return <MDX components={eigenregieMdx} />;
@@ -31,6 +34,7 @@ export default async function EigenregieModulPage(props: Props) {
   if (i === -1) notFound();
   await requireCourseAccess('eigenregie', `/eigenregie/lernen/${slug}`);
   const modul = sorted[i];
+  const anzahlModule = sorted.filter((x) => x.order > 0).length;
   const prev = sorted[i - 1];
   const next = sorted[i + 1];
 
@@ -43,9 +47,11 @@ export default async function EigenregieModulPage(props: Props) {
             <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-6" aria-label="Breadcrumb">
               <Link href="/eigenregie/lernen" className="hover:text-brand-fire">Eigenregie</Link>
               <ChevronRight size={12} />
-              <span className="text-text-primary">Modul {modul.order}</span>
+              <span className="text-text-primary">{modulLabel(modul.order)}</span>
             </nav>
-            <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">Modul {modul.order} von {sorted.length}</p>
+            <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
+              {modul.order === 0 ? 'Startkapitel' : `Modul ${modul.order} von ${anzahlModule}`}
+            </p>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-text-primary mb-4 leading-tight">{modul.title}</h1>
             <p className="font-body text-lg text-text-secondary leading-relaxed mb-4">{modul.excerpt}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-sans text-text-muted">
@@ -57,12 +63,12 @@ export default async function EigenregieModulPage(props: Props) {
 
             <div className="mt-10 pt-6 border-t border-border-subtle flex justify-between gap-4">
               {prev ? (
-                <Link href={prev.url} className="flex items-center gap-2 text-sm font-sans text-text-secondary hover:text-brand-fire"><ChevronLeft size={16} /> Modul {prev.order}</Link>
+                <Link href={prev.url} className="flex items-center gap-2 text-sm font-sans text-text-secondary hover:text-brand-fire"><ChevronLeft size={16} /> {modulLabel(prev.order)}</Link>
               ) : (
                 <Link href="/eigenregie/lernen" className="flex items-center gap-2 text-sm font-sans text-text-secondary hover:text-brand-fire"><ChevronLeft size={16} /> Diagnose</Link>
               )}
               {next ? (
-                <Link href={next.url} className="flex items-center gap-2 text-sm font-sans font-bold text-text-primary hover:text-brand-fire ml-auto text-right">Modul {next.order}: {next.title.split(':')[0]} <ChevronRight size={16} /></Link>
+                <Link href={next.url} className="flex items-center gap-2 text-sm font-sans font-bold text-text-primary hover:text-brand-fire ml-auto text-right">{modulLabel(next.order)}: {next.title.split(':')[0]} <ChevronRight size={16} /></Link>
               ) : (
                 <Link href="/eigenregie/lernen" className="flex items-center gap-2 text-sm font-sans font-bold text-text-primary hover:text-brand-fire ml-auto">Zur Übersicht <ChevronRight size={16} /></Link>
               )}
