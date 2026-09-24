@@ -58,9 +58,15 @@ describe('Stufenpruefung: Bewertung', () => {
     const richtig = richtigFuer(modul, alle);
     // fremde id → als falsch gewertet, nicht als Fehler geworfen
     expect(bewerte(modul, [...alle.slice(0, 4), 'gibt-es-nicht'], richtig).score).toBe(4);
-    // Antworten zur falschen Reihenfolge → nicht dieselbe Punktzahl
+    // Antworten zur falschen Reihenfolge → nur Zufallstreffer zaehlen.
+    // Bis 24.09.2026 stand hier `toBeLessThanOrEqual(5)` bei fuenf Fragen —
+    // das ist immer wahr und haette auch eine Bewertung ohne ids bestanden.
     const gedreht = [...alle].reverse();
-    expect(bewerte(modul, gedreht, richtig).score).toBeLessThanOrEqual(5);
+    const loesungGedreht = richtigFuer(modul, gedreht);
+    expect(loesungGedreht, 'Vorbedingung: Loesungen muessen sich beim Drehen aendern').not.toEqual(richtig);
+    const zufallstreffer = richtig.filter((a, i) => a === loesungGedreht[i]).length;
+    expect(bewerte(modul, gedreht, richtig).score).toBe(zufallstreffer);
+    expect(zufallstreffer).toBeLessThan(alle.length);
   });
 
   it('Ziehung: hoechstens eine Frage je Lektion, nie mehr als der Pool', () => {
@@ -106,6 +112,82 @@ describe('Stufenpruefung: Bewertung', () => {
         expect(f.explain.length).toBeGreaterThan(0);
       }
       expect(FLASHCARDS[modul].length).toBeGreaterThan(0);
+    }
+  });
+});
+
+// Randfaelle der Bewertung (24.09.2026). Die Route /api/diplome/pruefung prueft
+// vorher per Zod (ganze Zahlen −1…16, Anzahl = gezogene Fragen) und nimmt die ids
+// aus dem signierten Token. bewerte() muss trotzdem allein robust sein — sie ist
+// die verbindliche Stelle und darf nie werfen oder etwas Ungueltiges belohnen.
+describe('Stufenpruefung: Bewertung — Randfaelle', () => {
+  const modul: StufeKey = 'bronze';
+  const loesung = (id: string, m: StufeKey = modul) => FRAGEN[m].find((f) => f.id === id)!.correct;
+  const optionen = (id: string) => FRAGEN[modul].find((f) => f.id === id)!.options.length;
+
+  it('echte Ziehung: 10 Fragen, Grenze 8 — 8 richtig besteht, 7 nicht', () => {
+    for (let lauf = 0; lauf < 20; lauf++) {
+      const gezogen = zieheFragen(modul);
+      expect(gezogen).toHaveLength(QUIZ_FRAGEN_PRO_PRUEFUNG);
+      const richtig = gezogen.map((id) => loesung(id));
+      // i < k falsch beantworten: (correct + 1) % Optionen ist immer eine andere, gueltige Option
+      const mitFehlern = (k: number) =>
+        gezogen.map((id, i) => (i < k ? (loesung(id) + 1) % optionen(id) : loesung(id)));
+
+      expect(bewerte(modul, gezogen, richtig)).toMatchObject({ score: 10, gesamt: 10, grenze: 8, bestanden: true });
+      expect(bewerte(modul, gezogen, mitFehlern(2))).toMatchObject({ score: 8, bestanden: true });
+      expect(bewerte(modul, gezogen, mitFehlern(3))).toMatchObject({ score: 7, bestanden: false });
+    }
+  });
+
+  it('ungueltige Antworten zaehlen als falsch und werfen nicht', () => {
+    const [id] = FRAGEN[modul].map((f) => f.id);
+    const c = loesung(id);
+    const falsch = (a: number) => bewerte(modul, [id], [a]).ergebnisse[0].richtig;
+
+    expect(falsch(c)).toBe(true); // Gegenprobe: die Loesung selbst zaehlt
+    for (const a of [-1, optionen(id), 16, c + 0.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => bewerte(modul, [id], [a])).not.toThrow();
+      expect(falsch(a), `Antwort ${a}`).toBe(false);
+    }
+  });
+
+  it('fehlende Antworten sind falsch, ueberzaehlige zaehlen nicht mit', () => {
+    const gezogen = FRAGEN[modul].slice(0, 5).map((f) => f.id);
+    const richtig = gezogen.map((id) => loesung(id));
+
+    // Nur drei Antworten fuer fuenf Fragen → 3 von 5, gesamt bleibt 5.
+    expect(bewerte(modul, gezogen, richtig.slice(0, 3))).toMatchObject({ score: 3, gesamt: 5, bestanden: false });
+    // Zusaetzliche Antworten hinter der letzten Frage aendern nichts.
+    expect(bewerte(modul, gezogen, [...richtig, ...richtig])).toMatchObject({ score: 5, gesamt: 5 });
+  });
+
+  it('eine id aus einer anderen Stufe zaehlt nicht — auch mit deren richtiger Antwort', () => {
+    // Sonst liesse sich eine Bronze-Pruefung mit leichten Fragen einer anderen
+    // Stufe fuellen, deren Loesungen man kennt.
+    const fremd = FRAGEN.anatomie[0];
+    const e = bewerte(modul, [fremd.id], [loesung(fremd.id, 'anatomie')]);
+    expect(e.score).toBe(0);
+    expect(e.ergebnisse[0]).toEqual({ id: fremd.id, richtig: false, explain: '', lektionSlug: '' });
+  });
+
+  it('ergebnisse: eine Zeile je Frage, in Reihenfolge, mit Erklaerung und Lektion', () => {
+    const fragen = FRAGEN[modul].slice(0, 3);
+    const antworten = [fragen[0].correct, (fragen[1].correct + 1) % fragen[1].options.length, fragen[2].correct];
+    const { ergebnisse } = bewerte(modul, fragen.map((f) => f.id), antworten);
+
+    expect(ergebnisse).toEqual(
+      fragen.map((f, i) => ({ id: f.id, richtig: i !== 1, explain: f.explain, lektionSlug: f.lektionSlug })),
+    );
+  });
+
+  it('die Bewertung haengt nur von ids und Antworten ab — nicht vom Zufall der Ziehung', () => {
+    const gezogen = zieheFragen(modul);
+    const antworten = gezogen.map((id, i) => (i % 2 ? loesung(id) : 0));
+    const erste = bewerte(modul, gezogen, antworten);
+    for (let lauf = 0; lauf < 5; lauf++) {
+      zieheFragen(modul); // Zufall weiterdrehen
+      expect(bewerte(modul, gezogen, antworten)).toEqual(erste);
     }
   });
 });
