@@ -249,20 +249,21 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Search bar — blendet mit 4 px Versatz ein statt zu springen. Nur
+        {/* Search bar — blendet mit 8 px Versatz ein statt zu springen. Nur
             opacity/transform, keine Hoehen-Animation: die Leiste schiebt den
             Inhalt darunter weiterhin sofort, aber ohne Layout-Arbeit pro Frame.
             Oeffnet nur per Klick; bekaeme sie ein Tastenkuerzel, gehoert die
-            Animation wieder raus (100+/Tag, Tastatur = keine Bewegung). */}
+            Animation wieder raus (100+/Tag, Tastatur = keine Bewegung).
+            Abnahme Uwe 24.09.2026: „spuerbarer" — 200 ms / 8 px statt 150 ms / 4 px. */}
         <AnimatePresence>
           {searchOpen && (
             <motion.div
               key="search-bar"
               className="border-t border-brand-gold/15 bg-surface-elevated"
-              initial={{ opacity: 0, y: -4 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4, transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } }}
-              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+              exit={{ opacity: 0, y: -8, transition: { duration: 0.15, ease: [0.23, 1, 0.32, 1] } }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
             >
               <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 <form onSubmit={handleSearch} className="flex items-center gap-3">

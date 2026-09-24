@@ -149,6 +149,8 @@ export default function NewsletterSignup({
   // wie ein Sprung. Nur opacity/transform (Compositor), Kurve wie im Header.
   // Bei prefers-reduced-motion nimmt MotionConfig (MotionProvider) die scale-
   // Anteile heraus — es bleibt die Ueberblendung.
+  // Abnahme Uwe 24.09.2026: „deutlicher" — 300 ms statt 250, Haekchen-Feder
+  // bounce 0.3 statt 0.2. Der Moment soll nach Bestaetigung aussehen.
   if (status === 'success') {
     return (
       <motion.div
@@ -161,13 +163,13 @@ export default function NewsletterSignup({
         aria-live="polite"
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
       >
         <motion.div
           className="w-11 h-11 bg-[rgb(var(--nl-gold)/0.15)] flex items-center justify-center mx-auto mb-3"
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', duration: 0.5, bounce: 0.2, delay: 0.08 }}
+          transition={{ type: 'spring', duration: 0.5, bounce: 0.3, delay: 0.08 }}
         >
           <Check size={20} className="text-[rgb(var(--nl-gold))]" />
         </motion.div>
