@@ -627,3 +627,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-09-23
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/matambre-a-la-pizza.jpg:
+    status: ki
+    quelle: Magnific (KI-Generierung), Bild-ID w4WvBqd7EI, Originaldatei magnific_argentinischer-matambrela_w4WvBqd7EI.png (1280x720), als JPG komprimiert
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-24
+    hinweis: Ersetzt fruehere FLUX-Generierung (zeigte Fladenbrot-Pizza statt Fleisch). Kommerzielle Nutzung haengt am Magnific-Tarif und ist NICHT belegt; Attributionspflicht je nach Tarif ungeklaert; C2PA-Marker nicht geprueft
