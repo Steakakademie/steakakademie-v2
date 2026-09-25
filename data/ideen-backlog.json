@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-22T09:56:12.116Z",
+ "aktualisiert": "2026-09-25T10:10:55.577Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -1921,6 +1921,110 @@
     "Recipes"
    ],
    "gesehen": "2026-09-22",
+   "status": "neu"
+  },
+  {
+   "id": "orwhateveryoudo:chuck-roast-tacos",
+   "quelle": "orwhateveryoudo",
+   "quelleName": "Or Whatever You Do",
+   "quelleUrl": "https://www.orwhateveryoudo.com/",
+   "eignung": [
+    "rezept"
+   ],
+   "schwerpunkt": "Pellet-Grill und Griddle, große thematische Bandbreite",
+   "titel": "Chuck Roast Tacos",
+   "link": "https://www.orwhateveryoudo.com/2026/09/chuck-roast-tacos.html",
+   "datum": "Thu, 24 Sep 2026 20:41:59 +0000",
+   "kategorien": [
+    "Beef",
+    "Mexican Recipes",
+    "Potluck",
+    "Recipes"
+   ],
+   "gesehen": "2026-09-25",
+   "status": "neu"
+  },
+  {
+   "id": "orwhateveryoudo:blackstone-half-and-half-tortillas",
+   "quelle": "orwhateveryoudo",
+   "quelleName": "Or Whatever You Do",
+   "quelleUrl": "https://www.orwhateveryoudo.com/",
+   "eignung": [
+    "rezept"
+   ],
+   "schwerpunkt": "Pellet-Grill und Griddle, große thematische Bandbreite",
+   "titel": "Blackstone Half and Half Tortillas",
+   "link": "https://www.orwhateveryoudo.com/2026/09/blackstone-half-and-half-tortillas.html",
+   "datum": "Sun, 20 Sep 2026 16:34:29 +0000",
+   "kategorien": [
+    "Blackstone Griddle Recipes",
+    "Blackstone Mexican Recipes",
+    "Recipes"
+   ],
+   "gesehen": "2026-09-25",
+   "status": "neu"
+  },
+  {
+   "id": "orwhateveryoudo:venison-chili-bread-bowls",
+   "quelle": "orwhateveryoudo",
+   "quelleName": "Or Whatever You Do",
+   "quelleUrl": "https://www.orwhateveryoudo.com/",
+   "eignung": [
+    "rezept"
+   ],
+   "schwerpunkt": "Pellet-Grill und Griddle, große thematische Bandbreite",
+   "titel": "Venison Chili Bread Bowls",
+   "link": "https://www.orwhateveryoudo.com/2026/09/venison-chili-bread-bowls.html",
+   "datum": "Wed, 16 Sep 2026 16:57:41 +0000",
+   "kategorien": [
+    "Recipes",
+    "Venison"
+   ],
+   "gesehen": "2026-09-25",
+   "status": "neu"
+  },
+  {
+   "id": "orwhateveryoudo:blackstone-no-breading-chicken-parmesan",
+   "quelle": "orwhateveryoudo",
+   "quelleName": "Or Whatever You Do",
+   "quelleUrl": "https://www.orwhateveryoudo.com/",
+   "eignung": [
+    "rezept"
+   ],
+   "schwerpunkt": "Pellet-Grill und Griddle, große thematische Bandbreite",
+   "titel": "Blackstone No Breading Chicken Parmesan",
+   "link": "https://www.orwhateveryoudo.com/2026/09/blackstone-no-breading-chicken-parmesan.html",
+   "datum": "Mon, 14 Sep 2026 01:18:44 +0000",
+   "kategorien": [
+    "Blackstone Dinner Recipes",
+    "Blackstone Griddle Recipes",
+    "Chicken",
+    "Recipes",
+    "cheese",
+    "chicken breast"
+   ],
+   "gesehen": "2026-09-25",
+   "status": "neu"
+  },
+  {
+   "id": "orwhateveryoudo:smoked-honey-glazed-pork-chops",
+   "quelle": "orwhateveryoudo",
+   "quelleName": "Or Whatever You Do",
+   "quelleUrl": "https://www.orwhateveryoudo.com/",
+   "eignung": [
+    "rezept"
+   ],
+   "schwerpunkt": "Pellet-Grill und Griddle, große thematische Bandbreite",
+   "titel": "Smoked Honey-Glazed Pork Chops",
+   "link": "https://www.orwhateveryoudo.com/2026/09/smoked-honey-glazed-pork-chops.html",
+   "datum": "Thu, 10 Sep 2026 15:19:52 +0000",
+   "kategorien": [
+    "Pork",
+    "Recipes",
+    "Traeger Pork Recipes",
+    "pork chops"
+   ],
+   "gesehen": "2026-09-25",
    "status": "neu"
   }
  ]
