@@ -38,7 +38,15 @@ export default function TuwasduwillstPlatzhalter() {
             mit echten Zahlen. Zuerst: <strong className="text-[#F4EFE9]">Eigenregie</strong>, der Selbstlern-Kurs für deine eigene
             Website, und der <strong className="text-[#F4EFE9]">Realitäts-Check Selbstständigkeit</strong>.
           </p>
-          <p className="font-sans text-sm text-[#F4EFE9]/50 mt-10">Bald hier.</p>
+          <div className="mt-10 border-l-2 border-[#E85018] pl-5">
+            <p className="font-sans text-base text-[#F4EFE9]/85">
+              Du brauchst eine Website — neu oder modernisiert — und willst sie am Ende selbst besitzen?
+            </p>
+            <a href="https://tuwasduwillst.de/projekt-anamnese" className="inline-block mt-3 font-sans font-bold text-[#E85018] underline underline-offset-4 hover:text-[#F4EFE9]">
+              In ca. 6 Minuten zu Umfang und Richtpreis →
+            </a>
+          </div>
+          <p className="font-sans text-sm text-[#F4EFE9]/50 mt-10">Mehr bald hier.</p>
         </div>
       </div>
       <footer className="border-t border-[#F4EFE9]/10">

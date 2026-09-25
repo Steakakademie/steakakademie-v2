@@ -86,7 +86,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     href: '/bbq-news',
     sub: [
       { label: 'BBQ-News', href: '/bbq-news' },
-      { label: 'Grillstil — Frauen & Lifestyle', href: '/grillstil' },
+      { label: 'Grillstil — Grillen für Frauen', href: '/grillstil' },
       { label: 'Pflanzlich & Vegan', href: '/pflanzlich' },
       { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
       { label: 'USA-Expedition', href: '/usa-expedition' },

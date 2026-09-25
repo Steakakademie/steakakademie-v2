@@ -54,6 +54,10 @@ module.exports = {
   sitemapSize: 5000,
   exclude: [
     '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
+    // tuwasduwillst.de ist eine eigene Marke (Host-Weiche in next.config.mjs):
+    // diese Seiten gehoeren nicht in die Steakakademie-Sitemap.
+    '/tuwasduwillst',
+    '/tuwasduwillst/*',
     // Bezahlprodukt-Schutz (26.08.2026): Stufe 2-5 sind Teil des kostenpflichtigen
     // Grillmeister-Diploms. Oeffentlich bleibt nur der Anreisser auf der Seite
     // selbst — die Volltexte gehoeren nicht in den Index. Stufe 1 (Bronze,
