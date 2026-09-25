@@ -42,6 +42,7 @@ function betreffTag(subject: string): string {
     case 'rezept':      return '[Rezept-Idee]';
     case 'urkunde':     return '[Urkunde]';      // Bestellung gedruckte Urkunde (/diplome/urkunde)
     case 'hofladen':    return '[Hofladen]';     // Hof melden/bestaetigen (/hoefe)
+    case 'baukasten':   return '[Baukasten]';    // Projekt-Anamnese (tuwasduwillst.de/projekt-anamnese)
     default:            return '[Allgemein]';   // diplom, feedback, sonstiges, leer
   }
 }

@@ -158,6 +158,14 @@ const nextConfig = {
           has: [{ type: 'host', value: 'tuwasduwillst.de' }],
           destination: '/tuwasduwillst',
         },
+        // Website-Baukasten: Projekt-Anamnese (Konzept 25.09.2026, Abschnitt 13).
+        // Steht VOR der Sammelregel; deren Ziel beginnt mit „tuwasduwillst" und
+        // wird von ihr selbst ausgenommen, eine Kette entsteht also nicht.
+        {
+          source: '/projekt-anamnese',
+          has: [{ type: 'host', value: 'tuwasduwillst.de' }],
+          destination: '/tuwasduwillst/projekt-anamnese',
+        },
         {
           source: '/:pfad((?!_next/|api/|tuwasduwillst).+)',
           has: [{ type: 'host', value: 'tuwasduwillst.de' }],
@@ -180,6 +188,12 @@ const nextConfig = {
         source: '/tuwasduwillst',
         has: [{ type: 'host', value: '(www\\.)?steakakademie\\.de' }],
         destination: 'https://tuwasduwillst.de/',
+        permanent: false,
+      },
+      {
+        source: '/tuwasduwillst/:pfad+',
+        has: [{ type: 'host', value: '(www\\.)?steakakademie\\.de' }],
+        destination: 'https://tuwasduwillst.de/:pfad+',
         permanent: false,
       },
       // Glossar-Duplikat zusammengelegt (27.08.2026): "Smoker-Temperatur" gab es
