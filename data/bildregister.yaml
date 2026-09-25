@@ -628,9 +628,12 @@ bilder:
     erworben_am: 2026-09-23
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/fraldinha-churrasco.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/fraldinha-churrasco.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
+    status: lizenz
+    quelle: "Unsplash-Collage aus 2 Fotos (IDs 8fUbsnvyTWU + qcSPyVordpg)"
+    urheber: "Rodrigo Rodrigues | WOLF Λ R T"
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: "https://unsplash.com/photos/a-skewer-holds-a-deliciously-roasted-cut-of-meat-8fUbsnvyTWU ; https://unsplash.com/photos/delicious-grilled-steak-on-a-skewer-being-sliced-qcSPyVordpg"
+    erworben_am: 2026-09-26
     namensnennung: false
-    erworben_am: 2026-09-25
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    hinweis: Ersetzt die fal.ai-KI-Generierung durch eine Echtfoto-Collage (2 Unsplash-Aufnahmen desselben Fotografen, Fraldinha-Spiess beim Anschneiden, Medium Rare sichtbar). imageAI im MDX-Frontmatter auf false gesetzt, imageSource entsprechend angepasst.
