@@ -57,7 +57,7 @@ export type Antworten = {
 type Opt = { wert: string; label: string; hinweis?: string };
 export type Frage = {
   key: keyof Antworten;
-  block: 'Ausgangslage' | 'Ziele' | 'Umfang' | 'Material' | 'Nach dem Livegang' | 'Rahmen';
+  block: 'Ausgangslage' | 'Ziele' | 'Umfang' | 'Material' | 'Nach dem Livegang' | 'Rahmen' | 'Deine Wünsche';
   frage: string;
   erklaerung?: string;
   art: 'eins' | 'mehrere' | 'url' | 'text';
@@ -164,12 +164,16 @@ export const FRAGEN: Frage[] = [
       { wert: 'bis-1000', label: 'Bis 1.000 €' }, { wert: 'bis-3000', label: 'Bis 3.000 €' }, { wert: 'bis-10000', label: 'Bis 10.000 €' },
       { wert: 'darueber', label: 'Mehr als 10.000 €' }, { wert: 'unklar', label: 'Weiß ich noch nicht' },
     ] },
-  { key: 'freitext', block: 'Rahmen', art: 'text', optional: true,
-    frage: 'Magst du dein Vorhaben in zwei, drei Sätzen beschreiben?',
-    erklaerung: 'Optional. Alles, was dir wichtig ist und oben nicht vorkam.' },
+  // G — Deine Wünsche (eigener letzter Schritt, Uwe 25.09.2026: Platz für eigene Bemerkungen am Ende)
+  { key: 'freitext', block: 'Deine Wünsche', art: 'text', optional: true,
+    frage: 'Bemerkungen, Wünsche, weitere Angaben',
+    erklaerung: 'Alles, was dir wichtig ist und oben nicht vorkam: Websites, die dir gefallen, besondere Funktionen, feste Termine, Bedenken oder Fragen. Wird mit deiner Anfrage an Uwe übergeben.' },
 ];
 
-export const BLOECKE = ['Ausgangslage', 'Ziele', 'Umfang', 'Material', 'Nach dem Livegang', 'Rahmen'] as const;
+export const BLOECKE = ['Ausgangslage', 'Ziele', 'Umfang', 'Material', 'Nach dem Livegang', 'Rahmen', 'Deine Wünsche'] as const;
+
+/** Obergrenze für das Freitextfeld — hält die Projektakte unter dem Limit von /api/kontakt. */
+export const FREITEXT_MAX = 2000;
 
 /** Die Fragen, die bei diesen Antworten tatsächlich gestellt werden. */
 export function aktiveFragen(a: Partial<Antworten>): Frage[] {
@@ -442,9 +446,16 @@ export function projektakte(a: Antworten, e: Ergebnis, fmt: (n: number) => strin
   if (e.mietkauf) z.push(`Mietkauf: ${fmt(e.mietkauf.rate)}/Monat × ${e.mietkauf.monate}`);
   z.push(`Nächster Schritt: ${e.naechsterSchritt === 'wertgespraech' ? 'Wertgespräch' : 'Angebot zum Festpreis'}`);
   if (e.markierungen.length) z.push(`Markierungen: ${e.markierungen.join(' · ')}`);
+  const bemerkung = a.freitext?.trim();
+  if (bemerkung) {
+    z.push('');
+    z.push('BEMERKUNGEN / WÜNSCHE DES KUNDEN');
+    z.push(bemerkung.slice(0, FREITEXT_MAX));
+  }
   z.push('');
   z.push('ANTWORTEN');
   for (const f of aktiveFragen(a)) {
+    if (f.key === 'freitext') continue;
     const v = a[f.key];
     if (v === undefined || v === '' || (Array.isArray(v) && v.length === 0)) continue;
     const text = Array.isArray(v) ? v.map((x) => label(f.key, x)).join(', ') : f.art === 'eins' ? label(f.key, v) : String(v);

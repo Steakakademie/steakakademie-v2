@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type RefObject } from 'react';
 import { ArrowLeft, ArrowRight, Check, Printer, RotateCcw, Send } from 'lucide-react';
 import {
-  BLOECKE, aktiveFragen, bereinige, istBeantwortet, projektakte, vollstaendig, werteAus,
+  BLOECKE, FREITEXT_MAX, aktiveFragen, bereinige, istBeantwortet, projektakte, vollstaendig, werteAus,
   type Antworten, type Ergebnis, type Frage, type Position,
 } from '@/lib/baukasten/anamnese';
 import { formatBetrag, type Waehrung } from '@/lib/baukasten/preise';
@@ -112,9 +112,12 @@ function FrageFeld({ f, a, setze, umschalten }: {
             placeholder="https://www.dein-betrieb.de" maxLength={300}
             className="w-full bg-transparent border border-[#F4EFE9]/20 px-4 py-3 font-sans text-base focus:border-[#E85018] focus:outline-none" />
         ) : (
-          <textarea value={wert} onChange={(ev) => setze(f.key, ev.target.value)} aria-labelledby={id} rows={4} maxLength={1500}
-            placeholder="Zum Beispiel: Wir sind ein Malerbetrieb mit 8 Leuten und suchen dringend zwei Azubis …"
+          <>
+          <textarea value={wert} onChange={(ev) => setze(f.key, ev.target.value)} aria-labelledby={id} rows={7} maxLength={FREITEXT_MAX}
+            placeholder="Zum Beispiel: Wir sind ein Malerbetrieb mit 8 Leuten und suchen dringend zwei Azubis. Die Seite von Firma X gefällt mir, weil … Bis zur Messe im März sollte alles fertig sein."
             className="w-full bg-transparent border border-[#F4EFE9]/20 px-4 py-3 font-sans text-base focus:border-[#E85018] focus:outline-none resize-y" />
+          <p className="mt-1 text-right font-sans text-xs text-[#F4EFE9]/45" aria-live="polite">{wert.length} / {FREITEXT_MAX} Zeichen</p>
+          </>
         )}
       </fieldset>
     );

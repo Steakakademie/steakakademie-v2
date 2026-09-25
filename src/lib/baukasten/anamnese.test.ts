@@ -125,5 +125,18 @@ describe('Verzweigung', () => {
     const t = projektakte(a, werteAus(a), (n) => formatBetrag(n, 'EUR'));
     expect(t.length).toBeLessThanOrEqual(4800);
     expect(t).toContain('PROJEKT-ANAMNESE');
+    expect(t).toContain('POSITIONEN'); // Positionen werden auch bei langem Freitext nicht abgeschnitten
+  });
+
+  it('Bemerkungen/Wünsche stehen oben in der Projektakte, nicht in der Antwortliste', () => {
+    const a = mit({ freitext: 'Bitte Termin erst ab Oktober.' });
+    const t = projektakte(a, werteAus(a), (n) => formatBetrag(n, 'EUR'));
+    expect(t.indexOf('BEMERKUNGEN / WÜNSCHE DES KUNDEN')).toBeLessThan(t.indexOf('ANTWORTEN'));
+    expect(t.split('Bitte Termin erst ab Oktober.').length - 1).toBe(1);
+  });
+
+  it('Letzter Schritt ist „Deine Wünsche" mit dem Freitextfeld', () => {
+    const letzte = aktiveFragen(basis).filter((f) => f.block === 'Deine Wünsche');
+    expect(letzte.map((f) => f.key)).toEqual(['freitext']);
   });
 });
