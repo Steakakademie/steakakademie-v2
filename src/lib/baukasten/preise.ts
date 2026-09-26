@@ -58,7 +58,7 @@ export const PREISE = {
   wartungPlus: { eur: 129, chf: 155 },
   wachstumKlein: { eur: 490 },
   wachstumGross: { eur: 890 },
-  // Personal-Coaching (Eigenregie-Konzept 2b, freigegeben 09.09.2026)
+  // Personal-Coaching (Eigenregie-Konzept 2b, freigegeben 09.09.2026; Einheit = 60 Minuten, festgelegt 26.09.2026)
   coachingEinheit: { eur: 129 },
 } as const satisfies Record<string, Preis>;
 
@@ -66,6 +66,9 @@ export type PreisSchluessel = keyof typeof PREISE;
 
 /** Übliche Länge einer Artikelbeschreibung — Grundlage der Stückpreis-Spanne in der Anamnese. */
 export const ARTIKELTEXT_WOERTER = { min: 100, max: 200 } as const;
+
+/** Dauer einer Coaching-Einheit in Minuten (Uwe, 26.09.2026). */
+export const COACHING_MINUTEN = 60;
 
 export const preis = (k: PreisSchluessel, w: Waehrung): number => betrag(PREISE[k], w);
 

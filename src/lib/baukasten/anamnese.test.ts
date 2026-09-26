@@ -122,6 +122,11 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     expect(arten).toContain('budget');
   });
 
+  it('9b Coaching-Weiche nennt 60 Minuten für 129 €', () => {
+    const e = werteAus(mit({ betrieb: 'selbst-pflegen', ziele: ['anfragen'] }));
+    expect(e.weichen.find((x) => x.art === 'coaching')?.text).toContain('60 Minuten für 129 €');
+  });
+
   it('10 Gleiche Antworten → gleiches Ergebnis; Freitext 24/7 wird ehrlich beantwortet', () => {
     const a = mit({ freitext: 'Wir brauchen jemanden, der 24/7 erreichbar ist.' });
     expect(werteAus(a)).toEqual(werteAus({ ...a }));
