@@ -16,10 +16,27 @@ describe('Preisliste', () => {
   });
   it('CHF: feste Preise aus dem Konzept, sonst EUR × 1,2 gerundet', () => {
     expect(betrag(PREISE.rohbau, 'CHF')).toBe(2390);
-    expect(betrag(PREISE.karriereAb, 'CHF')).toBe(830);
-    expect(betrag(PREISE.artikeltextMin, 'CHF')).toBe(11);
+    expect(betrag(PREISE.karriereAb, 'CHF')).toBe(950);
+    expect(betrag(PREISE.artikeltextWort, 'CHF')).toBe(0.32);
     expect(formatBetrag(2390, 'CHF')).toBe('CHF 2’390');
     expect(formatBetrag(1990, 'EUR')).toBe('1.990 €');
+    expect(formatBetrag(0.27, 'EUR')).toBe('0,27 €');
+  });
+
+  it('Marktpreis-Check 26.09.2026: Preise wie von Uwe festgelegt', () => {
+    expect(PREISE.fundament.eur).toBe(990);
+    expect(PREISE.rohbau.eur).toBe(1990);
+    expect(PREISE.schluesselfertig.eur).toBe(3490);
+    expect(PREISE.schluesselfertigSeo.eur).toBe(4250);
+    expect(PREISE.shopEinbindungAb.eur).toBe(1650);
+    expect(PREISE.karriereAb.eur).toBe(790);
+    expect(PREISE.artikeltextWort.eur).toBe(0.27);
+    expect([PREISE.wachstumKlein.eur, PREISE.wachstumGross.eur]).toEqual([490, 890]);
+  });
+
+  it('L/XL höchstens 15 % unter der Markt-Untergrenze (Plattform ab 8.000 €, Showcase ab 20.000 €, Stand 09/2026)', () => {
+    expect(PREISE.plattformAb.eur).toBeGreaterThanOrEqual(8000 * 0.85);
+    expect(PREISE.showcaseAb.eur).toBeGreaterThanOrEqual(20000 * 0.85);
   });
 });
 
@@ -36,7 +53,7 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     const e = werteAus(mit({ leistungen: '4-8', ziele: ['anfragen', 'mitarbeiter'], stellen: '2-5' }));
     expect(e.stufe).toBe('S');
     expect(e.paket).toBe('Rohbau');
-    expect(e.einmalig.betrag).toBe(1990 + 690);
+    expect(e.einmalig.betrag).toBe(1990 + 790);
     expect(e.einmalig.ab).toBe(true);
   });
 
@@ -51,7 +68,21 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     const e = werteAus(mit({ ziele: ['verkaufen', 'mitarbeiter'], artikel: 'bis-50', artikelMaterial: 'beides', stellen: '1' }));
     expect(e.stufe).toBe('M');
     expect(e.positionen.find((p) => p.label.startsWith('Webshop'))?.enthalten).toBe(true);
-    expect(e.einmalig.betrag).toBe(3490 + 690);
+    expect(e.einmalig.betrag).toBe(3490 + 790);
+  });
+
+  it('4b Blog + überregional → Schlüsselfertig mit SEO-Ausbau 4.250 €; lokal bleibt 3.490 €', () => {
+    const e = werteAus(mit({ ziele: ['blog'], sichtbarkeit: 'ueberregional' }));
+    expect(e.paket).toBe('Schlüsselfertig mit SEO-Ausbau');
+    expect(e.einmalig.betrag).toBe(4250);
+    expect(werteAus(mit({ ziele: ['blog'] })).einmalig.betrag).toBe(3490);
+  });
+
+  it('4c Artikeltexte: 0,27 € je Wort → 27–54 € je Artikel', () => {
+    const e = werteAus(mit({ ziele: ['verkaufen'], artikel: 'bis-50', artikelMaterial: 'fotos' }));
+    const t = e.positionen.find((p) => p.label.startsWith('Artikelbeschreibungen'));
+    expect([t?.betrag, t?.stueckBis]).toEqual([27, 54]);
+    expect(t?.hinweis).toContain('0,27 € je Wort');
   });
 
   it('5 Großer Shop (51–500 Artikel) → L, Wertgespräch, kein Mietkauf', () => {

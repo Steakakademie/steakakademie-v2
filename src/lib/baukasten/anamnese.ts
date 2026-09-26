@@ -8,7 +8,7 @@
 
 import {
   type Land, type Waehrung, type PreisSchluessel,
-  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN,
+  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN, ARTIKELTEXT_WOERTER,
 } from './preise';
 
 // ─── Antworten ────────────────────────────────────────────────────────────────
@@ -283,6 +283,10 @@ export function werteAus(a: Antworten): Ergebnis {
     paket = 'Plattform (Maßanfertigung)';
     paketBetrag = p('plattformAb');
     positionen.push({ label: paket, betrag: paketBetrag, ab: true, art: 'einmalig', hinweis: 'Preis nach dem Wertgespräch — orientiert an dem, was die Website für dich leisten soll.' });
+  } else if (stufe === 'M' && a.sichtbarkeit !== 'lokal') {
+    paket = 'Schlüsselfertig mit SEO-Ausbau';
+    paketBetrag = p('schluesselfertigSeo');
+    positionen.push({ label: paket, betrag: paketBetrag, art: 'einmalig', hinweis: 'Schlüsselfertig + Wettbewerbsanalyse, 6 statt 3 Startartikel, Search Console und Bing eingerichtet, Google-Unternehmensprofil optimiert, 3 Monate Ranking-Bericht.' });
   } else if (stufe === 'M') {
     paket = 'Schlüsselfertig';
     paketBetrag = p('schluesselfertig');
@@ -318,7 +322,7 @@ export function werteAus(a: Antworten): Ergebnis {
   }
   const befreiung = a.vorhaben === 'zurueckholen' || a.zugaenge === 'nein' || a.zugaenge === 'unklar';
   if (befreiung) {
-    positionen.push({ label: 'Befreiungs-Paket: Domain und Zugänge zurückholen', betrag: p('befreiungAb'), ab: true, enthalten: true, art: 'einmalig', hinweis: 'Wird bei Buchung eines Pakets angerechnet.' });
+    positionen.push({ label: 'Befreiungs-Paket: Domain und Zugänge zurückholen', betrag: p('befreiungAb'), ab: true, enthalten: true, art: 'einmalig', hinweis: `Normalfall. Blockiert die bisherige Agentur, rechnen wir Mehraufwand mit ${formatBetrag(p('mehraufwandStunde'), w)} pro Stunde ab — rechtliche Durchsetzung übernimmt ein Anwalt, nicht wir. Wird bei Buchung eines Pakets angerechnet.` });
     markierungen.push('Befreiung nötig');
   }
   if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: null, art: 'einmalig', hinweis: 'Wir führen einen vorhandenen Buchungsdienst ein — Preis im Angebot.' });
@@ -326,7 +330,8 @@ export function werteAus(a: Antworten): Ergebnis {
 
   // Stückpreise (nicht in der Summe)
   if (ziel('verkaufen') && (a.artikelMaterial === 'fotos' || a.artikelMaterial === 'nichts')) {
-    positionen.push({ label: 'Artikelbeschreibungen, SEO/GEO-optimiert', betrag: p('artikeltextMin'), stueckBis: p('artikeltextMax'), art: 'stueck', hinweis: 'Je Artikel, KI-gestützt mit menschlicher Endkontrolle.' });
+    const wort = p('artikeltextWort');
+    positionen.push({ label: 'Artikelbeschreibungen, SEO/GEO-optimiert', betrag: Math.round(wort * ARTIKELTEXT_WOERTER.min), stueckBis: Math.round(wort * ARTIKELTEXT_WOERTER.max), art: 'stueck', hinweis: `Je Artikel bei ${ARTIKELTEXT_WOERTER.min}–${ARTIKELTEXT_WOERTER.max} Wörtern (${formatBetrag(wort, w)} je Wort). KI-gestützt geschrieben, von einem Menschen geprüft.` });
   }
   if (ziel('verkaufen') && (a.artikelMaterial === 'texte' || a.artikelMaterial === 'nichts')) {
     hinweise.push('Produktfotos brauchst du selbst — wir bearbeiten echte Fotos (freistellen, Hintergrund, Größen), erfinden aber keine Produktbilder. Das wäre irreführend.');
