@@ -85,6 +85,18 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     expect(t?.hinweis).toContain('0,27 € je Wort');
   });
 
+  it('4d Mehr als 15 Leistungen → Maßanfertigung (Festpakete höchstens 12 Seiten)', () => {
+    const e = werteAus(mit({ leistungen: 'mehr' }));
+    expect(e.stufe).toBe('L');
+    expect(e.positionen.some((p) => p.label.startsWith('Zusätzliche Leistungsseiten'))).toBe(false);
+  });
+
+  it('4e Sprachen: nur Deutsch oder Deutsch + Englisch', () => {
+    const f = aktiveFragen(basis).find((x) => x.key === 'sprachen');
+    expect(f?.optionen?.map((o) => o.wert)).toEqual(['de', 'de-en']);
+    expect(werteAus(mit({ sprachen: 'de-en' })).positionen.some((p) => p.label === 'Zweite Sprache: Englisch')).toBe(true);
+  });
+
   it('5 Großer Shop (51–500 Artikel) → L, Wertgespräch, kein Mietkauf', () => {
     const e = werteAus(mit({ ziele: ['verkaufen'], artikel: '51-500', artikelMaterial: 'nichts', zahlung: 'monatlich', rahmen: 'bis-10000' }));
     expect(e.stufe).toBe('L');

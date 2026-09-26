@@ -22,7 +22,7 @@ export type Leistungen = '1-3' | '4-8' | '9-15' | 'mehr';
 export type Artikel = 'bis-50' | '51-500' | 'mehr';
 export type ArtikelMaterial = 'beides' | 'fotos' | 'texte' | 'nichts';
 export type Stellen = '1' | '2-5' | 'mehr';
-export type Sprachen = 'de' | 'de-en' | 'weitere';
+export type Sprachen = 'de' | 'de-en'; // weitere Sprachen bieten wir nicht an (Uwe, 26.09.2026)
 export type Vorhanden = 'logo' | 'fotos' | 'texte';
 export type Betrieb = 'selbst-pflegen' | 'ihr-pflegt' | 'selbst-bauen';
 export type Sichtbarkeit = 'lokal' | 'ueberregional' | 'wachsen';
@@ -131,7 +131,7 @@ export const FRAGEN: Frage[] = [
       { wert: '1', label: 'Eine' }, { wert: '2-5', label: '2–5' }, { wert: 'mehr', label: 'Mehr als 5' },
     ] },
   { key: 'sprachen', block: 'Umfang', art: 'eins', frage: 'In welchen Sprachen soll die Website erscheinen?', optionen: [
-    { wert: 'de', label: 'Deutsch' }, { wert: 'de-en', label: 'Deutsch und Englisch' }, { wert: 'weitere', label: 'Deutsch und weitere Sprachen' },
+    { wert: 'de', label: 'Deutsch' }, { wert: 'de-en', label: 'Deutsch und Englisch' },
   ] },
   // D — Material
   { key: 'vorhanden', block: 'Material', art: 'mehrere', optional: true, frage: 'Was ist schon vorhanden?',
@@ -255,7 +255,8 @@ export function ermittleStufe(a: Antworten): Stufe {
   const ziel = (z: Ziel) => a.ziele.includes(z);
   const grosserShop = ziel('verkaufen') && (a.artikel === '51-500' || a.artikel === 'mehr');
   if (ziel('eindruck') && a.rahmen === 'darueber') return 'XL';
-  if (ziel('portal') || grosserShop) return 'L';
+  // Festpakete haben höchstens 12 Seiten — mehr als 15 Leistungen gehen nur als Maßanfertigung (Uwe, 26.09.2026)
+  if (ziel('portal') || grosserShop || a.leistungen === 'mehr') return 'L';
   if (ziel('blog') || ziel('verkaufen') || ziel('termine') || a.betrieb === 'selbst-pflegen') return 'M';
   return 'S';
 }
@@ -300,9 +301,6 @@ export function werteAus(a: Antworten): Ergebnis {
     paketBetrag = p('rohbau');
     positionen.push({ label: 'Rohbau', betrag: paketBetrag, art: 'einmalig', hinweis: 'Bis 12 Seiten, eigene Seite je Leistung, Galerie, Anfrageformular, SEO/GEO-Standard.' });
   }
-  if (a.leistungen === 'mehr' && !massanfertigung) {
-    positionen.push({ label: 'Zusätzliche Leistungsseiten (über 12 Seiten)', betrag: null, art: 'einmalig', hinweis: 'Umfang klären wir im Angebot.' });
-  }
 
   // Bausteine — in L/XL Teil der Maßanfertigung, in M ist einer im Paket enthalten
   let bausteinFrei = stufe === 'M';
@@ -326,7 +324,7 @@ export function werteAus(a: Antworten): Ergebnis {
     markierungen.push('Befreiung nötig');
   }
   if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: null, art: 'einmalig', hinweis: 'Wir führen einen vorhandenen Buchungsdienst ein — Preis im Angebot.' });
-  if (a.sprachen !== 'de') positionen.push({ label: a.sprachen === 'de-en' ? 'Zweite Sprache: Englisch' : 'Weitere Sprachen', betrag: null, enthalten: massanfertigung, art: 'einmalig', hinweis: massanfertigung ? 'Teil der Maßanfertigung.' : 'Preis je Sprache im Angebot.' });
+  if (a.sprachen === 'de-en') positionen.push({ label: 'Zweite Sprache: Englisch', betrag: null, enthalten: massanfertigung, art: 'einmalig', hinweis: massanfertigung ? 'Teil der Maßanfertigung.' : 'Preis im Angebot.' });
 
   // Stückpreise (nicht in der Summe)
   if (ziel('verkaufen') && (a.artikelMaterial === 'fotos' || a.artikelMaterial === 'nichts')) {
