@@ -466,7 +466,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           {/* Aroma-Matcher — Platz 1, Bild, Gold-Rahmen, NEU + VIP */}
           <Link
             href="/aroma-matcher"
-            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated transition-colors"
+            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated hover:shadow-lg hover:shadow-brand-gold/25 transition-[background-color,box-shadow]"
           >
             <div className="relative h-32 w-full">
               <Image
