@@ -243,13 +243,13 @@ export default function DiplomaProgressSection() {
           <p className="font-serif italic text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
             style={{ color: '#c8a850' }}
           >
-            Belege dein Fachwissen, bestehe exklusive Prüfungen und werde Teil unserer Elite.<br className="hidden sm:block" />
+            Belege dein Fachwissen, bestehe exklusive Prüfungen und werde Teil unserer Elite.<br className="hidden sm:block" />{' '}
             Eine Ausbildung in 5 präzisen Stufen.
           </p>
         </div>
 
         {/* ── Badge progression ── */}
-        <div className="flex items-end justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-16 overflow-x-auto pb-4">
+        <div className="flex items-end justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-16 overflow-x-auto md:overflow-visible pb-4">
           {STUFEN.map((stufe, i) => (
             <BadgePedestal key={i} {...stufe} />
           ))}
