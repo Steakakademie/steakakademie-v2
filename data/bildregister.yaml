@@ -637,3 +637,10 @@ bilder:
     erworben_am: 2026-09-26
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung durch eine Echtfoto-Collage (2 Unsplash-Aufnahmen desselben Fotografen, Fraldinha-Spiess beim Anschneiden, Medium Rare sichtbar). imageAI im MDX-Frontmatter auf false gesetzt, imageSource entsprechend angepasst.
+  images/rezepte/queijo-coalho-espeto.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/queijo-coalho-espeto.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-26
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
