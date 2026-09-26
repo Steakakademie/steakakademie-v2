@@ -35,6 +35,9 @@ const DEMO_PAIRINGS: Pairing[] = [
   { partner: 'Röstzwiebel', category: 'Gemüse', shared: 4, shared_examples: ['Pyrazine'] },
 ];
 
+const KACHEL_BOX =
+  'flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold focus-within:border-brand-gold transition-colors';
+
 function Bar({ value, max }: { value: number; max: number }) {
   const pct = Math.max(8, Math.round((value / max) * 100));
   return (
@@ -79,7 +82,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
   const max = treffer?.reduce((m, t) => Math.max(m, t.shared), 1) ?? 1;
 
   return (
-    <div className="flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5">
+    <div className={KACHEL_BOX}>
       <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
         <FlaskConical size={18} />
         <h3 className="font-serif text-lg font-bold text-text-light">Foodpairing</h3>
@@ -268,7 +271,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
   }, [seed?.nonce]);
 
   return (
-    <div ref={boxRef} className="flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5">
+    <div ref={boxRef} className={KACHEL_BOX}>
       <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
         <ChefHat size={18} />
         <h3 className="font-serif text-lg font-bold text-text-light">Rezept-Schmiede</h3>
@@ -463,7 +466,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           {/* Aroma-Matcher — Platz 1, Bild, Gold-Rahmen, NEU + VIP */}
           <Link
             href="/aroma-matcher"
-            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated transition-colors"
+            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated hover:shadow-lg hover:shadow-brand-gold/25 transition-[background-color,box-shadow]"
           >
             <div className="relative h-32 w-full">
               <Image
@@ -528,7 +531,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           </Link>
 
           {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
-          <div className="flex flex-col rounded-xl border border-border-subtle bg-surface-card/60 p-5" aria-label="Räucherholz-Finder — bald verfügbar">
+          <div className="flex flex-col rounded-xl border border-border-subtle bg-surface-card/60 p-5 hover:border-brand-gold/50 transition-colors" aria-label="Räucherholz-Finder — bald verfügbar">
             <div className="mb-2 flex gap-2">
               <Badge muted>Bald</Badge>
               <Badge filled>VIP</Badge>
