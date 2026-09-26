@@ -94,7 +94,18 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
   it('4e Sprachen: nur Deutsch oder Deutsch + Englisch', () => {
     const f = aktiveFragen(basis).find((x) => x.key === 'sprachen');
     expect(f?.optionen?.map((o) => o.wert)).toEqual(['de', 'de-en']);
-    expect(werteAus(mit({ sprachen: 'de-en' })).positionen.some((p) => p.label === 'Zweite Sprache: Englisch')).toBe(true);
+    const fundament = werteAus(mit({ sprachen: 'de-en' }));
+    expect(fundament.positionen.find((p) => p.label.startsWith('Zweite Sprache'))?.betrag).toBe(490);
+    expect(fundament.einmalig.betrag).toBe(990 + 490);
+    expect(werteAus(mit({ sprachen: 'de-en', leistungen: '4-8' })).positionen.find((p) => p.label.startsWith('Zweite Sprache'))?.betrag).toBe(790);
+  });
+
+  it('4f Terminbuchung 190 € und Lieferzeiten 2 / 3 / 5 Wochen', () => {
+    const t = werteAus(mit({ ziele: ['anfragen', 'termine'] }));
+    expect(t.positionen.find((p) => p.label === 'Terminbuchung einrichten')?.betrag).toBe(190);
+    expect(werteAus(basis).zeitrahmen).toBe('2 Wochen ab vollständigen Unterlagen.');
+    expect(werteAus(mit({ leistungen: '4-8' })).zeitrahmen).toBe('3 Wochen ab vollständigen Unterlagen.');
+    expect(werteAus(mit({ ziele: ['blog'] })).zeitrahmen).toBe('5 Wochen ab vollständigen Unterlagen.');
   });
 
   it('5 Großer Shop (51–500 Artikel) → L, Wertgespräch, kein Mietkauf', () => {

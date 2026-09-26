@@ -8,7 +8,7 @@
 
 import {
   type Land, type Waehrung, type PreisSchluessel,
-  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN, ARTIKELTEXT_WOERTER, COACHING_MINUTEN,
+  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN, ARTIKELTEXT_WOERTER, COACHING_MINUTEN, LIEFERZEIT_WOCHEN,
 } from './preise';
 
 // ─── Antworten ────────────────────────────────────────────────────────────────
@@ -323,8 +323,14 @@ export function werteAus(a: Antworten): Ergebnis {
     positionen.push({ label: 'Befreiungs-Paket: Domain und Zugänge zurückholen', betrag: p('befreiungAb'), ab: true, enthalten: true, art: 'einmalig', hinweis: `Normalfall. Blockiert die bisherige Agentur, rechnen wir Mehraufwand mit ${formatBetrag(p('mehraufwandStunde'), w)} pro Stunde ab — rechtliche Durchsetzung übernimmt ein Anwalt, nicht wir. Wird bei Buchung eines Pakets angerechnet.` });
     markierungen.push('Befreiung nötig');
   }
-  if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: null, art: 'einmalig', hinweis: 'Wir führen einen vorhandenen Buchungsdienst ein — Preis im Angebot.' });
-  if (a.sprachen === 'de-en') positionen.push({ label: 'Zweite Sprache: Englisch', betrag: null, enthalten: massanfertigung, art: 'einmalig', hinweis: massanfertigung ? 'Teil der Maßanfertigung.' : 'Preis im Angebot.' });
+  if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: p('terminbuchung'), art: 'einmalig', hinweis: 'Buchungsseite in deinem eigenen Google-Kalender, eingebunden in deine Website. Auf Wunsch mit automatischem Wochenrhythmus.' });
+  if (a.sprachen === 'de-en') {
+    if (massanfertigung) positionen.push({ label: 'Zweite Sprache: Englisch', betrag: null, enthalten: true, art: 'einmalig', hinweis: 'Teil der Maßanfertigung.' });
+    else {
+      const klein = paket === 'Fundament';
+      positionen.push({ label: `Zweite Sprache: Englisch (${klein ? 'bis 5' : 'bis 12'} Seiten)`, betrag: p(klein ? 'englischBis5Seiten' : 'englischBis12Seiten'), art: 'einmalig', hinweis: 'KI-gestützt übersetzt, von einem Menschen geprüft. Sprachumschalter und Suchmaschinen-Kennzeichnung inklusive.' });
+    }
+  }
 
   // Stückpreise (nicht in der Summe)
   if (ziel('verkaufen') && (a.artikelMaterial === 'fotos' || a.artikelMaterial === 'nichts')) {
@@ -367,8 +373,8 @@ export function werteAus(a: Antworten): Ergebnis {
   // Zeitrahmen (Richtwert, ab vollständigen Unterlagen)
   const zeitrahmen = massanfertigung
     ? 'Nach dem Wertgespräch. Wir nehmen höchstens eine Maßanfertigung gleichzeitig an — ggf. mit Warteliste.'
-    : stufe === 'M' ? 'In der Regel 3–6 Wochen ab vollständigen Unterlagen.' : 'In der Regel 2–4 Wochen ab vollständigen Unterlagen.';
-  if (a.termin === '4-wochen' && (massanfertigung || (stufe === 'M' && a.vorhaben === 'modernisieren'))) {
+    : `${stufe === 'M' ? LIEFERZEIT_WOCHEN.schluesselfertig : paket === 'Fundament' ? LIEFERZEIT_WOCHEN.fundament : LIEFERZEIT_WOCHEN.rohbau} Wochen ab vollständigen Unterlagen.`;
+  if (a.termin === '4-wochen' && (massanfertigung || stufe === 'M')) {
     hinweise.push('4 Wochen sind für diesen Umfang knapp. Wir sagen dir im Angebot ehrlich, was bis dahin realistisch ist.');
   }
 
