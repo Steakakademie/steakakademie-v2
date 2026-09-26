@@ -531,14 +531,14 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           </Link>
 
           {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
-          <div className="flex flex-col rounded-xl border border-border-subtle bg-surface-card/60 p-5 hover:border-brand-gold/50 transition-colors" aria-label="Räucherholz-Finder — bald verfügbar">
+          <div className={KACHEL_BOX} aria-label="Räucherholz-Finder — bald verfügbar">
             <div className="mb-2 flex gap-2">
               <Badge muted>Bald</Badge>
               <Badge filled>VIP</Badge>
             </div>
-            <div className="flex items-center gap-2 mb-1.5 text-text-muted">
+            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
               <Trees size={18} />
-              <h3 className="font-serif text-lg font-bold text-text-light/80">Räucherholz-Finder</h3>
+              <h3 className="font-serif text-lg font-bold text-text-light">Räucherholz-Finder</h3>
             </div>
             <p className="text-xs text-text-secondary mb-4">
               Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
