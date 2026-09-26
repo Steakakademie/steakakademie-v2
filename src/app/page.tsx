@@ -245,10 +245,19 @@ export default async function HomePage() {
                 border: '1px solid rgba(200,136,42,0.12)',
               }}
             >
+              {/* B1 Glut von unten — atmet (eigene Clip-Ebene, damit der Beam außen bleibt) */}
+              <div aria-hidden className="absolute inset-0 overflow-hidden pointer-events-none" style={{ borderRadius: '4px' }}>
+                <div className="sa-manifest-glut" />
+              </div>
+              {/* B2 Border-Beam, langsam */}
+              <span aria-hidden className="sa-beam" style={{ ['--sa-beam-dauer' as string]: '9s' }}>
+                <span className="sa-beam__rot" />
+              </span>
+
               {/* Dekorative Gold-Linien */}
-              <div className="flex items-center gap-5 mb-10">
+              <div className="relative flex items-center gap-5 mb-10">
                 <div className="h-px flex-1 bg-brand-gold/20" />
-                <span className="font-sans text-[10px] tracking-[0.35em] uppercase text-text-muted">Manifest</span>
+                <span className="relative font-sans text-[10px] tracking-[0.35em] uppercase text-[#c8a870]">Manifest</span>
                 <div className="h-px flex-1 bg-brand-gold/20" />
               </div>
 
@@ -262,18 +271,19 @@ export default async function HomePage() {
                   &ldquo;
                 </span>
                 <blockquote className="relative font-serif text-2xl sm:text-3xl lg:text-[2rem] font-bold italic text-text-light leading-[1.4]">
-                  Feuer ist Geduld. Rauch ist Zeit.
+                  Feuer ist <span className="sa-goldwort">Geduld.</span> Rauch ist{' '}
+                  <span className="sa-goldwort">Zeit.</span>
                   <br />
                   Das perfekte Steak ist keine Technik —
                   <br />
-                  es ist ein Standpunkt.
+                  es ist ein <span className="sa-goldwort">Standpunkt.</span>
                 </blockquote>
               </div>
 
               {/* Attributierung */}
-              <div className="mt-10 flex items-center gap-5">
+              <div className="relative mt-10 flex items-center gap-5">
                 <div className="h-px w-16 bg-brand-gold/25" />
-                <cite className="font-sans text-xs tracking-[0.22em] uppercase text-text-muted not-italic">
+                <cite className="relative font-sans text-xs tracking-[0.22em] uppercase text-[#c8a870] not-italic">
                   Marco, der Pitmaster
                 </cite>
               </div>
