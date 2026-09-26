@@ -208,4 +208,15 @@ describe('Digistore24-Webhook: Credit-Produkt bei Wiederholung', () => {
     expect(db.credits).toEqual({ 'user-existing-1': 1 });
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
+
+  it('schreibt beim 5er-Pack (25 EUR brutto) fuenf Credits gut, bei der Einzeldiagnose (7 EUR) eines', async () => {
+    seedUsers(2);
+
+    const pack   = await POST(delivery({ event: 'payment', order_id: 'ORD-PACK', product_id: '696394', email: 'kunde1@example.de', amount_brutto: '25.00' }));
+    const einzel = await POST(delivery({ event: 'payment', order_id: 'ORD-EINZEL', product_id: '696394', email: 'kunde2@example.de', amount_brutto: '7.00' }));
+
+    expect(pack.status).toBe(200);
+    expect(einzel.status).toBe(200);
+    expect(db.credits).toEqual({ 'user-existing-1': 5, 'user-existing-2': 1 });
+  });
 });

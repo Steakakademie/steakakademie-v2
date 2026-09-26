@@ -94,6 +94,25 @@ const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-syst
  */
 const CREDIT_FALLBACK_SLUG = 'steak-beichte';
 
+/**
+ * Paketgroesse aus dem gezahlten Betrag. Die Steak-Beichte hat EIN Digistore-Produkt (696394)
+ * mit zwei Preisplaenen: Einzeldiagnose 7 EUR (1 Credit) und 5er-Pack 25 EUR (5 Credits).
+ * digistore_products.credit_amount kennt nur den Einzelwert — ohne diese Ableitung bekaeme
+ * ein 25-EUR-Kaeufer 1 Credit. Schwelle 20 EUR (25 EUR minus ~20 % Gutschein) statt exaktem
+ * Betrag, damit Rabattcodes das Paket nicht auf 1 Credit zurueckfallen lassen.
+ * Refunds/Chargebacks liefern den Betrag ggf. negativ → Betrag zaehlt.
+ */
+const CREDIT_PACK_MIN_BRUTTO = 20;
+const CREDIT_PACK_SIZE = 5;
+
+function creditsForOrder(baseCredits: number, params: Record<string, string>): number {
+  const brutto = Math.abs(parseFloat(params.amount_brutto ?? ''));
+  if (baseCredits === 1 && Number.isFinite(brutto) && brutto >= CREDIT_PACK_MIN_BRUTTO) {
+    return CREDIT_PACK_SIZE;
+  }
+  return baseCredits;
+}
+
 // ─── Authentifizierung ──────────────────────────────────────────────────────
 
 function safeEqual(a: string, b: string): boolean {
@@ -250,7 +269,8 @@ export async function POST(req: Request) {
   }
   const isVoucher     = mapping?.is_voucher ?? false;
   const voucherCredit = mapping?.voucher_credit_amount ?? null;  // gesetzt = Credit-Gutschein
-  const creditAmount  = (mapping?.credit_amount as number | null) ?? null;
+  const baseCredit    = (mapping?.credit_amount as number | null) ?? null;
+  const creditAmount  = baseCredit && baseCredit > 0 ? creditsForOrder(baseCredit, params) : baseCredit;
 
   // 0) Credit-Produkt — eigener Pfad, kein Course-Gate. Vor dem Gutschein-Zweig:
   //    ein Gutschein AUF Credits ist etwas anderes (der Kaeufer verschenkt ihn).

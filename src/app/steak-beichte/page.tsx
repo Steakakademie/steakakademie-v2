@@ -338,7 +338,7 @@ export default function SteakBeichtePage() {
                   </p>
                   {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
                   <a
-                    href="https://www.checkout-ds24.com/product/696394"
+                    href="https://www.checkout-ds24.com/offer/347059064/RKqM5nVwWQfc/696394"
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
