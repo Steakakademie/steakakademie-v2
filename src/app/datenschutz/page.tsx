@@ -525,6 +525,49 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>10d. Terminbuchung für Coachings (Cal.com)</h2>
+              <p className="mb-3">
+                Termine für ein gekauftes Personal-Coaching buchst du über eine Buchungsseite des
+                Dienstes Cal.com der <strong className="text-text-primary">Cal.com, Inc.</strong>,
+                2261 Market Street #4382, San Francisco, CA 94114, USA. Cal.com verarbeitet die Daten
+                in unserem Auftrag (Art. 28 DSGVO, Vertrag zur Auftragsverarbeitung). Wir binden die
+                Buchungsseite nicht in unsere Website ein, sondern verlinken sie: Daten fließen erst,
+                wenn du den Link öffnest.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Welche Daten:</strong> Name, E-Mail-Adresse,
+                gewählter Termin, deine Antworten auf die Buchungsfragen (Ziel des Coachings, aktueller
+                Stand, genutzte Website oder Werkzeuge, Bestellnummer, ggf. deine Erklärung zum Beginn
+                vor Ablauf der Widerrufsfrist) sowie technische Daten beim Aufruf der Seite (z. B.
+                IP-Adresse, Browser).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Wozu:</strong> Vereinbarung, Bestätigung,
+                Erinnerung, Verschiebung und Durchführung des Termins. Damit es keine Doppelbuchungen
+                gibt, gleicht Cal.com freie Zeiten mit unserem Google-Kalender ab; der Termin wird dort
+                eingetragen und findet per Google Meet statt (Google Ireland Limited, Gordon House,
+                Barrow Street, Dublin 4, Irland).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Übermittlung in die USA:</strong> Cal.com
+                verarbeitet Daten in den USA. Grundlage sind die EU-Standardvertragsklauseln
+                (Art. 46 Abs. 2 lit. c DSGVO) bzw. das EU-US Data Privacy Framework, soweit der Anbieter
+                zertifiziert ist.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Wir löschen Buchungsdaten
+                6 Monate nach dem Termin, soweit keine gesetzliche Aufbewahrungspflicht besteht.
+                Rechnungsdaten liegen bei Digistore24 (Abschnitt 10).
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}
+                <a href="https://cal.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  cal.com/privacy
+                </a>
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>11. KI-Assistenten „Marco&quot; (Anthropic)</h2>
               <p className="mb-3">
                 Diese Website bietet den KI-Assistenten „Marco&quot; als Chat-Widget an.

@@ -2,8 +2,9 @@
  * Rotations-Blocker für den Google-Kalender-Terminplan „Personal-Coaching (60 Min)"
  * tuwasduwillst.de · festgelegt von Uwe am 26.09.2026
  *
- * Was es tut: Der Terminplan in Google Kalender steht auf Mo–Fr 09:00–17:00
- * (Termine 60 Min, letzter Start 16:00). Dieses Skript trägt jeden Tag automatisch
+ * Was es tut: Das Buchungstool (Cal.com) bietet Mo–Fr 09:00–12:00 und 13:00–17:00 an,
+ * Termine 60 Min, danach 30 Min Vorbereitung — Starts 09:00, 10:30, 13:00, 14:30, 16:00,
+ * höchstens 4 Termine am Tag (Uwe, 27.09.2026). Dieses Skript trägt jeden Tag automatisch
  * für die nächsten 8 Wochen „belegt"-Blocker an allen Tagen ein, die im
  * 4-Wochen-Rhythmus NICHT buchbar sind. Google blendet diese Tage dann aus.
  *
@@ -14,9 +15,9 @@
  * Eigene Abwesenheiten: einfach einen Termin („beschäftigt") in den Hauptkalender
  * eintragen — der Terminplan blendet die Zeit sofort aus. Nichts weiter zu tun.
  *
- * Belegt-Optik (Uwe, 27.09.2026): An buchbaren Tagen werden zusätzlich einzelne Stunden
+ * Belegt-Optik (Uwe, 27.09.2026): An buchbaren Tagen werden zusätzlich einzelne Termine
  * nach Zufall geblockt — vorne im Kalender mehr, weiter hinten weniger, jeden Tag anders.
- * Der Zufall ist je Datum fest (gleiche Stunden bei jedem Lauf), damit nichts „flackert".
+ * Der Zufall ist je Datum fest (gleiche Termine bei jedem Lauf), damit nichts „flackert".
  * Echte Buchungen werden angerechnet: Hat ein Tag schon echte Termine, fallen entsprechend
  * weniger Zufallsblocker an. Wirkt auf Google-Terminplan und Cal.com gleichermaßen, weil
  * beide die Belegung aus dem Google-Kalender lesen.
@@ -31,17 +32,19 @@ const KONFIG = {
   anker: '2026-10-05',            // Montag der ersten „Woche 1"
   ersterTag: '2026-10-05',        // vorher ist nichts buchbar (z. B. auf '2026-11-02' setzen)
   horizontTage: 63,               // 8 Wochen + 1 Woche Reserve
-  von: 9, bis: 17,                // Blocker-Zeitraum = Verfügbarkeit im Terminplan
+  von: 9, bis: 17,                // Rotations-Blocker: ganzer Tag
+  slots: ['09:00', '10:30', '13:00', '14:30', '16:00'], // Terminbeginne (60 Min + 30 Min Vorbereitung, Mittag 12–13)
+  dauerMin: 60,
   muster: { 1: [1, 3, 5], 2: [2, 3, 4], 3: [1, 2, 3, 4, 5], 4: [1, 2, 4, 5] }, // 1 = Montag
   feiertageNRW: true,
   titel: 'Rotation: nicht buchbar',
   tag: 'rotationBlocker',
-  // Zufällig geblockte Stunden an buchbaren Tagen (8 Termine am Tag: 9–16 Uhr)
+  // Zufällig geblockte Termine an buchbaren Tagen (5 Termine am Tag, höchstens 4 buchbar)
   zufall: {
     aktiv: true,
     salz: 'tuwasduwillst-2026',   // ändern = neue Verteilung
-    // [bis Tag x ab heute, min, max] Stunden pro Tag
-    staffel: [[14, 2, 4], [35, 1, 3], [999, 0, 2]],
+    // [bis Tag x ab heute, min, max] geblockte Termine pro Tag
+    staffel: [[14, 1, 3], [35, 1, 2], [999, 0, 1]],
     titel: 'Nicht verfügbar',
   },
 };
@@ -100,14 +103,16 @@ function zufallsAnzahl(tag, abstand, k) {
   return st[1] + Math.floor(zufallszahl(k.zufall.salz + '|n|' + tag) * (st[2] - st[1] + 1));
 }
 
-/** Die Stunden (Startzeit) in fester Zufallsreihenfolge für einen Tag. */
-function zufallsStunden(tag, k) {
-  const stunden = [];
-  for (let h = k.von; h < k.bis; h++) stunden.push(h);
-  return stunden.sort(function (a, b) {
+/** Die Terminbeginne in fester Zufallsreihenfolge für einen Tag. */
+function zufallsSlots(tag, k) {
+  return k.slots.slice().sort(function (a, b) {
     return zufallszahl(k.zufall.salz + '|' + tag + '|' + a) - zufallszahl(k.zufall.salz + '|' + tag + '|' + b);
   });
 }
+
+function hhmm(min) { return String(Math.floor(min / 60)).padStart(2, '0') + ':' + String(min % 60).padStart(2, '0'); }
+function minuten(hm) { const p = hm.split(':').map(Number); return p[0] * 60 + p[1]; }
+function slotEnde(slot, k) { return hhmm(minuten(slot) + k.dauerMin); }
 
 /** Werktage im Horizont, die geblockt werden müssen. */
 function zuBlockendeTage(heute, k) {
@@ -122,21 +127,21 @@ function zuBlockendeTage(heute, k) {
 // ─── Google-Kalender (läuft nur in Apps Script) ───────────────────────────────
 
 /**
- * Soll-Liste aller Blocker: ganze Tage (Rhythmus) + einzelne Zufallsstunden.
- * belegt(tag) liefert die Startstunden echter Termine an diesem Tag (werden angerechnet).
- * Schlüssel: 'YYYY-MM-DD@von-bis'.
+ * Soll-Liste aller Blocker: ganze Tage (Rhythmus) + einzelne Zufallstermine.
+ * belegt(tag) liefert die Terminbeginne ('HH:MM'), die schon durch echte Termine belegt sind.
+ * Schlüssel: 'YYYY-MM-DD@HH:MM-HH:MM'.
  */
 function sollBlocker(heute, k, belegt) {
   const out = {};
-  zuBlockendeTage(heute, k).forEach(function (tag) { out[tag + '@' + k.von + '-' + k.bis] = k.titel; });
+  zuBlockendeTage(heute, k).forEach(function (tag) { out[tag + '@' + hhmm(k.von * 60) + '-' + hhmm(k.bis * 60)] = k.titel; });
   if (!k.zufall.aktiv) return out;
   for (let n = 0; n <= k.horizontTage; n++) {
     const d = plusTage(heute, n), tag = ymd(d);
     if (!istBuchbar(d, k)) continue;
     const echt = belegt ? belegt(tag) : [];
     let rest = Math.max(0, zufallsAnzahl(tag, n, k) - echt.length);
-    zufallsStunden(tag, k).forEach(function (h) {
-      if (rest > 0 && echt.indexOf(h) === -1) { out[tag + '@' + h + '-' + (h + 1)] = k.zufall.titel; rest--; }
+    zufallsSlots(tag, k).forEach(function (slot) {
+      if (rest > 0 && echt.indexOf(slot) === -1) { out[tag + '@' + slot + '-' + slotEnde(slot, k)] = k.zufall.titel; rest--; }
     });
   }
   return out;
@@ -148,14 +153,24 @@ function aktualisiereBlocker() {
   const heute = new Date();
   const start = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
   const ende = plusTage(start, k.horizontTage + 1);
-  const schluessel = function (ev) { return ymd(ev.getStartTime()) + '@' + ev.getStartTime().getHours() + '-' + ev.getEndTime().getHours(); };
+  const uhr = function (d) { return hhmm(d.getHours() * 60 + d.getMinutes()); };
+  const schluessel = function (ev) { return ymd(ev.getStartTime()) + '@' + uhr(ev.getStartTime()) + '-' + uhr(ev.getEndTime()); };
 
+  // Echte Termine: welche Terminbeginne überschneiden sich mit einem nicht-automatischen Termin?
   const events = kal.getEvents(start, ende);
   const echt = {};
   events.forEach(function (ev) {
     if (ev.getTag(k.tag) === '1' || ev.isAllDayEvent()) return;
     const tag = ymd(ev.getStartTime());
-    (echt[tag] = echt[tag] || []).push(ev.getStartTime().getHours());
+    const von = ev.getStartTime().getHours() * 60 + ev.getStartTime().getMinutes();
+    const bis = ev.getEndTime().getHours() * 60 + ev.getEndTime().getMinutes();
+    k.slots.forEach(function (slot) {
+      const s0 = minuten(slot), s1 = s0 + k.dauerMin;
+      if (von < s1 && bis > s0) {
+        echt[tag] = echt[tag] || [];
+        if (echt[tag].indexOf(slot) === -1) echt[tag].push(slot);
+      }
+    });
   });
   const soll = sollBlocker(heute, k, function (tag) { return echt[tag] || []; });
 
@@ -168,10 +183,10 @@ function aktualisiereBlocker() {
   });
   Object.keys(soll).forEach(function (key) {
     if (vorhanden[key]) return;
-    const tag = key.split('@')[0], zeiten = key.split('@')[1].split('-').map(Number), d = datum(tag);
+    const tag = key.split('@')[0], zeiten = key.split('@')[1].split('-').map(minuten), d = datum(tag);
     const ev = kal.createEvent(soll[key],
-      new Date(d.getFullYear(), d.getMonth(), d.getDate(), zeiten[0]),
-      new Date(d.getFullYear(), d.getMonth(), d.getDate(), zeiten[1]),
+      new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, zeiten[0]),
+      new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, zeiten[1]),
       { description: 'Automatisch vom Rotations-Blocker (tuwasduwillst.de). Nicht von Hand ändern — KONFIG anpassen.' });
     ev.setTag(k.tag, '1');
     ev.removeAllReminders();

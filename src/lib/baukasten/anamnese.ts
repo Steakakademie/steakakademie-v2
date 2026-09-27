@@ -407,7 +407,7 @@ export function werteAus(a: Antworten): Ergebnis {
     weichen.push({ art: 'eigenregie', text: 'Du willst selbst bauen? Dann ist Eigenregie wahrscheinlich dein Weg: der Selbstlern-Kurs für deine eigene Website — mit denselben Werkzeugen, die wir nutzen. Die Diagnose zeigt dir in 3 Minuten, ob er zu dir passt.', href: EIGENREGIE_DIAGNOSE_URL });
   }
   if (a.betrieb === 'selbst-pflegen') {
-    weichen.push({ art: 'coaching', text: `Du willst Inhalte selbst pflegen: Nach der Übergabe zeigen wir dir das im Personal-Coaching (Einheit ${COACHING_MINUTEN} Minuten für ${formatBetrag(p('coachingEinheit'), w)}, einzeln buchbar).` });
+    weichen.push({ art: 'coaching', text: `Du willst Inhalte selbst pflegen: Nach der Übergabe zeigen wir dir das im Personal-Coaching (Einheit ${COACHING_MINUTEN} Minuten für ${formatBetrag(p('coachingEinheit'), w)}, einzeln buchbar). Den Termin wählst du nach dem Kauf direkt selbst im Kalender.` });
   }
   const rahmenGrenze: Record<Rahmen, number> = { 'bis-1000': 1000, 'bis-3000': 3000, 'bis-10000': 10000, darueber: Infinity, unklar: Infinity };
   const grenze = rahmenGrenze[a.rahmen] * (w === 'CHF' ? 1.2 : 1);
