@@ -645,9 +645,12 @@ bilder:
     erworben_am: 2026-09-26
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/coracao-de-frango.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/coracao-de-frango.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
-    namensnennung: false
+    status: lizenz
+    quelle: "Pexels-Collage aus 2 Fotos (IDs 37183926 + 37183924)"
+    urheber: Caio Niceas
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: "https://www.pexels.com/photo/grilled-meat-skewers-on-wooden-platter-37183926/ ; https://www.pexels.com/photo/grilled-meat-skewers-on-wooden-board-37183924/"
     erworben_am: 2026-09-27
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung durch eine Echtfoto-Collage (2 Pexels-Aufnahmen desselben Fotografen, Haehnchenherzen-Spiesse auf Holzbrett, keine Personen, keine Marken). imageAI im MDX-Frontmatter auf false gesetzt.
