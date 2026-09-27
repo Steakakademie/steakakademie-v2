@@ -21,6 +21,8 @@
  * Echte Buchungen werden angerechnet: Hat ein Tag schon echte Termine, fallen entsprechend
  * weniger Zufallsblocker an. Wirkt auf Google-Terminplan und Cal.com gleichermaßen, weil
  * beide die Belegung aus dem Google-Kalender lesen.
+ * Raster (27.09.2026): Jeder Blocker und jeder echte Termin wird bis zum nächsten Terminbeginn
+ * (Termin + 30 Min) belegt. So bleiben die Starts 09:00 · 10:30 · 13:00 · 14:30 · 16:00 fest.
  * Grenze: Die Buchungsseite zeigt nur freie Zeiten — nirgends Texte wie „gebucht" oder
  * „nur noch 2 frei" dazuschreiben, solange das nicht stimmt (irreführende Knappheit, UWG).
  *
@@ -30,11 +32,12 @@
 const KONFIG = {
   kalenderId: 'primary',
   anker: '2026-10-05',            // Montag der ersten „Woche 1"
-  ersterTag: '2026-10-05',        // vorher ist nichts buchbar (z. B. auf '2026-11-02' setzen)
+  ersterTag: '2026-11-02',        // vorher ist nichts buchbar (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung 01.11.)
   horizontTage: 63,               // 8 Wochen + 1 Woche Reserve
   von: 9, bis: 17,                // Rotations-Blocker: ganzer Tag
   slots: ['09:00', '10:30', '13:00', '14:30', '16:00'], // Terminbeginne (60 Min + 30 Min Vorbereitung, Mittag 12–13)
   dauerMin: 60,
+  pauseMin: 30,                   // Vorbereitung nach jedem Termin; Zufallsblocker = Termin + Pause
   muster: { 1: [1, 3, 5], 2: [2, 3, 4], 3: [1, 2, 3, 4, 5], 4: [1, 2, 4, 5] }, // 1 = Montag
   feiertageNRW: true,
   titel: 'Rotation: nicht buchbar',
@@ -112,7 +115,9 @@ function zufallsSlots(tag, k) {
 
 function hhmm(min) { return String(Math.floor(min / 60)).padStart(2, '0') + ':' + String(min % 60).padStart(2, '0'); }
 function minuten(hm) { const p = hm.split(':').map(Number); return p[0] * 60 + p[1]; }
-function slotEnde(slot, k) { return hhmm(minuten(slot) + k.dauerMin); }
+// Blocker reichen bis zum nächsten Terminbeginn: Cal.com setzt freie Zeiten sonst direkt hinter
+// einen belegten Block (geprüft 27.09.2026: 09:00 geblockt → 10:00 statt 10:30 angeboten).
+function slotEnde(slot, k) { return hhmm(minuten(slot) + k.dauerMin + k.pauseMin); }
 
 /** Werktage im Horizont, die geblockt werden müssen. */
 function zuBlockendeTage(heute, k) {
@@ -134,11 +139,13 @@ function zuBlockendeTage(heute, k) {
 function sollBlocker(heute, k, belegt) {
   const out = {};
   zuBlockendeTage(heute, k).forEach(function (tag) { out[tag + '@' + hhmm(k.von * 60) + '-' + hhmm(k.bis * 60)] = k.titel; });
-  if (!k.zufall.aktiv) return out;
   for (let n = 0; n <= k.horizontTage; n++) {
     const d = plusTage(heute, n), tag = ymd(d);
     if (!istBuchbar(d, k)) continue;
     const echt = belegt ? belegt(tag) : [];
+    // Echte Termine ins Raster ziehen, sonst bietet Cal.com z. B. 13:45 statt 14:30 an
+    echt.forEach(function (slot) { out[tag + '@' + slot + '-' + slotEnde(slot, k)] = k.zufall.titel; });
+    if (!k.zufall.aktiv) continue;
     let rest = Math.max(0, zufallsAnzahl(tag, n, k) - echt.length);
     zufallsSlots(tag, k).forEach(function (slot) {
       if (rest > 0 && echt.indexOf(slot) === -1) { out[tag + '@' + slot + '-' + slotEnde(slot, k)] = k.zufall.titel; rest--; }

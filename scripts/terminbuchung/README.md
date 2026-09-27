@@ -2,6 +2,8 @@
 
 Festgelegt von Uwe am 26./27.09.2026. Buchungswerkzeug: **Cal.com Free** (0 €). Dazu ein Google-Apps-Script (0 €), das den Rhythmus pflegt.
 
+**Stand 27.09.2026: eingerichtet und geprüft.** Buchungslink: **https://cal.com/mingma/personal-coaching** · buchbar ab **Mo 02.11.2026** (`ersterTag`, Jobcenter). Apps-Script-Projekt „Rotations-Blocker Coaching“ im Konto steakakademie@gmail.com, Trigger täglich 03:00.
+
 ## Ablauf für den Kunden
 
 1. Coaching bei Digistore kaufen.
@@ -12,7 +14,7 @@ Festgelegt von Uwe am 26./27.09.2026. Buchungswerkzeug: **Cal.com Free** (0 €)
 
 | Rhythmuswoche | buchbar |
 |---|---|
-| 1 (erste ab Mo 05.10.2026) | Mo, Mi, Fr |
+| 1 (Anker Mo 05.10.2026; erste buchbare Woche ab 02.11.) | Mo, Mi, Fr |
 | 2 | Di, Mi, Do |
 | 3 | Mo–Fr |
 | 4 | Mo, Di, Do, Fr |
@@ -25,7 +27,11 @@ Danach beginnt der Rhythmus von vorn.
 - Höchstens **4 Termine pro Tag**, Mindestvorlauf **24 Stunden**, buchbar **8 Wochen** im Voraus
 - NRW-Feiertage sind gesperrt
 
-## Einrichtung Cal.com (einmalig, ca. 20 Minuten)
+## Einrichtung Cal.com (erledigt 27.09.2026)
+
+Ist-Zustand: Konto `mingma` (Google-Login steakakademie@gmail.com), Sprache Deutsch, 24 Stunden, Woche ab Montag, Suchmaschinenindexierung **aus**. Kalender steakakademie@gmail.com verbunden (Konflikte prüfen + Termine eintragen). Verfügbarkeitsplan „Coaching“. Terminart „Personal-Coaching (60 Min)“ **im Profil ausgeblendet** (nur über den Link nach dem Kauf erreichbar); die Standard-Terminarten 15/30 Min sind ebenfalls ausgeblendet. Buchungsformular: 4 Fragen (ohne Widerrufs-Checkbox, wartet auf Nieweg), „Zusätzliche Notizen“ und „Weitere Gäste“ ausgeblendet. Workflows „Coaching Erinnerung 24 Std“ und „… 1 Std“ mit eigenem Betreff und Absender; der Text ist die Cal.com-Vorlage „Erinnerung“ (eigener Text nur im Bezahltarif).
+
+Zum Nachbauen:
 
 1. **Konto** auf cal.com anlegen. Nutzername z. B. `tuwasduwillst`, Zeitzone Europe/Berlin, Sprache Deutsch.
 2. **Kalender verbinden** (Einstellungen → Kalender): den Google-Kalender, in dem das Rotations-Skript läuft, **und** alle privaten Kalender, die auf Konflikte geprüft werden sollen. Neue Buchungen landen im Google-Hauptkalender.
@@ -44,7 +50,8 @@ Danach beginnt der Rhythmus von vorn.
 - Das Skript läuft jeden Morgen um 03:00 Uhr und pflegt die Blocker für die nächsten 9 Wochen.
 - **Abwesenheit:** einen normalen Termin (Status „beschäftigt") in einen der verbundenen Kalender eintragen. Die Zeit verschwindet sofort von der Buchungsseite.
 - **Rhythmus ändern:** `KONFIG.muster` im Skript. Der nächste Lauf räumt alte Blocker selbst auf.
-- **Buchbar erst ab einem Tag:** `KONFIG.ersterTag`, z. B. `'2026-11-02'` (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung).
+- **Buchbar erst ab einem Tag:** `KONFIG.ersterTag`, aktuell `'2026-11-02'` (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung).
+- **Raster:** Cal.com setzt freie Zeiten direkt hinter belegte Blöcke. Deshalb belegt das Skript jeden Zufallsblocker und jeden echten Termin bis zum nächsten Terminbeginn (60 + 30 Min, `KONFIG.pauseMin`). Ein privater Termin, der erst nach dem 3-Uhr-Lauf eingetragen wird, kann das Raster bis zum nächsten Lauf verschieben; sofort korrigieren: `aktualisiereBlocker` im Skript-Editor ausführen.
 - **Terminbeginne ändern:** `KONFIG.slots` anpassen und in Cal.com Zeitintervall und Verfügbarkeit gleich halten.
 
 ## Belegt-Optik
