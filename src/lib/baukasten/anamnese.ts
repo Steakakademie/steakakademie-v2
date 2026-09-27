@@ -8,7 +8,7 @@
 
 import {
   type Land, type Waehrung, type PreisSchluessel,
-  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN, ARTIKELTEXT_WOERTER,
+  waehrungFuer, preis, mietkaufRate, formatBetrag, LAUFEND_BEIM_KUNDEN, ARTIKELTEXT_WOERTER, COACHING_MINUTEN, LIEFERZEIT_WOCHEN,
 } from './preise';
 
 // ─── Antworten ────────────────────────────────────────────────────────────────
@@ -22,7 +22,7 @@ export type Leistungen = '1-3' | '4-8' | '9-15' | 'mehr';
 export type Artikel = 'bis-50' | '51-500' | 'mehr';
 export type ArtikelMaterial = 'beides' | 'fotos' | 'texte' | 'nichts';
 export type Stellen = '1' | '2-5' | 'mehr';
-export type Sprachen = 'de' | 'de-en' | 'weitere';
+export type Sprachen = 'de' | 'de-en'; // weitere Sprachen bieten wir nicht an (Uwe, 26.09.2026)
 export type Vorhanden = 'logo' | 'fotos' | 'texte';
 export type Betrieb = 'selbst-pflegen' | 'ihr-pflegt' | 'selbst-bauen';
 export type Sichtbarkeit = 'lokal' | 'ueberregional' | 'wachsen';
@@ -131,7 +131,7 @@ export const FRAGEN: Frage[] = [
       { wert: '1', label: 'Eine' }, { wert: '2-5', label: '2–5' }, { wert: 'mehr', label: 'Mehr als 5' },
     ] },
   { key: 'sprachen', block: 'Umfang', art: 'eins', frage: 'In welchen Sprachen soll die Website erscheinen?', optionen: [
-    { wert: 'de', label: 'Deutsch' }, { wert: 'de-en', label: 'Deutsch und Englisch' }, { wert: 'weitere', label: 'Deutsch und weitere Sprachen' },
+    { wert: 'de', label: 'Deutsch' }, { wert: 'de-en', label: 'Deutsch und Englisch' },
   ] },
   // D — Material
   { key: 'vorhanden', block: 'Material', art: 'mehrere', optional: true, frage: 'Was ist schon vorhanden?',
@@ -255,7 +255,8 @@ export function ermittleStufe(a: Antworten): Stufe {
   const ziel = (z: Ziel) => a.ziele.includes(z);
   const grosserShop = ziel('verkaufen') && (a.artikel === '51-500' || a.artikel === 'mehr');
   if (ziel('eindruck') && a.rahmen === 'darueber') return 'XL';
-  if (ziel('portal') || grosserShop) return 'L';
+  // Festpakete haben höchstens 12 Seiten — mehr als 15 Leistungen gehen nur als Maßanfertigung (Uwe, 26.09.2026)
+  if (ziel('portal') || grosserShop || a.leistungen === 'mehr') return 'L';
   if (ziel('blog') || ziel('verkaufen') || ziel('termine') || a.betrieb === 'selbst-pflegen') return 'M';
   return 'S';
 }
@@ -300,9 +301,6 @@ export function werteAus(a: Antworten): Ergebnis {
     paketBetrag = p('rohbau');
     positionen.push({ label: 'Rohbau', betrag: paketBetrag, art: 'einmalig', hinweis: 'Bis 12 Seiten, eigene Seite je Leistung, Galerie, Anfrageformular, SEO/GEO-Standard.' });
   }
-  if (a.leistungen === 'mehr' && !massanfertigung) {
-    positionen.push({ label: 'Zusätzliche Leistungsseiten (über 12 Seiten)', betrag: null, art: 'einmalig', hinweis: 'Umfang klären wir im Angebot.' });
-  }
 
   // Bausteine — in L/XL Teil der Maßanfertigung, in M ist einer im Paket enthalten
   let bausteinFrei = stufe === 'M';
@@ -325,8 +323,14 @@ export function werteAus(a: Antworten): Ergebnis {
     positionen.push({ label: 'Befreiungs-Paket: Domain und Zugänge zurückholen', betrag: p('befreiungAb'), ab: true, enthalten: true, art: 'einmalig', hinweis: `Normalfall. Blockiert die bisherige Agentur, rechnen wir Mehraufwand mit ${formatBetrag(p('mehraufwandStunde'), w)} pro Stunde ab — rechtliche Durchsetzung übernimmt ein Anwalt, nicht wir. Wird bei Buchung eines Pakets angerechnet.` });
     markierungen.push('Befreiung nötig');
   }
-  if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: null, art: 'einmalig', hinweis: 'Wir führen einen vorhandenen Buchungsdienst ein — Preis im Angebot.' });
-  if (a.sprachen !== 'de') positionen.push({ label: a.sprachen === 'de-en' ? 'Zweite Sprache: Englisch' : 'Weitere Sprachen', betrag: null, enthalten: massanfertigung, art: 'einmalig', hinweis: massanfertigung ? 'Teil der Maßanfertigung.' : 'Preis je Sprache im Angebot.' });
+  if (ziel('termine') && !massanfertigung) positionen.push({ label: 'Terminbuchung einrichten', betrag: p('terminbuchung'), art: 'einmalig', hinweis: 'Buchungsseite in deinem eigenen Google-Kalender, eingebunden in deine Website. Auf Wunsch mit automatischem Wochenrhythmus.' });
+  if (a.sprachen === 'de-en') {
+    if (massanfertigung) positionen.push({ label: 'Zweite Sprache: Englisch', betrag: null, enthalten: true, art: 'einmalig', hinweis: 'Teil der Maßanfertigung.' });
+    else {
+      const klein = paket === 'Fundament';
+      positionen.push({ label: `Zweite Sprache: Englisch (${klein ? 'bis 5' : 'bis 12'} Seiten)`, betrag: p(klein ? 'englischBis5Seiten' : 'englischBis12Seiten'), art: 'einmalig', hinweis: 'KI-gestützt übersetzt, von einem Menschen geprüft. Sprachumschalter und Suchmaschinen-Kennzeichnung inklusive.' });
+    }
+  }
 
   // Stückpreise (nicht in der Summe)
   if (ziel('verkaufen') && (a.artikelMaterial === 'fotos' || a.artikelMaterial === 'nichts')) {
@@ -369,8 +373,8 @@ export function werteAus(a: Antworten): Ergebnis {
   // Zeitrahmen (Richtwert, ab vollständigen Unterlagen)
   const zeitrahmen = massanfertigung
     ? 'Nach dem Wertgespräch. Wir nehmen höchstens eine Maßanfertigung gleichzeitig an — ggf. mit Warteliste.'
-    : stufe === 'M' ? 'In der Regel 3–6 Wochen ab vollständigen Unterlagen.' : 'In der Regel 2–4 Wochen ab vollständigen Unterlagen.';
-  if (a.termin === '4-wochen' && (massanfertigung || (stufe === 'M' && a.vorhaben === 'modernisieren'))) {
+    : `${stufe === 'M' ? LIEFERZEIT_WOCHEN.schluesselfertig : paket === 'Fundament' ? LIEFERZEIT_WOCHEN.fundament : LIEFERZEIT_WOCHEN.rohbau} Wochen ab vollständigen Unterlagen.`;
+  if (a.termin === '4-wochen' && (massanfertigung || stufe === 'M')) {
     hinweise.push('4 Wochen sind für diesen Umfang knapp. Wir sagen dir im Angebot ehrlich, was bis dahin realistisch ist.');
   }
 
@@ -403,7 +407,7 @@ export function werteAus(a: Antworten): Ergebnis {
     weichen.push({ art: 'eigenregie', text: 'Du willst selbst bauen? Dann ist Eigenregie wahrscheinlich dein Weg: der Selbstlern-Kurs für deine eigene Website — mit denselben Werkzeugen, die wir nutzen. Die Diagnose zeigt dir in 3 Minuten, ob er zu dir passt.', href: EIGENREGIE_DIAGNOSE_URL });
   }
   if (a.betrieb === 'selbst-pflegen') {
-    weichen.push({ art: 'coaching', text: `Du willst Inhalte selbst pflegen: Nach der Übergabe zeigen wir dir das im Personal-Coaching (Einheit ${formatBetrag(p('coachingEinheit'), w)}, einzeln buchbar).` });
+    weichen.push({ art: 'coaching', text: `Du willst Inhalte selbst pflegen: Nach der Übergabe zeigen wir dir das im Personal-Coaching (Einheit ${COACHING_MINUTEN} Minuten für ${formatBetrag(p('coachingEinheit'), w)}, einzeln buchbar). Den Termin wählst du nach dem Kauf direkt selbst im Kalender.` });
   }
   const rahmenGrenze: Record<Rahmen, number> = { 'bis-1000': 1000, 'bis-3000': 3000, 'bis-10000': 10000, darueber: Infinity, unklar: Infinity };
   const grenze = rahmenGrenze[a.rahmen] * (w === 'CHF' ? 1.2 : 1);

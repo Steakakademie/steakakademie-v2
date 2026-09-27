@@ -52,20 +52,34 @@ export const PREISE = {
   artikeltextWort: { eur: 0.27 },
   produktbildMin: { eur: 3 },
   produktbildMax: { eur: 6 },
+  // Bausteine, festgelegt 27.09.2026 (Vertiefungsrunde: Aufwand + Markt → Uwe)
+  terminbuchung: { eur: 190, chf: 230 },
+  englischBis5Seiten: { eur: 490, chf: 590 },
+  englischBis12Seiten: { eur: 790, chf: 950 },
+  /** Anfrage-Assistent: Einrichtung in den Konten des Kunden inkl. 4 Wochen Probelauf. */
+  anfrageAssistent: { eur: 990, chf: 1190 },
+  /** Agenten-Überwachung: in Wartung Plus enthalten, zu Basis/Standard als Aufpreis. */
+  agentenUeberwachung: { eur: 49, chf: 59 },
   // Laufend
   wartungBasis: { eur: 49, chf: 59 },
   wartungStandard: { eur: 79, chf: 95 },
   wartungPlus: { eur: 129, chf: 155 },
   wachstumKlein: { eur: 490 },
   wachstumGross: { eur: 890 },
-  // Personal-Coaching (Eigenregie-Konzept 2b, freigegeben 09.09.2026)
+  // Personal-Coaching (Eigenregie-Konzept 2b, freigegeben 09.09.2026; Einheit = 60 Minuten, festgelegt 26.09.2026)
   coachingEinheit: { eur: 129 },
 } as const satisfies Record<string, Preis>;
 
 export type PreisSchluessel = keyof typeof PREISE;
 
+/** Lieferzeit in Wochen ab vollständigen Unterlagen (Uwe, 27.09.2026). Maßanfertigung: nach dem Wertgespräch. */
+export const LIEFERZEIT_WOCHEN = { fundament: 2, rohbau: 3, schluesselfertig: 5 } as const;
+
 /** Übliche Länge einer Artikelbeschreibung — Grundlage der Stückpreis-Spanne in der Anamnese. */
 export const ARTIKELTEXT_WOERTER = { min: 100, max: 200 } as const;
+
+/** Dauer einer Coaching-Einheit in Minuten (Uwe, 26.09.2026). */
+export const COACHING_MINUTEN = 60;
 
 export const preis = (k: PreisSchluessel, w: Waehrung): number => betrag(PREISE[k], w);
 

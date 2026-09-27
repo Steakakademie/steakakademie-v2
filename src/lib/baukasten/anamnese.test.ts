@@ -85,6 +85,29 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     expect(t?.hinweis).toContain('0,27 € je Wort');
   });
 
+  it('4d Mehr als 15 Leistungen → Maßanfertigung (Festpakete höchstens 12 Seiten)', () => {
+    const e = werteAus(mit({ leistungen: 'mehr' }));
+    expect(e.stufe).toBe('L');
+    expect(e.positionen.some((p) => p.label.startsWith('Zusätzliche Leistungsseiten'))).toBe(false);
+  });
+
+  it('4e Sprachen: nur Deutsch oder Deutsch + Englisch', () => {
+    const f = aktiveFragen(basis).find((x) => x.key === 'sprachen');
+    expect(f?.optionen?.map((o) => o.wert)).toEqual(['de', 'de-en']);
+    const fundament = werteAus(mit({ sprachen: 'de-en' }));
+    expect(fundament.positionen.find((p) => p.label.startsWith('Zweite Sprache'))?.betrag).toBe(490);
+    expect(fundament.einmalig.betrag).toBe(990 + 490);
+    expect(werteAus(mit({ sprachen: 'de-en', leistungen: '4-8' })).positionen.find((p) => p.label.startsWith('Zweite Sprache'))?.betrag).toBe(790);
+  });
+
+  it('4f Terminbuchung 190 € und Lieferzeiten 2 / 3 / 5 Wochen', () => {
+    const t = werteAus(mit({ ziele: ['anfragen', 'termine'] }));
+    expect(t.positionen.find((p) => p.label === 'Terminbuchung einrichten')?.betrag).toBe(190);
+    expect(werteAus(basis).zeitrahmen).toBe('2 Wochen ab vollständigen Unterlagen.');
+    expect(werteAus(mit({ leistungen: '4-8' })).zeitrahmen).toBe('3 Wochen ab vollständigen Unterlagen.');
+    expect(werteAus(mit({ ziele: ['blog'] })).zeitrahmen).toBe('5 Wochen ab vollständigen Unterlagen.');
+  });
+
   it('5 Großer Shop (51–500 Artikel) → L, Wertgespräch, kein Mietkauf', () => {
     const e = werteAus(mit({ ziele: ['verkaufen'], artikel: '51-500', artikelMaterial: 'nichts', zahlung: 'monatlich', rahmen: 'bis-10000' }));
     expect(e.stufe).toBe('L');
@@ -120,6 +143,11 @@ describe('Projekt-Anamnese — 10 Testfälle (Prüfpunkt Stufe 1)', () => {
     const arten = e.weichen.map((w) => w.art);
     expect(arten).toContain('eigenregie');
     expect(arten).toContain('budget');
+  });
+
+  it('9b Coaching-Weiche nennt 60 Minuten für 129 €', () => {
+    const e = werteAus(mit({ betrieb: 'selbst-pflegen', ziele: ['anfragen'] }));
+    expect(e.weichen.find((x) => x.art === 'coaching')?.text).toContain('60 Minuten für 129 €');
   });
 
   it('10 Gleiche Antworten → gleiches Ergebnis; Freitext 24/7 wird ehrlich beantwortet', () => {
