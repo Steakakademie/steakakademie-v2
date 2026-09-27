@@ -15,6 +15,22 @@ Termine à 60 Minuten, Start stündlich 09:00–16:00, 8 Wochen im Voraus buchba
 
 Danach beginnt der Rhythmus von vorn. NRW-Feiertage sind automatisch gesperrt.
 
+## Belegt-Optik (ab 27.09.2026)
+
+An buchbaren Tagen blockt das Skript zusätzlich einzelne Stunden nach Zufall:
+
+| Abstand ab heute | geblockte Stunden pro Tag |
+|---|---|
+| bis 14 Tage | 2–4 |
+| 15–35 Tage | 1–3 |
+| danach | 0–2 |
+
+- **Stabil:** Der Zufall hängt am Datum. Jeder Lauf blockt dieselben Stunden, nichts springt hin und her.
+- **Echte Buchungen zählen mit:** Hat ein Tag drei echte Termine und das Ziel sind drei, kommt kein Zufallsblocker dazu.
+- **Einstellen:** `KONFIG.zufall.staffel` ändert die Menge, `KONFIG.zufall.salz` erzeugt eine neue Verteilung, `KONFIG.zufall.aktiv = false` schaltet die Zufallsblocker ab.
+- **Werkzeug:** Das funktioniert mit dem Google-Terminplan und mit Cal.com Free gleich, weil beide die Belegung aus dem Google-Kalender lesen.
+- **Grenze:** Die Buchungsseite zeigt nur freie Zeiten. Nirgends „gebucht", „fast ausgebucht" oder „nur noch 2 frei" dazuschreiben, solange das nicht stimmt. Erfundene Knappheit ist irreführende Werbung (UWG).
+
 ## Einrichtung (einmalig, ca. 15 Minuten)
 
 1. **Terminplan anlegen** (Google Kalender am Computer → Eintragen → Terminplan)

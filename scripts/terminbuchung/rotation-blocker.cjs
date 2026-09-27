@@ -14,6 +14,15 @@
  * Eigene Abwesenheiten: einfach einen Termin („beschäftigt") in den Hauptkalender
  * eintragen — der Terminplan blendet die Zeit sofort aus. Nichts weiter zu tun.
  *
+ * Belegt-Optik (Uwe, 27.09.2026): An buchbaren Tagen werden zusätzlich einzelne Stunden
+ * nach Zufall geblockt — vorne im Kalender mehr, weiter hinten weniger, jeden Tag anders.
+ * Der Zufall ist je Datum fest (gleiche Stunden bei jedem Lauf), damit nichts „flackert".
+ * Echte Buchungen werden angerechnet: Hat ein Tag schon echte Termine, fallen entsprechend
+ * weniger Zufallsblocker an. Wirkt auf Google-Terminplan und Cal.com gleichermaßen, weil
+ * beide die Belegung aus dem Google-Kalender lesen.
+ * Grenze: Die Buchungsseite zeigt nur freie Zeiten — nirgends Texte wie „gebucht" oder
+ * „nur noch 2 frei" dazuschreiben, solange das nicht stimmt (irreführende Knappheit, UWG).
+ *
  * Kosten: 0 € (Google Apps Script, privates Google-Konto).
  */
 
@@ -27,6 +36,14 @@ const KONFIG = {
   feiertageNRW: true,
   titel: 'Rotation: nicht buchbar',
   tag: 'rotationBlocker',
+  // Zufällig geblockte Stunden an buchbaren Tagen (8 Termine am Tag: 9–16 Uhr)
+  zufall: {
+    aktiv: true,
+    salz: 'tuwasduwillst-2026',   // ändern = neue Verteilung
+    // [bis Tag x ab heute, min, max] Stunden pro Tag
+    staffel: [[14, 2, 4], [35, 1, 3], [999, 0, 2]],
+    titel: 'Nicht verfügbar',
+  },
 };
 
 // ─── reine Logik (ohne Google-Dienste, testbar) ───────────────────────────────
@@ -67,6 +84,31 @@ function istBuchbar(d, k) {
   return k.muster[rhythmusWoche(d, k.anker)].indexOf(wt) !== -1;
 }
 
+/** FNV-1a + Murmur3-Finalizer → gut gestreute Zahl in [0, 1), fest je Eingabe. */
+function zufallszahl(text) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b) >>> 0;
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35) >>> 0;
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+
+/** Zielzahl zufällig geblockter Stunden für einen buchbaren Tag (abstand = Tage ab heute). */
+function zufallsAnzahl(tag, abstand, k) {
+  const st = k.zufall.staffel.find(function (x) { return abstand <= x[0]; });
+  return st[1] + Math.floor(zufallszahl(k.zufall.salz + '|n|' + tag) * (st[2] - st[1] + 1));
+}
+
+/** Die Stunden (Startzeit) in fester Zufallsreihenfolge für einen Tag. */
+function zufallsStunden(tag, k) {
+  const stunden = [];
+  for (let h = k.von; h < k.bis; h++) stunden.push(h);
+  return stunden.sort(function (a, b) {
+    return zufallszahl(k.zufall.salz + '|' + tag + '|' + a) - zufallszahl(k.zufall.salz + '|' + tag + '|' + b);
+  });
+}
+
 /** Werktage im Horizont, die geblockt werden müssen. */
 function zuBlockendeTage(heute, k) {
   const out = [];
@@ -79,33 +121,62 @@ function zuBlockendeTage(heute, k) {
 
 // ─── Google-Kalender (läuft nur in Apps Script) ───────────────────────────────
 
+/**
+ * Soll-Liste aller Blocker: ganze Tage (Rhythmus) + einzelne Zufallsstunden.
+ * belegt(tag) liefert die Startstunden echter Termine an diesem Tag (werden angerechnet).
+ * Schlüssel: 'YYYY-MM-DD@von-bis'.
+ */
+function sollBlocker(heute, k, belegt) {
+  const out = {};
+  zuBlockendeTage(heute, k).forEach(function (tag) { out[tag + '@' + k.von + '-' + k.bis] = k.titel; });
+  if (!k.zufall.aktiv) return out;
+  for (let n = 0; n <= k.horizontTage; n++) {
+    const d = plusTage(heute, n), tag = ymd(d);
+    if (!istBuchbar(d, k)) continue;
+    const echt = belegt ? belegt(tag) : [];
+    let rest = Math.max(0, zufallsAnzahl(tag, n, k) - echt.length);
+    zufallsStunden(tag, k).forEach(function (h) {
+      if (rest > 0 && echt.indexOf(h) === -1) { out[tag + '@' + h + '-' + (h + 1)] = k.zufall.titel; rest--; }
+    });
+  }
+  return out;
+}
+
 function aktualisiereBlocker() {
   const k = KONFIG;
   const kal = k.kalenderId === 'primary' ? CalendarApp.getDefaultCalendar() : CalendarApp.getCalendarById(k.kalenderId);
   const heute = new Date();
-  const soll = zuBlockendeTage(heute, k);
   const start = new Date(heute.getFullYear(), heute.getMonth(), heute.getDate());
   const ende = plusTage(start, k.horizontTage + 1);
+  const schluessel = function (ev) { return ymd(ev.getStartTime()) + '@' + ev.getStartTime().getHours() + '-' + ev.getEndTime().getHours(); };
+
+  const events = kal.getEvents(start, ende);
+  const echt = {};
+  events.forEach(function (ev) {
+    if (ev.getTag(k.tag) === '1' || ev.isAllDayEvent()) return;
+    const tag = ymd(ev.getStartTime());
+    (echt[tag] = echt[tag] || []).push(ev.getStartTime().getHours());
+  });
+  const soll = sollBlocker(heute, k, function (tag) { return echt[tag] || []; });
 
   const vorhanden = {};
-  kal.getEvents(start, ende).forEach(function (ev) {
-    if (ev.getTag(k.tag) === '1') {
-      const tag = ymd(ev.getStartTime());
-      if (soll.indexOf(tag) === -1 || vorhanden[tag]) ev.deleteEvent(); // Rhythmus geändert oder doppelt
-      else vorhanden[tag] = true;
-    }
+  events.forEach(function (ev) {
+    if (ev.getTag(k.tag) !== '1') return;
+    const key = schluessel(ev);
+    if (!soll[key] || vorhanden[key]) ev.deleteEvent(); // Rhythmus/Zufall geändert oder doppelt
+    else vorhanden[key] = true;
   });
-  soll.forEach(function (tag) {
-    if (vorhanden[tag]) return;
-    const d = datum(tag);
-    const ev = kal.createEvent(k.titel,
-      new Date(d.getFullYear(), d.getMonth(), d.getDate(), k.von),
-      new Date(d.getFullYear(), d.getMonth(), d.getDate(), k.bis),
-      { description: 'Automatisch vom Rotations-Blocker (tuwasduwillst.de). Nicht von Hand ändern — Rhythmus in KONFIG anpassen.' });
+  Object.keys(soll).forEach(function (key) {
+    if (vorhanden[key]) return;
+    const tag = key.split('@')[0], zeiten = key.split('@')[1].split('-').map(Number), d = datum(tag);
+    const ev = kal.createEvent(soll[key],
+      new Date(d.getFullYear(), d.getMonth(), d.getDate(), zeiten[0]),
+      new Date(d.getFullYear(), d.getMonth(), d.getDate(), zeiten[1]),
+      { description: 'Automatisch vom Rotations-Blocker (tuwasduwillst.de). Nicht von Hand ändern — KONFIG anpassen.' });
     ev.setTag(k.tag, '1');
     ev.removeAllReminders();
   });
-  console.log('Blocker gesetzt: ' + soll.length + ' Tage bis ' + ymd(ende));
+  console.log('Blocker gesetzt: ' + Object.keys(soll).length + ' bis ' + ymd(ende));
 }
 
 /** Einmal ausführen: legt den täglichen Lauf (03:00 Uhr) an. */
@@ -115,4 +186,4 @@ function einrichten() {
   aktualisiereBlocker();
 }
 
-if (typeof module !== 'undefined') module.exports = { KONFIG, istBuchbar, zuBlockendeTage, rhythmusWoche, feiertageNRW, ymd, datum };
+if (typeof module !== 'undefined') module.exports = { KONFIG, istBuchbar, zuBlockendeTage, rhythmusWoche, feiertageNRW, ymd, datum, sollBlocker, zufallsAnzahl, plusTage };

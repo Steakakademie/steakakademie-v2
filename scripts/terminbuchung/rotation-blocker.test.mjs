@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { KONFIG: k, istBuchbar, zuBlockendeTage, rhythmusWoche, feiertageNRW, datum } = require('./rotation-blocker.cjs');
+const { KONFIG: k, istBuchbar, zuBlockendeTage, rhythmusWoche, feiertageNRW, datum, sollBlocker, plusTage, ymd } = require('./rotation-blocker.cjs');
 const tage = (liste) => liste.map((s) => istBuchbar(datum(s), k));
 
 describe('Rotations-Blocker Terminbuchung (Rhythmus Uwe, 26.09.2026)', () => {
@@ -28,5 +28,45 @@ describe('Rotations-Blocker Terminbuchung (Rhythmus Uwe, 26.09.2026)', () => {
     expect(bl).toContain('2026-10-06');
     expect(bl).not.toContain('2026-10-05');
     expect(bl.every((s) => { const w = datum(s).getDay(); return w > 0 && w < 6; })).toBe(true);
+  });
+
+  describe('Zufallsblocker (Belegt-Optik)', () => {
+    const heute = datum('2026-10-05');
+    const zufall = (belegt) => Object.entries(sollBlocker(heute, k, belegt)).filter(([, t]) => t === k.zufall.titel).map(([key]) => key);
+    const proTag = (keys) => keys.reduce((m, key) => { const t = key.split('@')[0]; m[t] = (m[t] || 0) + 1; return m; }, {});
+
+    it('nur an buchbaren Tagen, nur volle Stunden 9–16, stabil bei jedem Lauf', () => {
+      const a = zufall();
+      expect(a).toEqual(zufall());
+      for (const key of a) {
+        const [tag, zeit] = key.split('@');
+        expect(istBuchbar(datum(tag), k)).toBe(true);
+        const [von, bis] = zeit.split('-').map(Number);
+        expect(von).toBeGreaterThanOrEqual(9); expect(von).toBeLessThanOrEqual(16); expect(bis).toBe(von + 1);
+      }
+    });
+
+    it('vorne voller als hinten, und nicht jeder Tag gleich', () => {
+      const n = proTag(zufall());
+      const tage = Object.keys(n).sort();
+      const nah = tage.filter((t) => t <= ymd(plusTage(heute, 14))).map((t) => n[t]);
+      nah.forEach((x) => { expect(x).toBeGreaterThanOrEqual(2); expect(x).toBeLessThanOrEqual(4); });
+      const fern = Array.from({ length: 63 }, (_, i) => plusTage(heute, i)).filter((d) => istBuchbar(d, k) && ymd(d) > ymd(plusTage(heute, 35))).map((d) => n[ymd(d)] || 0);
+      fern.forEach((x) => expect(x).toBeLessThanOrEqual(2));
+      expect(new Set(nah).size).toBeGreaterThan(1);
+      const stundenMuster = new Set(tage.map((t) => zufall().filter((key) => key.startsWith(t)).map((key) => key.split('@')[1]).sort().join()));
+      expect(stundenMuster.size).toBeGreaterThan(5);
+    });
+
+    it('echte Termine werden angerechnet und nie doppelt geblockt', () => {
+      const ohne = proTag(zufall())['2026-10-05'];
+      const mit = zufall((tag) => (tag === '2026-10-05' ? [9, 10, 11, 12] : []));
+      expect(mit.filter((key) => key.startsWith('2026-10-05')).length).toBe(Math.max(0, ohne - 4));
+      expect(mit.some((key) => key === '2026-10-05@9-10')).toBe(false);
+    });
+
+    it('abschaltbar', () => {
+      expect(Object.values(sollBlocker(heute, { ...k, zufall: { ...k.zufall, aktiv: false } })).every((t) => t === k.titel)).toBe(true);
+    });
   });
 });
