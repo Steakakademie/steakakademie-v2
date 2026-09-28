@@ -496,18 +496,34 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
             </div>
           </Link>
 
-          {/* Cut-Atlas → bestehende Cut-Welt */}
-          <Link href="/cuts" className={KACHEL}>
-            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-              <Flame size={18} />
-              <h3 className="font-serif text-lg font-bold text-text-light">Cut-Atlas</h3>
+          {/* Cut-Atlas → bestehende Cut-Welt. Bild (Uwe, 28.09.2026): die Kachel
+              stand neben Aroma-Matcher und Foodpairing fast leer. Das Bild waechst
+              mit der Zeilenhoehe (flex-1) und fuellt so genau den Leerraum. */}
+          <Link
+            href="/cuts"
+            className="group flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
+          >
+            <div className="relative min-h-40 w-full flex-1">
+              <Image
+                src="/images/cut-atlas-stier.jpg"
+                alt="Schwarzer Stier im Glutlicht — Einstieg in den Cut-Atlas"
+                fill
+                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
+                className="object-cover object-[center_20%] transition-transform duration-500 group-hover:scale-[1.03]"
+              />
             </div>
-            <p className="text-xs text-text-secondary mb-4">
-              Jeder Cut erklärt — Lage, Muskel, Marmorierung und der perfekte Garpunkt.
-            </p>
-            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-              Entdecken <ChevronRight size={14} />
-            </span>
+            <div className="flex flex-col p-5">
+              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+                <Flame size={18} />
+                <h3 className="font-serif text-lg font-bold text-text-light">Cut-Atlas</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Jeder Cut erklärt — Lage, Muskel, Marmorierung und der perfekte Garpunkt.
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+                Entdecken <ChevronRight size={14} />
+              </span>
+            </div>
           </Link>
 
           <FoodpairingBox
