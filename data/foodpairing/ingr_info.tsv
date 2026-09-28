@@ -1,4 +1,5 @@
-# Zutaten (kuratiert) — id  name  category
+# Zutaten (kuratiert, v2 28.09.2026) — id	name	category
+# IDs 1–19 aus v1 beibehalten; 20 (Ribeye) und 21 (Steak) entfallen — Aliase auf „Rind" in src/app/api/foodpairing/route.ts.
 1	Rind	Fleisch
 2	Schwein	Fleisch
 3	Lamm	Fleisch
@@ -14,9 +15,59 @@
 13	Brotkruste	Backwaren
 14	Basmatireis	Getreide
 15	Popcorn	Getreide
-16	Butter	Milchfett
-17	Räucherspeck	Geräuchertes
-18	Whisky	Geräuchertes
+16	Butter	Milchprodukte
+17	Speck	Fleisch
+18	Whisky	Getränke
 19	Kartoffel	Gemüse
-20	Ribeye	Fleisch
-21	Steak	Fleisch
+22	Ananas	Obst
+23	Apfel	Obst
+24	Balsamico	Würzen
+25	Basilikum	Kräuter
+26	Bier	Getränke
+27	Blauschimmelkäse	Milchprodukte
+28	Bourbon	Getränke
+29	Chili	Gewürze
+30	Ente	Geflügel
+31	Erdbeere	Obst
+32	Erdnuss	Nüsse
+33	Feige (getrocknet)	Obst
+34	Garnele	Meeresfrüchte
+35	Grüne Minze	Kräuter
+36	Himbeere	Obst
+37	Hirsch	Fleisch
+38	Honig	Süßes
+39	Ingwer	Gewürze
+40	Kirsche	Obst
+41	Knoblauch	Gemüse
+42	Koriandergrün	Kräuter
+43	Kreuzkümmel	Gewürze
+44	Lorbeer	Kräuter
+45	Mais	Getreide
+46	Mango	Obst
+47	Meerrettich	Gewürze
+48	Muskatnuss	Gewürze
+49	Nelke	Gewürze
+50	Olivenöl	Öle
+51	Orange	Obst
+52	Paprika	Gemüse
+53	Parmesan	Milchprodukte
+54	Petersilie	Kräuter
+55	Pfeffer	Gewürze
+56	Pfefferminze	Kräuter
+57	Pfirsich	Obst
+58	Rosmarin	Kräuter
+59	Rotwein	Getränke
+60	Räucherlachs	Fisch
+61	Salbei	Kräuter
+62	Senfsaat	Gewürze
+63	Sesam	Nüsse
+64	Sojasauce	Würzen
+65	Spargel	Gemüse
+66	Thymian	Kräuter
+67	Tomate	Gemüse
+68	Trüffel	Pilze
+69	Vanille	Gewürze
+70	Weißwein	Getränke
+71	Zimt	Gewürze
+72	Zitrone	Obst
+73	Zwiebel	Gemüse

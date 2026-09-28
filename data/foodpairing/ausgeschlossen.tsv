@@ -1,0 +1,16 @@
+# Recherchierte, aber NICHT übernommene Belege — mit Grund. Nicht importiert.
+zutat	stoff	quelle	doi	grund
+Räucherlachs	Kresol (Isomer nicht angegeben)	Varlet et al. 2006	10.1021/jf053001p	Isomer in der Quelle nicht angegeben
+Petersilie	3-Methyl-2,4-nonandion	Masanetz & Grosch 1998	10.1007/s002170050225	Fehlgeruch getrockneter Ware, kein Aroma der Zutat
+Basilikum	Eugenol	Du et al. 2023	10.3390/metabo13010085	nur Sensorik-Korrelation, keine Olfaktometrie
+Basilikum	3-Methyl-2,4-nonandion	Liang et al. 2022	10.1016/j.foodres.2022.112080	Fehlgeruch getrockneter Ware, kein Aroma der Zutat
+Pfefferminze	Menthofurolacton (3,6-Dimethyl-4,5,6,7-tetrahydrobenzofuran-2(3H)-on)	Gabetti et al. 2021	10.1016/j.chroma.2021.462101	nur vorläufig identifiziert
+Ahornsirup	Vanillin	Mohammed et al. 2023	10.1016/j.heliyon.2023.e19216	nur Übersichtsartikel ohne Geruchsmessung (Mohammed 2023)
+Ahornsirup	Syringaldehyd	Mohammed et al. 2023	10.1016/j.heliyon.2023.e19216	nur Übersichtsartikel ohne Geruchsmessung (Mohammed 2023)
+Ahornsirup	Cyclotene	Mohammed et al. 2023	10.1016/j.heliyon.2023.e19216	nur Übersichtsartikel ohne Geruchsmessung (Mohammed 2023)
+Ahornsirup	Furaneol	Mohammed et al. 2023	10.1016/j.heliyon.2023.e19216	nur Übersichtsartikel ohne Geruchsmessung (Mohammed 2023)
+Ahornsirup	2-Ethyl-3,5-dimethylpyrazin	Mohammed et al. 2023	10.1016/j.heliyon.2023.e19216	nur Übersichtsartikel ohne Geruchsmessung (Mohammed 2023)
+Zitrone	Octanal	Reuss et al. 2020	10.38212/2224-6614.1060	Saft von teils HLB-kranken Bäumen, uneinheitliche Geruchsangaben
+Zitrone	1-Octen-3-on	Reuss et al. 2020	10.38212/2224-6614.1060	Saft von teils HLB-kranken Bäumen, uneinheitliche Geruchsangaben
+Zitrone	α-Pinen	Reuss et al. 2020	10.38212/2224-6614.1060	Saft von teils HLB-kranken Bäumen, uneinheitliche Geruchsangaben
+Ananas	β-Damascenon	George et al. 2025	10.1021/acs.jafc.4c12482	nur Sensorik-Korrelation, keine Olfaktometrie

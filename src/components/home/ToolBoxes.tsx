@@ -26,21 +26,23 @@ import MarcoStarter from '@/components/relaunch/MarcoStarter';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
-// Demo-Vorschau (verifizierte Aroma-Molekülbrücken aus foods-oa), bis die DB live ist.
+// Ersatzanzeige NUR bei Serverfehler: echte Ribeye-Treffer aus data/foodpairing v2
+// (28.09.2026, identisch mit match_foodpairing('Rind')). Wird ausdrücklich als
+// „Beispiel: Ribeye" beschriftet. Die v1-Demo zeigte „Kaffee · 7 Moleküle", die
+// echte DB lieferte 3 — solche Zahlen gehören nie in eine Vorschau.
 const DEMO_PAIRINGS: Pairing[] = [
-  { partner: 'Kaffee', category: 'geröstet', shared: 7, shared_examples: ['2-Methyl-3-furanthiol', 'Pyrazine'] },
-  { partner: 'Kakao', category: 'geröstet', shared: 6, shared_examples: ['Pyrazine', 'Strecker-Aldehyde'] },
-  { partner: 'Champignon', category: 'Gemüse', shared: 5, shared_examples: ['1-Octen-3-ol'] },
-  { partner: 'Thunfisch', category: 'Fisch', shared: 4, shared_examples: ['2-Methyl-3-furanthiol'] },
-  { partner: 'Röstzwiebel', category: 'Gemüse', shared: 4, shared_examples: ['Pyrazine'] },
+  { partner: 'Kartoffel', category: 'Gemüse', shared: 6, shared_examples: ['(E,E)-2,4-Decadienal', '2,3-Diethyl-5-methylpyrazin', '2-Ethyl-3,5-dimethylpyrazin'] },
+  { partner: 'Brotkruste', category: 'Backwaren', shared: 5, shared_examples: ['(E)-2-Nonenal', '(E,E)-2,4-Decadienal', '2-Acetylthiazolin'] },
+  { partner: 'Schwein', category: 'Fleisch', shared: 5, shared_examples: ['(E)-2-Nonenal', '(E,E)-2,4-Decadienal', '2-Ethyl-3,5-dimethylpyrazin'] },
+  { partner: 'Erdnuss', category: 'Nüsse', shared: 4, shared_examples: ['(E,E)-2,4-Decadienal', 'Furaneol', 'Methanthiol'] },
+  { partner: 'Garnele', category: 'Meeresfrüchte', shared: 4, shared_examples: ['2,3-Diethyl-5-methylpyrazin', '2-Acetylthiazolin', 'Furaneol'] },
 ];
 
 // Beispiel-Zutaten fuer die Foodpairing-Kachel (Uwe, 28.09.2026: Kachel wirkte leer).
-// NUR Namen, die im Aroma-Netzwerk einen Treffer liefern — am 28.09.2026 per
-// match_foodpairing() geprueft. „Rindfleisch", „Brisket", „Schweinebauch" usw.
-// liefern 0 Treffer und wuerden im Demo-Fallback landen. Neue Eintraege erst
-// gegen die RPC pruefen.
-const FOODPAIRING_BEISPIELE = ['Ribeye', 'Lamm', 'Lachs', 'Schwein', 'Hähnchen'] as const;
+// NUR Zutaten, die sowohl im alten (v1) als auch im neuen Datensatz (v2) Treffer
+// liefern — am 28.09.2026 gegen match_foodpairing() bzw. data/foodpairing geprüft.
+// „Ribeye" läuft über den Alias auf „Rind" (src/lib/foodpairing-alias.ts).
+const FOODPAIRING_BEISPIELE = ['Ribeye', 'Schwein', 'Hähnchen', 'Lamm', 'Kaffee'] as const;
 
 const KACHEL_BOX =
   'flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold focus-within:border-brand-gold transition-colors';
@@ -56,6 +58,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
   const [zutat, setZutat] = useState('');
   const [treffer, setTreffer] = useState<Pairing[] | null>(null);
   const [demo, setDemo] = useState(false);
+  const [hinweis, setHinweis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   function suchen(e: React.FormEvent) {
@@ -69,6 +72,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
     setLoading(true);
     setTreffer(null);
     setDemo(false);
+    setHinweis(null);
     try {
       const res = await fetch('/api/foodpairing', {
         method: 'POST',
@@ -78,6 +82,9 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
       const data = await res.json();
       if (res.ok && Array.isArray(data.treffer) && data.treffer.length) {
         setTreffer(data.treffer);
+      } else if (res.status === 404) {
+        // Zutat fehlt im Aroma-Netzwerk: ehrlich sagen, keine fremden Treffer zeigen.
+        setHinweis(`„${q}" ist noch nicht in unserer Aroma-Datenbank.`);
       } else {
         setTreffer(DEMO_PAIRINGS);
         setDemo(true);
@@ -98,7 +105,9 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
         <FlaskConical size={18} />
         <h3 className="font-serif text-lg font-bold text-text-light">Foodpairing</h3>
       </div>
-      <p className="text-xs text-text-secondary mb-3">Welche Aromen passen zusammen? Wissenschaftlich, über geteilte Moleküle.</p>
+      <p className="text-xs text-text-secondary mb-3">
+        Welche Aromen passen zusammen? Über geteilte Schlüssel-Aromastoffe — belegt aus über 100 Fachstudien der Lebensmittelchemie.
+      </p>
 
       <form onSubmit={suchen} className="flex gap-2">
         <input
@@ -115,6 +124,8 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
           {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
         </button>
       </form>
+
+      {hinweis && <p className="mt-3 text-xs text-text-muted">{hinweis} Probier eine der Zutaten unten.</p>}
 
       {!treffer && (
         <div className="mt-auto pt-5">
@@ -141,7 +152,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
       {treffer && (
         <div className="mt-4 space-y-2">
           {demo && (
-            <p className="text-[11px] text-text-muted italic">Vorschau-Beispiel — die Live-Datenbank wird gerade scharfgeschaltet.</p>
+            <p className="text-[11px] text-text-muted italic">Server gerade nicht erreichbar — Beispiel: Ribeye.</p>
           )}
           {treffer.map((t) => (
             <div key={t.partner} className="text-sm">

@@ -173,3 +173,20 @@ Technik-Ebene (`kochwissen`) **nicht**.
 - [ ] Juristischer Kurz-Check (Ahn-Nachnutzung, ODbL-Share-alike)
 - [ ] Head-Box-Komponente + „→ Rezept"-Verkettung im Frontend
 - [ ] Optional: CI-Workflow `import-foodpairing.yml` (analog `ingest-kochwissen.yml`)
+
+## 8 · Dataset v2 (28.09.2026)
+
+- **Anlass:** v1 hatte 21 Zutaten, 11 Stoffe/Stoffgruppen, Ø 2,5 Stoffe je Zutat. Treffer
+  teilten 1–3 Moleküle; typische Steak-Begleiter (Rotwein, Rosmarin, Knoblauch, Pfeffer)
+  fehlten, „Ribeye", „Rind", „Steak" waren dreifach geführt.
+- **v2:** 71 Zutaten · 198 Einzelstoffe mit CAS · 576 Kanten aus 588 Belegen (121 Studien,
+  alle mit DOI). Quelle der Wahrheit `data/foodpairing/belege.tsv`, Build
+  `npm run foodpairing:build`, Drift-Check in `npm run check`. Details: `data/foodpairing/SOURCES.md`.
+- **21 Hubs** nach tatsächlichem Vernetzungsgrad (Furaneol, Methional, β-Damascenon,
+  3-Methylbutanal …); jede Zutat dockt an mindestens einen an (Build prüft das).
+- Synonyme als Alias in der API (`src/lib/foodpairing-alias.ts`) statt Doppel-Zutaten.
+- **Import offen:** `foodpairing-import.mjs` upsertet nur. Die v1-Altzeilen (Stoffe 1–11 inkl.
+  ihrer 52 Kanten, Zutaten 20 „Ribeye" und 21 „Steak") bleiben dabei in der DB und müssen
+  einmalig entfernt werden — Entscheidung und Ausführung liegen bei Uwe.
+- Die Hub-Namen im Prompt des Rezept-Generators (`/api/kochwissen/generieren`) sind
+  Stoffgruppen-Begriffe und bleiben fachlich gültig; der Generator liest die Tabellen nicht.

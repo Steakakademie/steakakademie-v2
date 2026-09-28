@@ -1,21 +1,42 @@
 # Quellen & Lizenz des Aroma-Datasets
 
-Dieses Pairing-Dataset (`ingr_info.tsv`, `comp_info.tsv`, `ingr_comp.tsv`) ist eine
-**eigene Kuration der Steakakademie** — keine fremde Datenbank.
+Dieses Pairing-Dataset ist eine **eigene Kuration der Steakakademie**, keine fremde Datenbank.
+Es besteht aus **Fakten** (welcher Aromastoff in welchem Lebensmittel geruchsprägend ist)
+mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbelege in
+`belege.tsv` sind eigene Formulierungen (max. 20 Wörter), keine Zitate.
 
-## Worauf es beruht
-- **Öffentlich-freie Aromachemie** (Fakten: welches Molekül in welchem Lebensmittel
-  vorkommt — Fakten sind nicht urheberrechtlich geschützt).
-- **Unser CC-BY-Wissen** aus `data/kochwissen/foods-oa-*.csv` (MDPI *Molecules*/*Foods*,
-  CC BY 4.0, mit Attribution; eigene Formulierungen).
+## Stand v2 (28.09.2026)
+- **71 Zutaten · 198 Aromastoffe · 576 Verknüpfungen**, belegt durch **588 Belegzeilen aus
+  121 Fachstudien** (jede mit DOI). v1 hatte 21 Zutaten, 11 Stoffe(-gruppen), 52 Kanten ohne
+  Einzelquelle.
+- Grundlage: **Schlüssel-Aromastoffe** aus der Lebensmittelchemie — Aromaextrakt-
+  Verdünnungsanalyse (AEDA), Aromawerte (OAV), Rekombinations- und Weglassversuche,
+  GC-Olfaktometrie. Klassische Arbeitsgruppen u. a. Grosch, Schieberle, Buettner, Steinhaus
+  (Deutsche Forschungsanstalt für Lebensmittelchemie / TU München).
+- Jede Zeile in `belege.tsv` nennt Zubereitung, Quelle, DOI und die tatsächlich geöffnete URL
+  (meist PubMed- bzw. Europe-PMC-Abstract). Recherche am 28.09.2026; Stichprobe von 12 Belegen
+  unabhängig gegen die Abstracts geprüft: 12/12 bestätigt.
+- **Evidenz A** = AEDA/OAV/Rekombination/Omission. **Evidenz B** = GC-O ohne Verdünnung,
+  Headspace-OAV oder Übersichtsartikel mit Geruchsangabe. Schwächeres (nur Sensorik-Korrelation,
+  Übersicht ohne Geruchsmessung, Fehlgerüche, vorläufige Identifizierung) steht mit Grund in
+  `ausgeschlossen.tsv` und wird nicht importiert.
+- CAS-Nummern über PubChem geprüft; leer, wo die Quelle Stereochemie/Identität offenlässt.
+
+## Bekannte Lücken (ehrlich)
+- Nicht belegbar gefunden: **Oregano, Wacholderbeere, Paprikapulver, Ahornsirup, frische Feige,
+  gebratener westlicher Bacon, Tomatenmark.** (Teils existieren Studien, deren Abstract
+  keine Einzelstoffe nennt oder die nicht abrufbar waren.)
+- Dünn belegt: Nelke (1 Stoff), Basilikum (2), Räucherlachs (1), Pfeffer (Standardquelle
+  Jagella & Grosch 1999 nicht abrufbar), Hirsch (nur Headspace-OAV).
+- „Speck" stützt sich auf chinesischen Speck (geräuchert bzw. luftgetrocknet), „Rotwein" und
+  „Weißwein" fassen mehrere Rebsorten zusammen — Details je Zeile in `belege.tsv`.
 
 ## Bewusst NICHT verwendet (Lizenz)
-- **Ahn-Flavor-Network** (Sci. Rep. 1:196, 2011): steht unter **CC BY-NC-SA 3.0**
-  (**NonCommercial**) → für unseren kommerziellen Auftritt **nicht** nutzbar.
+- **Ahn-Flavor-Network** (Sci. Rep. 1:196, 2011): **CC BY-NC-SA 3.0** (NonCommercial).
 - **FlavorDB / FooDB** (CC BY-**NC**), **VCF** (kostenpflichtig), **FEMA-Liste**,
-  **Aroma-Wheels** (Copyright/NC-ND) — ebenfalls ausgeschlossen.
+  **Aroma-Wheels**, Foodpairing.com, The Flavor Bible — ausgeschlossen.
 
-## Status
-Bewusst klein und **steak-fokussiert** (v1). Erweiterbar durch weitere CC-BY-Paper
-oder — falls gewünscht — durch ein kommerziell lizenziertes Dataset (z. B. nach
-schriftlicher Freigabe der FlavorDB/FooDB-Autoren).
+## Erweitern
+Neue Belegzeile(n) in `belege.tsv` (gleiche Regeln: Primärliteratur, geöffnete URL, keine
+NC-Datenbanken), fehlende Zutat/Stoff-ID in `ingr_info.tsv` / `comp_info.tsv` ergänzen,
+dann `npm run foodpairing:build`. `npm run check` meldet, wenn `ingr_comp.tsv` nicht passt.
