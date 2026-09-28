@@ -15,6 +15,7 @@ import { NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { guardRequest } from '@/lib/api/guard';
+import { foodpairingZutat } from '@/lib/foodpairing-alias';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -41,7 +42,9 @@ export async function POST(req: Request) {
     maxBodyBytes: 4 * 1024,
   });
   if (!guard.ok) return guard.response;
-  const { zutat, limit } = guard.body;
+  const { limit } = guard.body;
+  // Synonyme (Ribeye, Steak, Bacon …) auf die eine Datenbank-Zutat abbilden.
+  const zutat = foodpairingZutat(guard.body.zutat);
 
   const admin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

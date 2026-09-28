@@ -173,3 +173,24 @@ Technik-Ebene (`kochwissen`) **nicht**.
 - [ ] Juristischer Kurz-Check (Ahn-Nachnutzung, ODbL-Share-alike)
 - [ ] Head-Box-Komponente + „→ Rezept"-Verkettung im Frontend
 - [ ] Optional: CI-Workflow `import-foodpairing.yml` (analog `ingest-kochwissen.yml`)
+
+## 8 · Dataset v2 (28.09.2026)
+
+- **Anlass:** v1 hatte 21 Zutaten, 11 Stoffe/Stoffgruppen, Ø 2,5 Stoffe je Zutat. Treffer
+  teilten 1–3 Moleküle; typische Steak-Begleiter (Rotwein, Rosmarin, Knoblauch, Pfeffer)
+  fehlten, „Ribeye", „Rind", „Steak" waren dreifach geführt.
+- **v2:** 71 Zutaten · 198 Einzelstoffe mit CAS · 576 Kanten aus 588 Belegen (121 Studien,
+  alle mit DOI). Quelle der Wahrheit `data/foodpairing/belege.tsv`, Build
+  `npm run foodpairing:build`, Drift-Check in `npm run check`. Details: `data/foodpairing/SOURCES.md`.
+- **21 Hubs** nach tatsächlichem Vernetzungsgrad (Furaneol, Methional, β-Damascenon,
+  3-Methylbutanal …); jede Zutat dockt an mindestens einen an (Build prüft das).
+- Synonyme als Alias in der API (`src/lib/foodpairing-alias.ts`) statt Doppel-Zutaten.
+- **Import = Sync (Freigabe Uwe, 28.09.2026):** `foodpairing-import.mjs` gleicht die DB an die
+  Dateien an und entfernt Überzähliges. Beim ersten v2-Lauf: Zutaten 20 „Ribeye" und 21 „Steak",
+  Stoffe 1–11 (v1-Stoffgruppen) und damit deren 52 Kanten per Cascade — am 28.09. lesend per SQL
+  gegengeprüft. Sicherungen: `--dry-run` zeigt die Löschliste vorher (braucht Service-Key, im
+  Workflow vorhanden); Abbruch ohne Schreibvorgang, wenn die Dateien weniger als die Hälfte der
+  Zutaten/Kanten der DB enthalten (`--force-prune` übersteuert); `--no-prune` = reiner Upsert.
+  **Achtung:** Wer den Workflow mit fremden Datei-URLs startet, ersetzt damit den Bestand.
+- Die Hub-Namen im Prompt des Rezept-Generators (`/api/kochwissen/generieren`) sind
+  Stoffgruppen-Begriffe und bleiben fachlich gültig; der Generator liest die Tabellen nicht.

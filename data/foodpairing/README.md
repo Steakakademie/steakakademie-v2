@@ -14,13 +14,21 @@ Architektur & Rechtslage: `docs/foodpairing-steckbrief.md`.
 > (Sci. Rep. 2011, **CC BY-NC-SA**), **FlavorDB/FooDB** (CC-BY-NC), **VCF** (Abo),
 > **FEMA-Liste**, **Aroma-Wheels**. Solche Fremd-Datasets niemals hier ablegen.
 
+## Aufbau (v2, 28.09.2026)
+
+`belege.tsv` ist die Quelle der Wahrheit (eine Zeile je Fachquelle). `ingr_comp.tsv` wird
+daraus von `scripts/foodpairing-build.mjs` **erzeugt** — nie von Hand ändern.
+`ausgeschlossen.tsv` dokumentiert recherchierte, aber zu schwach belegte Zeilen.
+Synonyme (Ribeye, Steak, Bacon …) stehen in `src/lib/foodpairing-alias.ts`, nicht als
+eigene Zutaten.
+
 ## Erwartete Dateien
 
 | Datei | Spalten (tab- oder kommagetrennt) |
 |---|---|
 | `ingr_info.tsv` | `id  name  category` |
 | `comp_info.tsv` | `id  name  CAS` |
-| `ingr_comp.tsv` | `ingredient_id  compound_id` |
+| `ingr_comp.tsv` | `ingredient_id  compound_id  evidenz  quellen` (generiert; Import liest die ersten zwei Spalten) |
 
 Kommentar-/Headerzeilen mit `#` werden übersprungen. Die `id`-Werte stammen aus dem
 Quelldatensatz → Import ist idempotent (re-runnable).
@@ -29,7 +37,8 @@ Quelldatensatz → Import ist idempotent (re-runnable).
 
 ```bash
 node scripts/foodpairing-import.mjs --dir data/foodpairing --dry-run   # Vorschau
-node scripts/foodpairing-import.mjs --dir data/foodpairing             # → Supabase
+node scripts/foodpairing-import.mjs --dir data/foodpairing             # → Supabase (Sync: entfernt, was nicht mehr in den Dateien steht)
+node scripts/foodpairing-import.mjs --dir data/foodpairing --no-prune  # nur ergänzen, nichts entfernen
 ```
 
 Voraussetzung: Migration `supabase/migrations/20260615_aroma_pairings.sql` eingespielt,

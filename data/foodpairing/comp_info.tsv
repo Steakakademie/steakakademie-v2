@@ -1,15 +1,201 @@
-# Aromamoleküle (kuratiert) — id  name  CAS  hub_role
-# hub_role gesetzt = "Schaltzentrale" (Hub-Aromastoff, oberste Ebene). Leer = Nicht-Hub.
-# Eigene Kuration der Steakakademie aus öffentlich-freier Aromachemie + CC-BY-Wissen
-# (foods-oa). KEINE fremde Datenbank. Siehe data/foodpairing/SOURCES.md.
-1	Röst-Pyrazine	—	Röstaroma-Nabe (Grillen ↔ Kaffee/Kakao/Nüsse)
-2	2-Methyl-3-furanthiol	28588-74-1	Fleisch-Nabe (Rind ↔ Thunfisch/Schinken/Kaffee)
-3	1-Octen-3-ol	3391-86-4	Pilz-Nabe (Fleisch ↔ Pilze)
-4	2-Acetyl-1-pyrrolin	85213-22-5	Krusten-Nabe (Kruste ↔ Brot/Reis/Mais)
-5	Strecker-Aldehyde (Methylbutanal)	590-86-3	Malz/Schoko-Nabe (Bräunung ↔ Kakao/Kaffee)
-6	(E,E)-2,4-Decadienal	25152-84-5
-7	Räucherphenole (Guaiacol/Syringol)	90-05-1	Räucher-Nabe (BBQ ↔ Whisky/Speck/Lachs)
-8	Gamma-Lactone	—
-9	Eugenol	97-53-0
-10	12-Methyltridecanal	75853-49-5
-11	4-Methyloctansäure	54947-74-9
+# Aromamoleküle (kuratiert, v2 28.09.2026) — id	name	CAS	hub_role
+# hub_role gesetzt = Leit-Aromastoff (Schaltzentrale). Beispiele darin stammen aus den Daten selbst.
+# Einzelstoffe mit CAS (PubChem-geprüft); leer = Stereochemie/Identität in der Quelle nicht eindeutig. v1-Stoffgruppen (1–11) entfallen.
+101	Furaneol	3658-77-3	Karamell-Nabe · verbindet u. a. Brotkruste, Lamm, Kartoffel, Kaffee, Mais
+102	Methional	3268-49-3	Kartoffel-/Brüh-Nabe · verbindet u. a. Lachs, Rind, Ente, Kartoffel, Kaffee
+103	β-Damascenon	23726-93-4	Kochapfel-Nabe · verbindet u. a. Kartoffel, Kaffee, Bier, Vanille, Grüne Minze
+104	3-Methylbutanal	590-86-3	Malz-Nabe (Strecker-Aldehyd) · verbindet u. a. Kartoffel, Kaffee, Bourbon, Ingwer, Petersilie
+105	(E,E)-2,4-Decadienal	25152-84-5	Frittierfett-Nabe · verbindet u. a. Brotkruste, Hirsch, Ente, Kartoffel, Popcorn
+106	Linalool	78-70-6	Blüten-Nabe · verbindet u. a. Paprika, Bier, Ingwer, Basilikum, Apfel
+107	Dimethyltrisulfid	3658-80-8	Schwefel-Nabe · verbindet u. a. Hirsch, Ente, Kartoffel, Kakao, Mais
+108	Hexanal	66-25-1	Grün-Nabe · verbindet u. a. Thunfisch, Schwein, Ente, Spargel, Basmatireis
+109	2-Acetyl-1-pyrrolin	85213-22-5	Krusten-/Popcorn-Nabe · verbindet u. a. Brotkruste, Basmatireis, Senfsaat, Garnele, Erdnuss
+110	2-Methylbutanal	96-17-3	
+111	Sotolon	28664-35-9	
+112	(Z)-3-Hexenal	6789-80-6	Frischgrün-Nabe · verbindet u. a. Paprika, Meerrettich, Lorbeer, Kirsche, Olivenöl
+113	1,8-Cineol	470-82-6	Kräuter-Nabe (Eukalyptus) · verbindet u. a. Ingwer, Grüne Minze, Zitrone
+114	1-Octen-3-ol	3391-86-4	
+115	2,3-Butandion	431-03-8	Butter-Nabe · verbindet u. a. Spargel, Butter, Haselnuss, Erdbeere, Trüffel
+116	Ethyl-2-methylbutanoat	7452-79-1	
+117	Ethylbutanoat	105-54-4	Frucht-Ester-Nabe · verbindet u. a. Bier, Blauschimmelkäse, Apfel, Trüffel
+118	Guaiacol	90-05-1	Rauch-Nabe · verbindet u. a. Räucherlachs, Rind, Kaffee, Whisky, Vanille
+119	(E)-2-Nonenal	18829-56-6	
+120	4-Vinylguaiacol	7786-61-0	
+121	Ethyl-2-methylpropanoat	97-62-1	
+122	Eugenol	97-53-0	Nelken-Nabe · verbindet u. a. Bourbon, Nelke, Grüne Minze, Feige (getrocknet)
+123	Nonanal	124-19-6	Wachs-/Zitrus-Nabe · verbindet u. a. Thunfisch, Ente, Basmatireis, Zimt, Feige (getrocknet)
+124	Phenylacetaldehyd	122-78-1	
+125	Vanillin	121-33-5	
+126	2-Ethyl-3,5-dimethylpyrazin	13925-07-0	Röst-Nabe (Pyrazin) · verbindet u. a. Brotkruste, Rind, Kartoffel, Kakao
+127	2-Furfurylthiol	98-02-2	
+128	2-Methyl-3-furanthiol	28588-74-1	Fleisch-Nabe · verbindet u. a. Thunfisch, Hähnchen, Rotwein, Erdnuss, Trüffel
+129	3-Methylbuttersäure	503-74-2	
+130	Dimethylsulfid	75-18-3	Kohl-/Mais-Nabe · verbindet u. a. Röstzwiebel, Rotwein, Petersilie, Trüffel
+131	Essigsäure	64-19-7	
+132	(E)-2-Hexenal	6728-26-3	
+133	(E,Z)-2,6-Nonadienal	557-48-2	
+134	1-Octen-3-on	4312-99-6	
+135	2,3-Diethyl-5-methylpyrazin	18138-04-0	
+136	2,3-Pentandion	600-14-6	
+137	2-Acetylthiazolin	29926-41-8	
+138	2-Isobutyl-3-methoxypyrazin	24683-00-9	
+139	2-Isopropyl-3-methoxypyrazin	25773-40-4	
+140	2-Methylpropanal	78-84-2	
+141	Octanal	124-13-0	
+142	2-Phenylethanol	60-12-8	
+143	Buttersäure	107-92-6	
+144	Heptanal	111-71-7	
+145	Methanthiol	74-93-1	
+146	Myrcen	123-35-3	
+147	trans-4,5-Epoxy-(E)-2-decenal	134454-31-2	
+148	Weinlacton	182699-77-0	
+149	α-Pinen	80-56-8	
+150	γ-Decalacton	706-14-9	
+151	(3E,5Z)-1,3,5-Undecatrien	19883-27-3	
+152	2-Propionyl-1-pyrrolin	133447-37-7	
+153	Acetaldehyd	75-07-0	
+154	Decanal	112-31-2	
+155	Ethylhexanoat	123-66-0	
+156	Limonen	138-86-3	
+157	β-Ionon	14901-07-6	
+158	β-Pinen	127-91-3	Harz-/Kiefern-Nabe · verbindet u. a. Kreuzkümmel
+159	δ-Decalacton	705-86-2	
+160	(E)-2-Decenal	3913-81-3	
+161	(E)-Isoeugenol	5932-68-3	
+162	(Z)-1,5-Octadien-3-on	65767-22-8	
+163	(Z)-2-Decenal	2497-25-8	
+164	(Z)-2-Nonenal	60784-31-8	
+165	1-Hexen-3-on	1629-60-3	
+166	2-Aminoacetophenon	551-93-9	
+167	2-Heptanon	110-43-0	
+168	2-Thenylthiol	6258-63-5	
+169	3-Ethyl-2,5-dimethylpyrazin	13360-65-1	
+170	3-Mercapto-2-methylpentan-1-ol	227456-27-1	Zwiebel-Thiol-Nabe · verbindet u. a. Röstzwiebel
+171	3-Phenylpropansäure	501-52-0	
+172	3-Sulfanylhexan-1-ol	51755-83-0	
+173	3-Sulfanylhexylacetat	136954-20-6	
+174	4-Methoxybenzaldehyd	123-11-5	
+175	4-Methylguaiacol	93-51-6	
+176	Benzaldehyd	100-52-7	
+177	Borneol	507-70-0	
+178	Citronellal	106-23-0	
+179	Dimethyldisulfid	624-92-0	
+180	Ethyloctanoat	106-32-1	
+181	Furfural	98-01-1	
+182	Geranial	141-27-5	
+183	Geraniol	106-24-1	
+184	Homofuraneol	27538-10-9	
+185	Mesifuran	4077-47-8	
+186	Phenylessigsäure	103-82-2	
+187	Rotundon	18374-76-0	
+188	γ-Terpinen	99-85-4	
+189	(E)-2-Dodecenal	20407-84-5	
+190	(E)-2-Hexen-1-ol	928-95-0	
+191	(E)-2-Octenal	2548-87-0	
+192	(E,E)-2,4-Nonadienal	5910-87-2	
+193	(E,Z)-2,4-Decadienal	25152-83-4	
+194	(R)-Carvon	6485-40-1	
+195	(Z)-1-Propenylmethylsulfid		
+196	(Z)-2-Heptenal	57266-86-1	
+197	(Z)-2-Hexenal	16635-54-4	
+198	(Z)-3-Hexenol	928-96-1	
+199	(Z)-6-Decenal		
+200	(Z)-6-Dodecen-γ-lacton	18679-18-0	
+201	(Z,Z)-3,6-Nonadienal	21944-83-2	
+202	1,1-Propandithiol	88497-17-0	
+203	1-Allylsulfanyl-1-propanthiol		
+204	1-Methylsulfanyl-1-propanthiol		
+205	1-Penten-3-on	1629-58-9	
+206	1-Propylsulfanyl-1-propanthiol		
+207	12-Methyltridecanal	75853-49-5	
+208	2,3-Octandion	585-25-1	
+209	2,4-Dihydroxy-2,5-dimethyl-3(2H)-furanon	10230-62-3	
+210	2,5-Dimethylpyrazin	123-32-0	
+211	2-Acetylfuran	1192-62-7	
+212	2-Acetylpyrrol	1072-83-9	
+213	2-Acetyltetrahydropyridin		
+214	2-Butyl-2-octenal	13019-16-4	
+215	2-Ethylfuran	3208-16-0	
+216	2-Heptanol	543-49-7	
+217	2-Isobutylthiazol	18640-74-9	
+218	2-Methyl-1-buten-1-thiol		
+219	2-Methyl-3-(methyldithio)furan	65505-17-1	
+220	2-Methyl-3-propylpyrazin	15986-80-8	
+221	2-Methylbutylacetat	624-41-9	
+222	2-Nonanol	628-99-9	
+223	2-Nonanon	821-55-6	
+224	2-Pentylfuran	3777-69-3	
+225	2-Phenylethylisothiocyanat	2257-09-2	
+226	3-Ethyl-5-methylphenol	698-71-5	
+227	3-Ethylphenol	620-17-7	
+228	3-Methyl-1-butanol	123-51-3	
+229	3-Methyl-1-buten-1-thiol		
+230	3-Methyl-2-buten-1-thiol	5287-45-6	
+231	3-Methylthiophen	616-44-4	
+232	3-sec-Butyl-2-methoxypyrazin	24168-70-5	
+233	3-Vinyl-1,2-dithiacyclohex-4-en		
+234	4-Ethyl-2-methylphenol	2219-73-0	
+235	4-Ethylguaiacol	2785-89-9	
+236	4-Hydroxy-5-methyl-3(2H)-furanon	19322-27-1	
+237	4-Mercapto-4-methylpentan-2-on	19872-52-7	
+238	4-Methoxy-2-methyl-2-butanthiol	94087-83-9	
+239	4-Methoxybenzylalkohol	105-13-5	
+240	4-Methylanisol	104-93-8	
+241	4-Methyloctansäure	54947-74-9	
+242	4-Methylphenol	106-44-5	
+243	5-Acetoxymethylfurfural	10551-58-3	
+244	Acetovanillon	498-02-2	
+245	Allicin	539-86-6	
+246	Allylisothiocyanat	57-06-7	
+247	Allylmethyldisulfid	2179-58-0	
+248	Allylmethyltrisulfid	34135-85-8	
+249	Benzylalkohol	100-51-6	
+250	Benzylbenzoat	120-51-4	
+251	Bis(1-sulfanylpropyl)sulfid		
+252	Carvacrol	499-75-2	
+253	cis-Rosenoxid	3033-23-6	
+254	cis-Whiskylacton	55013-32-6	
+255	Cumarin	91-64-5	
+256	Cuminaldehyd	122-03-2	
+257	Diallyldisulfid	2179-57-9	
+258	Diallylsulfid	592-88-1	
+259	Diallyltrisulfid	2050-87-5	
+260	Dipropyldisulfid	629-19-6	
+261	Dodecanal	112-54-9	
+262	Estragol	140-67-0	
+263	Ethyl-3-methylbutanoat	108-64-5	
+264	Ethyl-4-methylpentanoat	25415-67-2	
+265	Ethylcinnamat	103-36-6	
+266	Ethylcyclohexanoat	3289-28-9	
+267	Ethylpropanoat	105-37-3	
+268	Fenchol	1632-73-1	
+269	Geranylaceton	689-67-8	
+270	Germacren D	23986-74-5	
+271	Hexyl-2-methylbutanoat	10032-15-2	
+272	Hexylacetat	142-92-7	
+273	Himbeerketon	5471-51-2	
+274	Maltol	118-71-8	
+275	Menthofuran	494-90-6	
+276	Menthon	89-80-5	
+277	Methyl-2-methylbutanoat	868-57-5	
+278	Methylbutanoat	623-42-7	
+279	Neral	106-26-3	
+280	p-Cymol	99-87-6	
+281	p-Mentha-1,3,8-trien	18368-95-1	
+282	Propanal	123-38-6	
+283	Sabinen	3387-41-5	
+284	Skatol	83-34-1	
+285	Styrol	100-42-5	
+286	Thymol	89-83-8	
+287	Vanillylalkohol	498-00-0	
+288	Zimtaldehyd	14371-10-9	
+289	Zingiberen	495-60-3	
+290	α-Copaen		
+291	α-Phellandren	99-83-2	
+292	α-Terpinylacetat	80-26-2	
+293	α-Thujon	546-80-5	
+294	β-Caryophyllen	87-44-5	
+295	β-Thujon	471-15-8	
+296	γ-Dodecalacton	2305-05-7	
+297	γ-Nonalacton	104-61-0	
+298	γ-Octalacton	104-50-7	
