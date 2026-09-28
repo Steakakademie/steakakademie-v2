@@ -654,3 +654,13 @@ bilder:
     erworben_am: 2026-09-27
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung durch eine Echtfoto-Collage (2 Pexels-Aufnahmen desselben Fotografen, Haehnchenherzen-Spiesse auf Holzbrett, keine Personen, keine Marken). imageAI im MDX-Frontmatter auf false gesetzt.
+  images/rezepte/snoek-braai-appelkoos.jpg:
+    status: ki
+    quelle: "Foodiesfeed-Collage aus 2 Bildern: links Echtfoto 'Grilled fish', rechts KI-Bild 'Grilled Fish Lemon Beer'"
+    urheber: "Jakub Kapusnak (Echtfoto links); KI-generiert, Foodiesfeed (rechts)"
+    lizenz: CC0 (Foodiesfeed)
+    lizenz_url: https://www.foodiesfeed.com/license
+    quell_url: "https://www.foodiesfeed.com/free-food-photo/grilled-fish ; https://www.foodiesfeed.com/free-food-photo/grilled-fish-with-lemon-and-craft-beer"
+    erworben_am: 2026-09-28
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-Generierung. status ki, weil die rechte Bildhaelfte auf Foodiesfeed ausdruecklich als AI-generated gekennzeichnet ist (Doktrin docs/bildprogramm.md, Foodiesfeed-Einzelbildpruefung, geprueft 28.09.2026); imageAI bleibt true. Linke Haelfte Echtfoto. Keine Personen; Flaschenetiketten im Hintergrund unscharf, keine lesbaren Marken.
