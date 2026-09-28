@@ -35,6 +35,13 @@ const DEMO_PAIRINGS: Pairing[] = [
   { partner: 'Röstzwiebel', category: 'Gemüse', shared: 4, shared_examples: ['Pyrazine'] },
 ];
 
+// Beispiel-Zutaten fuer die Foodpairing-Kachel (Uwe, 28.09.2026: Kachel wirkte leer).
+// NUR Namen, die im Aroma-Netzwerk einen Treffer liefern — am 28.09.2026 per
+// match_foodpairing() geprueft. „Rindfleisch", „Brisket", „Schweinebauch" usw.
+// liefern 0 Treffer und wuerden im Demo-Fallback landen. Neue Eintraege erst
+// gegen die RPC pruefen.
+const FOODPAIRING_BEISPIELE = ['Ribeye', 'Lamm', 'Lachs', 'Schwein', 'Hähnchen'] as const;
+
 const KACHEL_BOX =
   'flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold focus-within:border-brand-gold transition-colors';
 
@@ -51,9 +58,13 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
   const [demo, setDemo] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function suchen(e: React.FormEvent) {
+  function suchen(e: React.FormEvent) {
     e.preventDefault();
-    const q = zutat.trim();
+    abfragen(zutat);
+  }
+
+  async function abfragen(eingabe: string) {
+    const q = eingabe.trim();
     if (!q) return;
     setLoading(true);
     setTreffer(null);
@@ -104,6 +115,28 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
           {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
         </button>
       </form>
+
+      {!treffer && (
+        <div className="mt-auto pt-5">
+          <p className="mb-2 text-[11px] uppercase tracking-wide text-text-muted">Probier’s mit</p>
+          <div className="flex flex-wrap gap-2">
+            {FOODPAIRING_BEISPIELE.map((b) => (
+              <button
+                key={b}
+                type="button"
+                disabled={loading}
+                onClick={() => {
+                  setZutat(b);
+                  abfragen(b);
+                }}
+                className="rounded-full border border-brand-gold/40 px-3 py-1 text-xs text-text-secondary hover:border-brand-gold hover:text-brand-gold disabled:opacity-50 transition-colors"
+              >
+                {b}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {treffer && (
         <div className="mt-4 space-y-2">
@@ -531,35 +564,68 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           />
           <RezeptSchmiedeBox seed={seed} />
 
-          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe) */}
-          <Link href="/hoefe" className={KACHEL}>
-            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-              <Radar size={18} />
-              <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
+          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe). Illustration
+              (Uwe, 28.09.2026) fuellt den Leerraum wie das Stier-Bild beim Cut-Atlas.
+              SVG mit transparentem Grund: object-contain, unoptimized (next/image
+              optimiert kein SVG). Herkunft: data/bildregister.yaml. */}
+          <Link
+            href="/hoefe"
+            className="group flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
+          >
+            <div className="relative min-h-40 w-full flex-1 bg-[radial-gradient(ellipse_at_50%_70%,rgba(200,136,42,0.14),transparent_70%)]">
+              <Image
+                src="/images/hofladen-reetdachhaus.svg"
+                alt="Illustration eines Bauernhauses mit Reetdach und Rosen — Symbol für Höfe in deiner Nähe"
+                fill
+                unoptimized
+                className="object-contain px-3 pt-4 pb-1 transition-transform duration-500 group-hover:scale-[1.03]"
+              />
             </div>
-            <p className="text-xs text-text-secondary mb-4">
-              Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
-              Deutschland, Österreich und die Schweiz.
-            </p>
-            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-              Höfe finden <ChevronRight size={14} />
-            </span>
+            <div className="flex flex-col p-5">
+              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+                <Radar size={18} />
+                <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
+                Deutschland, Österreich und die Schweiz.
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+                Höfe finden <ChevronRight size={14} />
+              </span>
+            </div>
           </Link>
 
           {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
-          <div className={KACHEL_BOX} aria-label="Räucherholz-Finder — bald verfügbar">
-            <div className="mb-2 flex gap-2">
-              <Badge muted>Bald</Badge>
-              <Badge filled>VIP</Badge>
+          {/* Bild (Uwe, 28.09.2026): Kachel stand leer. Motiv aus dem Streitfall
+              „Holz wässern" — Scheite auf Glut mit Rauch. */}
+          <div
+            className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card"
+            aria-label="Räucherholz-Finder — bald verfügbar"
+          >
+            <div className="relative min-h-40 w-full flex-1">
+              <Image
+                src="/images/streitfaelle/holz-waessern.jpg"
+                alt="Holzscheite auf glühender Glut mit aufsteigendem Rauch"
+                fill
+                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
+                className="object-cover object-[center_60%]"
+              />
             </div>
-            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-              <Trees size={18} />
-              <h3 className="font-serif text-lg font-bold text-text-light">Räucherholz-Finder</h3>
+            <div className="flex flex-col p-5">
+              <div className="mb-2 flex gap-2">
+                <Badge muted>Bald</Badge>
+                <Badge filled>VIP</Badge>
+              </div>
+              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+                <Trees size={18} />
+                <h3 className="font-serif text-lg font-bold text-text-light">Räucherholz-Finder</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
+              </p>
+              <span className="text-[11px] text-text-muted">Erscheint für VIP-SteakAkademiker.</span>
             </div>
-            <p className="text-xs text-text-secondary mb-4">
-              Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
-            </p>
-            <span className="mt-auto text-[11px] text-text-muted">Erscheint für VIP-SteakAkademiker.</span>
           </div>
         </div>
 
