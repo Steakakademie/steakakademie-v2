@@ -39,8 +39,11 @@ function buildItemListSchema(items: NewsItem[]) {
       '@type': 'ListItem',
       position: i + 1,
       item: {
-        '@type': 'NewsArticle',
+        // Nur Scout-Meldungen (eigene /bbq-news/<slug>-Seite) sind NewsArticle;
+        // eingestreute Plattform-Inhalte (Rezept, Cut, Artikel) sind Article.
+        '@type': n.slug ? 'NewsArticle' : 'Article',
         headline: n.title,
+        ...(n.href ? { url: `https://steakakademie.de${n.href}` } : {}),
         datePublished: n.isoDate,
         description: n.summary,
         author: { '@type': 'Organization', name: 'Steakakademie' },
