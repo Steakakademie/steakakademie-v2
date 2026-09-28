@@ -24,8 +24,8 @@ import { REGION_ACCENT, CompactItem } from '@/components/news/NewsLayout';
 // Redaktionsvorbehalt: Es wird ausschliesslich status='approved' gelesen —
 // das ist die manuelle Freigabe in /admin/review. Nichts erscheint hier, was
 // nicht ein Mensch freigegeben hat (AI Act Art. 50 Abs. 4, compliance/
-// ai-act-einstufung.md). Die redaktionellen FALLBACK_NEWS haben keinen
-// Textkoerper und deshalb bewusst keine Detailseite.
+// ai-act-einstufung.md). Eingestreute Plattform-Inhalte im News-Strom (seit
+// 28.09.2026) verlinken auf ihre eigene Seite und haben hier keine Detailseite.
 //
 // ISR: 1 h wie die Hub-Seite. Unbekannte Slugs werden zur Laufzeit geprueft
 // (dynamicParams), damit ein Beitrag, der nach dem Build freigegeben wird,

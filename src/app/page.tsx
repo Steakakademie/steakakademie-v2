@@ -19,7 +19,9 @@ import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
 import { STARTSEITEN_ARTIKEL } from '@/lib/startseiten-artikel';
 
-export const revalidate = 86400;
+// 3600 wie /bbq-news (28.09.2026): Freigaben in /admin/review und faellige
+// Artikel (gestaffelter Rollout) erscheinen binnen einer Stunde, nicht erst am Folgetag.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   // `absolute` wie in /home-b: der Markenname ist der Titel. Ohne das haengt
@@ -47,8 +49,14 @@ export default async function HomePage() {
   const puls = getPlattformPuls();
   const frischSaisonal = getFrischSaisonal();
 
-  // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift)
-  const news        = await getNewsItems();
+  // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift).
+  // Was oben schon steht (Aufmacher, Artikel-Reihe, Puls), nicht doppelt zeigen.
+  const news        = await getNewsItems({
+    ausschliessen: [
+      ...STARTSEITEN_ARTIKEL.slice(0, 7).map((a) => a.url),
+      ...puls.latest.map((p) => p.url),
+    ],
+  });
   const newsLead    = news[0];
   const newsCompact = news.slice(1, 4);
 

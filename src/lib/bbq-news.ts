@@ -6,10 +6,17 @@
 // Server-Rendering-Erzwingung). RLS-Policy `read_approved` erlaubt anonymen
 // SELECT auf status='approved'.
 //
-// Fällt auf redaktionelle FALLBACK_NEWS zurück, wenn keine Live-Daten/kein Env.
+// 28.09.2026: Die frueheren FALLBACK_NEWS (sechs hartkodierte Meldungen vom
+// Mai 2026) sind entfernt. Sie standen vier Monate unveraendert auf Startseite
+// und /bbq-news, weil kein Scout-Entwurf freigegeben war. Jetzt wird der Strom
+// immer mit den neuesten freigegebenen Plattform-Inhalten (Artikel, Cuts,
+// Methoden, Rezepte …) zusammengefuehrt und nach Datum sortiert — die News
+// laufen damit im selben Takt wie der Rest der Seite. Freigegebene Scout-News
+// stehen dazwischen, sobald sie da sind; veraltete rutschen von selbst nach hinten.
 
 import { createClient } from '@supabase/supabase-js';
 import { ROUTE_CATEGORIES, type ContentCategory } from '@/lib/content-routing';
+import { getRedaktionelleNeuzugaenge, type Neuzugang } from '@/lib/startseiten-artikel';
 
 export type NewsRegion = 'USA' | 'Deutschland' | 'International';
 
@@ -80,7 +87,7 @@ interface DraftRow {
   generated_at: string;
 }
 
-function rowToNewsItem(row: DraftRow, index: number): NewsItem {
+function rowToNewsItem(row: DraftRow): NewsItem {
   const cat = row.category as ContentCategory;
   const d = new Date(row.generated_at);
   const summary =
@@ -95,7 +102,6 @@ function rowToNewsItem(row: DraftRow, index: number): NewsItem {
     date: DE_DATE.format(d),
     isoDate: d.toISOString().slice(0, 10),
     source: 'Steakakademie Redaktion',
-    featured: index === 0,
     // Eigene URL je Beitrag (03.09.2026). Bis dahin lebten die News nur auf der
     // Hub-Seite — fuer Google und AI-Suche unsichtbar, die Sitemap fuehrte genau
     // eine /bbq-news-URL. Der Fallback unten bekommt bewusst KEINEN href: er hat
@@ -127,7 +133,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
       .maybeSingle();
     if (error || !data) return null;
     const row = data as DraftRow;
-    return { ...rowToNewsItem(row, 1), slug: row.slug, body: row.content_body ?? '' };
+    return { ...rowToNewsItem(row), slug: row.slug, body: row.content_body ?? '' };
   } catch {
     return null;
   }
@@ -153,99 +159,65 @@ export async function getNewsSlugs(limit = 200): Promise<string[]> {
   }
 }
 
-/** Holt freigegebene News (Supabase) oder Fallback. */
-export async function getNewsItems(): Promise<NewsItem[]> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key || BBQ_NEWS_CATEGORIES.length === 0) return FALLBACK_NEWS;
-
+/** Freigegebene Scout-News aus Supabase — [] ohne Env, bei Fehler oder ohne Daten. */
+async function getLiveNews(limit: number): Promise<NewsItem[]> {
+  const supabase = anonClient();
+  if (!supabase) return [];
   try {
-    const supabase = createClient(url, key, { auth: { persistSession: false } });
     const { data, error } = await supabase
       .from('content_drafts')
       .select('id, category, title, slug, seo_description, content_body, generated_at')
       .eq('status', 'approved')
       .in('category', BBQ_NEWS_CATEGORIES)
       .order('generated_at', { ascending: false })
-      .limit(12);
-
-    if (error || !data || data.length === 0) return FALLBACK_NEWS;
-    return data.map((row, i) => rowToNewsItem(row as DraftRow, i));
+      .limit(limit);
+    if (error || !data) return [];
+    return data.map((row) => rowToNewsItem(row as DraftRow));
   } catch {
-    return FALLBACK_NEWS;
+    return [];
   }
 }
 
-// ── Redaktioneller Fallback (vor Pipeline-Go-Live / wenn keine Live-Daten) ────
-export const FALLBACK_NEWS: NewsItem[] = [
-  {
-    id: 'pellet-grill-trend-2026',
-    region: 'USA',
-    category: 'Trend',
-    title: 'Pellet-Grills dominieren den US-Markt 2026 — was Deutschland davon lernt',
-    summary:
-      'In den USA gehört der WLAN-gesteuerte Pellet-Smoker längst zur Standardausrüstung. Wir ordnen ein, warum der Trend jetzt auch deutsche Terrassen erreicht und worauf es bei der Anschaffung wirklich ankommt.',
-    date: '27. Mai 2026',
-    isoDate: '2026-05-27',
+/** Plattform-Neuzugang → News-Eintrag. Link fuehrt auf den Inhalt selbst, keine /bbq-news-Detailseite. */
+function neuzugangToNewsItem(n: Neuzugang): NewsItem {
+  const a = n.article;
+  return {
+    id: `neu-${n.type}-${a.slug}`,
+    region: n.type === 'UsaBbqStyle' ? 'USA' : 'Deutschland',
+    category: a.category,
+    title: a.title,
+    summary: a.excerpt,
+    date: a.formattedDate,
+    isoDate: n.isoDate,
     source: 'Steakakademie Redaktion',
-    featured: true,
-    image: '/images/articles/pellet-grills-usa-2026.jpg',
-  },
-  {
-    id: 'grillsaison-dgr-2026',
-    region: 'Deutschland',
-    category: 'Szene',
-    title: 'Deutsche Grillmeisterschaft 2026: Termine, Disziplinen, Favoriten',
-    summary:
-      'Die offizielle Wettkampfsaison startet. Überblick über die wichtigsten Termine, die gewerteten Kategorien und wie ambitionierte Hobbygriller selbst einsteigen können.',
-    date: '24. Mai 2026',
-    isoDate: '2026-05-24',
-    source: 'Steakakademie Redaktion',
-  },
-  {
-    id: 'wagyu-preise-2026',
-    region: 'International',
-    category: 'Markt',
-    title: 'Wagyu-Preise im Frühjahr 2026: Warum gutes Marmorfleisch teurer wird',
-    summary:
-      'Futterkosten, Nachfrage aus Asien und der Boom um echtes A5-Wagyu treiben die Preise. Was das für deutsche Käufer bedeutet — und wann sich die Investition lohnt.',
-    date: '21. Mai 2026',
-    isoDate: '2026-05-21',
-    source: 'Steakakademie Redaktion',
-  },
-  {
-    id: 'reverse-sear-mainstream',
-    region: 'Deutschland',
-    category: 'Technik',
-    title: 'Reverse Sear wird Mainstream: Thermometer-Verkäufe steigen deutlich',
-    summary:
-      'Die Methode aus dem US-BBQ setzt sich in deutschen Küchen durch. Der Effekt: Kerntemperatur-Messung wird vom Profi-Werkzeug zum Standard. Unsere Einordnung zur Technik.',
-    date: '18. Mai 2026',
-    isoDate: '2026-05-18',
-    source: 'Steakakademie Redaktion',
-    href: '/methoden/reverse-sear',
-  },
-  {
-    id: 'texas-brisket-rekord',
-    region: 'USA',
-    category: 'Kultur',
-    title: 'Texas: Neue Generation von Pitmastern verbindet Tradition und Präzision',
-    summary:
-      'Zwischen Holzfeuer-Romantik und datengetriebener Garführung — wie die junge Pitmaster-Szene in Austin und Lockhart das klassische Brisket neu interpretiert.',
-    date: '14. Mai 2026',
-    isoDate: '2026-05-14',
-    source: 'Steakakademie Redaktion',
-    href: '/usa-expedition/texas-style',
-  },
-  {
-    id: 'nachhaltigkeit-holzkohle',
-    region: 'Deutschland',
-    category: 'Nachhaltigkeit',
-    title: 'Nachhaltige Holzkohle: Worauf das FSC-Siegel beim Grillen wirklich hinweist',
-    summary:
-      'Tropenholz im Kohlesack ist nach wie vor verbreitet. Wir erklären, welche Siegel Orientierung geben und welche heimischen Alternativen beim Grillergebnis überzeugen.',
-    date: '11. Mai 2026',
-    isoDate: '2026-05-11',
-    source: 'Steakakademie Redaktion',
-  },
-];
+    href: a.url,
+    image: a.image,
+  };
+}
+
+export interface NewsOptionen {
+  /** URLs, die auf der aufrufenden Seite schon stehen (Startseite: Aufmacher, Puls) — nicht doppelt zeigen. */
+  ausschliessen?: (string | undefined)[];
+  /** Maximale Anzahl Eintraege (Default 12). */
+  limit?: number;
+}
+
+/**
+ * BBQ-News-Strom: freigegebene Scout-News + neueste freigegebene Plattform-Inhalte,
+ * gemeinsam nach Datum sortiert (neueste zuerst). Der erste Eintrag ist `featured`.
+ * Bei gleichem Datum stehen Scout-News vor Plattform-Inhalten (stabile Sortierung).
+ */
+export async function getNewsItems(optionen: NewsOptionen = {}): Promise<NewsItem[]> {
+  const limit = optionen.limit ?? 12;
+  const raus = new Set(optionen.ausschliessen?.filter(Boolean) as string[] | undefined);
+
+  const live = await getLiveNews(limit);
+  const neu = getRedaktionelleNeuzugaenge(limit + raus.size)
+    .map(neuzugangToNewsItem)
+    .filter((n) => !n.href || !raus.has(n.href));
+
+  return [...live, ...neu]
+    .sort((a, b) => b.isoDate.localeCompare(a.isoDate))
+    .slice(0, limit)
+    .map((n, i) => ({ ...n, featured: i === 0 }));
+}

@@ -14,7 +14,7 @@
 // den redaktionellen Aufmacher nach jedem Rezept-Lauf dominieren.
 // ─────────────────────────────────────────────────────────────────────────────
 import {
-  allArtikels, allCuts, allMethodes, allVergleiches, allStreitfalls, allUsaBbqStyles,
+  allArtikels, allCuts, allMethodes, allVergleiches, allStreitfalls, allUsaBbqStyles, allRecipes,
 } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
 import bildHelligkeit from '../../data/bild-helligkeit.json';
@@ -43,6 +43,7 @@ const KATEGORIE: Record<string, { label: string; slug: string }> = {
   Streitfall:  { label: 'Wissen & Wissenschaft', slug: 'wissen' },
   UsaBbqStyle: { label: 'USA-Expedition',        slug: 'usa-expedition' },
   Artikel:     { label: 'Wissen & Wissenschaft', slug: 'wissen' },
+  Recipe:      { label: 'Rezepte',               slug: 'rezepte' },
 };
 
 // Artikel-Frontmatter darf eine eigene Kategorie tragen — auf die drei
@@ -146,6 +147,48 @@ export function getStartseitenArtikel(fallback: ArticleMeta[], mindestens = 8): 
     if (!urls.has(f.url)) { out.push(f); urls.add(f.url); }
   }
   return out;
+}
+
+/** Ein freigegebener Neuzugang mit ISO-Datum — Rohstoff fuer den BBQ-News-Strom. */
+export interface Neuzugang {
+  article: ArticleMeta;
+  /** yyyy-mm-dd aus publishedAt */
+  isoDate: string;
+  /** Contentlayer-Typ (Artikel, Cut, Recipe, UsaBbqStyle, …) */
+  type: string;
+}
+
+/**
+ * Neueste freigegebene Inhalte inkl. Rezepte, neueste zuerst (28.09.2026).
+ *
+ * Anlass: Der BBQ-News-Bereich (Startseite + /bbq-news) zeigte bis 28.09.2026
+ * eine hartkodierte Liste vom Mai 2026 — derselbe Fehler, den getStartseitenArtikel
+ * am 27.08. fuer den Magazin-Aufmacher behoben hat. Solange keine freigegebenen
+ * Scout-News vorliegen oder sie aelter sind als der Rest der Plattform, fuellt
+ * dieser Strom auf. Er waechst im selben Takt wie Rezepte (taeglich), Artikel-
+ * Rollout (2/Woche ab 01.10.) und Plattform-Puls.
+ *
+ * Bewusst pro Aufruf berechnet, nicht als Modul-Konstante: nurVeroeffentlicht()
+ * blendet kuenftig datierte Dokumente aus — das muss bei jedem ISR-Lauf neu
+ * gegen die aktuelle Uhrzeit laufen, sonst erscheint ein faelliger Artikel erst
+ * nach dem naechsten Deploy.
+ */
+export function getRedaktionelleNeuzugaenge(limit = 24): Neuzugang[] {
+  const rezepte = (allRecipes as unknown as (Doc & { description?: string })[])
+    .map((r) => ({ ...r, excerpt: r.excerpt ?? r.description }));
+  const docs = [
+    ...allArtikels, ...allCuts, ...allMethodes,
+    ...allVergleiches, ...allStreitfalls, ...allUsaBbqStyles,
+  ] as unknown as Doc[];
+
+  return nurVeroeffentlicht([...docs, ...rezepte])
+    .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))
+    .map((d) => {
+      const article = zuArticleMeta(d);
+      return article ? { article, isoDate: String(d.publishedAt).slice(0, 10), type: d.type } : null;
+    })
+    .filter((n): n is Neuzugang => n !== null)
+    .slice(0, limit);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

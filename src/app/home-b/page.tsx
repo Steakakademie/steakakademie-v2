@@ -16,7 +16,7 @@ import { getNewsItems } from '@/lib/bbq-news';
 import { STARTSEITEN_ARTIKEL } from '@/lib/startseiten-artikel';
 import type { ArticleMeta } from '@/types';
 
-export const revalidate = 86400;
+export const revalidate = 3600; // wie / und /bbq-news (28.09.2026)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Startseiten-Variante B — "Editorial Ember" (A/B-Test)
@@ -191,7 +191,12 @@ export default async function HomeVariantB() {
   const recommendedProducts = getRecommendedProducts(3);
   const puls = getPlattformPuls();
   const frischSaisonal = getFrischSaisonal();
-  const news = await getNewsItems();
+  const news = await getNewsItems({
+    ausschliessen: [
+      ...STARTSEITEN_ARTIKEL.slice(0, 5).map((a) => a.url),
+      ...puls.latest.map((p) => p.url),
+    ],
+  });
   const newsLead = news[0];
   const newsCompact = news.slice(1, 4);
 
