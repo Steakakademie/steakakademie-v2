@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-25T10:10:55.577Z",
+ "aktualisiert": "2026-09-28T11:40:44.330Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -2025,6 +2025,54 @@
     "pork chops"
    ],
    "gesehen": "2026-09-25",
+   "status": "neu"
+  },
+  {
+   "id": "grillseeker:italian-meatloaf-recipe",
+   "quelle": "grillseeker",
+   "quelleName": "Grillseeker",
+   "quelleUrl": "https://www.grillseeker.com/",
+   "eignung": [
+    "rezept",
+    "technik"
+   ],
+   "schwerpunkt": "Direkte Grilltechnik, Saucen und Rubs, Wild",
+   "titel": "Italian Meatloaf Recipe",
+   "link": "https://www.grillseeker.com/italian-meatloaf-recipe/",
+   "datum": "Sat, 05 Sep 2026 18:23:48 +0000",
+   "kategorien": [
+    "Beef",
+    "Comfort Food",
+    "Featured",
+    "Grill / Smoker",
+    "Main Dishes",
+    "Oven"
+   ],
+   "gesehen": "2026-09-28",
+   "status": "neu"
+  },
+  {
+   "id": "heygrillhey:grilled-breakfast-kabobs",
+   "quelle": "heygrillhey",
+   "quelleName": "Hey Grill Hey",
+   "quelleUrl": "https://heygrillhey.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Pellet-Grill, Familienküche, Feiertage, Saucen und Rubs",
+   "titel": "Grilled Breakfast Kabobs",
+   "link": "https://heygrillhey.com/grilled-breakfast-kabobs/",
+   "datum": "Fri, 25 Sep 2026 14:00:00 +0000",
+   "kategorien": [
+    "Bacon",
+    "Breakfast",
+    "Pork",
+    "Recipes",
+    "Sausage",
+    "Beef Rub"
+   ],
+   "gesehen": "2026-09-28",
    "status": "neu"
   }
  ]
