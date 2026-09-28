@@ -37,7 +37,8 @@ Quelldatensatz → Import ist idempotent (re-runnable).
 
 ```bash
 node scripts/foodpairing-import.mjs --dir data/foodpairing --dry-run   # Vorschau
-node scripts/foodpairing-import.mjs --dir data/foodpairing             # → Supabase
+node scripts/foodpairing-import.mjs --dir data/foodpairing             # → Supabase (Sync: entfernt, was nicht mehr in den Dateien steht)
+node scripts/foodpairing-import.mjs --dir data/foodpairing --no-prune  # nur ergänzen, nichts entfernen
 ```
 
 Voraussetzung: Migration `supabase/migrations/20260615_aroma_pairings.sql` eingespielt,

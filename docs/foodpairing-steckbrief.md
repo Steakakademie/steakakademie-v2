@@ -185,8 +185,12 @@ Technik-Ebene (`kochwissen`) **nicht**.
 - **21 Hubs** nach tatsächlichem Vernetzungsgrad (Furaneol, Methional, β-Damascenon,
   3-Methylbutanal …); jede Zutat dockt an mindestens einen an (Build prüft das).
 - Synonyme als Alias in der API (`src/lib/foodpairing-alias.ts`) statt Doppel-Zutaten.
-- **Import offen:** `foodpairing-import.mjs` upsertet nur. Die v1-Altzeilen (Stoffe 1–11 inkl.
-  ihrer 52 Kanten, Zutaten 20 „Ribeye" und 21 „Steak") bleiben dabei in der DB und müssen
-  einmalig entfernt werden — Entscheidung und Ausführung liegen bei Uwe.
+- **Import = Sync (Freigabe Uwe, 28.09.2026):** `foodpairing-import.mjs` gleicht die DB an die
+  Dateien an und entfernt Überzähliges. Beim ersten v2-Lauf: Zutaten 20 „Ribeye" und 21 „Steak",
+  Stoffe 1–11 (v1-Stoffgruppen) und damit deren 52 Kanten per Cascade — am 28.09. lesend per SQL
+  gegengeprüft. Sicherungen: `--dry-run` zeigt die Löschliste vorher (braucht Service-Key, im
+  Workflow vorhanden); Abbruch ohne Schreibvorgang, wenn die Dateien weniger als die Hälfte der
+  Zutaten/Kanten der DB enthalten (`--force-prune` übersteuert); `--no-prune` = reiner Upsert.
+  **Achtung:** Wer den Workflow mit fremden Datei-URLs startet, ersetzt damit den Bestand.
 - Die Hub-Namen im Prompt des Rezept-Generators (`/api/kochwissen/generieren`) sind
   Stoffgruppen-Begriffe und bleiben fachlich gültig; der Generator liest die Tabellen nicht.
