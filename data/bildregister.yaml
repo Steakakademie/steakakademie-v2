@@ -67,6 +67,14 @@ bilder:
   images/cuts/abanico.jpg: { status: offen }
   images/cuts/bauchspeck.jpg: { status: offen }
   images/cuts/beinscheibe.jpg: { status: offen }
+  images/hofladen-reetdachhaus.svg:
+    status: lizenz
+    quelle: Pixabay (ID 158511)
+    urheber: OpenClipart-Vectors
+    lizenz: Pixabay-Inhaltslizenz
+    lizenz_url: https://pixabay.com/de/service/license-summary/
+    quell_url: https://pixabay.com/de/users/openclipart-vectors-30363/
+    erworben_am: 2026-09-28
   images/cuts/brisket.jpg:
     status: lizenz
     quelle: Pexels (ID 36869213)

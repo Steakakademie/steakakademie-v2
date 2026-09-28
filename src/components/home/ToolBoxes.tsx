@@ -531,19 +531,36 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           />
           <RezeptSchmiedeBox seed={seed} />
 
-          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe) */}
-          <Link href="/hoefe" className={KACHEL}>
-            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-              <Radar size={18} />
-              <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
+          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe). Illustration
+              (Uwe, 28.09.2026) fuellt den Leerraum wie das Stier-Bild beim Cut-Atlas.
+              SVG mit transparentem Grund: object-contain, unoptimized (next/image
+              optimiert kein SVG). Herkunft: data/bildregister.yaml. */}
+          <Link
+            href="/hoefe"
+            className="group flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
+          >
+            <div className="relative min-h-40 w-full flex-1 bg-[radial-gradient(ellipse_at_50%_70%,rgba(200,136,42,0.14),transparent_70%)]">
+              <Image
+                src="/images/hofladen-reetdachhaus.svg"
+                alt="Illustration eines Bauernhauses mit Reetdach und Rosen — Symbol für Höfe in deiner Nähe"
+                fill
+                unoptimized
+                className="object-contain px-3 pt-4 pb-1 transition-transform duration-500 group-hover:scale-[1.03]"
+              />
             </div>
-            <p className="text-xs text-text-secondary mb-4">
-              Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
-              Deutschland, Österreich und die Schweiz.
-            </p>
-            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-              Höfe finden <ChevronRight size={14} />
-            </span>
+            <div className="flex flex-col p-5">
+              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+                <Radar size={18} />
+                <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-4">
+                Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
+                Deutschland, Österreich und die Schweiz.
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+                Höfe finden <ChevronRight size={14} />
+              </span>
+            </div>
           </Link>
 
           {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
