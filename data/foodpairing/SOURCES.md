@@ -45,8 +45,9 @@ ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitat
 - Verfahren: vier Recherche-Agenten; jede Zeile mit wörtlichem Zitat aus Abstract,
   Open-Access-Volltext oder Tabelle. **Alle** 81 gelieferten Zitate automatisch gegen die frisch
   geladenen Quelltexte geprüft (PubMed, Europe PMC, Crossref, OpenAlex): 81/81 wörtlich vorhanden.
-  Danach fachlich gesichtet — wörtlich richtig heißt noch nicht belastbar: 45 übernommen,
-  36 nicht übernommen (Gründe in `ausgeschlossen.tsv`). Die übernommenen Zitate stehen in `zitate.tsv`;
+  Danach fachlich gesichtet — wörtlich richtig heißt noch nicht belastbar — und von einem
+  separaten Agenten ohne Kenntnis der Recherche fachlich gegengeprüft (4 Fehler, 13 Hinweise,
+  alle eingearbeitet): 41 übernommen, 40 nicht übernommen (Gründe in `ausgeschlossen.tsv`). Die übernommenen Zitate stehen in `zitate.tsv`;
   `npm run foodpairing:zitate` prüft sie jederzeit erneut (Negativtest: manipulierte Zitate,
   fremde Tabellenzeilen und fehlende Stoffnamen werden erkannt).
 - **+ Röstknoblauch** (neue Zutat; Cadwallader et al. 2011, ACS Symp. Ser. 1068, GC-O mit
@@ -54,18 +55,20 @@ ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitat
   Dimethyltrisulfid, Guaiacol, Furaneol, Vanillin, (Z)/(E)-Isoeugenol.
 - **+ Ahornsirup** (neue Zutat; Belford et al. 1991, Zugabeversuch + deskriptive Sensorik → B):
   Furaneol, Sotolon („sugar furanone"), Guaiacol, Vanillin.
-- **Knoblauch** jetzt mit Primärstudien: Sasmaz et al. 2024 (AEDA, frisch), Chen et al. 2026 (OAV,
-  Paste), Wang et al. 2025 (blanchiert; AEDA/AECA), Abe et al. 2020 (AEDA-Daten im Review → B).
-  **Schwarzer Knoblauch** + Furfurylalkohol (Sasmaz 2024).
+- **Knoblauch** jetzt mit Primärstudien: Sasmaz et al. 2024 (AEDA, frisch), Wang et al. 2025
+  (blanchiert; AEDA/AECA), Chen et al. 2026 (Headspace-OAV, Paste → B). **Schwarzer Knoblauch**
+  + Furfurylalkohol (Sasmaz 2024). Nach der Fachprüfung gestrichen: Abe et al. 2020 (AEDA an
+  einem ausgekochten SDE-Extrakt; Dithiine laut Autoren GC-Artefakte, Methional ein Erhitzungsprodukt).
 - **Basilikum** +6 Stoffe (D'Alessandro et al. 2021, GC-O über drei Verdünnungsstufen, Tabelle 2 →
-  B). **Pfeffer** + weißer Pfeffer (Zhang et al. 2024, relative OAV aus GC-MS → B).
+  B). **Pfeffer** + weißer Pfeffer (Zhang et al. 2024, relative OAV aus GC-MS mit Literaturschwellen
+  → B; belegt Beteiligung, keine Rangfolge).
   **Nelke** + β-Caryophyllen (Oliveira et al. 2026, OAV-Aromaradar → B).
 - CAS nachgetragen: 3-Vinyl-1,2-dithiacyclohex-4-en = 62488-52-2 (PubChem CID 525328). Nicht zu
-  verwechseln mit 3-Vinyl-4H-1,2-dithiin (= …cyclohex-5-en, 62488-53-3), jetzt eigener Stoff.
+  verwechseln mit 3-Vinyl-4H-1,2-dithiin (= …cyclohex-5-en, 62488-53-3).
 - Abgelehnt u. a.: Frühlingszwiebel-/Schalottenöl (Produkte; Aldehyde teils aus dem Frittieröl),
   Wang et al. 2023 (Foods; GC-O-Geruchszuordnungen widersprechen bekannten Geruchsqualitäten),
   unbestimmte Isomere, Zhang et al. 2025 (nur Unterscheidungsmarker).
-- Stand danach: **75 Zutaten · 210 Stoffe · 627 Kanten · 650 Belege.**
+- Stand danach: **75 Zutaten · 208 Stoffe · 623 Kanten · 646 Belege.**
 
 ## Bekannte Lücken (ehrlich)
 - Nicht belegbar gefunden: **Oregano** (nur Übersicht zu ätherischen Ölen), **Wacholderbeere,
