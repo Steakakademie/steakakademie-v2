@@ -3,7 +3,9 @@
 Dieses Pairing-Dataset ist eine **eigene Kuration der Steakakademie**, keine fremde Datenbank.
 Es besteht aus **Fakten** (welcher Aromastoff in welchem Lebensmittel geruchsprägend ist)
 mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbelege in
-`belege.tsv` sind eigene Formulierungen (max. 20 Wörter), keine Zitate.
+`belege.tsv` sind eigene Formulierungen (max. 20 Wörter), keine Zitate. Ab R3 (29.09.2026)
+steht zusätzlich je Beleg eine kurze wörtliche Belegstelle mit Quellenangabe in `zitate.tsv` —
+ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitate`.
 
 ## Stand v2 (28.09.2026)
 - **71 Zutaten · 198 Aromastoffe · 576 Verknüpfungen**, belegt durch **588 Belegzeilen aus
@@ -39,12 +41,42 @@ mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbeleg
   Pfannkuchen-Gericht, DOI falsch zugeordnet), Knoblauch-roh als Evidenz A (zitierter Satz betraf
   schwarzen Knoblauch), Pfeffer weiterhin unverifiziert.
 
+## Recherche R3 (29.09.2026) — eigene Recherche mit Pflichtzitat
+- Verfahren: vier Recherche-Agenten; jede Zeile mit wörtlichem Zitat aus Abstract,
+  Open-Access-Volltext oder Tabelle. **Alle** 81 gelieferten Zitate automatisch gegen die frisch
+  geladenen Quelltexte geprüft (PubMed, Europe PMC, Crossref, OpenAlex): 81/81 wörtlich vorhanden.
+  Danach fachlich gesichtet — wörtlich richtig heißt noch nicht belastbar: 45 übernommen,
+  36 nicht übernommen (Gründe in `ausgeschlossen.tsv`). Die übernommenen Zitate stehen in `zitate.tsv`;
+  `npm run foodpairing:zitate` prüft sie jederzeit erneut (Negativtest: manipulierte Zitate,
+  fremde Tabellenzeilen und fehlende Stoffnamen werden erkannt).
+- **+ Röstknoblauch** (neue Zutat; Cadwallader et al. 2011, ACS Symp. Ser. 1068, GC-O mit
+  Headspace-Verdünnung + AEDA, 177 °C/1,5 h): 13 Stoffe, u. a. Allylmethyltrisulfid,
+  Dimethyltrisulfid, Guaiacol, Furaneol, Vanillin, (Z)/(E)-Isoeugenol.
+- **+ Ahornsirup** (neue Zutat; Belford et al. 1991, Zugabeversuch + deskriptive Sensorik → B):
+  Furaneol, Sotolon („sugar furanone"), Guaiacol, Vanillin.
+- **Knoblauch** jetzt mit Primärstudien: Sasmaz et al. 2024 (AEDA, frisch), Chen et al. 2026 (OAV,
+  Paste), Wang et al. 2025 (blanchiert; AEDA/AECA), Abe et al. 2020 (AEDA-Daten im Review → B).
+  **Schwarzer Knoblauch** + Furfurylalkohol (Sasmaz 2024).
+- **Basilikum** +6 Stoffe (D'Alessandro et al. 2021, GC-O über drei Verdünnungsstufen, Tabelle 2 →
+  B). **Pfeffer** + weißer Pfeffer (Zhang et al. 2024, relative OAV aus GC-MS → B).
+  **Nelke** + β-Caryophyllen (Oliveira et al. 2026, OAV-Aromaradar → B).
+- CAS nachgetragen: 3-Vinyl-1,2-dithiacyclohex-4-en = 62488-52-2 (PubChem CID 525328). Nicht zu
+  verwechseln mit 3-Vinyl-4H-1,2-dithiin (= …cyclohex-5-en, 62488-53-3), jetzt eigener Stoff.
+- Abgelehnt u. a.: Frühlingszwiebel-/Schalottenöl (Produkte; Aldehyde teils aus dem Frittieröl),
+  Wang et al. 2023 (Foods; GC-O-Geruchszuordnungen widersprechen bekannten Geruchsqualitäten),
+  unbestimmte Isomere, Zhang et al. 2025 (nur Unterscheidungsmarker).
+- Stand danach: **75 Zutaten · 210 Stoffe · 627 Kanten · 650 Belege.**
+
 ## Bekannte Lücken (ehrlich)
-- Nicht belegbar gefunden: **Oregano, Wacholderbeere, Ahornsirup, frische Feige,
-  gebratener westlicher Bacon, Tomatenmark.** (Teils existieren Studien, deren Abstract
-  keine Einzelstoffe nennt oder die nicht abrufbar waren.)
-- Dünn belegt: Nelke (1 Stoff), Basilikum (2), Räucherlachs (1), Pfeffer (Standardquelle
-  Jagella & Grosch 1999 nicht abrufbar), Hirsch (nur Headspace-OAV).
+- Nicht belegbar gefunden: **Oregano** (nur Übersicht zu ätherischen Ölen), **Wacholderbeere,
+  Schnittlauch, Bärlauch, Schalotte, Frühlingszwiebel** (keine Olfaktometrie-/AEDA-/OAV-Studie
+  an der Zutat selbst, bzw. nur Öl-Produkte), **frische Feige, gebratener westlicher Bacon,
+  Tomatenmark.** (Teils existieren Studien, deren Abstract keine Einzelstoffe nennt oder die nicht
+  abrufbar waren.)
+- **Lauch geparkt:** 3 Stoffe belegt (Nielsen & Poll 2004, GC-O), aber kein Hub-Stoff — die
+  Build-Regel „jede Zutat dockt an einen Hub an" lässt ihn (noch) nicht zu.
+- Dünn belegt: Nelke (2 Stoffe), Räucherlachs (1), Pfeffer (Standardquelle Jagella & Grosch 1999
+  weiterhin nicht abrufbar; weißer Pfeffer nur berechnete OAV), Hirsch (nur Headspace-OAV).
 - „Speck" stützt sich auf chinesischen Speck (geräuchert bzw. luftgetrocknet), „Rotwein" und
   „Weißwein" fassen mehrere Rebsorten zusammen — Details je Zeile in `belege.tsv`.
 
@@ -57,3 +89,6 @@ mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbeleg
 Neue Belegzeile(n) in `belege.tsv` (gleiche Regeln: Primärliteratur, geöffnete URL, keine
 NC-Datenbanken), fehlende Zutat/Stoff-ID in `ingr_info.tsv` / `comp_info.tsv` ergänzen,
 dann `npm run foodpairing:build`. `npm run check` meldet, wenn `ingr_comp.tsv` nicht passt.
+Zu jedem neuen Beleg gehört eine Zeile in `zitate.tsv` (wörtliche Belegstelle, `stoff_im_zitat`
+so geschrieben wie im Zitat). Externe Lieferungen im selben Format vorab prüfen:
+`npm run foodpairing:zitate -- --datei lieferung.tsv` (braucht Netz, läuft daher nicht in `check`).

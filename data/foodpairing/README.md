@@ -19,6 +19,7 @@ Architektur & Rechtslage: `docs/foodpairing-steckbrief.md`.
 `belege.tsv` ist die Quelle der Wahrheit (eine Zeile je Fachquelle). `ingr_comp.tsv` wird
 daraus von `scripts/foodpairing-build.mjs` **erzeugt** — nie von Hand ändern.
 `ausgeschlossen.tsv` dokumentiert recherchierte, aber zu schwach belegte Zeilen.
+`zitate.tsv` hält je Beleg (ab R3) die wörtliche Belegstelle; `npm run foodpairing:zitate` prüft sie gegen die Quelle.
 Synonyme (Ribeye, Steak, Bacon …) stehen in `src/lib/foodpairing-alias.ts`, nicht als
 eigene Zutaten.
 

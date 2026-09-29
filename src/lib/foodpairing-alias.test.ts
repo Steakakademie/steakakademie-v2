@@ -18,6 +18,8 @@ describe('foodpairingZutat', () => {
     expect(foodpairingZutat('Hühnchen')).toBe('Hähnchen');
     expect(foodpairingZutat('Bacon')).toBe('Speck');
     expect(foodpairingZutat('Minze')).toBe('Grüne Minze');
+    expect(foodpairingZutat('Gerösteter Knoblauch')).toBe('Röstknoblauch');
+    expect(foodpairingZutat('Maple Syrup')).toBe('Ahornsirup');
   });
 
   it('lässt unbekannte Eingaben unverändert', () => {

@@ -204,8 +204,14 @@
 24	186	B	Corsini et al. 2019
 24	243	B	Corsini et al. 2019
 24	274	B	Corsini et al. 2019
-25	106	A	Sonmezdag et al. 2018
-25	262	A	Sonmezdag et al. 2018
+25	106	A	D'Alessandro et al. 2021; Sonmezdag et al. 2018
+25	108	B	D'Alessandro et al. 2021
+25	113	B	D'Alessandro et al. 2021
+25	122	B	D'Alessandro et al. 2021
+25	146	B	D'Alessandro et al. 2021
+25	149	B	D'Alessandro et al. 2021
+25	262	A	D'Alessandro et al. 2021; Sonmezdag et al. 2018
+25	294	B	D'Alessandro et al. 2021
 26	101	A	Fritsch et al. 2005
 26	103	A	Fritsch et al. 2005
 26	106	A	Fritsch et al. 2005
@@ -332,15 +338,23 @@
 40	176	B	Sun et al. 2010
 40	249	B	Sun et al. 2010
 40	269	B	Sun et al. 2010
+41	102	B	Abe et al. 2020
 41	107	B	Kilic-Buyukkurt et al. 2023
+41	123	A	Wang et al. 2025
 41	179	B	Kilic-Buyukkurt et al. 2023
 41	233	B	Kilic-Buyukkurt et al. 2023
 41	245	B	Kilic-Buyukkurt et al. 2023
-41	247	B	Kilic-Buyukkurt et al. 2023
+41	247	A	Kilic-Buyukkurt et al. 2023; Sasmaz et al. 2024
 41	248	B	Kilic-Buyukkurt et al. 2023
-41	257	B	Kilic-Buyukkurt et al. 2023
-41	258	B	Kilic-Buyukkurt et al. 2023
+41	257	A	Chen et al. 2026; Kilic-Buyukkurt et al. 2023; Sasmaz et al. 2024
+41	258	A	Kilic-Buyukkurt et al. 2023; Wang et al. 2025
 41	259	B	Kilic-Buyukkurt et al. 2023
+41	303	B	Abe et al. 2020
+41	304	B	Abe et al. 2020
+41	305	B	Abe et al. 2020
+41	306	A	Wang et al. 2025
+41	307	A	Wang et al. 2025
+41	308	A	Wang et al. 2025
 42	122	B	Eyres et al. 2005
 42	157	B	Eyres et al. 2005
 42	160	B	Eyres et al. 2005
@@ -382,6 +396,7 @@
 48	158	B	Chatterjee et al. 2015
 48	283	B	Chatterjee et al. 2015
 49	122	A	Qiang et al. 2025
+49	294	B	Oliveira et al. 2026
 50	112	A	Guth et al. 1993; Neugebauer et al. 2020
 50	116	A	Guth et al. 1993
 50	121	A	Guth et al. 1993
@@ -424,12 +439,16 @@
 54	146	A	Masanetz & Grosch 1998
 54	199	A	Masanetz & Grosch 1998
 54	281	A	Masanetz & Grosch 1998
-55	156	B	Jirovetz et al. 2002
+55	149	B	Zhang et al. 2024
+55	156	B	Jirovetz et al. 2002; Zhang et al. 2024
 55	158	B	Jirovetz et al. 2002
 55	187	A	Wood et al. 2008
 55	270	B	Jirovetz et al. 2002
+55	280	B	Zhang et al. 2024
+55	290	B	Zhang et al. 2024
 55	291	B	Jirovetz et al. 2002
-55	294	B	Jirovetz et al. 2002
+55	294	B	Jirovetz et al. 2002; Zhang et al. 2024
+55	302	B	Zhang et al. 2024
 56	113	A	Gabetti et al. 2021
 56	275	A	Gabetti et al. 2021
 56	276	A	Gabetti et al. 2021
@@ -590,3 +609,21 @@
 75	259	A	Yang et al. 2019
 75	300	A	Yang et al. 2019
 75	301	A	Yang et al. 2019
+75	310	A	Sasmaz et al. 2024
+76	101	A	Cadwallader et al. 2011
+76	107	A	Cadwallader et al. 2011
+76	118	A	Cadwallader et al. 2011
+76	120	A	Cadwallader et al. 2011
+76	122	A	Cadwallader et al. 2011
+76	125	A	Cadwallader et al. 2011
+76	153	A	Cadwallader et al. 2011
+76	161	A	Cadwallader et al. 2011
+76	248	A	Cadwallader et al. 2011
+76	257	A	Cadwallader et al. 2011
+76	259	A	Cadwallader et al. 2011
+76	303	A	Cadwallader et al. 2011
+76	309	A	Cadwallader et al. 2011
+77	101	B	Belford et al. 1991
+77	111	B	Belford et al. 1991
+77	118	B	Belford et al. 1991
+77	125	B	Belford et al. 1991
