@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx } from './recipe-agent.mjs'
+import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -363,5 +363,106 @@ describe('Quality-Gate auf dem gebauten MDX', () => {
     const regeln = pruefeDokument(buildMdx(d), { bereich: 'rezepte', slug: SEED.slug }).map(b => b.regel)
     expect(regeln).toContain('fahrenheit')
     expect(regeln).toContain('abgeschnitten')
+  })
+})
+
+// ─── Gaumen-Rotation + Beschaffbarkeit (Regel 11, 29.09.2026) ────────────────
+// Anlass: Die letzten Rezepte waren zu fremd, die Zutaten kaum zu bekommen.
+
+const mk = (slug, stil) => ({ slug, stil })
+
+describe('ordneNachRotation — jedes zweite Rezept trifft den deutschen Geschmack', () => {
+  const offen = [mk('o1', 'original'), mk('o2', 'original'), mk('o3', 'original'), mk('v1', 'vertraut'), mk('v2', 'vertraut'), mk('v3', 'vertraut')]
+
+  it('beginnt bei Gleichstand mit vertraut und wechselt strikt ab', () => {
+    expect(ordneNachRotation(offen, []).map(s => s.slug)).toEqual(['v1', 'o1', 'v2', 'o2', 'v3', 'o3'])
+  })
+
+  it('setzt nach einem vertrauten Rezept mit original fort', () => {
+    expect(ordneNachRotation(offen, [mk('x', 'vertraut')])[0].slug).toBe('o1')
+  })
+
+  it('zaehlt Altbestand ohne stil nicht mit', () => {
+    expect(ordneNachRotation(offen, [{ slug: 'alt' }, { slug: 'alt2' }])[0].slug).toBe('v1')
+  })
+
+  it('laeuft mit dem anderen Stil weiter, wenn einer aufgebraucht ist — verliert nichts', () => {
+    const r = ordneNachRotation([mk('o1', 'original'), mk('o2', 'original')], [])
+    expect(r.map(s => s.slug)).toEqual(['o1', 'o2'])
+  })
+
+  it('behandelt Seeds ohne stil als original', () => {
+    expect(seedStil({ slug: 'a' })).toBe('original')
+    expect(seedStil({ slug: 'a', stil: 'vertraut' })).toBe('vertraut')
+  })
+})
+
+describe('Beschaffbarkeit', () => {
+  it.each([
+    ['Bananenblätter', ['bananenblätter']],
+    ['Betelblatt', ['betelblatt']],
+    ['Rochenflügel', ['rochenflügel']],
+    ['Binchotan-Kohle', ['binchotan']],
+  ])('erkennt %s als schwer erhältlich', (name, erwartet) => {
+    expect(schwerErhaeltlich([{ name }])).toEqual(erwartet)
+  })
+
+  it('haelt gebrochenen Pfeffer nicht fuer Rochen', () => {
+    expect(schwerErhaeltlich([{ name: 'gebrochener schwarzer Pfeffer' }])).toEqual([])
+  })
+
+  it('laesst Alltagszutaten durch', () => {
+    expect(schwerErhaeltlich([{ name: 'Hähnchenschenkel' }, { name: 'Sojasauce' }, { name: 'Senf' }, { name: 'Honig' }])).toEqual([])
+  })
+
+  const zutaten = (...namen) => namen.map(name => ({ amount: 1, unit: 'Stk', name }))
+  const kopfMit = (extra) => KOPF.replace('LAND: Japan', `LAND: Japan\n${extra}`)
+  const SEED_V = { ...SEED, stil: 'vertraut' }
+
+  it('vertraut: lehnt eine schwer erhaeltliche Zutat ab', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt'), SEED_V)
+    d.ingredients = zutaten('Hähnchenschenkel', 'Bananenblätter', 'Sojasauce', 'Mirin', 'Zucker')
+    expect(validate(d, SEED_V).join(' ')).toMatch(/Schwer erhältliche Zutat.*bananenblätter/)
+  })
+
+  it('vertraut: verlangt BESCHAFFUNG und lehnt Asia-Laden/Online ab', () => {
+    const ohne = datensatz(KOPF, SEED_V)
+    expect(validate(ohne, SEED_V)).toContain('Pflichtfeld fehlt: BESCHAFFUNG (Rezept für den deutschen Geschmack)')
+    const asia = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Asia-Laden/Online'), SEED_V)
+    expect(validate(asia, SEED_V).join(' ')).toMatch(/nicht alltagstauglich/)
+  })
+
+  it('vertraut: Supermarkt + Metzger ohne Spezialzutat besteht', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    expect(validate(d, SEED_V)).toEqual([])
+  })
+
+  it('original: eine Spezialzutat ist erlaubt, zwei nicht', () => {
+    const eine = datensatz(KOPF, SEED); eine.ingredients = zutaten('Hähnchen', 'Bananenblätter', 'Salz', 'Pfeffer', 'Öl')
+    expect(validate(eine, SEED)).toEqual([])
+    const zwei = datensatz(KOPF, SEED); zwei.ingredients = zutaten('Hähnchen', 'Bananenblätter', 'Pandan', 'Salz', 'Öl')
+    expect(validate(zwei, SEED).join(' ')).toMatch(/Zu viele schwer erhältliche Zutaten/)
+  })
+
+  it('der Gaumen-Block unterscheidet die Stile', () => {
+    expect(gaumenBlock(SEED_V)).toMatch(/DEUTSCHER GESCHMACK/)
+    expect(gaumenBlock(SEED)).toMatch(/NAH AM ORIGINAL/)
+  })
+})
+
+describe('data/rezept-seeds.json — Gaumen-Regel', () => {
+  const seeds = JSON.parse(readFileSync(new URL('../data/rezept-seeds.json', import.meta.url), 'utf-8'))
+  const offen = seeds.filter(s => s.stil && !s.pausiert)
+
+  it('jeder Seed mit stil hat einen gueltigen Wert', () => {
+    for (const s of seeds) if (s.stil) expect(['vertraut', 'original']).toContain(s.stil)
+  })
+
+  it('pausierte Seeds nennen einen Grund', () => {
+    for (const s of seeds.filter(x => x.pausiert)) expect(String(s.pausiert).length).toBeGreaterThan(10)
+  })
+
+  it('kein offener Seed haengt an einer schwer erhaeltlichen Zutat im Titel', () => {
+    for (const s of offen) expect(schwerErhaeltlich([{ name: `${s.title} ${s.meatType}` }])).toEqual([])
   })
 })

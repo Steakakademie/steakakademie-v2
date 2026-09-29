@@ -524,6 +524,31 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    - **Scheitern alle Einzelschritte, ist der Lauf rot.** Ein Skript, das jeden
      Durchgang verliert und trotzdem mit 0 endet, lügt.
 
+11. **Rezept-Gaumen-Regel (Uwe, 29.09.2026).** Rezepte kommen weiter NUR aus den
+   11 BBQ-Hochburgen (Systemprompt §5) — aber ausgewählt nach deutschem Geschmack
+   und Beschaffbarkeit. Anlass: Die zuletzt erzeugten Rezepte (Snoek, Betelblatt,
+   Rochen, Hühnerherzen …) waren für deutsche und auch für Hardcore-Griller zu
+   fremd, viele Zutaten kaum zu bekommen. Es geht **nicht** um deutsche Rezepte:
+   ob Südafrika, USA oder Asien, ist egal.
+   - **Jedes zweite Rezept trifft den deutschen Geschmack** (`stil: "vertraut"` im
+     Seed in `data/rezept-seeds.json`), die übrigen sind `original`. Der Agent
+     ordnet die offenen Seeds strikt abwechselnd (`ordneNachRotation`), bei
+     Gleichstand beginnt `vertraut`. Seeds ohne `stil` zählen als `original` und
+     werden nicht mitgezählt.
+   - **`vertraut` heißt:** Hauptgeschmack aus Fleisch, Rauch, Salz, Pfeffer, Paprika,
+     Knoblauch, Senf, Honig, Zitrone, Kräutern; keine Innereien-Spezialitäten;
+     Fermentiertes und stark Süß-Saures höchstens als Nebenrolle; Chili mild, als Option.
+   - **Beschaffbarkeit gilt für JEDES Rezept:** alle Zutaten im Supermarkt, beim
+     Metzger oder auf dem Wochenmarkt. `vertraut`: keine einzige Spezialzutat und
+     Bezugsquelle „Supermarkt (+ Metzger)". `original`: höchstens eine Spezialzutat,
+     mit Ersatz in der Anmerkung. Die Liste der schwer erhältlichen Zutaten steht in
+     `scripts/lib/beschaffbarkeit.mjs` — Neues dort eintragen, nicht in Prompts.
+   - **Durchgesetzt in Code, nicht nur im Prompt:** `validate()` lehnt ein Rezept mit
+     schwer erhältlicher Zutat ab (Versuchsschleife erzeugt neu); `recipe-seeds.mjs`
+     verwirft solche Seeds schon beim Nachlegen und füllt beide Stile getrennt auf.
+   - **`pausiert: "<Grund>"` im Seed parkt ein Gericht**, ohne es zu löschen. Pausierte
+     Seeds werden nicht erzeugt und zählen nicht zum Vorrat; `--slug` umgeht das.
+
 ---
 
 ## 3. Agentur-Struktur (Betriebsmodell)
