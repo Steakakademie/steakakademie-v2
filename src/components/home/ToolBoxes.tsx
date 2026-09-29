@@ -26,16 +26,17 @@ import MarcoStarter from '@/components/relaunch/MarcoStarter';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
-// Ersatzanzeige NUR bei Serverfehler: echte Ribeye-Treffer aus data/foodpairing v2
-// (28.09.2026, identisch mit match_foodpairing('Rind')). Wird ausdrücklich als
+// Ersatzanzeige NUR bei Serverfehler: echte Ribeye-Treffer, 1:1 aus der Live-DB
+// (match_foodpairing('Rind', 5) nach dem v2-Import am 29.09.2026). Die RPC blendet
+// Partner derselben Kategorie aus — deshalb kein Schwein/Lamm. Wird ausdrücklich als
 // „Beispiel: Ribeye" beschriftet. Die v1-Demo zeigte „Kaffee · 7 Moleküle", die
 // echte DB lieferte 3 — solche Zahlen gehören nie in eine Vorschau.
 const DEMO_PAIRINGS: Pairing[] = [
-  { partner: 'Kartoffel', category: 'Gemüse', shared: 6, shared_examples: ['(E,E)-2,4-Decadienal', '2,3-Diethyl-5-methylpyrazin', '2-Ethyl-3,5-dimethylpyrazin'] },
-  { partner: 'Brotkruste', category: 'Backwaren', shared: 5, shared_examples: ['(E)-2-Nonenal', '(E,E)-2,4-Decadienal', '2-Acetylthiazolin'] },
-  { partner: 'Schwein', category: 'Fleisch', shared: 5, shared_examples: ['(E)-2-Nonenal', '(E,E)-2,4-Decadienal', '2-Ethyl-3,5-dimethylpyrazin'] },
+  { partner: 'Kartoffel', category: 'Gemüse', shared: 6, shared_examples: ['(E,E)-2,4-Decadienal', '2-Ethyl-3,5-dimethylpyrazin', '2,3-Diethyl-5-methylpyrazin'] },
+  { partner: 'Brotkruste', category: 'Backwaren', shared: 5, shared_examples: ['(E,E)-2,4-Decadienal', '(E)-2-Nonenal', '2-Acetylthiazolin'] },
   { partner: 'Erdnuss', category: 'Nüsse', shared: 4, shared_examples: ['(E,E)-2,4-Decadienal', 'Furaneol', 'Methanthiol'] },
-  { partner: 'Garnele', category: 'Meeresfrüchte', shared: 4, shared_examples: ['2,3-Diethyl-5-methylpyrazin', '2-Acetylthiazolin', 'Furaneol'] },
+  { partner: 'Garnele', category: 'Meeresfrüchte', shared: 4, shared_examples: ['2-Acetylthiazolin', '2,3-Diethyl-5-methylpyrazin', 'Furaneol'] },
+  { partner: 'Hähnchen', category: 'Geflügel', shared: 4, shared_examples: ['(E,E)-2,4-Decadienal', '(E)-2-Nonenal', 'Methanthiol'] },
 ];
 
 // Beispiel-Zutaten fuer die Foodpairing-Kachel (Uwe, 28.09.2026: Kachel wirkte leer).
