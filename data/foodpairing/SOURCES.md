@@ -30,6 +30,14 @@ mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbeleg
   Pfeffer und Oregano (Studien existieren, Abstract nicht abrufbar → noch nicht verifiziert),
   Basilikum (DOI gehörte zu einer fachfremden Studie), Nelke (Zusatzstoffe nicht im Abstract),
   Ahornsirup (nur GC-MS).
+- **+ Schwarzer Knoblauch** (fermentiert; Yang et al. 2019, J. Agric. Food Chem.,
+  10.1021/acs.jafc.9b03269 — AEDA, Rekombination und Omission, Abstract geprüft): 9 Schlüsselstoffe,
+  darunter Furaneol, 3-Methylbuttersäure, Allylmethyltrisulfid; neu im Vokabular
+  (E,Z)-2,6-Nonadien-1-ol und γ-Undecalacton. Zweitbeleg: Übersicht Kilic-Buyukkurt et al. 2023
+  (Volltext geprüft). Stand danach: 73 Zutaten · 201 Stoffe · 590 Kanten · 605 Belege.
+- Aus einer dritten externen Lieferung **nicht** übernommen: Frühlingszwiebel (Studie zu einem
+  Pfannkuchen-Gericht, DOI falsch zugeordnet), Knoblauch-roh als Evidenz A (zitierter Satz betraf
+  schwarzen Knoblauch), Pfeffer weiterhin unverifiziert.
 
 ## Bekannte Lücken (ehrlich)
 - Nicht belegbar gefunden: **Oregano, Wacholderbeere, Ahornsirup, frische Feige,

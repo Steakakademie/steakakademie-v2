@@ -30,6 +30,7 @@ const ALIASE: Record<string, string> = {
   champignons: 'Champignon', tomaten: 'Tomate', pommes: 'Kartoffel', 'pommes frites': 'Kartoffel',
   kartoffeln: 'Kartoffel', 'gebratene zwiebel': 'Röstzwiebel', zwiebeln: 'Zwiebel', paprikaschote: 'Paprika',
   'schwarzer truffel': 'Trüffel',
+  'black garlic': 'Schwarzer Knoblauch', schwarzknoblauch: 'Schwarzer Knoblauch', 'fermentierter knoblauch': 'Schwarzer Knoblauch',
   // Kräuter, Gewürze
   minze: 'Grüne Minze', koriander: 'Koriandergrün', 'schwarzer pfeffer': 'Pfeffer', pfefferkorner: 'Pfeffer',
   gewurznelke: 'Nelke', 'paprika edelsuss': 'Paprikapulver', 'paprikapulver edelsuss': 'Paprikapulver', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
