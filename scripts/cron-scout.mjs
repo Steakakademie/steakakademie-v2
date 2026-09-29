@@ -191,8 +191,28 @@ const DISCARD_PATTERNS = [
   /obituary/i, /death notice/i, /nachruf/i,
 ]
 
-function shouldDiscard(article) {
-  return DISCARD_PATTERNS.some(rx => rx.test(article.title))
+// Produkttests fremder Redaktionen (29.09.2026): Aus Titel + Teaser entstand
+// „… im Test" unter unserem Namen — ohne dass die Steakakademie je getestet
+// hat (irreführend, UWG). Solche Eintraege gehen gar nicht erst in Opus.
+const TEST_PATTERNS = [/\bim test\b/i, /\btest:/i, /testbericht/i, /\bim praxistest\b/i, /\breview\b/i]
+
+// Grillbezug (29.09.2026): Der Quellen-Bonus (Die Frau am Grill 2,5) hob
+// Grießnockerl, Zitronencreme und Brezelaufstrich allein über die Schwelle.
+// Ohne mindestens ein Grill-/BBQ-Signal im Text kein Briefing.
+const GRILL_SIGNALE = [
+  ...KEYWORDS.bbq_core.words, ...KEYWORDS.technique.words, ...KEYWORDS.country.words,
+  'grill', 'rotisserie', 'drehspieß', 'planke', 'dutch oven', 'feuerplatte', 'plancha',
+]
+
+function hatGrillbezug(article) {
+  const text = `${article.title} ${article.summary}`.toLowerCase()
+  return GRILL_SIGNALE.some(w => text.includes(w))
+}
+
+export function shouldDiscard(article) {
+  if (DISCARD_PATTERNS.some(rx => rx.test(article.title))) return true
+  if (TEST_PATTERNS.some(rx => rx.test(article.title))) return true
+  return !hatGrillbezug(article)
 }
 
 // ─── HTML-Entity-Decoder ──────────────────────────────────────────────────────
@@ -232,8 +252,30 @@ PFLICHT: konkrete Temperaturen, direkte vs. indirekte Hitze, Röstaromen. Kennze
   return `Du bist Senior-Redakteur für BBQ & Grill auf steakakademie.de. Ton: direkt, leidenschaftlich, expertenhaft. Immer Temperaturen und Techniken einbauen.`
 }
 
+const GATE_REGELN = [
+  ['fahrenheit',   /\d\s?°\s?F\b|\bFahrenheit\b/],
+  ['imperial',     /\d\s?(Pfund|lbs?|oz|Unzen|Zoll|inch(es)?)\b/i],
+  ['ich-form',     /(^|[\s„"(])(ich|mir|mich|mein(e|en|em|er)?)\b/i],
+  ['testbehauptung', /\b(im test|getestet|unser test|testergebnis|im praxistest|testurteil)\b/i],
+]
+
+export function pruefeEntwurf(text) {
+  return GATE_REGELN.filter(([, rx]) => rx.test(text)).map(([name]) => name)
+}
+
 async function generateContent(briefing) {
   const cat = briefing.category
+  const regeln = `HARTE REGELN (verletzt = Entwurf wird verworfen):
+- Du kennst NUR Titel und Teaser der Quelle, nicht den Artikel. Schreibe deshalb
+  KEINEN Bericht über den Quellartikel, sondern einen eigenständigen Wissensartikel
+  der Steakakademie zum Thema. Keine Aussagen über konkrete Betriebe, Personen,
+  Produkte, Preise oder Ereignisse, die nicht wörtlich im Teaser stehen.
+- Keine Ich- oder Wir-Form, keine Erlebnisse, keine Besuche, keine Verkostungen.
+- Keine Test-, Prüf- oder Vergleichsbehauptungen („im Test", „getestet", „unser Fazit
+  nach X Stunden") — die Steakakademie hat nichts davon selbst geprüft.
+- Kerntemperaturen, Garzeiten und Reifungs-Fakten NIE raten: verweise auf den
+  Temperatur-Guide (/temperatur-guide) statt Zahlen zu nennen.
+- Nur metrische Einheiten und °C. Kein °F, keine Pfund, Unzen, Zoll.`
   const msg = await anthropic.messages.create({
     model:      'claude-opus-4-7',
     max_tokens: 3072,
@@ -248,6 +290,8 @@ Titel: ${briefing.article.title}
 Zusammenfassung: ${briefing.article.summary}
 Kategorie: ${cat}
 
+${regeln}
+
 Antworte NUR als JSON:
 {"title":"...","content_body":"... (600-1000 Wörter, Markdown)","seo_title":"... (max 60)","seo_description":"... (max 160)","image_prompt_en":"... (englischer Bild-Prompt)"}`
     }],
@@ -257,6 +301,11 @@ Antworte NUR als JSON:
   const m    = text.match(/\{[\s\S]*\}/)
   if (!m) throw new Error('Kein JSON in Antwort')
   const parsed = JSON.parse(m[0])
+
+  // Qualitäts-Gate (29.09.2026): Was die Regeln bricht, landet nicht in der
+  // Review-Warteschlange — Uwe soll entscheiden, nicht aussortieren.
+  const gate = pruefeEntwurf(`${parsed.title}\n${parsed.content_body}`)
+  if (gate.length) throw new Error(`Gate: ${gate.join(', ')}`)
 
   // QoF Ton-Check
   const lower = parsed.content_body.toLowerCase()
@@ -470,7 +519,7 @@ async function main() {
   console.log()
 }
 
-main().catch(err => {
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main().catch(err => {
   console.error(c.red(`\n✗ Pipeline-Fehler: ${err.message}`))
   process.exit(1)
 })
