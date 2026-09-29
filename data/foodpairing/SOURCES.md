@@ -22,8 +22,17 @@ mit Einzelnachweis. Fakten sind nicht urheberrechtlich geschützt; die Kurzbeleg
   `ausgeschlossen.tsv` und wird nicht importiert.
 - CAS-Nummern über PubChem geprüft; leer, wo die Quelle Stereochemie/Identität offenlässt.
 
+## Nachtrag 29.09.2026
+- **+ Paprikapulver** (edelsüß; Zimmermann & Schieberle 2000, AEDA, Abstract geprüft): β-Ionon,
+  Furaneol, Sotolon, 2- und 3-Methylbuttersäure. Stand danach: 72 Zutaten · 199 Stoffe ·
+  581 Kanten · 593 Belege.
+- Aus einer externen Web-Recherche **nicht** übernommen (Gründe in `ausgeschlossen.tsv`):
+  Pfeffer und Oregano (Studien existieren, Abstract nicht abrufbar → noch nicht verifiziert),
+  Basilikum (DOI gehörte zu einer fachfremden Studie), Nelke (Zusatzstoffe nicht im Abstract),
+  Ahornsirup (nur GC-MS).
+
 ## Bekannte Lücken (ehrlich)
-- Nicht belegbar gefunden: **Oregano, Wacholderbeere, Paprikapulver, Ahornsirup, frische Feige,
+- Nicht belegbar gefunden: **Oregano, Wacholderbeere, Ahornsirup, frische Feige,
   gebratener westlicher Bacon, Tomatenmark.** (Teils existieren Studien, deren Abstract
   keine Einzelstoffe nennt oder die nicht abrufbar waren.)
 - Dünn belegt: Nelke (1 Stoff), Basilikum (2), Räucherlachs (1), Pfeffer (Standardquelle

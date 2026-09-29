@@ -32,7 +32,7 @@ const ALIASE: Record<string, string> = {
   'schwarzer truffel': 'Trüffel',
   // Kräuter, Gewürze
   minze: 'Grüne Minze', koriander: 'Koriandergrün', 'schwarzer pfeffer': 'Pfeffer', pfefferkorner: 'Pfeffer',
-  gewurznelke: 'Nelke', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
+  gewurznelke: 'Nelke', 'paprika edelsuss': 'Paprikapulver', 'paprikapulver edelsuss': 'Paprikapulver', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
   // Getränke, Würzen, Süßes
   scotch: 'Whisky', whiskey: 'Whisky', schokolade: 'Kakao', 'dunkle schokolade': 'Kakao',
   'balsamico-essig': 'Balsamico', balsamessig: 'Balsamico', 'aceto balsamico': 'Balsamico', 'soja-sauce': 'Sojasauce',
