@@ -67,14 +67,15 @@ bilder:
   images/cuts/abanico.jpg: { status: offen }
   images/cuts/bauchspeck.jpg: { status: offen }
   images/cuts/beinscheibe.jpg: { status: offen }
-  images/hofladen-reetdachhaus.svg:
+  # Zuschnitt 4:3 + Farb-/Tonwertkorrektur (wärmer, abgedunkelt, Vignette) — kein generativer Eingriff
+  images/hofladen-radar-markt.jpg:
     status: lizenz
-    quelle: Pixabay (ID 158511)
-    urheber: OpenClipart-Vectors
+    quelle: Pixabay (ID 1363034)
+    urheber: b1-foto
     lizenz: Pixabay-Inhaltslizenz
     lizenz_url: https://pixabay.com/de/service/license-summary/
-    quell_url: https://pixabay.com/de/users/openclipart-vectors-30363/
-    erworben_am: 2026-09-28
+    quell_url: https://pixabay.com/de/photos/1363034/
+    erworben_am: 2026-09-29
   images/cuts/brisket.jpg:
     status: lizenz
     quelle: Pexels (ID 36869213)
