@@ -12,7 +12,8 @@
  *
  * Spalten: zutat  stoff  stoff_im_zitat  doi  url  fundstelle  zitat
  * `url` darf sein: Europe-PMC-Suche (JSON) oder -Volltext (fullTextXML), PubMed efetch,
- * Crossref- oder OpenAlex-Werk. Andere Seiten werden als Rohtext verglichen.
+ * Crossref- oder OpenAlex-Werk, oder ein frei zugängliches PDF (braucht `pdftotext` aus poppler).
+ * Andere Seiten werden als Rohtext verglichen.
  *
  * Braucht Netz → bewusst NICHT in `npm run check` (Builds nie durch Netz/Inhalt blockieren).
  * Hinter einem Proxy: NODE_USE_ENV_PROXY=1 setzen.
@@ -23,6 +24,7 @@
  */
 
 import { readFileSync } from 'fs'
+import { execFileSync } from 'child_process'
 import { join, dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -72,7 +74,7 @@ async function hole(url) {
     try {
       const res = await fetch(url, { headers: { 'User-Agent': 'steakakademie-foodpairing-zitate/1.0' } })
       if (res.status === 404) break
-      if (res.ok) text = await res.text()
+      if (res.ok) text = /\.pdf($|\?)/i.test(url) ? pdfText(Buffer.from(await res.arrayBuffer())) : await res.text()
     } catch {
       /* nächster Versuch */
     }
@@ -80,6 +82,21 @@ async function hole(url) {
   const quelltext = extrahiere(url, text)
   cache.set(url, quelltext)
   return quelltext
+}
+
+/**
+ * PDF (z. B. Dissertation auf mediaTUM) → Text über `pdftotext` (poppler). Silbentrennung am
+ * Zeilenende wird zurückgenommen („Methylpro-\npanal" → „Methylpropanal"), echte Bindestriche vor
+ * Ziffern/Großbuchstaben bleiben. Ohne pdftotext: leer → Meldung „Quelltext nicht abrufbar".
+ */
+function pdfText(buf) {
+  try {
+    const t = execFileSync('pdftotext', ['-layout', '-', '-'], { input: buf, maxBuffer: 64 * 1024 * 1024 }).toString('utf8')
+    // „<"/„>" im Fließtext (z. B. „OAV > 1") würden sonst von der Tag-Entfernung als Tag gelesen
+    return t.replace(/-\n\s*(?=\p{Ll})/gu, '').replace(/</g, '‹').replace(/>/g, '›')
+  } catch {
+    return ''
+  }
 }
 
 function extrahiere(url, text) {
