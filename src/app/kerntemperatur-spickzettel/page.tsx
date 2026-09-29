@@ -51,7 +51,9 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
     titel: 'Schwein',
     rows: [
       { key: 'pork_juicy', was: 'Kotelett, Filet, Steaks' },
-      { key: 'pork_kruste', was: 'Krustenbraten' },
+      { key: 'pork_keule', was: 'Keule (Krustenbraten) — mager, exakt messen' },
+      { key: 'pork_schulter', was: 'Schulter (Krustenbraten) — der Klassiker' },
+      { key: 'pork_bauch', was: 'Bauch (Krustenbraten) — Fett und Bindegewebe schmelzen lange' },
       { key: 'pork_lowslow', was: 'Pulled Pork & Spareribs' },
     ],
   },
@@ -68,8 +70,21 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
     rows: [
       { key: 'poultry', was: 'Hähnchen & Pute — immer vollständig durchgaren' },
       { key: 'duck_breast', was: 'Entenbrust — darf rosa sein' },
-      { key: 'duck_whole', was: 'Ganze Ente / Gans' },
+      { key: 'duck_whole', was: 'Ganze Ente' },
+      { key: 'goose_whole', was: 'Ganze Gans, rosa / saftig' },
+      { key: 'goose_whole_done', was: 'Ganze Gans, durchgebraten' },
+      { key: 'goose_breast', was: 'Gänsebrust — Rosa vom dunklen Muskelfleisch' },
+      { key: 'goose_leg', was: 'Gänsekeule — löst sich vom Knochen' },
       { key: 'burger', was: 'Burger-Patty — gewolftes Fleisch immer durch' },
+    ],
+  },
+  {
+    titel: 'Wildschwein',
+    rows: [
+      { key: 'boar_ruecken', was: 'Rücken & Steaks — rosa nur trichinenuntersucht, nicht für Risikogruppen' },
+      { key: 'boar_filet', was: 'Filet & Medaillons — rosa nur trichinenuntersucht, nicht für Risikogruppen' },
+      { key: 'boar_braten', was: 'Braten & Nacken — Low & Slow' },
+      { key: 'boar_keule', was: 'Keule & Schulter — Schmoren, Smoken' },
     ],
   },
   {
@@ -191,9 +206,9 @@ export default function SpickzettelPage() {
                   <tbody>
                     {[
                       { was: 'Schweinefleisch', key: 'schwein' },
-                      { was: 'Geflügel', key: 'gefluegel' },
+                      { was: 'Geflügel (Ausnahme: Entenbrust)', key: 'gefluegel' },
                       { was: 'Hackfleisch (gewolft)', key: 'hackfleisch' },
-                      { was: 'Wildschwein (Trichinen)', key: 'wildschwein' },
+                      { was: 'Wildschwein (Ausnahme: Rücken/Filet, s. o.)', key: 'wildschwein' },
                     ].map(({ was, key }) => (
                       <tr key={key} className="border-b border-border-subtle/60">
                         <td className="py-1.5 pr-2 text-text-secondary">{was}</td>

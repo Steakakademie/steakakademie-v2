@@ -8,6 +8,13 @@ import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getProductsByCategory } from '@/lib/products';
 import KeyFacts from '@/components/KeyFacts';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
+import { badge, spanne, mindestwert } from '@/lib/kerntemperatur-referenz';
+
+// Werte für Schwein nach Teilstück, Geflügel und Wildschwein kommen aus
+// data/kerntemperatur-referenz.yaml (Uwe, 29.09.2026: „sollte auf Dauer
+// innerhalb des Systems integriert werden“). Hier keine Zahl von Hand eintragen.
+const GEFLUEGEL_MIN = `${mindestwert('gefluegel')} °C`;
+const ca = (key: string) => `ca. ${badge(key).c} °C`;
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
 
@@ -43,7 +50,7 @@ const FAQ_ITEMS = [
   {
     question: 'Warum muss Hähnchen komplett durchgegart sein?',
     answer:
-      'Geflügel kann Salmonellen und Campylobacter enthalten. Erst ab einer Kerntemperatur von 74 °C (Mindest-Haltedauer 2 Sekunden) werden diese Keime zuverlässig abgetötet. Diese Empfehlung gilt gemäß BfR (Bundesinstitut für Risikobewertung).',
+      `Geflügel kann Salmonellen und Campylobacter enthalten. Das BfR (Bundesinstitut für Risikobewertung) empfiehlt, Geflügel im Kern für mindestens zwei Minuten auf 70 °C zu erhitzen. Die Steakakademie setzt den Mindestwert mit ${GEFLUEGEL_MIN} bewusst darüber.`,
   },
   {
     question: 'Was ist der Unterschied zwischen Ziel-Kerntemperatur und Ruhephase?',
@@ -182,7 +189,7 @@ export default function TemperaturGuidePage() {
               <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/50">
                 <span className="inline-flex items-center gap-1.5 bg-brand-fire/20 text-brand-fire font-bold px-3 py-1 border border-brand-fire/30">
                   <Clock size={11} />
-                  Zuletzt aktualisiert: Mai 2026
+                  Zuletzt aktualisiert: September 2026
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <BookOpen size={11} className="text-brand-gold/60" />
@@ -430,9 +437,23 @@ export default function TemperaturGuidePage() {
                       highlight: false,
                     },
                     {
-                      cut: 'Schweinebauch / Kruste',
-                      temp: '80–85 °C',
-                      result: 'Weich, Fettschichten ausgebraten',
+                      cut: 'Schweinekeule (Krustenbraten)',
+                      temp: ca('pork_keule'),
+                      result: 'Saftig — mager, trocknet schnell',
+                      note: 'Exakt messen, wenige Grad entscheiden',
+                      highlight: false,
+                    },
+                    {
+                      cut: 'Schweineschulter (Krustenbraten)',
+                      temp: ca('pork_schulter'),
+                      result: 'Saftig, der Klassiker',
+                      note: 'Kruste separat mit hoher Oberhitze',
+                      highlight: false,
+                    },
+                    {
+                      cut: 'Schweinebauch (Krustenbraten)',
+                      temp: ca('pork_bauch'),
+                      result: 'Besonders zart — Fett und Bindegewebe schmelzen lange',
                       note: 'Kruste separat mit hoher Oberhitze',
                       highlight: false,
                     },
@@ -601,7 +622,7 @@ export default function TemperaturGuidePage() {
               persönlichen Geschmack. Geflügel kann{' '}
               <strong className="text-text-primary">Salmonellen und Campylobacter</strong> enthalten, die erst
               bei ausreichend hoher Temperatur und Haltedauer zuverlässig abgetötet werden. Das BfR empfiehlt
-              mindestens 74 °C Kerntemperatur für mindestens 2 Sekunden.
+              70 °C im Kern für mindestens zwei Minuten; die Steakakademie setzt den Mindestwert mit {GEFLUEGEL_MIN} darüber.
             </p>
 
             {/* BfR-Warnbox */}
@@ -610,10 +631,12 @@ export default function TemperaturGuidePage() {
               <div>
                 <p className="font-sans text-xs font-bold tracking-[0.1em] uppercase text-amber-400 mb-1">BfR-Empfehlung Geflügel</p>
                 <p className="font-body text-sm text-amber-200/80 leading-relaxed">
-                  Geflügelfleisch (Hühnchen, Pute, Ente, Gans, Wachtel) muss eine Kerntemperatur von{' '}
-                  <strong className="text-amber-200">mindestens 74 °C für mindestens 2 Sekunden</strong> erreichen.
-                  Rosafarbenes Geflügelfleisch ist kein Anzeichen für ein gewünschtes Garergebnis —
-                  es ist ein Sicherheitsrisiko. Keine Ausnahmen.
+                  Das BfR empfiehlt für Geflügelfleisch{' '}
+                  <strong className="text-amber-200">70 °C im Kern für mindestens zwei Minuten</strong>. Die
+                  Steakakademie setzt den Mindestwert mit {GEFLUEGEL_MIN} bewusst darüber. Entscheidend ist die
+                  Kerntemperatur, nicht die Farbe: Hähnchen und Pute sind durchgegart nicht mehr rosa, bei Gans
+                  und Ente kann das dunkle Muskelfleisch trotz sicherer Temperatur rosa bleiben. Einzige bewusste
+                  Ausnahme unter dem Mindestwert ist die Entenbrust (siehe Tabelle).
                 </p>
               </div>
             </div>
@@ -632,49 +655,61 @@ export default function TemperaturGuidePage() {
                   {[
                     {
                       bird: 'Hähnchenbrust',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '74–76 °C',
                       note: 'Nicht überschreiten — wird trocken. Sonde in die dickste Stelle der Brust',
                     },
                     {
                       bird: 'Hähnchenschenkel / -keule',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '80–85 °C',
                       note: 'Bindegewebe und Sehnen lösen sich erst ab 80 °C — saftiger als Brust',
                     },
                     {
                       bird: 'Ganzes Hähnchen',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '82 °C (dickste Stelle Oberschenkel)',
                       note: 'Sonde in die Schenkelinnenseite — nicht am Knochen messen',
                     },
                     {
                       bird: 'Pute / Truthahn (Brust)',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '77–80 °C',
                       note: 'Große Stücke: Brust und Schenkel separat messen',
                     },
                     {
                       bird: 'Pute (Schenkel)',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '82–85 °C',
                       note: 'Überwacht separat — gart langsamer als Brust',
                     },
                     {
                       bird: 'Ente (Brust)',
-                      min: '74 °C',
-                      ideal: '75–78 °C',
-                      note: 'Entenbrustfilet kann etwas rosa sein wenn sicherheitsrelevante 74 °C erreicht',
+                      min: 'Ausnahme',
+                      ideal: `${spanne('duck_breast')} ${badge('duck_breast').label}`,
+                      note: badge('duck_breast').hinweis ?? '',
                     },
                     {
-                      bird: 'Gans',
-                      min: '74 °C',
-                      ideal: '80–85 °C',
-                      note: 'Schenkel immer heißer garen als Brust — getrennte Messung',
+                      bird: 'Gans (ganz)',
+                      min: GEFLUEGEL_MIN,
+                      ideal: `${spanne('goose_whole')} ${badge('goose_whole').label} · ${spanne('goose_whole_done')} durch`,
+                      note: 'Keule immer heißer garen als Brust — getrennt messen',
+                    },
+                    {
+                      bird: 'Gänsebrust',
+                      min: GEFLUEGEL_MIN,
+                      ideal: `${spanne('goose_breast')} ${badge('goose_breast').label} · ${spanne('goose_breast_done')} durch`,
+                      note: 'Das Rosa kommt vom dunklen Muskelfleisch, nicht von zu wenig Hitze',
+                    },
+                    {
+                      bird: 'Gänsekeule',
+                      min: GEFLUEGEL_MIN,
+                      ideal: spanne('goose_leg'),
+                      note: 'Löst sich leicht vom Knochen',
                     },
                     {
                       bird: 'Wachtel / Taube',
-                      min: '74 °C',
+                      min: GEFLUEGEL_MIN,
                       ideal: '74–76 °C',
                       note: 'Kleine Vögel — schnelles Übergaren möglich, Thermometer unabdingbar',
                     },
@@ -718,8 +753,9 @@ export default function TemperaturGuidePage() {
             </div>
             <p className="font-body text-text-secondary leading-relaxed mb-8 max-w-2xl">
               Wild-Fleisch zeichnet sich durch geringen Fettgehalt, intensive Aromatik und feine Textur aus.
-              Hirsch und Reh tolerierten niedrige Kerntemperaturen ähnlich wie Rind. Bei Wildschwein gilt
-              eine verschärfte Regel: Trichinose-Vorsorge erfordert höhere Mindesttemperaturen.
+              Hirsch und Reh tolerieren niedrige Kerntemperaturen ähnlich wie Rind. Bei Wildschwein entscheidet
+              das Teilstück: Braten, Nacken, Keule und Schulter werden durchgegart, Rücken und Filet dürfen nur
+              unter Bedingungen rosa bleiben (siehe Hinweis unter der Tabelle).
             </p>
 
             <div className="overflow-x-auto mb-8">
@@ -735,11 +771,32 @@ export default function TemperaturGuidePage() {
                 <tbody>
                   {[
                     {
-                      animal: 'Wildschwein (alle Stücke)',
-                      temp: '72 °C (Mindest)',
-                      grade: 'Vollständig durchgegart',
-                      note: 'Trichinose-Pflichtvorsorge. Keine Ausnahmen. BfR-Empfehlung.',
+                      animal: 'Wildschwein (Rücken/Steaks)',
+                      temp: spanne('boar_ruecken'),
+                      grade: badge('boar_ruecken').label,
+                      note: badge('boar_ruecken').hinweis ?? '',
                       warn: true,
+                    },
+                    {
+                      animal: 'Wildschwein (Filet/Medaillons)',
+                      temp: spanne('boar_filet'),
+                      grade: badge('boar_filet').label,
+                      note: badge('boar_filet').hinweis ?? '',
+                      warn: true,
+                    },
+                    {
+                      animal: 'Wildschwein (Braten/Nacken)',
+                      temp: spanne('boar_braten'),
+                      grade: badge('boar_braten').label,
+                      note: 'Low & Slow',
+                      warn: false,
+                    },
+                    {
+                      animal: 'Wildschwein (Keule/Schulter)',
+                      temp: spanne('boar_keule'),
+                      grade: badge('boar_keule').label,
+                      note: 'Ideal zum Schmoren oder Smoken',
+                      warn: false,
                     },
                     {
                       animal: 'Reh (Rücken/Filet)',
@@ -771,9 +828,9 @@ export default function TemperaturGuidePage() {
                     },
                     {
                       animal: 'Wildente / Fasan',
-                      temp: '74 °C (Mindest)',
+                      temp: `${GEFLUEGEL_MIN} (Mindest)`,
                       grade: 'Durchgegart',
-                      note: 'Wildgeflügel = BfR-Geflügel-Regel gilt',
+                      note: 'Wildgeflügel — es gilt der Geflügel-Mindestwert',
                       warn: true,
                     },
                     {
@@ -803,12 +860,13 @@ export default function TemperaturGuidePage() {
               <div className="flex gap-3">
                 <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-sans text-xs font-bold tracking-[0.1em] uppercase text-amber-400 mb-1">Wildschwein — Trichinose-Pflichtvorsorge</p>
+                  <p className="font-sans text-xs font-bold tracking-[0.1em] uppercase text-amber-400 mb-1">Wildschwein — wann rosa geht und wann nicht</p>
                   <p className="font-body text-sm text-amber-200/80 leading-relaxed">
-                    Wildschwein muss in Deutschland vor dem Verzehr auf Trichinen untersucht werden
-                    (Pflicht nach EU-Verordnung 2075/2005). Zusätzlich: vollständiges Durchgaren bei mindestens
-                    72 °C tötet vorhandene Trichinen-Larven ab. Einfrieren reicht bei Wildschwein
-                    <em> nicht</em> aus — anders als bei Zucht-Schweinen.
+                    Wildschwein muss in Deutschland vor dem Verzehr amtlich auf Trichinen untersucht werden
+                    (Pflicht nach EU-Verordnung 2075/2005). Rosa gegarter Rücken oder Filet nur mit diesem
+                    Nachweis. Wildschwein kann außerdem Hepatitis-E-Viren tragen: Für Schwangere, Kinder, ältere
+                    und immungeschwächte Menschen immer auf mindestens {mindestwert('wildschwein')} °C durchgaren.
+                    Einfrieren reicht bei Wildschwein <em>nicht</em> aus — anders als bei Zucht-Schweinen.
                   </p>
                 </div>
               </div>
