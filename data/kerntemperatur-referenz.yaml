@@ -45,19 +45,39 @@ badges:
   # Gäste nehmen Schwein bei 63–65 nicht an. Untergrenze bleibt >= sicherheit.schwein.
   iberico:      { c: 66, range: [65, 68], label: "durch, saftig" }
   pork_lowslow: { c: 92, range: [88, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
-  pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten
+  pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten — Teilstück bis 29.09.2026 nie benannt; passt zu Keule/Schulter, NICHT zu Bauch
+  # Schwein nach Teilstück (Uwe, 29.09.2026): „Es gibt nicht die eine Wahrheit bei
+  # den Kerntemperaturen, weil immer auch das Teilstück eine Rolle spielt."
+  # Richtwerte, alle über sicherheit.schwein (63). c = Uwes „ca."-Wert; die
+  # Korridore ±2 °C (Keule, Schulter) sind eine ANNAHME von Claude, noch nicht
+  # von Uwe bestätigt. Bauch 80–85 übernimmt den Korridor aus dem Temperatur-Guide.
+  pork_keule:    { c: 70, range: [68, 72], label: "saftig" }          # mager, trocknet schnell — exakt messen
+  pork_schulter: { c: 75, range: [73, 77], label: "saftig, klassisch" }
+  pork_bauch:    { c: 80, range: [80, 85], label: "zart" }            # Fett und Bindegewebe schmelzen erst lange; Krustenbraten vom Bauch
   poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C); Keule/Flügel 74–80
   # Brust getrennt (Uwe, 23.09.2026, Kurspraxis): bei 68 °C vom Grill, zieht in der
   # Ruhe auf 72 nach — darüber trocken. Der Endwert bleibt >= sicherheit.gefluegel;
   # 68 ist ausdrücklich ZIEHwert, kein Serviertwert (im Text so formulieren).
   poultry_breast: { c: 72, range: [72, 74], label: "durch, saftig" }
   duck_breast:  { c: 58, range: [56, 62], label: "rosa" }             # Sonderfall: Entenbrust darf rosa
-  duck_whole:   { c: 75, range: [70, 80], label: "knusprig durch" }   # ganze Ente/Gans
+  duck_whole:   { c: 75, range: [72, 80], label: "knusprig durch" }   # ganze Ente — Untergrenze 29.09.2026 von 70 auf sicherheit.gefluegel (72) angehoben; vorher unter der eigenen Sicherheitsgrenze
+  # Gans nach Teilstück (Uwe, 29.09.2026). Korridore = Uwes Werte, c = Mitte.
+  # Alle Werte über sicherheit.gefluegel.
+  goose_whole:      { c: 77, range: [75, 79], label: "saftig" }
+  goose_whole_done: { c: 82, range: [80, 85], label: "durchgebraten, zart" }
+  goose_breast:     { c: 75, range: [73, 78], label: "saftig" }
+  goose_breast_done: { c: 80, range: [79, 82], label: "durchgebraten" }
+  goose_leg:        { c: 82, range: [80, 85], label: "löst sich vom Knochen" }
   salmon:       { c: 52, range: [48, 52], label: "glasig" }
   tuna:         { c: 46, range: [40, 46], label: "seared" }
   whitefish:    { c: 58, range: [55, 62], label: "durch" }            # Dorade/Kabeljau/Rotbarbe/Mahi/Schwertfisch
   oily_whole:   { c: 63, range: [60, 65], label: "durch" }            # ganze Makrele/Sardine
   burger:       { c: 70, range: [70, 72], label: "durchgegart" }      # Hack: durch Wolfen Keime innen → ≥70 °C
+  # Wildschwein nach Teilstück (Uwe, 29.09.2026) — nur die durchgegarten Stücke.
+  # Rücken/Steaks (60–66) und Filet/Medaillons (60–64) rosa sind NICHT übernommen:
+  # sie liegen unter sicherheit.wildschwein (70) — Entscheidung offen, siehe PR.
+  boar_braten:  { c: 78, range: [75, 80], label: "voll gar, saftig" }  # Braten, Nacken — Low & Slow
+  boar_keule:   { c: 78, range: [75, 82], label: "durchgegart, weich" } # Keule, Schulter — Schmoren, Smoken
 
 # Sicherheits-Mindestwerte (nie unterschreiten — Risikogruppen)
 sicherheit:
