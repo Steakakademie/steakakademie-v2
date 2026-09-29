@@ -30,9 +30,14 @@ const ALIASE: Record<string, string> = {
   champignons: 'Champignon', tomaten: 'Tomate', pommes: 'Kartoffel', 'pommes frites': 'Kartoffel',
   kartoffeln: 'Kartoffel', 'gebratene zwiebel': 'Röstzwiebel', zwiebeln: 'Zwiebel', paprikaschote: 'Paprika',
   'schwarzer truffel': 'Trüffel',
+  // Röstknoblauch (Beleg: geröstet, 177 °C, 1,5 h) — „gebraten/frittiert“ bewusst NICHT, dafür fehlt ein Beleg
+  'gerosteter knoblauch': 'Röstknoblauch', 'knoblauch gerostet': 'Röstknoblauch', ofenknoblauch: 'Röstknoblauch',
+  'gebackener knoblauch': 'Röstknoblauch', 'roasted garlic': 'Röstknoblauch',
+  'maple syrup': 'Ahornsirup', ahornsyrup: 'Ahornsirup',
+  'black garlic': 'Schwarzer Knoblauch', schwarzknoblauch: 'Schwarzer Knoblauch', 'fermentierter knoblauch': 'Schwarzer Knoblauch',
   // Kräuter, Gewürze
   minze: 'Grüne Minze', koriander: 'Koriandergrün', 'schwarzer pfeffer': 'Pfeffer', pfefferkorner: 'Pfeffer',
-  gewurznelke: 'Nelke', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
+  gewurznelke: 'Nelke', 'paprika edelsuss': 'Paprikapulver', 'paprikapulver edelsuss': 'Paprikapulver', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
   // Getränke, Würzen, Süßes
   scotch: 'Whisky', whiskey: 'Whisky', schokolade: 'Kakao', 'dunkle schokolade': 'Kakao',
   'balsamico-essig': 'Balsamico', balsamessig: 'Balsamico', 'aceto balsamico': 'Balsamico', 'soja-sauce': 'Sojasauce',
