@@ -672,3 +672,10 @@ bilder:
     erworben_am: 2026-09-28
     namensnennung: false
     hinweis: Ersetzt die fal.ai-Generierung. status ki, weil die rechte Bildhaelfte auf Foodiesfeed ausdruecklich als AI-generated gekennzeichnet ist (Doktrin docs/bildprogramm.md, Foodiesfeed-Einzelbildpruefung, geprueft 28.09.2026); imageAI bleibt true. Linke Haelfte Echtfoto. Keine Personen; Flaschenetiketten im Hintergrund unscharf, keine lesbaren Marken.
+  images/rezepte/skilpadjies-braai.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/skilpadjies-braai.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-29
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
