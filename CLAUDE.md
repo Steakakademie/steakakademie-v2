@@ -366,6 +366,14 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    nicht. Details: `marketing_agent.txt` → Sektion WERBEKENNZEICHNUNG.
 2. **Fakten-Genauigkeit (Regel 8c).** Temperaturen/Cuts/Reifung NIE raten — kanonische
    Referenz `data/kerntemperatur-referenz.yaml`. Genauigkeit = stärkster Burggraben.
+   **Immer nach Teilstück (Uwe, 29.09.2026):** „Es gibt nicht die eine Wahrheit bei den
+   Kerntemperaturen, weil immer auch das Teilstück eine Rolle spielt." Ein Wert ohne
+   Teilstück (früher `pork_kruste`) ist unvollständig. Seiten holen Werte über
+   `src/lib/kerntemperatur-referenz.ts` statt sie hart zu kodieren. Werte unter dem
+   Sicherheitsminimum der Tierart (Entenbrust, Wildschwein-Rücken/-Filet rosa) nur mit
+   `unter_sicherheit: true` + `hinweis`, der mit angezeigt wird — Wächter:
+   `src/__tests__/kerntemperatur-referenz.test.ts`. Automatisch erzeugte Texte
+   (Rezept-Agent, Content-Gate) bleiben beim Sicherheitsminimum.
 3. **Marken-DNA** (`marketing_agent.txt`): Ton, Farben (#C8882A/#E85018/#120C07),
    **kein persönlicher Auftritt von Uwe** (Avatar-System Marco/Jonas/Elena).
    **Uwe ist auch keine Autorenstimme (Uwe, 06.09.2026: „Uwe Yendell als Sprachstimme raus").**
