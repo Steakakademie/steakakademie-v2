@@ -673,9 +673,12 @@ bilder:
     namensnennung: false
     hinweis: Ersetzt die fal.ai-Generierung. status ki, weil die rechte Bildhaelfte auf Foodiesfeed ausdruecklich als AI-generated gekennzeichnet ist (Doktrin docs/bildprogramm.md, Foodiesfeed-Einzelbildpruefung, geprueft 28.09.2026); imageAI bleibt true. Linke Haelfte Echtfoto. Keine Personen; Flaschenetiketten im Hintergrund unscharf, keine lesbaren Marken.
   images/rezepte/skilpadjies-braai.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/skilpadjies-braai.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
-    namensnennung: false
+    status: lizenz
+    quelle: Unsplash (ID xlf1tNGcBH0)
+    urheber: Janet Ganbold
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/a-close-up-of-a-skewer-of-food-on-a-grill-xlf1tNGcBH0
     erworben_am: 2026-09-29
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung (Echtfoto, frei unter Unsplash-Lizenz, kein Unsplash+; geprueft 29.09.2026). Motiv laut Unsplash Schaschlik in der Mongolei; keine Personen, keine Marken. imageAI im MDX-Frontmatter auf false gesetzt.
