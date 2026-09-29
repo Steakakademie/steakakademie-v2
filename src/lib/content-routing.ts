@@ -22,7 +22,8 @@ export type ContentCategory =
   | 'tuerkei'
   | 'spanien'
   | 'equipment'
-  | 'general-bbq';
+  | 'general-bbq'
+  | 'saison';
 
 export interface RouteTarget {
   /** Ziel-Seite, auf der dieser Content erscheint. */
@@ -47,6 +48,9 @@ export const CATEGORY_ROUTES: Record<ContentCategory, RouteTarget> = {
   thailand:            { route: '/bbq-news', label: 'Thailand',              agent: 'news-scout' },
   tuerkei:             { route: '/bbq-news', label: 'Türkei',                agent: 'news-scout' },
   spanien:             { route: '/bbq-news', label: 'Spanien',               agent: 'news-scout' },
+  // Saison-Berichte (scripts/saison-grow.mjs). Bis 29.09.2026 fehlte die Kategorie
+  // hier — freigegebene Saison-Beitraege erschienen auf keiner Seite.
+  saison:              { route: '/bbq-news', label: 'Saison',                agent: 'news-scout' },
 
   // ── Grillstil — Frauen & Lifestyle ───────────────────────────────────────
   'queen-of-fire':     { route: '/grillstil', label: 'Queen of Fire',        agent: 'queen-of-fire' },

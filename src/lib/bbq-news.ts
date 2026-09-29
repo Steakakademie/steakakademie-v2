@@ -58,6 +58,7 @@ const CATEGORY_REGION: Partial<Record<ContentCategory, NewsRegion>> = {
   thailand: 'International',
   tuerkei: 'International',
   spanien: 'International',
+  saison: 'Deutschland',
 };
 
 // Kategorie → Anzeige-Label für den Chip
@@ -73,6 +74,7 @@ const CATEGORY_LABEL: Partial<Record<ContentCategory, string>> = {
   thailand: 'Thailand',
   tuerkei: 'Türkei',
   spanien: 'Spanien',
+  saison: 'Saison',
 };
 
 const DE_DATE = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
