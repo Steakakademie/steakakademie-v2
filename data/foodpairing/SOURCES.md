@@ -81,6 +81,21 @@ ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitat
   für ein Aroma-Netz nur über dieses Literaturkapitel nutzbar.
 - Stand danach: **75 Zutaten · 208 Stoffe · 630 Kanten · 657 Belege.**
 
+## Nachtrag Granvogl-Arbeiten (29.09.2026, Hinweis von Uwe)
+Aus der Publikationsliste von M. Granvogl (J. Agric. Food Chem.) drei Sensomics-Studien — jeweils
+AEDA, Mengenbestimmung per Isotopenverdünnung (SIDA), OAV und Rekombination → **Evidenz A**:
+- **Kakao + dunkle Schokolade** (Seyfried & Granvogl 2019, 90 % und 99 % Kakao): Dimethyltrisulfid,
+  Essigsäure, Guaiacol, 3-Methylbuttersäure, Phenylessigsäure, Vanillin, Linalool.
+- **Bier + Weißbier** (Langos et al. 2013): β-Damascenon, 3-Methylbutylacetat, Ethyl-2-methylpropanoat,
+  Ethylbutanoat, Acetaldehyd, 3-Methyl-1-butanol, Dimethylsulfid, 4-Vinylguaiacol, 2-Phenylethanol.
+- **+ Rum** (neue Zutat; Franitza et al. 2016, zwei Arbeiten): Vanillin, Ethyl-2-methylbutanoat,
+  β-Damascenon, 2,3-Butandion, 3-Methylbutanal, Ethylbutanoat; aus der Fassreifung 4-Ethylphenol,
+  Guaiacol, 4-Ethylguaiacol, 4-Propylguaiacol (OAV ≥ 1).
+- Gesichtet, nicht übernommen: Birne (Abstract nennt nur Mengen, keine Geruchsbewertung),
+  Kartoffelchips (nur ausgewählte Stoffe, Schwerpunkt Schadstoffe), Lakritz, Hopfen, Tee,
+  Toona (für eine Grill-Seite ohne Nutzen), Olivenöl-Fehlaromen (Fehlgerüche).
+- Stand danach: **76 Zutaten · 211 Stoffe · 649 Kanten · 685 Belege**; 80/80 Zitate bestätigt.
+
 ## Bekannte Lücken (ehrlich)
 - Nicht belegbar gefunden: **Oregano** (nur Übersicht zu ätherischen Ölen), **Wacholderbeere,
   Schnittlauch, Bärlauch, Schalotte, Frühlingszwiebel** (keine Olfaktometrie-/AEDA-/OAV-Studie

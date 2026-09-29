@@ -75,12 +75,16 @@
 7	127	A	Czerny et al. 1999
 8	101	A	Frauendorfer et al. 2006
 8	104	A	Frauendorfer et al. 2006
-8	107	A	Frauendorfer et al. 2006
+8	106	A	Seyfried & Granvogl 2019
+8	107	A	Frauendorfer et al. 2006; Seyfried & Granvogl 2019
 8	110	A	Frauendorfer et al. 2006
+8	118	A	Seyfried & Granvogl 2019
 8	124	A	Frauendorfer et al. 2006
+8	125	A	Seyfried & Granvogl 2019
 8	126	A	Frauendorfer et al. 2006
-8	129	A	Frauendorfer et al. 2006
-8	131	A	Frauendorfer et al. 2006
+8	129	A	Frauendorfer et al. 2006; Seyfried & Granvogl 2019
+8	131	A	Frauendorfer et al. 2006; Seyfried & Granvogl 2019
+8	186	A	Seyfried & Granvogl 2019
 9	101	A	Burdack-Freitag et al. 2012
 9	104	A	Burdack-Freitag et al. 2012
 9	107	A	Burdack-Freitag et al. 2012
@@ -213,14 +217,19 @@
 25	262	A	D'Alessandro et al. 2021; Sonmezdag et al. 2018
 25	294	B	D'Alessandro et al. 2021
 26	101	A	Fritsch et al. 2005
-26	103	A	Fritsch et al. 2005
+26	103	A	Fritsch et al. 2005; Langos et al. 2013
 26	106	A	Fritsch et al. 2005
-26	117	A	Fritsch et al. 2005
-26	121	A	Fritsch et al. 2005
+26	117	A	Fritsch et al. 2005; Langos et al. 2013
+26	120	A	Langos et al. 2013
+26	121	A	Fritsch et al. 2005; Langos et al. 2013
 26	129	A	Fritsch et al. 2005
-26	153	A	Fritsch et al. 2005
+26	130	A	Langos et al. 2013
+26	142	A	Langos et al. 2013
+26	153	A	Fritsch et al. 2005; Langos et al. 2013
 26	180	A	Fritsch et al. 2005
+26	228	A	Langos et al. 2013
 26	264	A	Fritsch et al. 2005
+26	313	A	Langos et al. 2013
 27	114	A	Moio et al. 2000
 27	117	A	Moio et al. 2000
 27	155	A	Moio et al. 2000
@@ -630,3 +639,13 @@
 77	111	B	Belford et al. 1991
 77	118	B	Belford et al. 1991
 77	125	B	Belford et al. 1991
+78	103	A	Franitza et al. 2016 (Handelsrums); Franitza et al. 2016 (Herstellung)
+78	104	A	Franitza et al. 2016 (Handelsrums)
+78	115	A	Franitza et al. 2016 (Handelsrums)
+78	116	A	Franitza et al. 2016 (Handelsrums)
+78	117	A	Franitza et al. 2016 (Handelsrums)
+78	118	A	Franitza et al. 2016 (Herstellung)
+78	125	A	Franitza et al. 2016 (Handelsrums); Franitza et al. 2016 (Herstellung)
+78	235	A	Franitza et al. 2016 (Herstellung)
+78	311	A	Franitza et al. 2016 (Herstellung)
+78	312	A	Franitza et al. 2016 (Herstellung)

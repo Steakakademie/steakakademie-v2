@@ -39,6 +39,7 @@ const ALIASE: Record<string, string> = {
   minze: 'Grüne Minze', koriander: 'Koriandergrün', 'schwarzer pfeffer': 'Pfeffer', pfefferkorner: 'Pfeffer',
   gewurznelke: 'Nelke', 'paprika edelsuss': 'Paprikapulver', 'paprikapulver edelsuss': 'Paprikapulver', nelken: 'Nelke', senf: 'Senfsaat', lorbeerblatt: 'Lorbeer',
   // Getränke, Würzen, Süßes
+  weissbier: 'Bier', weizenbier: 'Bier', hefeweizen: 'Bier', 'dunkler rum': 'Rum', 'brauner rum': 'Rum',
   scotch: 'Whisky', whiskey: 'Whisky', schokolade: 'Kakao', 'dunkle schokolade': 'Kakao',
   'balsamico-essig': 'Balsamico', balsamessig: 'Balsamico', 'aceto balsamico': 'Balsamico', 'soja-sauce': 'Sojasauce',
   // Obst
