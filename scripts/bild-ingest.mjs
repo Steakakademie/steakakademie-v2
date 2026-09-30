@@ -40,6 +40,7 @@ import { readFile, writeFile, readdir, stat, copyFile, rename, mkdir } from 'fs/
 import { existsSync, readFileSync } from 'fs'
 import { join, dirname, basename, extname } from 'path'
 import { fileURLToPath } from 'url'
+import { leseId as leseIdAusName } from './lib/bild-id.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
@@ -240,27 +241,9 @@ function setzeFeld(raw, feld, wert) {
   return raw.replace(/^---\n/, `---\n${zeile}\n`)
 }
 
-/**
- * Bild-ID aus dem Dateinamen.
- *
- * Pexels benennt nach dem Muster `pexels-<fotograf>-<fotografID>-<fotoID>.jpg`.
- * Die erste Zahl ist dort die Fotografen-ID, nicht die des Bildes — wer sie
- * nimmt, schreibt eine Herkunft ins Manifest, die auf ein fremdes Bild zeigt.
- * Bei Pexels gilt deshalb die LETZTE Zahlengruppe, sonst die fuehrende.
- */
+/** Bild-ID aus dem Dateinamen — Regeln je Quelle in scripts/lib/bild-id.mjs. */
 function leseId(datei, quelle) {
-  const name = basename(datei, extname(datei))
-  // Unsplash vergibt alphanumerische IDs (z. B. "TDwxg8i8lfE"), keine Ziffernfolgen.
-  // Eine reine Zifferpruefung wuerde jedes Unsplash-Bild faelschlich blockieren.
-  if (quelle === 'unsplash') return /^[A-Za-z0-9_-]{6,}$/.test(name) ? name : null
-  if (/^pexels[-_]/i.test(name)) {
-    const zahlen = name.match(/\d{4,}/g)
-    return zahlen ? zahlen[zahlen.length - 1] : null
-  }
-  const vorn = name.match(/^(\d{4,})/)
-  if (vorn) return vorn[1]
-  const irgendwo = name.match(/(\d{6,})/)
-  return irgendwo ? irgendwo[1] : null
+  return leseIdAusName(basename(datei, extname(datei)), quelle)
 }
 
 /**
