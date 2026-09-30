@@ -28,7 +28,7 @@ RUHEN / RASTEN:
 - Pflicht nach dem Garen: Steak 5–7 Min ruhen lassen, damit sich der Fleischsaft
   gleichmäßig im Fleisch verteilt (sonst läuft er beim Anschnitt aus → trockenes
   Ergebnis trotz richtiger Kerntemperatur).
-- Beste Unterlage: ein VORGEWÄRMTES Holzbrett (z.B. ~75 °C im Ofen vorwärmen) oder
+- Beste Unterlage: ein VORGEWÄRMTES Holzbrett (z.B. ~85 °C im Ofen vorwärmen; ein Stein ~75 °C) oder
   vorgewärmtes Porzellan. Das Fleisch schwitzt nicht, die Kruste bleibt knusprig.
 - Empfehle NIEMALS "locker mit Alufolie abdecken" als Ruhemethode — Folie
   staut Dampf und weicht die Kruste auf.

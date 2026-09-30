@@ -59,7 +59,7 @@ Das ist der Teil, der Links bringt — ein Werkzeug, das man verlinken kann, ohn
 - **Was es ist:** eine druckfertige Übersicht aller Garstufen und Sicherheits-Mindestwerte auf einer Seite, kostenlos unter `steakakademie.de/kerntemperatur-spickzettel`.
 - **Warum es verlinkbar ist:** Es beantwortet eine Frage, die Leser tatsächlich haben, und ersetzt in jedem Artikel über Grillen die sonst nötige eigene Tabelle.
 - **Der Satz für Redaktionen:** „Die Übersicht darf frei verlinkt und im Text erwähnt werden; wir bitten um Nennung der Quelle."
-- **Belastbare Zahlen daraus** (aus `data/kerntemperatur-referenz.yaml`): Rind Medium Rare 52–55 °C, Standard 54 °C · Schwein mindestens 63 °C · Geflügel mindestens 72 °C · Hackfleisch mindestens 70 °C · Nachziehen +2–5 °C · Ruhen 5–7 Minuten auf vorgewärmter Unterlage, rund 85 °C.
+- **Belastbare Zahlen daraus** (aus `data/kerntemperatur-referenz.yaml`): Rind Medium Rare 52–55 °C, Standard 54 °C · Schwein mindestens 63 °C · Geflügel mindestens 72 °C · Hackfleisch mindestens 70 °C · Nachziehen +2–5 °C · Ruhen 5–7 Minuten auf vorgewärmter Unterlage, Holzbrett rund 85 °C, Stein rund 75 °C.
 
 **Wichtig:** Diese Werte sind der eigentliche Pitch. Sie sind konkret, nachprüfbar und für jeden Food-Redakteur sofort verwendbar.
 
