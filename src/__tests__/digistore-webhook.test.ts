@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { POST } from '@/app/api/webhooks/digistore24/route';
+import { digistoreSignature } from '@/lib/digistore/signature';
 
 /**
  * Digistore24-Webhook gegen eine In-Memory-Supabase.
@@ -218,5 +219,42 @@ describe('Digistore24-Webhook: Credit-Produkt bei Wiederholung', () => {
     expect(pack.status).toBe(200);
     expect(einzel.status).toBe(200);
     expect(db.credits).toEqual({ 'user-existing-1': 5, 'user-existing-2': 1 });
+  });
+});
+
+describe('Digistore24-Webhook: „Verbindung testen“ (event=connection_test)', () => {
+  const PASS = 'test-ipn-kennwort';
+
+  function signed(fields: Record<string, string>, pass = PASS) {
+    const params = { ...fields, sha_sign: digistoreSignature(pass, fields) };
+    return new Request('https://steakakademie.de/api/webhooks/digistore24', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(params).toString(),
+    });
+  }
+
+  beforeEach(() => {
+    process.env.DIGISTORE_IPN_PASSPHRASE = PASS;
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+  });
+
+  it('antwortet mit 200, wenn der Test korrekt signiert ist — ohne Bestellung anzulegen', async () => {
+    const res = await POST(signed({ event: 'connection_test' }));
+    expect(res.status).toBe(200);
+    expect(db.tables.digistore_orders).toHaveLength(0);
+  });
+
+  it('weist einen Test mit falschem Kennwort ab (401)', async () => {
+    const res = await POST(signed({ event: 'connection_test' }, 'falsches-kennwort'));
+    expect(res.status).toBe(401);
+  });
+
+  it('akzeptiert einen echten Kauf über sha_sign', async () => {
+    const res = await POST(signed({
+      event: 'payment', order_id: 'ORD-SHA-1', product_id: '696399', email: 'neu@example.de',
+    }));
+    expect(res.status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(1);
   });
 });

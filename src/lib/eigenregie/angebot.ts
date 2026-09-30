@@ -16,8 +16,11 @@ export const CHECKOUT_URL = 'https://www.checkout-ds24.com/product/695900';
 export const PILOT_PREIS = 999;
 export const REGULAERER_PREIS = 1497;
 export const PILOT_PLAETZE = 10;
-/** Letzter Tag des Pilotfensters, 23:59:59 deutscher Zeit (MEZ, Zeitumstellung am 25.10.). */
-export const PILOT_ENDE = new Date('2026-10-31T23:59:59+01:00');
+/** Letzter Tag des Pilotfensters, 23:59:59 deutscher Zeit (MEZ). Bis 30.09.2026: 31.10.2026;
+ *  verlängert auf 31.12.2026 (Uwe, 30.09.2026), weil der Start an der Jobcenter-Zusage hängt. */
+export const PILOT_ENDE = new Date('2026-12-31T23:59:59+01:00');
+/** Erster Tag mit regulärem Preis (Tag nach PILOT_ENDE). */
+export const REGULAER_AB = new Date(PILOT_ENDE.getTime() + 1000);
 
 export type Angebot = {
   preis: number;

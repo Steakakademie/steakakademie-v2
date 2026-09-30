@@ -238,7 +238,16 @@ export async function POST(req: Request) {
   const productId = params.product_id;
   const email     = (params.email ?? params.buyer_email ?? '').toLowerCase().trim();
 
+  // Digistore „Verbindung testen“ sendet event=connection_test ohne Bestelldaten.
+  // Authentifiziert ist er da schon — mit 200 antworten, sonst meldet Digistore
+  // einen Fehler, obwohl Anbindung und Kennwort stimmen (30.09.2026).
+  if (event === 'connection_test') {
+    console.info('[ds-webhook] connection_test ok via', auth.via);
+    return new Response('OK', { status: 200 });
+  }
+
   if (!event || !orderId || !productId || !email) {
+    console.warn('[ds-webhook] missing required fields', { event: event || null, via: auth.via });
     return new Response('Missing required fields', { status: 400 });
   }
 
