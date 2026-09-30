@@ -99,7 +99,11 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold focus-within:border-brand-gold transition-colors">
-      {/* Aufhänger (Uwe, 30.09.2026: „Kachel muss mehr Neugier wecken") — eigene
+      {/* Name „Aroma-Tuning" statt „Foodpairing" (Uwe, 30.09.2026): Foodpairing NV hält
+          eine Bildmarke mit EU-Benennung in Kl. 41/42/43 — der Werkzeugname soll nicht
+          die Marke sein; „Foodpairing" steht nur beschreibend im Fließtext.
+          „Aroma-Kompass" verworfen: aromakompass.ch ist ein Pairing-Tool in DACH.
+          Aufhänger (Uwe, 30.09.2026: „Kachel muss mehr Neugier wecken") — eigene
           Datengrafik statt Stockfoto; Werte aus KACHEL_TEASER, per Test gegen
           data/foodpairing abgesichert. */}
       <Link href="/foodpairing" className="group block" aria-label="Foodpairing erklärt: Warum Steak und Schokolade zusammenpassen">
@@ -115,12 +119,12 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
           <FlaskConical size={18} />
-          <h3 className="font-serif text-lg font-bold text-text-light">Foodpairing</h3>
+          <h3 className="font-serif text-lg font-bold text-text-light">Aroma-Tuning</h3>
         </div>
         <p className="text-sm font-semibold text-text-light">Steak und Schokolade? Passt.</p>
         <p className="text-xs text-text-secondary mb-2">
-          Beide teilen drei Schlüssel-Aromen. Finde heraus, welche Zutaten zu deiner passen — belegt aus über 100
-          Fachstudien.
+          Beide teilen drei Schlüssel-Aromen. Finde heraus, welche Zutaten für dein Foodpairing zusammenpassen —
+          belegt aus über 100 Fachstudien.
         </p>
         <Link
           href="/foodpairing"
@@ -134,7 +138,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
             value={zutat}
             onChange={(e) => setZutat(e.target.value)}
             placeholder="Deine Zutat, z. B. Erdbeere"
-            aria-label="Zutat für Foodpairing"
+            aria-label="Zutat für das Aroma-Tuning"
             className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
           />
           <button
@@ -142,7 +146,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
             disabled={loading}
             className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
+            {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Tunen
           </button>
         </form>
 

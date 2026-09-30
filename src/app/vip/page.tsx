@@ -75,7 +75,7 @@ const BLEIBT_FREI = [
   `${FREE_LIMIT} Cuts im Aroma-Matcher`,
   'Die Warnliste der ungeeigneten Räucherhölzer',
   'Marco, der KI-Grillmeister — auch als Sommelier am Grill',
-  'Foodpairing, Rezept-Schmiede, Hofladen-Radar',
+  'Aroma-Tuning, Rezept-Schmiede, Hofladen-Radar',
 ];
 
 export default function VipPage() {
