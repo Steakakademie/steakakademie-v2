@@ -70,7 +70,7 @@ export default function DankePage() {
         </Link>
 
         <p className="mt-4 text-white/30 text-xs">
-          Die Abbuchung erfolgt durch Digistore24. Bei Fragen:{' '}
+          Die Abbuchung erfolgt durch Digistore24.com. Bei Fragen:{' '}
           <a href="mailto:masterclass@steakakademie.de" className="underline hover:text-white/60 transition-colors">
             masterclass@steakakademie.de
           </a>
