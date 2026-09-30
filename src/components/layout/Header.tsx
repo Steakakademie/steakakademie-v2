@@ -60,7 +60,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { label: '★ Aroma-Matcher', href: '/aroma-matcher' },
       { label: 'Cut-Atlas', href: '/cuts' },
       { label: 'Cut-Generator', href: '/cut-generator' },
-      { label: 'Foodpairing', href: '/#werkzeuge' },
+      { label: 'Foodpairing', href: '/foodpairing' },
       { label: 'Rezept-Schmiede', href: '/#werkzeuge' },
       { label: 'Hofladen-Radar', href: '/hoefe' },
       { label: 'Fleischpass — Grill-Logbuch', href: '/fleischpass' },
