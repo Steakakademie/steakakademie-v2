@@ -366,6 +366,14 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    nicht. Details: `marketing_agent.txt` → Sektion WERBEKENNZEICHNUNG.
 2. **Fakten-Genauigkeit (Regel 8c).** Temperaturen/Cuts/Reifung NIE raten — kanonische
    Referenz `data/kerntemperatur-referenz.yaml`. Genauigkeit = stärkster Burggraben.
+   **Immer nach Teilstück (Uwe, 29.09.2026):** „Es gibt nicht die eine Wahrheit bei den
+   Kerntemperaturen, weil immer auch das Teilstück eine Rolle spielt." Ein Wert ohne
+   Teilstück (früher `pork_kruste`) ist unvollständig. Seiten holen Werte über
+   `src/lib/kerntemperatur-referenz.ts` statt sie hart zu kodieren. Werte unter dem
+   Sicherheitsminimum der Tierart (Entenbrust, Wildschwein-Rücken/-Filet rosa) nur mit
+   `unter_sicherheit: true` + `hinweis`, der mit angezeigt wird — Wächter:
+   `src/__tests__/kerntemperatur-referenz.test.ts`. Automatisch erzeugte Texte
+   (Rezept-Agent, Content-Gate) bleiben beim Sicherheitsminimum.
 3. **Marken-DNA** (`marketing_agent.txt`): Ton, Farben (#C8882A/#E85018/#120C07),
    **kein persönlicher Auftritt von Uwe** (Avatar-System Marco/Jonas/Elena).
    **Uwe ist auch keine Autorenstimme (Uwe, 06.09.2026: „Uwe Yendell als Sprachstimme raus").**
@@ -515,6 +523,31 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
      unbemerkt sterben.
    - **Scheitern alle Einzelschritte, ist der Lauf rot.** Ein Skript, das jeden
      Durchgang verliert und trotzdem mit 0 endet, lügt.
+
+11. **Rezept-Gaumen-Regel (Uwe, 29.09.2026).** Rezepte kommen weiter NUR aus den
+   11 BBQ-Hochburgen (Systemprompt §5) — aber ausgewählt nach deutschem Geschmack
+   und Beschaffbarkeit. Anlass: Die zuletzt erzeugten Rezepte (Snoek, Betelblatt,
+   Rochen, Hühnerherzen …) waren für deutsche und auch für Hardcore-Griller zu
+   fremd, viele Zutaten kaum zu bekommen. Es geht **nicht** um deutsche Rezepte:
+   ob Südafrika, USA oder Asien, ist egal.
+   - **Jedes zweite Rezept trifft den deutschen Geschmack** (`stil: "vertraut"` im
+     Seed in `data/rezept-seeds.json`), die übrigen sind `original`. Der Agent
+     ordnet die offenen Seeds strikt abwechselnd (`ordneNachRotation`), bei
+     Gleichstand beginnt `vertraut`. Seeds ohne `stil` zählen als `original` und
+     werden nicht mitgezählt.
+   - **`vertraut` heißt:** Hauptgeschmack aus Fleisch, Rauch, Salz, Pfeffer, Paprika,
+     Knoblauch, Senf, Honig, Zitrone, Kräutern; keine Innereien-Spezialitäten;
+     Fermentiertes und stark Süß-Saures höchstens als Nebenrolle; Chili mild, als Option.
+   - **Beschaffbarkeit gilt für JEDES Rezept:** alle Zutaten im Supermarkt, beim
+     Metzger oder auf dem Wochenmarkt. `vertraut`: keine einzige Spezialzutat und
+     Bezugsquelle „Supermarkt (+ Metzger)". `original`: höchstens eine Spezialzutat,
+     mit Ersatz in der Anmerkung. Die Liste der schwer erhältlichen Zutaten steht in
+     `scripts/lib/beschaffbarkeit.mjs` — Neues dort eintragen, nicht in Prompts.
+   - **Durchgesetzt in Code, nicht nur im Prompt:** `validate()` lehnt ein Rezept mit
+     schwer erhältlicher Zutat ab (Versuchsschleife erzeugt neu); `recipe-seeds.mjs`
+     verwirft solche Seeds schon beim Nachlegen und füllt beide Stile getrennt auf.
+   - **`pausiert: "<Grund>"` im Seed parkt ein Gericht**, ohne es zu löschen. Pausierte
+     Seeds werden nicht erzeugt und zählen nicht zum Vorrat; `--slug` umgeht das.
 
 ---
 

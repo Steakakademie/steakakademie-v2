@@ -27,6 +27,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 import yaml from 'js-yaml'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
+import { schwerErhaeltlich } from './lib/beschaffbarkeit.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
@@ -326,6 +327,54 @@ function alleSeeds() {
   return zusammen
 }
 
+// ─── GAUMEN-ROTATION (29.09.2026) ─────────────────────────────────────────────
+// Anlass (Uwe, 29.09.2026): Die zuletzt erzeugten Rezepte waren fuer deutsche und
+// auch fuer Hardcore-Griller zu fremd, viele Zutaten kaum zu bekommen. Ursache:
+// Seeds und Reihenfolge nahmen keine Ruecksicht auf Geschmack und Beschaffbarkeit.
+//
+// Regel (CLAUDE.md, Regel 11): Rezepte kommen weiter NUR aus den 11 Hochburgen —
+// aber JEDES ZWEITE ist ein Gericht, das den deutschen Geschmack trifft und mit
+// einfach erhaeltlichen Zutaten gelingt (`stil: "vertraut"` im Seed). Woher es
+// stammt (Suedafrika, USA, Asien), ist egal. Die uebrigen sind `original`. Fuer
+// BEIDE gilt die Beschaffbarkeits-Regel (SYSTEM + validate()).
+
+const STILE = ['vertraut', 'original']
+
+/** Ein Seed ohne `stil`-Feld gilt als original (Altbestand). */
+function seedStil (seed) {
+  return seed?.stil === 'vertraut' ? 'vertraut' : 'original'
+}
+
+/**
+ * Bringt die offenen Seeds in Produktionsreihenfolge: strikt abwechselnd vertraut /
+ * original. Gezaehlt werden nur ERLEDIGTE Seeds mit ausdruecklichem `stil`
+ * (Datei vorhanden oder PR offen) — der Altbestand ohne Feld bleibt aussen vor,
+ * sonst muessten erst dutzende vertraute Rezepte "nachgeholt" werden. Gleichstand
+ * → vertraut zuerst. Ist ein Stil aufgebraucht, laeuft der andere weiter (das meldet
+ * der Aufrufer, damit der Vorrat nachgelegt wird).
+ *
+ * @param {object[]} offen     noch nicht erzeugte, nicht pausierte Seeds
+ * @param {object[]} erledigt  erzeugte Seeds (nur solche mit `stil` zaehlen)
+ * @returns {object[]} dieselben Seeds, in Rotationsreihenfolge (Reihenfolge je Stil bleibt)
+ */
+function ordneNachRotation (offen, erledigt = []) {
+  let vertraut = erledigt.filter(s => s?.stil === 'vertraut').length
+  let inter   = erledigt.filter(s => s?.stil === 'original').length
+  const topf = {
+    vertraut:       offen.filter(s => seedStil(s) === 'vertraut'),
+    original: offen.filter(s => seedStil(s) === 'original'),
+  }
+  const reihe = []
+  while (topf.vertraut.length || topf.original.length) {
+    let wunsch = vertraut <= inter ? 'vertraut' : 'original'
+    if (!topf[wunsch].length) wunsch = wunsch === 'vertraut' ? 'original' : 'vertraut'
+    reihe.push(topf[wunsch].shift())
+    if (wunsch === 'vertraut') vertraut++
+    else inter++
+  }
+  return reihe
+}
+
 // ─── SLUGS AUS OFFENEN REZEPT-PRS ─────────────────────────────────────────────
 //
 // Der Lauf sieht sonst nur main: Der Cache (content/rezepte/.recipe-cache.json)
@@ -522,7 +571,9 @@ function buildMdx(data) {
 const SYSTEM = `Du bist Marco, der Chefautor von Steakakademie.de — Deutschlands autoritativster BBQ-Wissensplattform.
 Ton: direkt, präzise, leidenschaftlich. Kein Fülltext. Kein Clickbait. Echter Substanz-Anspruch.
 Zielgruppe: ambitionierte BBQ-Enthusiasten, 30–55 Jahre, die wissen wollen WARUM etwas funktioniert.
-Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).`
+Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).
+
+BESCHAFFBARKEIT (verbindlich für JEDES Rezept, Regel 11): Alle Zutaten müssen Grillern im DACH-Raum ohne Spezialbestellung zugänglich sein — Supermarkt (Edeka, Rewe, Lidl, Kaufland), Metzger, Wochenmarkt. Nicht verwenden: Bananenblätter, Betelblätter, Pandan, Binchotan, Rochen, Känguru, Snoek, Netzfett und Vergleichbares. Verlangt das Original so etwas, nimm den handelsüblichen Ersatz und nenne ihn im Text (Backpapier oder Alufolie statt Bananenblatt, Briketts statt Binchotan, Makrele statt Snoek). Höchstens EINE Spezialzutat je Rezept (Asia-Laden oder Online), dann steht der Ersatz in der Anmerkung der Zutat. Mengen metrisch.`
 
 // ─── KERNTEMPERATUR-REFERENZ (Regel 8c) ──────────────────────────────────────
 // Bis 15.09.2026 las der Agent die Referenz nie: Die Temperaturen kamen aus den
@@ -614,7 +665,7 @@ function parseStructuredText(text) {
     if (kv && section !== 'body') {
       const key = kv[1], val = kv[2].trim()
       const map = {
-        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', IMAGE_PROMPT: 'imagePrompt', LAND: 'land',
+        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', IMAGE_PROMPT: 'imagePrompt', LAND: 'land', BESCHAFFUNG: 'beschaffung',
         PREP_TIME: 'prepTime', COOK_TIME: 'cookTime', TOTAL_TIME: 'totalTime',
         SERVINGS: 'servings', CALORIES: 'calories',
         SEO_TITLE: 'seoTitle', SEO_DESCRIPTION: 'seoDescription',
@@ -700,6 +751,23 @@ function parseStructuredText(text) {
   return data
 }
 
+const GAUMEN_VERTRAUT = `GAUMEN-VORGABE (dieses Rezept: DEUTSCHER GESCHMACK, Regel 11):
+- Das Gericht bleibt ein echtes Gericht seines Herkunftslandes. Es ist aber so gewählt und dosiert, dass es deutsche Griller — auch Hardcore-Griller ohne Experimentierlust — auf Anhieb anspricht.
+- Alle Zutaten aus dem normalen Supermarkt oder vom Metzger. Kein Asia-Laden, kein Online-Versand, keine Spezialzutat.
+- Der Hauptgeschmack liegt im vertrauten Bereich: Fleisch, Rauch, Salz, Pfeffer, Paprika, Knoblauch, Zwiebel, Senf, Honig, Zitrone, Kräuter, Bier. Chili nur mild bis mittel und als Option.
+- Fremde Aromen (Fischsauce, Fermentiertes, Pasten, stark süß-saure oder süß-scharfe Marinaden) höchstens als Nebenrolle, nie als Hauptgeschmack. Keine Innereien-Spezialitäten.
+- Beilagen, die man hierzulande kennt (Kartoffeln, Brot, Salat, Gemüse, Dips).
+- Weicht das Rezept vom Original ab (Ersatzzutat, mildere Würzung), sage im Text in einem Satz, was du geändert hast und warum.`
+
+const GAUMEN_ORIGINAL = `GAUMEN-VORGABE (dieses Rezept: NAH AM ORIGINAL, Regel 11):
+- Bleib nah am Original, aber jede Zutat muss im deutschen Supermarkt oder beim Metzger zu bekommen sein; höchstens eine Spezialzutat (Asia-Laden oder Online), dann mit Ersatz in der Anmerkung.
+- Schärfe und Süße so dosieren, dass deutsche Griller das Gericht ohne Gewöhnung essen. Schärfe als Option nennen, nicht als Vorgabe.`
+
+/** Der Gaumen-Block fuer den Prompt — je nach Stil des Seeds. */
+function gaumenBlock (seed) {
+  return seedStil(seed) === 'vertraut' ? GAUMEN_VERTRAUT : GAUMEN_ORIGINAL
+}
+
 async function generateRecipe(seed) {
   // Phase 1: Strukturiertes Textformat — kein JSON, kein Parsing-Problem
   const metaPrompt = `Generiere strukturierte Rezept-Metadaten für steakakademie.de.
@@ -710,6 +778,7 @@ DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
 IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
+BESCHAFFUNG: [Wo gibt es ALLE Zutaten? Genau eines von: "Supermarkt" | "Supermarkt + Metzger" | "Supermarkt + Asia-Laden/Online" (nur bei einer einzigen Spezialzutat mit Ersatz in deren Anmerkung)]
 CORE_TEMP: [Ziel-Kerntemperatur des Hauptprodukts in °C als Zahl, gemessen vor dem Ruhen, gemäß Kerntemperatur-Referenz — bei Beilagen, Saucen, Desserts und Getränken: keine]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
@@ -756,6 +825,8 @@ Rezept-Kontext:
 - Fleisch/Hauptprodukt: ${seed.meatType}
 - Methode: ${seed.cookingMethod}
 
+${gaumenBlock(seed)}
+
 Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Kommentar außerhalb des Formats.`
 
   const metaResp = await generateText({
@@ -790,6 +861,8 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
 
 Rezept: ${data.title}
 Konzept: ${seed.concept}
+
+${gaumenBlock(seed)}
 
 Format: Reines Markdown, keine Frontmatter, kein JSON.
 Struktur:
@@ -854,6 +927,16 @@ function validate(data, seed) {
   if (!/^PT/.test(data.prepTime || '')) errors.push(`prepTime kein ISO 8601: ${data.prepTime}`)
   if (!/^PT/.test(data.cookTime  || '')) errors.push(`cookTime kein ISO 8601: ${data.cookTime}`)
   if (!/^PT/.test(data.totalTime || '')) errors.push(`totalTime kein ISO 8601: ${data.totalTime}`)
+  // Beschaffbarkeit (Regel 11, 29.09.2026). Vertraut-Rezept: keine einzige schwer
+  // erhaeltliche Zutat, Bezugsquelle nur Supermarkt/Metzger. International: hoechstens eine.
+  const schwer = schwerErhaeltlich(data.ingredients)
+  if (seedStil(seed) === 'vertraut') {
+    if (schwer.length > 0) errors.push(`Schwer erhältliche Zutat(en) in einem Rezept für den deutschen Geschmack: ${schwer.join(', ')}`)
+    if (!data.beschaffung) errors.push('Pflichtfeld fehlt: BESCHAFFUNG (Rezept für den deutschen Geschmack)')
+    else if (/asia|online|fachhandel|spezial/i.test(data.beschaffung)) errors.push(`Bezugsquelle nicht alltagstauglich für den deutschen Geschmack: ${data.beschaffung}`)
+  } else if (schwer.length > 1) {
+    errors.push(`Zu viele schwer erhältliche Zutaten (${schwer.join(', ')}) — höchstens eine, mit Ersatz`)
+  }
   const sicherheit = sicherheitsKlasse(seed)
   if (sicherheit) {
     if (!Number.isFinite(data.coreTemp)) {
@@ -916,13 +999,30 @@ async function main() {
     console.log(`  ${inOffenenPRs.size} Rezept(e) warten in offenen PRs auf Freigabe — werden uebersprungen`)
   }
 
+  const istErledigt = s => !!cache[s.slug] || existsSync(join(REZEPTE, `${s.slug}.mdx`)) || inOffenenPRs.has(s.slug)
+
   let toGenerate = FORCE
     ? seeds
     : seeds.filter(s => {
-        const outFile = join(REZEPTE, `${s.slug}.mdx`)
-        // Cache ODER existierende Datei ODER offener PR → skip
-        return !cache[s.slug] && !existsSync(outFile) && !inOffenenPRs.has(s.slug)
+        // Cache ODER existierende Datei ODER offener PR → skip. `pausiert` (Grund als
+        // Text im Seed) parkt ein Gericht, ohne es zu loeschen — z. B. wegen schwer
+        // erhaeltlicher Zutaten. `--slug` und `--force` umgehen das bewusst.
+        if (s.pausiert && !SLUG_ONLY) return false
+        return !istErledigt(s)
       })
+  // Gaumen-Rotation (Regel 11): jedes zweite Rezept trifft den deutschen Geschmack. Nur im echten
+  // Wachstumslauf — --force/--slug behalten ihre Reihenfolge.
+  if (!FORCE && !SLUG_ONLY) {
+    toGenerate = ordneNachRotation(toGenerate, seeds.filter(s => s.stil && istErledigt(s)))
+    const rest = st => toGenerate.filter(s => seedStil(s) === st).length
+    if (process.env.GITHUB_OUTPUT) {
+      appendFileSync(process.env.GITHUB_OUTPUT, `seeds_remaining_deutsch=${rest('vertraut')}\nseeds_remaining_international=${rest('original')}\n`)
+    }
+    if (toGenerate.length > 0) {
+      console.log(`  Gaumen-Rotation: ${rest('vertraut')} vertraut · ${rest('original')} original offen — als Nächstes: ${seedStil(toGenerate[0])}`)
+      if (rest('vertraut') === 0) console.warn(c.yellow('  ⚠ Kein deutscher Seed mehr offen — jedes zweite Rezept kann nicht vertraut sein. recipe-seeds.mjs legt nach.'))
+    }
+  }
   const pendingTotal = toGenerate.length
   if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT)   // „täglich 1" etc.
 
@@ -958,7 +1058,7 @@ async function main() {
 
     for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
       const anlauf = versuch > 1 ? c.dim(` (Versuch ${versuch}/${VERSUCHE})`) : ''
-      process.stdout.write(`  Generiere: ${c.bold(seed.slug)}${anlauf}... `)
+      process.stdout.write(`  Generiere: ${c.bold(seed.slug)} ${c.dim(`[${seedStil(seed)}]`)}${anlauf}... `)
 
       let kandidat
       try {
@@ -1046,4 +1146,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx }
+export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }

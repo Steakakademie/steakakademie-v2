@@ -70,6 +70,32 @@ ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitat
   unbestimmte Isomere, Zhang et al. 2025 (nur Unterscheidungsmarker).
 - Stand danach: **75 Zutaten · 208 Stoffe · 623 Kanten · 646 Belege.**
 
+## Nachtrag Pfeffer (29.09.2026, Quelle von Uwe)
+- **Pfeffer, schwarz: +11 Belege** aus der Dissertation Dawid 2012 (TU München, Lehrstuhl Hofmann;
+  frei auf mediaTUM: https://mediatum.ub.tum.de/doc/1096439/1096439.pdf, S. 35). Sie zitiert die
+  Omissionsversuche von Jagella & Grosch 1999: α- und β-Pinen, Myrcen, α-Phellandren, Limonen,
+  Linalool, Methylpropanal, 2- und 3-Methylbutanal, Buttersäure, 3-Methylbuttersäure sind die
+  wertgebenden flüchtigen Stoffe des schwarzen Pfeffers. **Evidenz B** (Sekundärzitat; die
+  Primärarbeit bleibt über keine API abrufbar). Zitat maschinell gegen das PDF geprüft.
+- Die Dissertation selbst behandelt vor allem Geschmacks- und Schärfestoffe (nicht flüchtig) —
+  für ein Aroma-Netz nur über dieses Literaturkapitel nutzbar.
+- Stand danach: **75 Zutaten · 208 Stoffe · 630 Kanten · 657 Belege.**
+
+## Nachtrag Granvogl-Arbeiten (29.09.2026, Hinweis von Uwe)
+Aus der Publikationsliste von M. Granvogl (J. Agric. Food Chem.) drei Sensomics-Studien — jeweils
+AEDA, Mengenbestimmung per Isotopenverdünnung (SIDA), OAV und Rekombination → **Evidenz A**:
+- **Kakao + dunkle Schokolade** (Seyfried & Granvogl 2019, 90 % und 99 % Kakao): Dimethyltrisulfid,
+  Essigsäure, Guaiacol, 3-Methylbuttersäure, Phenylessigsäure, Vanillin, Linalool.
+- **Bier + Weißbier** (Langos et al. 2013): β-Damascenon, 3-Methylbutylacetat, Ethyl-2-methylpropanoat,
+  Ethylbutanoat, Acetaldehyd, 3-Methyl-1-butanol, Dimethylsulfid, 4-Vinylguaiacol, 2-Phenylethanol.
+- **+ Rum** (neue Zutat; Franitza et al. 2016, zwei Arbeiten): Vanillin, Ethyl-2-methylbutanoat,
+  β-Damascenon, 2,3-Butandion, 3-Methylbutanal, Ethylbutanoat; aus der Fassreifung 4-Ethylphenol,
+  Guaiacol, 4-Ethylguaiacol, 4-Propylguaiacol (OAV ≥ 1).
+- Gesichtet, nicht übernommen: Birne (Abstract nennt nur Mengen, keine Geruchsbewertung),
+  Kartoffelchips (nur ausgewählte Stoffe, Schwerpunkt Schadstoffe), Lakritz, Hopfen, Tee,
+  Toona (für eine Grill-Seite ohne Nutzen), Olivenöl-Fehlaromen (Fehlgerüche).
+- Stand danach: **76 Zutaten · 211 Stoffe · 649 Kanten · 685 Belege**; 80/80 Zitate bestätigt.
+
 ## Bekannte Lücken (ehrlich)
 - Nicht belegbar gefunden: **Oregano** (nur Übersicht zu ätherischen Ölen), **Wacholderbeere,
   Schnittlauch, Bärlauch, Schalotte, Frühlingszwiebel** (keine Olfaktometrie-/AEDA-/OAV-Studie
@@ -78,8 +104,8 @@ ausschließlich als Nachweis, maschinell prüfbar mit `npm run foodpairing:zitat
   abrufbar waren.)
 - **Lauch geparkt:** 3 Stoffe belegt (Nielsen & Poll 2004, GC-O), aber kein Hub-Stoff — die
   Build-Regel „jede Zutat dockt an einen Hub an" lässt ihn (noch) nicht zu.
-- Dünn belegt: Nelke (2 Stoffe), Räucherlachs (1), Pfeffer (Standardquelle Jagella & Grosch 1999
-  weiterhin nicht abrufbar; weißer Pfeffer nur berechnete OAV), Hirsch (nur Headspace-OAV).
+- Dünn belegt: Nelke (2 Stoffe), Räucherlachs (1), Hirsch (nur Headspace-OAV). Pfeffer: die
+  Primärarbeit Jagella & Grosch 1999 ist nur als Sekundärzitat (Dawid 2012) belegt.
 - „Speck" stützt sich auf chinesischen Speck (geräuchert bzw. luftgetrocknet), „Rotwein" und
   „Weißwein" fassen mehrere Rebsorten zusammen — Details je Zeile in `belege.tsv`.
 
