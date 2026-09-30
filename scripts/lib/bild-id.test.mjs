@@ -30,6 +30,16 @@ describe('leseId — Zahlen-IDs (unveraendert)', () => {
     expect(leseId('pexels-nano-erdozain-120534369-27642997', 'pexels')).toBe('27642997')
   })
 
+  it('Pexels mit vorangestellter Beschreibung: Bild-ID, nicht Fotografen-ID', () => {
+    expect(leseId('short ribs - pexels-evgeniya-davydova-35773675-16400933', 'pexels')).toBe('16400933')
+    expect(leseId('Tomahawek - pexels-eduardo-krajan-424982200-15378091', 'pexels')).toBe('15378091')
+    expect(leseId('Coração de Frango – Gegrillte Hähnchenherzen nach Rodízio -Artpexels-caio-niceas-2148806704-37183924', 'pexels')).toBe('37183924')
+  })
+
+  it('Pexels-Ordner ohne Wort "pexels" im Namen: nackte ID', () => {
+    expect(leseId('9541976-rohes-rindfleisch-am-haken', 'pexels')).toBe('9541976')
+  })
+
   it('fuehrende Zahl, sonst erste Gruppe ab 6 Ziffern', () => {
     expect(leseId('5252598-grill-holzkohle', 'pixabay')).toBe('5252598')
     expect(leseId('cskkkk-meat-7696816_1920', 'pixabay')).toBe('7696816')
