@@ -5,7 +5,8 @@
  * Pexels benennt nach dem Muster `pexels-<fotograf>-<fotografID>-<fotoID>.jpg`.
  * Die erste Zahl ist dort die Fotografen-ID, nicht die des Bildes — wer sie
  * nimmt, schreibt eine Herkunft ins Manifest, die auf ein fremdes Bild zeigt.
- * Bei Pexels gilt deshalb die LETZTE Zahlengruppe, sonst die fuehrende.
+ * Bei Pexels gilt deshalb die LETZTE Zahlengruppe, sonst die fuehrende —
+ * auch wenn vor `pexels-` noch eine eigene Beschreibung steht.
  *
  * Unsplash vergibt alphanumerische IDs aus genau 11 Zeichen (z. B.
  * "TDwxg8i8lfE"), die auch `-` und `_` enthalten koennen ("W-M0h1FJD0M").
@@ -26,7 +27,10 @@ export function leseId(name, quelle) {
     if (download) return download[1]
     return /^[A-Za-z0-9_-]{6,}$/.test(name) ? name : null
   }
-  if (/^pexels[-_]/i.test(name)) {
+  // Nicht nur am Namensanfang: eine vorangestellte eigene Beschreibung
+  // ("short ribs - pexels-<fotograf>-<fotografID>-<fotoID>") liess die Regel
+  // frueher ins Leere laufen, und der Fallback las die Fotografen-ID.
+  if (quelle === 'pexels' || /pexels[-_]/i.test(name)) {
     const zahlen = name.match(/\d{4,}/g)
     return zahlen ? zahlen[zahlen.length - 1] : null
   }
