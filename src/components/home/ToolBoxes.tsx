@@ -23,6 +23,8 @@ import Image from 'next/image';
 import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus, Radar, Wine, Trees, Crown } from 'lucide-react';
 import LazyMarkdown from '@/components/ui/LazyMarkdown';
 import MarcoStarter from '@/components/relaunch/MarcoStarter';
+import AromaBrueckeSvg from '@/components/foodpairing/AromaBrueckeSvg';
+import { KACHEL_TEASER, FOODPAIRING_BEISPIELE } from '@/lib/foodpairing-inhalte';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
@@ -38,12 +40,6 @@ const DEMO_PAIRINGS: Pairing[] = [
   { partner: 'Garnele', category: 'Meeresfrüchte', shared: 4, shared_examples: ['2-Acetylthiazolin', '2,3-Diethyl-5-methylpyrazin', 'Furaneol'] },
   { partner: 'Hähnchen', category: 'Geflügel', shared: 4, shared_examples: ['(E,E)-2,4-Decadienal', '(E)-2-Nonenal', 'Methanthiol'] },
 ];
-
-// Beispiel-Zutaten fuer die Foodpairing-Kachel (Uwe, 28.09.2026: Kachel wirkte leer).
-// NUR Zutaten, die sowohl im alten (v1) als auch im neuen Datensatz (v2) Treffer
-// liefern — am 28.09.2026 gegen match_foodpairing() bzw. data/foodpairing geprüft.
-// „Ribeye" läuft über den Alias auf „Rind" (src/lib/foodpairing-alias.ts).
-const FOODPAIRING_BEISPIELE = ['Ribeye', 'Schwein', 'Hähnchen', 'Lamm', 'Kaffee'] as const;
 
 const KACHEL_BOX =
   'flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold focus-within:border-brand-gold transition-colors';
@@ -101,81 +97,105 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
   const max = treffer?.reduce((m, t) => Math.max(m, t.shared), 1) ?? 1;
 
   return (
-    <div className={KACHEL_BOX}>
-      <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-        <FlaskConical size={18} />
-        <h3 className="font-serif text-lg font-bold text-text-light">Foodpairing</h3>
-      </div>
-      <p className="text-xs text-text-secondary mb-3">
-        Welche Aromen passen zusammen? Über geteilte Schlüssel-Aromastoffe — belegt aus über 100 Fachstudien der Lebensmittelchemie.
-      </p>
-
-      <form onSubmit={suchen} className="flex gap-2">
-        <input
-          value={zutat}
-          onChange={(e) => setZutat(e.target.value)}
-          placeholder="z. B. Ribeye"
-          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
+    <div className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold focus-within:border-brand-gold transition-colors">
+      {/* Aufhänger (Uwe, 30.09.2026: „Kachel muss mehr Neugier wecken") — eigene
+          Datengrafik statt Stockfoto; Werte aus KACHEL_TEASER, per Test gegen
+          data/foodpairing abgesichert. */}
+      <Link href="/foodpairing" className="group block" aria-label="Foodpairing erklärt: Warum Steak und Schokolade zusammenpassen">
+        <AromaBrueckeSvg
+          a={KACHEL_TEASER.a}
+          b={KACHEL_TEASER.b}
+          bruecken={KACHEL_TEASER.bruecken}
+          idSuffix="kachel"
+          className="block w-full transition-opacity group-hover:opacity-90"
+          titel="Steak und Schokolade teilen drei Schlüssel-Aromen: röstig, karamellig, rauchig"
         />
-        <button
-          type="submit"
-          disabled={loading}
-          className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
+      </Link>
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+          <FlaskConical size={18} />
+          <h3 className="font-serif text-lg font-bold text-text-light">Foodpairing</h3>
+        </div>
+        <p className="text-sm font-semibold text-text-light">Steak und Schokolade? Passt.</p>
+        <p className="text-xs text-text-secondary mb-2">
+          Beide teilen drei Schlüssel-Aromen. Finde heraus, welche Zutaten zu deiner passen — belegt aus über 100
+          Fachstudien.
+        </p>
+        <Link
+          href="/foodpairing"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold hover:gap-2 hover:text-brand-fire transition-[gap]"
         >
-          {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
-        </button>
-      </form>
+          So funktioniert’s <ChevronRight size={14} />
+        </Link>
 
-      {hinweis && <p className="mt-3 text-xs text-text-muted">{hinweis} Probier eine der Zutaten unten.</p>}
+        <form onSubmit={suchen} className="flex gap-2">
+          <input
+            value={zutat}
+            onChange={(e) => setZutat(e.target.value)}
+            placeholder="Deine Zutat, z. B. Erdbeere"
+            aria-label="Zutat für Foodpairing"
+            className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
+          >
+            {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
+          </button>
+        </form>
 
-      {!treffer && (
-        <div className="mt-auto pt-5">
-          <p className="mb-2 text-[11px] uppercase tracking-wide text-text-muted">Probier’s mit</p>
-          <div className="flex flex-wrap gap-2">
-            {FOODPAIRING_BEISPIELE.map((b) => (
-              <button
-                key={b}
-                type="button"
-                disabled={loading}
-                onClick={() => {
-                  setZutat(b);
-                  abfragen(b);
-                }}
-                className="rounded-full border border-brand-gold/40 px-3 py-1 text-xs text-text-secondary hover:border-brand-gold hover:text-brand-gold disabled:opacity-50 transition-colors"
-              >
-                {b}
-              </button>
+        {hinweis && <p className="mt-3 text-xs text-text-muted">{hinweis} Probier eine der Zutaten unten.</p>}
+
+        {!treffer && (
+          <div className="mt-auto pt-5">
+            <p className="mb-2 text-[11px] uppercase tracking-wide text-text-muted">Oder starte mit</p>
+            <div className="flex flex-wrap gap-2">
+              {FOODPAIRING_BEISPIELE.map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  disabled={loading}
+                  onClick={() => {
+                    setZutat(b);
+                    abfragen(b);
+                  }}
+                  className="rounded-full border border-brand-gold/40 px-3 py-1 text-xs text-text-secondary hover:border-brand-gold hover:text-brand-gold disabled:opacity-50 transition-colors"
+                >
+                  {b}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {treffer && (
+          <div className="mt-4 space-y-2">
+            {demo && (
+              <p className="text-[11px] text-text-muted italic">Server gerade nicht erreichbar — Beispiel: Ribeye.</p>
+            )}
+            {treffer.map((t) => (
+              <div key={t.partner} className="text-sm">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-text-light font-medium">{t.partner}</span>
+                  <button
+                    type="button"
+                    onClick={() => onSeedRezept(demo ? 'Ribeye' : zutat, t.partner)}
+                    className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-brand-gold hover:text-brand-fire"
+                    title={`Rezept: ${demo ? 'Ribeye' : zutat} mit ${t.partner}`}
+                  >
+                    → Rezept
+                  </button>
+                </div>
+                <Bar value={t.shared} max={max} />
+                <p className="text-[11px] text-text-muted truncate">
+                  {t.shared} Moleküle{t.shared_examples?.length ? ` · ${t.shared_examples.join(', ')}` : ''}
+                </p>
+              </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {treffer && (
-        <div className="mt-4 space-y-2">
-          {demo && (
-            <p className="text-[11px] text-text-muted italic">Server gerade nicht erreichbar — Beispiel: Ribeye.</p>
-          )}
-          {treffer.map((t) => (
-            <div key={t.partner} className="text-sm">
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-text-light font-medium">{t.partner}</span>
-                <button
-                  type="button"
-                  onClick={() => onSeedRezept(zutat, t.partner)}
-                  className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-brand-gold hover:text-brand-fire"
-                  title={`Rezept: ${zutat} mit ${t.partner}`}
-                >
-                  → Rezept
-                </button>
-              </div>
-              <Bar value={t.shared} max={max} />
-              <p className="text-[11px] text-text-muted truncate">
-                {t.shared} Moleküle{t.shared_examples?.length ? ` · ${t.shared_examples.join(', ')}` : ''}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

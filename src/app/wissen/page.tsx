@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Thermometer, Flame, Snowflake, Beef, BookOpen, LifeBuoy, Globe, Wheat } from 'lucide-react';
+import { ChevronRight, Thermometer, Flame, Snowflake, Beef, BookOpen, LifeBuoy, Globe, Wheat, FlaskConical } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -18,6 +18,7 @@ const HUB = [
   { href: '/cuts', icon: Beef, title: 'Cuts & Fleischkunde', desc: 'Welches Fleischteil ist was — Anatomie, Marmorierung, Herkunft und die richtige Zubereitung je Cut.' },
   { href: '/glossar', icon: BookOpen, title: 'BBQ-Lexikon', desc: 'Begriffe von A bis Z — Bark, Stall, Smoke Ring, Plateauphase: das Vokabular der Pitmaster.' },
   { href: '/rettung', icon: LifeBuoy, title: 'Steak-Rettung', desc: 'Wenn etwas schiefläuft: die häufigsten Fehler und wie du sie beim nächsten Mal vermeidest.' },
+  { href: '/foodpairing', icon: FlaskConical, title: 'Foodpairing', desc: 'Warum Steak und Schokolade zusammenpassen: Schlüssel-Aromen, Aroma-Rad zum Ausprobieren und bekannte Kombinationen im Faktencheck.' },
   { href: '/terroir', icon: Globe, title: 'Meat-Terroir', desc: 'Warum Herkunft schmeckt: Rasse, Fütterung, Region — und was das für dein Fleisch bedeutet.' },
   // Freigegeben am 03.09.2026 (war vom 30.08. bis 03.09. ausgebaut, solange die
   // Serienteile auf status: review standen).
