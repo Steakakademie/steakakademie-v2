@@ -269,13 +269,6 @@ export async function POST(req: Request) {
   const courseTitle    = (mapping?.courses as any)?.title ?? null;
   const coursePublished = (mapping?.courses as any)?.published as boolean | null | undefined;
 
-  // Latenter Fall (696396 Mein Protokoll, 696399 BBQ-Grundkurs): Mapping da,
-  // Kurs aber unveroeffentlicht. Die Buchung wird trotzdem angelegt (Zugang
-  // greift, sobald Uwe veroeffentlicht) — aber jemand muss es JETZT erfahren.
-  // Nur bei echten Kaufereignissen; Rueckerstattungen loesen keinen Alarm aus.
-  if (courseId && coursePublished === false && (event === 'payment' || event === 'rebill' || event === 'rebill_resumed')) {
-    alarmKassiertOhneAuslieferung('kurs-unpublished', { productId, orderId, event, courseSlug });
-  }
   const isVoucher     = mapping?.is_voucher ?? false;
   const voucherCredit = mapping?.voucher_credit_amount ?? null;  // gesetzt = Credit-Gutschein
   const baseCredit    = (mapping?.credit_amount as number | null) ?? null;
@@ -315,6 +308,18 @@ export async function POST(req: Request) {
   });
   if (rec.kind === 'done') return rec.response;
   const orderRow = { id: rec.id };
+
+  // Latenter Fall (696396 Mein Protokoll, 696399 BBQ-Grundkurs): Mapping da,
+  // Kurs aber unveroeffentlicht. Die Buchung wird trotzdem angelegt (Zugang
+  // greift, sobald Uwe veroeffentlicht) — aber jemand muss es JETZT erfahren.
+  // Nur bei echten Kaufereignissen; Rueckerstattungen loesen keinen Alarm aus.
+  // Steht bewusst HINTER dem Credit-Zweig und der Idempotenz (30.09.2026):
+  // Credit-Produkte (Steak-Beichte) liefern ueber Credits, nicht ueber den Kurs —
+  // dort war der Alarm ein Fehlalarm. Und eine zweite Zustellung derselben
+  // Bestellung (zwei IPN-Anbindungen, Digistore-Retry) alarmiert nicht erneut.
+  if (courseId && coursePublished === false && (event === 'payment' || event === 'rebill' || event === 'rebill_resumed')) {
+    alarmKassiertOhneAuslieferung('kurs-unpublished', { productId, orderId, event, courseSlug });
+  }
 
   if (!courseId) {
     // Bis 07.09.2026 nur console.error — auf Vercel sieht das niemand, die

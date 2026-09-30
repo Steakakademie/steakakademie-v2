@@ -258,3 +258,30 @@ describe('Digistore24-Webhook: „Verbindung testen“ (event=connection_test)',
     expect(db.tables.bookings).toHaveLength(1);
   });
 });
+
+describe('Digistore24-Webhook: Alarm „Kurs nicht veroeffentlicht“ (Fehlalarm 30.09.2026)', () => {
+  function alarme() {
+    return (console.error as any).mock.calls.filter((c: unknown[]) => c[0] === '[ds-webhook] ALARM');
+  }
+
+  it('Credit-Produkt (Steak-Beichte) loest keinen Alarm aus, auch wenn der Kurs unveroeffentlicht ist', async () => {
+    db.tables.digistore_products[1] = {
+      ...db.tables.digistore_products[1],
+      course_id: 'course-steak-beichte',
+      courses: { slug: 'steak-beichte', title: 'Steak-Beichte', published: false },
+    };
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-B-1', product_id: '696394', email: 'neu@example.de' }));
+    expect(res.status).toBe(200);
+    expect(alarme()).toHaveLength(0);
+  });
+
+  it('Kurs-Produkt mit unveroeffentlichtem Kurs alarmiert genau einmal, auch bei doppelter Zustellung', async () => {
+    db.tables.digistore_products[0].courses = { slug: 'bbq-grundkurs', title: 'BBQ Grundkurs', published: false };
+    const felder = { event: 'payment', order_id: 'ORD-K-1', product_id: '696399', email: 'neu2@example.de' };
+    const erste  = await POST(delivery(felder));
+    const zweite = await POST(delivery(felder));
+    expect(erste.status).toBe(200);
+    expect(zweite.status).toBe(200);
+    expect(alarme()).toHaveLength(1);
+  });
+});
