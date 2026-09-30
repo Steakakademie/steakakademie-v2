@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { istImDatensatz, paarung, rad, statistik } from './foodpairing-daten';
-import { FAKTENCHECK, FOODPAIRING_BEISPIELE, KACHEL_TEASER, RAEDER, UEBERRASCHUNGEN } from './foodpairing-inhalte';
+import { aromaUrteil, duftfamilie, istImDatensatz, paarung, rad, statistik } from './foodpairing-daten';
+import { FAKTENCHECK, FOODPAIRING_BEISPIELE, KACHEL_TEASER, RAEDER, STEAK_POPCORN, UEBERRASCHUNGEN } from './foodpairing-inhalte';
 
 // Wächter für /foodpairing und die Startseiten-Kachel: Jede Aroma-Aussage in den
 // Texten muss durch data/foodpairing gedeckt sein. Ändern sich die Belege, fällt
@@ -29,11 +29,12 @@ describe('Foodpairing-Inhalte gegen die Belege', () => {
     for (const f of FAKTENCHECK) {
       if (f.erwartet === undefined) continue;
       expect(namen(f.a!, f.b!).length, f.titel).toBe(f.erwartet);
+      if (f.verwandt) expect(paarung(f.a!, f.b!).verwandt.map((v) => v.familie), f.titel).toEqual(f.verwandt);
       if (f.besser) expect(namen(f.besser.a, f.besser.b).length, f.titel).toBeGreaterThan(f.erwartet);
     }
-    expect(namen('Rind', 'Popcorn')).toEqual(['(E,E)-2,4-Decadienal']); // „nur die Frittiernote"
-    expect(namen('Popcorn', 'Haselnuss')).toContain('2-Acetyl-1-pyrrolin'); // Popcorn-Röstnote
+    // Lamm & Kaffee: „Karamell, Vanille und eine verwandte Röstnote"
     expect(namen('Lamm', 'Kaffee').sort()).toEqual(['Furaneol', 'Vanillin']);
+    expect(paarung('Lamm', 'Kaffee').verwandt.map((v) => v.familie)).toEqual(['röstig']);
   });
 
   it('„Nicht geprüft"-Einträge sind wirklich nicht im Datensatz', () => {
@@ -59,5 +60,22 @@ describe('Foodpairing-Inhalte gegen die Belege', () => {
 
   it('Statistik: „über 100 Fachstudien" in der Kachel bleibt wahr', () => {
     expect(statistik().studien).toBeGreaterThan(100);
+  });
+
+  it('Steak & Popcorn: zwei gleiche Moleküle (Popcorn-Röstnote + Frittiernote) und verwandte Rauchnote', () => {
+    const p = paarung(STEAK_POPCORN.a, STEAK_POPCORN.b);
+    expect(p.stoffe.map((s) => s.name).sort()).toEqual(['(E,E)-2,4-Decadienal', '2-Acetyl-1-pyrrolin']);
+    expect(p.stoffe.length).toBe(STEAK_POPCORN.erwartet);
+    expect(p.verwandt.map((v) => v.familie)).toEqual([...STEAK_POPCORN.verwandt]);
+    expect(aromaUrteil(p)).toBe('Brücke');
+    // Ideen: Paprikapulver teilt mit Rind die Karamellnote
+    expect(namen('Rind', 'Paprikapulver')).toContain('Furaneol');
+  });
+
+  it('Duftfamilien bleiben eng: Methoxypyrazine sind nicht „röstig"', () => {
+    expect(duftfamilie('2-Isobutyl-3-methoxypyrazin')).toBeNull();
+    expect(duftfamilie('2-Methoxy-3-isobutylpyrazin')).toBeNull();
+    expect(duftfamilie('2-Acetyl-1-pyrrolin')).toBe('röstig');
+    expect(duftfamilie('Dimethyltrisulfid')).toBeNull();
   });
 });
