@@ -683,3 +683,13 @@ bilder:
     erworben_am: 2026-09-29
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung (Echtfoto, frei unter Unsplash-Lizenz, kein Unsplash+; geprueft 29.09.2026). Motiv laut Unsplash Schaschlik in der Mongolei; keine Personen, keine Marken. imageAI im MDX-Frontmatter auf false gesetzt.
+  images/rezepte/haehnchenschenkel-bier-senf-glasur.jpg:
+    status: ki
+    quelle: "Unsplash (ID rZyClxoeu2E), mit Google Gemini bearbeitet"
+    urheber: "Carla Limatola (Ausgangsfoto); KI-Bearbeitung Steakakademie (Uwe Yendell)"
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/brown-fried-food-on-brown-wooden-chopping-board-rZyClxoeu2E
+    erworben_am: 2026-09-30
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-Generierung. Ausgangsfoto frei unter Unsplash-Lizenz (kein Unsplash+, geprueft 30.09.2026); per Gemini veraendert (Honigglas und Knoblauch eingefuegt, Kraeuterdeko entfernt, Abgleich mit Original 30.09.2026) - deshalb status ki und imageAI true (Art. 50 KI-VO). Keine Personen, keine Marken. Gemini-Nutzungsbedingungen fuer kommerzielle Nutzung der Ausgabe nicht geprueft.
