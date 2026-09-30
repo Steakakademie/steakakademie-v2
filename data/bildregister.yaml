@@ -673,3 +673,13 @@ bilder:
     erworben_am: 2026-09-28
     namensnennung: false
     hinweis: Ersetzt die fal.ai-Generierung. status ki, weil die rechte Bildhaelfte auf Foodiesfeed ausdruecklich als AI-generated gekennzeichnet ist (Doktrin docs/bildprogramm.md, Foodiesfeed-Einzelbildpruefung, geprueft 28.09.2026); imageAI bleibt true. Linke Haelfte Echtfoto. Keine Personen; Flaschenetiketten im Hintergrund unscharf, keine lesbaren Marken.
+  images/rezepte/skilpadjies-braai.jpg:
+    status: lizenz
+    quelle: Unsplash (ID xlf1tNGcBH0)
+    urheber: Janet Ganbold
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/a-close-up-of-a-skewer-of-food-on-a-grill-xlf1tNGcBH0
+    erworben_am: 2026-09-29
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung (Echtfoto, frei unter Unsplash-Lizenz, kein Unsplash+; geprueft 29.09.2026). Motiv laut Unsplash Schaschlik in der Mongolei; keine Personen, keine Marken. imageAI im MDX-Frontmatter auf false gesetzt.
