@@ -19,7 +19,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { createClient } from '@supabase/supabase-js'
-import Anthropic from '@anthropic-ai/sdk'
+import { callClaude, parseJson, printCacheStats } from './lib/anthropic.mjs'
 import { readFile } from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -42,7 +42,8 @@ if (!DRY_RUN && (!SUPABASE_URL || !SERVICE_ROLE || !ANTHROPIC_KEY)) {
 }
 
 const supabase = (SUPABASE_URL && SERVICE_ROLE) ? createClient(SUPABASE_URL, SERVICE_ROLE) : null
-const anthropic = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null
+const MODELL = 'claude-opus-4-7'
+const VERSUCHE = 3   // KAN-84: unlesbare Modellantwort → neu erzeugen statt Lauf abbrechen
 
 // ─── Kalender ────────────────────────────────────────────────────────────────
 
@@ -107,15 +108,31 @@ HARTE REGELN:
 Antworte NUR mit JSON:
 {"title":"...","content_body":"... (600-1000 Wörter, Markdown)","seo_title":"... (max 60 Zeichen)","seo_description":"... (max 160 Zeichen)","image_prompt_en":"... (englischer Bild-Prompt: appetizing professional food photograph, warm rustic wooden board, soft natural light, the whole dish in frame, 50mm lens — KEINE Wörter wie photorealistic/4K/8k/macro)"}`
 
-  const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-7',
-    max_tokens: 4000,
-    messages: [{ role: 'user', content: prompt }],
-  })
-  const text = msg.content.find(b => b.type === 'text')?.text ?? ''
-  const m = text.match(/\{[\s\S]*\}/)
-  if (!m) throw new Error('Kein JSON in der Antwort')
-  const parsed = JSON.parse(m[0])
+  // Zentraler Client (CLAUDE.md §4 Prompt-Caching) + toleranter Parser.
+  // Scheitert das Lesen trotzdem (abgeschnitten, Pflichtfeld fehlt), wird neu erzeugt.
+  let parsed
+  let letzterFehler
+  for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
+    try {
+      const { text, raw } = await callClaude({
+        model: MODELL,
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }],
+        label: 'saison-grow',
+      })
+      if (raw?.stop_reason === 'max_tokens') throw new Error('Antwort bei max_tokens abgeschnitten')
+      const kandidat = parseJson(text)
+      const fehlend = ['title', 'content_body', 'seo_title', 'seo_description']
+        .filter(k => typeof kandidat?.[k] !== 'string' || !kandidat[k].trim())
+      if (fehlend.length) throw new Error(`Pflichtfeld(er) fehlen: ${fehlend.join(', ')}`)
+      parsed = kandidat
+      break
+    } catch (err) {
+      letzterFehler = err
+      console.error(`  Versuch ${versuch}/${VERSUCHE} unbrauchbar: ${err.message}`)
+    }
+  }
+  if (!parsed) throw new Error(`Keine verwertbare Modellantwort nach ${VERSUCHE} Versuchen — ${letzterFehler?.message}`)
 
   // Regel 8d-Wache: verbotene Wörter aus dem Bild-Prompt filtern
   const banned = /\b(photorealistic|photo-realistic|4k|8k|high detail|macro)\b/gi
@@ -201,6 +218,7 @@ async function main() {
       }, { onConflict: 'run_id' })
 
       console.log(`✅ Draft angelegt: "${draft.title}" (${draft.slug}) — wartet in /admin/review`)
+      printCacheStats()
       return   // genau EIN Draft pro Lauf
     }
   }
