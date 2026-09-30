@@ -141,28 +141,24 @@ export type FaktencheckEintrag = {
   titel: string;
   a?: string;
   b?: string;
-  art?: 'kontrast';
-  /** Anzahl geteilter Stoffe, die der Text voraussetzt (Test prüft Gleichheit). */
+  /** Anzahl gleicher Moleküle, die der Text voraussetzt (Test prüft Gleichheit). */
   erwartet?: number;
+  /** Verwandte Duftfamilien, die der Text nennt (Test prüft Gleichheit). */
+  verwandt?: string[];
+  /** Kontrast-Hebel (redaktionell, Küchenpraxis — nicht aus der Aroma-Datenbank). */
+  kontrast?: string[];
   text: string;
   besser?: { a: string; b: string; label: string };
 };
 
 export const FAKTENCHECK: FaktencheckEintrag[] = [
   {
-    titel: 'Steak & Popcorn',
-    a: 'Rind',
-    b: 'Popcorn',
-    erwartet: 1,
-    text: 'Wird oft mit gemeinsamen Röstaromen begründet. In unseren Belegen teilen die beiden nur die Frittiernote. Die typische Popcorn-Röstnote passt besser zu Haselnuss.',
-    besser: { a: 'Rind', b: 'Kaffee', label: 'Steak & Kaffee' },
-  },
-  {
     titel: 'Schokoladenmousse & Röstzwiebeln',
     a: 'Kakao',
     b: 'Röstzwiebel',
     erwartet: 0,
-    text: 'In unseren Belegen keine gemeinsame Schlüsselnote. Wer Schokolade mit Zwiebelgewächsen verbinden will, nimmt Röstknoblauch.',
+    verwandt: ['malzig'],
+    text: 'Kein gemeinsames Molekül, nur eine verwandte Malznote. Wer Schokolade mit Zwiebelgewächsen verbinden will, nimmt Röstknoblauch.',
     besser: { a: 'Kakao', b: 'Röstknoblauch', label: 'Schokolade & Röstknoblauch' },
   },
   {
@@ -170,14 +166,17 @@ export const FAKTENCHECK: FaktencheckEintrag[] = [
     a: 'Ananas',
     b: 'Blauschimmelkäse',
     erwartet: 0,
-    text: 'Keine geteilte Schlüsselnote — das Paar lebt vom Kontrast: Fruchtsäure und Süße gegen Salz und Fett. Funktioniert, aber nicht wegen Foodpairing.',
+    verwandt: ['fruchtig (Ester)'],
+    kontrast: ['Süß-salzig', 'Säure gegen Fett'],
+    text: 'Kein gemeinsames Molekül — aber eine verwandte Fruchtnote: Blauschimmelkäse trägt selbst fruchtige Ester. Den Rest erledigt der Kontrast: Fruchtsäure und Süße gegen Salz und Fett.',
   },
   {
     titel: 'Garnelen & Vanille',
     a: 'Garnele',
     b: 'Vanille',
     erwartet: 1,
-    text: 'Eine einzige Brücke: die würzige Sotolon-Note. Ein Versuch wert, aber kein Selbstläufer.',
+    verwandt: [],
+    text: 'Eine einzige Brücke: die würzig-karamellige Sotolon-Note. Ein Versuch wert, aber kein Selbstläufer.',
     besser: { a: 'Garnele', b: 'Kaffee', label: 'Garnele & Kaffee' },
   },
   {
@@ -185,6 +184,7 @@ export const FAKTENCHECK: FaktencheckEintrag[] = [
     a: 'Thunfisch',
     b: 'Zimt',
     erwartet: 1,
+    verwandt: [],
     text: 'Eine Brücke: die wachsig-zitrusartige Nonanal-Note. Dezent eingesetzt spannend, mehr nicht.',
   },
   {
@@ -192,7 +192,8 @@ export const FAKTENCHECK: FaktencheckEintrag[] = [
     a: 'Lamm',
     b: 'Erdbeere',
     erwartet: 1,
-    text: 'Eine Brücke über Karamell. Mit Kaffee teilt Lamm mehr — Karamell und Vanille.',
+    verwandt: [],
+    text: 'Eine Brücke über Karamell. Mit Kaffee teilt Lamm mehr — Karamell, Vanille und eine verwandte Röstnote.',
     besser: { a: 'Lamm', b: 'Kaffee', label: 'Lamm & Kaffee' },
   },
   {
@@ -201,10 +202,53 @@ export const FAKTENCHECK: FaktencheckEintrag[] = [
   },
   {
     titel: 'Wassermelone & Senf · Essiggurke & Erdnussbutter',
-    art: 'kontrast',
-    text: 'Keine Aroma-Brücke, sondern Kontrast: Süße puffert Schärfe, Säure schneidet durch Fett. Gutes Prinzip — aber ein anderes.',
+    kontrast: ['Süß-scharf', 'Säure gegen Fett'],
+    text: 'Keine Aroma-Brücke, sondern reiner Kontrast: Süße puffert Schärfe, Säure schneidet durch Fett. Gutes Prinzip — aber ein anderes.',
   },
 ];
+
+/**
+ * Steak & Popcorn — Uwe, 30.09.2026: Das Paar soll als funktionierende Kombination
+ * erklärt werden. Befund (inkl. neuem Beleg Li et al. 2021): ZWEI gleiche Moleküle —
+ * die Popcorn-Röstnote 2-Acetyl-1-pyrrolin und die Frittiernote Decadienal — plus eine
+ * verwandte Rauchnote. Eine Geschmacksstudie zu genau diesem Paar gibt es nicht
+ * (Recherche 30.09.2026). Textur und süß-salzig sind Küchenpraxis und so gekennzeichnet.
+ */
+export const STEAK_POPCORN = {
+  a: 'Rind',
+  b: 'Popcorn',
+  erwartet: 2,
+  verwandt: ['rauchig'],
+  hebel: [
+    {
+      titel: 'Gemeinsame Röstnote',
+      quelle: 'Aroma-Datenbank',
+      text: 'Der typische Popcorn-Duft heißt 2-Acetyl-1-pyrrolin — und genau dieser Stoff ist auch in gegrilltem Rind als geruchsaktiv nachgewiesen. Dazu teilen beide die Frittiernote (Decadienal) und eine verwandte Rauchnote. Alles Kinder der Maillard-Reaktion.',
+    },
+    {
+      titel: 'Texturkontrast',
+      quelle: 'Küchenpraxis',
+      text: 'Zartes, saftiges Fleisch trifft auf knusprigen Biss. Der Wechsel hält jeden Bissen spannend.',
+    },
+    {
+      titel: 'Süß-salziger Gegenpol',
+      quelle: 'Küchenpraxis',
+      text: 'Gesalzenes oder karamellisiertes Popcorn setzt einen Gegenpol zum kräftigen, umamireichen Entrecôte.',
+    },
+  ],
+  ideen: [
+    {
+      titel: 'Karamell-Brücke',
+      text: 'Entrecôte medium-rare braten, dazu Popcorn mit einer schnellen Sahne-Karamell-Soße. Das Karamell bringt die karamellige Note ins Popcorn, die das Steak schon trägt (Furaneol) — rechnerisch wird aus der Brücke eine starke.',
+      auftrag: 'Entrecôte medium-rare mit Karamell-Popcorn',
+    },
+    {
+      titel: 'Herzhaft mit Paprika',
+      text: 'Popcorn mit Meersalz und geräuchertem Paprikapulver würzen, zu dünnen Steak-Tranchen und einem frischen Salat. Paprikapulver teilt mit Rind die Karamellnote, die Räucherung verstärkt die Rauchbrücke.',
+      auftrag: 'Steak-Tranchen mit Paprika-Popcorn und Salat',
+    },
+  ],
+} as const;
 
 /**
  * Kachel „Foodpairing" (Startseite): Aufhänger Steak & Schokolade.

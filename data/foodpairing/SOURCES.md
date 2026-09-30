@@ -109,6 +109,12 @@ AEDA, Mengenbestimmung per Isotopenverdünnung (SIDA), OAV und Rekombination →
 - „Speck" stützt sich auf chinesischen Speck (geräuchert bzw. luftgetrocknet), „Rotwein" und
   „Weißwein" fassen mehrere Rebsorten zusammen — Details je Zeile in `belege.tsv`.
 
+## Nachtrag 30.09.2026
+- **Rind + 2-Acetyl-1-pyrrolin** (Evidenz B; Li et al. 2021, Foods 10:3113, 10.3390/foods10123113 —
+  GC-O-MS an gegrilltem, gereiftem Rinderrücken, Kontaktgrill 220 °C; Abstract über Europe PMC
+  geprüft, Zitat in `zitate.tsv`). Anlass: Steak & Popcorn auf /foodpairing — die Popcorn-Röstnote
+  ist damit auch fürs Steak belegt. Stand danach: 650 Kanten · 686 Belege.
+
 ## Bewusst NICHT verwendet (Lizenz)
 - **Ahn-Flavor-Network** (Sci. Rep. 1:196, 2011): **CC BY-NC-SA 3.0** (NonCommercial).
 - **FlavorDB / FooDB** (CC BY-**NC**), **VCF** (kostenpflichtig), **FEMA-Liste**,

@@ -13,8 +13,10 @@ import { join } from 'node:path';
 
 export type Zutat = { id: string; name: string; kategorie: string };
 export type Stoff = { id: string; name: string; note: string | null };
-export type Paarung = { a: string; b: string; stoffe: Stoff[] };
-export type RadPartner = { name: string; kategorie: string; stoffe: Stoff[] };
+/** Verwandte Note: dieselbe Duftfamilie, aber verschiedene Moleküle auf beiden Seiten. */
+export type Verwandt = { familie: string; a: string[]; b: string[] };
+export type Paarung = { a: string; b: string; stoffe: Stoff[]; verwandt: Verwandt[] };
+export type RadPartner = { name: string; kategorie: string; stoffe: Stoff[]; verwandt: Verwandt[] };
 export type Rad = { zentrum: string; kategorie: string; partner: RadPartner[] };
 
 /**
@@ -84,7 +86,41 @@ export const AROMA_NOTE: Record<string, string> = {
   'β-Caryophyllen': 'holzig-würzig',
   'trans-4,5-Epoxy-(E)-2-decenal': 'metallisch',
   '(E,Z)-2,6-Nonadienal': 'Gurke',
+  '2-Acetyltetrahydropyridin': 'röstig/Cracker',
+  '2-Methyl-3-propylpyrazin': 'röstig',
+  '12-Methyltridecanal': 'talgig/rindtypisch',
+  'γ-Octalacton': 'kokosartig',
+  Mesifuran: 'karamellig',
 };
+
+/**
+ * Duftfamilien für „verwandte Noten" — bewusst ENG gefasst: nur Stoffklassen, deren
+ * Vertreter ähnlich riechen und in der Aromaforschung gemeinsam beschrieben werden
+ * (z. B. Röstnote: Alkylpyrazine, Acetylpyrrolin, Acetylthiazolin — alle aus der
+ * Maillard-Reaktion). Breite, uneinheitliche Klassen (Schwefelstoffe, Methoxypyrazine,
+ * Terpene quer durch) zählen NICHT, sonst wäre am Ende alles „verwandt".
+ * Reihenfolge zählt: die erste passende Regel gewinnt.
+ */
+export const DUFTFAMILIEN: { familie: string; muster: RegExp }[] = [
+  { familie: 'röstig', muster: /^(?![\s\S]*[Mm]ethoxy)[\s\S]*pyrazin|pyrrolin|thiazolin|tetrahydropyridin|Furfurylthiol/ },
+  { familie: 'Vanille', muster: /Vanill/ },
+  { familie: 'rauchig', muster: /guaiacol|Guaiacol/ },
+  { familie: 'karamellig', muster: /^Furaneol$|^Homofuraneol$|^Mesifuran$|^Sotolon$/ },
+  { familie: 'Honig', muster: /^Phenylacetaldehyd$|^Phenylessigsäure$/ },
+  { familie: 'käsig', muster: /^Buttersäure$|^2-Methylbuttersäure$|^3-Methylbuttersäure$/ },
+  { familie: 'fruchtig (Ester)', muster: /^(Ethyl|Methyl)[\w-]*oat$/ },
+  { familie: 'sahnig-fruchtig (Lacton)', muster: /lacton$/ },
+  { familie: 'malzig', muster: /^[23]-Methylbutanal$|^2-Methylpropanal$/ },
+  { familie: 'grasig-grün', muster: /^Hexanal$|Hexenal$/ },
+  { familie: 'fettig', muster: /dienal$|-2-Nonenal$|-2-Decenal$|Methyltridecanal/ },
+  { familie: 'pilzig', muster: /^1-Octen-3-o[ln]$/ },
+  { familie: 'butterig', muster: /^2,3-Butandion$|^2,3-Pentandion$/ },
+  { familie: 'zitrusartig', muster: /^(Octanal|Nonanal|Decanal|Geranial|Neral|Limonen|Citronellal)$/ },
+];
+
+export function duftfamilie(stoff: string): string | null {
+  return DUFTFAMILIEN.find((f) => f.muster.test(stoff))?.familie ?? null;
+}
 
 type Daten = {
   zutaten: Map<string, Zutat>; // key: name
@@ -139,13 +175,40 @@ function geteilt(a: Zutat, b: Zutat): Stoff[] {
     .sort((x, y) => Number(!!y.note) - Number(!!x.note) || x.name.localeCompare(y.name, 'de'));
 }
 
+function familien(z: Zutat): Map<string, string[]> {
+  const d = daten();
+  const m = new Map<string, string[]>();
+  (d.kanten.get(z.id) ?? new Set<string>()).forEach((sid) => {
+    const name = d.stoffe.get(sid)!.name;
+    const f = duftfamilie(name);
+    if (f) m.set(f, [...(m.get(f) ?? []), name].sort((x, y) => x.localeCompare(y, 'de')));
+  });
+  return m;
+}
+
+/** Familien, die beide tragen — ohne jene, die schon ein gemeinsames Molekül abdeckt. */
+function verwandt(a: Zutat, b: Zutat, gleich: Stoff[]): Verwandt[] {
+  const schon = new Set(gleich.map((s) => duftfamilie(s.name)).filter(Boolean));
+  const fa = familien(a);
+  const fb = familien(b);
+  const out: Verwandt[] = [];
+  fa.forEach((stoffeA, familie) => {
+    const stoffeB = fb.get(familie);
+    if (stoffeB && !schon.has(familie)) out.push({ familie, a: stoffeA, b: stoffeB });
+  });
+  return out.sort((x, y) => x.familie.localeCompare(y.familie, 'de'));
+}
+
 export function istImDatensatz(name: string): boolean {
   return daten().zutaten.has(name);
 }
 
 /** Geteilte Schlüssel-Aromastoffe zweier Zutaten (wirft, wenn eine fehlt). */
 export function paarung(a: string, b: string): Paarung {
-  return { a, b, stoffe: geteilt(zutat(a), zutat(b)) };
+  const za = zutat(a);
+  const zb = zutat(b);
+  const stoffe = geteilt(za, zb);
+  return { a, b, stoffe, verwandt: verwandt(za, zb, stoffe) };
 }
 
 /** Aroma-Rad: die stärksten Partner einer Zutat, fremde Kategorien, absteigend. */
@@ -155,7 +218,7 @@ export function rad(zentrum: string, max = 12): Rad {
   daten().zutaten.forEach((p) => {
     if (p.name === z.name || p.kategorie === z.kategorie) return;
     const stoffe = geteilt(z, p);
-    if (stoffe.length) partner.push({ name: p.name, kategorie: p.kategorie, stoffe });
+    if (stoffe.length) partner.push({ name: p.name, kategorie: p.kategorie, stoffe, verwandt: verwandt(z, p, stoffe) });
   });
   partner.sort((x, y) => y.stoffe.length - x.stoffe.length || x.name.localeCompare(y.name, 'de'));
   return { zentrum: z.name, kategorie: z.kategorie, partner: partner.slice(0, max) };
@@ -175,4 +238,19 @@ export function statistik() {
 /** „a, b und c" — für Fließtext. */
 export function aufzaehlen(teile: string[]): string {
   return teile.length < 2 ? teile.join('') : `${teile.slice(0, -1).join(', ')} und ${teile[teile.length - 1]}`;
+}
+
+export type Urteil = 'Starke Brücke' | 'Brücke' | 'Schwache Brücke' | 'Keine Brücke';
+
+/**
+ * Aroma-Urteil aus beiden Ebenen: gleiche Moleküle zählen voll, verwandte Noten halb.
+ * ≥3 → stark, ≥2 → Brücke, >0 → schwach. Kontrast (Geschmack, Textur) ist eine
+ * eigene, redaktionelle Ebene und fließt hier bewusst nicht ein.
+ */
+export function aromaUrteil(p: Pick<Paarung, 'stoffe' | 'verwandt'>): Urteil {
+  const punkte = p.stoffe.length + p.verwandt.length * 0.5;
+  if (punkte >= 3) return 'Starke Brücke';
+  if (punkte >= 2) return 'Brücke';
+  if (punkte > 0) return 'Schwache Brücke';
+  return 'Keine Brücke';
 }

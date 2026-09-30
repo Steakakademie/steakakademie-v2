@@ -84,6 +84,23 @@ export default function AromaRad({ raeder }: { raeder: RadMitLabel[] }) {
                   </li>
                 ))}
               </ul>
+              {partner.verwandt.length > 0 && (
+                <div className="mt-3">
+                  <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
+                    Dazu verwandte Noten
+                  </p>
+                  <ul className="mt-1.5 space-y-1.5">
+                    {partner.verwandt.map((v) => (
+                      <li key={v.familie} className="font-sans text-xs text-text-secondary">
+                        <span className="font-semibold text-text-light">≈ {v.familie}</span>{' '}
+                        <span className="text-text-muted">
+                          ({v.a.join(', ')} ↔ {v.b.join(', ')})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <Link
                 href={`/?schmiede=${encodeURIComponent(`${rad.label} mit ${partner.name}`)}#werkzeuge`}
                 className="mt-5 inline-flex items-center gap-2 rounded-lg bg-brand-fire px-4 py-2.5 font-sans text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90"

@@ -1,14 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, FlaskConical, ChefHat, Wine, Scale, Microscope } from 'lucide-react';
+import { ChevronRight, FlaskConical, ChefHat, Wine, Scale, Microscope, Sparkles, History, AlertTriangle } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AutorHinweis from '@/components/AutorHinweis';
 import AromaRad, { type RadMitLabel } from '@/components/foodpairing/AromaRad';
 import { gruppenFarbe } from '@/components/foodpairing/AromaRadSvg';
 import AromaBrueckeSvg from '@/components/foodpairing/AromaBrueckeSvg';
-import { aufzaehlen, istImDatensatz, paarung, rad, statistik, type Paarung } from '@/lib/foodpairing-daten';
-import { UEBERRASCHUNGEN, FAKTENCHECK, RAEDER } from '@/lib/foodpairing-inhalte';
+import {
+  aromaUrteil,
+  aufzaehlen,
+  istImDatensatz,
+  paarung,
+  rad,
+  statistik,
+  type Paarung,
+  type Urteil,
+} from '@/lib/foodpairing-daten';
+import { UEBERRASCHUNGEN, FAKTENCHECK, RAEDER, STEAK_POPCORN } from '@/lib/foodpairing-inhalte';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { ogImages } from '@/lib/og';
 
@@ -18,7 +27,7 @@ export const dynamic = 'force-static';
 const URL = '/foodpairing';
 const TITEL = 'Foodpairing: Warum Steak und Schokolade zusammenpassen';
 const BESCHREIBUNG =
-  'Foodpairing erklärt: Welche Zutaten teilen Schlüssel-Aromen? Aroma-Rad zum Ausprobieren, überraschende Paare mit Beleg und der Faktencheck bekannter Kombinationen.';
+  'Foodpairing erklärt: Schlüssel-Aromen, die drei Hebel guter Paare, Aroma-Rad zum Ausprobieren, Steak & Popcorn im Detail und was die Forschung wirklich sagt.';
 
 export const metadata: Metadata = {
   title: 'Foodpairing: Welche Aromen zusammenpassen',
@@ -37,29 +46,60 @@ function anzahlText(n: number) {
   return n === 1 ? '1 gemeinsames Schlüssel-Aroma' : `${n} gemeinsame Schlüssel-Aromen`;
 }
 
-function urteil(p: Paarung | null, art?: 'kontrast') {
-  if (art === 'kontrast') return { label: 'Kontrast', klasse: 'border-[#5FB8B0] text-[#5FB8B0]' };
-  if (!p) return { label: 'Nicht geprüft', klasse: 'border-border-subtle text-text-muted' };
-  const n = p.stoffe.length;
-  if (n === 0) return { label: 'Keine Brücke', klasse: 'border-border-subtle text-text-muted' };
-  if (n === 1) return { label: 'Schwache Brücke', klasse: 'border-brand-gold/50 text-brand-gold' };
-  if (n === 2) return { label: 'Brücke', klasse: 'border-brand-gold text-brand-gold' };
-  return { label: 'Starke Brücke', klasse: 'border-brand-fire text-brand-fire' };
+const URTEIL_KLASSE: Record<Urteil, string> = {
+  'Starke Brücke': 'border-brand-fire text-brand-fire',
+  Brücke: 'border-brand-gold text-brand-gold',
+  'Schwache Brücke': 'border-brand-gold/50 text-brand-gold',
+  'Keine Brücke': 'border-border-subtle text-text-muted',
+};
+
+function UrteilMarke({ p }: { p: Paarung | null }) {
+  if (!p) {
+    return <Marke klasse="border-border-subtle text-text-muted">Nicht geprüft</Marke>;
+  }
+  const u = aromaUrteil(p);
+  return <Marke klasse={URTEIL_KLASSE[u]}>{u}</Marke>;
 }
 
+function Marke({ klasse, children }: { klasse: string; children: React.ReactNode }) {
+  return (
+    <span className={`inline-block shrink-0 rounded-full border px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide ${klasse}`}>
+      {children}
+    </span>
+  );
+}
+
+/** Chips: gleiche Moleküle (voll) und verwandte Noten (gestrichelt, „≈"). */
 function Noten({ p }: { p: Paarung }) {
   return (
     <ul className="flex flex-wrap gap-1.5">
       {p.stoffe.map((s) => (
         <li
           key={s.id}
-          title={s.name}
+          title={`Gleiches Molekül: ${s.name}`}
           className="rounded-full border border-border-subtle bg-surface-base px-2.5 py-0.5 font-sans text-[11px] text-text-secondary"
         >
           {s.note ?? s.name}
         </li>
       ))}
+      {p.verwandt.map((v) => (
+        <li
+          key={v.familie}
+          title={`Verwandte Note: ${v.a.join(', ')} ↔ ${v.b.join(', ')}`}
+          className="rounded-full border border-dashed border-brand-gold/50 px-2.5 py-0.5 font-sans text-[11px] text-text-muted"
+        >
+          ≈ {v.familie}
+        </li>
+      ))}
     </ul>
+  );
+}
+
+function Quelle({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} className="underline decoration-brand-gold/40 hover:text-brand-fire" target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
   );
 }
 
@@ -67,35 +107,33 @@ export default function FoodpairingPage() {
   const stat = statistik();
   const raeder: RadMitLabel[] = RAEDER.map((r) => ({ ...rad(r.zutat, 12), label: r.label, sub: r.sub }));
   const steakSchoko = paarung('Rind', 'Kakao');
-  const steakPopcorn = paarung('Rind', 'Popcorn');
+  const popcorn = paarung(STEAK_POPCORN.a, STEAK_POPCORN.b);
 
   const faq = [
     {
       question: 'Was ist Foodpairing?',
       answer:
-        'Foodpairing kombiniert Zutaten nach ihren Schlüssel-Aromen — den wenigen Duftmolekülen, die ein Lebensmittel prägen. Teilen zwei Zutaten solche Moleküle, harmonieren sie oft, auch wenn die Kombination ungewohnt klingt.',
+        'Foodpairing kombiniert Zutaten nach ihren Schlüssel-Aromen — den wenigen Duftmolekülen, die ein Lebensmittel prägen. Teilen zwei Zutaten solche Moleküle, riechen sie verwandt und passen oft zusammen, auch wenn die Kombination ungewohnt klingt. Die Idee wurde um das Jahr 2000 durch den britischen Koch Heston Blumenthal bekannt.',
     },
     {
-      question: 'Ist Foodpairing wissenschaftlich belegt?',
+      question: 'Ist Foodpairing wissenschaftlich bewiesen?',
       answer:
-        'Teilweise. Eine Auswertung von über 56.000 Rezepten (Ahn et al., Scientific Reports 2011) fand: Nordamerikanische und westeuropäische Küchen kombinieren bevorzugt Zutaten mit gemeinsamen Aromastoffen, ostasiatische Küchen eher nicht. Gemeinsame Aromen sind also ein guter Hinweis, aber kein Naturgesetz — Geschmack, Textur und Kontrast zählen mit.',
+        'Nein, nicht als Geschmacksregel. Belegt ist: Nordamerikanische und westeuropäische Rezepte kombinieren überzufällig oft Zutaten mit gemeinsamen Aromastoffen, ostasiatische und indische Küchen eher nicht (Ahn et al. 2011; Jain et al. 2015). Dass mehr gemeinsame Stoffe besseren Geschmack vorhersagen, ist nicht gezeigt — ein Übersichtsartikel von Charles Spence (2020) nennt die Hypothese inzwischen widerlegt. Gemeinsame Aromen sind deshalb ein guter Ideengeber, kein Naturgesetz.',
     },
     {
       question: 'Warum passt Steak zu Schokolade?',
       answer: `Gebratenes Rindfleisch und Kakao teilen in unseren belegten Daten ${anzahlText(
         steakSchoko.stoffe.length,
-      )}: ${aufzaehlen(steakSchoko.stoffe.map((s) => (s.note ? `${s.note} (${s.name})` : s.name)))}. Deshalb wirkt Kakao im Rub wie eine Verlängerung der Kruste.`,
+      )}: ${aufzaehlen(steakSchoko.stoffe.map((s) => (s.note ? `${s.note} (${s.name})` : s.name)))}. Alle drei entstehen beim Rösten und Braten.`,
     },
     {
       question: 'Passen Steak und Popcorn zusammen?',
-      answer: `Die Kombination wird oft mit gemeinsamen Röstaromen begründet. In unseren Belegen teilen Rind und Popcorn aber nur ${anzahlText(
-        steakPopcorn.stoffe.length,
-      )} (${steakPopcorn.stoffe.map((s) => s.note ?? s.name).join(', ')}). Eine schwache Brücke — stärker sind Steak & Kaffee oder Steak & Schokolade.`,
+      answer: `Ja, aus mehreren Gründen. Beide teilen ${anzahlText(popcorn.stoffe.length)} — darunter 2-Acetyl-1-pyrrolin, den typischen Popcorn-Duft, der auch in gegrilltem Rind nachgewiesen ist. Dazu kommen der Texturkontrast (zart gegen knusprig) und der süß-salzige Gegenpol, wenn das Popcorn gesalzen oder karamellisiert ist. Eine Geschmacksstudie zu genau diesem Paar gibt es allerdings nicht.`,
     },
     {
       question: 'Wie nutze ich Foodpairing am Grill?',
       answer:
-        'Über Rub, Glaze, Beilage und Getränk: Wähle zum Fleisch eine Zutat mit mehreren gemeinsamen Schlüssel-Aromen — zum Beispiel Kaffee oder Kakao im Rub für Rind, Himbeere als Glaze für Schwein. Die Foodpairing-Suche auf der Startseite und der Aroma-Matcher zeigen dir passende Partner.',
+        'Über drei Hebel: Ähnlichkeit (Kaffee oder Kakao im Rub für Rind), Kontrast (Essiggurke oder Krautsalat zu fettem Pulled Pork) und Synergie (Parmesan oder Pilze zum Steak — Umami verstärkt sich). Die Foodpairing-Suche auf der Startseite und der Aroma-Matcher zeigen dir passende Partner.',
     },
   ];
 
@@ -107,7 +145,7 @@ export default function FoodpairingPage() {
     authorName: 'Elena',
     authorSlug: 'elena',
     url: URL,
-    keywords: ['Foodpairing', 'Aromen kombinieren', 'Schlüssel-Aromen', 'Steak und Schokolade', 'Aroma-Rad'],
+    keywords: ['Foodpairing', 'Aromen kombinieren', 'Schlüssel-Aromen', 'Steak und Schokolade', 'Steak und Popcorn', 'Aroma-Rad'],
   });
   const breadcrumbSch = breadcrumbSchema([
     { name: 'Wissen', url: '/wissen' },
@@ -144,11 +182,12 @@ export default function FoodpairingPage() {
                 Beim Foodpairing kombinierst du Zutaten nicht nach Gewohnheit, sondern nach ihren{' '}
                 <strong className="text-text-light">Schlüssel-Aromen</strong> — den wenigen Duftmolekülen, die ein
                 Lebensmittel wirklich prägen. Teilen zwei Zutaten solche Moleküle, schlagen sie eine Brücke. Sie
-                harmonieren, auch wenn die Kombination auf den ersten Blick absurd klingt.
+                harmonieren oft, auch wenn die Kombination auf den ersten Blick absurd klingt.
               </p>
               <p className="mt-3 font-body text-[1.08rem] leading-relaxed text-text-secondary">
                 Ein gebratenes Steak und dunkler Kakao zum Beispiel teilen {anzahlText(steakSchoko.stoffe.length)}:{' '}
-                {aufzaehlen(steakSchoko.stoffe.map((s) => s.note ?? s.name))}. Probier es unten im Aroma-Rad aus.
+                {aufzaehlen(steakSchoko.stoffe.map((s) => s.note ?? s.name))}. Gemeinsame Aromen sind aber nur einer
+                von drei Hebeln — und ein Ideengeber, kein Naturgesetz. Beides erklären wir hier.
               </p>
               <p className="mt-5 font-sans text-xs text-text-muted">Von Elena · Food Science</p>
               <AutorHinweis authorSlug="elena" />
@@ -180,7 +219,7 @@ export default function FoodpairingPage() {
             <p className="mb-5 mt-2 max-w-2xl font-body text-text-secondary">
               In der Mitte steht deine Zutat, außen ihre stärksten Partner. Die Zahl im Punkt zeigt, wie viele
               Schlüssel-Aromen die beiden teilen — je größer der Punkt, desto stärker die Brücke. Tipp einen Partner
-              an, um zu sehen, welche Aromen es sind.
+              an, um zu sehen, welche Aromen es sind und welche Noten zusätzlich verwandt sind.
             </p>
             <AromaRad raeder={raeder} />
           </section>
@@ -191,25 +230,80 @@ export default function FoodpairingPage() {
               So funktioniert Foodpairing
             </h2>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
-              {[
-                {
-                  t: '1 · Wenige Moleküle prägen alles',
-                  x: 'Ein Steak gibt beim Braten hunderte flüchtige Stoffe ab. Riechen kannst du nur eine Handvoll davon — die Schlüssel-Aromen. Die Aromaforschung findet sie mit Verdünnungsanalysen und Nachbau-Versuchen.',
-                },
-                {
-                  t: '2 · Gemeinsame Moleküle bauen Brücken',
-                  x: 'Steckt dasselbe Schlüssel-Aroma in zwei Zutaten, greifen sie ineinander statt zu konkurrieren. Das ist die Grundidee des Foodpairings.',
-                },
-                {
-                  t: '3 · Mehr Brücken, stärkeres Signal',
-                  x: 'Eine gemeinsame Note ist ein Hinweis, drei oder mehr sind ein starkes Signal. Geschmack, Textur und Temperatur entscheiden trotzdem mit.',
-                },
-              ].map((k) => (
-                <div key={k.t} className="rounded-xl border border-border-subtle bg-surface-card p-5">
-                  <h3 className="mb-2 font-serif text-lg font-bold text-text-light">{k.t}</h3>
-                  <p className="font-sans text-sm leading-relaxed text-text-secondary">{k.x}</p>
-                </div>
-              ))}
+              <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
+                <h3 className="mb-2 font-serif text-lg font-bold text-text-light">1 · Wenige Moleküle prägen alles</h3>
+                <p className="font-sans text-sm leading-relaxed text-text-secondary">
+                  In Lebensmitteln sind rund 10.000 flüchtige Stoffe bekannt. Nur etwa 230 davon sind Schlüssel-Aromen,
+                  und ein einzelnes Lebensmittel wird von 3 bis 40 geprägt (
+                  <Quelle href="https://doi.org/10.1002/anie.201309508">Dunkel et al. 2014</Quelle>). Beim Essen
+                  erreichen sie die Nase vor allem von hinten, über den Rachen — deshalb schmeckst du sie, statt sie
+                  nur zu riechen.
+                </p>
+              </div>
+              <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
+                <h3 className="mb-2 font-serif text-lg font-bold text-text-light">2 · So findet die Forschung sie</h3>
+                <p className="font-sans text-sm leading-relaxed text-text-secondary">
+                  Ein Mensch riecht am Gaschromatographen, der Extrakt wird Schritt für Schritt verdünnt. Was dann noch
+                  riechbar ist, zählt. Der Aromawert (Menge geteilt durch Geruchsschwelle) und Nachbau- und
+                  Weglassversuche bestätigen, welche Stoffe den Duft wirklich tragen.
+                </p>
+              </div>
+              <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
+                <h3 className="mb-2 font-serif text-lg font-bold text-text-light">3 · Die Brücken-Idee</h3>
+                <p className="font-sans text-sm leading-relaxed text-text-secondary">
+                  Teilen zwei Zutaten Schlüssel-Aromen, riechen sie verwandt — die Idee: Sie greifen ineinander, statt
+                  zu konkurrieren. Das ist plausibel und ein starker Ideengeber, als Geschmacksregel aber nicht
+                  bewiesen. Probieren bleibt Pflicht.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Drei Hebel ── */}
+          <section className="mt-14" aria-labelledby="hebel">
+            <h2 id="hebel" className="font-serif text-2xl font-bold text-text-light sm:text-3xl">
+              Drei Hebel für gute Paare
+            </h2>
+            <p className="mt-2 max-w-2xl font-body text-text-secondary">
+              Die Sensorik-Forschung unterscheidet drei Wege, wie Zutaten zusammenfinden (
+              <Quelle href="https://doi.org/10.1186/s13411-017-0053-0">Spence et al. 2017</Quelle>). Foodpairing im
+              engeren Sinn ist nur der erste.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-brand-fire/40 bg-surface-card p-6">
+                <p className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-brand-fire">
+                  <FlaskConical size={12} /> Hebel 1
+                </p>
+                <h3 className="mt-1 font-serif text-xl font-bold text-text-light">Ähnlichkeit</h3>
+                <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">
+                  <strong className="text-text-light">Gleiche Moleküle</strong> in beiden Zutaten — oder{' '}
+                  <strong className="text-text-light">verwandte Noten</strong>: verschiedene Moleküle aus derselben
+                  Duftfamilie, etwa die Röstnote aus Pyrazinen im Steak und aus Pyrrolinen im Popcorn. Beispiel: Steak
+                  & Kaffee.
+                </p>
+              </div>
+              <div className="rounded-xl border border-[#5FB8B0]/50 bg-surface-card p-6">
+                <p className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#5FB8B0]">
+                  <Scale size={12} /> Hebel 2
+                </p>
+                <h3 className="mt-1 font-serif text-xl font-bold text-text-light">Kontrast</h3>
+                <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">
+                  Gegensätze gleichen sich aus: Säure schneidet Fett, Süße puffert Schärfe, Salz dämpft Bitterkeit,
+                  knusprig trifft zart. Beispiel: Essiggurke oder Krautsalat zu fettem Pulled Pork.
+                </p>
+              </div>
+              <div className="rounded-xl border border-brand-gold/50 bg-surface-card p-6">
+                <p className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">
+                  <Sparkles size={12} /> Hebel 3
+                </p>
+                <h3 className="mt-1 font-serif text-xl font-bold text-text-light">Synergie</h3>
+                <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">
+                  Zwei Zutaten verstärken sich gegenseitig. Das beste Beispiel ist Umami: Glutamat (Parmesan, Tomate,
+                  Pilze) und Inosinat (Fleisch) wirken zusammen deutlich stärker als allein (
+                  <Quelle href="https://doi.org/10.1111/j.1365-2621.1967.tb09715.x">Yamaguchi 1967</Quelle>). Beispiel:
+                  Steak mit Parmesanbutter.
+                </p>
+              </div>
             </div>
           </section>
 
@@ -219,7 +313,8 @@ export default function FoodpairingPage() {
               Überraschende Paare — mit Beleg
             </h2>
             <p className="mt-2 max-w-2xl font-body text-text-secondary">
-              Jede Zahl kommt aus unserer eigenen Aroma-Datenbank, jede Verbindung ist mit Fachstudien belegt.
+              Jede Zahl kommt aus unserer eigenen Aroma-Datenbank, jede Verbindung ist mit Fachstudien belegt. Volle
+              Chips sind gleiche Moleküle, gestrichelte (≈) verwandte Noten.
             </p>
             {UEBERRASCHUNGEN.map((g) => (
               <div key={g.gruppe} className="mt-8">
@@ -227,14 +322,11 @@ export default function FoodpairingPage() {
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {g.paare.map((pp) => {
                     const p = paarung(pp.a, pp.b);
-                    const u = urteil(p);
                     return (
                       <article key={pp.titel} className="flex flex-col rounded-xl border border-border-subtle bg-surface-card p-5">
                         <div className="flex items-start justify-between gap-3">
                           <h4 className="font-serif text-xl font-bold text-text-light">{pp.titel}</h4>
-                          <span className={`shrink-0 rounded-full border px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide ${u.klasse}`}>
-                            {u.label}
-                          </span>
+                          <UrteilMarke p={p} />
                         </div>
                         <p className="mt-1 font-sans text-xs text-text-muted">
                           <span className="inline-block h-2 w-2 rounded-full align-middle" style={{ background: gruppenFarbe(pp.katA) }} aria-hidden />{' '}
@@ -262,6 +354,72 @@ export default function FoodpairingPage() {
             ))}
           </section>
 
+          {/* ── Steak & Popcorn ── */}
+          <section className="mt-14 rounded-2xl border border-brand-gold/40 bg-surface-card p-5 sm:p-8" aria-labelledby="popcorn">
+            <div className="grid items-center gap-8 lg:grid-cols-12">
+              <div className="lg:col-span-7">
+                <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-brand-fire">Im Detail</p>
+                <h2 id="popcorn" className="mt-1 font-serif text-2xl font-bold text-text-light sm:text-3xl">
+                  Steak & Popcorn: Wenn alle drei Hebel ziehen
+                </h2>
+                <p className="mt-3 font-body text-text-secondary">
+                  Klingt nach Kino, funktioniert am Grill. Das Paar ist ein Lehrstück, weil es mehrere Gründe auf einmal
+                  hat — und weil die oft zitierte Begründung „gleiche Röstaromen“ nur zur Hälfte stimmt.
+                </p>
+                <div className="mt-4 flex items-center gap-3">
+                  <UrteilMarke p={popcorn} />
+                  <span className="font-sans text-xs text-text-muted">{anzahlText(popcorn.stoffe.length)}</span>
+                </div>
+                <div className="mt-3">
+                  <Noten p={popcorn} />
+                </div>
+              </div>
+              <div className="lg:col-span-5">
+                <AromaBrueckeSvg
+                  a="Steak"
+                  subA="gegrillt"
+                  b="Popcorn"
+                  bruecken={popcorn.stoffe.map((s) => ({ note: s.note ?? s.name, stoff: s.name }))}
+                  idSuffix="popcorn"
+                  className="w-full overflow-hidden rounded-xl border border-brand-gold/30"
+                  titel={`Aroma-Brücke Steak und Popcorn: ${popcorn.stoffe.map((s) => s.name).join(', ')}`}
+                />
+              </div>
+            </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {STEAK_POPCORN.hebel.map((h) => (
+                <div key={h.titel} className="rounded-xl border border-border-subtle bg-surface-base p-5">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-serif text-lg font-bold text-text-light">{h.titel}</h3>
+                    <span className="font-sans text-[10px] uppercase tracking-wide text-text-muted">{h.quelle}</span>
+                  </div>
+                  <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">{h.text}</p>
+                </div>
+              ))}
+            </div>
+            <h3 className="mt-8 font-sans text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">Zubereitungsideen</h3>
+            <div className="mt-3 grid gap-4 md:grid-cols-2">
+              {STEAK_POPCORN.ideen.map((i) => (
+                <div key={i.titel} className="flex flex-col rounded-xl border border-border-subtle bg-surface-base p-5">
+                  <h4 className="font-serif text-lg font-bold text-text-light">{i.titel}</h4>
+                  <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">{i.text}</p>
+                  <Link
+                    href={`/?schmiede=${encodeURIComponent(i.auftrag)}#werkzeuge`}
+                    className="mt-auto inline-flex items-center gap-1.5 pt-4 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold hover:text-brand-fire"
+                  >
+                    <ChefHat size={14} /> Rezept dazu
+                  </Link>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 font-sans text-xs text-text-muted">
+              Chemische Verwandtschaft ist belegt (u. a.{' '}
+              <Quelle href="https://doi.org/10.3390/foods10123113">Li et al. 2021</Quelle> für gegrilltes Rind,
+              Schieberle 1991 für Popcorn). Eine Geschmacksstudie zu genau diesem Paar gibt es nicht — dein Gaumen
+              entscheidet.
+            </p>
+          </section>
+
           {/* ── Faktencheck ── */}
           <section className="mt-14" aria-labelledby="faktencheck">
             <h2 id="faktencheck" className="font-serif text-2xl font-bold text-text-light sm:text-3xl">
@@ -276,7 +434,6 @@ export default function FoodpairingPage() {
               {FAKTENCHECK.map((f, i) => {
                 const p = f.a && f.b && istImDatensatz(f.a) && istImDatensatz(f.b) ? paarung(f.a, f.b) : null;
                 const besser = f.besser ? paarung(f.besser.a, f.besser.b) : null;
-                const u = urteil(p, f.art);
                 return (
                   <div
                     key={f.titel}
@@ -284,14 +441,18 @@ export default function FoodpairingPage() {
                   >
                     <div className="sm:col-span-4">
                       <h3 className="font-serif text-lg font-bold text-text-light">{f.titel}</h3>
-                      <span className={`mt-1.5 inline-block rounded-full border px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide ${u.klasse}`}>
-                        {u.label}
-                        {p && f.art !== 'kontrast' ? ` · ${p.stoffe.length}` : ''}
-                      </span>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {f.a ? <UrteilMarke p={p} /> : !f.kontrast && <UrteilMarke p={null} />}
+                        {f.kontrast?.map((k) => (
+                          <Marke key={k} klasse="border-[#5FB8B0] text-[#5FB8B0]">
+                            Kontrast: {k}
+                          </Marke>
+                        ))}
+                      </div>
                     </div>
                     <div className="font-sans text-sm leading-relaxed text-text-secondary sm:col-span-8">
                       <p>{f.text}</p>
-                      {p && p.stoffe.length > 0 && (
+                      {p && (p.stoffe.length > 0 || p.verwandt.length > 0) && (
                         <div className="mt-2">
                           <Noten p={p} />
                         </div>
@@ -307,79 +468,141 @@ export default function FoodpairingPage() {
                 );
               })}
             </div>
+
+            <div className="mt-6 rounded-xl border border-brand-fire/30 bg-surface-card p-6">
+              <h3 className="inline-flex items-center gap-2 font-serif text-xl font-bold text-text-light">
+                <AlertTriangle size={18} className="text-brand-fire" /> Vier Mythen, die du im Netz liest
+              </h3>
+              <ul className="mt-3 space-y-2 font-sans text-sm leading-relaxed text-text-secondary">
+                <li>
+                  <strong className="text-text-light">„Foodpairing ist wissenschaftlich bewiesen.“</strong> Bewiesen
+                  ist nur, dass manche Küchen solche Paare häufiger nutzen — nicht, dass sie besser schmecken.
+                </li>
+                <li>
+                  <strong className="text-text-light">„X und Y teilen 73 Stoffe, also passen sie.“</strong> Rohe
+                  Stoffzahlen ohne Konzentration und Geruchsschwelle sagen wenig. Es zählen Schlüssel-Aromen — deshalb
+                  sind unsere Zahlen klein.
+                </li>
+                <li>
+                  <strong className="text-text-light">„80 % des Geschmacks kommen aus der Nase.“</strong> Der Geruch
+                  dominiert das Aroma, aber diese Prozentzahl ist nicht belegt (
+                  <Quelle href="https://doi.org/10.1186/s13411-015-0040-2">Spence 2015</Quelle>).
+                </li>
+                <li>
+                  <strong className="text-text-light">„Gleiche Röstaromen“ bei Steak & Popcorn.</strong> Teils: Die
+                  Popcorn-Note ist gleich, die meisten Röstnoten im Steak stammen aber von anderen Molekülen — verwandt,
+                  nicht identisch.
+                </li>
+              </ul>
+            </div>
           </section>
 
-          {/* ── Brücke oder Kontrast ── */}
-          <section className="mt-14 grid gap-4 md:grid-cols-2" aria-label="Zwei Wege zum guten Pairing">
-            <div className="rounded-xl border border-brand-fire/40 bg-surface-card p-6">
-              <p className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-brand-fire">
-                <FlaskConical size={12} /> Weg 1
-              </p>
-              <h2 className="mt-1 font-serif text-2xl font-bold text-text-light">Brücke: gleiche Aromen</h2>
-              <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">
-                Zwei Zutaten teilen Schlüssel-Aromen und verstärken sich. Beispiel: Steak & Kaffee — Karamell, Rauch
-                und die Brühe-Note. Das ist Foodpairing im engeren Sinn.
-              </p>
-            </div>
-            <div className="rounded-xl border border-[#5FB8B0]/50 bg-surface-card p-6">
-              <p className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#5FB8B0]">
-                <Scale size={12} /> Weg 2
-              </p>
-              <h2 className="mt-1 font-serif text-2xl font-bold text-text-light">Kontrast: Gegensätze gleichen aus</h2>
-              <p className="mt-2 font-sans text-sm leading-relaxed text-text-secondary">
-                Säure schneidet Fett, Süße puffert Schärfe, Salz hebt Frucht. Beispiel: Essiggurke zum fetten Pulled
-                Pork. Hier teilen die Zutaten keine Aromen — sie ergänzen sich im Geschmack.
-              </p>
-            </div>
+          {/* ── Herkunft & Forschung ── */}
+          <section className="mt-14" aria-labelledby="forschung">
+            <h2 id="forschung" className="inline-flex items-center gap-2 font-serif text-2xl font-bold text-text-light sm:text-3xl">
+              <History size={22} className="text-brand-gold" /> Woher die Idee kommt — und was die Forschung sagt
+            </h2>
+            <ol className="mt-5 space-y-4 border-l border-brand-gold/30 pl-5">
+              {[
+                {
+                  jahr: 'um 2000',
+                  text: (
+                    <>
+                      Heston Blumenthal (The Fat Duck) probiert Salziges im Dessert und landet bei weißer Schokolade mit
+                      Kaviar. Der Aromachemiker François Benzi (Firmenich) erklärt ihm: Beide enthalten viele Amine.
+                      Blumenthal veröffentlicht das 2002 (
+                      <Quelle href="https://www.theguardian.com/lifeandstyle/2002/may/04/foodanddrink.shopping">
+                        The Guardian
+                      </Quelle>
+                      ).
+                    </>
+                  ),
+                },
+                {
+                  jahr: '2009',
+                  text: <>In Belgien gründet sich das Unternehmen Foodpairing® und macht die Idee zum Datenwerkzeug für Profiküchen.</>,
+                },
+                {
+                  jahr: '2010',
+                  text: (
+                    <>
+                      Blumenthal selbst rückt ab: Dass zwei Zutaten einen Stoff teilen, sei „a slender justification for
+                      compatibility“ — eine dünne Begründung (zitiert nach{' '}
+                      <Quelle href="https://doi.org/10.1186/s13411-017-0053-0">Spence et al. 2017</Quelle>).
+                    </>
+                  ),
+                },
+                {
+                  jahr: '2011',
+                  text: (
+                    <>
+                      Die große Rezeptanalyse: 56.498 Rezepte. Nordamerikanische und westeuropäische Küchen kombinieren
+                      bevorzugt Zutaten mit gemeinsamen Aromastoffen, ostasiatische und südeuropäische eher nicht. Der
+                      Effekt hängt an wenigen Zutaten wie Milch, Butter, Kakao, Vanille, Sahne und Ei (
+                      <Quelle href="https://doi.org/10.1038/srep00196">Ahn et al. 2011</Quelle>).
+                    </>
+                  ),
+                },
+                {
+                  jahr: '2015',
+                  text: (
+                    <>
+                      Indische Regionalküchen zeigen das Gegenteil: Sie kombinieren überwiegend Zutaten mit{' '}
+                      <em>wenig</em> Aroma-Überlappung — getrieben von den Gewürzen (
+                      <Quelle href="https://doi.org/10.1371/journal.pone.0139539">Jain et al. 2015</Quelle>).
+                    </>
+                  ),
+                },
+                {
+                  jahr: '2020',
+                  text: (
+                    <>
+                      Ein kritischer Übersichtsartikel nennt die Hypothese als Geschmacksregel widerlegt. Ähnlichkeit,
+                      Kontrast, Tradition und Textur zählen zusammen (
+                      <Quelle href="https://doi.org/10.1016/j.foodres.2020.109124">Spence 2020</Quelle>).
+                    </>
+                  ),
+                },
+              ].map((e) => (
+                <li key={e.jahr} className="relative">
+                  <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-brand-gold bg-surface-base" aria-hidden />
+                  <p className="font-sans text-xs font-bold uppercase tracking-wide text-brand-gold">{e.jahr}</p>
+                  <p className="mt-0.5 font-sans text-sm leading-relaxed text-text-secondary">{e.text}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 max-w-3xl rounded-xl border border-border-subtle bg-surface-card p-5 font-sans text-sm leading-relaxed text-text-secondary">
+              <strong className="text-text-light">Unser Umgang damit:</strong> Wir nutzen gemeinsame Schlüssel-Aromen als
+              Ideengeber und sagen dir offen, wie stark eine Brücke ist. Ob ein Paar auf dem Teller funktioniert,
+              entscheiden am Ende Menge, Garstufe, Kontrast — und dein Gaumen.
+            </p>
           </section>
 
-          {/* ── Grenzen & Datenbasis ── */}
-          <section className="mt-14 grid gap-4 lg:grid-cols-2" aria-label="Grenzen und Datenbasis">
-            <div className="rounded-xl border border-border-subtle bg-surface-card p-6">
-              <h2 className="font-serif text-2xl font-bold text-text-light">Wo die Theorie an Grenzen stößt</h2>
-              <p className="mt-3 font-sans text-sm leading-relaxed text-text-secondary">
-                Eine Auswertung von über 56.000 Rezepten zeigte: Nordamerikanische und westeuropäische Küchen
-                kombinieren bevorzugt Zutaten mit gemeinsamen Aromastoffen — ostasiatische Küchen eher nicht, und
-                schmecken trotzdem hervorragend (
-                <a
-                  href="https://doi.org/10.1038/srep00196"
-                  className="underline hover:text-brand-fire"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ahn et al., Scientific Reports 2011
-                </a>
-                ).
-              </p>
-              <p className="mt-3 font-sans text-sm leading-relaxed text-text-secondary">
-                Gemeinsame Aromen sind deshalb ein Kompass, kein Gesetz. Grundgeschmack (süß, sauer, salzig, bitter,
-                umami), Textur, Temperatur und Menge entscheiden mit, ob ein Paar auf dem Teller funktioniert.
-              </p>
-            </div>
-            <div className="rounded-xl border border-brand-gold/30 bg-surface-card p-6">
-              <h2 className="inline-flex items-center gap-2 font-serif text-2xl font-bold text-text-light">
-                <Microscope size={20} className="text-brand-gold" /> Unsere Datenbasis
-              </h2>
-              <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {[
-                  [stat.zutaten, 'Zutaten'],
-                  [stat.stoffe, 'Schlüssel-Aromen'],
-                  [stat.kanten, 'Verbindungen'],
-                  [stat.studien, 'Fachstudien'],
-                ].map(([zahl, label]) => (
-                  <div key={label} className="rounded-lg bg-surface-base p-3 text-center">
-                    <dt className="order-2 font-sans text-[11px] text-text-muted">{label}</dt>
-                    <dd className="font-serif text-2xl font-bold text-brand-gold">{zahl}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-4 font-sans text-sm leading-relaxed text-text-secondary">
-                Viele Foodpairing-Tools zählen jedes Molekül, das zwei Zutaten gemeinsam haben — auch Spuren, die
-                niemand riecht. Wir zählen nur Schlüssel-Aromen, die in Fachstudien per Verdünnungsanalyse,
-                Aromawert oder Nachbau-Versuch als geruchsprägend nachgewiesen sind. Jede Verbindung hat eine Quelle
-                mit DOI. Weniger Treffer, aber jeder ist am Gaumen spürbar.
-              </p>
-            </div>
+          {/* ── Datenbasis ── */}
+          <section className="mt-14 rounded-xl border border-brand-gold/30 bg-surface-card p-6" aria-labelledby="daten">
+            <h2 id="daten" className="inline-flex items-center gap-2 font-serif text-2xl font-bold text-text-light">
+              <Microscope size={20} className="text-brand-gold" /> Unsere Datenbasis
+            </h2>
+            <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                [stat.zutaten, 'Zutaten'],
+                [stat.stoffe, 'Schlüssel-Aromen'],
+                [stat.kanten, 'Verbindungen'],
+                [stat.studien, 'Fachstudien'],
+              ].map(([zahl, label]) => (
+                <div key={label} className="flex flex-col-reverse rounded-lg bg-surface-base p-3 text-center">
+                  <dt className="font-sans text-[11px] text-text-muted">{label}</dt>
+                  <dd className="font-serif text-2xl font-bold text-brand-gold">{zahl}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 max-w-3xl font-sans text-sm leading-relaxed text-text-secondary">
+              Wir zählen nur Schlüssel-Aromen, die in Fachstudien per Verdünnungsanalyse, Aromawert oder
+              Nachbau-Versuch als geruchsprägend nachgewiesen sind — jede Verbindung mit Quelle und DOI.{' '}
+              <strong className="text-text-light">Verwandte Noten</strong> fassen wir eng: nur Stoffklassen, die
+              ähnlich riechen (etwa Röstnoten aus Pyrazinen, Pyrrolinen und Thiazolinen). Weniger Treffer, aber jeder
+              ist am Gaumen spürbar.
+            </p>
           </section>
 
           {/* ── FAQ ── */}
@@ -409,7 +632,7 @@ export default function FoodpairingPage() {
                 Die Foodpairing-Suche findet Partner für jede der {stat.zutaten} Zutaten — und schmiedet dir auf Wunsch
                 gleich ein Rezept daraus.
               </p>
-              <span className="mt-3 inline-flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+              <span className="mt-3 inline-flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold transition-[gap] group-hover:gap-2">
                 Zur Suche <ChevronRight size={14} />
               </span>
             </Link>
@@ -422,7 +645,7 @@ export default function FoodpairingPage() {
               <p className="mt-1 font-sans text-sm text-text-secondary">
                 Rub, Räucherholz und das passende Glas — zugeschnitten auf Ribeye, Brisket, Flank und mehr.
               </p>
-              <span className="mt-3 inline-flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+              <span className="mt-3 inline-flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold transition-[gap] group-hover:gap-2">
                 Cut wählen <ChevronRight size={14} />
               </span>
             </Link>
