@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   description: BESCHREIBUNG,
   alternates: { canonical: `https://steakakademie.de${URL}` },
   openGraph: {
-    images: ogImages('Foodpairing', 'Warum Steak und Schokolade zusammenpassen'),
+    images: ogImages('Foodpairing erklärt', 'Warum Steak und Schokolade zusammenpassen'),
     title: TITEL,
     description: BESCHREIBUNG,
     url: `https://steakakademie.de${URL}`,
@@ -133,7 +133,7 @@ export default function FoodpairingPage() {
     {
       question: 'Wie nutze ich Foodpairing am Grill?',
       answer:
-        'Über drei Hebel: Ähnlichkeit (Kaffee oder Kakao im Rub für Rind), Kontrast (Essiggurke oder Krautsalat zu fettem Pulled Pork) und Synergie (Parmesan oder Pilze zum Steak — Umami verstärkt sich). Die Foodpairing-Suche auf der Startseite und der Aroma-Matcher zeigen dir passende Partner.',
+        'Über drei Hebel: Ähnlichkeit (Kaffee oder Kakao im Rub für Rind), Kontrast (Essiggurke oder Krautsalat zu fettem Pulled Pork) und Synergie (Parmesan oder Pilze zum Steak — Umami verstärkt sich). Das Aroma-Tuning auf der Startseite und der Aroma-Matcher zeigen dir passende Partner.',
     },
   ];
 
@@ -629,7 +629,7 @@ export default function FoodpairingPage() {
               <FlaskConical size={20} className="text-brand-fire" />
               <h2 className="mt-2 font-serif text-xl font-bold text-text-light">Deine Zutat testen</h2>
               <p className="mt-1 font-sans text-sm text-text-secondary">
-                Die Foodpairing-Suche findet Partner für jede der {stat.zutaten} Zutaten — und schmiedet dir auf Wunsch
+                Das Aroma-Tuning findet Partner für jede der {stat.zutaten} Zutaten — und schmiedet dir auf Wunsch
                 gleich ein Rezept daraus.
               </p>
               <span className="mt-3 inline-flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wide text-brand-gold transition-[gap] group-hover:gap-2">
