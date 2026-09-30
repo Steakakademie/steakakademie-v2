@@ -149,13 +149,48 @@ export async function callClaude (o) {
   throw lastErr
 }
 
-/** Toleranter JSON-Parser für Modell-Antworten (```json-Fences, Vorwort). */
+/**
+ * Maskiert rohe Steuerzeichen INNERHALB von JSON-Strings (Zeilenumbruch, Tab …).
+ * Modelle schreiben Markdown-Felder oft mit echten Zeilenumbrüchen statt \n —
+ * JSON.parse bricht dann mit „Bad control character in string literal" ab
+ * (KAN-84, saison-grow 26.09.2026). Außerhalb von Strings bleibt alles unverändert.
+ */
+export function maskiereSteuerzeichen (t) {
+  let out = ''
+  let inString = false
+  let escaped = false
+  for (const ch of String(t)) {
+    if (inString) {
+      if (escaped) { out += ch; escaped = false; continue }
+      if (ch === '\\') { out += ch; escaped = true; continue }
+      if (ch === '"') { out += ch; inString = false; continue }
+      const code = ch.charCodeAt(0)
+      if (code < 0x20) {
+        out += ch === '\n' ? '\\n' : ch === '\r' ? '\\r' : ch === '\t' ? '\\t'
+          : '\\u' + code.toString(16).padStart(4, '0')
+        continue
+      }
+      out += ch
+    } else {
+      if (ch === '"') inString = true
+      out += ch
+    }
+  }
+  return out
+}
+
+/** Toleranter JSON-Parser für Modell-Antworten (```json-Fences, Vorwort, rohe Zeilenumbrüche in Strings). */
 export function parseJson (text) {
-  let t = String(text).trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim()
-  try { return JSON.parse(t) } catch {}
+  const t = String(text).trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim()
   const m = t.match(/[{[][\s\S]*[}\]]/)
+  const versuche = [t, maskiereSteuerzeichen(t)]
+  if (m) versuche.push(m[0], maskiereSteuerzeichen(m[0]))
+  let letzterFehler
+  for (const v of versuche) {
+    try { return JSON.parse(v) } catch (e) { letzterFehler = e }
+  }
   if (!m) throw new Error('Kein JSON in der Antwort')
-  return JSON.parse(m[0])
+  throw letzterFehler
 }
 
 /* ── Mehrstufige Konversation ────────────────────────────────────────────── */
