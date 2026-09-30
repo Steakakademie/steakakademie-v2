@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { berechneWeg, type Antworten } from '@/lib/eigenregie/diagnose';
-import { angebotFuer, PILOT_ENDE, PILOT_PREIS, REGULAERER_PREIS } from '@/lib/eigenregie/angebot';
+import { angebotFuer, PILOT_ENDE, PILOT_PREIS, REGULAERER_PREIS, REGULAER_AB } from '@/lib/eigenregie/angebot';
 
 const basis: Antworten = {
   ziel: 'kunden', heute: 'wordpress', zugaenge: 'ja', zeit: '2-5', technik: 'office', gewerbe: 'ja', kostenHeute: 300, idee: '',
@@ -31,12 +31,16 @@ describe('Eigenregie-Diagnose', () => {
 });
 
 describe('Eigenregie-Angebot', () => {
-  const vorher = new Date('2026-10-31T22:00:00Z'); // 23:00 MEZ
-  const nachher = new Date('2026-10-31T23:00:00Z'); // 00:00 MEZ am 01.11.
-  it('Pilotpreis bis 31.10. 23:59:59 MEZ, danach regulär — für alle gleich', () => {
+  const vorher = new Date('2026-12-31T22:00:00Z'); // 23:00 MEZ
+  const nachher = new Date('2026-12-31T23:00:00Z'); // 00:00 MEZ am 01.01.2027
+  it('Pilotpreis bis 31.12.2026 23:59:59 MEZ, danach regulär — für alle gleich', () => {
     expect(vorher.getTime()).toBeLessThan(PILOT_ENDE.getTime());
     expect(angebotFuer(vorher, 3)).toMatchObject({ preis: PILOT_PREIS, pilot: true, freiePlaetze: 7 });
     expect(angebotFuer(nachher, 3)).toMatchObject({ preis: REGULAERER_PREIS, pilot: false });
+  });
+  it('Seite und strukturierte Daten nennen dieselben Daten wie PILOT_ENDE', () => {
+    expect(PILOT_ENDE.toLocaleDateString('sv-SE', { timeZone: 'Europe/Berlin' })).toBe('2026-12-31');
+    expect(REGULAER_AB.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Berlin' })).toBe('1. Januar 2027');
   });
   it('Nach 10 Plätzen ausverkauft, unbekannte Zahl bleibt unbekannt', () => {
     expect(angebotFuer(vorher, 10).ausverkauft).toBe(true);
