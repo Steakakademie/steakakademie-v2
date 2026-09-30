@@ -45,7 +45,10 @@ const flag = (name, def = undefined) => {
   return i >= 0 ? (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true) : def
 }
 const FILE      = flag('file')
-const MODEL     = flag('model', 'voyage-3.5')   // 1024 Dimensionen (passt zu vector(1024))
+// Muss zum Query-Modell in src/lib/kochwissen/voyage.ts passen (Wächter: src/__tests__/voyage-modell.test.ts).
+// voyage-3.5 bis 22.08.2026; am 15.09. hat ein Ingest mit diesem alten Default 114 Rezepte
+// wieder mit voyage-3.5 eingebettet und den voyage-4-Korpus gemischt.
+const MODEL     = flag('model', process.env.VOYAGE_MODEL ?? 'voyage-4')   // 1024 Dimensionen (passt zu vector(1024))
 const DRY_RUN   = !!flag('dry-run', false)
 // Gratis-Voyage (ohne Zahlungsmethode) drosselt auf 3 RPM / 10K TPM. Daher kleine
 // Batches + Pause zwischen Requests; mit Zahlungsmethode: --batch 96 --throttle-ms 0

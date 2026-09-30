@@ -40,7 +40,7 @@ const flag = (n, d) => {
 const APPLY     = !!flag('apply', false)
 const SOURCE    = flag('source', null)
 const MIN_SCORE = parseFloat(flag('min-score', '0.5'))
-const MODEL     = flag('model', 'voyage-3.5')
+const MODEL     = flag('model', process.env.VOYAGE_MODEL ?? 'voyage-4')   // wie kochwissen-ingest.mjs
 
 // ─── Titel-Aehnlichkeit (Token-Jaccard) ───────────────────────────────────────
 const STOP = new Set(['der','die','das','und','oder','mit','ohne','fuer','von','bei','im','in','am','zum','zur','des','ein','eine'])
