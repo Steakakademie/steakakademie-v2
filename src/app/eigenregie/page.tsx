@@ -5,7 +5,7 @@ import { ChevronRight, CheckCircle2, XCircle, ArrowRight, Lock, CalendarClock, U
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ogImages } from '@/lib/og';
-import { angebotFuer, euro, CHECKOUT_URL, PILOT_ENDE, PILOT_PLAETZE, PILOT_PREIS, REGULAERER_PREIS } from '@/lib/eigenregie/angebot';
+import { angebotFuer, euro, CHECKOUT_URL, PILOT_ENDE, PILOT_PLAETZE, PILOT_PREIS, REGULAERER_PREIS, REGULAER_AB } from '@/lib/eigenregie/angebot';
 import { vergebenePlaetze } from '@/lib/eigenregie/plaetze.server';
 import { KOSTEN } from '@/lib/eigenregie/diagnose';
 import { allEigenregieModuls } from 'contentlayer/generated';
@@ -91,7 +91,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
       '@type': 'Offer',
       priceCurrency: 'EUR',
       price: angebot.preis,
-      ...(angebot.pilot ? { priceValidUntil: '2026-10-31' } : {}),
+      ...(angebot.pilot ? { priceValidUntil: PILOT_ENDE.toLocaleDateString('sv-SE', { timeZone: 'Europe/Berlin' }) } : {}),
       availability: kaufbar ? 'https://schema.org/InStock' : angebot.ausverkauft ? 'https://schema.org/SoldOut' : 'https://schema.org/PreOrder',
       url: 'https://steakakademie.de/eigenregie',
     },
@@ -298,7 +298,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
               ))}
             </div>
             <p className="font-body text-xs text-text-muted mt-8">
-              Zum Vergleich der Pilotpreis: {euro(PILOT_PREIS)} gegenüber {euro(REGULAERER_PREIS)} regulär ab 1. November 2026.
+              Zum Vergleich der Pilotpreis: {euro(PILOT_PREIS)} gegenüber {euro(REGULAERER_PREIS)} regulär ab {REGULAER_AB.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Berlin' })}.
             </p>
           </div>
         </section>
