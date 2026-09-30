@@ -36,8 +36,9 @@ Erreicht er das nicht, oder ist das Steak dünn → Methode Kalt.
 
 - **Dauer:** 5 Minuten Standard. Bis 7 Minuten bei dicken Stücken am Knochen
   (Beispiel des Betreibers: Ochsenkotelett). `[B]`
-- **Untergrund muss warm sein.** Zulässig: vorgewärmtes Holzbrett, Stein oder Ziegel,
-  im Backofen bei **75 °C** vorgewärmt. Ebenso ein Rost mit Auffang für austretenden
+- **Untergrund muss warm sein.** Zulässig: Holzbrett, im Backofen auf **85 °C**
+  vorgewärmt, oder Stein bzw. Ziegel auf **75 °C** — Stein speichert die Hitze länger
+  und gibt mehr ab (Uwe, 30.09.2026). Ebenso ein Rost mit Auffang für austretenden
   Fleischsaft, ebenfalls bei 75 °C. `[B]`
 - **Niemals einpacken.** Keine Folie, keine Abdeckung. Es entsteht Kondenswasser, die
   Kruste weicht auf. `[B]`

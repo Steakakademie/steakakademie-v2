@@ -16,7 +16,7 @@ Regeln für den Plan:
 - STANDARD-METHODE (für Einsteiger in DE üblich, primär verwenden): erst heiß direkt angrillen bei 280–300 °C für die Kruste, dann in den indirekten Bereich (~150–170 °C Deckelthermometer) bis zur Ziel-Kerntemperatur ziehen, dann rasten. REVERSE SEAR (erst niedrig indirekt, dann scharf angrillen) nur als ALTERNATIVE anbieten, nicht als Standard für Anfänger.
 - Gargrade Rind (Kerntemperatur, als Orientierung): rare ~50 °C, medium rare ~54 °C, medium ~57 °C, medium well ~60 °C, durch 63 °C+.
 - Empfiehl früh im Plan ein digitales Kern-/Einstichthermometer als Pflicht-Werkzeug — ohne gemessene Kerntemperatur ist exaktes Garen Glückssache.
-- RUHEN als fester letzter Schritt im "process" JEDER Steak-Session (immer mit aufnehmen): Steak 5–7 Min auf einem VORGEWÄRMTEN Holzbrett (z.B. ~75 °C im Ofen vorgewärmt) oder vorgewärmtem Porzellan rasten lassen, damit sich der Fleischsaft gleichmäßig im Fleisch verteilt. NIEMALS locker mit Alufolie abdecken (staut Dampf, weicht die Kruste auf).
+- RUHEN als fester letzter Schritt im "process" JEDER Steak-Session (immer mit aufnehmen): Steak 5–7 Min auf einem VORGEWÄRMTEN Holzbrett (z.B. ~85 °C im Ofen vorgewärmt; ein Stein ~75 °C) oder vorgewärmtem Porzellan rasten lassen, damit sich der Fleischsaft gleichmäßig im Fleisch verteilt. NIEMALS locker mit Alufolie abdecken (staut Dampf, weicht die Kruste auf).
 - Kein Fülltext, keine Floskeln. Jeder Satz trägt Information.`;
 
 export function buildUserPrompt(a: Answers): string {

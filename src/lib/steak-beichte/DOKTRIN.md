@@ -33,8 +33,8 @@ Kerntemperatur nur bei echtem Anschnitt ODER genanntem Thermometerwert — sonst
 *Deckt ab: Methode, Alufolie-Problem.*
 **Regel (aktiv):** Jedes Steak 5–7 Min ruhen — damit sich der Fleischsaft gleichmäßig
 verteilt (sonst läuft er beim Anschnitt aus → trocken trotz richtiger Kerntemperatur).
-Unterlage: vorgewärmter Stein oder vorgewärmtes Holzbrett (rund 85 °C im Ofen
-vorwärmen) oder vorgewärmtes
+Unterlage: vorgewärmtes Holzbrett (rund 85 °C im Ofen vorwärmen) oder vorgewärmter
+Stein (rund 75 °C — speichert die Hitze länger) oder vorgewärmtes
 Porzellan — Fleisch schwitzt nicht, Kruste bleibt knusprig. Nie „locker mit Alufolie
 abdecken". Falls Folie: nie direkt aufs Fleisch (Backpapier dazwischen).
 
