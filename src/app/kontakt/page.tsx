@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 import Link from 'next/link';
 import { ChevronRight, Mail, MessageSquare, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -37,6 +37,7 @@ const CONTACT_OPTIONS = [
 export default function KontaktPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', consent: false, website: '' });
   const [turnstileToken, setTurnstileToken] = useState('');
+  const wartetAufCaptcha = Boolean(TURNSTILE_SITE_KEY) && !turnstileToken;
   // Vorbelegung aus der URL (z. B. /kontakt?betreff=hofladen&hof=<slug> aus dem
   // Hofladen-Radar): Betreff und ein Nachrichten-Anfang, damit der Hof-Bezug
   // nicht verloren geht. Nach dem Mount, damit Server- und Client-HTML gleich
@@ -235,10 +236,10 @@ export default function KontaktPage() {
 
                 <button
                   type="submit"
-                  disabled={state === 'sending' || !form.consent}
+                  disabled={state === 'sending' || wartetAufCaptcha || !form.consent}
                   className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {state === 'sending' ? 'Wird gesendet…' : 'Nachricht senden →'}
+                  {state === 'sending' ? 'Wird gesendet…' : wartetAufCaptcha ? 'Sicherheitsprüfung…' : 'Nachricht senden →'}
                 </button>
               </form>
             )}

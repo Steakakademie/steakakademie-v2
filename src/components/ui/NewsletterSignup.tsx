@@ -6,7 +6,7 @@ import { Flame, Check, Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { trackEvent } from '@/components/analytics/PlausibleScript';
 import { NEWSLETTER_CONSENT_TEXT, NEWSLETTER_CONSENT_VERSION } from '@/lib/newsletter-consent';
-import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -94,7 +94,8 @@ export default function NewsletterSignup({
   const consentId = useId();
 
   const emailValid = EMAIL_RE.test(email.trim());
-  const canSubmit = emailValid && consent && status !== 'loading';
+  const wartetAufCaptcha = Boolean(TURNSTILE_SITE_KEY) && !turnstileToken;
+  const canSubmit = emailValid && consent && status !== 'loading' && !wartetAufCaptcha;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
