@@ -29,7 +29,7 @@ export default function AgbPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Allgemeine Geschäftsbedingungen
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -68,8 +68,17 @@ export default function AgbPage() {
               <p>
                 Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer (sofern
                 anwendbar). Als Kleinunternehmer gemäß § 19 UStG kann keine Umsatzsteuer
-                ausgewiesen werden. Verfügbare Zahlungsmethoden (u.&nbsp;a. SEPA-Lastschrift,
-                PayPal, Klarna) werden beim Bestellvorgang über Digistore24 angezeigt.
+                ausgewiesen werden. Für digitale Produkte werden die verfügbaren
+                Zahlungsmethoden (u.&nbsp;a. SEPA-Lastschrift, PayPal, Klarna) beim
+                Bestellvorgang über Digistore24 angezeigt.
+              </p>
+              <p className="mt-3">
+                <strong className="text-text-primary">Gedruckte Urkunden</strong> werden nicht über
+                Digistore24 abgewickelt. Nach dem Absenden der Bestellung erhältst du eine
+                Eingangsbestätigung per E-Mail; sie ist noch keine Annahme deines Angebots. Nach
+                Prüfung deiner Bestellung senden wir dir per E-Mail eine Rechnung mit den
+                Zahlungsinformationen. Mit dieser E-Mail kommt der Vertrag zustande (§&nbsp;2). Die
+                Zahlung erfolgt per Überweisung; der Druck beginnt nach Zahlungseingang.
               </p>
             </section>
 
