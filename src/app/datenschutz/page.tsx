@@ -700,8 +700,9 @@ export default function DatenschutzPage() {
                 Wenn du eine gedruckte Urkunde bestellst, speichern wir deine Bestellung (Name auf der
                 Urkunde, Level, Versandadresse, E-Mail-Adresse, Zeitpunkt deiner Einwilligung) und
                 übermitteln Name und Versandadresse an unseren Druckdienstleister{' '}
-                <strong className="text-text-primary">Gelato</strong>, der die Urkunde druckt und
-                verschickt. Gelato verarbeitet die Daten als Auftragsverarbeiter (Art. 28 DSGVO) auf
+                <strong className="text-text-primary">Gelato ASA</strong>, Dronning Eufemias Gate 8,
+                0191 Oslo, Norwegen, der die Urkunde druckt und verschickt. Norwegen gehört zum
+                Europäischen Wirtschaftsraum; die DSGVO gilt dort unmittelbar. Gelato verarbeitet die Daten als Auftragsverarbeiter (Art. 28 DSGVO) auf
                 Grundlage seiner Data Processing Terms, die Teil der Nutzungsbedingungen sind
                 (<a href="https://www.gelato.com/legal/data-processing-terms" target="_blank" rel="noopener noreferrer" className={linkClass}>gelato.com/legal/data-processing-terms</a>).
               </p>

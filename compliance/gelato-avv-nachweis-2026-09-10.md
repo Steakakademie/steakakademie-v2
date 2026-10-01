@@ -5,6 +5,27 @@
 Druckdienstleister fehlte als Voraussetzung, um Kundenadressen für den Versand
 gedruckter Urkunden automatisiert an Gelato zu übertragen.
 
+## Vertragspartner (ergänzt 01.10.2026)
+
+**Gelato ASA**, Dronning Eufemias Gate 8, 0191 Oslo, Norwegen (EWR).
+
+Wörtlich aus den Gelato API Terms, Abschnitt Definitionen (Last Updated Date:
+2 June 2025, abgerufen 01.10.2026):
+
+> "Gelato (or we): Gelato ASA, Norwegian company having its principal place of
+> business at Dronning Eufemias Gate 8, 0191 Oslo, Norway."
+
+Dieselbe Anschrift nennen die API Terms als Zustelladresse für Mitteilungen.
+Eine Organisationsnummer steht weder in den API Terms noch in den Data
+Processing Terms.
+
+**Offen für die Rechtsprüfung:** Die Data Processing Terms (Last Updated Date:
+29 November 2024) führen 91 Druckpartner als Unterauftragsverarbeiter weltweit,
+u. a. in Drittländern, und verweisen dafür auf die EU-Standardvertragsklauseln.
+Welcher Partner eine Bestellung aus Deutschland druckt, ist dort nicht
+festgelegt. Ob Datenschutz 10e die Unterauftragsverarbeiter bzw. mögliche
+Drittlandübermittlungen nennen muss, ist nicht geklärt.
+
 ## Befund
 
 Gelato verlangt **keine separat unterschriebene AVV-Datei**. Der Auftragsverarbeitungsvertrag
