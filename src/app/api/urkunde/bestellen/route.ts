@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/lib/api/guard';
 import { stufeOfLevel, LEVELS } from '@/lib/diplome/stufen';
 import { dienstClient } from '@/lib/urkunde/produktion';
-import { meldeBestellung } from '@/lib/urkunde/benachrichtigung';
-import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/lib/urkunde/preis';
+import { meldeBestellung, bestaetigeBestellung } from '@/lib/urkunde/benachrichtigung';
+import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_WIDERRUF_HINWEIS, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/lib/urkunde/preis';
 
 /**
  * POST /api/urkunde/bestellen — Bestellung einer gedruckten Urkunde.
@@ -125,6 +125,15 @@ export async function POST(req: Request) {
     ].filter(Boolean).join('\n'),
     email,
   );
+
+  await bestaetigeBestellung(email, {
+    stufeName: `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
+    nameAufUrkunde: b.nameAufUrkunde,
+    preis: `${urkundePreisText()} (Versand inklusive, ohne Umsatzsteuer nach § 19 UStG)`,
+    bestellId: zeile.id,
+    adresse: [`${b.vorname} ${b.nachname}`, b.strasse, b.adresszusatz ?? '', `${b.plz} ${b.ort}`, b.land].filter(Boolean).join(', '),
+    widerrufHinweis: URKUNDE_WIDERRUF_HINWEIS,
+  });
 
   return Response.json({ ok: true, id: zeile.id });
 }

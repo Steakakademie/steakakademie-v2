@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 import { LEVELS, STUFEN, stufeByNr, gradMitTraeger, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
 import {
   URKUNDE_CONSENT_TEXT,
+  URKUNDE_WIDERRUF_HINWEIS,
   URKUNDE_LAENDER,
   urkundePreisMitVersand,
   urkundePreisText,
@@ -362,6 +363,10 @@ export default function UrkundePage() {
                 Druckdienstleister Gelato übermittelt.
                 Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
               </p>
+              <p className="text-text-light/50 text-xs font-body leading-relaxed">
+                <strong>Kein Widerrufsrecht:</strong> {URKUNDE_WIDERRUF_HINWEIS} Du erhältst eine
+                Bestätigung deiner Bestellung per E-Mail.
+              </p>
 
               {state === 'error' && fehler && (
                 <p className="text-sm font-sans text-brand-fire">{fehler}</p>
@@ -372,7 +377,7 @@ export default function UrkundePage() {
                 disabled={state === 'submitting' || !consent}
                 className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {state === 'submitting' ? 'Wird gesendet…' : `Gedruckte Urkunde bestellen — ${urkundePreisText()} →`}
+                {state === 'submitting' ? 'Wird gesendet…' : `Zahlungspflichtig bestellen — ${urkundePreisText()} →`}
               </button>
             </motion.form>
           )}

@@ -695,6 +695,24 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>10e. Gedruckte Urkunden (Druck und Versand über Gelato)</h2>
+              <p className="mb-3">
+                Wenn du eine gedruckte Urkunde bestellst, speichern wir deine Bestellung (Name auf der
+                Urkunde, Level, Versandadresse, E-Mail-Adresse, Zeitpunkt deiner Einwilligung) und
+                übermitteln Name und Versandadresse an unseren Druckdienstleister{' '}
+                <strong className="text-text-primary">Gelato</strong>, der die Urkunde druckt und
+                verschickt. Gelato verarbeitet die Daten als Auftragsverarbeiter (Art. 28 DSGVO) auf
+                Grundlage seiner Data Processing Terms, die Teil der Nutzungsbedingungen sind
+                (<a href="https://www.gelato.com/legal/data-processing-terms" target="_blank" rel="noopener noreferrer" className={linkClass}>gelato.com/legal/data-processing-terms</a>).
+              </p>
+              <p className="mb-3">
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Erfüllung deiner Bestellung) sowie deine
+                Einwilligung im Bestellformular. Die Daten werden nur so lange gespeichert, wie es für
+                Abwicklung, Gewährleistung und gesetzliche Aufbewahrungspflichten erforderlich ist.
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>12. Cookies &amp; lokale Speicherung</h2>
               <p className="mb-3">
                 <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}

@@ -34,6 +34,14 @@ export const URKUNDE_CONSENT_TEXT =
   'übermittelt werden.';
 
 /**
+ * Widerrufshinweis fuer die Urkunde (§ 312g Abs. 2 Nr. 1 BGB): Sie wird mit dem
+ * Namen des Bestellers bzw. Beschenkten angefertigt, also nach Kundenspezifikation.
+ */
+export const URKUNDE_WIDERRUF_HINWEIS =
+  'Die Urkunde wird nach deinen Angaben individuell angefertigt (Name, Level). ' +
+  'Für solche Waren besteht gemäß § 312g Abs. 2 Nr. 1 BGB kein Widerrufsrecht.';
+
+/**
  * Länder, in die bestellt werden kann (ISO 3166-1 alpha-2).
  *
  * EINE Liste für beide Seiten: Das Auswahlfeld auf /diplome/urkunde rendert
