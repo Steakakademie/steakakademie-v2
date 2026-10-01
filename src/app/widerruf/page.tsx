@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WiderrufForm from './WiderrufForm';
+import { URKUNDE_WIDERRUF_HINWEIS } from '@/lib/urkunde/preis';
 
 export const metadata: Metadata = {
   title: 'Vertrag widerrufen',
@@ -45,7 +46,8 @@ export default function WiderrufPage() {
 
               <p className="font-body text-xs text-text-muted leading-relaxed mt-10 border-t border-border-subtle pt-5">
                 Hinweis: Für bestimmte Verträge besteht kein Widerrufsrecht (z. B. digitale Inhalte,
-                deren Ausführung du ausdrücklich vor Ablauf der Widerrufsfrist zugestimmt hast).
+                deren Ausführung du ausdrücklich vor Ablauf der Widerrufsfrist zugestimmt hast,
+                oder gedruckte Urkunden: {URKUNDE_WIDERRUF_HINWEIS}).
                 Details findest du in unseren{' '}
                 <Link href="/agb" className="text-brand-gold hover:text-brand-fire underline">AGB</Link>{' '}
                 und der dortigen Widerrufsbelehrung.
