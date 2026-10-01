@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-28T11:40:44.330Z",
+ "aktualisiert": "2026-10-01T11:36:31.009Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -2073,6 +2073,55 @@
     "Beef Rub"
    ],
    "gesehen": "2026-09-28",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:back-to-basics-a-hot-date-with-bacon-blue-cheese-and-hot-honey",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "Back to Basics: A Hot Date with Bacon, Blue Cheese, and Hot Honey",
+   "link": "https://barbecuebible.com/2026/09/29/bacon-wrapped-dates/",
+   "datum": "Tue, 29 Sep 2026 17:00:24 +0000",
+   "kategorien": [
+    "Back to Barbecue Basics",
+    "Homepage Feature",
+    "Pork",
+    "Recipes",
+    "Recipes & Techniques",
+    "Bacon Wrapped Dates"
+   ],
+   "gesehen": "2026-10-01",
+   "status": "neu"
+  },
+  {
+   "id": "barbecuebible:how-to-candy-bacon",
+   "quelle": "barbecuebible",
+   "quelleName": "Barbecue Bible",
+   "quelleUrl": "https://barbecuebible.com/",
+   "eignung": [
+    "rezept",
+    "artikel",
+    "technik"
+   ],
+   "schwerpunkt": "Internationales Grillen, Technik, Grill-Kulturen",
+   "titel": "How to Candy Bacon",
+   "link": "https://barbecuebible.com/2026/09/25/how-to-candy-bacon/",
+   "datum": "Fri, 25 Sep 2026 10:00:22 +0000",
+   "kategorien": [
+    "Homepage Feature",
+    "Pork",
+    "Recipes",
+    "bacon",
+    "Candied Bacon"
+   ],
+   "gesehen": "2026-10-01",
    "status": "neu"
   }
  ]
