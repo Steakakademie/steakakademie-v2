@@ -29,11 +29,20 @@ KI-Crawler ausdrücklich zuließ.
 | robots.txt | `public/robots.txt` | Training-Crawler `Disallow: /`, Such-Crawler erlaubt |
 | Sitemap | `next-sitemap.config.js` | 163 noindex-URLs raus (159× `/relaunch/*`, 3 Rechtsseiten, `apple-icon.png`) — 585 → 419 URLs |
 
-**Nicht geprüft in der Session:** Playwright-E2E, Vercel-Preview, das Turnstile-
-Widget im Browser (kein Site-Key vorhanden). Geprüft: tsc 0 Fehler, eslint 0
-Fehler, Vitest 10/10 neue Tests, `next build` grün (419 Sitemap-URLs),
-`next start`-Smoke: robots/tdmrep/tdm-policy 200, Header gesetzt, Honeypot auf
-Newsletter (JSON) und Kontakt (Formular-POST) liefert stilles OK.
+**LIVE und bewiesen (01.10.2026, 15:17):** Produktions-Build mit Schlüsseln
+(PR #270, Deploy 15:12). Uwe hat das Kontaktformular auf dem Preview in seinem
+normalen Chrome abgeschickt: Turnstile unsichtbar bestanden (Token in beiden
+Widgets, Höhe 0 px), „Nachricht gesendet". Server auf steakakademie.de: POST
+ohne Token → 403; Site-Key im Client-Bundle (`chunks/5950-*.js`) nachgewiesen.
+**Lehre:** Der Automatisierungs-Browser der Claude-App (Electron + Debugger)
+fällt bei Turnstile IMMER durch — Fehlercode `600010` („Challenge nicht
+bestanden"). Das ist kein Konfigurationsfehler (der wäre `110200`, Hostname),
+sondern der Beweis, dass die Prüfung greift. Erfolgsfall nur in einem echten
+Browser testen. Nicht geprüft: Playwright-E2E gegen Formulare mit Turnstile —
+E2E läuft ohne Env-Vars, dort rendert kein Widget und der Server überspringt;
+bleibt so, solange die Secrets nicht in den Workflow wandern (bewusst nicht).
+Geprüft vor dem Merge: tsc 0 Fehler, eslint 0 Fehler, Vitest 10/10, `next build`
+grün (419 Sitemap-URLs), `next start`-Smoke.
 
 ## Canonical-Crawl (01.10.2026, live, 585 Sitemap-URLs)
 
@@ -53,9 +62,9 @@ Bild-Route `apple-icon.png`. Alle aus der Sitemap genommen (siehe Tabelle).
    (plain) und `TURNSTILE_SECRET_KEY` (sensitive) in Production, Preview und
    Development gesetzt. Greift ab dem nächsten Build — der PR-Preview wurde
    danach neu angestoßen.
-3. **Erst nach dem Merge + Produktions-Deploy** Supabase → Authentication → Attack Protection → Captcha →
-   Turnstile, Secret eintragen. Vorher nicht — sonst sperrt sich der Login aus,
-   weil der Browser noch kein Token liefert.
+3. **Jetzt möglich (Prod-Build mit Schlüsseln ist seit 15:12 live):** Supabase
+   → Authentication → Attack Protection → Captcha → Turnstile, Secret aus Vercel
+   eintragen. Danach einmal Login per Passwort UND Magic-Link testen.
 4. **Vercel Firewall** (vercel.com → Projekt → Firewall). Stand 01.10.2026: für
    das Projekt wurde noch nie eine Firewall-Konfiguration angelegt (API:
    „Config not found"); das Anlegen aus der Session war gesperrt. Empfehlung:
