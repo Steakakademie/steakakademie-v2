@@ -44,13 +44,16 @@ Bild-Route `apple-icon.png`. Alle aus der Sitemap genommen (siehe Tabelle).
 
 ## Was Uwe tun muss (Reihenfolge einhalten)
 
-1. **Turnstile anlegen:** dashboard.cloudflare.com → Turnstile → Add Site.
-   Hostnames `steakakademie.de`, `tuwasduwillst.de`, `*.vercel.app`. Modus
-   „Managed". Kosten 0 €. **Keine DNS-Änderung.**
-2. **Vercel-Env** (Production + Preview): `NEXT_PUBLIC_TURNSTILE_SITE_KEY`,
-   `TURNSTILE_SECRET_KEY` → Redeploy. Danach im Browser prüfen: Kontaktformular
-   abschicken, Konsole ohne CSP-Fehler.
-3. **Erst danach** Supabase → Authentication → Attack Protection → Captcha →
+1. ~~Turnstile anlegen~~ **erledigt 01.10.2026, 14:50:** Widget
+   `steakakademie-formulare` im Cloudflare-Konto (Account 6844ff22…), Hostnames
+   `steakakademie.de`, `tuwasduwillst.de`, `vercel.app` (deckt die Previews),
+   Modus „Verwaltet". Kosten 0 €, keine DNS-Änderung. Schlüssel liegen NUR in
+   Vercel und im Cloudflare-Dashboard, nicht im Repo.
+2. ~~Vercel-Env~~ **erledigt 01.10.2026:** `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+   (plain) und `TURNSTILE_SECRET_KEY` (sensitive) in Production, Preview und
+   Development gesetzt. Greift ab dem nächsten Build — der PR-Preview wurde
+   danach neu angestoßen.
+3. **Erst nach dem Merge + Produktions-Deploy** Supabase → Authentication → Attack Protection → Captcha →
    Turnstile, Secret eintragen. Vorher nicht — sonst sperrt sich der Login aus,
    weil der Browser noch kein Token liefert.
 4. **Vercel Firewall** (vercel.com → Projekt → Firewall). Stand 01.10.2026: für
