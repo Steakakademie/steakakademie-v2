@@ -1,23 +1,65 @@
-# ── AI-/Answer-Engine-Crawler: ausdrücklich erwünscht (GEO / Burggraben 3) ──
-User-agent: GPTBot
+# steakakademie.de — robots.txt
+#
+# Entscheidung Uwe, 01.10.2026: „Training-Bots sperren, Such-Bots erlauben."
+# Loest die Fassung ab, die ALLE KI-Crawler ausdruecklich erlaubte (GEO /
+# Burggraben 3). Die Linie jetzt:
+#   - KI-SUCHE darf lesen und zitieren (bringt Besucher, Quelle wird genannt).
+#   - KI-TRAINING ist nicht erlaubt (Inhalte wandern ins Modell, kein Rueckweg).
+# Der Nutzungsvorbehalt nach § 44b Abs. 3 UrhG steht maschinenlesbar in
+# /.well-known/tdmrep.json und im Header TDM-Reservation: 1. Diese Datei ist
+# die zweite Stufe: Sie nennt die Crawler beim Namen. Wer sie ignoriert,
+# ignoriert sie auf eigenes Risiko — der Vorbehalt gilt trotzdem.
+#
+# Namen nach den Bot-Dokumentationen der Anbieter (Stand 01.10.2026). Neue
+# Namen hier nachtragen, nicht in Code-Kommentaren.
+
+# ── KI-Suche / Answer Engines: erwuenscht ────────────────────────────────────
+# OpenAI: Suche (OAI-SearchBot) und Nutzeranfragen (ChatGPT-User) — NICHT GPTBot.
+# Anthropic: Claude-SearchBot (Suche), Claude-User (Nutzeranfragen) — NICHT ClaudeBot.
+# Perplexity: PerplexityBot (Index), Perplexity-User (Nutzeranfragen).
+# Microsoft Copilot laeuft ueber bingbot, Google AI Overviews ueber Googlebot.
 User-agent: OAI-SearchBot
 User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: anthropic-ai
 User-agent: Claude-SearchBot
+User-agent: Claude-User
 User-agent: PerplexityBot
 User-agent: Perplexity-User
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-User-agent: Amazonbot
-User-agent: CCBot
-User-agent: Bytespider
+User-agent: DuckAssistBot
+User-agent: YouBot
+User-agent: MistralAI-User
+User-agent: Meta-ExternalFetcher
 Allow: /
 Disallow: /go/
 Disallow: /api/
 Disallow: /admin/
 
-# ── Alle übrigen Crawler ──
+# ── KI-Training: nicht erlaubt ───────────────────────────────────────────────
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: meta-externalagent
+User-agent: Meta-ExternalAgent
+User-agent: FacebookBot
+User-agent: cohere-ai
+User-agent: Diffbot
+User-agent: omgili
+User-agent: omgilibot
+User-agent: Timpibot
+User-agent: ImagesiftBot
+User-agent: PanguBot
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: PetalBot
+User-agent: Webzio-Extended
+Disallow: /
+
+# ── Alle uebrigen Crawler (Googlebot, bingbot, …) ────────────────────────────
 User-agent: *
 Allow: /
 Disallow: /go/

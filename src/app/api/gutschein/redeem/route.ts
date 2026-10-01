@@ -4,9 +4,17 @@
  * Löst einen produktspezifischen Geschenkgutschein ein: prüft + schaltet den
  * zugehörigen Kurs für den eingeloggten Nutzer frei (redeem_voucher → grant_course_access).
  * Login-Pflicht (der Zugang gehört dem Beschenkten). Race-sicher in der DB-Funktion.
+ *
+ * Rate-Limit (01.10.2026): 10 Versuche / IP / Stunde über guardRequest — ein
+ * Gutschein-Code lässt sich sonst durchprobieren. Die Login-Prüfung bleibt
+ * hier in der Route (eigene Fehlermeldung mit needsLogin für den Client).
  */
+const RATE = { limit: 10, windowMs: 60 * 60 * 1_000 };
+const BodySchema = z.object({ code: z.string().trim().min(1, 'Bitte gib einen Gutschein-Code ein.').max(64) });
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createClient as createServerClient } from '@/lib/supabase/server';
+import { guardRequest } from '@/lib/api/guard';
 import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
@@ -19,6 +27,10 @@ const NEXT_BY_SLUG: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
+  const guard = await guardRequest(req, { key: 'gutschein-redeem', rate: RATE, schema: BodySchema });
+  if (!guard.ok) return guard.response;
+  const code = guard.body.code;
+
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -26,15 +38,6 @@ export async function POST(req: Request) {
       { error: 'Bitte melde dich an oder registriere dich, um den Gutschein einzulösen.', needsLogin: true },
       { status: 401 },
     );
-  }
-
-  let code: string;
-  try {
-    const body = await req.json();
-    code = String(body.code ?? '').trim();
-    if (!code) throw new Error('no code');
-  } catch {
-    return NextResponse.json({ error: 'Bitte gib einen Gutschein-Code ein.' }, { status: 400 });
   }
 
   const admin = createClient(

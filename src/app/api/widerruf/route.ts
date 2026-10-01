@@ -10,21 +10,32 @@
  *   LOOPS_API_KEY · LOOPS_WIDERRUF_TEMPLATE_ID  (Bestätigungs-Vorlage)
  *
  * Graceful: ohne Loops-Template wird trotzdem protokolliert + on-screen bestätigt.
+ *
+ * Eingangsschutz (01.10.2026): Same-Origin, 10 Widerrufe / IP / Stunde und ein
+ * Honeypot `website` — über den zentralen Guard. BEWUSST KEIN Turnstile: Der
+ * Widerrufsbutton (§ 312k BGB) muss ohne Hürde funktionieren; eine fehlgeschlagene
+ * Sicherheitsprüfung darf einen Verbraucher nicht am Widerruf hindern.
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
+import { guardRequest } from '@/lib/api/guard';
+
+const RATE = { limit: 10, windowMs: 60 * 60 * 1_000 };
+const BodySchema = z.object({
+  email: z.string().trim().toLowerCase().max(254).optional().default(''),
+  orderRef: z.string().trim().max(100).optional().default(''),
+  name: z.string().trim().max(200).optional().default(''),
+  product: z.string().trim().max(300).optional().default(''),
+  reason: z.string().trim().max(2000).optional().default(''),
+});
 
 export async function POST(req: Request) {
-  let body: any;
-  try { body = await req.json(); } catch { return Response.json({ error: 'Ungültige Anfrage.' }, { status: 400 }); }
-
-  const email    = String(body.email ?? '').trim().toLowerCase();
-  const orderRef = String(body.orderRef ?? '').trim();
-  const name     = String(body.name ?? '').trim().slice(0, 200);
-  const product  = String(body.product ?? '').trim().slice(0, 300);
-  const reason   = String(body.reason ?? '').trim().slice(0, 2000);
+  const guard = await guardRequest(req, { key: 'widerruf', rate: RATE, schema: BodySchema, honeypot: 'website' });
+  if (!guard.ok) return guard.response;
+  const { email, orderRef, name, product, reason } = guard.body;
 
   // Identifikation: E-Mail ODER Bestell-/Vertragsnummer ist Pflicht.
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

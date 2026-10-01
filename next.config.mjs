@@ -12,8 +12,9 @@ import { withSentryConfig } from '@sentry/nextjs';
  *   plausible.io   Reichweitenmessung, laedt ohne Einwilligung (cookielos)
  *   *.clarity.ms   Microsoft Clarity, laedt NUR nach Einwilligung
  *   *.supabase.co  Datenbank-Abfragen aus dem Browser (NEXT_PUBLIC_SUPABASE_URL)
- * Schriften sind ueber next/font self-hosted, es gibt keine iframes und keine
- * Formulare mit externem action — deshalb font-src 'self' und form-action 'self'.
+ * Schriften sind ueber next/font self-hosted und es gibt keine Formulare mit
+ * externem action — deshalb font-src 'self' und form-action 'self'. Der einzige
+ * erlaubte Frame ist der Turnstile-Challenge-Frame von challenges.cloudflare.com.
  *
  * WARUM 'unsafe-inline' bei script-src, obwohl das die Schutzwirkung mindert:
  * Der saubere Weg waeren Nonces. Next vergibt sie aber nur ueber die Middleware,
@@ -36,7 +37,10 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const CSP = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://plausible.io https://*.clarity.ms`,
+  // challenges.cloudflare.com: Cloudflare Turnstile (Bot-Pruefung an Kontakt,
+  // Newsletter, Login, Nischen-Lead) — Script + Challenge-Frame, seit 01.10.2026.
+  // Turnstile ist ein eigenstaendiges Widget, die Domain haengt NICHT an Cloudflare.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://plausible.io https://*.clarity.ms https://challenges.cloudflare.com`,
   "style-src 'self' 'unsafe-inline'",
   // api.maptiler.com: Kartenkacheln des Hofladen-Radars (/hoefe) — geladen erst
   // nach Klick des Besuchers (Klick-zum-Laden), siehe HofladenRadar.tsx.
@@ -47,7 +51,7 @@ const CSP = [
   // Fehler- und Messmeldungen gehen an eigene Routen unter 'self'; das
   // Server-Sentry sendet vom Server und faellt nicht unter die CSP.
   "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co https://api.maptiler.com",
-  "frame-src 'none'",
+  "frame-src https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",
@@ -124,6 +128,12 @@ const nextConfig = {
           // nur auf Klick, nur first-party; Drittanbieter-Frames bleiben ausgeschlossen.
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          // Nutzungsvorbehalt fuer Text- und Data-Mining (§ 44b Abs. 3 UrhG, Art. 4
+          // Abs. 3 DSM-RL) in maschinenlesbarer Form — TDM Reservation Protocol
+          // (W3C TDMRep). Dazu /.well-known/tdmrep.json und die Policy-Seite.
+          // Die robots.txt regelt zusaetzlich, welche KI-Crawler ueberhaupt lesen.
+          { key: 'TDM-Reservation', value: '1' },
+          { key: 'TDM-Policy', value: 'https://steakakademie.de/.well-known/tdm-policy.json' },
         ],
       },
       {

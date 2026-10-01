@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createDOIToken } from '@/lib/doi';
+import { guardRequest } from '@/lib/api/guard';
 import { NEWSLETTER_CONSENT_VERSION, NEWSLETTER_CONSENT_HISTORY } from '@/lib/newsletter-consent';
 
 /**
@@ -46,78 +48,33 @@ const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
   default: { userGroup: 'newsletter' },
 };
 
-// ─── In-process rate limiter ──────────────────────────────────────────────────
-// Ephemeral — resets on cold start, not shared across instances (same pattern as
-// /api/validator). Genügt für DOI-Anmeldungen; für Multi-Instanz-GA → Upstash Redis.
-// Schützt vor Missbrauch der (kostenpflichtigen) Loops-Transactional-Mails.
+// ─── Eingangsschutz ──────────────────────────────────────────────────────────
+// Seit 01.10.2026 über den zentralen Guard (src/lib/api/guard.ts): Same-Origin,
+// 5 Anmeldeversuche / IP / 10 min, Honeypot `website`, Turnstile-Token.
+// Vorher stand hier ein eigener Map-Limiter — gleiche Grenze, zweite Kopie.
+const RATE = { limit: 5, windowMs: 10 * 60 * 1_000 };
 
-interface RateLimitEntry { count: number; resetAt: number }
-
-const RL_WINDOW_MS = 10 * 60 * 1_000; // 10 Minuten
-const RL_MAX_REQS  = 5;               // max. 5 Anmeldeversuche / IP / Fenster
-const rlStore      = new Map<string, RateLimitEntry>();
-
-function rateLimit(ip: string): { allowed: boolean; retryAfterSecs: number } {
-  const now   = Date.now();
-  const entry = rlStore.get(ip);
-
-  if (!entry || entry.resetAt < now) {
-    rlStore.set(ip, { count: 1, resetAt: now + RL_WINDOW_MS });
-    return { allowed: true, retryAfterSecs: 0 };
-  }
-
-  if (entry.count >= RL_MAX_REQS) {
-    return { allowed: false, retryAfterSecs: Math.ceil((entry.resetAt - now) / 1_000) };
-  }
-
-  entry.count++;
-  return { allowed: true, retryAfterSecs: 0 };
-}
+const BodySchema = z.object({
+  email: z.string().trim().toLowerCase().email('Invalid email format').max(254),
+  source: z.string().max(64).optional().default('default'),
+  // Fassung des akzeptierten Einwilligungstextes — Typ wird unten geprüft.
+  consentVersion: z.unknown().optional(),
+});
 
 export async function POST(req: NextRequest) {
   try {
-    // ── Rate limit (pro IP) ──────────────────────────────────────────────────
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? '127.0.0.1';
-    const { allowed, retryAfterSecs } = rateLimit(ip);
-    if (!allowed && process.env.NODE_ENV !== 'development') {
-      return NextResponse.json(
-        { error: 'Zu viele Anmeldeversuche. Bitte in ein paar Minuten erneut probieren.' },
-        { status: 429, headers: { 'Retry-After': String(retryAfterSecs) } },
-      );
-    }
+    const guard = await guardRequest(req, {
+      key: 'newsletter',
+      rate: RATE,
+      schema: BodySchema,
+      honeypot: 'website',
+      turnstile: true,
+    });
+    if (!guard.ok) return guard.response;
+    const { email, source, consentVersion } = guard.body;
+    const ip = guard.ip;
 
-    // ── Body robust parsen (defekter JSON → 400 statt Crash) ─────────────────
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
-    }
-
-    const { email, source = 'default', website, consentVersion } = (body ?? {}) as {
-      email?: unknown;
-      source?: string;
-      website?: unknown; // Honeypot — von echten Nutzern nie befüllt
-      consentVersion?: unknown; // Fassung des akzeptierten Einwilligungstextes
-    };
-
-    // ── Bot-Honeypot ─────────────────────────────────────────────────────────
-    // Bots füllen versteckte Felder aus. Wir tun so, als sei alles ok (kein Signal
-    // an den Bot), senden aber nichts an Loops.
-    if (typeof website === 'string' && website.trim() !== '') {
-      return NextResponse.json({ success: true, doi: true });
-    }
-
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
-    }
-
-    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedEmail = email;
 
     // Dev-Modus: kein Loops API Key → simulierte Antwort
     if (!LOOPS_API_KEY) {

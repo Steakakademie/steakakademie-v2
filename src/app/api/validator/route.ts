@@ -22,6 +22,7 @@
 import { NextResponse }       from 'next/server';
 import { ZodError }           from 'zod';
 import { NicheInputSchema }   from '@/types/validator';
+import { guardRequest }       from '@/lib/api/guard';
 import { ValidatorEngine }    from '@/engine/validatorEngine';
 import { SeoAnalyzer }        from '@/services/seoAnalyzer';
 import { MonetizationEvaluator } from '@/services/monetizationEvaluator';
@@ -30,70 +31,19 @@ import { ContentMatchAnalyzer }  from '@/services/contentMatchAnalyzer';
 export const runtime     = 'nodejs';
 export const maxDuration = 30;
 
-// ─── In-process rate limiter ──────────────────────────────────────────────────
-// Ephemeral — resets on cold start, not shared across instances.
-// Good enough for demo / MVP; swap Map → Upstash Redis before GA launch.
-
-interface RateLimitEntry { count: number; resetAt: number }
-
-const RL_WINDOW_MS = 60 * 60 * 1_000; // 1 hour
-const RL_MAX_REQS  = 10;
-const rlStore      = new Map<string, RateLimitEntry>();
-
-function rateLimit(ip: string): { allowed: boolean; retryAfterSecs: number } {
-  const now   = Date.now();
-  const entry = rlStore.get(ip);
-
-  if (!entry || entry.resetAt < now) {
-    rlStore.set(ip, { count: 1, resetAt: now + RL_WINDOW_MS });
-    return { allowed: true, retryAfterSecs: 0 };
-  }
-
-  if (entry.count >= RL_MAX_REQS) {
-    return { allowed: false, retryAfterSecs: Math.ceil((entry.resetAt - now) / 1_000) };
-  }
-
-  entry.count++;
-  return { allowed: true, retryAfterSecs: 0 };
-}
+// ─── Eingangsschutz ──────────────────────────────────────────────────────────
+// Seit 01.10.2026 über den zentralen Guard (src/lib/api/guard.ts): Same-Origin,
+// 10 Analysen / IP / Stunde, Zod-Schema. Vorher ein eigener Map-Limiter hier.
+const RATE = { limit: 10, windowMs: 60 * 60 * 1_000 };
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
 
-  // ── 1. Rate limit ──────────────────────────────────────────────────────────
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? '127.0.0.1';
-  const { allowed, retryAfterSecs } = rateLimit(ip);
-
-  const isDev = process.env.NODE_ENV === 'development';
-  if (!allowed && !isDev) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Try again later.' },
-      { status: 429, headers: { 'Retry-After': String(retryAfterSecs) } },
-    );
-  }
-
-  // ── 2. Parse body ──────────────────────────────────────────────────────────
-  let rawBody: unknown;
-  try {
-    rawBody = await req.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 });
-  }
-
-  // ── 3. Validate input ──────────────────────────────────────────────────────
-  const parsed = NicheInputSchema.safeParse(rawBody);
-  if (!parsed.success) {
-    return NextResponse.json(
-      {
-        error:  'Input validation failed.',
-        issues: parsed.error.flatten(),
-      },
-      { status: 400 },
-    );
-  }
-
-  const input = parsed.data;
+  // ── 1–3. Herkunft, Rate-Limit, Body, Schema ───────────────────────────────
+  const guard = await guardRequest(req, { key: 'validator', rate: RATE, schema: NicheInputSchema });
+  if (!guard.ok) return guard.response;
+  const input = guard.body;
 
   // ── 4. Resolve query-param options ────────────────────────────────────────
   const url            = new URL(req.url);
