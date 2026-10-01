@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { URKUNDE_WIDERRUF_HINWEIS } from '@/lib/urkunde/preis';
 import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -148,6 +149,10 @@ export default function AgbPage() {
               <p className="mb-3">
                 Du hast das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von
                 Gründen zu widerrufen. Die Frist beginnt ab Erhalt der Ware.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Ausnahme gedruckte Urkunden:</strong>{' '}
+                {URKUNDE_WIDERRUF_HINWEIS}
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Elektronische Widerrufsfunktion (§ 356a BGB):</strong>{' '}
