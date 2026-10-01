@@ -5,7 +5,7 @@ import Link                    from 'next/link';
 import { useSearchParams }     from 'next/navigation';
 import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
 import OAuthButtons from '@/components/auth/OAuthButtons';
-import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
 
@@ -25,6 +25,16 @@ function LoginForm() {
   // Ohne Site-Key rendert das Widget nicht und captchaToken bleibt undefined.
   const [captcha, setCaptcha] = useState('');
   const captchaToken = captcha || undefined;
+  // Solange Turnstile aktiv ist und noch kein Token geliefert hat, bleibt der
+  // Absende-Knopf gesperrt. Sonst geht die Anfrage ohne Token raus und Supabase
+  // antwortet „captcha protection: request disallowed" (01.10.2026, Uwe im Test).
+  const wartetAufCaptcha = Boolean(TURNSTILE_SITE_KEY) && !captcha;
+
+  /** Supabase-Fehlertexte sind Englisch — die Captcha-Faelle uebersetzen. */
+  function fehlertext(msg: string): string {
+    if (/captcha/i.test(msg)) return 'Die Sicherheitsprüfung ist fehlgeschlagen. Bitte lade die Seite neu und versuch es noch einmal.';
+    return msg;
+  }
 
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +55,7 @@ function LoginForm() {
     if (error) {
       turnstileReset();
       setStatus('error');
-      setMessage(error.message);
+      setMessage(fehlertext(error.message));
     } else {
       setSentMsg('Klick auf den Link in der E-Mail — kein Passwort nötig.');
       setStatus('sent');
@@ -65,7 +75,7 @@ function LoginForm() {
       setMessage(
         /invalid login credentials/i.test(error.message)
           ? 'E-Mail oder Passwort falsch. Noch kein Passwort-Konto? Unten „Konto erstellen".'
-          : error.message,
+          : fehlertext(error.message),
       );
     } else {
       window.location.href = redirectTo;
@@ -89,7 +99,7 @@ function LoginForm() {
     });
     if (error) {
       turnstileReset();
-      setStatus('error'); setMessage(error.message);
+      setStatus('error'); setMessage(fehlertext(error.message));
     } else if (data.session) {
       window.location.href = redirectTo;                 // E-Mail-Bestätigung deaktiviert → direkt drin
     } else {
@@ -223,24 +233,29 @@ function LoginForm() {
                 </div>
               )}
 
+              {/* Turnstile VOR dem Knopf: Wenn Cloudflare eine Interaktion will,
+                  sieht man das Kaestchen, bevor man auf „Senden" drueckt. */}
+              <Turnstile action="login" onToken={setCaptcha} />
+
               <button
                 type="submit"
-                disabled={status === 'loading' || !email.trim() || (mode === 'password' && !password)}
+                disabled={status === 'loading' || wartetAufCaptcha || !email.trim() || (mode === 'password' && !password)}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 font-sans font-bold text-sm rounded-sm transition-opacity disabled:opacity-50"
                 style={{ background: '#E85018', color: '#17100B' }}
               >
                 {status === 'loading'
                   ? (mode === 'magic' ? 'Wird gesendet …' : 'Bitte warten …')
-                  : (mode === 'magic' ? 'Magic Link senden' : 'Anmelden')}
-                {status !== 'loading' && (mode === 'magic' ? <ArrowRight size={14} /> : <Lock size={14} />)}
+                  : wartetAufCaptcha
+                    ? 'Sicherheitsprüfung …'
+                    : (mode === 'magic' ? 'Magic Link senden' : 'Anmelden')}
+                {status !== 'loading' && !wartetAufCaptcha && (mode === 'magic' ? <ArrowRight size={14} /> : <Lock size={14} />)}
               </button>
-              <Turnstile action="login" onToken={setCaptcha} />
             </form>
 
             {mode === 'password' && (
               <button
                 onClick={handleSignup}
-                disabled={status === 'loading'}
+                disabled={status === 'loading' || wartetAufCaptcha}
                 className="w-full mt-3 py-2.5 px-4 font-sans font-bold text-xs uppercase tracking-wider rounded-sm border transition-colors disabled:opacity-50"
                 style={{ borderColor: 'rgba(200,136,42,0.45)', color: '#C8882A' }}
               >

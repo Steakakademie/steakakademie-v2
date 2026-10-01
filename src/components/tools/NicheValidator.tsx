@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import HoneypotFeld, { honeypotWert } from '@/components/ui/HoneypotFeld';
-import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 import { experimental_useObject as useObject } from 'ai/react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import {
@@ -492,7 +492,7 @@ export default function NicheValidator() {
                         </div>
                         <button
                           type="submit"
-                          disabled={!leadEmail || !leadConsent || leadState === 'sending'}
+                          disabled={!leadEmail || !leadConsent || leadState === 'sending' || (Boolean(TURNSTILE_SITE_KEY) && !leadTurnstile)}
                           className="
                             shrink-0 bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010]
                             disabled:opacity-50 disabled:cursor-not-allowed
