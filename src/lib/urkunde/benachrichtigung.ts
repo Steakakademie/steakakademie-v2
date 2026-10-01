@@ -51,3 +51,47 @@ export async function meldeBestellung(text: string, absender: string): Promise<b
     return false;
   }
 }
+
+/**
+ * Bestaetigung an den Besteller (§ 312i Abs. 1 Nr. 3 BGB: Zugang der Bestellung
+ * unverzueglich auf elektronischem Weg bestaetigen).
+ *
+ * Braucht eine eigene Loops-Transaktionsvorlage (LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID,
+ * Variablen: stufe_name, name_auf_urkunde, preis, bestell_id, adresse, widerruf_hinweis) —
+ * die Loops-API legt keine Vorlagen an, sie entstehen im Loops-Editor. Fehlt die
+ * Variable, wird nur geloggt; die Bestellung bleibt gespeichert.
+ */
+export async function bestaetigeBestellung(
+  email: string,
+  v: { stufeName: string; nameAufUrkunde: string; preis: string; bestellId: string; adresse: string; widerrufHinweis: string },
+): Promise<boolean> {
+  const apiKey = process.env.LOOPS_API_KEY;
+  const templateId = process.env.LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID;
+  if (!apiKey || !templateId) {
+    console.warn('[urkunde] LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID fehlt — keine Bestaetigung an den Besteller.');
+    return false;
+  }
+  try {
+    const resp = await fetch('https://app.loops.so/api/v1/transactional', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        transactionalId: templateId,
+        email,
+        dataVariables: {
+          stufe_name: v.stufeName,
+          name_auf_urkunde: v.nameAufUrkunde,
+          preis: v.preis,
+          bestell_id: v.bestellId,
+          adresse: v.adresse,
+          widerruf_hinweis: v.widerrufHinweis,
+        },
+      }),
+    });
+    if (!resp.ok) console.error('[urkunde] loops bestaetigung', resp.status, (await resp.text()).slice(0, 300));
+    return resp.ok;
+  } catch (e) {
+    console.error('[urkunde] loops bestaetigung error', e);
+    return false;
+  }
+}
