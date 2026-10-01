@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import HoneypotFeld, { honeypotWert } from '@/components/ui/HoneypotFeld';
+import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
 import { experimental_useObject as useObject } from 'ai/react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import {
@@ -50,12 +52,15 @@ export default function NicheValidator() {
     submit({ niche: niche.trim() });
   }
 
+  const leadFormRef = useRef<HTMLFormElement>(null);
+  const [leadTurnstile, setLeadTurnstile] = useState('');
+
   async function handleLead(e: React.FormEvent) {
     e.preventDefault();
     if (!leadEmail || !object?.niche || leadState !== 'idle') return;
     setLeadState('sending');
     try {
-      await fetch('/api/niche-validator/lead', {
+      const res = await fetch('/api/niche-validator/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,10 +69,14 @@ export default function NicheValidator() {
           verdict: object.verdict?.decision,
           difficulty: object.difficulty?.overall,
           consent: true,
+          website: honeypotWert(leadFormRef.current),
+          turnstileToken: leadTurnstile,
         }),
       });
+      if (!res.ok) throw new Error(String(res.status));
       setLeadState('success');
     } catch {
+      turnstileReset();
       setLeadState('idle');
     }
   }
@@ -459,7 +468,9 @@ export default function NicheValidator() {
                     <p className="text-sm font-body text-text-secondary mb-5 leading-relaxed">
                       Receive this full analysis as a saved brief, plus the 7-day operator series that walks through the exact steps that built steakakademie.de — applied to <span className="text-brand-gold">{a.niche}</span>.
                     </p>
-                    <form onSubmit={handleLead} className="flex flex-col gap-3">
+                    <form ref={leadFormRef} onSubmit={handleLead} className="flex flex-col gap-3">
+                      <HoneypotFeld />
+                      <Turnstile action="niche-lead" onToken={setLeadTurnstile} />
                       <div className="flex flex-col sm:flex-row gap-3">
                         <div className="relative flex-1">
                           <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />

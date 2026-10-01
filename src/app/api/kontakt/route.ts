@@ -33,6 +33,14 @@ export const dynamic = 'force-dynamic';
 
 import { createClient } from '@supabase/supabase-js';
 import { CONSENT_TEXT, KONTAKT_EMPFAENGER as EMPFAENGER } from '@/lib/kontakt';
+import { botCheck, rateLimitRequest } from '@/lib/api/guard';
+
+// Eingangsschutz (01.10.2026): 5 Nachrichten / IP / 10 min und Turnstile-Token
+// über die Helfer des zentralen Guards. guardRequest selbst passt hier nicht,
+// weil die Route bewusst auch application/x-www-form-urlencoded annimmt (siehe
+// oben). Kein Same-Origin-Zwang: Das Formular ohne JavaScript sendet keinen
+// Sec-Fetch-Site-Header, auf den man sich verlassen könnte.
+const RATE = { limit: 5, windowMs: 10 * 60 * 1_000 };
 
 /** Auswahlfeld → Betreff-Praefix fuer die Gmail-Filter. */
 function betreffTag(subject: string): string {
@@ -50,6 +58,9 @@ function betreffTag(subject: string): string {
 export async function POST(req: Request) {
   const typ = req.headers.get('content-type') || '';
   const alsFormular = typ.includes('application/x-www-form-urlencoded') || typ.includes('multipart/form-data');
+
+  const limit = rateLimitRequest(req, 'kontakt', RATE);
+  if (!limit.ok) return antwort(req, alsFormular, { error: 'Zu viele Nachrichten in kurzer Zeit. Bitte in ein paar Minuten erneut versuchen.' }, 429);
 
   let daten: Record<string, string> = {};
   try {
@@ -80,6 +91,15 @@ export async function POST(req: Request) {
   // Bots bekommen ein freundliches OK und nichts passiert. Eine Fehlermeldung
   // wuerde nur verraten, dass es die Falle gibt.
   if (falle) return antwort(req, alsFormular, { ok: true }, 200);
+
+  // Turnstile (Feld `turnstileToken` bzw. `cf-turnstile-response` aus dem
+  // Formular ohne JavaScript). Ohne TURNSTILE_SECRET_KEY wird uebersprungen.
+  const token = daten.turnstileToken ?? daten['cf-turnstile-response'];
+  const bot = await botCheck({ turnstileToken: token }, { turnstile: true, ip: limit.ip, rlHeaders: limit.headers });
+  if (!bot.ok) {
+    const text = await bot.response.json().catch(() => ({ error: 'Sicherheitspruefung fehlgeschlagen.' }));
+    return antwort(req, alsFormular, { error: text.error }, 403);
+  }
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!name || !emailOk || !message) {

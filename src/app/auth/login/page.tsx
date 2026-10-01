@@ -5,6 +5,7 @@ import Link                    from 'next/link';
 import { useSearchParams }     from 'next/navigation';
 import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
 import OAuthButtons from '@/components/auth/OAuthButtons';
+import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
 
@@ -19,6 +20,11 @@ function LoginForm() {
   const [status,   setStatus]   = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
   const [message,  setMessage]  = useState('');
   const [sentMsg,  setSentMsg]  = useState('');
+  // Cloudflare Turnstile: Supabase prueft das Token serverseitig, sobald im
+  // Supabase-Dashboard (Auth → Attack Protection → Captcha) Turnstile aktiv ist.
+  // Ohne Site-Key rendert das Widget nicht und captchaToken bleibt undefined.
+  const [captcha, setCaptcha] = useState('');
+  const captchaToken = captcha || undefined;
 
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
@@ -32,10 +38,12 @@ function LoginForm() {
       email: email.trim(),
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}`,
+        captchaToken,
       },
     });
 
     if (error) {
+      turnstileReset();
       setStatus('error');
       setMessage(error.message);
     } else {
@@ -50,8 +58,9 @@ function LoginForm() {
     setStatus('loading');
     const { createClient } = await import('@/lib/supabase/client');
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password, options: { captchaToken } });
     if (error) {
+      turnstileReset();
       setStatus('error');
       setMessage(
         /invalid login credentials/i.test(error.message)
@@ -76,9 +85,10 @@ function LoginForm() {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}` },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}`, captchaToken },
     });
     if (error) {
+      turnstileReset();
       setStatus('error'); setMessage(error.message);
     } else if (data.session) {
       window.location.href = redirectTo;                 // E-Mail-Bestätigung deaktiviert → direkt drin
@@ -224,6 +234,7 @@ function LoginForm() {
                   : (mode === 'magic' ? 'Magic Link senden' : 'Anmelden')}
                 {status !== 'loading' && (mode === 'magic' ? <ArrowRight size={14} /> : <Lock size={14} />)}
               </button>
+              <Turnstile action="login" onToken={setCaptcha} />
             </form>
 
             {mode === 'password' && (

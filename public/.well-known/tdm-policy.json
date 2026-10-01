@@ -1,0 +1,35 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/odrl.jsonld",
+    { "tdm": "http://www.w3.org/ns/tdmrep#", "vcard": "http://www.w3.org/2006/vcard/ns#" }
+  ],
+  "@type": "Offer",
+  "profile": "http://www.w3.org/ns/tdmrep",
+  "uid": "https://steakakademie.de/.well-known/tdm-policy.json",
+  "assigner": {
+    "uid": "https://steakakademie.de",
+    "vcard:fn": "Steakakademie (Uwe Yendell)",
+    "vcard:hasEmail": "mailto:pitmaster@steakakademie.de",
+    "vcard:hasURL": "https://steakakademie.de/impressum"
+  },
+  "permission": [
+    {
+      "target": "https://steakakademie.de/",
+      "action": "tdm:mine",
+      "constraint": [
+        {
+          "leftOperand": "tdm:license",
+          "operator": "eq",
+          "rightOperand": "https://steakakademie.de/nutzungsbedingungen"
+        }
+      ],
+      "duty": [
+        {
+          "action": "obtainConsent",
+          "consentingParty": { "uid": "https://steakakademie.de" }
+        }
+      ]
+    }
+  ],
+  "tdm:note": "Text- und Data-Mining (einschliesslich Nutzung zum Training von KI-Modellen) ist fuer saemtliche Inhalte von steakakademie.de gemaess § 44b Abs. 3 UrhG / Art. 4 Abs. 3 RL (EU) 2019/790 vorbehalten. Eine Nutzung ist nur mit vorheriger schriftlicher Lizenz moeglich. Anfragen an pitmaster@steakakademie.de."
+}

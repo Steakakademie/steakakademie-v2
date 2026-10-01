@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
 import Link from 'next/link';
 import { ChevronRight, Mail, MessageSquare, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -35,6 +36,7 @@ const CONTACT_OPTIONS = [
 
 export default function KontaktPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', consent: false, website: '' });
+  const [turnstileToken, setTurnstileToken] = useState('');
   // Vorbelegung aus der URL (z. B. /kontakt?betreff=hofladen&hof=<slug> aus dem
   // Hofladen-Radar): Betreff und ein Nachrichten-Anfang, damit der Hof-Bezug
   // nicht verloren geht. Nach dem Mount, damit Server- und Client-HTML gleich
@@ -74,13 +76,14 @@ export default function KontaktPage() {
       const res = await fetch('/api/kontakt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, turnstileToken }),
       });
       const daten = await res.json().catch(() => ({}));
       // Erfolg wird gemeldet, wenn die Route ihn bestaetigt — nicht vorher.
       if (res.ok && daten.ok) { setState('sent'); return; }
       setFehler(daten.error || 'Die Nachricht konnte nicht zugestellt werden.');
       setState('error');
+      turnstileReset(); // Token ist einmal gueltig — fuer den naechsten Versuch ein neues
     } catch {
       setFehler('Keine Verbindung zum Server. Bitte später erneut versuchen.');
       setState('error');
@@ -224,6 +227,11 @@ export default function KontaktPage() {
                     </a>.
                   </p>
                 )}
+
+                {/* Turnstile (unsichtbar, zeigt sich nur bei Bedarf). Rendert nur mit
+                    NEXT_PUBLIC_TURNSTILE_SITE_KEY; ohne JavaScript legt das Widget
+                    selbst ein verstecktes Feld cf-turnstile-response ins Formular. */}
+                <Turnstile action="kontakt" onToken={setTurnstileToken} />
 
                 <button
                   type="submit"

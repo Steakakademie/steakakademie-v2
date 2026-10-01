@@ -6,6 +6,7 @@ import { Flame, Check, Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { trackEvent } from '@/components/analytics/PlausibleScript';
 import { NEWSLETTER_CONSENT_TEXT, NEWSLETTER_CONSENT_VERSION } from '@/lib/newsletter-consent';
+import Turnstile, { turnstileReset } from '@/components/ui/Turnstile';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -85,6 +86,7 @@ export default function NewsletterSignup({
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState(''); // Honeypot
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -116,7 +118,7 @@ export default function NewsletterSignup({
         headers: { 'Content-Type': 'application/json' },
         // consentVersion wandert mit: Sie ist der Schlüssel, mit dem sich später
         // belegen lässt, WORIN eingewilligt wurde (Art. 7 Abs. 1 DSGVO).
-        body: JSON.stringify({ email: email.trim(), source, website, consentVersion: NEWSLETTER_CONSENT_VERSION }),
+        body: JSON.stringify({ email: email.trim(), source, website, consentVersion: NEWSLETTER_CONSENT_VERSION, turnstileToken }),
       });
 
       if (res.ok) {
@@ -132,6 +134,7 @@ export default function NewsletterSignup({
         .json()
         .then((d: { error?: string }) => d?.error)
         .catch(() => undefined);
+      turnstileReset(); // Token ist einmal gueltig — fuer den naechsten Versuch ein neues
       if (res.status === 429) {
         setErrorMsg('Zu viele Anmeldeversuche. Bitte in ein paar Minuten erneut probieren.');
       } else {
@@ -324,6 +327,8 @@ export default function NewsletterSignup({
                 {errorMsg}
               </p>
             )}
+            {/* Turnstile — unsichtbar bis Cloudflare eine Interaktion braucht; rendert nur mit Site-Key */}
+            <Turnstile action="newsletter" onToken={setTurnstileToken} />
           </form>
 
           {/* Lesbarkeits-Fix: 10px/60%-Deckkraft war unter jeder Kontrastgrenze.

@@ -11,11 +11,26 @@
  * erfindet keine Temperaturen/Zeiten/Mengen. Jede Antwort nennt die Quellen.
  *
  * Siehe docs/wissensdatenbank-architektur.md.
+ *
+ * Eingangsschutz (01.10.2026): Bis dahin war dieser Endpunkt — Voyage-Embedding
+ * plus Claude pro Aufruf — ohne jede Grenze aufrufbar; kein Browser-Bauteil im
+ * Repo ruft ihn, nur /api/kochwissen/generieren war über guardRequest gesichert.
+ * Jetzt: Same-Origin, 10 Fragen / IP / 10 min, Login oder Admin-Cookie — gleiche
+ * Linie wie /generieren (project_api_guard: Rezept-Schmiede bewusst nicht anonym).
  */
+const RATE = { limit: 10, windowMs: 10 * 60 * 1_000 };
+const BodySchema = z.object({
+  frage: z.string().trim().min(1, 'frage fehlt').max(2000),
+  kategorie: z.string().max(100).optional().nullable(),
+  cut: z.string().max(100).optional().nullable(),
+  limit: z.coerce.number().int().min(1).max(20).optional().default(8),
+});
 
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { searchKochwissen, buildKontext, rerankTreffer, type Treffer } from '@/lib/kochwissen/retrieval';
 import { searchContext, type KnowledgeMatch } from '@/lib/voyage-retrieval';
@@ -44,21 +59,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'VOYAGE_API_KEY fehlt.' }, { status: 500 });
   }
 
-  // 1) Eingabe
-  let frage: string;
-  let kategorie: string | null;
-  let cut: string | null;
-  let limit: number;
-  try {
-    const body = await req.json();
-    frage = String(body.frage ?? '').trim();
-    kategorie = body.kategorie ? String(body.kategorie) : null;
-    cut = body.cut ? String(body.cut) : null;
-    limit = Math.min(Math.max(parseInt(body.limit, 10) || 8, 1), 20);
-    if (!frage) throw new Error('leer');
-  } catch {
-    return NextResponse.json({ error: 'Ungültige Eingabe — "frage" fehlt.' }, { status: 400 });
-  }
+  // 1) Eingabe — Herkunft, Rate-Limit, Auth, Schema über den zentralen Guard.
+  const guard = await guardRequest(req, { key: 'kochwissen', rate: RATE, schema: BodySchema, auth: 'user-or-admin' });
+  if (!guard.ok) return guard.response;
+  const frage = guard.body.frage;
+  const kategorie = guard.body.kategorie ?? null;
+  const cut = guard.body.cut ?? null;
+  const limit = guard.body.limit;
 
   const admin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

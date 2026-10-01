@@ -7,6 +7,8 @@
  *   2. Rate-Limit — Fixed-Window pro IP + Endpunkt-Schlüssel.
  *   3. Body       — Content-Type, Größenlimit, JSON-Parse, Zod-Schema.
  *   4. Auth       — optional: eingeloggter Supabase-Nutzer ODER Admin-Cookie.
+ *   5. Bots       — optional: Honeypot-Feld (still verwerfen) und Cloudflare-
+ *                   Turnstile-Token (src/lib/api/turnstile.ts), seit 01.10.2026.
  *
  * Läuft in Edge- und Node-Runtime (nur Web-APIs, kein next/headers).
  *
@@ -21,6 +23,7 @@
 import { createServerClient } from '@supabase/ssr';
 import type { z } from 'zod';
 import { istAdminPasswort } from '@/lib/admin-auth';
+import { TURNSTILE_FEHLER_TEXT, verifyTurnstile } from '@/lib/api/turnstile';
 
 // ─── Typen ───────────────────────────────────────────────────────────────────
 
@@ -43,6 +46,19 @@ export type GuardOptions<S extends z.ZodTypeAny> = {
   requireSameOrigin?: boolean;
   /** Zusätzlich Login (Supabase-Session) oder Admin-Cookie verlangen. */
   auth?: 'none' | 'user-or-admin' | 'admin';
+  /**
+   * Name eines Honeypot-Felds im Body (z. B. 'website'). Ist es befüllt, war es
+   * ein Bot: Er bekommt ein freundliches `{ ok: true }` mit 200 — und nichts
+   * passiert. Geprüft VOR dem Zod-Schema, damit ein striktes Schema das Feld
+   * nicht erst wegfiltert. Eine Fehlermeldung würde nur die Falle verraten.
+   */
+  honeypot?: string;
+  /**
+   * Cloudflare-Turnstile-Token aus `body.turnstileToken` prüfen. Ohne
+   * TURNSTILE_SECRET_KEY wird übersprungen (Rollout ohne Variablen bleibt
+   * unverändert). Das Feld wird vor dem Zod-Schema entfernt.
+   */
+  turnstile?: boolean;
 };
 
 export type GuardResult<T> =
@@ -212,7 +228,7 @@ export async function guardRequest<S extends z.ZodTypeAny>(
   req: Request,
   opts: GuardOptions<S>,
 ): Promise<GuardResult<z.infer<S>>> {
-  const { key, rate, schema, maxBodyBytes = 16 * 1024, requireSameOrigin = true, auth = 'none' } = opts;
+  const { key, rate, schema, maxBodyBytes = 16 * 1024, requireSameOrigin = true, auth = 'none', honeypot, turnstile = false } = opts;
 
   // 1) Herkunft
   if (requireSameOrigin && !isSameOrigin(req)) {
@@ -260,6 +276,11 @@ export async function guardRequest<S extends z.ZodTypeAny>(
   } catch {
     return { ok: false, response: jsonError(400, 'Ungültiges JSON.', rlHeaders) };
   }
+  // 5) Bots — Honeypot still verwerfen, Turnstile-Token prüfen.
+  const bot = await botCheck(parsed, { honeypot, turnstile, ip, rlHeaders });
+  if (!bot.ok) return bot;
+  parsed = bot.body;
+
   const result = schema.safeParse(parsed);
   if (!result.success) {
     const issue = result.error.issues[0];
@@ -268,4 +289,60 @@ export async function guardRequest<S extends z.ZodTypeAny>(
   }
 
   return { ok: true, body: result.data, ip, principal };
+}
+
+// ─── Bot-Prüfung (Honeypot + Turnstile) ──────────────────────────────────────
+
+type BotCheckOpts = { honeypot?: string; turnstile: boolean; ip: string; rlHeaders: Record<string, string> };
+
+/**
+ * Für guardRequest und für Routen, die ihren Body selbst lesen (Formular-Routen
+ * wie /api/kontakt): prüft Honeypot und Turnstile auf einem beliebigen Objekt
+ * und gibt den Body ohne `turnstileToken` zurück.
+ */
+export async function botCheck(
+  body: unknown,
+  { honeypot, turnstile, ip, rlHeaders }: BotCheckOpts,
+): Promise<{ ok: true; body: unknown } | { ok: false; response: Response }> {
+  const obj = body && typeof body === 'object' ? (body as Record<string, unknown>) : null;
+
+  if (honeypot && obj && String(obj[honeypot] ?? '').trim() !== '') {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...rlHeaders },
+      }),
+    };
+  }
+
+  if (!turnstile) return { ok: true, body };
+
+  const token = obj ? obj.turnstileToken : undefined;
+  const verdict = await verifyTurnstile(typeof token === 'string' ? token : undefined, ip);
+  if (!verdict.ok) {
+    return { ok: false, response: jsonError(403, TURNSTILE_FEHLER_TEXT, rlHeaders) };
+  }
+  if (obj && 'turnstileToken' in obj) {
+    const rest = { ...obj };
+    delete rest.turnstileToken;
+    return { ok: true, body: rest };
+  }
+  return { ok: true, body };
+}
+
+/**
+ * Rate-Limit allein — für Routen, die keinen JSON-Body haben oder ihn selbst
+ * lesen (Formular-POSTs, GET-Routen). Gleicher Zähler wie guardRequest.
+ */
+export function rateLimitRequest(req: Request, key: string, rule: RateLimitRule):
+  | { ok: true; ip: string; headers: Record<string, string> }
+  | { ok: false; response: Response } {
+  const ip = clientIp(req);
+  const verdict = limiter.check(`${key}:${ip}`, rule);
+  const headers = rateLimitHeaders(rule, verdict);
+  if (!verdict.allowed) {
+    return { ok: false, response: jsonError(429, `Zu viele Anfragen — bitte in ${verdict.retryAfterSecs} s erneut versuchen.`, headers) };
+  }
+  return { ok: true, ip, headers };
 }

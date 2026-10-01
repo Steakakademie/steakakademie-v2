@@ -54,6 +54,16 @@ module.exports = {
   sitemapSize: 5000,
   exclude: [
     '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
+    // Canonical-Crawl 01.10.2026 (585 Sitemap-URLs live geprueft): 425 Seiten mit
+    // korrektem Self-Canonical, KEINE Abweichung auf der Alt-Site. Aber 163
+    // noindex-Seiten standen in der Sitemap — widerspruechliches Signal an
+    // Google („bitte indexieren" vs. „bitte nicht"). Raus damit:
+    '/relaunch',      // Parallel-Relaunch: noindex, Canonical auf / (159 URLs)
+    '/relaunch/*',
+    '/challenge-teilnahmebedingungen', // robots: { index: false }
+    '/nutzungsbedingungen',            // robots: { index: false }
+    '/eigenregie/diagnose',            // robots: { index: false }
+    '/apple-icon.png', // Bild-Route (ImageResponse), kein Dokument, kein Canonical
     // tuwasduwillst.de ist eine eigene Marke (Host-Weiche in next.config.mjs):
     // diese Seiten gehoeren nicht in die Steakakademie-Sitemap.
     '/tuwasduwillst',

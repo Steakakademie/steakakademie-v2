@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import HoneypotFeld, { honeypotWert } from '@/components/ui/HoneypotFeld';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 
 const inputCls = 'w-full border px-4 py-2.5 text-sm font-sans bg-transparent';
@@ -16,6 +17,7 @@ export default function WiderrufForm() {
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState<string | null>(null);
   const [done, setDone]         = useState<{ datum: string; zeit: string; emailSent: boolean } | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const canSubmit = (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || orderRef.trim().length > 0) && !loading;
 
@@ -28,7 +30,7 @@ export default function WiderrufForm() {
       const res = await fetch('/api/widerruf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), orderRef: orderRef.trim(), name: name.trim(), product: product.trim(), reason: reason.trim() }),
+        body: JSON.stringify({ email: email.trim(), orderRef: orderRef.trim(), name: name.trim(), product: product.trim(), reason: reason.trim(), website: honeypotWert(formRef.current) }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) throw new Error(data?.error ?? 'Widerruf konnte nicht verarbeitet werden.');
@@ -65,7 +67,8 @@ export default function WiderrufForm() {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-5">
+    <form ref={formRef} onSubmit={submit} className="space-y-5">
+      <HoneypotFeld />
       <div>
         <label className="font-serif text-sm font-bold text-text-primary block mb-2">E-Mail-Adresse</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="deine@email.de"

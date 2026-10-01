@@ -13,39 +13,32 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createDOIToken } from '@/lib/doi';
+import { guardRequest } from '@/lib/api/guard';
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
 const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
 
-interface LeadPayload {
-  email?: string;
-  niche?: string;
-  verdict?: 'Go' | 'Caution' | 'Skip';
-  difficulty?: number;
-  consent?: boolean;
-}
+// Eingangsschutz (01.10.2026): Same-Origin, 5 Leads / IP / Stunde, Honeypot,
+// Turnstile — über den zentralen Guard. Schützt die kostenpflichtige Loops-Mail.
+const RATE = { limit: 5, windowMs: 60 * 60 * 1_000 };
+const LeadSchema = z.object({
+  email: z.string().trim().toLowerCase().email('Invalid email.').max(254),
+  niche: z.string().trim().min(1, 'Niche is required.').max(200),
+  verdict: z.enum(['Go', 'Caution', 'Skip']).optional(),
+  difficulty: z.number().optional(),
+  consent: z.boolean().optional(),
+});
+type LeadPayload = z.infer<typeof LeadSchema>;
 
 export async function POST(req: NextRequest) {
-  let body: LeadPayload;
-
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 });
-  }
-
-  const email = body.email?.trim().toLowerCase();
-  const niche = body.niche?.trim();
-
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ error: 'Invalid email.' }, { status: 400 });
-  }
-
-  if (!niche) {
-    return NextResponse.json({ error: 'Niche is required.' }, { status: 400 });
-  }
+  const guard = await guardRequest(req, { key: 'niche-lead', rate: RATE, schema: LeadSchema, honeypot: 'website', turnstile: true });
+  if (!guard.ok) return guard.response;
+  const body: LeadPayload = guard.body;
+  const email = body.email;
+  const niche = body.niche;
 
   // Einwilligung muss explizit gegeben worden sein (DSGVO Art. 6 Abs. 1 lit. a)
   if (!body.consent) {
