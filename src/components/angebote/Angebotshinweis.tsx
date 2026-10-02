@@ -6,21 +6,19 @@ import AngebotLink from './AngebotLink';
  * Der eine Hinweis im Text — nach dem Wissens-Höhepunkt der Seite.
  * Die Seite wählt (hinweiseFuer), dieser Baustein zeigt nur an.
  *
- * ENTWURFSPHASE (02.10.2026): zwei Fassungen zur Abnahme durch Uwe.
- *   randnotiz — dezent: Goldlinie, Kennzeile, ein Satz, ein Link.
- *   karte     — plakativer: Rahmen, Name, Satz, Knopf.
- * Nach der Entscheidung bleibt eine; die andere und die Umgebungsvariable
- * ANGEBOT_VARIANTE fliegen raus.
+ * Zwei Fassungen, nach Umgebung (Entscheidung Uwe, 02.10.2026, anhand der
+ * Entwurfsbilder: „A im Rezept, B im Glossar"):
+ *   randnotiz — Goldlinie, Kennzeile, ein Satz, ein Link. Für Seiten, die schon
+ *               voller Kästen sind (Rezept): dort fällt die Linie auf.
+ *   karte     — Rahmen, Name, Satz, Knopf. Für ruhige Seiten (Glossar): dort
+ *               trägt die Karte.
  */
 export type HinweisVariante = 'randnotiz' | 'karte';
-
-export const STANDARD_VARIANTE: HinweisVariante =
-  process.env.ANGEBOT_VARIANTE === 'karte' ? 'karte' : 'randnotiz';
 
 const KENNZEILE = 'Aus der Steakakademie';
 
 export default function Angebotshinweis({
-  hinweis, seite, variante = STANDARD_VARIANTE,
+  hinweis, seite, variante = 'randnotiz',
 }: {
   hinweis: Hinweis | null;
   seite: Seitentyp;

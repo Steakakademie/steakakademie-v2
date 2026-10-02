@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ChevronRight, ArrowRight, Camera, Zap, FileSearch,
@@ -6,6 +6,22 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { verkaufsstand } from '@/lib/angebote/register';
+
+// Kaufbar oder nicht entscheidet data/angebote.yaml (Eintrag steak-beichte).
+// Bis 02.10.2026 standen hier drei Checkout-Links ohne Schalter.
+const VERKAUF = verkaufsstand('steak-beichte');
+
+function NochNicht({ breit = false }: { breit?: boolean }) {
+  return (
+    <span
+      aria-disabled="true"
+      className={`${breit ? 'flex w-full justify-center' : 'inline-flex'} items-center px-6 py-3 font-sans text-sm font-bold border border-brand-gold/40 text-text-muted cursor-not-allowed`}
+    >
+      {VERKAUF.hinweis}
+    </span>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'Steak-Beichte — KI-Diagnose für Grill-Fehler',
@@ -123,13 +139,18 @@ export default function SteakBeichtePage() {
               </p>
 
               <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://www.checkout-ds24.com/product/696394"
-                  className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
-                  style={{ background: '#C8882A', color: '#0D0A06' }}
-                >
-                  Diagnose starten <ArrowRight size={15} />
-                </a>
+                {VERKAUF.kaufbar ? (
+                  <a
+                    href="https://www.checkout-ds24.com/product/696394"
+                    rel="nofollow"
+                    className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+                    style={{ background: '#C8882A', color: '#0D0A06' }}
+                  >
+                    Diagnose starten <ArrowRight size={15} />
+                  </a>
+                ) : (
+                  <NochNicht />
+                )}
                 <a
                   href="#wie-es-funktioniert"
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans text-sm border transition-colors hover:border-brand-gold/40"
@@ -295,14 +316,18 @@ export default function SteakBeichtePage() {
                     </div>
                     <Flame size={20} className="text-brand-gold mt-1" />
                   </div>
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
-                  <a
-                    href="https://www.checkout-ds24.com/product/696394"
-                    className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
-                    style={{ borderColor: 'rgba(200,136,42,0.25)', color: '#C8882A' }}
-                  >
-                    1 Diagnose kaufen <ArrowRight size={14} />
-                  </a>
+                  {VERKAUF.kaufbar ? (
+                    <a
+                      href="https://www.checkout-ds24.com/product/696394"
+                      rel="nofollow"
+                      className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
+                      style={{ borderColor: 'rgba(200,136,42,0.25)', color: '#C8882A' }}
+                    >
+                      1 Diagnose kaufen <ArrowRight size={14} />
+                    </a>
+                  ) : (
+                    <NochNicht breit />
+                  )}
                 </div>
 
                 {/* 5er */}
@@ -336,14 +361,18 @@ export default function SteakBeichtePage() {
                   <p className="font-body text-xs text-text-muted mb-4 mt-2">
                     Credits verfallen nicht — nutz sie wann du willst.
                   </p>
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
-                  <a
-                    href="https://www.checkout-ds24.com/offer/347059064/RKqM5nVwWQfc/696394"
-                    className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
-                    style={{ background: '#C8882A', color: '#0D0A06' }}
-                  >
-                    5er-Pack kaufen <ArrowRight size={14} />
-                  </a>
+                  {VERKAUF.kaufbar ? (
+                    <a
+                      href="https://www.checkout-ds24.com/offer/347059064/RKqM5nVwWQfc/696394"
+                      rel="nofollow"
+                      className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+                      style={{ background: '#C8882A', color: '#0D0A06' }}
+                    >
+                      5er-Pack kaufen <ArrowRight size={14} />
+                    </a>
+                  ) : (
+                    <NochNicht breit />
+                  )}
                 </div>
               </div>
 

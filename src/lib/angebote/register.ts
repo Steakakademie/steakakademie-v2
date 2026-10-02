@@ -36,6 +36,26 @@ export function angebot(id: string): Angebot {
   return a;
 }
 
+const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+
+/**
+ * Darf die Seite dieses Angebots einen Kaufknopf zeigen?
+ *
+ * Eine Stelle für „kaufbar oder nicht": der Status im Register. Die Seite fragt
+ * hier, statt eine eigene Umgebungsvariable zu führen. Verkaufsstart ist damit
+ * eine Zeile in data/angebote.yaml — durch einen PR, also durch die Pflicht-Checks.
+ * (Mein Protokoll und Eigenregie haben noch eigene Schalter; Umzug in Schritt 2.)
+ */
+export function verkaufsstand(id: string): { kaufbar: boolean; hinweis: string } {
+  const a = angebot(id);
+  if (a.status === 'live') return { kaufbar: true, hinweis: '' };
+  if (a.status === 'ab_datum' && a.ab) {
+    const [jahr, monat, tag] = a.ab.split('-').map(Number);
+    return { kaufbar: false, hinweis: `Verkaufsstart geplant: ${tag}. ${MONATE[monat - 1]} ${jahr}` };
+  }
+  return { kaufbar: false, hinweis: 'Derzeit nicht buchbar' };
+}
+
 /** Hinweis im Text und Regal für eine Seite — zusammen, damit nichts doppelt steht. */
 export function hinweiseFuer(kontext: Seitenkontext): { imText: Hinweis | null; regal: Hinweis[] } {
   const liste = angebote();

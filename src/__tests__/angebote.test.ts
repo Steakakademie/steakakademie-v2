@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { abText, hinweisImText, markeVon, passendeHinweise, regal } from '@/lib/angebote/auswahl';
-import { angebot, angebote, hinweiseFuer } from '@/lib/angebote/register';
+import { angebot, angebote, hinweiseFuer, verkaufsstand } from '@/lib/angebote/register';
 import { AngebotSchema, RegisterSchema, type Angebot } from '@/lib/angebote/typen';
 import { PAKETE } from '@/lib/mein-protokoll/guthaben';
 
@@ -37,7 +37,7 @@ describe('Register (data/angebote.yaml)', () => {
   });
 
   it('Geschäftsfeld 3 und zurückgestellte Produkte erscheinen nirgends', () => {
-    for (const id of ['eigenregie', 'gruender-schmiede', 'steuer-matrix', 'steak-beichte', 'fleischpass', 'gutscheine']) {
+    for (const id of ['eigenregie', 'gruender-schmiede', 'steuer-matrix', 'fleischpass', 'gutscheine']) {
       expect(angebot(id).status, id).toBe('pausiert');
     }
     const alle = [
@@ -45,9 +45,23 @@ describe('Register (data/angebote.yaml)', () => {
       ...passendeHinweise(angebote(), { typ: 'glossar', slug: 'x', felder: { category: 'Techniken & Methoden' } }, HEUTE),
       ...passendeHinweise(angebote(), { typ: 'temperatur-guide', slug: 'temperatur-guide' }, HEUTE),
     ].map((h) => h.id);
-    for (const id of ['eigenregie', 'gruender-schmiede', 'steuer-matrix', 'steak-beichte', 'fleischpass', 'gutscheine']) {
+    for (const id of ['eigenregie', 'gruender-schmiede', 'steuer-matrix', 'fleischpass', 'gutscheine']) {
       expect(alle).not.toContain(id);
     }
+  });
+
+  it('Steak-Beichte: vor dem Verkaufsstart kein Kaufknopf, der Hinweis trägt das Datum', () => {
+    // Uwe, 02.10.2026: bis zur Gewerbeanmeldung keine bezahlten Bestellungen.
+    // Wird der Status auf `live` gestellt, ist dieser Test bewusst anzupassen.
+    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart geplant: 1. November 2026' });
+    const h = passendeHinweise(angebote(), { typ: 'rezept', slug: 'x', felder: { kategorie: 'fleisch', difficulty: 'Profi' } }, HEUTE)
+      .find((x) => x.id === 'steak-beichte');
+    expect(h?.marke).toBe('ab 1. November');
+  });
+
+  it('pausierte Angebote sind nie kaufbar', () => {
+    expect(verkaufsstand('fleischpass').kaufbar).toBe(false);
+    expect(verkaufsstand('gruender-schmiede').kaufbar).toBe(false);
   });
 
   it('der Preis von Mein Protokoll stimmt mit dem Paketpreis im Code überein', () => {

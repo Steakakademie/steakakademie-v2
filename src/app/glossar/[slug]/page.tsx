@@ -169,6 +169,7 @@ export default function GlossarEntryPage(props: Props) {
           <Angebotshinweis
             hinweis={hinweiseFuer({ typ: 'glossar', slug: entry.slug, felder: { category: entry.category } }).imText}
             seite="glossar"
+            variante="karte"
           />
 
           {/* Related glossary entries */}

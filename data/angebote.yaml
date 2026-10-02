@@ -198,22 +198,25 @@ angebote:
         wenn: { difficulty: [Fortgeschritten, Profi] }
         satz: "Du grillst auf diesem Niveau? Für dich entsteht der VIP-Bereich — Werkzeuge ohne Limit und grammgenaue Profi-Rezepte."
 
-  # ─── Zurückgestellt: erscheinen nirgends ─────────────────────────────────────
-
   - id: steak-beichte
     name: Steak-Beichte
     url: /steak-beichte
     art: bezahlt
-    status: pausiert
-    grund: >-
-      Wartet auf Uwes Entscheidung (Konzept, offene Frage 2): Die Seite hat heute
-      einen Kaufknopf ohne Schalter; seine Regel vom 27.09. lautet „keine bezahlten
-      Bestellungen vor der Gewerbeanmeldung". Solange das offen ist, schickt das
-      Register niemanden dorthin. Vorgesehener Anlass: Ende jedes Fleisch-Rezepts
-      („Nicht so geworden wie auf dem Bild? Foto hochladen, Ursache erfahren.").
+    # Verkauf bis zur Gewerbeanmeldung aus (Uwe, 02.10.2026: „Beide auf ‚ab 1.
+    # November'"; Regel vom 27.09.: keine bezahlten Bestellungen vorher).
+    # DIESER STATUS STEUERT AUCH DIE SEITE: /steak-beichte zeigt die Kaufknöpfe
+    # nur bei `live` (verkaufsstand() in src/lib/angebote/register.ts).
+    # Verkaufsstart = diese Zeile auf `live` setzen, `ab` entfernen.
+    status: ab_datum
+    ab: 2026-11-01
     preis_text: ab 7 €
     knopf: Zur Steak-Beichte
-    anlaesse: []
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: fleisch }
+        satz: "Nicht so geworden wie auf dem Bild? Beschreib, was schiefging — mit Foto, wenn du magst — und erfahre die Ursache."
+
+  # ─── Zurückgestellt: erscheinen nirgends ─────────────────────────────────────
 
   - id: fleischpass
     name: Fleischpass
@@ -221,10 +224,11 @@ angebote:
     art: bezahlt
     status: pausiert
     grund: >-
-      Das Logbuch gibt es nicht (02.10.2026 geprüft: keine Route außer der
-      Verkaufsseite, keine Tabelle). „Kostenlos starten" führt zum Login und danach
-      ins Leere. Kein Hinweis, bis es gebaut ist.
-    preis_text: 39 € im Jahr
+      Das Logbuch gibt es noch nicht (02.10.2026 geprüft: keine Route außer der
+      Seite selbst, keine Tabelle). Die Seite steht auf „in Vorbereitung". Kein
+      Hinweis, bis es gebaut ist. Preis und Zuschnitt (einzeln oder VIP-Baustein)
+      sind nicht entschieden.
+    preis_text: ""
     knopf: Zum Fleischpass
     anlaesse: []
 
@@ -257,7 +261,9 @@ angebote:
     url: /gruender-schmiede
     art: bezahlt
     status: pausiert
-    grund: Geschäftsfeld 3 — andere Zielgruppe, kein Hinweis in Grill-Inhalten (Konzept, Frage 4).
+    grund: >-
+      Geschäftsfeld 3, kein Hinweis in Grill-Inhalten. Auf der Seite seit 03.09.2026
+      nicht buchbar („durch ein neues Produkt abgelöst", Entscheidung Uwe).
     preis_text: ""
     knopf: Zur Gründer-Schmiede
     anlaesse: []
