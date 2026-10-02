@@ -19,6 +19,17 @@ import { createClient } from '@/lib/supabase/client';
  * kein Zertifikat haengt daran — deshalb darf der Client hier direkt
  * schreiben (RLS: nur eigene Zeilen).
  *
+ * Korrektur 02.10.2026: Geschrieben wurde per `.upsert()` ohne
+ * `ignoreDuplicates` — das wird zu `ON CONFLICT … DO UPDATE` und braucht das
+ * UPDATE-Recht. Die Tabelle gibt `authenticated` aber bewusst nur SELECT,
+ * INSERT, DELETE (Migration 20260906190000). Folge: JEDER Schreibversuch
+ * scheiterte mit 42501, lesson_progress hatte am 02.10.2026 null Zeilen, der
+ * Lesestand lebte nur im Browser. Jetzt `ignoreDuplicates: true`
+ * (`DO NOTHING`, braucht nur INSERT) — an der Live-DB in einer verworfenen
+ * Transaktion gegengeprueft. Dazu ein Nachtrag beim Laden: Was lokal gelesen
+ * ist, im Konto aber fehlt (anonym gelesen, frueher gescheitert), wird
+ * nachgeschrieben. Das ist zugleich der Wiederholungsversuch nach einem Fehler.
+ *
  * variant="leiste": Fortschrittsleiste fuer die Seitenspalte.
  * variant="knopf": „Als gelesen markieren" unter dem Text.
  */
@@ -34,6 +45,26 @@ function ladeLokal(): Set<string> {
   } catch {
     return new Set();
   }
+}
+
+/**
+ * Zeilen ins Konto schreiben, vorhandene unberuehrt lassen. `true` bei Erfolg.
+ * ignoreDuplicates ist hier Pflicht, nicht Stil — siehe Kopfkommentar.
+ */
+async function schreibeInsKonto(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  stufe: number,
+  slugs: readonly string[],
+): Promise<boolean> {
+  if (slugs.length === 0) return true;
+  const { error } = await supabase
+    .from('lesson_progress')
+    .upsert(
+      slugs.map((lektion_slug) => ({ user_id: userId, lektion_slug, stufe })),
+      { onConflict: 'user_id,lektion_slug', ignoreDuplicates: true },
+    );
+  return !error;
 }
 
 function speichereLokal(set: Set<string>) {
@@ -60,6 +91,10 @@ export default function LektionFortschritt({ stufe, lektionSlug, alleSlugs, colo
   const [hydrated, setHydrated] = useState(false);
   const [fehler, setFehler] = useState<string | null>(null);
 
+  // Stabiler Schluessel statt des Arrays selbst: alleSlugs kommt als Prop und
+  // darf den Effekt nicht bei jedem Rendern neu ausloesen.
+  const slugKey = alleSlugs.join('|');
+
   // Laden: lokal sofort, Konto danach dazu mischen.
   useEffect(() => {
     let cancelled = false;
@@ -72,12 +107,22 @@ export default function LektionFortschritt({ stufe, lektionSlug, alleSlugs, colo
         const { data: { user } } = await supabase.auth.getUser();
         if (!user || cancelled) return;
         setUserId(user.id);
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('lesson_progress')
           .select('lektion_slug')
           .eq('user_id', user.id)
           .eq('stufe', stufe);
-        if (!data || cancelled) return;
+        if (error || !data || cancelled) return;
+
+        // Nachtrag: lokal gelesene Lektionen DIESER Stufe, die im Konto fehlen.
+        // Nur Slugs aus alleSlugs — der lokale Speicher haelt alle Stufen.
+        const imKonto = new Set(data.map((row) => row.lektion_slug as string));
+        const fehlend = slugKey.split('|').filter((s) => s && lokal.has(s) && !imKonto.has(s));
+        if (fehlend.length > 0) {
+          await schreibeInsKonto(supabase, user.id, stufe, fehlend);
+          if (cancelled) return;
+        }
+
         setGelesen((prev) => {
           const next = new Set(prev);
           for (const row of data) next.add(row.lektion_slug as string);
@@ -89,7 +134,7 @@ export default function LektionFortschritt({ stufe, lektionSlug, alleSlugs, colo
       }
     })();
     return () => { cancelled = true; };
-  }, [stufe]);
+  }, [stufe, slugKey]);
 
   const markiere = useCallback(async () => {
     setFehler(null);
@@ -100,12 +145,10 @@ export default function LektionFortschritt({ stufe, lektionSlug, alleSlugs, colo
     if (!userId) return;
     try {
       const supabase = createClient();
-      const { error } = await supabase
-        .from('lesson_progress')
-        .upsert({ user_id: userId, lektion_slug: lektionSlug, stufe }, { onConflict: 'user_id,lektion_slug' });
-      if (error) setFehler('Auf diesem Gerät gemerkt — im Konto konnte es gerade nicht gespeichert werden.');
+      const ok = await schreibeInsKonto(supabase, userId, stufe, [lektionSlug]);
+      if (!ok) setFehler('Auf diesem Gerät gemerkt — im Konto konnte es gerade nicht gespeichert werden. Beim nächsten Öffnen einer Lektion wird es nachgeholt.');
     } catch {
-      setFehler('Auf diesem Gerät gemerkt — im Konto konnte es gerade nicht gespeichert werden.');
+      setFehler('Auf diesem Gerät gemerkt — im Konto konnte es gerade nicht gespeichert werden. Beim nächsten Öffnen einer Lektion wird es nachgeholt.');
     }
   }, [gelesen, lektionSlug, stufe, userId]);
 
