@@ -9,7 +9,7 @@
  * Next-Konventionsdateiname.
  */
 import { type NextRequest, NextResponse } from 'next/server';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { updateSession } from '@/lib/supabase/middleware';
 
 const IS_CRAWLER =
@@ -67,8 +67,8 @@ export async function proxy(request: NextRequest) {
   // Admin-UI: ungültiges/fehlendes Cookie → zur Login-Seite
   if (pathname.startsWith('/admin')) {
     if (pathname !== '/admin/login') {
-      const auth = request.cookies.get('admin_auth');
-      if (!istAdminPasswort(auth?.value)) {
+      const auth = request.cookies.get(ADMIN_COOKIE);
+      if (!(await istAdminCookie(auth?.value))) {
         return NextResponse.redirect(new URL('/admin/login', request.url));
       }
     }
@@ -80,8 +80,8 @@ export async function proxy(request: NextRequest) {
     (pathname.startsWith('/api/admin') && pathname !== '/api/admin/auth') ||
     pathname.startsWith('/api/pm-agent')
   ) {
-    const auth = request.cookies.get('admin_auth');
-    if (!istAdminPasswort(auth?.value)) {
+    const auth = request.cookies.get(ADMIN_COOKIE);
+    if (!(await istAdminCookie(auth?.value))) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     return NextResponse.next();

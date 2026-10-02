@@ -22,7 +22,7 @@
 
 import { createServerClient } from '@supabase/ssr';
 import type { z } from 'zod';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { TURNSTILE_FEHLER_TEXT, verifyTurnstile } from '@/lib/api/turnstile';
 
 // ─── Typen ───────────────────────────────────────────────────────────────────
@@ -178,7 +178,8 @@ function parseCookies(header: string | null): { name: string; value: string }[] 
 }
 
 /**
- * Admin-Cookie-Schema wie in /api/admin/*: admin_auth === ADMIN_PASSWORD.
+ * Admin-Cookie-Schema wie in /api/admin/*: signiertes Sitzungs-Token im
+ * Cookie admin_auth (seit 02.10.2026; vorher stand dort das Passwort selbst).
  *
  * Der Vergleich selbst steht in src/lib/admin-auth.ts und NUR dort
  * (CLAUDE.md, Abschnitt „Admin-Erkennung"). Bis 11.09.2026 lag hier eine
@@ -187,12 +188,12 @@ function parseCookies(header: string | null): { name: string; value: string }[] 
  * siebte Stelle einer Regel, die genau eine haben soll: Wer die Pruefung
  * spaeter haertet, haette sie hier uebersehen.
  *
- * istAdminPasswort liest nur process.env und laeuft damit auch im
- * Edge-Runtime — die Zusage im Kopf dieser Datei bleibt gueltig.
+ * istAdminCookie nutzt nur process.env und Web Crypto und laeuft damit auch
+ * im Edge-Runtime — die Zusage im Kopf dieser Datei bleibt gueltig.
  */
-export function isAdminRequest(req: Request): boolean {
-  const cookie = parseCookies(req.headers.get('cookie')).find((c) => c.name === 'admin_auth');
-  return istAdminPasswort(cookie?.value);
+export async function isAdminRequest(req: Request): Promise<boolean> {
+  const cookie = parseCookies(req.headers.get('cookie')).find((c) => c.name === ADMIN_COOKIE);
+  return istAdminCookie(cookie?.value);
 }
 
 /** Eingeloggter Supabase-Nutzer aus den Request-Cookies (read-only, kein Refresh-Write). */
@@ -216,7 +217,7 @@ export async function userIdFromRequest(req: Request): Promise<string | null> {
 
 async function resolvePrincipal(req: Request, mode: NonNullable<GuardOptions<z.ZodTypeAny>['auth']>): Promise<Principal | null> {
   if (mode === 'none') return { kind: 'anonymous' };
-  if (isAdminRequest(req)) return { kind: 'admin' };
+  if (await isAdminRequest(req)) return { kind: 'admin' };
   if (mode === 'admin') return null;
   const userId = await userIdFromRequest(req);
   return userId ? { kind: 'user', userId } : null;

@@ -18,6 +18,11 @@
 *.csv   text eol=lf
 *.sql   text eol=lf
 *.svg   text eol=lf
+
+# Erweitert 02.10.2026: patch-package schreibt patches/*.patch unter Windows
+# mit CRLF neu. Ohne diese Zeile steht die Datei danach dauerhaft als
+# „geaendert" im Arbeitsbaum (17 Zeilen rein, 17 raus — nur Zeilenenden).
+*.patch text eol=lf
 *.txt   text eol=lf
 *.html  text eol=lf
 *.toml  text eol=lf

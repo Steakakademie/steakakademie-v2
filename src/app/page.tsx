@@ -34,9 +34,10 @@ export const metadata: Metadata = {
 };
 
 const CATEGORY_SECTIONS = [
-  { title: 'Grilltechniken',      slug: 'grilltechniken', articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'grilltechniken') },
-  { title: 'Cuts & Fleischkunde', slug: 'cuts',           articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'cuts') },
-  { title: 'Wissen & Wissenschaft', slug: 'wissen',       articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'wissen') },
+  { title: 'Grilltechniken',      slug: 'grilltechniken', href: '/kategorie/grilltechniken', articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'grilltechniken') },
+  { title: 'Cuts & Fleischkunde', slug: 'cuts',           href: '/kategorie/cuts',           articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'cuts') },
+  // /kategorie/wissen gibt es nicht (404 bis 02.10.2026) — die Uebersicht heisst /wissen.
+  { title: 'Wissen & Wissenschaft', slug: 'wissen',       href: '/wissen',                   articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'wissen') },
 ];
 
 export default async function HomePage() {
@@ -338,13 +339,13 @@ export default async function HomePage() {
         {CATEGORY_SECTIONS.filter((s) => s.articles.length > 0).map((section) => (
           <section key={section.slug} className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex items-center justify-between mb-3">
-              <Link href={`/kategorie/${section.slug}`}>
+              <Link href={section.href}>
                 <h2 className="font-serif text-2xl font-bold text-text-light hover:text-brand-gold transition-colors">
                   {section.title}
                 </h2>
               </Link>
               <Link
-                href={`/kategorie/${section.slug}`}
+                href={section.href}
                 className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase text-brand-fire hover:text-brand-gold transition-colors"
               >
                 Alle <ChevronRight size={14} />

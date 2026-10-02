@@ -44,11 +44,23 @@ import { digistoreSignature } from '@/lib/digistore/signature';
  * Kassieren-ohne-Auslieferung-Alarm (17.09.2026, DB-Audit vom 07.09.)
  * ====================================================================
  * Digistore verkauft, was dort aktiv ist — unabhaengig davon, ob die DB einen
- * Kurs dafuer kennt. Produkt 695900 (Eigenregie, 37/497 EUR) hat KEINE
- * digistore_products-Zeile; 696396/696399 haben eine, zeigen aber auf einen
- * Kurs mit published=false. In beiden Faellen zahlt der Kaeufer und bekommt
- * nichts. Abschalten in Digistore ist blockiert (API nur lesend, Backend-UI
- * wirft 400/CSRF). Bis das geloest ist, muss ein solcher Kauf SOFORT jemanden
+ * Kurs dafuer kennt. Zwei Faelle, in denen der Kaeufer zahlt und nichts
+ * bekommt: das Produkt hat KEINE digistore_products-Zeile, oder die Zeile
+ * zeigt auf einen Kurs mit published=false.
+ *
+ * Stand 02.10.2026 (gegen DB und Digistore-API geprueft):
+ *   - 696396 (Mein Protokoll), 696399 (BBQ-Grundkurs): Zeile da, Kurs
+ *     unveroeffentlicht.
+ *   - 734925 (VIP), 734926/734927 (Beratungen): keine Zeile; in Digistore mit
+ *     Verkaufsstopp seit 19.09.2026 gesperrt.
+ *   - 695900 (Eigenregie, 999 / 1.497 EUR): Zeile und veroeffentlichter Kurs
+ *     seit 19.09.2026, Verkaufsstopp in Digistore seit 23.09.2026. Die frueher
+ *     hier genannten 37/497 EUR und „keine Zeile" galten fuer den Vorgaenger
+ *     „Agentur-Killer-Sprint".
+ * Die Digistore-API ist seit 18.09.2026 schreibbar; der fruehere Satz
+ * „Abschalten ist blockiert" gilt nicht mehr.
+ *
+ * Solange es solche Produkte gibt, muss ein Kauf SOFORT jemanden
  * erreichen, statt still als Zeile in digistore_orders zu liegen: Sentry
  * (Server-SDK, sentry.server.config.ts) legt ein neues Issue an und mailt.
  * Fingerprint pro Produkt, damit jede Bestellung im selben Issue landet und

@@ -111,6 +111,31 @@ export function authorSchemaRef(authorSlug: string) {
   return { '@type': 'Organization' as const, '@id': ORGANIZATION_ID, name: 'Steakakademie', url: BASE_URL };
 }
 
+// ── Pruefvermerk: fachlich geprueft von Uwe ──────────────────────────────────
+// `reviewedAt` im Frontmatter setzt nur Uwe von Hand (CLAUDE.md §2 Regel 4) —
+// es ist der datierte Nachweis, dass ein Mensch den Text geprueft hat. Bis
+// 02.10.2026 stand dieser Nachweis nur im Fliesstext; im strukturierten Teil
+// der Seite fehlte er, obwohl er das einzige E-E-A-T-Signal eines echten
+// Menschen ist. schema.org fuehrt `reviewedBy`/`lastReviewed` an der WebPage,
+// nicht am Article — deshalb haengen die Felder an mainEntityOfPage.
+// Ohne `reviewedAt` gibt es KEINE Felder: Ein Pruefvermerk ohne Pruefung waere
+// eine Falschaussage.
+
+export function pruefvermerkSchema(reviewedAt?: string | null) {
+  if (!reviewedAt) return {};
+  const datum = new Date(reviewedAt);
+  if (Number.isNaN(datum.getTime())) return {};
+  return {
+    lastReviewed: datum.toISOString().slice(0, 10),
+    reviewedBy: {
+      '@type': 'Person' as const,
+      '@id': FOUNDER_ID,
+      name: 'Uwe Yendell',
+      url: `${BASE_URL}/ueber-uns`,
+    },
+  };
+}
+
 // ── Artikel / Fachbeitrag ────────────────────────────────────────────────────
 
 export interface ArticleSchemaInput {
@@ -123,6 +148,8 @@ export interface ArticleSchemaInput {
   authorSlug: string;
   url: string;
   keywords?: string[];
+  /** Frontmatter `reviewedAt` — nur gesetzt, wenn Uwe den Text geprueft hat. */
+  reviewedAt?: string | null;
 }
 
 export function articleSchema(input: ArticleSchemaInput) {
@@ -138,7 +165,11 @@ export function articleSchema(input: ArticleSchemaInput) {
     keywords: input.keywords?.join(', '),
     author: authorSchemaRef(input.authorSlug),
     publisher: { '@id': `${BASE_URL}/#organization` },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}${input.url}` },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${BASE_URL}${input.url}`,
+      ...pruefvermerkSchema(input.reviewedAt),
+    },
     inLanguage: 'de-DE',
   };
 }

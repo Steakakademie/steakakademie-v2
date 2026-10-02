@@ -21,7 +21,7 @@ import AffiliateBox from '@/components/mdx/AffiliateBox';
 // 19.09.2026: Callouts registriert — der Pökel-Artikel nutzt <Schnelluebersicht>/<Achtung>;
 // als Entwurf unsichtbar, nach Freigabe brach der Vercel-Build (Expected component `Achtung`).
 import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
-import { faqSchema } from '@/lib/schema';
+import { authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -187,8 +187,14 @@ export default function ArtikelDetailPage(props: Props) {
         description: artikel.excerpt,
         datePublished: artikel.publishedAt,
         ...(artikel.updatedAt && { dateModified: artikel.updatedAt }),
-        author: { '@type': 'Person', name: artikel.author },
-        mainEntityOfPage: `https://steakakademie.de${artikel.url}`,
+        // Person NUR fuer reale Autoren — Marco, Elena und Jonas sind
+        // KI-Personas und wurden hier bis 02.10.2026 als Person ausgezeichnet.
+        author: authorSchemaRef(artikel.authorSlug),
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://steakakademie.de${artikel.url}`,
+          ...pruefvermerkSchema(artikel.reviewedAt),
+        },
         ...(artikel.image && { image: artikel.image }),
       };
 

@@ -24,7 +24,7 @@ export const maxDuration = 90;
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { dienstClient, produziere } from '@/lib/urkunde/produktion';
 
 /**
@@ -40,11 +40,11 @@ import { dienstClient, produziere } from '@/lib/urkunde/produktion';
  *                     Druckdatei, wird aber weder produziert noch berechnet
  *          stornieren Bestellung abschliessen, ohne zu drucken
  *
- * Auth: admin_auth-Cookie === ADMIN_PASSWORD, wie bei /api/admin/drafts.
+ * Auth: signiertes Sitzungs-Token im Cookie admin_auth (src/lib/admin-auth.ts), wie bei /api/admin/drafts.
  */
 
 async function authed(): Promise<boolean> {
-  return istAdminPasswort((await cookies()).get('admin_auth')?.value);
+  return istAdminCookie((await cookies()).get(ADMIN_COOKIE)?.value);
 }
 
 export async function GET() {
