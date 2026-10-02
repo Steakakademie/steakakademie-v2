@@ -4,8 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import {
-  GRILL_TYPES, EXPERIENCE, TIME_SLOTS, GOALS,
+  GRILL_TYPES, EXPERIENCE, TIME_SLOTS, GOALS, type Answers,
 } from '@/lib/mein-protokoll/schema';
+
+type Props = {
+  /** 'neu' verbraucht ein Protokoll, 'korrektur' die eine kostenlose Korrektur. */
+  modus: 'neu' | 'korrektur';
+  korrekturVon?: string;
+  /** Vorbelegung (Korrektur: die Antworten des bisherigen Plans). */
+  start?: Answers;
+  /** Wortlaut der Bestätigung — kommt vom Server und wird mit dem Plan gespeichert. */
+  bestaetigung: string;
+};
 
 type Step =
   | { key: 'grillType';      label: string; options: readonly string[] }
@@ -20,15 +30,17 @@ const STEPS: Step[] = [
   { key: 'mainGoal',       label: 'Dein Hauptziel',        options: GOALS },
 ];
 
-export default function FragebogenForm() {
+export default function FragebogenForm({ modus, korrekturVon, start, bestaetigung }: Props) {
   const router = useRouter();
 
-  const [grillType,      setGrillType]      = useState<string>('');
-  const [grillOther,     setGrillOther]     = useState<string>('');
-  const [experience,     setExperience]     = useState<string>('');
-  const [timePerSession, setTimePerSession] = useState<string>('');
-  const [mainGoal,       setMainGoal]       = useState<string>('');
-  const [frustration,    setFrustration]    = useState<string>('');
+  const [grillType,      setGrillType]      = useState<string>(start?.grillType ?? '');
+  const [grillOther,     setGrillOther]     = useState<string>(start?.grillOther ?? '');
+  const [experience,     setExperience]     = useState<string>(start?.experience ?? '');
+  const [timePerSession, setTimePerSession] = useState<string>(start?.timePerSession ?? '');
+  const [mainGoal,       setMainGoal]       = useState<string>(start?.mainGoal ?? '');
+  const [frustration,    setFrustration]    = useState<string>(start?.frustration ?? '');
+  const [hinweis,        setHinweis]        = useState<string>('');
+  const [bestaetigt,     setBestaetigt]     = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState<string | null>(null);
@@ -45,7 +57,8 @@ export default function FragebogenForm() {
 
   const allSelected = grillType && experience && timePerSession && mainGoal;
   const grillOk     = grillType !== 'Anderes' || grillOther.trim().length > 1;
-  const canSubmit   = allSelected && grillOk && frustration.trim().length >= 3 && !loading;
+  const hinweisOk   = modus !== 'korrektur' || hinweis.trim().length >= 3;
+  const canSubmit   = allSelected && grillOk && hinweisOk && bestaetigt && frustration.trim().length >= 3 && !loading;
 
   async function submit() {
     if (!canSubmit) return;
@@ -62,15 +75,20 @@ export default function FragebogenForm() {
           timePerSession,
           mainGoal,
           frustration: frustration.trim(),
+          modus,
+          korrekturVon: modus === 'korrektur' ? korrekturVon : undefined,
+          hinweis: modus === 'korrektur' ? hinweis.trim() : undefined,
+          bestaetigt: true,
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
       if (!res.ok || !data?.ok) {
         throw new Error(data?.error ?? 'Plan-Generierung fehlgeschlagen.');
       }
       router.push('/mein-protokoll/plan');
-    } catch (err: any) {
-      setError(err?.message ?? 'Etwas ist schiefgelaufen. Bitte erneut versuchen.');
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Etwas ist schiefgelaufen. Bitte erneut versuchen.');
       setLoading(false);
     }
   }
@@ -131,8 +149,45 @@ export default function FragebogenForm() {
         <p className="text-xs font-sans text-text-muted mt-1">{frustration.length}/600</p>
       </div>
 
+      {modus === 'korrektur' && (
+        <div>
+          <p className="font-serif text-sm font-bold text-text-primary mb-3">
+            Was passt am bisherigen Plan nicht?
+          </p>
+          <textarea
+            value={hinweis}
+            onChange={(e) => setHinweis(e.target.value)}
+            maxLength={600}
+            rows={4}
+            placeholder="Zum Beispiel: Die Sessions sind zu lang für meine Zeit. Oder: zu viel Rind, ich will mehr Geflügel."
+            className="w-full border px-4 py-3 text-sm font-sans bg-transparent leading-relaxed"
+            style={{ borderColor: 'rgba(200,136,42,0.25)' }}
+          />
+          <p className="text-xs font-sans text-text-muted mt-1">{hinweis.length}/600</p>
+        </div>
+      )}
+
+      <div className="border px-4 py-4" style={{ borderColor: 'rgba(200,136,42,0.25)', background: 'rgba(200,136,42,0.04)' }}>
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={bestaetigt}
+            onChange={(e) => setBestaetigt(e.target.checked)}
+            className="mt-1 h-4 w-4 shrink-0 accent-[#C8882A]"
+          />
+          <span className="text-sm font-sans text-text-secondary leading-relaxed">{bestaetigung}</span>
+        </label>
+        <p className="text-xs font-sans text-text-muted leading-relaxed mt-3 pl-7">
+          Deine Antworten werden zur Erstellung an unseren KI-Dienstleister Anthropic (USA) übermittelt und
+          zusammen mit dem Plan in deinem Konto gespeichert —{' '}
+          <a href="/datenschutz" className="text-brand-gold underline hover:text-brand-fire">Datenschutzerklärung</a>.
+          Trag keine sensiblen persönlichen Daten in die Freitextfelder ein.
+        </p>
+      </div>
+
       {error && (
         <div
+          role="alert"
           className="border px-4 py-3 text-sm font-sans"
           style={{ borderColor: 'rgba(180,60,0,0.4)', background: 'rgba(180,60,0,0.06)', color: '#B43C00' }}
         >
@@ -150,18 +205,18 @@ export default function FragebogenForm() {
         {loading ? (
           <>
             <Loader2 size={16} className="animate-spin motion-reduce:animate-none" />
-            Plan wird generiert … (bis zu 60 Sek.)
+            Plan wird erstellt … (ein bis zwei Minuten)
           </>
         ) : (
           <>
-            Meinen Plan generieren <ArrowRight size={16} />
+            {modus === 'korrektur' ? 'Plan neu erstellen' : 'Meinen Plan erstellen'} <ArrowRight size={16} />
           </>
         )}
       </button>
 
       {loading && (
         <p className="text-xs font-sans text-text-muted">
-          Das System baut deinen 8-Wochen-Plan. Schließe dieses Fenster nicht.
+          Das System baut deinen 8-Wochen-Plan und prüft jede Kerntemperatur gegen die Referenz. Schließe dieses Fenster nicht.
         </p>
       )}
     </div>

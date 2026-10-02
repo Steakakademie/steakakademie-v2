@@ -74,6 +74,9 @@ const nextConfig = {
   outputFileTracingIncludes: {
     '/api/admin/urkunden': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
     '/api/admin/urkunden/vorschau': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
+    // Der Generator baut Prompt und Prüfung zur Laufzeit aus der Referenz
+    // (src/lib/kerntemperatur-referenz.ts liest die YAML per fs).
+    '/api/mein-protokoll/generate': ['./data/kerntemperatur-referenz.yaml'],
   },
   images: {
     formats: ['image/avif', 'image/webp'],

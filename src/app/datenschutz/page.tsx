@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: September 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -615,6 +615,57 @@ export default function DatenschutzPage() {
                 <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   anthropic.com/privacy
                 </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>11a. KI-gestützte Kaufprodukte: „Mein Protokoll&quot; und „Steak-Beichte&quot; (Anthropic)</h2>
+              <p className="mb-3">
+                Zwei kostenpflichtige Produkte erstellen ihr Ergebnis mit einem KI-Sprachmodell von{' '}
+                <strong className="text-text-primary">Anthropic PBC</strong>, 548 Market Street, San Francisco,
+                CA 94104, USA (Auftragsverarbeiter gemäß Art. 28 DSGVO). Beide setzen ein Nutzerkonto voraus
+                (Abschnitt 9).
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-3">
+                <li>
+                  <strong className="text-text-primary">Mein Protokoll (8-Wochen-Grillplan):</strong>{' '}
+                  Übermittelt werden deine Antworten aus dem Fragebogen — Grilltyp, Erfahrungsstand, Zeit pro
+                  Session, Hauptziel, dein Freitext zur Frage, was dich beim Grillen stört, sowie bei einer
+                  Korrektur dein Hinweis, was am Plan nicht passt. Name und E-Mail-Adresse werden nicht
+                  übermittelt. Antworten und Plan speichern wir in deinem Konto, zusammen mit Zeitpunkt und
+                  Wortlaut deiner Bestätigung, dass der Plan erstellt werden soll.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Steak-Beichte (Grillfehler-Diagnose):</strong>{' '}
+                  Übermittelt werden deine Problembeschreibung, optional Cut und Grilltyp sowie — falls du
+                  eines hochlädst — dein Foto. Das Foto speichern wir in einem nicht öffentlichen Speicher bei
+                  Supabase, Beschreibung und Diagnose in deinem Konto.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Drittlandübermittlung:</strong>{' '}
+                  USA — Rechtsgrundlage: EU-Standardvertragsklauseln (SCC) gemäß Art. 46 Abs. 2 lit. c DSGVO.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Rechtsgrundlage:</strong>{' '}
+                  Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) — ohne die Übermittlung lässt sich das gekaufte
+                  Ergebnis nicht erstellen.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Speicherdauer:</strong>{' '}
+                  Bis du dein Konto löschst. Mit der Kontolöschung entfernen wir Antworten, Pläne, Diagnosen
+                  und hochgeladene Fotos.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Keine automatisierte Entscheidung:</strong>{' '}
+                  Plan und Diagnose sind Empfehlungen ohne Rechtswirkung (kein Fall des Art. 22 DSGVO).
+                </li>
+              </ul>
+              <p>
+                Bitte trag in Freitextfelder keine sensiblen personenbezogenen Daten ein und lade keine Fotos
+                hoch, auf denen Personen zu erkennen sind. Weitere Informationen:{' '}
+                <Link href="/ki-disclaimer" className={linkClass}>
+                  KI-Disclaimer
+                </Link>
               </p>
             </section>
 

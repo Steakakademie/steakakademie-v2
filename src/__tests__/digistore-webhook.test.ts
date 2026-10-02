@@ -27,11 +27,19 @@ function nextId(prefix: string) {
 function from(name: string) {
   const rows = (db.tables[name] ??= []);
   const filters: [string, unknown][] = [];
-  let op: 'select' | 'insert' | 'update' = 'select';
+  let op: 'select' | 'insert' | 'update' | 'upsert' = 'select';
   let payload: Row | null = null;
   const matches = (r: Row) => filters.every(([k, v]) => r[k] === v);
 
-  async function run(single: boolean) {
+  async function run(single: boolean, list = false) {
+    if (op === 'upsert') {
+      // Nachbildung von UNIQUE (quelle, referenz) + ignoreDuplicates.
+      const row = payload!;
+      if (!rows.some((r) => r.quelle === row.quelle && r.referenz === row.referenz)) {
+        rows.push({ id: nextId('gutschrift'), ...row });
+      }
+      return { data: null, error: null };
+    }
     if (op === 'insert') {
       const row = payload!;
       if (name === 'digistore_orders' &&
@@ -46,6 +54,8 @@ function from(name: string) {
       rows.filter(matches).forEach((r) => Object.assign(r, payload));
       return { data: null, error: null };
     }
+    // Ohne single()/maybeSingle() liefert PostgREST eine Liste.
+    if (list) return { data: rows.filter(matches), error: null };
     const found = rows.find(matches) ?? null;
     if (single && !found) return { data: null, error: { code: 'PGRST116', message: 'no rows' } };
     return { data: found, error: null };
@@ -55,10 +65,11 @@ function from(name: string) {
     select: () => builder,
     insert: (row: Row) => { op = 'insert'; payload = row; return builder; },
     update: (patch: Row) => { op = 'update'; payload = patch; return builder; },
+    upsert: (row: Row) => { op = 'upsert'; payload = row; return builder; },
     eq: (k: string, v: unknown) => { filters.push([k, v]); return builder; },
     single: () => run(true),
     maybeSingle: () => run(false),
-    then: (ok: any, fail: any) => run(false).then(ok, fail),
+    then: (ok: any, fail: any) => run(false, op === 'select' && name === 'protokoll_gutschriften').then(ok, fail),
   };
   return builder;
 }
@@ -149,6 +160,8 @@ beforeEach(() => {
         courses: { slug: 'bbq-grundkurs', title: 'BBQ Grundkurs' } },
       { ds_product_id: '696394', course_id: null, is_voucher: false, voucher_credit_amount: null, credit_amount: 1,
         courses: null },
+      { ds_product_id: '696396', course_id: 'course-mein-protokoll', is_voucher: false, voucher_credit_amount: null, credit_amount: null,
+        courses: { slug: 'mein-protokoll', title: 'Mein Protokoll', published: true } },
     ],
     digistore_orders: [],
     bookings: [],
@@ -283,5 +296,59 @@ describe('Digistore24-Webhook: Alarm „Kurs nicht veroeffentlicht“ (Fehlalarm
     expect(erste.status).toBe(200);
     expect(zweite.status).toBe(200);
     expect(alarme()).toHaveLength(1);
+  });
+});
+
+describe('Digistore24-Webhook: Mein Protokoll — Pakete als Gutschrift', () => {
+  const kauf = (order: string, brutto: string, event = 'payment') =>
+    delivery({ event, order_id: order, product_id: '696396', email: 'griller@example.de', amount_brutto: brutto });
+  const gutschriften = () => db.tables.protokoll_gutschriften ?? [];
+  const summe = () => gutschriften().reduce((n, g) => n + g.anzahl, 0);
+  const zugang = () => (db.tables.bookings ?? []).some((b) => b.course_id === 'course-mein-protokoll' && !b.revoked_at);
+
+  it('19 EUR schreibt 1 Protokoll gut, 29 EUR zwei — und schaltet den Zugang frei', async () => {
+    expect((await POST(kauf('MP-1', '19.00'))).status).toBe(200);
+    expect(gutschriften()).toMatchObject([{ quelle: 'digistore', referenz: 'MP-1', anzahl: 1 }]);
+    expect(zugang()).toBe(true);
+
+    expect((await POST(kauf('MP-2', '29.00'))).status).toBe(200);
+    expect(gutschriften()[1]).toMatchObject({ referenz: 'MP-2', anzahl: 2 });
+    expect(summe()).toBe(3);
+  });
+
+  it('eine zweite Zustellung derselben Bestellung schreibt nichts doppelt', async () => {
+    await POST(kauf('MP-1', '29.00'));
+    await POST(kauf('MP-1', '29.00'));
+    expect(gutschriften()).toHaveLength(1);
+    expect(summe()).toBe(2);
+  });
+
+  it('scheitert die Mail, bleibt die Gutschrift bei der Wiederholung einfach', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('nope', { status: 500 })));
+    expect((await POST(kauf('MP-1', '19.00'))).status).toBe(500);
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })));
+    await POST(kauf('MP-1', '19.00'));
+    expect(summe()).toBe(1);
+  });
+
+  it('Rückgabe des einzigen Kaufs bucht zurück und entzieht den Zugang', async () => {
+    await POST(kauf('MP-1', '29.00'));
+    expect((await POST(kauf('MP-1', '-29.00', 'refund'))).status).toBe(200);
+    expect(gutschriften()[1]).toMatchObject({ referenz: 'MP-1:rueckgabe', anzahl: -2 });
+    expect(summe()).toBe(0);
+    expect(zugang()).toBe(false);
+  });
+
+  it('Rückgabe EINES von zwei Käufen lässt den Zugang für den anderen stehen', async () => {
+    await POST(kauf('MP-1', '19.00'));
+    await POST(kauf('MP-2', '19.00'));
+    expect((await POST(kauf('MP-2', '-19.00', 'refund'))).status).toBe(200);
+    expect(summe()).toBe(1);
+    expect(zugang()).toBe(true);
+  });
+
+  it('andere Kurse bekommen keine Protokoll-Gutschrift', async () => {
+    await POST(delivery({ event: 'payment', order_id: 'BBQ-1', product_id: '696399', email: 'griller@example.de', amount_brutto: '49.00' }));
+    expect(gutschriften()).toHaveLength(0);
   });
 });

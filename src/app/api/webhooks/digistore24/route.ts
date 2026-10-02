@@ -38,6 +38,7 @@ export const dynamic  = 'force-dynamic';
 import { timingSafeEqual } from 'node:crypto';
 import * as Sentry from '@sentry/nextjs';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { protokolleFuerBetrag } from '@/lib/mein-protokoll/guthaben';
 import { digistoreSignature } from '@/lib/digistore/signature';
 
 /**
@@ -123,6 +124,66 @@ function creditsForOrder(baseCredits: number, params: Record<string, string>): n
     return CREDIT_PACK_SIZE;
   }
   return baseCredits;
+}
+
+// ─── Mein Protokoll: Gutschriften ───────────────────────────────────────────
+
+const PROTOKOLL_SLUG = 'mein-protokoll';
+
+/**
+ * Gutschrift einer Bestellung. Idempotent über UNIQUE (quelle, referenz): Eine
+ * zweite Zustellung derselben Order (Digistore-Retry, zwei IPN-Anbindungen)
+ * schreibt nichts doppelt. Ein Fehler wirft — dann antwortet der Webhook mit
+ * 500 und Digistore stellt erneut zu; lieber das als ein Kauf ohne Guthaben.
+ */
+async function schreibeProtokollGutschrift(
+  supabase: SupabaseClient,
+  userId: string,
+  orderId: string,
+  anzahl: number,
+): Promise<void> {
+  const { error } = await supabase
+    .from('protokoll_gutschriften')
+    .upsert(
+      { user_id: userId, quelle: 'digistore', referenz: orderId, anzahl },
+      { onConflict: 'quelle,referenz', ignoreDuplicates: true },
+    );
+  if (error) throw new Error(`protokoll_gutschriften insert failed: ${error.message}`);
+}
+
+/**
+ * Rückgabe/Chargeback: Gegenbuchung in Höhe der ursprünglichen Gutschrift.
+ * Liefert das Guthaben, das dem Nutzer danach bleibt (Summe aller Zeilen).
+ */
+async function bucheProtokollGutschriftZurueck(
+  supabase: SupabaseClient,
+  userId: string,
+  orderId: string,
+): Promise<number> {
+  const { data: gutschrift, error: leseErr } = await supabase
+    .from('protokoll_gutschriften')
+    .select('anzahl')
+    .eq('quelle', 'digistore')
+    .eq('referenz', orderId)
+    .maybeSingle();
+  if (leseErr) throw new Error(`protokoll_gutschriften read failed: ${leseErr.message}`);
+
+  if (gutschrift && gutschrift.anzahl > 0) {
+    const { error } = await supabase
+      .from('protokoll_gutschriften')
+      .upsert(
+        { user_id: userId, quelle: 'digistore', referenz: `${orderId}:rueckgabe`, anzahl: -gutschrift.anzahl },
+        { onConflict: 'quelle,referenz', ignoreDuplicates: true },
+      );
+    if (error) throw new Error(`protokoll_gutschriften refund failed: ${error.message}`);
+  }
+
+  const { data: zeilen, error: sumErr } = await supabase
+    .from('protokoll_gutschriften')
+    .select('anzahl')
+    .eq('user_id', userId);
+  if (sumErr) throw new Error(`protokoll_gutschriften sum failed: ${sumErr.message}`);
+  return (zeilen ?? []).reduce((summe: number, z: { anzahl: number }) => summe + z.anzahl, 0);
 }
 
 // ─── Authentifizierung ──────────────────────────────────────────────────────
@@ -355,6 +416,13 @@ export async function POST(req: Request) {
       });
       if (grantErr) throw new Error(`grant_course_access failed: ${grantErr.message}`);
 
+      // Mein Protokoll: Die Buchung öffnet nur die Tür — WIE VIELE Protokolle
+      // bezahlt sind, steht in protokoll_gutschriften (19 € = 1, 29 € = 2).
+      // Vor dem Mailversand, damit der Link nie auf ein leeres Guthaben zeigt.
+      if (courseSlug === PROTOKOLL_SLUG) {
+        await schreibeProtokollGutschrift(supabase, userId, orderId, protokolleFuerBetrag(params.amount_brutto));
+      }
+
       await sendMagicLink(supabase, email, courseSlug, courseTitle);
 
       await supabase
@@ -373,13 +441,23 @@ export async function POST(req: Request) {
       const userId = await findUserId(supabase, email);
       if (!userId) throw new Error(`refund for unknown user: ${email}`);
 
-      const { data: count, error: revokeErr } = await supabase.rpc('revoke_course_access', {
-        p_user_id:   userId,
-        p_course_id: courseId,
-      });
-      if (revokeErr) throw new Error(`revoke_course_access failed: ${revokeErr.message}`);
-      if (count === 0) {
-        console.warn('[ds-webhook] refund had no booking to revoke', { email, courseId });
+      // Mein Protokoll: erst die Gutschrift dieser Bestellung zurückbuchen. Bleibt
+      // danach Guthaben aus einer ANDEREN Bestellung übrig, behält der Nutzer den
+      // Zugang — sonst nähme die Rückgabe eines Kaufs auch den zweiten mit.
+      let zugangBleibt = false;
+      if (courseSlug === PROTOKOLL_SLUG) {
+        zugangBleibt = (await bucheProtokollGutschriftZurueck(supabase, userId, orderId)) > 0;
+      }
+
+      if (!zugangBleibt) {
+        const { data: count, error: revokeErr } = await supabase.rpc('revoke_course_access', {
+          p_user_id:   userId,
+          p_course_id: courseId,
+        });
+        if (revokeErr) throw new Error(`revoke_course_access failed: ${revokeErr.message}`);
+        if (count === 0) {
+          console.warn('[ds-webhook] refund had no booking to revoke', { email, courseId });
+        }
       }
 
       await supabase

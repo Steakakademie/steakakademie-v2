@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 import { requireCourseAccess } from '@/lib/auth/require-course-access';
 import { PlanSchema, type Plan } from '@/lib/mein-protokoll/schema';
+import { ladeStand } from '@/lib/mein-protokoll/stand';
 import PrintButton from './PrintButton';
 import PlanNewsletter from './PlanNewsletter';
 
@@ -18,17 +19,18 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function PlanPage() {
+export default async function PlanPage(props: { searchParams: Promise<{ nr?: string }> }) {
   const { user } = await requireCourseAccess('mein-protokoll', '/mein-protokoll/plan');
+  const { nr } = await props.searchParams;
 
   const supabase = await createClient();
-  const { data: row } = await supabase
-    .from('protokolle')
-    .select('id, plan, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const stand = await ladeStand(supabase, user.id);
+  const g = stand.guthaben;
+
+  // Gezeigt wird ein Protokoll: das per ?nr= gewählte, sonst das jüngste. Gibt es
+  // eine Korrektur, ersetzt sie den ursprünglichen Plan.
+  const gewaehlt = g.protokolle.find((p) => String(p.nr) === nr) ?? g.protokolle[g.protokolle.length - 1] ?? null;
+  const row = gewaehlt ? stand.zeilen.find((z) => z.id === gewaehlt.aktuellId) ?? null : null;
 
   // Noch kein Plan generiert → zurück zum Fragebogen
   if (!row?.plan) {
@@ -42,7 +44,7 @@ export default async function PlanPage() {
                 Noch kein Plan vorhanden
               </h1>
               <p className="font-body text-text-secondary mb-8">
-                Fülle den Fragebogen aus — dein 8-Wochen-Plan wird in Minuten generiert.
+                Fülle den Fragebogen aus — dein 8-Wochen-Plan wird in ein bis zwei Minuten erstellt.
               </p>
               <Link
                 href="/mein-protokoll/fragebogen"
@@ -71,16 +73,9 @@ export default async function PlanPage() {
                 Plan konnte nicht geladen werden
               </h1>
               <p className="font-body text-text-secondary mb-8">
-                Bitte generiere deinen Plan erneut. Falls das Problem bleibt:
-                pitmaster@steakakademie.de
+                Das ist ein Fehler auf unserer Seite, dein Guthaben ist davon nicht betroffen.
+                Schreib uns bitte: pitmaster@steakakademie.de
               </p>
-              <Link
-                href="/mein-protokoll/fragebogen"
-                className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-base"
-                style={{ background: '#C8882A', color: '#0D0A06' }}
-              >
-                Erneut generieren <ArrowRight size={16} />
-              </Link>
             </div>
           </section>
         </main>
@@ -113,6 +108,8 @@ export default async function PlanPage() {
               <div className="max-w-2xl">
                 <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
                   Dein persönlicher 8-Wochen-Plan
+                  {g.protokolle.length > 1 && gewaehlt ? ` · Protokoll ${gewaehlt.nr} von ${g.protokolle.length}` : ''}
+                  {gewaehlt?.korrigiert ? ' · korrigierte Fassung' : ''}
                 </span>
                 <h1 className="font-serif text-3xl lg:text-4xl font-bold text-text-primary mb-4">
                   Mein Protokoll
@@ -123,6 +120,25 @@ export default async function PlanPage() {
               </div>
               <PrintButton />
             </div>
+
+            {/* Auswahl, sobald es mehr als ein Protokoll gibt */}
+            {g.protokolle.length > 1 && (
+              <nav className="print:hidden mb-8 flex flex-wrap gap-2" aria-label="Deine Protokolle">
+                {g.protokolle.map((p) => (
+                  <Link
+                    key={p.basisId}
+                    href={`/mein-protokoll/plan?nr=${p.nr}`}
+                    aria-current={p.nr === gewaehlt?.nr ? 'page' : undefined}
+                    className="px-4 py-2 border text-sm font-sans font-bold transition-colors"
+                    style={p.nr === gewaehlt?.nr
+                      ? { background: '#C8882A', color: '#0D0A06', borderColor: '#C8882A' }
+                      : { borderColor: 'rgba(200,136,42,0.4)', color: '#C8882A' }}
+                  >
+                    Protokoll {p.nr}
+                  </Link>
+                ))}
+              </nav>
+            )}
 
             {/* Schwerpunkte */}
             <div className="mb-12 border border-brand-gold/20 p-6" style={{ background: 'rgba(200,136,42,0.04)' }}>
@@ -168,7 +184,8 @@ export default async function PlanPage() {
               <p className="text-[10px] font-sans text-text-muted/60 mt-3">Unabhängige Empfehlungen — keine bezahlten Platzierungen.</p>
             </div>
 
-            {/* Wochenstart-Erinnerung (Element 2) */}
+            {/* Newsletter-Anmeldung (Element 2). Bis 02.10.2026 versprach sie eine
+                „Wochenstart-Erinnerung jeden Montag" — die gibt es in Loops nicht. */}
             <PlanNewsletter />
 
             {/* Wochen */}
@@ -242,8 +259,8 @@ export default async function PlanPage() {
                     <p className="font-body text-sm text-text-secondary leading-relaxed">
                       <strong className="text-text-primary">Session absolviert?</strong> Trag sie in deinen{' '}
                       <Link href="/fleischpass" className="text-brand-gold font-bold hover:text-brand-fire underline">Fleischpass</Link>{' '}
-                      ein — Kerntemperatur, Methode, dein Urteil. Nach 8 Wochen zeigt dir die KI, wo du
-                      konstant bist und wo noch Luft ist. Kostenlos.
+                      ein — Kerntemperatur, Methode, dein Urteil. So siehst du nach 8 Wochen selbst, wo du
+                      konstant bist und wo noch Luft ist.
                     </p>
                   </div>
                 )}
@@ -288,34 +305,51 @@ export default async function PlanPage() {
 
             <p className="mt-8 border-t border-border-subtle pt-5 font-body text-xs text-text-muted leading-relaxed max-w-2xl">
               <strong className="text-text-secondary">Hinweis:</strong> Dieser Plan ist KI-generiert —
-              Temperaturen und Zeiten sind Richtwerte ohne Gewähr. Die{' '}
+              Temperaturen und Zeiten sind Richtwerte ohne Gewähr. Die Kerntemperaturen stammen aus der
+              Referenz der Steakakademie; „Kern&quot; meint den Wert beim Servieren, gemessen im dicksten Punkt. Die{' '}
               <strong className="text-text-secondary">Lebensmittelsicherheit</strong> (z. B. sichere
               Kerntemperaturen bei Geflügel und Hack) liegt in deiner Verantwortung. Mehr im{' '}
               <Link href="/ki-disclaimer" className="text-brand-gold hover:text-brand-fire underline">KI-Disclaimer</Link>.
             </p>
 
-            {/* 8-Wochen-Abschluss-Framing (Element 5) */}
+            {/* Abschluss + was als Nächstes möglich ist */}
             <p className="print:hidden mt-8 max-w-2xl font-body text-sm text-text-secondary leading-relaxed">
-              8 Wochen sind kein Kurs — das ist eine Gewohnheit, die du dir baust. Bist du am Ende
-              bereit fürs nächste Level, generierst du einfach einen neuen Plan auf höherem Niveau.
+              8 Wochen sind kein Kurs — das ist eine Gewohnheit, die du dir baust.
+              {stand.verfuegbar && g.frei > 0
+                ? ` Du hast noch ${g.frei === 1 ? 'ein Protokoll' : `${g.frei} Protokolle`} offen: Es baut auf diesem Plan auf.`
+                : ''}
+              {stand.verfuegbar && gewaehlt && !gewaehlt.korrigiert
+                ? ' Passt etwas an diesem Plan nicht, steht dir eine kostenlose Korrektur zu.'
+                : ''}
             </p>
 
             <div className="print:hidden mt-6 flex flex-wrap gap-4">
               <PrintButton />
-              <Link
-                href="/mein-protokoll/fragebogen"
-                className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
-                style={{ background: '#C8882A', color: '#0D0A06' }}
-              >
-                Nächste Stufe: Neuen Plan generieren
-              </Link>
+              {stand.verfuegbar && g.frei > 0 && (
+                <Link
+                  href="/mein-protokoll/fragebogen"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
+                  style={{ background: '#C8882A', color: '#0D0A06' }}
+                >
+                  Nächstes Protokoll starten
+                </Link>
+              )}
+              {stand.verfuegbar && gewaehlt && !gewaehlt.korrigiert && (
+                <Link
+                  href={`/mein-protokoll/fragebogen?modus=korrektur&von=${gewaehlt.basisId}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 border font-sans text-sm font-bold transition-colors hover:bg-brand-gold/10"
+                  style={{ borderColor: 'rgba(200,136,42,0.6)', color: '#C8882A' }}
+                >
+                  Kostenlose Korrektur nutzen
+                </Link>
+              )}
             </div>
 
-            {/* Diplom-Hinweis (Element 6) — ehrlich, kein Button */}
+            {/* Diplom-Hinweis (Element 6) */}
             <p className="print:hidden mt-10 pt-6 border-t border-border-subtle text-xs font-body text-text-muted leading-relaxed max-w-2xl">
-              Die Steakakademie baut gerade die <strong className="text-text-secondary">Diplom-Tracks</strong> auf —
-              strukturierte Lernpfade, die auf Plänen wie diesem aufbauen. Wer früh dabei sein will:
-              die Wochenstart-Erinnerung oben genügt, du erfährst es zuerst.
+              Wer es strukturiert will: Das{' '}
+              <Link href="/diplome" className="text-brand-gold hover:text-brand-fire underline">Grillmeister-Diplom</Link>{' '}
+              der Steakakademie führt in Lektionen und Prüfungen durch dieselben Themen.
             </p>
           </div>
         </section>

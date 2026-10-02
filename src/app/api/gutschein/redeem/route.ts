@@ -58,6 +58,21 @@ export async function POST(req: Request) {
   const status = (data as any)?.status as string;
   if (status === 'ok') {
     const slug = (data as any).course_slug as string;
+
+    // Mein Protokoll: Der Gutschein öffnet den Zugang (redeem_voucher →
+    // grant_course_access); das Guthaben — ein Protokoll je Gutschein — steht in
+    // protokoll_gutschriften. Idempotent über UNIQUE (quelle, referenz). Scheitert
+    // der Eintrag, bleibt der Zugang bestehen, aber der Fragebogen meldet „kein
+    // Guthaben": deshalb laut protokollieren statt still schlucken.
+    if (slug === 'mein-protokoll') {
+      const { error: gErr } = await admin
+        .from('protokoll_gutschriften')
+        .upsert(
+          { user_id: user.id, quelle: 'gutschein', referenz: code.toUpperCase(), anzahl: 1 },
+          { onConflict: 'quelle,referenz', ignoreDuplicates: true },
+        );
+      if (gErr) console.error('[gutschein] protokoll_gutschriften insert failed', { userId: user.id, message: gErr.message });
+    }
     return NextResponse.json({
       ok: true,
       course_title: (data as any).course_title ?? 'deinem Produkt',

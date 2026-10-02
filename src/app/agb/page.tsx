@@ -287,7 +287,7 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 9 KI-gestützte Inhalte (Marco-Widget)</h2>
+              <h2 className={h2Class}>§ 9 KI-gestützte Inhalte</h2>
               <p>
                 Auf steakakademie.de ist ein KI-Assistent (&quot;Marco&quot;) verfügbar, der auf Basis
                 von KI-Sprachmodellen Antworten zu Grillthemen generiert. Diese Antworten sind
@@ -295,6 +295,16 @@ export default function AgbPage() {
                 professionelle Beratung — insbesondere nicht in Fragen der Lebensmittelsicherheit,
                 Hygiene oder Gesundheit. Die Nutzung des KI-Assistenten erfolgt auf eigene
                 Verantwortung.
+              </p>
+              <p className="mt-3">
+                Dasselbe gilt für die Produkte „Mein Protokoll&quot; (persönlicher 8-Wochen-Grillplan) und
+                „Steak-Beichte&quot; (Diagnose von Grillfehlern): Ihr Ergebnis wird von einem
+                KI-Sprachmodell erstellt und nicht einzeln von einem Menschen geprüft. Temperaturen und
+                Zeiten sind Richtwerte. Bei „Mein Protokoll&quot; umfasst ein Protokoll einen Plan sowie eine
+                kostenlose Neuerstellung (Korrektur); die Erstellung beginnt erst, wenn du den Fragebogen
+                abschickst. Einzelheiten zur Datenverarbeitung stehen in der{' '}
+                <Link href="/datenschutz" className={linkClass}>Datenschutzerklärung</Link> und im{' '}
+                <Link href="/ki-disclaimer" className={linkClass}>KI-Disclaimer</Link>.
               </p>
             </section>
 
