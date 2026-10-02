@@ -52,11 +52,6 @@ export async function POST(req: Request) {
   if (!guard.ok) return guard.response;
   const auftrag = guard.body;
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error('[mein-protokoll] ANTHROPIC_API_KEY fehlt');
-    return fehler(503, 'Die Plan-Erstellung ist gerade nicht verfügbar. Bitte versuch es später erneut.');
-  }
-
   // 2) Login + Buchung
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -73,6 +68,11 @@ export async function POST(req: Request) {
     .in('status', ['active', 'confirmed', 'pending'])
     .maybeSingle();
   if (!booking) return fehler(403, 'Kein Zugang. Bitte zuerst kaufen.');
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error('[mein-protokoll] ANTHROPIC_API_KEY fehlt');
+    return fehler(503, 'Die Plan-Erstellung ist gerade nicht verfügbar. Bitte versuch es später erneut.');
+  }
 
   // 3) Guthaben
   const stand = await ladeStand(supabase, user.id);
