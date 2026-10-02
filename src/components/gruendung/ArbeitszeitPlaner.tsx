@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { Clock, Plus, Trash2, Check, CalendarDays, RefreshCw, AlertTriangle } from 'lucide-react';
 import {
@@ -115,6 +115,9 @@ export default function ArbeitszeitPlaner() {
   const [ntCat, setNtCat] = useState<RoadmapKategorie>('Website');
   const [ntEffort, setNtEffort] = useState('2');
 
+  const maskeTitelId = useId();
+  const maskePanelRef = useRef<HTMLDivElement>(null);
+
   // Laden
   useEffect(() => {
     try {
@@ -143,6 +146,48 @@ export default function ArbeitszeitPlaner() {
       /* noop */
     }
   }, [loaded, maskOpen, hours, tasks]);
+
+  // Maske als Dialog bedienbar machen: Fokus hinein, Tab bleibt darin, Escape schliesst
+  // (wie "Timetable bauen"), danach Fokus zurueck. Die Maske oeffnet sich beim Erstaufruf
+  // ungefragt und deckt den ganzen Viewport — ohne das hatte eine Tastatur-Nutzerin keinen
+  // ausgewiesenen Ausweg.
+  useEffect(() => {
+    if (!maskOpen) return;
+    const vorher = document.activeElement as HTMLElement | null;
+    const panel = maskePanelRef.current;
+    const fokussierbar = () =>
+      panel
+        ? Array.from(
+            panel.querySelectorAll<HTMLElement>('input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'),
+          ).filter((el) => !el.hasAttribute('disabled'))
+        : [];
+    fokussierbar()[0]?.focus();
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setMaskOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const el = fokussierbar();
+      if (el.length === 0) return;
+      const first = el[0];
+      const last = el[el.length - 1];
+      const drin = panel?.contains(document.activeElement) ?? false;
+      if (e.shiftKey && (!drin || document.activeElement === first)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (!drin || document.activeElement === last)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      vorher?.focus?.();
+    };
+  }, [maskOpen]);
 
   const schedule = useMemo(() => computeSchedule(tasks, hours), [tasks, hours]);
 
@@ -191,6 +236,10 @@ export default function ArbeitszeitPlaner() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           >
             <motion.div
+              ref={maskePanelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={maskeTitelId}
               initial={{ opacity: 0, scale: 0.97, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 8, transition: { duration: 0.16 } }}
@@ -199,7 +248,7 @@ export default function ArbeitszeitPlaner() {
             >
               <div className="mb-1 flex items-center gap-2">
                 <Clock size={18} className="text-brand-fire" />
-                <h2 className="font-serif text-xl text-text-primary">Wie viel Zeit hast du?</h2>
+                <h2 id={maskeTitelId} className="font-serif text-xl text-text-primary">Wie viel Zeit hast du?</h2>
               </div>
               <p className="mb-5 font-body text-[0.9rem] leading-relaxed text-text-secondary">
                 Trag ein, wie viele Stunden du an jedem Wochentag realistisch fürs Projekt aufbringen
