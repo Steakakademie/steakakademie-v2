@@ -37,7 +37,7 @@ export default function KiDisclaimerPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             KI-Systeme &amp; KI-Disclaimer
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
 
           <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
 
@@ -86,6 +86,25 @@ export default function KiDisclaimerPage() {
                       <td className="px-4 py-3">
                         Automatisierte Prüfung eingereichter Community-Rezepte und Erzeugung von
                         KI-Symbolbildern
+                      </td>
+                    </tr>
+                    <tr className="border-b border-white/5">
+                      <td className="px-4 py-3">
+                        <span className="font-semibold text-text-primary">Mein Protokoll</span>
+                      </td>
+                      <td className="px-4 py-3">Claude Sonnet (Anthropic PBC)</td>
+                      <td className="px-4 py-3">
+                        Persönlicher 8-Wochen-Grillplan aus deinen Fragebogen-Antworten. Kerntemperaturen
+                        werden nach der Erzeugung maschinell gegen die Referenz der Steakakademie geprüft
+                      </td>
+                    </tr>
+                    <tr className="border-b border-white/5">
+                      <td className="px-4 py-3">
+                        <span className="font-semibold text-text-primary">Steak-Beichte</span>
+                      </td>
+                      <td className="px-4 py-3">Claude Sonnet (Anthropic PBC)</td>
+                      <td className="px-4 py-3">
+                        Diagnose von Grillfehlern aus deiner Beschreibung und einem optionalen Foto
                       </td>
                     </tr>
                   </tbody>

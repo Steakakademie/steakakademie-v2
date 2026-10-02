@@ -1,18 +1,24 @@
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 /**
- * Wochenstart-Erinnerung im Plan — nutzt die zentrale NewsletterSignup-Komponente
- * (DSGVO-Consent, Honeypot, Double-Opt-In-Erfolgszustand) mit Plan-spezifischer
- * Ansprache. Segmentierung über source="mein-protokoll-plan".
+ * Newsletter-Anmeldung im Plan — nutzt die zentrale NewsletterSignup-Komponente
+ * (DSGVO-Consent, Honeypot, Double-Opt-In-Erfolgszustand). Segmentierung über
+ * source="mein-protokoll-plan".
+ *
+ * Bis 02.10.2026 stand hier „Wochenstart-Erinnerung — jeden Montag eine kurze
+ * Erinnerung mit dem Wochenthema". Diese Erinnerung gibt es nicht: In Loops ist
+ * kein Workflow dafür angelegt, die Anmeldung landet im allgemeinen Verteiler.
+ * Versprochen wird deshalb nur, was die Anmeldung tatsächlich auslöst. Wer die
+ * Montags-Erinnerung baut, stellt den Text hier wieder um — nicht vorher.
  */
 export default function PlanNewsletter() {
   return (
     <NewsletterSignup
       source="mein-protokoll-plan"
-      eyebrow="Wochenstart-Erinnerung"
-      headline="Damit du jede Woche dranbleibst."
-      subline="Jeden Montag eine kurze Erinnerung mit dem Wochenthema, einem Tipp zum Cut und der einen Frage, die dich scharf macht. Kein Spam — nur die Dinge, die diese Woche zählen."
-      cta="Aktivieren"
+      eyebrow="Newsletter"
+      headline="Mehr Grillwissen per E-Mail."
+      subline="Der Newsletter der Steakakademie: Cuts, Techniken, Temperaturen — präzise, ehrlich, jederzeit abbestellbar."
+      cta="Anmelden"
       className="print:hidden my-8"
     />
   );

@@ -31,7 +31,9 @@ const G_BG     = { background: 'linear-gradient(135deg, rgba(200,136,42,0.08) 0%
 // Kurs-Slug → reale Route (es gibt keine /kurse/[slug]-Route; jeder Kurs hat eine Top-Level-Seite)
 const COURSE_ROUTES: Record<string, string> = {
   'steak-beichte': '/steak-beichte',
-  'mein-protokoll': '/mein-protokoll',
+  // Direkt zum Plan: die Seite führt selbst zum Fragebogen, solange es keinen gibt.
+  // Die Verkaufsseite /mein-protokoll war für Käufer eine Sackgasse.
+  'mein-protokoll': '/mein-protokoll/plan',
   // Eingestellt 09.09.2026 — der Eintrag bleibt fuer Bestandsbuchungen, zeigt
   // aber auf das Diplom, das den Stoff uebernommen hat.
   'bbq-grundkurs': '/diplome',
@@ -50,6 +52,9 @@ function courseHref(slug: string): string {
 }
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
+  // grant_course_access schreibt seit 20.09.2026 'active' (Migration
+  // bookings_status_active_und_widerruf); 'confirmed' sind ältere Buchungen.
+  active:     { label: 'Aktiv',         color: '#4ade80' },
   confirmed:  { label: 'Aktiv',         color: '#4ade80' },
   pending:    { label: 'Ausstehend',    color: '#C8882A' },
   cancelled:  { label: 'Storniert',     color: '#7A6558' },
@@ -66,7 +71,11 @@ export default async function MeineKursePage() {
     .from('bookings')
     .select('id, status, created_at, courses(id, title, description, slug, price)')
     .eq('user_id', user.id)
-    .eq('status', 'confirmed')
+    // Dieselbe Menge wie requireCourseAccess: Bis 02.10.2026 stand hier nur
+    // 'confirmed' — der Webhook schreibt aber 'active'. Ein Käufer hatte Zugang,
+    // sah unter „Meine Kurse" aber nichts.
+    .in('status', ['active', 'confirmed', 'pending'])
+    .is('revoked_at', null)
     .order('created_at', { ascending: false });
 
   const confirmed = (bookings ?? []) as unknown as Booking[];

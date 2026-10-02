@@ -22,8 +22,15 @@ export interface Badge {
   hinweis?: string;
 }
 
+export interface Garstufe {
+  range: [number, number];
+  label: string;
+}
+
 export interface KernReferenz {
   meta: Record<string, string>;
+  /** Garstufen-Skala Rind; der Schlüssel `bestaetigt` ist ein Vermerk, keine Stufe. */
+  garstufen_rind: Record<string, Garstufe | boolean>;
   badges: Record<string, Badge>;
   sicherheit: Record<string, number>;
 }
@@ -54,4 +61,15 @@ export function mindestwert(klasse: string): number {
   const m = kernReferenz().sicherheit[klasse];
   if (typeof m !== 'number') throw new Error(`Sicherheitswert „${klasse}" fehlt in data/kerntemperatur-referenz.yaml`);
   return m;
+}
+
+/** Garstufen-Skala Rind (rare … well_done) in der Reihenfolge der Referenz. */
+export function garstufenRind(): Record<string, Garstufe> {
+  const roh = kernReferenz().garstufen_rind;
+  if (!roh) throw new Error('garstufen_rind fehlt in data/kerntemperatur-referenz.yaml');
+  const stufen: Record<string, Garstufe> = {};
+  for (const [key, wert] of Object.entries(roh)) {
+    if (typeof wert === 'object' && wert !== null && Array.isArray(wert.range)) stufen[key] = wert;
+  }
+  return stufen;
 }

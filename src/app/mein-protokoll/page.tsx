@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ChevronRight, ArrowRight, ClipboardList, Cpu, Download,
@@ -6,11 +6,17 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { badge } from '@/lib/kerntemperatur-referenz';
+import { CHECKOUT_URL, VERKAUF_AN, VERKAUFSSTART_TEXT } from '@/lib/mein-protokoll/angebot';
+import { PAKETE } from '@/lib/mein-protokoll/guthaben';
+
+// Kerntemperatur aus der Referenz statt hart kodiert (CLAUDE.md §2 Regel 2).
+const MR = badge('beef_mr').c;
 
 export const metadata: Metadata = {
   title: 'Mein Protokoll — Dein 8-Wochen-Grillplan',
   description:
-    'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt — in 5 Minuten generiert. 8 Wochen, konkrete Sessions.',
+    'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt — 5 Minuten Fragebogen, 8 Wochen, konkrete Sessions.',
   alternates: { canonical: 'https://steakakademie.de/mein-protokoll' },
   openGraph: {
     title: 'Mein Protokoll — Dein 8-Wochen-Grillplan',
@@ -27,7 +33,7 @@ const STEPS = [
     Icon: ClipboardList,
     step: '01',
     title: 'Fragebogen ausfüllen',
-    desc: '5 Minuten. Grilltyp, Erfahrungsstand, verfügbare Zeit pro Session, Budget, Ziele, was dich am meisten nervt. Je konkreter, desto präziser der Plan.',
+    desc: '5 Minuten. Grilltyp, Erfahrungsstand, verfügbare Zeit pro Session, Ziele, was dich am meisten nervt. Je konkreter, desto präziser der Plan.',
   },
   {
     Icon: Cpu,
@@ -62,7 +68,7 @@ const PLAN_FEATURES = [
   {
     Icon: BarChart2,
     title: 'Messbare Erfolgskriterien',
-    desc: 'Jede Session hat ein konkretes Ziel: nicht "lern das Steak besser machen", sondern "Kerntemperatur 54°C bei mittlerem Ribeye, gleichmäßige Kruste auf beiden Seiten".',
+    desc: `Jede Session hat ein konkretes Ziel: nicht "lern das Steak besser machen", sondern "Kerntemperatur ${MR} °C beim Ribeye, gleichmäßige Kruste auf beiden Seiten"`,
   },
 ];
 
@@ -76,7 +82,7 @@ const QUESTIONNAIRE_PREVIEW = [
 const FAQ = [
   {
     q: 'Kann ich den Plan nach 8 Wochen wiederholen oder neu generieren?',
-    a: 'Ja. Du kannst den Fragebogen nach Abschluss erneut ausfüllen — auf einem höheren Niveau — und bekommst einen neuen Plan. Jeder Neudurchlauf erfordert einen neuen Kauf.',
+    a: 'Ein Protokoll ist ein Plan über 8 Wochen. Für die nächsten 8 Wochen brauchst du ein weiteres Protokoll — im Paket mit zwei Protokollen ist es schon dabei, und das zweite baut auf dem ersten auf statt von vorn zu beginnen.',
   },
   {
     q: 'Was wenn mein Grill nicht in den Optionen ist?',
@@ -88,11 +94,11 @@ const FAQ = [
   },
   {
     q: 'Bekomme ich den Plan als PDF?',
-    a: 'Du erhältst deinen Plan als strukturiertes Web-Dokument mit Druckoption — übersichtlich formatiert für Küche oder Grillplatz. PDF-Export ist in Vorbereitung.',
+    a: 'Du erhältst deinen Plan als strukturiertes Web-Dokument mit Druckoption — übersichtlich formatiert für Küche oder Grillplatz. Über die Druckfunktion deines Browsers speicherst du ihn auch als PDF.',
   },
   {
     q: 'Was wenn ich mit dem Plan nicht zufrieden bin?',
-    a: 'Schreib uns unter pitmaster@steakakademie.de. Wenn der generierte Plan offensichtlich nicht zu deinen Angaben passt, erstellen wir ihn kostenfrei neu.',
+    a: 'Zu jedem Protokoll gehört eine kostenlose Korrektur: Du passt deine Antworten an, schreibst dazu, was nicht passt, und der Plan wird einmal neu erstellt. Bleibt danach etwas offen, schreib uns unter pitmaster@steakakademie.de.',
   },
 ];
 
@@ -103,7 +109,7 @@ export default function MeinProtokollPage() {
 
       <main className="bg-surface-base">
 
-        {/* â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Hero */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <nav
@@ -124,7 +130,7 @@ export default function MeinProtokollPage() {
                 Dein Plan.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                8 Wochen. Auf dich zugeschnitten. In 5 Minuten generiert.
+                8 Wochen. Auf dich zugeschnitten. 5 Minuten Fragebogen.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Kein generischer Kurs der für jeden passt und deshalb für niemanden
@@ -135,11 +141,11 @@ export default function MeinProtokollPage() {
 
               <div className="flex flex-wrap items-center gap-4">
                 <a
-                  href="https://www.checkout-ds24.com/product/696396"
+                  href="#kaufen"
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
-                  Plan generieren — 19 € <ArrowRight size={15} />
+                  {VERKAUF_AN ? 'Protokoll wählen — ab 19 €' : `Ab 19 € — Verkaufsstart ${VERKAUFSSTART_TEXT}`} <ArrowRight size={15} />
                 </a>
                 <a
                   href="#wie-es-funktioniert"
@@ -153,7 +159,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Problem â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Problem */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
@@ -194,7 +200,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Wie es funktioniert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Wie es funktioniert */}
         <section id="wie-es-funktioniert" className="border-b border-border-subtle bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-12">
@@ -223,7 +229,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Fragebogen-Vorschau â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Fragebogen-Vorschau */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
@@ -234,8 +240,9 @@ export default function MeinProtokollPage() {
                 5 Fragen. Keine Pflichtfelder ohne Sinn.
               </h2>
               <p className="font-body text-text-secondary mb-10 max-w-xl">
-                Jede Frage hat eine direkte Auswirkung auf deinen Plan. Kein Datenschutz-Overhead,
-                keine Newsletter-Pflicht.
+                Jede Frage hat eine direkte Auswirkung auf deinen Plan. Keine Newsletter-Pflicht.
+                Deine Antworten gehen zur Plan-Erstellung an unseren KI-Dienstleister — Details in der{' '}
+                <Link href="/datenschutz" className="text-brand-gold underline hover:text-brand-fire">Datenschutzerklärung</Link>.
               </p>
 
               <div className="space-y-4 max-w-2xl">
@@ -267,7 +274,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Was dein Plan enthält â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Was dein Plan enthält */}
         <section className="border-b border-border-subtle bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-12">
@@ -300,7 +307,7 @@ export default function MeinProtokollPage() {
                 {[
                   { label: 'Cut', value: 'Entrecôte 300g' },
                   { label: 'Methode', value: 'Reverse Sear' },
-                  { label: 'Zieltemp.', value: '54 °C Kern' },
+                  { label: 'Zieltemp.', value: `${MR} °C Kern` },
                   { label: 'Erfolgsziel', value: 'Gleichmäßige Garung, Kruste <90 Sek.' },
                 ].map(({ label, value }) => (
                   <div key={label}>
@@ -313,7 +320,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Preis + CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Preis + CTA */}
         <section
           id="kaufen"
           className="border-b border-brand-gold/15"
@@ -321,49 +328,66 @@ export default function MeinProtokollPage() {
         >
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
-                <div className="max-w-md">
-                  <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
-                    Einmaliger Kauf
-                  </span>
-                  <h2 className="font-serif text-3xl font-bold text-text-primary">
-                    Mein Protokoll
-                  </h2>
-                  <p className="font-serif text-4xl font-bold text-brand-gold mt-2">19 €</p>
-                  <p className="text-sm font-sans text-text-muted mt-1 mb-6">
-                    Einmalig · Sofortzugang zum Fragebogen · Plan in Minuten
-                  </p>
-                  <ul className="space-y-2">
-                    {[
-                      'Persönlicher 8-Wochen-Plan',
-                      'Auf deinen Grilltyp & deine Zeit zugeschnitten',
-                      'Jede Session mit Cut, Methode, Temperaturziel',
-                      'Messbare Erfolgskriterien pro Session',
-                      'Wiederholbar — neuer Plan nach 8 Wochen',
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm font-sans text-text-secondary">
-                        <ChevronRight size={13} className="text-brand-gold shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
+                Einmaliger Kauf — kein Abo
+              </span>
+              <h2 className="font-serif text-3xl font-bold text-text-primary mb-3">
+                Mein Protokoll
+              </h2>
+              <p className="font-body text-sm text-text-secondary leading-relaxed max-w-2xl mb-8">
+                Ein Protokoll ist ein persönlicher Plan über 8 Wochen. Zu jedem Protokoll gehört
+                eine kostenlose Korrektur, falls der erste Wurf nicht passt.
+              </p>
 
-                <div className="shrink-0 flex flex-col items-stretch sm:items-end gap-4">
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
-                  <a
-                    href="https://www.checkout-ds24.com/product/696396"
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
-                    style={{ background: '#C8882A', color: '#0D0A06' }}
-                  >
-                    19 € — Plan generieren
-                    <ArrowRight size={16} />
-                  </a>
-                  <p className="text-center text-[10px] font-sans text-text-muted">
-                    Plan sofort nach Kauf verfügbar.
-                  </p>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {PAKETE.map((paket) => (
+                  <div key={paket.protokolle} className="border border-brand-gold/25 p-6 flex flex-col" style={{ background: 'rgba(200,136,42,0.04)' }}>
+                    <h3 className="font-serif text-xl font-bold text-text-primary">{paket.titel}</h3>
+                    <p className="font-serif text-4xl font-bold text-brand-gold mt-2">{paket.preis} €</p>
+                    <p className="text-sm font-sans text-text-muted mt-1 mb-5">Einmalig · {paket.zeile}</p>
+                    <ul className="space-y-2 mb-6">
+                      {[
+                        paket.protokolle === 1 ? 'Ein persönlicher 8-Wochen-Plan' : 'Zwei 8-Wochen-Pläne, aufeinander aufbauend',
+                        'Auf deinen Grilltyp & deine Zeit zugeschnitten',
+                        'Jede Session mit Cut, Methode, Temperaturziel',
+                        'Kerntemperaturen aus der Steakakademie-Referenz, maschinell geprüft',
+                        'Eine kostenlose Korrektur je Protokoll',
+                      ].map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm font-sans text-text-secondary">
+                          <ChevronRight size={13} className="text-brand-gold shrink-0 mt-0.5" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-auto">
+                      {VERKAUF_AN ? (
+                        <a
+                          href={CHECKOUT_URL}
+                          rel="nofollow"
+                          className="flex items-center justify-center gap-2 px-6 py-3.5 font-sans font-bold text-base hover:opacity-90 transition-opacity"
+                          style={{ background: '#C8882A', color: '#0D0A06' }}
+                        >
+                          {paket.titel} — {paket.preis} €
+                          <ArrowRight size={16} />
+                        </a>
+                      ) : (
+                        <span
+                          className="flex items-center justify-center px-6 py-3.5 font-sans font-bold text-base border border-brand-gold/40 text-text-muted cursor-not-allowed"
+                          aria-disabled="true"
+                        >
+                          Verkaufsstart geplant: {VERKAUFSSTART_TEXT}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
+
+              <p className="mt-4 text-xs font-sans text-text-muted">
+                {VERKAUF_AN
+                  ? 'Das Paket wählst du im Bestellformular. Nach dem Kauf bekommst du eine E-Mail mit deinem Login-Link zum Fragebogen.'
+                  : `Noch nicht bestellbar — Verkaufsstart geplant: ${VERKAUFSSTART_TEXT}. Preise und Leistung stehen fest.`}
+              </p>
 
               <div
                 className="mt-8 border px-5 py-4"
@@ -371,16 +395,25 @@ export default function MeinProtokollPage() {
               >
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Hinweis zum Widerrufsrecht:</strong>{' '}
-                  Nach Kauf und Fragebogen-Ausfüllung wird der Plan sofort generiert — digitaler
-                  Inhalt, kein Widerruf nach Bereitstellung. Der Fragebogen kann vor Generierung
-                  beliebig oft angepasst werden. Endpreis in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                  Für digitale Inhalte gilt das 14-tägige Widerrufsrecht (
+                  <Link href="/agb" className="text-brand-gold underline hover:text-brand-fire">AGB § 6a</Link>,{' '}
+                  <Link href="/widerruf" className="text-brand-gold underline hover:text-brand-fire">Widerruf</Link>).
+                  Es erlischt, wenn du beim Kauf ausdrücklich zustimmst, dass der Plan vor Ablauf der Frist
+                  erstellt wird, und bestätigst, dass du damit dein Widerrufsrecht verlierst. Der Plan wird
+                  erst erstellt, wenn du den Fragebogen abschickst.
+                  Endpreis in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                </p>
+                <p className="text-xs font-sans text-text-secondary leading-relaxed mt-2">
+                  <strong className="text-text-primary">KI-Hinweis:</strong>{' '}
+                  Der Plan wird von einem KI-Sprachmodell erstellt. Temperaturen und Zeiten sind Richtwerte.
+                  Mehr im <Link href="/ki-disclaimer" className="text-brand-gold underline hover:text-brand-fire">KI-Disclaimer</Link>.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* FAQ */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
@@ -400,7 +433,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* Navigation */}
         <section className="bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="max-w-content mx-auto">
@@ -410,7 +443,7 @@ export default function MeinProtokollPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose für Grillfehler' },
-                  { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 Länder im Netto-Vergleich' },
+                  { label: 'Fleischpass', href: '/fleischpass', note: 'Grill-Logbuch für deine Sessions' },
                   { label: 'Diplom-System', href: '/diplome', note: '10 Level BBQ-Kompetenz' },
                 ].map(({ label, href, note }) => (
                   <Link

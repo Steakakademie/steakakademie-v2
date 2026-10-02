@@ -1,8 +1,10 @@
 /**
  * Mein Protokoll (Produkt B) — Schemas
  *
- * Fragebogen-Antworten (Input) + generierter 8-Wochen-Plan (Output).
- * Geteilt zwischen Generate-API (server) und Anzeige (client/server).
+ * Fragebogen-Antworten (Input) + gespeicherter 8-Wochen-Plan (Anzeige).
+ * Geteilt zwischen Generate-API (server) und Anzeige (client/server) — deshalb
+ * hier KEIN Dateizugriff. Das strengere Schema, gegen das generiert wird, steht
+ * in ./generierung.ts (nur Server, liest die Kerntemperatur-Referenz).
  */
 
 import { z } from 'zod';
@@ -25,6 +27,20 @@ export const AnswersSchema = z.object({
 
 export type Answers = z.infer<typeof AnswersSchema>;
 
+/** Was der Generator-Endpunkt entgegennimmt: Antworten + Auftrag. */
+export const AuftragSchema = AnswersSchema.extend({
+  /** 'neu' verbraucht ein gekauftes Protokoll, 'korrektur' die eine kostenlose Korrektur. */
+  modus:        z.enum(['neu', 'korrektur']).default('neu'),
+  /** Protokoll, das korrigiert werden soll (nur bei modus 'korrektur'). */
+  korrekturVon: z.string().uuid().optional(),
+  /** Was am bisherigen Plan nicht passt (nur bei modus 'korrektur'). */
+  hinweis:      z.string().trim().max(600).optional(),
+  /** Ausdrückliche Bestätigung, dass jetzt erstellt und Guthaben verbraucht wird. */
+  bestaetigt:   z.literal(true),
+});
+
+export type Auftrag = z.infer<typeof AuftragSchema>;
+
 // ─── Generierter Plan ──────────────────────────────────────────────────────────
 
 export const SessionSchema = z.object({
@@ -32,6 +48,10 @@ export const SessionSchema = z.object({
   method:           z.string().describe('Methode, z.B. "Heiß angrillen + indirekt ziehen", "Reverse Sear", "direkt"'),
   grillTemp:        z.string().optional().describe('Grill-/Deckeltemperaturen konkret, z.B. "280–300 °C direkt zum Angrillen, danach ~150–170 °C Deckel indirekt". IMMER ausfüllen.'),
   targetTemp:       z.string().describe('Ziel-KERNtemperatur mit Gargrad, z.B. "54 °C Kern (medium rare)"'),
+  // Seit 02.10.2026: Schlüssel aus data/kerntemperatur-referenz.yaml + geprüfte Zahl.
+  // Optional, weil ältere gespeicherte Pläne die Felder nicht haben.
+  kernRef:          z.string().optional(),
+  kernTempC:        z.number().nullable().optional(),
   process:          z.string().optional().describe('Ablauf in 2–4 kurzen Schritten: Glut/Vorheizen → Angrillen (°C, beide Seiten) → in indirekten Bereich (Deckel-°C) bis Kerntemperatur → Rasten. Konkret mit Zahlen. IMMER ausfüllen.'),
   timePlanning:     z.string().describe('Zeitplanung der Session, z.B. "ca. 90 Min inkl. Ruhephase"'),
   successCriterion: z.string().describe('Konkretes, messbares Erfolgskriterium für diese Session'),
