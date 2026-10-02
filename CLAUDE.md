@@ -310,6 +310,56 @@
 
 ---
 
+## A2. Stack, Befehle, Dateibenennung (Uwe, 02.10.2026)
+
+> Belegt am 02.10.2026 aus `package.json`, `tsconfig.json`, `vitest.config.ts`,
+> `tailwind.config.js` und einer Zählung der versionierten Dateien. Ändert sich die
+> Quelle, ändert sich diese Zeile — nicht umgekehrt.
+
+**Stack**
+- Next.js 16 (App Router), React 19, TypeScript 5.7, **Tailwind CSS 3.4** (nicht v4;
+  Konfiguration in `tailwind.config.js`), Node 24 (`.nvmrc`, `engines` `>=24 <25`),
+  Inhalte als MDX über Contentlayer.
+- Import-Alias `@/…` zeigt auf `src/…`.
+- Tailwind: Flächen-, Text-, Rand- und Markenfarben kommen als Token aus der Config
+  (`surface-*`, `text-*`, `border-*`, `brand-*`, `ink`); statt `transition-all` benannte
+  Properties (`transition-colors`, `transition-opacity` …), so wie Plan 003 es
+  umgesetzt hat. Stand 02.10.2026 stehen nach 003 wieder zwei `transition-all` in
+  `src/app/grillstil/page.tsx` und `src/components/baukasten/Anamnese.tsx` — Altlast
+  aus späteren Änderungen, nicht Absicht.
+- framer-motion: Import immer `m as motion`, nie das volle `motion` — der
+  `MotionProvider` läuft mit `LazyMotion strict`, ein voller Import wirft im Dev-Modus.
+
+**Befehle**
+- `npm run dev` — Dev-Server (`next dev --webpack`)
+- `npm run build` — Produktions-Build (`--webpack`); `prebuild` führt drei Inhalts-Gates
+  aus, `postbuild` Sitemap, Frontmatter- und Link-Check
+- `npm run lint` — ESLint 9 (Flat Config)
+- `npm test` — Vitest; erfasst **nur** `src/**/*.test.ts` und `scripts/**/*.test.mjs`
+  (ein `*.test.tsx` würde nicht laufen)
+- `npm run test:e2e` — Playwright (Chromium); lokal gegen den Dev-Server, in CI gegen
+  `next start`
+- `npm run check` — alle Inhalts-Gates (Redaktionsvorbehalt, Startseiten-Hierarchie,
+  MDX-Komponenten, Frontmatter, Links, Content-Qualität, Taxonomie, Foodpairing)
+- Reihenfolge vor jedem Push steht in Abschnitt A: commit → `npm run build` → push.
+
+**Dateibenennung** (Bestand am 02.10.2026; neue Dateien folgen ihm)
+- React-Komponenten unter `src/components/**`: **PascalCase** (`ArbeitszeitPlaner.tsx`,
+  `RecipeSubmitModal.tsx`; 106 von 107). Themenordner dort klein oder kebab-case
+  (`aroma-matcher/`, `steuer-matrix/`, `relaunch/`).
+- Hilfsmodule unter `src/lib/**`: **kebab-case** oder ein kleingeschriebenes Wort
+  (`kerntemperatur-referenz.ts`, `consent.ts`) — kein PascalCase.
+- App Router unter `src/app/**`: `page.tsx`, `layout.tsx`, `route.ts`; Routenordner in
+  kebab-case.
+- Skripte unter `scripts/**`: kebab-case `.mjs`.
+- Inhalte (`content/**/*.mdx`), Daten (`data/**`) und Bilder (`public/images/**`):
+  kebab-case; vereinzelte Ausnahmen im Bestand (`CREDITS.md`, importierte Bildnamen,
+  `wissensdatenbank-2.x.csv`) sind kein Vorbild.
+- Tests: Vitest `*.test.ts` (in `src/__tests__/` oder neben dem Code), Skript-Tests
+  `*.test.mjs`, E2E `tests/e2e/*.spec.ts`.
+
+---
+
 ## 0. Meine Rolle — Projekt-Director
 
 Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative Instanz
