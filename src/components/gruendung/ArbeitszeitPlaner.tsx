@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Clock, Plus, Trash2, Check, CalendarDays, RefreshCw, AlertTriangle } from 'lucide-react';
 import {
   ROADMAP_VORLAGE,
@@ -114,6 +115,9 @@ export default function ArbeitszeitPlaner() {
   const [ntCat, setNtCat] = useState<RoadmapKategorie>('Website');
   const [ntEffort, setNtEffort] = useState('2');
 
+  const maskeTitelId = useId();
+  const maskePanelRef = useRef<HTMLDivElement>(null);
+
   // Laden
   useEffect(() => {
     try {
@@ -142,6 +146,48 @@ export default function ArbeitszeitPlaner() {
       /* noop */
     }
   }, [loaded, maskOpen, hours, tasks]);
+
+  // Maske als Dialog bedienbar machen: Fokus hinein, Tab bleibt darin, Escape schliesst
+  // (wie "Timetable bauen"), danach Fokus zurueck. Die Maske oeffnet sich beim Erstaufruf
+  // ungefragt und deckt den ganzen Viewport — ohne das hatte eine Tastatur-Nutzerin keinen
+  // ausgewiesenen Ausweg.
+  useEffect(() => {
+    if (!maskOpen) return;
+    const vorher = document.activeElement as HTMLElement | null;
+    const panel = maskePanelRef.current;
+    const fokussierbar = () =>
+      panel
+        ? Array.from(
+            panel.querySelectorAll<HTMLElement>('input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'),
+          ).filter((el) => !el.hasAttribute('disabled'))
+        : [];
+    fokussierbar()[0]?.focus();
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setMaskOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const el = fokussierbar();
+      if (el.length === 0) return;
+      const first = el[0];
+      const last = el[el.length - 1];
+      const drin = panel?.contains(document.activeElement) ?? false;
+      if (e.shiftKey && (!drin || document.activeElement === first)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (!drin || document.activeElement === last)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      vorher?.focus?.();
+    };
+  }, [maskOpen]);
 
   const schedule = useMemo(() => computeSchedule(tasks, hours), [tasks, hours]);
 
@@ -176,52 +222,73 @@ export default function ArbeitszeitPlaner() {
 
   return (
     <div className="space-y-8">
-      {/* Maske */}
-      {maskOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-sm border border-border-subtle bg-surface-base p-6 shadow-xl">
-            <div className="mb-1 flex items-center gap-2">
-              <Clock size={18} className="text-brand-fire" />
-              <h2 className="font-serif text-xl text-text-primary">Wie viel Zeit hast du?</h2>
-            </div>
-            <p className="mb-5 font-body text-[0.9rem] leading-relaxed text-text-secondary">
-              Trag ein, wie viele Stunden du an jedem Wochentag realistisch fürs Projekt aufbringen
-              kannst. Daraus baut der Planer deinen Timetable — und rechnet automatisch neu, sobald
-              du Aufgaben abhakst oder ergänzt.
-            </p>
-            <div className="mb-6 grid grid-cols-7 gap-2">
-              {WOCHENTAGE.map((wd, i) => (
-                <label key={wd} className="flex flex-col items-center gap-1">
-                  <span className="font-sans text-[11px] font-bold uppercase text-text-muted">{wd}</span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={24}
-                    step={0.5}
-                    value={hours[i]}
-                    onChange={(e) => {
-                      const v = parseFloat(e.target.value);
-                      setHours((h) => h.map((x, j) => (j === i ? (Number.isFinite(v) ? v : 0) : x)));
-                    }}
-                    className="w-full rounded-sm border border-border-subtle bg-surface-elevated px-1 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire"
-                  />
-                </label>
-              ))}
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-body text-[0.85rem] text-text-muted">
-                {weekly} Std./Woche
-              </span>
-              <button
-                onClick={() => setMaskOpen(false)}
-                className="rounded-sm bg-brand-fire px-5 py-2 font-sans text-sm font-bold text-white transition-opacity hover:opacity-90"
-              >
-                Timetable bauen
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Maske — Werte aus RecipeSubmitModal (Feder, Ausgang kuerzer als Eingang) und
+          ExitIntent (scale 0.97). Bei prefers-reduced-motion nimmt MotionConfig
+          (MotionProvider) die Verschiebung und Skalierung weg, die Deckkraft bleibt. */}
+      <AnimatePresence>
+        {maskOpen && (
+          <motion.div
+            key="maske-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          >
+            <motion.div
+              ref={maskePanelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={maskeTitelId}
+              initial={{ opacity: 0, scale: 0.97, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 8, transition: { duration: 0.16 } }}
+              transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+              className="w-full max-w-lg rounded-sm border border-border-subtle bg-surface-base p-6 shadow-xl"
+            >
+              <div className="mb-1 flex items-center gap-2">
+                <Clock size={18} className="text-brand-fire" />
+                <h2 id={maskeTitelId} className="font-serif text-xl text-text-primary">Wie viel Zeit hast du?</h2>
+              </div>
+              <p className="mb-5 font-body text-[0.9rem] leading-relaxed text-text-secondary">
+                Trag ein, wie viele Stunden du an jedem Wochentag realistisch fürs Projekt aufbringen
+                kannst. Daraus baut der Planer deinen Timetable — und rechnet automatisch neu, sobald
+                du Aufgaben abhakst oder ergänzt.
+              </p>
+              <div className="mb-6 grid grid-cols-7 gap-2">
+                {WOCHENTAGE.map((wd, i) => (
+                  <label key={wd} className="flex flex-col items-center gap-1">
+                    <span className="font-sans text-[11px] font-bold uppercase text-text-muted">{wd}</span>
+                    <input
+                      type="number"
+                      min={0}
+                      max={24}
+                      step={0.5}
+                      value={hours[i]}
+                      onChange={(e) => {
+                        const v = parseFloat(e.target.value);
+                        setHours((h) => h.map((x, j) => (j === i ? (Number.isFinite(v) ? v : 0) : x)));
+                      }}
+                      className="w-full rounded-sm border border-border-subtle bg-surface-elevated px-1 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire"
+                    />
+                  </label>
+                ))}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="font-body text-[0.85rem] text-text-muted">
+                  {weekly} Std./Woche
+                </span>
+                <button
+                  onClick={() => setMaskOpen(false)}
+                  className="rounded-sm bg-brand-fire px-5 py-2 font-sans text-sm font-bold text-white transition-opacity hover:opacity-90"
+                >
+                  Timetable bauen
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Summary */}
       <div className="grid gap-4 sm:grid-cols-3">
