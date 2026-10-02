@@ -240,8 +240,15 @@
   (`istAdminPasswort`). Nie wieder `cookie === process.env.ADMIN_PASSWORD` inline:
   fehlt die Variable, ist `undefined === undefined` wahr und jeder Besucher Admin —
   /admin, /api/admin/*, /api/pm-agent/*, Volltexte der Bezahl-Lektionen. Sechs solche
-  Stellen sind am 05.09. auf die Funktion gezogen worden. Ob `ADMIN_PASSWORD` auch im
-  Vercel-**Preview**-Scope gesetzt ist, ist aus dem Repo nicht einsehbar — nachsehen.
+  Stellen sind am 05.09. auf die Funktion gezogen worden. `ADMIN_PASSWORD` ist im
+  Vercel-Projekt **nur im Scope Production** gesetzt (per Vercel-MCP am 02.10.2026
+  nachgesehen): Auf Preview-Deployments gibt es also keinen Admin — gewollt.
+- **Der Cookie `admin_auth` traegt seit 02.10.2026 ein signiertes Sitzungs-Token, nicht
+  mehr das Passwort.** Format `v1.<ablauf>.<HMAC-SHA256>`, Schluessel ist
+  `ADMIN_PASSWORD`; Passwort aendern beendet alle Sitzungen. `istAdminPasswort` prueft
+  nur noch die Eingabe im Login (`/api/admin/auth`), ueberall sonst gilt
+  `await istAdminCookie(...)` — asynchron, weil Web Crypto (guard.ts laeuft auch in
+  Edge-Routen). Waechter: `src/__tests__/admin-auth.test.ts`.
 
 **Deployment-Status ohne Raten**
 - Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
