@@ -18,7 +18,7 @@ export default function Footer() {
               Der Kerntemperatur-Spickzettel für die Grillstation.
             </h2>
             <p className="sk-text sk-text--16" style={{ marginTop: 14 }}>
-              Rind, Schwein, Lamm, Geflügel, Fisch — die Werte der Pitmaster-Doktrin. Dazu freitags ein Stück BBQ-Wissen. Jederzeit abbestellbar.
+              Rind, Schwein, Lamm, Geflügel, Fisch — die Werte der Pitmaster-Doktrin. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar.
             </p>
           </div>
           <SpickzettelForm />

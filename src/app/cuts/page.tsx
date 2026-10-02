@@ -8,15 +8,37 @@ import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getCutsBySpecies, getPrimalsBySpecies, ALL_CUTS } from '@/lib/cuts-catalog';
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
+/**
+ * Schwein ist vorübergehend ausgeblendet — die Schwein-Cut-Fotos stammen aus
+ * Händler-Produktbildern und sind nach der Rechts-Doktrin
+ * (public/images/cuts/CREDITS.md) nicht verwendbar.
+ *
+ * EIN Schalter für die ganze Seite (03.10.2026): Tabs im Atlas (Prop `showPork`),
+ * Titel, Beschreibung, H1, Einleitung und ItemList-Schema hängen an dieser
+ * Konstante. Vorher stand sie nur in CutAtlasClient.tsx — der Atlas zeigte Rind,
+ * während Titel, Text und Schema „Rind & Schwein“ und 64 Cuts auswiesen.
+ *
+ * Warum hier und nicht als Export aus CutAtlasClient.tsx: Das ist ein
+ * 'use client'-Modul. Ein Server-Bauteil bekommt von dort keinen Wert, sondern
+ * einen Client-Verweis — eine Funktion, also immer „wahr“ (CLAUDE.md Abschnitt A,
+ * 06.09.2026). Die Seite würde dann dauerhaft Schwein bewerben, bei grünem Build.
+ *
+ * Sobald lizenzsaubere Fotos vorliegen: hier und in CutGenerator.tsx auf `true`
+ * setzen (dort und in src/lib/plattform-puls.ts wird Schwein getrennt geführt).
+ */
+const SHOW_PORK: boolean = false;
+
 export const metadata: Metadata = {
-  title: 'Cut-Atlas — Alle Rinder- und Schweine-Cuts',
-  description:
-    'Der interaktive Cut-Atlas: alle Rinder- und Schweine-Teilstücke von Ribeye und Tomahawk bis Secreto und Schäufele — mit Cut-DNA, Garstufe und Rezepten.',
+  title: SHOW_PORK ? 'Cut-Atlas — Alle Rinder- und Schweine-Cuts' : 'Cut-Atlas — Alle Rinder-Cuts',
+  description: SHOW_PORK
+    ? 'Der interaktive Cut-Atlas: alle Rinder- und Schweine-Teilstücke von Ribeye und Tomahawk bis Secreto und Schäufele — mit Cut-DNA, Garstufe und Rezepten.'
+    : 'Der interaktive Cut-Atlas: alle Rinder-Teilstücke von Ribeye und Tomahawk bis Tafelspitz und Ochsenbacke — mit Cut-DNA, Garstufe und Rezepten.',
   alternates: { canonical: 'https://steakakademie.de/cuts' },
   openGraph: {
-    title: 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv',
-    description:
-      'Wo sitzt welcher Cut? Interaktiver Atlas für alle Rinder- und Schweine-Teilstücke — mit Cut-DNA, Garstufe, Rezepten und Bezugsquelle.',
+    title: SHOW_PORK ? 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv' : 'Cut-Atlas — Alle Rinder-Cuts interaktiv',
+    description: SHOW_PORK
+      ? 'Wo sitzt welcher Cut? Interaktiver Atlas für alle Rinder- und Schweine-Teilstücke — mit Cut-DNA, Garstufe, Rezepten und Bezugsquelle.'
+      : 'Wo sitzt welcher Cut? Interaktiver Atlas für alle Rinder-Teilstücke — mit Cut-DNA, Garstufe, Rezepten und Bezugsquelle.',
     url: 'https://steakakademie.de/cuts',
     images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
@@ -30,13 +52,18 @@ export default function CutsPage() {
   };
   const recipeMap = buildCutRecipeMap(ALL_CUTS);
 
-  // ItemList-Schema für die Cut-Sammlung (GEO/Rich Results)
+  // ItemList-Schema für die Cut-Sammlung (GEO/Rich Results) — nur, was der
+  // Besucher im Atlas auch anklicken kann. Bis 03.10.2026 standen hier alle 64
+  // Katalog-Einträge inklusive der 24 ausgeblendeten Schwein-Cuts.
+  const sichtbareCuts = SHOW_PORK ? ALL_CUTS : bySpecies.rind.cuts;
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Rinder- & Schweine-Cuts — Steakakademie Cut-Atlas',
-    numberOfItems: ALL_CUTS.length,
-    itemListElement: ALL_CUTS.map((c, i) => ({
+    name: SHOW_PORK
+      ? 'Rinder- & Schweine-Cuts — Steakakademie Cut-Atlas'
+      : 'Rinder-Cuts — Steakakademie Cut-Atlas',
+    numberOfItems: sichtbareCuts.length,
+    itemListElement: sichtbareCuts.map((c, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: c.nameDE,
@@ -62,11 +89,13 @@ export default function CutsPage() {
                 Steakakademie · Cut-Atlas
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
-                Rind &amp; Schwein, Cut für Cut
+                {SHOW_PORK ? 'Rind & Schwein, Cut für Cut' : 'Rind, Cut für Cut'}
               </h1>
               <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Wechsle zwischen Rind und Schwein, wähle ein Teilstück oder klicke direkt auf einen
-                Cut. Du erfährst die Lage am Tier, die Cut-DNA, die ideale Garstufe und Kerntemperatur
+                {SHOW_PORK
+                  ? 'Wechsle zwischen Rind und Schwein, wähle ein Teilstück oder klicke direkt auf einen Cut.'
+                  : 'Wähle ein Teilstück oder klicke direkt auf einen Cut.'}{' '}
+                Du erfährst die Lage am Tier, die Cut-DNA, die ideale Garstufe und Kerntemperatur
                 — plus passende Rezepte und wo du ihn bekommst.
               </p>
             </div>
@@ -88,7 +117,7 @@ export default function CutsPage() {
 
         {/* Atlas */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <CutAtlasClient bySpecies={bySpecies} recipeMap={recipeMap} />
+          <CutAtlasClient bySpecies={bySpecies} recipeMap={recipeMap} showPork={SHOW_PORK} />
         </section>
 
         {/* ── ÜBERSICHTSPOSTER (Uwe abgenommen, 30.08.2026) ────────────────
@@ -173,7 +202,7 @@ export default function CutsPage() {
               source="cuts-atlas"
               eyebrow="Kostenloses Geschenk"
               headline="Zu jedem Cut gehört eine Kerntemperatur."
-              subline="Wir schicken dir den druckfertigen Spickzettel mit allen Garstufen — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Jederzeit abbestellbar."
+              subline="Wir schicken dir den Link zum druckfertigen Spickzettel mit allen Garstufen. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar."
               cta="Spickzettel sichern"
             />
           </div>

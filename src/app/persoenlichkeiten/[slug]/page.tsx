@@ -316,12 +316,12 @@ export default function PersoenlichkeitPage(props0: Props) {
                 <MDXContent components={mdxComponents} />
               </div>
 
-              {/* Newsletter capture — after article, before funnel */}
-              <NewsletterSignup
-                source={`persoenlichkeiten-article-${person.category}`}
-                headline="Solche Meister-Porträts jede Woche — kostenlos."
-                subline="Ein Meister, eine Technik, ein Rezept. Jeden Freitag der Steakakademie-Wissens-Brief direkt ins Postfach."
-              />
+              {/* Newsletter capture — after article, before funnel.
+                  03.10.2026: Die eigene Copy versprach „Meister-Porträts jede Woche“
+                  und „jeden Freitag“ — beides gibt es nicht (kein Wochenversand, das
+                  letzte Porträt ist vom 23.05.2026). Jetzt die einheitlichen Defaults
+                  der Komponente: Spickzettel + Wissens-Brief ohne Takt. */}
+              <NewsletterSignup source={`persoenlichkeiten-article-${person.category}`} />
 
             </article>
           </div>
@@ -340,7 +340,7 @@ export default function PersoenlichkeitPage(props0: Props) {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-serif text-xl font-bold text-text-light">Weitere Meister entdecken</h2>
                 <Link href="/persoenlichkeiten" className="text-xs font-sans text-brand-gold/70 hover:text-brand-gold transition-colors">
-                  Alle 50 Profile →
+                  Alle {total} Profile →
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

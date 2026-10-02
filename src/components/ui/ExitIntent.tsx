@@ -146,7 +146,7 @@ export default function ExitIntent() {
                   source="exit-intent"
                   eyebrow="Warte kurz — bevor du gehst"
                   headline="Nimm den Kerntemperatur-Spickzettel mit."
-                  subline="Alle Garstufen auf einer Seite, druckfertig für die Grillstation. Dazu jeden Freitag ein Stück BBQ-Wissen, das bleibt. Kein Spam · Double-Opt-In."
+                  subline="Alle Garstufen auf einer Seite, druckfertig für die Grillstation. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Double-Opt-In, jederzeit abbestellbar."
                   cta="Ja, Spickzettel sichern"
                   className="border-0 bg-transparent"
                 />
