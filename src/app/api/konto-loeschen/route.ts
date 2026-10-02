@@ -11,6 +11,8 @@
  *  - Streitfall-Erfahrungsberichte     (streitfall_beitraege)
  *  - Grill-Protokolle                  (protokolle)
  *  - Steak-Diagnosen + Credit-Konto    (diagnosen, diagnose_credits)
+ *  - hochgeladene Diagnose-Fotos        (Storage-Bucket diagnose-images, seit 02.10.2026)
+ *  - Lesestand der Diplom-Lektionen     (lesson_progress, seit 02.10.2026 auch explizit)
  *
  * Was NICHT gelöscht, sondern ANONYMISIERT wird — user_recipes:
  *  Community-Rezepte bleiben bestehen. Sie sind veröffentlichter Inhalt der
@@ -49,14 +51,30 @@
  *    Das ist unkritisch (keine personenbezogenen Daten außer der toten UUID),
  *    wird hier aber bewusst nicht "repariert".
  *
- * Weiterer offener Punkt: diagnosen.image_path zeigt auf Storage-Objekte;
- * hochgeladene Diagnose-Bilder im Storage-Bucket werden hier noch nicht
- * mitgelöscht (separates Storage-API, Bucket-Name nicht in den Migrations).
+ * Diagnose-Fotos (seit 02.10.2026): diagnosen.image_path zeigt auf Objekte im
+ * privaten Bucket `diagnose-images`, abgelegt unter `<user.id>/<zeit>.<ext>`
+ * (src/app/api/steak-beichte/analyze/route.ts; Bucket angelegt in
+ * supabase/migrations/012_diagnose_credits.sql). Bis dahin blieben die Fotos
+ * nach der Konto-Löschung liegen — die Zeile in `diagnosen` war weg, die
+ * Datei nicht. Jetzt wird der Ordner des Nutzers geleert, BEVOR die Zeilen
+ * fallen; scheitert das, bricht die Löschung ab wie bei den Tabellen.
+ *
+ * NICHT angefasst, Entscheidung offen (Uwe / RAin Nieweg, Stand 02.10.2026) —
+ * hier nur festgehalten, damit es niemand für erledigt hält:
+ *  - urkunden_bestellungen: FK ON DELETE SET NULL, E-Mail, Name und
+ *    Lieferadresse bleiben stehen. Bei bezahlten Bestellungen spricht die
+ *    Aufbewahrungspflicht dafür, bei unbezahlten (`neu`) nichts.
+ *  - Bucket `urkunden`: gerenderte Urkunde mit Klarnamen, hängt an der Bestellung.
+ *  - vouchers (purchaser_email, redeemed_by), widerrufe, kontaktanfragen:
+ *    kein user_id-Bezug, Zuordnung nur über die E-Mail-Adresse.
+ *  - Loops: Der Newsletter-Kontakt ist eine eigene Einwilligung und wird mit
+ *    dem Konto nicht abgemeldet.
  *
  * Flow:
  *  1. Auth — nur der eingeloggte Nutzer kann SEIN Konto löschen (401 sonst)
  *  2. Body-Validierung (Zod): { bestaetigung: 'LÖSCHEN' } — exakt
  *  3. Service-Role: Community-Rezepte anonymisieren (vor allem anderen)
+ *  3b. Service-Role: Diagnose-Fotos im Storage löschen
  *  4. Service-Role: Nutzerdaten tabellenweise löschen (defensiv)
  *  5. admin.auth.admin.deleteUser(user.id)
  *  6. Session-Cookies beenden (signOut, best effort)
@@ -66,7 +84,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient as createServerClient } from '@/lib/supabase/server';
-import { createClient as createAdminClient } from '@supabase/supabase-js';
+import { createClient as createAdminClient, type SupabaseClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -74,6 +92,32 @@ export const dynamic = 'force-dynamic';
 const InputSchema = z.object({
   bestaetigung: z.literal('LÖSCHEN'),
 });
+
+/** Privater Bucket der Steak-Beichte-Fotos; Objekte liegen unter `<user.id>/…`. */
+const DIAGNOSE_BUCKET = 'diagnose-images';
+
+/**
+ * Leert den Foto-Ordner eines Nutzers. `list` liefert höchstens `limit`
+ * Einträge je Aufruf — deshalb in Runden, bis der Ordner leer ist. Die
+ * Obergrenze an Runden verhindert eine Endlosschleife, falls `remove` Erfolg
+ * meldet, ohne zu löschen.
+ */
+async function loescheDiagnoseFotos(
+  admin: SupabaseClient,
+  userId: string,
+): Promise<{ ok: true; anzahl: number } | { ok: false; grund: string }> {
+  let anzahl = 0;
+  for (let runde = 0; runde < 20; runde++) {
+    const { data, error } = await admin.storage.from(DIAGNOSE_BUCKET).list(userId, { limit: 100 });
+    if (error) return { ok: false, grund: error.message };
+    const pfade = (data ?? []).filter((o) => o.name).map((o) => `${userId}/${o.name}`);
+    if (pfade.length === 0) return { ok: true, anzahl };
+    const { error: delErr } = await admin.storage.from(DIAGNOSE_BUCKET).remove(pfade);
+    if (delErr) return { ok: false, grund: delErr.message };
+    anzahl += pfade.length;
+  }
+  return { ok: false, grund: 'Ordner nach 20 Runden nicht leer' };
+}
 
 /** Ersetzt den Anzeigenamen an allen Rezepten des gelöschten Kontos. */
 const ANONYMER_AUTOR = 'Ehemaliges Mitglied';
@@ -87,6 +131,7 @@ const TABELLEN_MIT_USER_ID = [
   'streitfall_votes',
   'streitfall_beitraege',
   'course_progress',
+  'lesson_progress',
   'protokolle',
   'diagnosen',
   'diagnose_credits',
@@ -140,6 +185,19 @@ export async function POST(req: Request) {
       .eq('user_id', user.id);
     if (error) {
       console.error('[konto-loeschen] Anonymisieren von user_recipes fehlgeschlagen', error);
+      return NextResponse.json(
+        { error: 'Die Löschung konnte nicht abgeschlossen werden. Dein Konto besteht weiter — bitte versuche es später erneut oder melde dich über das Kontaktformular.' },
+        { status: 500 },
+      );
+    }
+  }
+
+  // 3b) Diagnose-Fotos aus dem Storage löschen — vor den Tabellen, solange das
+  //     Konto noch besteht und ein zweiter Versuch möglich ist.
+  {
+    const fotos = await loescheDiagnoseFotos(admin, user.id);
+    if (!fotos.ok) {
+      console.error('[konto-loeschen] Löschen der Diagnose-Fotos fehlgeschlagen', fotos.grund);
       return NextResponse.json(
         { error: 'Die Löschung konnte nicht abgeschlossen werden. Dein Konto besteht weiter — bitte versuche es später erneut oder melde dich über das Kontaktformular.' },
         { status: 500 },
