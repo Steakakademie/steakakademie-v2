@@ -14,6 +14,9 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 | [004](004-hover-nur-mit-echtem-zeiger.md) | Hover-Motion nur noch bei echtem Zeigegerät auslösen | LOW | Accessibility | 1 Datei, 3 Zeilen | **DONE**¹ |
 | [005](005-mobiles-menue-animieren.md) | Mobiles Menü mit Ein- und Ausblendung versehen | MEDIUM | Missed opportunity | 1 Datei, ~10 Zeilen | **DONE**⁴ |
 | [006](006-emberglow-compositor-layer.md) | `EmberGlow` vom Repaint auf Compositor-Layer umstellen | LOW | Performance | 1 Datei, ~40 Zeilen | **DONE**⁵ |
+| [007](007-arbeitszeitplaner-maske-animieren.md) | Arbeitszeitplaner-Maske ein- und ausblenden | MEDIUM | Missed opportunity | 1 Datei, ~20 Zeilen | **DONE**⁶ |
+
+⁶ Umgesetzt am 02.10.2026, im Browser pro Frame gemessen (normal und `prefers-reduced-motion`), Zahlen im Plan. Der Plan stammt aus dem Alt-Branch `feature/arbeitszeitplaner-modal-motion` (der dort `001` hiess und nie in `main` landete) und wurde auf den Stand nach 002 angepasst: Import `m as motion`, keine eigene Reduced-Motion-Verzweigung.
 
 ⁵ Am 02.09.2026 gemessen und umgesetzt. Vorher/Nachher auf demselben Server (`next start`, Mediane aus 6 Laeufen): Der EmberGlow zurechenbare Aufwand faellt von **+76 Paint-Ereignissen und −4,0 Bildern/s auf 0 Paints und −0,3 Bilder/s**. Optisch unveraendert — die Ebenen-Gewichte treffen bei 0/50/100 % exakt Rare/Medium/Well Done, der Pixelvergleich weicht um hoechstens 1,4 von 255 je Kanal ab. Ursprungsbefund: Die im Abschnitt „Nicht in Plänen enthalten" geforderte Messung liegt damit vor: Der Repaint kostet beim Vollscroll +71 Paint-Ereignisse (+24 %) und rund 3 Bilder pro Sekunde (52,5 statt 55,6). Real, aber klein — deshalb LOW und kein Dringlichkeitsfall. Zwei Vermutungen wurden dabei widerlegt: unter 4× CPU-Drosselung trägt die Messung nicht, und in der Ruhephase nach dem Scrollen entsteht kein Mehraufwand. Zahlen und Methode im Plan.
 
@@ -44,6 +47,7 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 | 002 | 001 | Schritt 3 kontrolliert den Balken, den 001 auf `scaleX` umstellt. Ohne 001: Schritt überspringen und vermerken |
 | 005 | 002 | Reduced Motion kommt über den `MotionProvider` aus 002, nicht über eigenen Code im Header |
 | 003 | 001, 005 | Gleiche Dateien (`FrischSaisonal.tsx`, `Header.tsx`), unterschiedliche Zeilen — Reihenfolge vermeidet Merge-Konflikte |
+| 007 | 002 | Import `m as motion` und Reduced Motion kommen aus dem `MotionProvider` von 002 |
 | 001, 004 | — | unabhängig |
 
 ## Nicht in Plänen enthalten
