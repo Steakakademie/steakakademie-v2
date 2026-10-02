@@ -453,11 +453,89 @@ fahren, nicht zwei im Minutenabstand.
 | **Ursache der `/hoefe`-Zugriffe** | außerhalb des Auftrags dieser Messung | Clarity-Abfrage „Referrer für /hoefe, letzte 7 Tage" |
 | ~~`docs/seo-monitoring-methodik.md`~~ | ~~**Datei existiert nicht**~~ — **erledigt 21.09.2026: angelegt.** Sie bündelt das Verfahren des **wöchentlichen SEO-Laufs** (Leitmessung, Technik-Checks, Clarity, Off-Page, Berichtsregeln) | Die Methodik des 4-wöchigen GEO-Re-Checks bleibt bewusst hier in dieser Datei — die neue Datei verweist darauf, statt sie zu doppeln |
 
+## Messung 6 — 01.10.2026 (Re-Check, selbst erhoben; Perplexity NICHT erhebbar)
+
+**Vorab:** Lauf 17 Tage nach Messung 5 (nicht 4 Wochen, Fälligkeit laut Datei war 18.10.). Anlass: geplanter Task-Lauf. Messung 6 ersetzt den Termin nicht rückwirkend; nächste Fälligkeit neu gesetzt (siehe unten).
+Maßnahme seit Messung 5: keine gezielte GEO-Maßnahme bekannt (nicht geprüft, ob Commits seit 20.09. GEO-relevant waren).
+
+### 1. Google DE organisch (Leitmessung) — DOM-gezählt
+
+Query wörtlich, `google.de?hl=de&gl=de&num=10`, Seiten 1–5 (`start=0/10/20/30/40`). Zählung: 7 + 10 + 10 + 7 = **34** (7. organischer Treffer auf Seite 4). Seite 5 nicht mehr aufgerufen (Treffer vorher gefunden).
+
+| Query | Position | Δ |
+|---|---|---|
+| „Was ist die richtige Kerntemperatur für ein Steak medium" | **34, Seite 4** — `steakakademie.de/temperatur-guide` | ⚪ Seite 4 gehalten. Messung 5 in der Datei: ~36; Auftragstext nannte „39". Differenz innerhalb ±3 (bzw. Auftragszahl nicht aus Datei) → **keine Bewegung** |
+| „Kerntemperatur Steak" (Kopf-Keyword) | **nicht auf Seite 1** (8 organische Treffer, kein steakakademie.de) | ⚪ unverändert |
+
+Seite 1 Leit-Query: Grillfürst, block-house, AMA-Grillclub, little-london, oberpfalz-beef, bell.ch, Grillfürst (2. URL). ⚠️ Auftragstext „Platz 39" ≠ Datei „~36" — die Datei gilt; Zählunschärfe ±3 bleibt.
+
+### 2. Google AI Overview (Header „Übersicht mit KI", Prüfung via `document.body.innerText`)
+
+| | Leit-Query | „Kerntemperatur Steak" |
+|---|---|---|
+| AIO ausgeliefert | ✅ ja | ✅ ja |
+| Genannter Wert | Medium **55–59 °C** | Medium **54–58 °C** |
+| Inline zitiert | Grillfürst (Kopfsatz), shop.block-house.de (+2 verdeckt); Quellen-Kacheln am Ende: block-house, Grillfürst | YouTube/Grillfluencer, Don Carne (+3), shop.block-house.de (+1), Grillfürst (2×) |
+| steakakademie.de zitiert | ❌ nein (Panel nicht aufgeklappt, verdeckte „+N" nicht auflösbar) | ❌ nein |
+
+Wert-Verschiebung ggü. Messung 5 (54–58 → 55–59 bei Leit-Query): AIO-Text ist nicht stabil; kein Befund über Steakakademie.
+
+### 3. Perplexity — ❌ NICHT ERHOBEN
+
+Mit anonymem Aufruf (`perplexity.ai/search?q=…`, auch mit `&focus=internet`) liefert Perplexity nach 7 Sek. „Melde dich an und wiederhole deine Anfrage" — **Login-Wall**, keine Antwort, keine Quellenliste. Zwei Versuche, gleiches Ergebnis. Einloggen ist laut Vorgabe ausgeschlossen. Das ist **Änderung ggü. 20.09.** (da anonym 10 Quellen) — entweder Perplexity hat das anonyme Kontingent dieses Browser-Profils erschöpft oder die Anon-Nutzung in DE eingeschränkt; Ursache nicht prüfbar.
+**Folge:** Stabilitätsfrage („Quelle 1 inline" vom 20.09.) bleibt offen: zwei Treffer (09.08. Pos. 6, 20.09. Pos. 1 lt. Auftrag), ein Indiz, kein Beweis. **Kein Rückschluss auf Rückgang.**
+Was es gebraucht hätte: eingeloggter Perplexity-Account (Uwe) oder Browser-Profil mit frischem Anon-Kontingent / anderes Netz.
+
+### 4. ChatGPT — Kontrollmessung
+
+`chatgpt.com/?q=…` ohne Login → Antwort sofort aus Modellwissen (55–58 °C), **kein Quellen-Panel, kein Retrieval**. Vierte Messung in Folge (07.07., 09.08., 20.09., 01.10.) ohne Retrieval → für keine Domain Zitier-Chance über diesen Weg.
+
+### 5. Zugriffsdaten (Microsoft Clarity, Fenster 24.09.–01.10., Non-Bot)
+
+| Quelle | Sessions | (20.09.) |
+|---|---|---|
+| Direct | 18 | 35 |
+| steakakademie.de (intern/Self-Referral) | 14 | — |
+| google | 13 | 3 |
+| **bing** | **9** | 12 |
+| duckduckgo.com | 4 | — |
+| checkout-ds24.com | 4 | — |
+| yahoo | 3 | — |
+| qwant | 1 | — |
+| chatgpt.com | 0 | 1 |
+
+Top-Seiten: `/` 19, `/temperatur-guide` 7 (20.09.: 5), `/diplome` 4, `/danke/steak-beichte` 4, `/rezepte/fleisch` 3, `/fleischwissen/gras-vs-getreide…` 3.
+⚠️ Google-Sessions 3 → 13 (Vervierfachung), Bing 12 → 9. **Einstellige/kleine Zahlen = Einzelbefund, kein Trend**; Fenster nicht identisch (Messung 5 hatte anderes 7-Tage-Fenster). Wer die Besuche sind (Uwe/Bots/Nutzer), ist aus Clarity nicht entscheidbar. Ursache des Google-Anstiegs nicht prüfbar (Search Console nicht angebunden).
+
+### Gesamt-Fazit Messung 6
+
+- Google: Seite 4 gehalten, keine Bewegung. Erwartung bestätigt (ohne Backlinks nichts).
+- Perplexity: **nicht messbar** (Login-Wall) — die Erfolgsfrage aus Messung 5 bleibt „Indiz, nicht Beweis".
+- ChatGPT: kein Retrieval, 4. Mal.
+- Traffic: Google-Sessions steigen absolut, Bing sinkt leicht — kleine Zahlen.
+- Wikidata-Wirkung: weiterhin **Kausalität nicht belegbar**; keine Messanordnung trennt Entity-Signal von Index-Reifung.
+
+### Widerruf / Korrektur früherer Einschätzungen
+
+Kein Widerruf nötig. Hinweis: Der Auftragstext nennt für Messung 5 „Platz 39", die Datei „~36"; Datei maßgeblich.
+
+### ❌ Was NICHT erhoben wurde (Berichtspflicht, CLAUDE.md Abschnitt A)
+
+| Nicht erhoben | Warum | Was es gebraucht hätte |
+|---|---|---|
+| **Perplexity** (Listung + Inline) | Login-Wall bei anonymem Aufruf, 2 Versuche | Login durch Uwe oder anderes Profil/Netz; zwei Läufe zu verschiedenen Tageszeiten |
+| **Bing-DE-Position** | in diesem Lauf nicht abgefragt (Auftrag listete es nicht, obwohl Messung 5 es ab Messung 6 vorsah) | `bing.com/search?q=…&setlang=de&cc=DE`, DOM-Zählung |
+| AIO-Panel „Alle anzeigen" / verdeckte „+N" | nicht aufgeklappt | Klick vor der Link-Auszählung |
+| Google Seite 5, Brand-Query | nicht nötig bzw. ausgelassen | — |
+| Screenshots | DOM-basiert | `docs/geo-baseline-screenshots/` |
+| Impressionen/CTR | Search Console nicht angebunden | GSC-Anbindung |
+| Git-Commit | bewusst nicht committet — Uwe committet selbst | — |
+
 ## Re-Check-Rhythmus
 
 Alle 4 Wochen erheben und hier als neue Sektion anhängen — **nie überschreiben**.
 
-**Nächste Fälligkeit: 18.10.2026.** (Ops-Heartbeat `maxTage: 32` hängt an der Änderung
+**Nächste Fälligkeit: 29.10.2026** (4 Wochen nach Messung 6 vom 01.10.2026; vorher 18.10.2026). (Ops-Heartbeat `maxTage: 32` hängt an der Änderung
 dieser Datei; bleibt sie aus, wird der tägliche Heartbeat-Lauf rot — so gewollt.)
 
 Messanordnung ab Messung 6 — gegenüber Messung 5 **erweitert**:

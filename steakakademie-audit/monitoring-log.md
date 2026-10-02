@@ -8,7 +8,119 @@
 > einer US-basierten WebSearch und liefern eine Trefferliste, keine deutsche
 > SERP-Position.** Vergleiche über diese Grenze hinweg sind nicht 1:1 belastbar.
 
+## KW40 — 28.09.2026
+
+> **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach dem letzten Eintrag (KW39,
+> 21.09.2026, Lauf 2). Die Traffic-Fenster beider Läufe (14.–21.09. bzw. 21.–28.09.) sind
+> lückenlos aneinandergrenzende 7-Tage-Fenster — die Traffic-Deltas unten sind damit ein
+> echter Wochenvergleich, anders als in KW39.
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ Vorwoche (21.09.) | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz 34** (Seite 4, Position 7) | `steakakademie.de/temperatur-guide` | ⚪ unverändert — exakt derselbe Wert (34) | ⚪ nicht vergleichbar (Methodenwechsel KW39) |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 8** organischen Treffern (nur Seite 1 geprüft — Minimalvorgabe) | — | = unverändert (Vorwoche ebenfalls nur Seite 1, ebenfalls nicht in Top 8) | = (Baseline: nicht in Top 10) |
+| Brand-Query „Steakakademie" | **Platz 1** (erster organischer Treffer, nach einer Gesponsert-Anzeige) | `steakakademie.de/` | = unverändert | = (Baseline: Platz 1) |
+
+**Zählweise Leit-Query:** Seite 1: 7 organische Treffer · Seite 2: 10 · Seite 3: 10 (inkl. 1 Facebook-Video) · Seite 4: Position 7 → 7+10+10+7 = **34**. Identisch mit dem Vorwochenwert — die stabilste Messung seit Einführung der Leitmessung. URL per DOM-Linkextraktion verifiziert (`steakakademie.de/temperatur-guide`), Snippet-Titel diese Woche „Kerntemperaturen Fleisch — Tabelle 2026" statt vorheriger Formulierung — reines Snippet-Rewriting durch Google, keine URL-Änderung.
+
+**Brand-Befund:** Vor dem organischen Block läuft weiterhin eine Gesponsert-Anzeige von GrillKonzept auf den eigenen Markennamen (unverändert). Organisch: 1. `steakakademie.de/` · 2.–4. GrillKonzept (Veranstaltungsseiten, fremd) und Facebook Steakakademie Bochum (fremd) gemischt · danach `steakakademie.de/diplome`, WR.de Dortmund, Oberpfalz-Beef. Kein GitHub-Treffer unter den ersten Ergebnissen.
+
+### Google AI Overview
+
+**Leit-Query:** vorhanden, zitiert **Grillfürst** (primär) + **shop.block-house.de** (+4 weitere). `steakakademie.de` wird **nicht** zitiert — geprüft über `document.body.innerText`, Volltextsuche nach „steakakademie": kein Treffer. Δ Vorwoche: dieselben zwei Hauptquellen (Reihenfolge vertauscht), etwas mehr Nebenquellen sichtbar (+4 statt +2) — inhaltlich keine Bewegung.
+
+**Kopf-Keyword „Kerntemperatur Steak":** ebenfalls ein AI Overview, zitiert **„Der Grillfluencer" (YouTube)** primär, dazu **Don Carne** (+3), **shop.block-house.de** (+1), **Grillfürst**. Auch hier keine Nennung von uns. Δ Vorwoche: Don Carne war letzte Woche die einzige genannte Quelle — diese Woche mit mehr sichtbaren Nebenquellen (YouTube neu vorn), aber unverändert ohne uns.
+
+### Traffic (Microsoft Clarity, 7 Tage, Non-Bot-Sessions, 21.09.–28.09.2026)
+
+Beide Abfragen liefen diesmal mit **identischem Fenster** — der in KW39 und in der GEO-Baseline dokumentierte Ein-Tages-Versatz zwischen beiden Clarity-Abfragen ist behoben.
+
+| Quelle | Sessions | Δ Vorwoche (7-Tage-Fenster 14.–21.09.) |
+|---|---|---|
+| Direct | 23 | −10 (Vorwoche 33) |
+| **google** | **10** | **+8** (Vorwoche 2) |
+| **bing** | **6** | **−7** (Vorwoche 13) |
+| duckduckgo.com | 4 | neu in der Top-Liste |
+| yahoo | 1 | neu |
+| chatgpt.com | 1 | = |
+| steakakademie.de (Eigenverweis) | 1 | neu |
+| www.qwant.com | 1 | neu |
+
+**Auffälligster Befund der Woche:** Das Verhältnis Bing:Google hat sich **gedreht** — von 13:2 (≈6,5-fach zugunsten Bing, Vorwoche) auf 10:6 (≈1,7-fach zugunsten Google, diese Woche). Beide Fenster sind echte, nicht überlappende 7-Tage-Zeiträume, der Vergleich ist damit methodisch sauber — **aber** die absolute Fallzahl bleibt einstellig bis niedrig-zweistellig, weshalb dies laut Methodik als **Einzelbefund, nicht als Trend** gilt. Ursache nicht ermittelt (Clarity liefert keine Kausalattribution); möglich sind ein echter Sichtbarkeitszuwachs auf Google, ein einmaliger Referral-Peak oder reines Rauschen bei dieser Fallzahl.
+
+**Top-Seiten (7 Tage):** `/` **13** (Vorwoche 6, +7) · `/auth/login` 4 (neu in Top 10) · `/diplome` 4 (Vorwoche 1, +3) · `/autoren/uwe-yendell` 3 (neu) · `/fleischwissen/gras-vs-getreide-was-steckt-im-fleisch` 3 (neu) · `/rezepte/fleisch/iberico-pluma` 2 (neu) · `/temperatur-guide` 2 (Vorwoche 5, −3) · `/diplome/lernen/stufe-1/grillarten` 2 (neu) · `/hoefe` 2 (Vorwoche 22, **−20**) · `/rezepte/fleisch/entrecote-grillen` 1 (neu).
+
+**Zweitauffälligster Befund:** `/hoefe` war in den letzten Läufen durchgehend die mit Abstand meistbesuchte Seite (22 Sessions Vorwoche) und ist diese Woche auf 2 eingebrochen. Nicht attribuierbar (Uwe selbst, Bot oder echte Besucher — aus Clarity nicht entscheidbar), aber die Größenordnung des Rückgangs ist auffällig genug, um im nächsten Lauf im Auge behalten zu werden.
+
+**Einordnung, nicht Statistik:** ~47 Sessions/Woche (Vorwoche ~50), enthält Uwes eigene Aufrufe (u. a. vermutlich `/auth/login`, `/autoren/uwe-yendell`).
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de` (WebSearch): **0 echte externe Backlinks — unverändert.**
+
+Treffer weiterhin ausschließlich Namensvettern/fremde Kursanbieter: Facebook Steakakademie Bochum · Smokefire Grillakademie (Gutschein-Produktseiten) · Beisser (Fleischerei) · GrillKonzept (Kurstermine) · `butchery-lehel.de` (München) · Wikipedia „Akademie" (themenfremd) · Akademie der kochenden Künste (neu in der Trefferliste, ebenfalls fremd/themenfremd). Keine dieser Seiten verlinkt auf uns.
+
+Seit dem letzten Eintrag ist eine neue Kalenderwoche vergangen (KW39 → KW40) — die Zählung wird entsprechend hochgezählt: **12 Wochen in Folge ohne Backlink** (Vorwoche: 11). Keine nofollow-Prüfung nötig, da kein Link existiert.
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ Vorwoche |
+|---|---|---|---|
+| www → non-www Redirect, Wurzel | `https://www.steakakademie.de/` → **HTTP/2 308**, `location: https://steakakademie.de/` | 🟢 ok | = hält (Fix aus PR #160 / `524c6da` weiterhin in Produktion aktiv) |
+| www → non-www Redirect, Unterseite | `https://www.steakakademie.de/temperatur-guide` → **HTTP/2 308**, `location: https://steakakademie.de/temperatur-guide` | 🟢 ok | = |
+| Apex leitet nicht um | `https://steakakademie.de/` → **HTTP/2 200**, keine `location` | 🟢 ok | = |
+| `/llms.txt` erreichbar | `200 text/plain; charset=utf-8`, 1.533 Byte | 🟢 ok | = |
+| `/robots.txt` endet mit Sitemap-Zeile | Letzte Zeile `Sitemap: https://steakakademie.de/sitemap.xml` | 🟢 ok | = |
+
+Alle fünf Pflichtchecks grün, per Statuscode/Header geprüft (nicht per Seiteninhalt). Der in KW39 behobene Wurzel-Redirect hält eine Woche später weiterhin stabil — keine Regression.
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig.** `docs/geo-baseline.md`, Abschnitt „Re-Check-Rhythmus": **Nächste Fälligkeit 18.10.2026** — unverändert, noch drei Wochen hin. Zuständig: Monats-Task `geo-recheck-baseline`.
+- **Bing Webmaster Tools: erledigt**, kein offener Punkt mehr (siehe Update 24.09.2026 im KW39-Eintrag: Verifizierung + Sitemap-Einreichung bestätigt abgeschlossen). Erste Bing-eigene Kennzahlen (Impressionen, Positionen, CTR, gecrawlte URLs) wurden in diesem Lauf **nicht** abgefragt — kein Bing-Webmaster-Tools-Zugriff in dieser Session verfügbar. Sollte im nächsten Lauf nachgeholt werden, sobald ein Zugriffsweg existiert.
+- **Google Search Console per API weiterhin nicht angebunden** — siehe Handlungsempfehlung unten.
+- **Traffic-Auffälligkeiten unbeobachtet:** Bing/Google-Verhältnis gedreht, `/hoefe` von 22 auf 2 Sessions eingebrochen. Beides nachrichtlich, keine Ursachenermittlung in diesem Lauf möglich (Clarity liefert keine Kausalattribution) — im nächsten Lauf gegenprüfen, ob sich der Trend bestätigt oder es ein Einzelausschlag war.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Platz 34 für die Leit-Query, exakt unverändert zur Vorwoche. Brand auf 1 gesund. Kopf-Keyword weiterhin nicht in den ersten 8 Treffern. |
+| AI Overview / GEO | 🔴 | Beide geprüften AIOs (Leit-Query und Kopf-Keyword) zitieren uns weiterhin nicht — Grillfürst/block-house.de bzw. Der Grillfluencer/Don Carne dominieren. |
+| Traffic | 🟡 | ~47 Sessions/Woche. Bing:Google-Verhältnis hat sich von 6,5:1 auf 1,7:1 zugunsten Google gedreht (echter Wochenvergleich, aber kleine Fallzahl → Einzelbefund, kein bestätigter Trend). `/hoefe` von 22 auf 2 Sessions eingebrochen, Ursache offen. |
+| Off-Page | 🔴 | 0 Backlinks, jetzt 12 Wochen in Folge. |
+| Technik | 🟢 | Alle fünf Checks grün, per Statuscode geprüft. Der KW39-Fix (Wurzel-Redirect) hält eine Woche später stabil. |
+
+### Handlungsempfehlung (eine)
+
+**Google Search Console per API anbinden.** Der Auftragstext nennt eine bereits existierende Property (ohne www) — das ist eine unbelegte Angabe aus dem Auftrag, in diesem Lauf **nicht verifiziert** (kein GSC-Zugriff in dieser Session verfügbar), gehört aber genau deshalb in die Prüfung: Mit dieser Anbindung kämen zum ersten Mal echte Durchschnittspositionen, Impressionen und CTR ins Monitoring — bisher wird jede Positions- und Sichtbarkeitsaussage nur über manuelle SERP-Stichproben (diese Leitmessung) approximiert. Kostenrahmen: 0 €, sofern die Property tatsächlich existiert; Aufwand hängt davon ab, ob nur ein API-Zugriffstoken fehlt oder die Property erst noch angelegt werden muss — dazu selbst noch keine belastbare Aussage möglich.
+
+*Grundannahme nicht zum zweiten Mal unerledigt:* Dies ist die erste Woche, in der GSC als alleinige Empfehlung geführt wird (bisher nur „danach unverändert" mitgeführt) — keine Streichungsprüfung nötig.
+
+*Nachrichtlich, nicht als zweite Empfehlung gezählt:* Der Bing/Google-Traffic-Shift und der `/hoefe`-Einbruch sind auffällig genug, um im nächsten Lauf gezielt gegengeprüft zu werden, werden hier aber bewusst nicht als Handlungsempfehlung geführt, da noch unklar ist, ob echtes Signal oder Rauschen vorliegt.
+
+Danach unverändert: (3) echte Backlinks (kein spamfreier 15-Minuten-Weg, CLAUDE.md Regel 5).
+
+### Trend in einem Satz
+
+Ranking und Technik sind diese Woche die stabilsten Größen (Platz 34 exakt gehalten, alle Technik-Checks grün und der KW39-Fix hält), während sich im Traffic-Mix ein auffälliger, aber bei dieser Fallzahl nicht als Trend zu wertender Umschwung zeigt — Google überholt Bing, und die bisher dominante Seite `/hoefe` bricht ein.
+
+### Was NICHT geprüft wurde
+
+- **Bing-, ChatGPT- und Perplexity-Messung** — gehören in den GEO-Re-Check (fällig erst 18.10.2026).
+- **Bing-eigene Kennzahlen** (Impressionen, Positionen, CTR, gecrawlte URLs) trotz abgeschlossener Bing-Webmaster-Tools-Anbindung — kein Zugriffsweg in dieser Session verfügbar.
+- **Vollständiges Aufklappen der AIO-Quellenlisten** („Mehr anzeigen") — nur die inline sichtbaren Domains ausgezählt, bei beiden Queries.
+- **Kopf-Keyword nur Seite 1 geprüft** (8 Treffer) statt Seiten 1–5 — Minimalvorgabe erfüllt, kein vollständiger Rankingvergleich über alle 5 Seiten.
+- **Keine Klickrate/Impressionen/Durchschnittsposition** — Search-Console-Anbindung fehlt weiterhin (siehe Handlungsempfehlung).
+- **Ursache des Traffic-Shifts (Google↑/Bing↓) und des `/hoefe`-Einbruchs nicht ermittelt** — Clarity liefert keine Kausalattribution einzelner Sessions.
+- **Property-Existenz der Google Search Console nicht verifiziert** — Angabe stammt nur aus dem Auftragstext, nicht selbst geprüft.
+- **Nichts committet** — Uwe committet selbst, wie in der Aufgabenstellung vorgegeben.
+
 ## KW39 — 21.09.2026 (Lauf 2)
+
+> **Update 24.09.2026:** Handlungsempfehlung dieses Eintrags umgesetzt — Bing Webmaster Tools ist angebunden. GSC-Import scheiterte mit „keine Daten vorhanden", daher manuelle Verifizierung per HTML-Meta-Tag (`msvalidate.01`) über `metadata.verification.other` in `src/app/layout.tsx`, PR [#214](https://github.com/Steakakademie/steakakademie-v2/pull/214) (gemerged, Vercel-Deploy `5cbd639` bestätigt `READY`, Tag live auf `steakakademie.de` per curl geprüft). Uwe hat die Verifizierung bei Bing erfolgreich abgeschlossen. Sitemap (`https://steakakademie.de/sitemap.xml`) am selben Tag bei Bing eingereicht — erster Versuch mit relativem Pfad `sitemap.xml` von Bing abgelehnt („Feed-URL gehört nicht zur Website“), zweiter Versuch mit voller URL erfolgreich (von Uwe bestätigt). Eigener Check: `https://steakakademie.de/sitemap.xml` liefert HTTP 200, valider Sitemap-Index mit einem Sub-Sitemap-Eintrag. Damit **kein offener Punkt mehr** aus dieser Empfehlung — nächster Lauf sollte erste Bing-Kennzahlen (Impressionen, Positionen, CTR, gecrawlte URLs) einsammeln, sobald welche vorliegen.
 
 > **Kalendarischer Hinweis:** Dieser Lauf kommt nur **1 Tag** nach dem vorherigen Eintrag
 > (20.09.). Grund: Der Scheduled Task wurde am Sonntag, 20.09., neu angelegt (Cron
