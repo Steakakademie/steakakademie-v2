@@ -21,7 +21,10 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const NEXT_BY_SLUG: Record<string, string> = {
-  'bbq-grundkurs':  '/bbq-grundkurs',
+  // BBQ-Grundkurs (eingestellt 09.09.2026) steht bewusst weiter drin: Es kann
+  // Gutscheine geben, die vor der Einstellung verkauft wurden. Sie loesen weiter
+  // ein — das Ziel ist jetzt das Diplom, das den Stoff uebernommen hat.
+  'bbq-grundkurs':  '/diplome',
   'mein-protokoll': '/mein-protokoll/fragebogen',
   'steak-beichte':  '/steak-beichte/diagnose',
 };

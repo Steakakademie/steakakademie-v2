@@ -41,12 +41,35 @@ DS-de **genehmigt**. Wer eine Statusangabe hier ändert, prüft sie vorher gegen
 |----|---------|-------|---|---|---|---|
 | 696394 | Steak-Beichte (KI-Diagnose, Credits) | 7 € / 25 € (5er) | ✅ Y | ✅ genehmigt | `/steak-beichte` (indexiert) | ✅ an |
 | 696396 | Mein Protokoll (8-Wochen-Plan) | 19 € / 29 € | ✅ Y | ⏳ „neu" | `/mein-protokoll` (indexiert) | ✅ an |
-| 696399 | BBQ-Grundkurs | 79 € / 127 € | ✅ Y | ⏳ „neu" | `/bbq-grundkurs` (indexiert) | ❌ keine ID im Code |
+| 696399 | BBQ-Grundkurs — **eingestellt 09.09.2026** | 79 € / 127 € | ✅ Y ⚠️ | ⏳ „neu" | `/bbq-grundkurs` → **301 auf `/diplome`** | ❌ keine ID im Code |
 | 695894 | Gründung-Sprint | 99 € | ✅ Y | ✅ genehmigt | `/gruender-schmiede` (**noindex**) | ❌ **aus, 03.09.2026** |
 | 695900 | Eigenregie (bis 07.09.2026 „Agentur-Killer-Sprint") | — | ✅ Y | ✅ genehmigt | `/eigenregie` (**noindex**) | ❌ bewusst aus |
 | 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ❌ **aus, 03.09.2026** |
 
 ⚠️ **Regel:** Jedes Course-Produkt braucht `courses`-Zeile + `digistore_products`-Mapping, sonst kassiert es ohne Auslieferung. Reaktivierung: **erst Substanz, dann Checkout** — nie umgekehrt.
+
+### BBQ-Grundkurs (696399) — eingestellt am 09.09.2026
+
+**Entscheidung Uwe, 09.09.2026:** Der Kurs entfällt als eigenes Produkt. Grund ist der neu
+gefasste Rahmenlehrplan: Stufe 1 des Grillmeister-Diploms ist von sieben auf **elf Lektionen**
+gewachsen und deckt damit vier der fünf geplanten Grundkurs-Module ab — Hitze, Kerntemperatur
+samt Nachziehen, Fehler retten, Startroutine. Und zwar **kostenlos**. Ein Bezahlprodukt, das
+dasselbe sagt, was zwei Klicks weiter gratis steht, hätte beide beschädigt.
+
+Umgesetzt am 09.09.: 301 von `/bbq-grundkurs` und `/danke/bbq-grundkurs` auf `/diplome`
+(`next.config.mjs`), Seiten und Dankeseite entfernt, Konzeptpapier als eingestellt
+gekennzeichnet, Eintrag im Link-Gate zurückgebaut.
+
+**⚠️ NOCH OFFEN — und das ist der gefährliche Teil:** Digistore 696399 ist weiterhin **aktiv**,
+und die `courses`-Zeile `bbq-grundkurs` samt Mapping steht noch. Das ist Absicht: Nimmt man das
+Mapping weg, solange das Produkt kaufbar ist, zahlt jemand und landet nirgends — genau der
+Zustand, den wir bei 695900 beklagen. Reihenfolge deshalb zwingend: **erst in Digistore
+abschalten, dann Mapping und Kurszeile aufräumen.** Auf der Kurszeile liegt außerdem eine
+Buchung (vermutlich Testkauf aus der Einrichtung) — vor dem Löschen prüfen.
+
+Was mit dem Kurs entfällt, waren zwei echte Argumente, die nicht mit ihm verschwinden: der
+Sprung von 0 € auf 99–149 € und das Weihnachtsgeschäft. Beides soll über **Gutscheine aufs
+Diplom** gelöst werden, nicht über ein neues Produkt.
 
 ### Gründung-Sprint (695894) — Checkout stillgelegt am 03.09.2026
 

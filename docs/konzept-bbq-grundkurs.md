@@ -1,5 +1,34 @@
 # Konzept — BBQ-Grundkurs als Einstiegsprodukt
 
+> ## ⛔ EINGESTELLT — Entscheidung Uwe, 09.09.2026
+>
+> **Der BBQ-Grundkurs entfällt als eigenes Produkt.** Grund ist der neu gefasste
+> Rahmenlehrplan vom 08.09.2026: Stufe 1 des Grillmeister-Diploms ist von sieben
+> auf **elf Lektionen** gewachsen und deckt vier der fünf hier geplanten Module
+> ab — Hitze verstehen (1.5, 1.6), Kerntemperatur & Carryover (1.7, 1.9),
+> Fehler retten (1.3, 1.4, 1.11), Grundcuts folgen in Stufe 2. Und zwar
+> kostenlos. Ein Bezahlprodukt, das dasselbe sagt, was zwei Klicks weiter gratis
+> steht, hätte beide beschädigt.
+>
+> **Dieses Papier wird nicht gelöscht.** Zwei Argumente darin gelten weiter und
+> haben mit dem Produkt nichts zu tun: der Sprung von 0 € auf 99–149 € (§2) und
+> das Weihnachtsgeschäft (§2, zweiter Absatz). Beides wird über **Gutscheine
+> aufs Diplom** gelöst, nicht über ein zweites Produkt — ein Rabatt, den man
+> beenden kann, ist mehr wert als ein Preis, den man nicht mehr erhöhen kann.
+>
+> Technischer Stand nach der Entscheidung: `/bbq-grundkurs` und
+> `/danke/bbq-grundkurs` leiten dauerhaft auf `/diplome`
+> (`next.config.mjs`). **Offen und in dieser Reihenfolge abzuarbeiten:** erst
+> Digistore 696399 abschalten, dann `digistore_products`-Mapping und die
+> `courses`-Zeile entfernen — nie umgekehrt, sonst zahlt jemand und landet
+> nirgends. Auf der Kurszeile liegt eine Buchung (vermutlich Testkauf), die vor
+> dem Löschen zu prüfen ist.
+>
+> Alles unterhalb dieser Linie ist der Stand vom 27.08.2026 und beschreibt ein
+> Produkt, das es nicht geben wird.
+
+---
+
 **Regel-8b-Konzept. Vorlage zur Freigabe.** Stand 27.08.2026.
 Entscheidung Uwe (27.08.): Der Kurs bleibt — als eigenes Produkt zwischen
 kostenlosem Trichter und Grillmeister-Diplom.

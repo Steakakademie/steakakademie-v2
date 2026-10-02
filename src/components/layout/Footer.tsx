@@ -41,7 +41,10 @@ const FOOTER_LINKS = {
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
-    { label: 'BBQ-Grundkurs', href: '/bbq-grundkurs' },
+    // BBQ-Grundkurs am 09.09.2026 eingestellt — Stufe 1 des Diploms deckt den
+    // Stoff kostenlos ab. Der Eintrag ist raus statt umgebogen: Zwei Zeilen auf
+    // dasselbe Ziel sind eine Enttaeuschung, keine Navigation.
+    { label: 'Rahmenlehrplan', href: '/diplome/rahmenlehrplan' },
     // Vorher standen hier Marco, Jonas und Elena als drei Eintraege — alle drei
     // zeigten auf dieselbe Seite /autoren. Drei Zeilen fuer ein Ziel sind
     // verschenkter Platz und fuer den Nutzer eine Enttaeuschung beim zweiten Klick.

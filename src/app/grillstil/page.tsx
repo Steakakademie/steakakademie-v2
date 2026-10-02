@@ -73,8 +73,8 @@ export default async function GrillstilPage() {
       nr: '01',
       title: 'Grundlagen verstehen',
       text: 'Direkte und indirekte Hitze, Zonen, Deckel auf oder zu: das System hinter jedem guten Grillabend.',
-      href: '/bbq-grundkurs',
-      cta: 'Zum BBQ-Grundkurs',
+      href: '/diplome',
+      cta: 'Zum Grillmeister-Diplom',
     },
     {
       icon: Beef,

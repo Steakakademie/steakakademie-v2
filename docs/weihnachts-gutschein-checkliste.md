@@ -53,7 +53,17 @@ Settings → Environment Variables → Production:
 |---|---|
 | `NEXT_PUBLIC_DS_VOUCHER_MEIN_PROTOKOLL` | `https://www.checkout-ds24.com/product/<DS_ID_PROTOKOLL>` |
 | `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE` | `https://www.checkout-ds24.com/product/<DS_ID_BEICHTE>` |
-| *(später)* `NEXT_PUBLIC_DS_VOUCHER_BBQ_GRUNDKURS` | erst nach Video-Kurs-Fertigstellung |
+
+**Entfallen (Uwe, 09.09.2026):** `NEXT_PUBLIC_DS_VOUCHER_BBQ_GRUNDKURS` — der
+BBQ-Grundkurs ist eingestellt, Stufe 1 des Diploms deckt seinen Stoff kostenlos ab.
+Der Eintrag ist auch aus `src/lib/gutschein-products.ts` raus: Ein Geschenkgutschein
+auf ein Produkt, das es nicht mehr gibt, ist der schlimmste Fall dieser Liste — der
+Schenkende zahlt, der Beschenkte kann nichts einlösen.
+
+**Damit stehen im Weihnachtsregal nur noch 19 € und 7 €.** Der 79-€-Platz war der
+einzige im geschenktauglichen Bereich; sein Ersatz ist ein **Gutschein auf das
+Grillmeister-Diplom (99 €)**, sobald das Diplom monetarisiert ist. Diese Lücke ist
+der bewusst in Kauf genommene Preis der Einstellung — nicht ein Versehen.
 
 → **Redeploy** auslösen (env greift erst im nächsten Build).
 → Karte auf `/gutschein` wechselt automatisch von „In Vorbereitung" auf Kauf-Button.
