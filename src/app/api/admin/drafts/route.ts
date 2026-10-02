@@ -1,17 +1,17 @@
 // ── Review-Workflow API ──────────────────────────────────────────────────────
 // GET   → listet offene Entwürfe (status draft|review)
 // PATCH → setzt status auf approved|rejected  (Body: { id, status })
-// Auth: admin_auth Cookie === ADMIN_PASSWORD. Schreibt mit Service-Role.
+// Auth: signiertes Sitzungs-Token im Cookie admin_auth (src/lib/admin-auth.ts). Schreibt mit Service-Role.
 
 import { NextResponse } from 'next/server';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
 async function authed(): Promise<boolean> {
-  return istAdminPasswort((await cookies()).get('admin_auth')?.value);
+  return istAdminCookie((await cookies()).get(ADMIN_COOKIE)?.value);
 }
 
 function service() {
