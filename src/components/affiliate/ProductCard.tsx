@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ExternalLink, Star, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
+import { amazonBewertung } from './produkt-anzeige';
 
 function SymbolicBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   // Rechtlich relevanter Hinweis: KI-/generisches Bild, nicht das Originalprodukt
@@ -221,6 +222,9 @@ export default function ProductCard({
   const affiliateHref = `/go/${product.id}`;
   // imageUrl (PA-API) hat Vorrang vor image (manuell in YAML)
   const imageSrc = product.imageUrl ?? product.image;
+  // Sterne nur bei Produkten mit Amazon-Link, immer mit Quelle (03.10.2026) —
+  // die Zahlen sind Amazon-Durchschnitte, keine Bewertung der Steakakademie.
+  const bewertung = amazonBewertung(product);
 
   // ── SIDEBAR VARIANT ────────────────────────────────────────────────────
   if (variant === 'sidebar') {
@@ -262,11 +266,11 @@ export default function ProductCard({
           </span>
         )}
 
-        {product.rating && (
+        {bewertung && (
           <div className="flex items-center gap-2 mb-2">
-            <StarRow rating={product.rating} />
+            <StarRow rating={bewertung.rating} />
             <span className="text-xs font-sans text-text-muted">
-              {product.rating.toFixed(1)} <span title="Durchschnittliche Amazon-Kundenbewertung">(Ø Amazon)</span>
+              {bewertung.rating.toFixed(1)} <span title="Durchschnittliche Amazon-Kundenbewertung">(Ø Amazon)</span>
             </span>
           </div>
         )}
@@ -390,14 +394,16 @@ export default function ProductCard({
           {product.name}
         </h3>
 
-        {product.rating && (
+        {bewertung && (
           <div className="flex items-center gap-2 mb-3">
-            <StarRow rating={product.rating} />
+            <StarRow rating={bewertung.rating} />
             <span className="text-sm font-sans text-text-secondary">
-              {product.rating.toFixed(1)}
-              {product.ratingCount && (
-                <span className="text-text-muted"> ({product.ratingCount.toLocaleString('de-DE')} Amazon-Bewertungen)</span>
-              )}
+              {bewertung.rating.toFixed(1)}
+              <span className="text-text-muted">
+                {bewertung.ratingCount
+                  ? ` (${bewertung.ratingCount.toLocaleString('de-DE')} Amazon-Bewertungen)`
+                  : ' (Ø Amazon)'}
+              </span>
             </span>
           </div>
         )}

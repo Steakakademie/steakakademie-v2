@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
+import { amazonBewertung } from './produkt-anzeige';
 
 interface ComparisonTableProps {
   products: Product[];
@@ -25,6 +26,14 @@ function StarRating({ rating }: { rating: number }) {
       ))}
       <span className="text-xs font-sans text-text-secondary ml-1">
         {rating.toFixed(1)}
+      </span>
+      {/* Quelle gehoert an die Zahl (03.10.2026): ohne sie liest sich die
+          Spalte als Bewertung der Steakakademie. */}
+      <span
+        className="text-[10px] font-sans text-text-muted ml-1 whitespace-nowrap"
+        title="Durchschnittliche Amazon-Kundenbewertung"
+      >
+        (Ø Amazon)
       </span>
     </div>
   );
@@ -60,6 +69,8 @@ export default function ComparisonTable({ products, className }: ComparisonTable
               const rank = index + 1;
               const isTopPick = product.badge === 'Testsieger' || product.recommended;
               const affiliateHref = `/go/${product.id}`;
+              // Sterne nur bei Produkten mit Amazon-Link (produkt-anzeige.ts)
+              const bewertung = amazonBewertung(product);
 
               return (
                 <tr
@@ -100,8 +111,8 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                   </td>
 
                   <td className="py-4 px-4">
-                    {product.rating ? (
-                      <StarRating rating={product.rating} />
+                    {bewertung ? (
+                      <StarRating rating={bewertung.rating} />
                     ) : (
                       <span className="text-xs font-sans text-text-muted">—</span>
                     )}
