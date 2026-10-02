@@ -9,6 +9,7 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ChevronRight, MapPin, Flame } from 'lucide-react';
+import { authorSchemaRef } from '@/lib/schema';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -123,7 +124,9 @@ export default function UsaExpeditionSlugPage(props: Props) {
     description: entry.excerpt,
     image: entry.image,
     datePublished: entry.publishedAt,
-    author: { '@type': 'Person', name: entry.author },
+    // Person NUR fuer reale Autoren — KI-Personas wurden hier bis 02.10.2026
+    // als Person ausgezeichnet.
+    author: authorSchemaRef(entry.authorSlug),
     publisher: {
       '@type': 'Organization',
       name: 'Steakakademie',
