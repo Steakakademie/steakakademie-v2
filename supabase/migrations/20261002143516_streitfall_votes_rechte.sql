@@ -1,10 +1,14 @@
 -- ============================================================
 -- Streitfall-Umfrage: fehlende Tabellenrechte + Haertung
--- Migration: 20261002150000_streitfall_votes_rechte
+-- Migration: 20261002143516_streitfall_votes_rechte
 --
--- STAND 02.10.2026: NOCH NICHT ANGEWENDET. DDL an der Live-DB braucht Uwes
--- Freigabe. Nach dem Anwenden die Datei auf die Version umbenennen, die
--- supabase_migrations.schema_migrations dafuer vergibt (Ledger-Regel).
+-- ANGEWENDET am 02.10.2026, 16:35 (Freigabe Uwe: „Ja, auf Supabase anwenden").
+-- Der Dateiname traegt die Version aus supabase_migrations.schema_migrations
+-- (Ledger-Regel). Danach an der Live-DB belegt: `authenticated` hat auf
+-- streitfall_votes INSERT, SELECT, UPDATE; die drei entzogenen Rechte stehen
+-- fuer anon/authenticated auf keiner Tabelle in public mehr (vorher 190
+-- Eintraege); Stimme abgeben und aendern als Rolle authenticated in einer
+-- verworfenen Transaktion: ok.
 --
 -- 1) Befund (Audit 02.10.2026, an der Live-DB belegt)
 --    20260817_streitfall_umfrage.sql legt fuer streitfall_votes drei Policies
