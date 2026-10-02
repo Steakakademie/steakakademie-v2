@@ -13,7 +13,7 @@
       200
     ],
     "maxTage": 0,
-    "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Notbehelf: steakakademie-de.netlify.app liefert noch aus (Stand vor 13.08.2026)."
+    "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Einen Notbehelf gibt es nicht mehr: Die frühere Netlify-Kopie ist seit 24.09.2026 offline."
   },
   {
     "name": "Rezept-Produktion",

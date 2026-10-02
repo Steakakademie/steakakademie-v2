@@ -135,6 +135,7 @@ export default function FleischwissenArtikel(props: Props) {
     authorName: doc.author,
     authorSlug: doc.authorSlug,
     url: doc.url,
+    reviewedAt: doc.reviewedAt,
   });
 
   const breadcrumbSch = breadcrumbSchema([

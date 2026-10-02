@@ -54,6 +54,19 @@ export default function UrkundePage() {
   const [state, setState] = useState<FormState>('idle');
   const [fehler, setFehler] = useState('');
   const [konto, setKonto] = useState<Konto>('laedt');
+  // Ob die Bestellung gerade angenommen wird, weiss nur der Server (haengt an
+  // seiner Konfiguration, siehe src/lib/urkunde/bestellbar.ts). `null` = noch
+  // nicht gefragt; im Zweifel kein Formular.
+  const [bestellbar, setBestellbar] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/urkunde/bestellen', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : { bestellbar: false }))
+      .then((d: { bestellbar?: unknown }) => { if (!cancelled) setBestellbar(d.bestellbar === true); })
+      .catch(() => { if (!cancelled) setBestellbar(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -259,7 +272,17 @@ export default function UrkundePage() {
             </motion.div>
           )}
 
-          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && (
+          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && bestellbar === false && (
+            <div className="text-center border border-brand-gold/20 bg-surface-elevated p-10">
+              <h2 className="font-serif text-2xl font-bold text-text-light mb-3">Gedruckte Urkunde: gerade nicht bestellbar</h2>
+              <p className="font-body text-text-light/60 leading-relaxed max-w-md mx-auto">
+                Wir nehmen im Moment keine Bestellungen für die gedruckte Urkunde an. Die digitale
+                Urkunde bleibt kostenlos.
+              </p>
+            </div>
+          )}
+
+          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && bestellbar === true && (
             <motion.form
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

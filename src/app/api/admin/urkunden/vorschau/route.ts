@@ -11,7 +11,7 @@ export const maxDuration = 60;
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { dienstClient } from '@/lib/urkunde/produktion';
 import { rendereUrkunde, urkundenDatum } from '@/lib/urkunde/render';
 
@@ -29,7 +29,7 @@ import { rendereUrkunde, urkundenDatum } from '@/lib/urkunde/render';
  * hier auf und nicht beim Empfaenger.
  */
 export async function GET(req: Request) {
-  if (!istAdminPasswort((await cookies()).get('admin_auth')?.value)) {
+  if (!(await istAdminCookie((await cookies()).get(ADMIN_COOKIE)?.value))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

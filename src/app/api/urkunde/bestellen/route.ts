@@ -6,6 +6,7 @@ import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/li
 import { stufeOfLevel, LEVELS } from '@/lib/diplome/stufen';
 import { dienstClient } from '@/lib/urkunde/produktion';
 import { meldeBestellung, bestaetigeBestellung } from '@/lib/urkunde/benachrichtigung';
+import { urkundeBestellbar, urkundeFehlendeKonfiguration } from '@/lib/urkunde/bestellbar';
 import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_WIDERRUF_HINWEIS, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/lib/urkunde/preis';
 
 /**
@@ -38,7 +39,24 @@ const Body = z.object({
   consent: z.literal(true),
 });
 
+const NICHT_BESTELLBAR = 'Die gedruckte Urkunde ist gerade nicht bestellbar. Die digitale Urkunde bleibt kostenlos.';
+
+/**
+ * GET /api/urkunde/bestellen — sagt der Bestellseite, ob sie das Formular
+ * zeigen darf. Gibt nur ja/nein heraus, nie die Namen fehlender Variablen.
+ */
+export async function GET() {
+  return Response.json({ bestellbar: urkundeBestellbar() }, { headers: { 'Cache-Control': 'no-store' } });
+}
+
 export async function POST(req: Request) {
+  // Vor allem anderen: Ohne verschickbare Bestaetigung und ohne Druckdienst
+  // wird keine verbindliche Bestellung angenommen (src/lib/urkunde/bestellbar.ts).
+  if (!urkundeBestellbar()) {
+    console.warn('[urkunde/bestellen] abgelehnt, Konfiguration fehlt:', urkundeFehlendeKonfiguration().join(', '));
+    return jsonError(503, NICHT_BESTELLBAR);
+  }
+
   const guard = await guardRequest(req, {
     key: 'urkunde-bestellen',
     rate: { limit: 5, windowMs: 60 * 60 * 1000 },
@@ -53,7 +71,7 @@ export async function POST(req: Request) {
   if (!level || !stufe) return jsonError(400, 'Unbekanntes Level.');
 
   const userId = await userIdFromRequest(req);
-  const admin = isAdminRequest(req);
+  const admin = await isAdminRequest(req);
   if (!userId && !admin) return jsonError(401, 'Für die Bestellung musst du angemeldet sein.');
 
   const db = dienstClient();

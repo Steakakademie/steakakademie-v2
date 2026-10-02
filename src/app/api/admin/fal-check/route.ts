@@ -1,15 +1,15 @@
 // Diagnose: zeigt (admin-geschützt) den in Vercel hinterlegten FAL_KEY in MASKIERTER
 // Form, damit man prüfen kann, ob der RICHTIGE Wert gespeichert ist — ohne fal-Kosten.
-// GET /api/admin/fal-check  (Auth: admin_auth Cookie === ADMIN_PASSWORD)
+// GET /api/admin/fal-check  (Auth: Sitzungs-Token im Cookie admin_auth, src/lib/admin-auth.ts)
 
 import { NextResponse } from 'next/server';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  if (!istAdminPasswort((await cookies()).get('admin_auth')?.value)) {
+  if (!(await istAdminCookie((await cookies()).get(ADMIN_COOKIE)?.value))) {
     return NextResponse.json({ error: 'Unauthorized — erst /admin/login' }, { status: 401 });
   }
   const k = process.env.FAL_KEY ?? '';
