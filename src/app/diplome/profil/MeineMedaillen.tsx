@@ -68,7 +68,8 @@ export default function MeineMedaillen() {
                 {s.metall}
               </p>
               <p className="text-[10px] sm:text-[11px] font-sans text-text-muted leading-tight">
-                {earned ? `${z?.quiz_score ?? '–'} von 5` : 'offen'}
+                {/* Ohne Nenner: Stufe 1 stellt 10 Fragen, die uebrigen 5 — „von 5" war fuer Stufe 1 falsch. */}
+                {earned ? (z?.quiz_score != null ? `${z.quiz_score} richtig` : 'bestanden') : 'offen'}
               </p>
             </div>
           );
