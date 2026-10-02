@@ -33,7 +33,7 @@ export default function AngebotsRegal({ hinweise, seite }: { hinweise: Hinweis[]
               {h.name}
             </span>
             <span className="mt-1.5 font-body text-sm leading-relaxed text-text-secondary">{h.satz}</span>
-            <span className="mt-3 inline-flex items-center gap-1 pt-1 font-sans text-xs font-bold text-brand-gold">
+            <span className="mt-auto inline-flex items-center gap-1 pt-4 font-sans text-xs font-bold text-brand-gold">
               {h.knopf} <ChevronRight size={13} />
             </span>
           </AngebotLink>
