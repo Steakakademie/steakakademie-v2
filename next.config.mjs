@@ -280,6 +280,19 @@ const nextConfig = {
         destination: '/diplome',
         permanent: true,
       },
+      // /kategorie hat keine Uebersichtsseite, und /kategorie/wissen war bis
+      // 02.10.2026 von der Startseite verlinkt, ohne dass es die Kategorie gab
+      // (404). Beides fuehrt auf die Wissens-Uebersicht.
+      {
+        source: '/kategorie',
+        destination: '/wissen',
+        permanent: true,
+      },
+      {
+        source: '/kategorie/wissen',
+        destination: '/wissen',
+        permanent: true,
+      },
       {
         source: '/danke/bbq-grundkurs',
         destination: '/diplome',

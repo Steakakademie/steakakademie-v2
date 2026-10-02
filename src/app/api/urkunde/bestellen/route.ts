@@ -53,7 +53,7 @@ export async function POST(req: Request) {
   if (!level || !stufe) return jsonError(400, 'Unbekanntes Level.');
 
   const userId = await userIdFromRequest(req);
-  const admin = isAdminRequest(req);
+  const admin = await isAdminRequest(req);
   if (!userId && !admin) return jsonError(401, 'Für die Bestellung musst du angemeldet sein.');
 
   const db = dienstClient();

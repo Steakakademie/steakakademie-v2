@@ -69,7 +69,7 @@ export async function POST(req: Request) {
   if (!ziehung || ziehung.m !== modul) return jsonError(400, 'Prüfung ungültig oder abgelaufen — bitte neu starten.');
   if (ziehung.ids.length !== antworten.length) return jsonError(400, 'Antworten passen nicht zur Prüfung.');
 
-  const admin = isAdminRequest(req);
+  const admin = await isAdminRequest(req);
   const userId = await userIdFromRequest(req);
   const bezahlstufe = stufe.nr >= ERSTE_BEZAHLSTUFE;
 
