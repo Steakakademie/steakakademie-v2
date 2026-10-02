@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { ChevronRight, Thermometer, AlertTriangle, CheckCircle2, Clock, Flame, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import AngebotsRegal from '@/components/angebote/AngebotsRegal';
+import { passendeHinweise } from '@/lib/angebote/auswahl';
+import { angebote } from '@/lib/angebote/register';
 import ProductCard from '@/components/affiliate/ProductCard';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getProductsByCategory } from '@/lib/products';
@@ -1257,6 +1260,14 @@ export default function TemperaturGuidePage() {
               </div>
             </div>
           </div>
+
+
+          {/* ── Eigene Angebote — Regal vor den Querverweisen. Kein Hinweis im Text:
+              die Seite hat bereits zwei Kontaktpunkte zum Spickzettel. ── */}
+          <AngebotsRegal
+            hinweise={passendeHinweise(angebote(), { typ: 'temperatur-guide', slug: 'temperatur-guide' }).slice(0, 3)}
+            seite="temperatur-guide"
+          />
 
           {/* ── Cross-Silo-Links ─────────────────────────────────────────── */}
           <div className="pt-10 border-t border-border-subtle">
