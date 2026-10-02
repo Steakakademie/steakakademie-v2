@@ -16,6 +16,9 @@
  *
  * Rate limit: 10 req / hour / IP (in-process; replace with Upstash Redis
  * for production multi-instance deployments).
+ *
+ * Auth: admin cookie only (since 03.10.2026) — no caller in the project,
+ * and ?mode=full costs one Anthropic call per request.
  * ===================================================================
  */
 
@@ -34,14 +37,18 @@ export const maxDuration = 30;
 // ─── Eingangsschutz ──────────────────────────────────────────────────────────
 // Seit 01.10.2026 über den zentralen Guard (src/lib/api/guard.ts): Same-Origin,
 // 10 Analysen / IP / Stunde, Zod-Schema. Vorher ein eigener Map-Limiter hier.
+// Seit 03.10.2026 nur noch für Admin: Die Route hat keinen Aufrufer im Projekt,
+// war aber anonym erreichbar — und `?mode=full` löst je Anfrage einen
+// Anthropic-Aufruf aus. Wer sie wieder öffentlich braucht, entscheidet das
+// bewusst und baut eine Oberfläche dazu.
 const RATE = { limit: 10, windowMs: 60 * 60 * 1_000 };
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
 
-  // ── 1–3. Herkunft, Rate-Limit, Body, Schema ───────────────────────────────
-  const guard = await guardRequest(req, { key: 'validator', rate: RATE, schema: NicheInputSchema });
+  // ── 1–3. Herkunft, Rate-Limit, Admin-Cookie, Body, Schema ─────────────────
+  const guard = await guardRequest(req, { key: 'validator', rate: RATE, schema: NicheInputSchema, auth: 'admin' });
   if (!guard.ok) return guard.response;
   const input = guard.body;
 

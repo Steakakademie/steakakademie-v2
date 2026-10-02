@@ -19,7 +19,9 @@ export default function LoginPage() {
     if (res.ok) {
       router.push('/admin/pm-agent')
     } else {
-      setError('Falsches Passwort')
+      // 429 seit 03.10.2026 (Rate-Limit im Login): Wer gesperrt ist, soll nicht
+      // „Falsches Passwort“ lesen und am richtigen Passwort zweifeln.
+      setError(res.status === 429 ? 'Zu viele Versuche — bitte in 15 Minuten erneut versuchen.' : 'Falsches Passwort')
       setLoading(false)
     }
   }
