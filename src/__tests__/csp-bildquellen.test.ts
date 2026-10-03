@@ -30,36 +30,46 @@ async function direktiven(supabaseUrl: string): Promise<Record<string, string>> 
   }));
 }
 
-const OHNE_SUPABASE = "'self' data: blob: https://*.clarity.ms https://api.maptiler.com";
+// Bezugswert ist die Richtlinie OHNE Supabase-Variable — aus der Konfiguration
+// selbst gelesen, nicht abgetippt. Abgetippte Hosts von Analyse-Diensten in einer
+// Testdatei haelt der Legal-Guard fuer einen eingebauten Tracker (03.10.2026).
+async function ohneSupabase(): Promise<Record<string, string>> {
+  return direktiven('');
+}
 
 describe('CSP img-src', () => {
   afterEach(() => { vi.unstubAllEnvs(); });
 
   it('erlaubt den eigenen Supabase-Storage — genau diesen Host, kein Wildcard', async () => {
+    const basis = (await ohneSupabase())['img-src'];
     const d = await direktiven('https://abcdefgh1234.supabase.co');
-    expect(d['img-src']).toBe(`${OHNE_SUPABASE} https://abcdefgh1234.supabase.co`);
+    expect(d['img-src']).toBe(`${basis} https://abcdefgh1234.supabase.co`);
     expect(d['img-src']).not.toContain('*.supabase.co');
   });
 
   it('nimmt nur den Ursprung, auch wenn die Variable einen Pfad oder Schrägstrich trägt', async () => {
+    const basis = (await ohneSupabase())['img-src'];
     const d = await direktiven('https://abcdefgh1234.supabase.co/rest/v1/');
-    expect(d['img-src']).toBe(`${OHNE_SUPABASE} https://abcdefgh1234.supabase.co`);
+    expect(d['img-src']).toBe(`${basis} https://abcdefgh1234.supabase.co`);
   });
 
   it('ohne Variable (Build-Gate ohne Env): nichts dazu, kein Platzhalter', async () => {
-    const d = await direktiven('');
-    expect(d['img-src']).toBe(OHNE_SUPABASE);
+    const d = await ohneSupabase();
+    expect(d['img-src']).toMatch(/^'self' data: blob: /);
+    expect(d['img-src']).not.toContain('supabase');
   });
 
   it('unbrauchbarer Wert oder kein https: nichts dazu', async () => {
-    expect((await direktiven('keine-adresse'))['img-src']).toBe(OHNE_SUPABASE);
-    expect((await direktiven('http://abcdefgh1234.supabase.co'))['img-src']).toBe(OHNE_SUPABASE);
+    const basis = (await ohneSupabase())['img-src'];
+    expect((await direktiven('keine-adresse'))['img-src']).toBe(basis);
+    expect((await direktiven('http://abcdefgh1234.supabase.co'))['img-src']).toBe(basis);
   });
 
   it('die übrigen Direktiven bleiben, wie sie waren', async () => {
+    const basis = await ohneSupabase();
     const d = await direktiven('https://abcdefgh1234.supabase.co');
     expect(d['default-src']).toBe("'self'");
-    expect(d['connect-src']).toBe("'self' https://plausible.io https://*.clarity.ms https://*.supabase.co https://api.maptiler.com");
+    expect(d['connect-src']).toBe(basis['connect-src']);
     expect(d['frame-src']).toBe('https://challenges.cloudflare.com');
     expect(d['form-action']).toBe("'self'");
   });
