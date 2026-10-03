@@ -67,7 +67,7 @@ export function websiteSchema() {
     url: BASE_URL,
     name: 'Steakakademie',
     description:
-      'Deutschlands methodisch tiefste BBQ-Wissensplattform — Fleischkunde, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome.',
+      'Deutschlands methodisch tiefste BBQ-Wissensplattform — Fleischkunde, Grilltechniken, Ausrüstungs-Vergleiche und Grillmeister-Diplome.',
     publisher: { '@id': `${BASE_URL}/#organization` },
     inLanguage: 'de-DE',
   };

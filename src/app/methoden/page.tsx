@@ -172,7 +172,7 @@ export default function MethodenIndexPage() {
                 { label: 'Maillard-Reaktion verstehen', href: '/wissen' },
                 { label: 'Ribeye: Marmorierung & IMF', href: '/cuts/ribeye' },
                 { label: 'Brisket: Plateauphase', href: '/cuts/brisket' },
-                { label: 'Fleischthermometer im Test', href: '/vergleich/premium-fleischthermometer' },
+                { label: 'Fleischthermometer im Vergleich', href: '/vergleich/premium-fleischthermometer' },
                 { label: 'Oberhitzegrill-Vergleich', href: '/vergleich/oberhitzegrill-vergleich' },
               ].map(({ label, href }) => (
                 <Link

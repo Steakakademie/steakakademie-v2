@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, ShieldCheck } from 'lucide-react';
+import { ExternalLink, ClipboardList } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
+import { klickKlassen, produktLink } from './produkt-anzeige';
+import PreisMitStand from './PreisMitStand';
 
 function BrandInitials({ brand }: { brand: string }) {
   const initials = brand.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
@@ -20,13 +22,21 @@ interface BuyingGuideBlockProps {
   className?: string;
 }
 
+/**
+ * Kaufberatungs-Block: Einordnung eines Produkts mit Link zum Anbieter.
+ *
+ * 03.10.2026: Das fest verdrahtete Siegel behauptete einen eigenen Gerätetest,
+ * für den es keinen Beleg gibt. An seiner Stelle steht, was der Block ist — eine
+ * Einordnung nach Datenlage. „Anzeige“ und Affiliate-Hinweis erscheinen nur
+ * beim Partnerlink (produktLink), der Preis immer mit Stand (PreisMitStand).
+ */
 export default function BuyingGuideBlock({
   product,
   title,
   summary,
   className,
 }: BuyingGuideBlockProps) {
-  const affiliateHref = `/go/${product.id}`;
+  const link = produktLink(product);
 
   return (
     <div
@@ -51,11 +61,10 @@ export default function BuyingGuideBlock({
         </div>
 
         <div className="flex-1 min-w-0">
-          {/* "Selbst getestet" trust badge */}
           <div className="flex items-center gap-1.5 mb-2">
-            <ShieldCheck size={13} className="text-brand-gold shrink-0" />
+            <ClipboardList size={13} className="text-brand-gold shrink-0" />
             <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
-              Selbst getestet
+              Einordnung nach Datenlage
             </span>
           </div>
 
@@ -68,24 +77,25 @@ export default function BuyingGuideBlock({
           </p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="font-sans font-bold text-xl text-text-primary">
-              {product.priceMin && product.priceMax
-                ? `${product.priceMin}–${product.priceMax} €`
-                : `${product.price} €`}
+            <span>
+              <PreisMitStand product={product} className="font-sans font-bold text-xl text-text-primary" />
             </span>
 
             <div className="flex flex-col items-start gap-1 self-start sm:self-auto">
-              <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
-                Anzeige
-              </span>
+              {link.partner && (
+                <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+                  Anzeige
+                </span>
+              )}
               <Link
-                href={affiliateHref}
-                className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-                rel="sponsored nofollow noopener"
+                href={link.href}
+                prefetch={false}
+                className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors ${klickKlassen(product)}`}
+                rel={link.rel}
                 target="_blank"
               >
                 <ExternalLink size={14} />
-                Zum Shop →
+                {link.partner ? 'Zum Shop →' : 'Zum Anbieter →'}
               </Link>
             </div>
           </div>
@@ -93,7 +103,9 @@ export default function BuyingGuideBlock({
       </div>
 
       <p className="text-[10px] font-sans text-text-muted mt-4 italic border-t border-border-subtle pt-3">
-        * Affiliate-Link — Preis unverändert für dich
+        {link.partner
+          ? '* Affiliate-Link — Preis unverändert für dich'
+          : 'Externer Link zum Anbieter — kein Partnerlink'}
       </p>
     </div>
   );

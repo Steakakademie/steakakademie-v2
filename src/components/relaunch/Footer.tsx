@@ -39,7 +39,7 @@ export default function Footer() {
             <Link href="/relaunch/streitfaelle">Streitfälle</Link>
           </div>
           <div className="sk-footer__col">
-            <span className="sk-footer__head">Tests</span>
+            <span className="sk-footer__head">Vergleiche</span>
             <Link href="/relaunch/vergleich/fleischthermometer">Fleischthermometer</Link>
             <Link href="/vergleich">Grills &amp; Smoker</Link>
             <Link href="/ausruestung/messer">Messer</Link>

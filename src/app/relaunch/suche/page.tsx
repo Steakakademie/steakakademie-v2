@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 /** Reihenfolge der Typ-Filter — nach erwarteter Nachfrage, nicht alphabetisch. */
 const TYP_REIHENFOLGE = [
   'Cut', 'Rezept', 'Grilltechnik', 'Streitfall', 'Glossar',
-  'Test & Vergleich', 'Artikel', 'USA-Expedition', 'Persönlichkeit',
+  'Vergleich', 'Artikel', 'USA-Expedition', 'Persönlichkeit',
 ];
 
 function sortiereTypen(typen: string[]): string[] {

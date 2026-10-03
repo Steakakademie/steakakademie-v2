@@ -12,11 +12,13 @@ const FOOTER_LINKS = {
     { label: 'Steak-Rettung: 6 Grillfehler', href: '/rettung' },
     { label: 'Alle Artikel', href: '/artikel' },
   ],
-  Tests: [
+  // Hiess bis 03.10.2026 „Tests“ / „Alle Tests“ — die Seiten sind Vergleiche
+  // nach Herstellerangaben, kein Gerätetest (src/lib/vergleich-seite.ts).
+  Vergleiche: [
     { label: 'Fleischthermometer', href: '/vergleich/fleischthermometer' },
     { label: 'Grills & Smoker', href: '/vergleich/grills' },
     { label: 'Messer', href: '/vergleich/messer' },
-    { label: 'Alle Tests', href: '/vergleich' },
+    { label: 'Alle Vergleiche', href: '/vergleich' },
   ],
   Cuts: [
     { label: 'Ribeye', href: '/cuts/ribeye' },
@@ -148,7 +150,7 @@ export default function Footer() {
           <p className="text-[11px] font-sans text-text-light/35 leading-relaxed mb-4 max-w-3xl">
             <strong className="text-text-light/50">Affiliate-Hinweis:</strong> Einige Links auf dieser Seite sind Affiliate-Links.
             Wenn du über sie kaufst, erhalten wir eine kleine Provision — der Preis für dich ändert sich nicht.
-            Wir empfehlen nur Produkte, die wir selbst getestet haben oder für qualitativ hochwertig halten.
+            Produktempfehlungen sind eine redaktionelle Einordnung nach Herstellerangaben — kein eigener Gerätetest.
           </p>
           {/* Gesetzlicher Widerrufsbutton (ab 19.06.2026) — ständig und leicht auffindbar, farblich hervorgehoben */}
           <Link

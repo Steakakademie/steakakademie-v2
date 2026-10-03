@@ -12,8 +12,8 @@ interface MDXBuyingGuideBlockProps {
  * Usage in MDX:
  *   <MDXBuyingGuideBlock
  *     id="meater-plus"
- *     title="Unser Testsieger"
- *     summary="Das MEATER Plus ist die beste Wahl für die meisten Griller."
+ *     title="Unsere Auswahl für Long Cooks"
+ *     summary="Das MEATER Plus passt nach Datenlage zu den meisten Grillern."
  *   />
  */
 export default function MDXBuyingGuideBlock({ id, title, summary }: MDXBuyingGuideBlockProps) {
