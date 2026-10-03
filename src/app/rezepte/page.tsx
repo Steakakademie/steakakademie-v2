@@ -97,7 +97,7 @@ export default function RezepteIndexPage() {
                   <Users size={12} /> Aus der Community
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-2">
-                  Rezepte von Mitgliedern — KI-geprüft, freigegeben
+                  Rezepte von Mitgliedern — KI-vorgeprüft, von Hand freigegeben
                 </h2>
                 <p className="font-body text-text-light/60 leading-relaxed max-w-xl mb-4">
                   Echte Kreationen zum Nachgrillen, eingereicht von der Akademie-Community.

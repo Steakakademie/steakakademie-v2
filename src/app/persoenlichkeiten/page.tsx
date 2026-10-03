@@ -16,6 +16,12 @@ export const metadata: Metadata = {
  * wächst dadurch nicht. Bis 03.10.2026 stand auf dieser Seite dreimal „alle zwei
  * Wochen neu vorgestellt“ — das letzte Porträt ist vom 23.05.2026, kein Workflow
  * erzeugt neue. Der Banner unten sagt deshalb nur, was die Funktion tut.
+ *
+ * Ohne Takt im Banner (03.10.2026, zweiter Durchgang): Die Seite wird statisch
+ * gebaut (kein `revalidate`, kein `dynamic`) — `Date.now()` ist der Zeitpunkt des
+ * Builds. Der Wechsel passiert also beim nächsten Deploy nach der Zwei-Wochen-
+ * Grenze, nicht von selbst. „Wechselt automatisch alle 2 Wochen — heute im Fokus“
+ * versprach mehr. Wer den Takt zusagen will, gibt der Seite zuerst ein `revalidate`.
  */
 function getCurrentFeatured(slugs: string[]): number {
   const weeksSinceEpoch = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
@@ -71,7 +77,7 @@ export default function PersoenlichkeitenPage() {
         <div className="bg-brand-gold/10 border-b border-brand-gold/20 px-4 py-2">
           <div className="max-w-editorial mx-auto flex items-center gap-2 text-xs font-sans text-brand-gold/70">
             <RotateCcw size={12} />
-            <span>Wechselt automatisch alle 2 Wochen — heute im Fokus: <strong className="text-brand-gold">{featured?.title?.split('—')[0]?.trim()}</strong></span>
+            <span>Im Fokus: <strong className="text-brand-gold">{featured?.title?.split('—')[0]?.trim()}</strong> — der Aufmacher wechselt durch den Bestand</span>
           </div>
         </div>
 

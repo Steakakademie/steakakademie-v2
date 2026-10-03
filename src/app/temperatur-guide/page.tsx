@@ -1180,7 +1180,7 @@ export default function TemperaturGuidePage() {
               source="temperatur-guide-vor-faq"
               eyebrow="Kostenloses Geschenk"
               headline="Die ganze Tabelle passt auf eine Seite."
-              subline="Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Jederzeit abbestellbar."
+              subline="Wir schicken dir den Link zum druckfertigen Kerntemperatur-Spickzettel. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar."
               cta="Spickzettel sichern"
             />
           </div>

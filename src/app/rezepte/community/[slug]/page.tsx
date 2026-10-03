@@ -179,7 +179,7 @@ export default async function CommunityRecipePage(props: { params: Promise<{ slu
           {/* Footer-Hinweis */}
           <div className="mt-12 pt-6 border-t border-border-subtle">
             <p className="text-xs font-sans text-text-muted">
-              Von einem Mitglied der Steakakademie eingereicht und KI-geprüft.{' '}
+              Von einem Mitglied der Steakakademie eingereicht und von einer KI vorgeprüft.{' '}
               {r.image_url && <>Das Beitragsbild ist ein KI-generiertes Symbolbild und kann vom tatsächlichen Gericht abweichen.{' '}</>}
               <Link href="/rezepte/community" className="text-brand-gold hover:underline">Mehr Community-Rezepte →</Link>
             </p>
