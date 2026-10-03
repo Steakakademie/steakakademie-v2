@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { Wrench, Lightbulb, ChevronRight } from 'lucide-react';
 
 // Kontext-Rail gegen tote Seitenränder: EIN passender Werkzeug-Tipp (themen-
-// abhängig, vorerst interne Tests — Affiliate folgt) + „Mehr Wissen"-Links.
+// abhängig, Link auf die interne Vergleichsseite) + „Mehr Wissen"-Links.
 // Bewusst kein Banner; native, nutzwertig.
+// 03.10.2026: Die Ziele sind Marktübersichten nach Herstellerangaben, kein
+// Gerätetest — Linktext und Fußzeile sagen das (src/lib/vergleich-seite.ts).
 
 type Tool = { label: string; href: string; why: string };
 
@@ -50,11 +52,11 @@ export default function KontextRail({ text, color }: { text: string; color: stri
           </span>
           <span className="block text-[13px] font-body text-text-secondary leading-snug mt-1">{tool.why}</span>
           <span className="inline-flex items-center gap-1 text-[11px] font-sans font-bold uppercase tracking-wider mt-2" style={{ color }}>
-            Zum Test <ChevronRight size={12} />
+            Zum Vergleich <ChevronRight size={12} />
           </span>
         </Link>
         <p className="text-[10px] font-sans text-text-muted mt-3 leading-snug">
-          Wir empfehlen nur, was wir selbst getestet haben.
+          Marktübersicht nach Herstellerangaben — kein eigener Gerätetest.
         </p>
       </div>
 

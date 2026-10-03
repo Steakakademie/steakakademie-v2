@@ -214,18 +214,22 @@ const FALLBACK_ARTICLES: ArticleMeta[] = [
     featured: true,
   },
   {
-    slug: 'fleischthermometer-test-2026',
+    // 03.10.2026: Titel und Auszug an die Seite angeglichen. Vorher: „Test 2026:
+    // Wir haben 8 Modelle verglichen“, „mit kalibriertem Referenzgerät gemessen“,
+    // Autor Jonas, 18. Mai — die Seite vergleicht drei Modelle nach
+    // Herstellerangaben, zeichnet Marco und ist vom 22. Mai.
+    slug: 'fleischthermometer-vergleich-2026',
     url: '/vergleich/fleischthermometer',
-    title: 'Fleischthermometer Test 2026: Wir haben 8 Modelle verglichen',
+    title: 'Fleischthermometer im Vergleich: MEATER Plus, Thermapen ONE und Inkbird',
     excerpt:
-      'Mit kalibriertem Referenzgerät bei 5 Temperaturen gemessen. Meater Plus, Thermapen ONE und Inkbird im direkten Vergleich — klare Empfehlung für jeden Bedarf.',
+      'Drei Fleischthermometer, drei Bauarten: Funk-Sonde, Sofortlesegerät und Mehrkanal-Bluetooth. Marktübersicht nach Herstellerangaben — mit Einordnung, welche Bauart zu welchem Grillstil passt.',
     image: '/images/articles/thermometer-test-steak-grill-1.webp',
     imageAlt: 'Fleischthermometer-Sonde im Ribeye Steak auf dem Grill',
     category: 'Ausrüstung',
     categorySlug: 'ausruestung',
-    author: 'Jonas — Der Enthusiast',
-    authorSlug: 'jonas',
-    formattedDate: '18. Mai 2026',
+    author: 'Marco, der Pitmaster',
+    authorSlug: 'marco',
+    formattedDate: '22. Mai 2026',
     readingTime: 15,
     featured: true,
   },

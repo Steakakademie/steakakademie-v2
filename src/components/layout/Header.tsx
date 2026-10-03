@@ -77,7 +77,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { label: 'Oberhitzegrills', href: '/vergleich/oberhitzegrill-vergleich' },
       { label: 'Dry-Ager', href: '/vergleich/dry-aging-kuehlschrank-vergleich' },
       { label: 'Küchenmaschinen', href: '/vergleich/kuechenmaschine-vergleich' },
-      { label: 'Alle Tests', href: '/vergleich' },
+      { label: 'Alle Vergleiche', href: '/vergleich' },
     ],
   },
   {
@@ -228,7 +228,7 @@ export default function Header() {
                 href="/vergleich/fleischthermometer"
                 className="hidden sm:block text-[11px] font-sans font-bold tracking-[0.12em] uppercase text-white hover:text-brand-gold transition-colors px-2 nav-sharp"
               >
-                Tests
+                Vergleiche
               </Link>
               <AccountLink />
               <Link
@@ -413,7 +413,7 @@ export default function Header() {
                   href="/vergleich/fleischthermometer"
                   className="block text-sm font-sans font-semibold text-text-light/60 hover:text-brand-gold transition-colors"
                 >
-                  Produkttests &amp; Vergleiche
+                  Ausrüstung im Vergleich
                 </Link>
                 <AccountLink mobile />
                 <Link
