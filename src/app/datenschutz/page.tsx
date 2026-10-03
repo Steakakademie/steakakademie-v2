@@ -149,12 +149,7 @@ export default function DatenschutzPage() {
                 ist nur, was der Code tut: src/components/ui/Turnstile.tsx (Script lädt,
                 sobald ein Formular mit Widget gerendert wird — ohne Klick, ohne Bezug
                 zum Consent-Banner) und src/lib/api/turnstile.ts (Token + Besucher-IP
-                gehen zur Prüfung an Cloudflare).
-                OFFEN FÜR DIE KANZLEI — bewusst NICHT geschrieben, weil das Repo es
-                nicht belegt: Rechtsgrundlage, Einordnung nach § 25 TDDDG (lädt vor
-                jeder Einwilligung), Auftragsverarbeitung/Vertrag mit Cloudflare für
-                Turnstile, Drittlandübermittlung, Speicherdauer bei Cloudflare, und
-                was das Widget im Endgerät speichert oder ausliest. */}
+                gehen zur Prüfung an Cloudflare). */}
             <section id="turnstile">
               <h2 className={h2Class}>4a. Bot-Schutz an Formularen (Cloudflare Turnstile)</h2>
               <p className="mb-3">
@@ -455,9 +450,7 @@ export default function DatenschutzPage() {
                 {/* Abgleich 03.10.2026: Hier stand „automatische Löschung nach 30 Tagen".
                     Dafür gibt es keinen Mechanismus — und nichts zu löschen: Die Anmeldung
                     ist zustandslos (src/lib/doi.ts, signiertes Token, 48 h), ein Kontakt
-                    entsteht erst in /api/newsletter/confirm. OFFEN (nur bei Loops
-                    prüfbar): ob und wie lange Loops den Versand der Bestätigungsmail
-                    protokolliert. */}
+                    entsteht erst in /api/newsletter/confirm. */}
                 <li>
                   Nicht bestätigte Anmeldungen: Vor deiner Bestätigung legen wir keinen Eintrag im
                   Verteiler an und speichern deine Anmeldung nicht bei uns. Deine Angaben
@@ -545,12 +538,7 @@ export default function DatenschutzPage() {
                   src/app/diplome/profil/KontoLoeschen.tsx mit.
                   NICHT genannt, weil nur über Fremdschlüssel-Kaskade und am Live-Stand
                   nicht geprüft: bookings, protokoll_gutschriften, aroma_matcher_abfragen,
-                  aroma_matrix_warteliste.
-                  OFFEN FÜR UWE/KANZLEI (im Kopfkommentar der Route als „Entscheidung
-                  offen" geführt): Was mit unbezahlten Urkunden-Bestellungen,
-                  Gutschein-, Widerrufs- und Kontaktdaten sowie dem Loops-Kontakt bei
-                  einer Kontolöschung geschehen soll, und welche Fristen dafür gelten.
-                  Hier steht deshalb nur der Ist-Zustand, keine Frist. */}
+                  aroma_matrix_warteliste. */}
               <p className="mb-3" id="konto-loeschen">
                 <strong className="text-text-primary">Konto löschen:</strong> Du kannst dein Konto
                 jederzeit selbst im{' '}
@@ -621,11 +609,7 @@ export default function DatenschutzPage() {
                 Abgleich 03.10.2026 mit /api/rezept-einreichen und /api/konto-loeschen:
                 Freigabe nur noch durch einen Menschen (Abschnitt 10a); eine Löschfunktion
                 für eigene Rezepte gibt es nicht (nur E-Mail); bei Kontolöschung werden
-                ALLE Einreichungen anonymisiert behalten, nicht nur veröffentlichte.
-                OFFEN FÜR UWE/KANZLEI (Z3-057): Nutzungsbedingungen § 5 lassen das
-                Nutzungsrecht mit der Kontolöschung enden, hier und im Einwilligungstext
-                bleibt das Rezept — das ist eine Entscheidung, kein Tippfehler, und
-                deshalb unverändert. */}
+                ALLE Einreichungen anonymisiert behalten, nicht nur veröffentlichte. */}
             <section id="community" className="scroll-mt-24">
               <h2 className={h2Class}>8a. Community-Rezepte (nutzergenerierte Inhalte)</h2>
               <p className="mb-3">
@@ -703,12 +687,7 @@ export default function DatenschutzPage() {
                   (ds_order_id, ds_product_id, ds_email, ds_event, raw_payload, raw_body),
                   legt aus der Käufer-E-Mail ein Konto an (ensureUser), verschickt den
                   Anmeldelink über Loops (sendMagicLink) und speichert bei Gutscheinen
-                  purchaser_email + gift_message (create_voucher).
-                  OFFEN (nur bei Digistore24 prüfbar): welche Felder die
-                  Benachrichtigung enthält (Name, Anschrift, Zahlart?) — davon hängt ab,
-                  ob der Satz „kein Zugriff auf vollständige Zahlungsdaten" so stehen
-                  bleiben kann. Eine Löschroutine nach Ablauf der Aufbewahrungsfrist
-                  gibt es im Repo nicht. */}
+                  purchaser_email + gift_message (create_voucher). */}
               <p className="mb-3">
                 <strong className="text-text-primary">Was wir von Digistore24 erhalten und
                 speichern:</strong> Nach einem Kauf – und bei späteren Ereignissen zu dieser
@@ -745,10 +724,7 @@ export default function DatenschutzPage() {
 
             {/* Neu 03.10.2026 — das Widerrufsformular war in der Datenschutzerklärung
                 nicht beschrieben (nur „Widerrufsbestätigungen" unter 7.1). Stand laut
-                src/app/api/widerruf/route.ts und supabase/migrations/20260531_widerrufe.sql.
-                OFFEN FÜR DIE KANZLEI — bewusst NICHT geschrieben: Rechtsgrundlage und
-                Speicherfrist. Eine Löschroutine für die Tabelle `widerrufe` gibt es
-                nicht; deshalb steht hier der Ist-Zustand und keine Frist. */}
+                src/app/api/widerruf/route.ts und supabase/migrations/20260531_widerrufe.sql. */}
             <section id="widerruf">
               <h2 className={h2Class}>10f. Widerrufsformular</h2>
               <p className="mb-3">
@@ -824,16 +800,7 @@ export default function DatenschutzPage() {
                 (auth: 'user-or-admin'); die Route schreibt nichts in die Datenbank.
                 ENTFERNT, weil für den falschen Empfänger geschrieben: „Anthropic PBC …
                 Auftragsverarbeiter gemäß Art. 28 DSGVO" und „Drittlandübermittlung USA —
-                EU-Standardvertragsklauseln".
-                OFFEN FÜR UWE/KANZLEI — bewusst NICHT ersetzt, weil das Repo es nicht
-                belegt: (1) welche Google-Gesellschaft Vertragspartner der Gemini-API
-                ist — beide Anschriften unten stammen aus dieser Erklärung (10d, 12a),
-                nicht aus einem Vertrag; (2) ob ein Auftragsverarbeitungsvertrag
-                besteht; (3) Ort der Verarbeitung, Drittlandübermittlung und deren
-                Garantie; (4) Speicherdauer bei Google und ob Eingaben zum Training
-                genutzt werden (hängt am Tarif des API-Schlüssels); (5) ob die
-                unverändert stehen gelassene Rechtsgrundlage für diesen Empfänger und
-                für Fotos trägt. */}
+                EU-Standardvertragsklauseln". */}
             <section id="marco">
               <h2 className={h2Class}>11. KI-Assistent „Marco&quot; (Google Gemini)</h2>
               <p className="mb-3">
@@ -952,9 +919,7 @@ export default function DatenschutzPage() {
                 Kanzlei sehen muss: Eine ABLEHNUNG (unsicher, kein Rezept, Bewertung
                 unter 45) trifft weiterhin die KI allein, ohne dass ein Mensch sie
                 ansieht. Der alte Wortlaut („Freigabe oder Ablehnung … unter
-                menschlicher Kontrolle") hätte das weiter falsch behauptet.
-                OFFEN FÜR DIE KANZLEI: ob die unverändert übernommene Einordnung zu
-                Art. 22 DSGVO bei automatischer Ablehnung trägt. */}
+                menschlicher Kontrolle") hätte das weiter falsch behauptet. */}
             <section>
               <h2 className={h2Class}>10a. KI-Moderation von Community-Einreichungen (Anthropic)</h2>
               <p className="mb-3">
@@ -1001,9 +966,7 @@ export default function DatenschutzPage() {
                 Eingabe danach samt den gefundenen Wissenseinträgen an Anthropic
                 (claude-sonnet-4-6); die Startseite sagt es selbst („Claude schreibt dein
                 Rezept", ToolBoxes.tsx). Für Anthropic wird auf die schon bestehenden
-                Angaben in 11a verwiesen statt sie zu wiederholen.
-                OFFEN FÜR DIE KANZLEI: ob Rechtsgrundlage und Widerspruchshinweis
-                unten, die für Voyage geschrieben wurden, auch für diesen Empfänger passen. */}
+                Angaben in 11a verwiesen statt sie zu wiederholen. */}
             <section>
               <h2 className={h2Class}>10c. Wissenssuche &amp; Rezept-Generierung (Voyage AI, Anthropic)</h2>
               <p className="mb-3">
@@ -1086,13 +1049,7 @@ export default function DatenschutzPage() {
                   gestrichen. Die Supabase-Anmeldung liegt technisch in Cookies
                   (sb-…-auth-token), nicht in einem „Token"-Speicher.
                   Die beiden Listen darunter („Weitere Einträge …", „Weitere Cookies")
-                  sind NEU und nennen nur, was der Code setzt.
-                  OFFEN FÜR DIE KANZLEI — bewusst ohne Einordnung gelassen: ob diese
-                  Einträge unter § 25 Abs. 2 TDDDG fallen, insbesondere das Cookie
-                  sa_ab_home (src/proxy.ts), das bei laufendem A/B-Test OHNE Einwilligung
-                  beim ersten Aufruf der Startseite gesetzt wird. Ob der Test läuft,
-                  hängt an der Vercel-Variable AB_HOME_ENABLED (aus dem Repo nicht
-                  einsehbar). */}
+                  sind NEU und nennen nur, was der Code setzt. */}
               <ul className="list-disc pl-5 space-y-1 mb-3">
                 <li><strong className="text-text-primary">sessionStorage</strong> (Schlüssel <code>sa_exit_shown</code>): Exit-Intent-Status (wurde das Overlay bereits gezeigt?) — wird nach Schließen des Browsers automatisch gelöscht</li>
                 <li><strong className="text-text-primary">Anmelde-Cookies von Supabase</strong> (<code>sb-…-auth-token</code>): nur für eingeloggte Nutzer — sie enthalten das Sitzungs-Token (JWT) zur Sitzungsverwaltung</li>

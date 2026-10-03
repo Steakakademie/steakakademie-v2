@@ -101,8 +101,8 @@ export default function RezepteIndexPage() {
                 </h2>
                 <p className="font-body text-text-light/60 leading-relaxed max-w-xl mb-4">
                   Echte Kreationen zum Nachgrillen, eingereicht von der Akademie-Community.
-                  Jede Einreichung wird von einer KI auf Sicherheit und Qualität geprüft —
-                  gute Rezepte gehen sofort live.
+                  Jede Einreichung prüft zuerst eine KI auf Sicherheit und Qualität —
+                  veröffentlicht wird erst nach unserer Freigabe.
                 </p>
                 <Link
                   href="/rezepte/community"

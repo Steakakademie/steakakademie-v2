@@ -278,12 +278,7 @@ export default function KiDisclaimerPage() {
                   ENTFERNT, weil für den falschen Empfänger geschrieben: „Datenübermittlung
                   an Anthropic (USA) … EU-Standardvertragsklauseln" und der Punkt
                   „Auftragsverarbeitung: … DPA mit Anthropic geschlossen. Keine Weitergabe an
-                  weitere Dritte."
-                  OFFEN FÜR UWE/KANZLEI — bewusst NICHT ersetzt, weil das Repo es nicht
-                  belegt: Vertrag/Auftragsverarbeitung mit Google für die Gemini-API,
-                  Vertragspartner (Google Ireland Limited oder Google LLC), Ort der
-                  Verarbeitung und Drittland-Garantie, Speicherdauer und Trainingsnutzung
-                  bei Google. Dieselbe Liste steht an Abschnitt 11 der Datenschutzerklärung. */}
+                  weitere Dritte." */}
               <ul className="space-y-3 mb-4">
                 <li className="flex gap-3">
                   <span className="shrink-0 font-bold text-brand-gold">→</span>
