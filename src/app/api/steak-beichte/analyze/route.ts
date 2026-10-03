@@ -4,6 +4,7 @@
  * Felder: problem (text, pflicht), cut?, grillType?, image? (Datei, optional)
  *
  * Flow:
+ *  0. Rate-Limit je IP (vor Auth), danach je Nutzer — seit 03.10.2026
  *  1. Auth — eingeloggter Nutzer
  *  2. consume_diagnose_credit (atomar) — kein Credit → 402, KEIN LLM-Call
  *  3. optional: Foto → Supabase Storage (privat) + Bytes an Vision
@@ -22,6 +23,7 @@ import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { DiagnoseInputSchema, ReportSchema } from '@/lib/steak-beichte/schema';
 import { SYSTEM_PROMPT, buildUserPrompt } from '@/lib/steak-beichte/prompts';
+import { RateLimiter, jsonError, rateLimitHeaders, rateLimitRequest } from '@/lib/api/guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -30,16 +32,40 @@ export const maxDuration = 90;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024; // 8 MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
 
+// Rate-Limit (03.10.2026): Login und Guthaben waren da, eine Bremse nicht. Ohne
+// Login kostet jeder Aufruf eine Sitzungspruefung; mit Login liest er bis zu
+// 8 MB Formulardaten und fragt das Guthaben ab — auch wenn keins da ist. Beides
+// ging beliebig oft. guardRequest passt nicht (erwartet JSON, hier kommt
+// multipart), also nur der Zaehler: erst je IP, nach der Anmeldung je Nutzer.
+// Der zweite haengt an der Nutzer-ID statt an der IP, damit ein Adresswechsel
+// ihn nicht umgeht. Beide Zaehler leben im Prozess (Grenze: src/lib/api/guard.ts).
+const RATE = { limit: 10, windowMs: 10 * 60_000 };
+const nutzerLimiter = new RateLimiter();
+
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: 'ANTHROPIC_API_KEY fehlt.' }, { status: 500 });
   }
+
+  // 0) Rate-Limit je IP — vor Auth und vor dem Lesen des Bodys
+  const ipLimit = rateLimitRequest(req, 'steak-beichte-analyze', RATE);
+  if (!ipLimit.ok) return ipLimit.response;
 
   // 1) Auth
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: 'Nicht eingeloggt.' }, { status: 401 });
+  }
+
+  // 1b) Rate-Limit je Nutzer — gilt auch, wenn die IP wechselt
+  const nutzerVerdict = nutzerLimiter.check(user.id, RATE);
+  if (!nutzerVerdict.allowed) {
+    return jsonError(
+      429,
+      `Zu viele Anfragen — bitte in ${nutzerVerdict.retryAfterSecs} s erneut versuchen.`,
+      rateLimitHeaders(RATE, nutzerVerdict),
+    );
   }
 
   // 2) Input parsen

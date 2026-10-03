@@ -11,13 +11,25 @@
  *
  * Der Heartbeat prueft deshalb nicht Laeufe, sondern ERGEBNISSE:
  *   typ "git"       — wann wurde dieser Pfad zuletzt veraendert?
+ *                     Mit "nurNeueDateien": true zaehlt nur ein Commit, der dort eine
+ *                     Datei HINZUGEFUEGT hat (siehe letzteGitAenderung).
  *   typ "supabase"  — wie alt ist der neueste Datensatz in dieser Tabelle?
+ *   typ "artefakt"  — wann hat ein Workflow zuletzt dieses Artefakt hochgeladen?
+ *                     Fuer Agenten, die weder ins Repo noch in die Datenbank liefern.
  *   typ "workflow"  — wann ist dieser Workflow zuletzt ueberhaupt gestartet?
  *                     (GitHub schaltet geplante Workflows in ruhigen Repos ab.)
+ *   typ "http"      — antwortet die Live-Seite?
  *
  * Ist irgendein Punkt ueberfaellig, endet das Skript mit exit 1. Der Workflow wird
  * rot, GitHub verschickt die Fehlermail, und der aufrufende Workflow legt zusaetzlich
  * ein Jira-Ticket an. Ein stiller Ausfall ist damit kein stiller Ausfall mehr.
+ *
+ * NICHT GEPRUEFT IST NICHT GESUND (03.10.2026): Fehlt einer Pruefung ihr Zugang
+ * (Supabase-Secrets, GitHub-Token), meldete sie bisher SKIP — und SKIP zaehlte wie
+ * OK. Drei von zehn Pruefungen konnten so stumm wegfallen, der Lauf blieb gruen und
+ * das Summary sagte „Automation lebt". Jetzt ist „nicht geprueft" ein eigener
+ * Zustand: eigene Zeile, eigene Ueberschrift, und der Lauf endet mit exit 1. Ein
+ * Waechter, der nicht hinsehen kann, darf nicht „alles in Ordnung" melden.
  *
  * Aufruf:
  *   node scripts/ops-heartbeat.mjs
@@ -27,7 +39,7 @@
 import { execFileSync } from 'node:child_process'
 import { readFileSync, existsSync, appendFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT   = join(__dirname, '..')
@@ -43,16 +55,34 @@ const c = {
   dim:    s => `\x1b[2m${s}\x1b[0m`,
 }
 
-const JETZT = Date.now()
-const tageSeit = iso => (JETZT - new Date(iso).getTime()) / 86_400_000
-
 // ─── PRUEFER ──────────────────────────────────────────────────────────────────
 
-/** Letzte Aenderung eines Pfades. Braucht volle Historie (actions/checkout fetch-depth: 0). */
-function letzteGitAenderung(pfad) {
-  const iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', pfad],
-    { cwd: ROOT, encoding: 'utf-8' }).trim()
-  if (!iso) throw new Error(`kein Commit fuer "${pfad}" gefunden — flacher Checkout? (fetch-depth: 0 noetig)`)
+/**
+ * Letzte Aenderung eines Pfades. Braucht volle Historie (actions/checkout fetch-depth: 0).
+ *
+ * `nurNeueDateien` (03.10.2026): Ohne die Option zaehlt JEDER Commit im Pfad — auch
+ * ein Tippfehler-Fix von Hand. Fuer einen Agenten, der neue Dateien liefern soll, ist
+ * das die falsche Frage: Am 02.10.2026 meldete der Heartbeat „Glossar: vor 8,8 Tagen"
+ * und meinte damit den Hand-Fix 3fa51a2 vom 23.09. Die letzte Lieferung des Agenten
+ * war der 19.09. (PR #143). Jede redaktionelle Korrektur stellte die Uhr zurueck und
+ * verdeckte den Stillstand. Mit der Option zaehlt nur ein Commit, der im Pfad eine
+ * Datei HINZUGEFUEGT hat (`--diff-filter=A`; Umbenennungen sind R, nicht A).
+ * Was bleibt: Legt ein Mensch eine neue Datei an, zaehlt auch das.
+ *
+ * Flacher Klon: An der Schnittkante sieht jede Datei „hinzugefuegt" aus. Das Ergebnis
+ * waere dann ein falsches Datum statt eines Fehlers — deshalb bricht die Pruefung ab.
+ */
+export function letzteGitAenderung(pfad, { nurNeueDateien = false, cwd = ROOT } = {}) {
+  const git = (args) => execFileSync('git', args, { cwd, encoding: 'utf-8' }).trim()
+  if (nurNeueDateien && git(['rev-parse', '--is-shallow-repository']) === 'true') {
+    throw new Error(`flacher Checkout — „neue Datei unter ${pfad}" ist so nicht bestimmbar (fetch-depth: 0 noetig)`)
+  }
+  const iso = git(['log', '-1', '--format=%cI', ...(nurNeueDateien ? ['--diff-filter=A'] : []), '--', pfad])
+  if (!iso) {
+    throw new Error(nurNeueDateien
+      ? `kein Commit gefunden, der unter "${pfad}" eine Datei hinzufuegt`
+      : `kein Commit fuer "${pfad}" gefunden — flacher Checkout? (fetch-depth: 0 noetig)`)
+  }
   return iso
 }
 
@@ -165,36 +195,125 @@ async function letzterWorkflowLauf(datei) {
   return { iso: lauf.created_at }
 }
 
+/**
+ * Juengstes Artefakt dieses Namens (03.10.2026).
+ *
+ * Fuer Agenten, deren Ergebnis weder im Repo noch in der Datenbank landet: social-grow
+ * laedt seine Entwuerfe als Artefakt „social-drafts" hoch (social-drafts/ ist
+ * gitignored). Ohne Entwuerfe entsteht kein Artefakt (`if-no-files-found: warn`) —
+ * das Alter des juengsten ist damit die ehrliche Frage „wann kam zuletzt etwas heraus".
+ * `minBytes` haelt eine leere Huelle draussen. Abgelaufene Artefakte zaehlen nicht.
+ * Braucht `actions: read` (im Workflow gesetzt).
+ */
+async function letztesArtefakt({ artefakt, minBytes = 1 }) {
+  const repo  = process.env.GITHUB_REPOSITORY
+  const token = process.env.GITHUB_TOKEN
+  if (!repo || !token) return { uebersprungen: 'GITHUB_REPOSITORY / GITHUB_TOKEN fehlen (läuft nur in Actions)' }
+
+  const res = await fetch(
+    `https://api.github.com/repos/${repo}/actions/artifacts?name=${encodeURIComponent(artefakt)}&per_page=30`,
+    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } })
+  if (!res.ok) throw new Error(`GitHub API ${res.status}: ${(await res.text()).slice(0, 200)}`)
+  return juengstesArtefakt((await res.json()).artifacts, { artefakt, minBytes })
+}
+
+/** Auswahl aus der API-Antwort — getrennt, damit sie ohne Netz testbar ist. */
+export function juengstesArtefakt(artefakte, { artefakt, minBytes = 1 }) {
+  const brauchbar = (artefakte ?? [])
+    .filter(a => a.name === artefakt && !a.expired && a.size_in_bytes >= minBytes)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+  if (!brauchbar.length) return { leer: `kein Artefakt "${artefakt}" mit mindestens ${minBytes} Bytes vorhanden` }
+  return { iso: brauchbar[0].created_at }
+}
+
+// ─── BEWERTUNG ────────────────────────────────────────────────────────────────
+
+/** Rohergebnis einer Pruefung → Status. Reine Funktion (scripts/ops-heartbeat.test.mjs). */
+export function bewerte(eintrag, ergebnis, jetzt = Date.now()) {
+  const basis = { name: eintrag.name, maxTage: eintrag.maxTage, hinweis: eintrag.hinweis }
+
+  if (ergebnis.uebersprungen) return { ...basis, status: 'uebersprungen', text: ergebnis.uebersprungen }
+  if (ergebnis.leer)          return { ...basis, status: 'ueberfaellig', text: ergebnis.leer, alter: null }
+  if (ergebnis.nichtsOffen)   return { ...basis, status: 'ok', text: ergebnis.nichtsOffen, alter: null }
+  // Erreichbarkeit kennt kein Alter — die Seite ist da oder sie ist weg.
+  if (ergebnis.erreichbar)    return { ...basis, status: 'ok', text: ergebnis.erreichbar, alter: null }
+  if (ergebnis.unerreichbar)  return { ...basis, status: 'ueberfaellig', text: ergebnis.unerreichbar, alter: null }
+
+  const alter = (jetzt - new Date(ergebnis.iso).getTime()) / 86_400_000
+  const was   = eintrag.typ === 'git' && eintrag.nurNeueDateien ? 'zuletzt neue Datei vor' : 'zuletzt vor'
+  const wann  = ergebnis.bezug ? `${ergebnis.bezug}: vor` : was
+  return {
+    ...basis,
+    status: alter > eintrag.maxTage ? 'ueberfaellig' : 'ok',
+    alter,
+    iso: ergebnis.iso,
+    text: `${wann} ${alter.toFixed(1)} Tagen (${ergebnis.iso.slice(0, 10)}), erlaubt: ${eintrag.maxTage}`,
+  }
+}
+
+/**
+ * Alle Ergebnisse → ein Urteil. Drei Zustaende, nicht zwei (03.10.2026):
+ *   steht  — ueberfaellig oder Pruefung gescheitert
+ *   blind  — nicht geprueft (Zugang fehlt). Zaehlt NICHT als gesund.
+ *   lebt   — nur wenn jeder Bereich geprueft wurde und liefert
+ */
+export function urteil(ergebnisse) {
+  const kaputt = ergebnisse.filter(r => r.status === 'ueberfaellig' || r.status === 'fehler')
+  const blind  = ergebnisse.filter(r => r.status === 'uebersprungen')
+  const ok     = ergebnisse.filter(r => r.status === 'ok')
+  const zustand = kaputt.length ? 'steht' : blind.length ? 'blind' : 'lebt'
+
+  const titel = {
+    steht: '🔴 Automation steht',
+    blind: `🟡 Wächter blind — ${blind.length} Bereich(e) nicht geprüft`,
+    lebt:  '✅ Automation lebt',
+  }[zustand]
+
+  const zeichen = { ok: '✅', ueberfaellig: '🔴', fehler: '⚠️', uebersprungen: '🟡' }
+  const markdown = [
+    `## ${titel}`, '',
+    `**${ok.length} liefern · ${kaputt.length} ohne Ergebnis · ${blind.length} nicht geprüft** (von ${ergebnisse.length})`, '',
+    '| | Bereich | Befund |', '| --- | --- | --- |',
+    ...ergebnisse.map(r => `| ${zeichen[r.status]} | ${r.name} | ${r.status === 'uebersprungen' ? `NICHT GEPRÜFT — ${r.text}` : r.text} |`),
+  ]
+  if (kaputt.length) {
+    markdown.push('', '### Was jetzt zu tun ist', '')
+    for (const r of kaputt) markdown.push(`**${r.name}** — ${r.text}`, '', `> ${r.hinweis ?? ''}`, '')
+  }
+  if (blind.length) {
+    markdown.push('', '### Nicht geprüft — kein OK', '',
+      'Diese Bereiche konnte der Wächter nicht ansehen. Ob sie liefern, ist unbekannt:', '',
+      ...blind.map(r => `- **${r.name}** — ${r.text}`), '')
+  }
+
+  // Kurzfassung für den Jira-/Issue-Schritt im Workflow. Ein nicht geprüfter Bereich
+  // trägt den Zusatz im Namen, damit Issue und Ticket ihn nicht als Stillstand lesen.
+  const gemeldet = [
+    ...kaputt.map(r => ({ name: r.name, text: `${r.name}: ${r.text}${r.hinweis ? ` — ${r.hinweis}` : ''}` })),
+    ...blind.map(r => ({ name: `${r.name} (nicht geprüft)`, text: `${r.name}: NICHT GEPRÜFT — ${r.text}` })),
+  ]
+  return {
+    zustand, titel, kaputt, blind, ok,
+    markdown: markdown.join('\n') + '\n',
+    ausgabe: `still=${gemeldet.length}\nbetroffen=${gemeldet.map(g => g.name).join(', ')}\nbericht=${gemeldet.map(g => g.text).join(' | ').replace(/\n/g, ' ')}\n`,
+    exitCode: zustand === 'lebt' ? 0 : 1,
+  }
+}
+
 // ─── HAUPTLAUF ────────────────────────────────────────────────────────────────
 
 async function pruefe(eintrag) {
-  const basis = { name: eintrag.name, maxTage: eintrag.maxTage, hinweis: eintrag.hinweis }
   try {
     let ergebnis
-    if (eintrag.typ === 'git')            ergebnis = { iso: letzteGitAenderung(eintrag.pfad) }
+    if (eintrag.typ === 'git')            ergebnis = { iso: letzteGitAenderung(eintrag.pfad, { nurNeueDateien: eintrag.nurNeueDateien === true }) }
     else if (eintrag.typ === 'supabase')  ergebnis = await letzterSupabaseDatensatz(eintrag)
     else if (eintrag.typ === 'workflow')  ergebnis = await letzterWorkflowLauf(eintrag.datei)
+    else if (eintrag.typ === 'artefakt')  ergebnis = await letztesArtefakt(eintrag)
     else if (eintrag.typ === 'http')      ergebnis = await pruefeErreichbarkeit(eintrag)
-    else return { ...basis, status: 'fehler', text: `unbekannter Typ "${eintrag.typ}"` }
-
-    if (ergebnis.uebersprungen) return { ...basis, status: 'uebersprungen', text: ergebnis.uebersprungen }
-    if (ergebnis.leer)          return { ...basis, status: 'ueberfaellig', text: ergebnis.leer, alter: null }
-    if (ergebnis.nichtsOffen)   return { ...basis, status: 'ok', text: ergebnis.nichtsOffen, alter: null }
-    // Erreichbarkeit kennt kein Alter — die Seite ist da oder sie ist weg.
-    if (ergebnis.erreichbar)    return { ...basis, status: 'ok', text: ergebnis.erreichbar, alter: null }
-    if (ergebnis.unerreichbar)  return { ...basis, status: 'ueberfaellig', text: ergebnis.unerreichbar, alter: null }
-
-    const alter = tageSeit(ergebnis.iso)
-    const wann  = ergebnis.bezug ? `${ergebnis.bezug}: vor` : 'zuletzt vor'
-    return {
-      ...basis,
-      status: alter > eintrag.maxTage ? 'ueberfaellig' : 'ok',
-      alter,
-      iso: ergebnis.iso,
-      text: `${wann} ${alter.toFixed(1)} Tagen (${ergebnis.iso.slice(0, 10)}), erlaubt: ${eintrag.maxTage}`,
-    }
+    else throw new Error(`unbekannter Typ "${eintrag.typ}"`)
+    return bewerte(eintrag, ergebnis)
   } catch (err) {
-    return { ...basis, status: 'fehler', text: err.message }
+    return { name: eintrag.name, maxTage: eintrag.maxTage, hinweis: eintrag.hinweis, status: 'fehler', text: err.message }
   }
 }
 
@@ -210,46 +329,38 @@ async function main() {
   const ergebnisse = []
   for (const e of eintraege) ergebnisse.push(await pruefe(e))
 
-  const symbol = { ok: c.green('OK   '), ueberfaellig: c.red('STILL'), fehler: c.red('FEHL '), uebersprungen: c.dim('SKIP ') }
+  const symbol = { ok: c.green('OK   '), ueberfaellig: c.red('STILL'), fehler: c.red('FEHL '), uebersprungen: c.yellow('BLIND') }
   for (const r of ergebnisse) console.log(`  ${symbol[r.status]} ${r.name.padEnd(34)} ${c.dim(r.text)}`)
 
-  const kaputt = ergebnisse.filter(r => r.status === 'ueberfaellig' || r.status === 'fehler')
+  const u = urteil(ergebnisse)
 
   // Job-Summary — die Tabelle, die man im Actions-Tab sofort sieht.
-  if (process.env.GITHUB_STEP_SUMMARY) {
-    const zeichen = { ok: '✅', ueberfaellig: '🔴', fehler: '⚠️', uebersprungen: '⏭️' }
-    const zeilen = [
-      `## ${kaputt.length ? '🔴 Automation steht' : '✅ Automation lebt'}`, '',
-      '| | Bereich | Befund |', '| --- | --- | --- |',
-      ...ergebnisse.map(r => `| ${zeichen[r.status]} | ${r.name} | ${r.text} |`),
-    ]
-    if (kaputt.length) {
-      zeilen.push('', '### Was jetzt zu tun ist', '')
-      for (const r of kaputt) zeilen.push(`**${r.name}** — ${r.text}`, '', `> ${r.hinweis ?? ''}`, '')
-    }
-    appendFileSync(process.env.GITHUB_STEP_SUMMARY, zeilen.join('\n') + '\n')
-  }
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, u.markdown)
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, u.ausgabe)
 
-  // Kurzfassung für den Jira-/Issue-Schritt im Workflow.
-  if (process.env.GITHUB_OUTPUT) {
-    const text = kaputt.map(r => `${r.name}: ${r.text}${r.hinweis ? ` — ${r.hinweis}` : ''}`).join(' | ')
-    appendFileSync(process.env.GITHUB_OUTPUT,
-      `still=${kaputt.length}\nbetroffen=${kaputt.map(r => r.name).join(', ')}\nbericht=${text.replace(/\n/g, ' ')}\n`)
-  }
-
-  if (kaputt.length === 0) {
-    console.log(c.green('\n  Alle Bereiche liefern.\n'))
+  if (u.zustand === 'lebt') {
+    console.log(c.green('\n  Alle Bereiche geprüft, alle liefern.\n'))
     return
   }
 
-  console.log(c.red(`\n  ${kaputt.length} Bereich(e) ohne Ergebnis:`))
-  for (const r of kaputt) console.log(c.red(`   • ${r.name}`) + (r.hinweis ? c.dim(`\n     ${r.hinweis}`) : ''))
+  if (u.kaputt.length) {
+    console.log(c.red(`\n  ${u.kaputt.length} Bereich(e) ohne Ergebnis:`))
+    for (const r of u.kaputt) console.log(c.red(`   • ${r.name}`) + (r.hinweis ? c.dim(`\n     ${r.hinweis}`) : ''))
+  }
+  if (u.blind.length) {
+    console.log(c.yellow(`\n  ${u.blind.length} Bereich(e) NICHT GEPRÜFT — das ist kein OK:`))
+    for (const r of u.blind) console.log(c.yellow(`   • ${r.name}`) + c.dim(` — ${r.text}`))
+  }
   console.log()
 
-  if (!NUR_BERICHT) process.exit(1)
+  if (!NUR_BERICHT) process.exit(u.exitCode)
 }
 
-main().catch(err => {
-  console.error(c.red(`\n  Heartbeat selbst fehlgeschlagen: ${err.message}\n`))
-  process.exit(1)
-})
+// Nur beim direkten Aufruf laufen lassen — sonst startet schon der Import im Test
+// einen echten Lauf. Gleiches Muster wie scripts/recipe-agent.mjs.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(err => {
+    console.error(c.red(`\n  Heartbeat selbst fehlgeschlagen: ${err.message}\n`))
+    process.exit(1)
+  })
+}

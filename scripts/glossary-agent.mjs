@@ -13,14 +13,40 @@
  *   node scripts/glossary-agent.mjs           # Nur Generierung (Build-Standard)
  *   node scripts/glossary-agent.mjs --link    # + Auto-Verlinkung in Content-Dateien
  *   node scripts/glossary-agent.mjs --dry-run # Vorschau ohne API-Calls / Datei-Schreibzugriff
+ *
+ * ERGEBNIS STATT LAUF (03.10.2026, CLAUDE.md Regel 10 „Gruen ist kein Ergebnis"):
+ * Seit dem einzigen Glossar-PR (#143, 19.09.2026) lief dieser Agent taeglich gruen
+ * mit „0 neue Begriffe (191 bereits verarbeitet, 191 gesamt)" — der Vorrat ist
+ * abgearbeitet: die SEED_TERMS-Liste ist durch, und die Extraktion findet in den
+ * 45 Quell-Dateien nichts Neues mehr. Das ist kein Defekt, aber es stand nirgends.
+ * Jetzt schreibt jeder Lauf seine Zahlen ins Job-Summary, und:
+ *   exit 0 = geliefert · oder Vorrat leer (mit Warnung) · oder alles Offene
+ *            bewusst nicht angelegt (Dublette, Temperatur-Check, Quality-Gate)
+ *   exit 1 = Absturz · kein Eintrag erstellt, obwohl Generierungen fehlschlugen ·
+ *            im Workflow: Begriffe offen, aber ANTHROPIC_API_KEY fehlt
+ * Bis 03.10.2026 endete auch ein Absturz mit exit 0 („damit der Build nicht
+ * abbricht") — der Agent haengt aber an keinem Build mehr: Vercel baut ueber
+ * `npm run build`, die Ketten `build:with-agents` / `dev:full` ruft nichts auf.
+ * Ob ueberhaupt noch etwas ankommt, prueft der Ops-Heartbeat (Eintrag „Glossar":
+ * juengste NEU HINZUGEFUEGTE Datei unter content/glossar).
+ *
+ * WARUM content/rezepte KEINE QUELLE IST (am 03.10.2026 geprueft, nicht geraten):
+ * Die Extraktion kennt nur Bindestrich-Komposita mit BBQ-Praefix. Auf die 128
+ * Rezepte losgelassen liefert sie 45 „neue Begriffe" wie Kollagen-zu, Bark-zu,
+ * Wagyu-Sinne, Kerntemperatur-Frage, Bark-Prozesses, Wagyu-Patty, Wagyu-Fett —
+ * Satzfragmente und Keyword-Permutationen, keine Fachbegriffe. Genau solche
+ * Eintraege legt docs/glossar-konsolidierung-kandidaten.md (Plan C2) gerade wieder
+ * zusammen. Mehr Quellen braucht zuerst eine bessere Extraktion oder eine von Hand
+ * gepflegte Seed-Liste — das ist eine Redaktions-Entscheidung, kein Schalter hier.
  */
 
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readdir, readFile, writeFile, mkdir, access } from 'fs/promises'
+import { appendFileSync } from 'fs'
 import YAML from 'yaml'
 import { join, extname, dirname, basename } from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 import { pruefeDokument, glossarDublette } from './lib/content-qualitaet.mjs'
 
@@ -432,6 +458,72 @@ async function autoLinkInFile(filePath, terms) {
   return count
 }
 
+// ─── LAUF-BILANZ ──────────────────────────────────────────────────────────────
+
+/**
+ * Was hat der Lauf geliefert — und ist das gruen? Reine Funktion, damit die Regel
+ * testbar ist (scripts/glossary-agent.test.mjs).
+ *
+ * @param {object} z
+ * @param {number} z.quellDateien   gescannte Content-Dateien
+ * @param {number} z.gesamt         Begriffe insgesamt (Seeds + Extraktion)
+ * @param {number} z.offen          davon noch nicht verarbeitet = der Vorrat
+ * @param {boolean} [z.ohneSchluessel]  ANTHROPIC_API_KEY fehlt
+ * @returns {{zustand: 'geliefert'|'vorrat-leer'|'nichts-angelegt'|'ausfall', exitCode: 0|1, titel: string, markdown: string}}
+ */
+export function laufBilanz (z) {
+  const { quellDateien, gesamt, offen, created = 0, skipped = 0, dubletten = 0, tempAbgelehnt = 0, gateAbgelehnt = 0, errors = 0, ohneSchluessel = false } = z
+
+  let zustand, titel
+  if (offen === 0) {
+    zustand = 'vorrat-leer'
+    titel = `⚪ Vorrat leer — 0 von ${gesamt} Begriffen offen, der Agent kann nichts erzeugen`
+  } else if (ohneSchluessel) {
+    zustand = 'ausfall'
+    titel = `🔴 ${offen} Begriffe offen, aber ANTHROPIC_API_KEY fehlt — nichts erzeugt`
+  } else if (created > 0) {
+    zustand = 'geliefert'
+    titel = `✅ ${created} neue Glossar-Einträge`
+  } else if (errors > 0) {
+    zustand = 'ausfall'
+    titel = `🔴 0 Einträge erstellt — ${errors} Generierungen fehlgeschlagen`
+  } else {
+    zustand = 'nichts-angelegt'
+    titel = `⚪ 0 Einträge erstellt — ${offen} offene Begriffe bewusst nicht angelegt`
+  }
+
+  const zeilen = [
+    `## 📖 Glossar-Agent`, '', `**${titel}**`, '',
+    '| Kennzahl | Wert |', '| --- | ---: |',
+    `| Quell-Dateien | ${quellDateien} |`,
+    `| Begriffe gesamt (Seeds + Extraktion) | ${gesamt} |`,
+    `| davon bereits verarbeitet | ${gesamt - offen} |`,
+    `| Vorrat (offen vor dem Lauf) | ${offen} |`,
+    `| Neu erstellt | ${created} |`,
+    `| Datei schon vorhanden | ${skipped} |`,
+    `| Dublette, nicht angelegt | ${dubletten} |`,
+    `| Am Temperatur-Check verworfen | ${tempAbgelehnt} |`,
+    `| Am Quality-Gate verworfen | ${gateAbgelehnt} |`,
+    `| Fehler | ${errors} |`,
+  ]
+  if (zustand === 'vorrat-leer') {
+    zeilen.push('',
+      '> Die Seed-Liste ist abgearbeitet und die Extraktion findet in den Quell-Dateien nichts Neues.',
+      '> Der Agent liefert erst wieder, wenn `SEED_TERMS` in `scripts/glossary-agent.mjs` neue Begriffe bekommt',
+      '> oder neue Artikel/Cuts/Methoden dazukommen. Bleibt das so, meldet der Ops-Heartbeat den Stillstand.')
+  }
+  return { zustand, exitCode: zustand === 'ausfall' ? 1 : 0, titel, markdown: zeilen.join('\n') + '\n' }
+}
+
+/** Bilanz ins Log, ins Job-Summary und — wenn nichts kam — als Warnung an den Lauf. */
+function melde (bilanz) {
+  console.log(`\n${bilanz.zustand === 'ausfall' ? c.red(bilanz.titel) : bilanz.zustand === 'geliefert' ? c.green(bilanz.titel) : c.yellow(bilanz.titel)}`)
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, bilanz.markdown)
+  if (process.env.GITHUB_ACTIONS && bilanz.zustand !== 'geliefert') {
+    console.log(`::${bilanz.zustand === 'ausfall' ? 'error' : 'warning'}::Glossar-Agent: ${bilanz.titel}`)
+  }
+}
+
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -482,8 +574,12 @@ async function main() {
       }
       console.log(`  Gesamt: ${c.bold(String(totalLinks))} neue Links gesetzt\n`)
     }
+    const bilanz = laufBilanz({ quellDateien: contentFiles.length, gesamt: allTerms.size, offen: newTerms.length, ohneSchluessel: true })
+    melde(bilanz)
     console.log()
-    process.exit(0)
+    // Lokal (dev:full ohne Schluessel) bleibt das ein Ueberspringen wie bisher. Im
+    // Workflow ist ein fehlendes Secret bei offenem Vorrat ein Ausfall — vorher gruen.
+    process.exit(process.env.GITHUB_ACTIONS ? bilanz.exitCode : 0)
   }
 
   // ── Schritt 2+3: Einträge generieren & speichern ────────────────────────────
@@ -567,6 +663,15 @@ async function main() {
   console.log(`\n${c.dim('📚')} Glossar: ${c.green(`${created} erstellt`)}, ${c.dim(`${skipped} übersprungen`)}${tempAbgelehnt ? ', ' + c.red(`${tempAbgelehnt} wegen Temperatur-Check verworfen`) : ''}${dubletten ? ', ' + c.dim(`${dubletten} Dubletten nicht angelegt`) : ''}${gateAbgelehnt ? ', ' + c.red(`${gateAbgelehnt} am Quality-Gate verworfen`) : ''}${errors ? ', ' + c.red(`${errors} Fehler`) : ''}`)
   console.log(`${c.dim('📑')} terms.json: ${termsIndex.length} Einträge → content/glossar/terms.json`)
 
+  // Zahlen statt Prosa — und rot, wenn nichts herauskam, obwohl Generierungen
+  // scheiterten (gleiche Regel wie im recipe-agent). Vorher endete das gruen.
+  const bilanz = laufBilanz({
+    quellDateien: contentFiles.length, gesamt: allTerms.size, offen: newTerms.length,
+    created, skipped, dubletten, tempAbgelehnt, gateAbgelehnt, errors,
+  })
+  melde(bilanz)
+  if (bilanz.exitCode) process.exitCode = bilanz.exitCode
+
   // ── Schritt 5: Auto-Verlinkung (opt-in) ────────────────────────────────────
   if (doLink && contentFiles.length > 0) {
     console.log(`\n${c.dim('🔗')} Auto-Verlinkung in Content-Dateien...`)
@@ -584,7 +689,14 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(c.red('\n❌ Glossary Agent Fehler:'), err.message)
-  process.exit(0)  // exit 0 damit der Build nicht abbricht
-})
+// Nur beim direkten Aufruf laufen lassen — sonst startet schon der Import im Test
+// einen echten Lauf. Gleiches Muster wie scripts/recipe-agent.mjs.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(err => {
+    console.error(c.red('\n❌ Glossary Agent Fehler:'), err.message)
+    // exit 1 (03.10.2026): Hier stand „exit 0 damit der Build nicht abbricht". Der
+    // Agent laeuft in keinem Build mehr, nur noch im Workflow glossary-grow — und
+    // dort machte exit 0 aus jedem Absturz einen gruenen Lauf.
+    process.exit(1)
+  })
+}

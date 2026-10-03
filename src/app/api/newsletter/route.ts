@@ -29,10 +29,11 @@ import { NEWSLETTER_CONSENT_VERSION, NEWSLETTER_CONSENT_HISTORY } from '@/lib/ne
 
 export const runtime = 'nodejs';
 
-const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
 const LOOPS_API_BASE = 'https://app.loops.so/api/v1';
-const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
+
+const NICHT_MOEGLICH =
+  'Anmeldung derzeit nicht möglich — die Bestätigungs-E-Mail kann nicht versendet werden. Bitte versuche es später erneut.';
 
 // Map source → Loops user groups for post-confirmation segmentation
 const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
@@ -76,8 +77,19 @@ export async function POST(req: NextRequest) {
 
     const normalizedEmail = email;
 
-    // Dev-Modus: kein Loops API Key → simulierte Antwort
+    // Pro Anfrage gelesen, nicht beim Laden des Moduls.
+    const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
+    const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
+
+    // Kein Loops API Key → simulierte Antwort, aber NUR ausserhalb der
+    // Produktion (03.10.2026). Vorher meldete die Route auch dort Erfolg
+    // („DEV MODE“): Fehlte der Schlüssel in Vercel, sah jeder „Fast geschafft“
+    // und es kam nie eine Mail — derselbe stille Trichter wie beim A2-Fix unten.
     if (!LOOPS_API_KEY) {
+      if (process.env.NODE_ENV === 'production') {
+        console.error('[Newsletter] LOOPS_API_KEY fehlt — Bestätigungs-E-Mail kann NICHT gesendet werden.');
+        return NextResponse.json({ error: NICHT_MOEGLICH }, { status: 503 });
+      }
       console.log(`[Newsletter] DEV MODE — DOI-E-Mail würde gesendet: ${normalizedEmail} (source: ${source})`);
       return NextResponse.json({ success: true, doi: true, dev: true });
     }
@@ -113,7 +125,12 @@ export async function POST(req: NextRequest) {
       loggedConsentVersion,
       ip,
     );
-    const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
+    // Ohne NEWSLETTER_DOI_SECRET gibt es in der Produktion kein Token
+    // (src/lib/doi.ts) — dann lieber keine Anmeldung als ein fälschbarer Link.
+    if (!token) {
+      return NextResponse.json({ error: NICHT_MOEGLICH }, { status: 503 });
+    }
+    const confirmUrl =`${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
 
     // ── A2-Fix „ehrlicher Fehler" (16.08.2026) ──────────────────────────────
     // Vorher meldete diese Route IMMER success:true — auch wenn keine Mail
@@ -127,10 +144,7 @@ export async function POST(req: NextRequest) {
         '[Newsletter] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail kann NICHT gesendet werden. ' +
         'Transaktionale Vorlage in Loops anlegen/publishen und ID in Vercel eintragen.',
       );
-      return NextResponse.json(
-        { error: 'Anmeldung derzeit nicht möglich — die Bestätigungs-E-Mail kann nicht versendet werden. Bitte versuche es später erneut.' },
-        { status: 503 },
-      );
+      return NextResponse.json({ error: NICHT_MOEGLICH }, { status: 503 });
     }
 
     const txRes = await fetch(`${LOOPS_API_BASE}/transactional`, {

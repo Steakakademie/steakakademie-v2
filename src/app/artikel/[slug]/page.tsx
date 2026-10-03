@@ -38,12 +38,22 @@ export async function generateStaticParams() {
 }
 
 /**
- * Entscheidend fuer die Anforderung „in Produktion nicht gerendert":
- * Ohne dies wuerde Next.js einen nicht gelisteten Slug on demand serverseitig
- * rendern — ein Entwurf waere per direkter URL erreichbar, obwohl er nirgends
- * verlinkt ist. false laesst unbekannte Slugs sauber auf 404 laufen.
+ * Unbekannte Slugs werden bei Bedarf gerendert (03.10.2026) — und laufen dort
+ * auf 404, wenn der Artikel nicht sichtbar ist: Entwurf, ungeprueft oder noch
+ * nicht faellig (sichtbareArtikel + notFound() unten, zur Laufzeit gerechnet).
+ *
+ * Bis dahin stand hier `false`. Das hielt Entwuerfe fern, baute aber eine
+ * Datumsfalle: Startseite, BBQ-News und Suche rechnen den Stichtag bei jedem
+ * Aufruf bzw. stuendlich neu und verlinken einen Artikel ab seinem
+ * `publishedAt`. Die Detailseite entstand nur beim Bauen — ohne Deploy am
+ * Stichtag fuehrte der neue Link auf 404 (zwei Artikel mit 09.10.2026).
+ * Gleiches Muster wie /bbq-news/[slug]. Der Schutz der Entwuerfe haengt jetzt
+ * allein an sichtbareArtikel() — dort nichts lockern, ohne das hier zu bedenken.
  */
-export const dynamicParams = false;
+export const dynamicParams = true;
+
+/** Stuendlich neu: Ein faellig gewordener Artikel loest sein 404 von selbst ab. */
+export const revalidate = 3600;
 
 /** JSON-LD sicher einbetten: verhindert das Ausbrechen aus dem script-Tag. */
 const ldJson = (obj: unknown) =>

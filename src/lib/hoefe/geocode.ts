@@ -8,15 +8,12 @@
  * Antworten werden 30 Tage gecacht (Next fetch-Cache): Orte wandern nicht.
  */
 import type { GeocodeTreffer } from './types';
+// Rahmen DE + AT + CH: seit 03.10.2026 an einer Stelle (./grenzen.ts), nicht mehr hier.
+import { imDachRaum } from './grenzen';
 
 const CACHE = { next: { revalidate: 60 * 60 * 24 * 30 } } as const;
 const UA = 'steakakademie.de Hofladen-Radar (kontakt via steakakademie.de/kontakt)';
 const LAENDER = 'de,at,ch';
-
-/** Grobe Box DE + AT + CH — muss zu imDachRaum() in scripts/lib/hoefe-osm.mjs passen. */
-export function imDachRaum(lat: number, lng: number): boolean {
-  return lat >= 45.5 && lat <= 55.5 && lng >= 5.5 && lng <= 17.5;
-}
 
 /**
  * Reine Postleitzahl → Suchtext + Laenderfilter.

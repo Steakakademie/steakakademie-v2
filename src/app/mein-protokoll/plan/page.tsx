@@ -252,15 +252,16 @@ export default async function PlanPage(props: { searchParams: Promise<{ nr?: str
                   )}
                 </div>
 
-                {/* Fleischpass-Teaser nach Woche 1 (Element 4) */}
+                {/* Notiz-Hinweis nach Woche 1. Bis 02.10.2026 stand hier ein Verweis auf den
+                    „Fleischpass" — das Logbuch dahinter gibt es nicht (nur die Verkaufsseite).
+                    Käufer wurden an eine Stelle geschickt, an der sich nichts eintragen lässt. */}
                 {w.week === 1 && (
                   <div className="print:hidden border border-brand-gold/15 bg-surface-elevated p-5 flex items-start gap-3">
                     <ClipboardList size={18} className="text-brand-gold shrink-0 mt-0.5" />
                     <p className="font-body text-sm text-text-secondary leading-relaxed">
-                      <strong className="text-text-primary">Session absolviert?</strong> Trag sie in deinen{' '}
-                      <Link href="/fleischpass" className="text-brand-gold font-bold hover:text-brand-fire underline">Fleischpass</Link>{' '}
-                      ein — Kerntemperatur, Methode, dein Urteil. So siehst du nach 8 Wochen selbst, wo du
-                      konstant bist und wo noch Luft ist.
+                      <strong className="text-text-primary">Session absolviert?</strong> Notier dir drei Dinge,
+                      solange sie frisch sind: gemessene Kerntemperatur, Methode, dein Urteil. Nach 8 Wochen
+                      siehst du daran selbst, wo du konstant bist und wo noch Luft ist.
                     </p>
                   </div>
                 )}

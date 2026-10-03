@@ -1,10 +1,13 @@
 -- ============================================================
 -- Mein Protokoll — Guthaben (Pakete) und Korrektur
 --
--- STAND DIESER DATEI: NOCH NICHT ANGEWENDET. Anwenden nur nach Freigabe durch
--- Uwe; danach wird der Dateiname auf die Ledger-Version umgestellt (Regel aus
--- PR #285). Die Migration ist rein additiv: neue Tabelle, drei neue nullbare
--- Spalten, eine neue Funktion. Bestehender Code läuft mit ihr unverändert.
+-- ANGEWENDET am 02.10.2026, 18:04 (Freigabe Uwe im Chat), Ledger-Version
+-- 20261002160432 — der Dateiname entspricht ihr (Regel aus PR #285). Rein
+-- additiv: neue Tabelle, drei neue nullbare Spalten, eine neue Funktion.
+-- Nachgeprüft auf der Live-DB: Rechte (authenticated nur SELECT, anon nichts),
+-- RLS an, Funktion nur für service_role, Bestand 3 + 1; sieben Aufrufe von
+-- protokoll_speichern in einer verworfenen Transaktion liefern die erwarteten
+-- Status (ok, kein_guthaben, korrektur_verbraucht, nicht_korrigierbar).
 --
 -- Anlass (Uwe, 02.10.2026): 19 € = 1 Protokoll, 29 € = 2 Protokolle; je
 -- Protokoll ein Plan plus EINE kostenlose Korrektur. Bis dahin ließ sich nach

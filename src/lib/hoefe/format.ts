@@ -1,4 +1,5 @@
 /** Reine Helfer fuer den Hofladen-Radar — ohne I/O, ohne 'use client' (Regel: geteilte Logik in src/lib). */
+import { DACH_GRENZEN } from './grenzen';
 
 export const FLEISCHART_LABEL: Record<string, string> = {
   rind: 'Rind',
@@ -36,6 +37,19 @@ export function zahlAusParam(v: string | null, fallback: number, min: number, ma
   const n = v == null ? NaN : Number(v);
   if (!Number.isFinite(n)) return fallback;
   return Math.min(max, Math.max(min, n));
+}
+
+/**
+ * Breite oder Laenge aus einem Query-Parameter, auf den DACH-Rahmen geklemmt.
+ * Fehlt der Parameter oder ist er keine Zahl: NaN — die Route faellt dann auf
+ * die Ortssuche zurueck. Die Grenzen kommen aus ./grenzen.ts (03.10.2026); vorher
+ * standen 47–56 / 5–16 hart in der Route, und ein Standort in Wien (16,37° O) oder
+ * Genf (46,2° N) wurde still an den Rand der alten Deutschland-Box verschoben.
+ */
+export function koordinateAusParam(v: string | null, achse: 'lat' | 'lng'): number {
+  return achse === 'lat'
+    ? zahlAusParam(v, NaN, DACH_GRENZEN.latMin, DACH_GRENZEN.latMax)
+    : zahlAusParam(v, NaN, DACH_GRENZEN.lngMin, DACH_GRENZEN.lngMax);
 }
 
 /** Nur http(s)-Links, Rest wird nicht verlinkt (OSM-Tags sind Freitext). */

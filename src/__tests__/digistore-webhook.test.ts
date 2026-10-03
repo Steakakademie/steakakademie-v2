@@ -17,6 +17,14 @@ const db = vi.hoisted(() => ({
   tables: {} as Record<string, Record<string, any>[]>,
   credits: {} as Record<string, number>,
   seq: 0,
+  // Lesefehler je Tabelle (03.10.2026): supabase-js wirft nicht, es liefert `error`.
+  leseFehler: {} as Record<string, { message: string }>,
+  sentry: [] as { text: string; opts: Record<string, any> }[],
+}));
+
+// Sentry wird nur mitgeschrieben — die Tests pruefen, WAS gemeldet wird.
+vi.mock('@sentry/nextjs', () => ({
+  captureMessage: (text: string, opts: Record<string, any>) => { db.sentry.push({ text, opts }); },
 }));
 
 function nextId(prefix: string) {
@@ -54,6 +62,7 @@ function from(name: string) {
       rows.filter(matches).forEach((r) => Object.assign(r, payload));
       return { data: null, error: null };
     }
+    if (db.leseFehler[name]) return { data: null, error: db.leseFehler[name] };
     // Ohne single()/maybeSingle() liefert PostgREST eine Liste.
     if (list) return { data: rows.filter(matches), error: null };
     const found = rows.find(matches) ?? null;
@@ -168,13 +177,17 @@ beforeEach(() => {
   };
   db.credits = {};
   db.seq = 0;
+  db.leseFehler = {};
+  db.sentry = [];
   process.env.DIGISTORE_WEBHOOK_TOKEN = TOKEN;
   process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
   process.env.LOOPS_API_KEY = 'loops-key';
   process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID = 'tpl-magic';
   vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })));
-  vi.spyOn(console, 'error').mockImplementation(() => {});
+  // mockClear: Der Spion bleibt ueber die Tests hinweg derselbe und sammelt
+  // sonst die ALARM-Zeilen frueherer Tests — alarme() weiter unten zaehlt sie.
+  vi.spyOn(console, 'error').mockImplementation(() => {}).mockClear();
   vi.spyOn(console, 'warn').mockImplementation(() => {});
 });
 
@@ -350,5 +363,74 @@ describe('Digistore24-Webhook: Mein Protokoll — Pakete als Gutschrift', () => 
   it('andere Kurse bekommen keine Protokoll-Gutschrift', async () => {
     await POST(delivery({ event: 'payment', order_id: 'BBQ-1', product_id: '696399', email: 'griller@example.de', amount_brutto: '49.00' }));
     expect(gutschriften()).toHaveLength(0);
+  });
+});
+
+describe('Digistore24-Webhook: Lesefehler ist nicht „unbekanntes Produkt“ (03.10.2026)', () => {
+  const kauf = { event: 'payment', order_id: 'ORD-L-1', product_id: '696399', email: 'neu@example.de' };
+
+  it('Produkt-Zuordnung nicht lesbar → 500 (Digistore wiederholt) und Alarm, keine Zeile, kein Zugang', async () => {
+    db.leseFehler.digistore_products = { message: 'connection terminated unexpectedly' };
+
+    const res = await POST(delivery(kauf));
+
+    expect(res.status).toBe(500);
+    expect(db.tables.digistore_orders).toHaveLength(0);
+    expect(db.tables.bookings).toHaveLength(0);
+    expect(db.sentry).toHaveLength(1);
+    expect(db.sentry[0].opts.tags).toMatchObject({ grund: 'mapping-lesefehler', ds_product_id: '696399' });
+    expect(db.sentry[0].opts.extra.fehler).toBe('connection terminated unexpectedly');
+  });
+
+  it('die Wiederholung nach behobenem Lesefehler liefert aus', async () => {
+    db.leseFehler.digistore_products = { message: 'connection terminated unexpectedly' };
+    expect((await POST(delivery(kauf))).status).toBe(500);
+
+    db.leseFehler = {};
+    expect((await POST(delivery(kauf))).status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(1);
+    expect(db.tables.digistore_orders[0]).toMatchObject({ processing_status: 'processed' });
+  });
+
+  it('wirklich unbekanntes Produkt bleibt bei 200 + Alarm „kein-mapping“', async () => {
+    const res = await POST(delivery({ ...kauf, product_id: '999999' }));
+    expect(res.status).toBe(200);
+    expect(db.sentry).toHaveLength(1);
+    expect(db.sentry[0].opts.tags).toMatchObject({ grund: 'kein-mapping' });
+  });
+});
+
+describe('Digistore24-Webhook: gescheiterte Verarbeitung erreicht Sentry (03.10.2026)', () => {
+  it('Kaufmail scheitert → 500 und Alarm „verarbeitung-gescheitert“ — nicht nur eine Logzeile', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('template not published', { status: 400 })));
+
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-V-1', product_id: '696399', email: 'neu@example.de' }));
+
+    expect(res.status).toBe(500);
+    expect(db.tables.digistore_orders[0]).toMatchObject({ processing_status: 'failed' });
+    expect(db.sentry).toHaveLength(1);
+    expect(db.sentry[0].opts.tags).toMatchObject({ grund: 'verarbeitung-gescheitert', ds_product_id: '696399', ds_event: 'payment' });
+    expect(db.sentry[0].opts.extra.fehler).toMatch(/loops email failed \(400\)/);
+  });
+
+  it('Credit-Produkt: gescheiterte Kaufmail alarmiert ebenfalls', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('nope', { status: 500 })));
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-V-2', product_id: '696394', email: 'neu@example.de' }));
+    expect(res.status).toBe(500);
+    expect(db.sentry.map((s) => s.opts.tags.grund)).toEqual(['verarbeitung-gescheitert']);
+  });
+
+  it('die Kaeuferadresse steht nicht im Alarm (Rueckgabe fuer unbekanntes Konto)', async () => {
+    const res = await POST(delivery({ event: 'refund', order_id: 'ORD-V-3', product_id: '696399', email: 'fremd@example.de' }));
+    expect(res.status).toBe(500);
+    expect(db.sentry).toHaveLength(1);
+    expect(JSON.stringify(db.sentry[0])).not.toContain('fremd@example.de');
+    expect(db.sentry[0].opts.extra.fehler).toBe('refund for unknown user: <email>');
+  });
+
+  it('erfolgreicher Kauf meldet nichts', async () => {
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-V-4', product_id: '696399', email: 'neu@example.de' }));
+    expect(res.status).toBe(200);
+    expect(db.sentry).toHaveLength(0);
   });
 });
