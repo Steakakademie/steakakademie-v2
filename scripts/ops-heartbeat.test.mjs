@@ -8,7 +8,7 @@
  */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { execFileSync } from 'node:child_process'
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs'
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { letzteGitAenderung, juengstesArtefakt, bewerte, urteil } from './ops-heartbeat.mjs'
@@ -209,13 +209,54 @@ describe('data/ops-heartbeat.json', () => {
 
   it('Agenten-Bereiche zaehlen nur neu hinzugefuegte Dateien', () => {
     expect(nach('Rezept-Produktion')).toMatchObject({ typ: 'git', pfad: 'content/rezepte', nurNeueDateien: true })
-    expect(nach('Glossar')).toMatchObject({ typ: 'git', pfad: 'content/glossar', nurNeueDateien: true })
-    // Eine einzelne Datei, die fortgeschrieben wird, kann nicht „neu hinzugefuegt" sein.
-    expect(nach('Ideen-Radar').nurNeueDateien).toBeUndefined()
+    // Gilt fuer jeden Eintrag, der einen ORDNER beobachtet: dort ist „irgendein
+    // Commit" nie eine Lieferung.
+    for (const e of eintraege.filter((x) => x.typ === 'git' && !/\.[a-z]+$/.test(x.pfad))) {
+      expect(e.nurNeueDateien, e.name).toBe(true)
+    }
+  })
+
+  // Am 03.10.2026 sind Automationen entfernt worden. Ein Eintrag, der auf etwas
+  // zeigt, das es nicht mehr gibt, meldet entweder dauerhaft Stillstand oder —
+  // schlimmer — bleibt gruen, weil irgendein Commit den Pfad beruehrt.
+  it('kein Eintrag zeigt auf einen Workflow oder Pfad, den es nicht mehr gibt', () => {
+    const da = (rel) => existsSync(new URL(`../${rel}`, import.meta.url))
+    for (const e of eintraege) {
+      if (e.typ === 'workflow') expect(da(`.github/workflows/${e.datei}`), `${e.name}: ${e.datei}`).toBe(true)
+      if (e.typ === 'git') expect(da(e.pfad), `${e.name}: ${e.pfad}`).toBe(true)
+    }
+  })
+
+  it('entfernte Automationen haben keinen Eintrag mehr', () => {
+    expect(nach('Ideen-Radar')).toBeUndefined()
+  })
+
+  // Der Glossar-Agent ist seit 03.10.2026 pausiert (Vorrat leer). Zeitplan und
+  // Waechter-Eintrag gehoeren zusammen: Ein Eintrag ohne Zeitplan meldet ab dem
+  // 14. Tag jeden Tag Stillstand, den niemand beheben soll — ein Zeitplan ohne
+  // Eintrag laeuft wieder unbemerkt leer (so war es vom 19.09. bis 03.10.2026).
+  it('Glossar-Agent: Zeitplan und Waechter-Eintrag gibt es nur gemeinsam', () => {
+    const workflow = readFileSync(new URL('../.github/workflows/glossary-grow.yml', import.meta.url), 'utf-8')
+    const ohneKommentare = workflow.split('\n').filter((z) => !/^\s*#/.test(z)).join('\n')
+    const hatZeitplan = /^\s*schedule:/m.test(ohneKommentare)
+    const hatEintrag = eintraege.some((e) => e.pfad === 'content/glossar' || e.datei === 'glossary-grow.yml')
+    expect(hatEintrag).toBe(hatZeitplan)
+    expect(ohneKommentare).toContain('workflow_dispatch')
   })
 
   it('Hofladen-Import: juengster letzter_import, 9 Tage', () => {
     expect(nach('Hofladen-Import')).toMatchObject({ typ: 'supabase', tabelle: 'hoefe', spalte: 'letzter_import', maxTage: 9 })
+  })
+
+  // Neue Automation → Eintrag (CLAUDE.md §2 Regel 10). Die Proben melden ihre
+  // Ergebnisse selbst; der Waechter sieht, ob sie ueberhaupt noch starten.
+  it('Funktionsproben: Workflow-Eintrag, 2 Tage — und der Workflow laeuft taeglich, nicht zur vollen Stunde', () => {
+    expect(nach('Funktionsproben')).toMatchObject({ typ: 'workflow', datei: 'funktionsproben.yml', maxTage: 2 })
+    const workflow = readFileSync(new URL('../.github/workflows/funktionsproben.yml', import.meta.url), 'utf-8')
+    const cron = /-\s*cron:\s*'(\d+) (\d+) \* \* \*'/.exec(workflow)
+    expect(cron, 'taeglicher Zeitplan').not.toBeNull()
+    expect(Number(cron[1]), 'Minute').not.toBe(0)
+    expect(workflow).toContain('workflow_dispatch')
   })
 
   it('Social-Entwürfe: Artefakt social-drafts, 9 Tage — derselbe Name wie im Workflow', () => {

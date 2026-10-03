@@ -4,8 +4,9 @@ name: Build-Guard
 #   • Contentlayer-Probleme / stumme Doc-Drops (vgl. KAN-26, CRLF-Rezepte)
 #   • Markdown-Tabellen ohne remark-gfm → Pipe-Text (vgl. KAN-28)
 # Läuft schnell (kein voller Next-Build). Bei Defekt: rot + automatisches KAN-Ticket.
-# Hinweis: blockiert NICHT den Vercel/Netlify-Deploy (der läuft parallel) — es ist
-# ein Frühwarn-Signal + Ticket. Harte Sperre bräuchte Branch-Protection (Admin).
+# Hinweis: blockiert NICHT den Vercel-Deploy (der läuft parallel). Den Merge nach
+# main sperrt der Job dagegen sehr wohl: „Stille Content-Defekte prüfen" ist seit
+# 04.09.2026 Pflicht-Check der Branch Protection (CLAUDE.md Abschnitt A).
 
 on:
   push:

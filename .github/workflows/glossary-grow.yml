@@ -1,12 +1,18 @@
 name: Glossar wachsen lassen
 
-# Lässt das Glossar im Hintergrund weiterwachsen: scannt den Content auf neue
-# BBQ-Begriffe, generiert via Claude standardisierte Definitionen, committet sie
-# persistent (der Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
+# Scannt den Content auf neue BBQ-Begriffe, generiert via Claude standardisierte
+# Definitionen und legt sie als PR vor (der Build-Lauf erzeugt sie sonst nur
+# ephemer pro Deploy).
+#
+# PAUSIERT seit 03.10.2026 — der tägliche Zeitplan (`schedule`) ist entfernt,
+# der Handstart bleibt. Grund: Vorrat leer; pausiert bis zur Entscheidung über
+# die Glossar-Konsolidierung, docs/glossar-konsolidierung-kandidaten.md.
+# Der Agent lief seit dem 19.09.2026 täglich grün, ohne einen Begriff zu
+# liefern. Der zugehörige Eintrag in data/ops-heartbeat.json ist im selben Zug
+# entfernt — wer den Zeitplan wieder einschaltet, trägt ihn dort wieder ein
+# (CLAUDE.md §2 Regel 10), sonst kann der Agent erneut unbemerkt leer laufen.
 on:
-  schedule:
-    - cron: '0 3 * * *'   # Täglich 03:00 UTC (~04:00/05:00 Berlin)
-  workflow_dispatch:        # + manuell auslösbar
+  workflow_dispatch:        # nur noch manuell auslösbar
 
 jobs:
   grow-glossary:
@@ -54,7 +60,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_SUMMARY: '🔴 Glossar-Agent fehlgeschlagen'
-          ALERT_DESCRIPTION: 'Der tägliche Glossar-Agent (glossary-grow) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_DESCRIPTION: 'Der Glossar-Agent (glossary-grow, Handstart) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Bug'
           ALERT_DEDUP_LABEL: 'ops-glossary-failed'
