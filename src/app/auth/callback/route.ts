@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { sicheresZielUrl } from '@/lib/auth/sicheres-ziel';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code        = searchParams.get('code');
   const tokenHash   = searchParams.get('token_hash');
   const type        = searchParams.get('type');
-  const redirectTo  = searchParams.get('next') ?? '/diplome/profil';
+  // 03.10.2026: `next` kommt aus der URL und ist damit fremdbestimmt. Bis dahin
+  // stand hier `${origin}${next}` — `next=@evil.example` fuehrte nach erfolgreicher
+  // Anmeldung auf einen fremden Host. Nur interne Pfade, sonst Standardziel;
+  // weitergeleitet wird mit dem URL-Objekt, nicht per String-Verkettung.
+  const ziel        = sicheresZielUrl(searchParams.get('next'), origin);
   // Supabase kann den Fehler direkt mitschicken (z.B. abgelaufener Link, Redirect-URL nicht erlaubt)
   const errParam    = searchParams.get('error_description') ?? searchParams.get('error');
 
@@ -20,14 +25,14 @@ export async function GET(request: Request) {
   // 1) Magic-Link / E-Mail-OTP (token_hash → verifyOtp; funktioniert geräteübergreifend, kein Code-Verifier nötig)
   if (tokenHash && type) {
     const { error } = await supabase.auth.verifyOtp({ type: type as any, token_hash: tokenHash });
-    if (!error) return NextResponse.redirect(`${origin}${redirectTo}`);
+    if (!error) return NextResponse.redirect(ziel);
     return fail(error.message);
   }
 
   // 2) PKCE-Code (OAuth / signInWithOtp vom Login-Formular — braucht den code_verifier-Cookie)
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(`${origin}${redirectTo}`);
+    if (!error) return NextResponse.redirect(ziel);
     return fail(error.message);
   }
 
