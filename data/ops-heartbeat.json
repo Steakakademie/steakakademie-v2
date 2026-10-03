@@ -31,14 +31,6 @@
     "hinweis": "Der Workflow selbst hat nicht mehr gestartet. GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft nur ein manueller Start oder ein Commit."
   },
   {
-    "name": "Glossar",
-    "typ": "git",
-    "pfad": "content/glossar",
-    "nurNeueDateien": true,
-    "maxTage": 14,
-    "hinweis": "Gezählt wird nur ein NEU HINZUGEFÜGTER Glossar-Eintrag — ein Hand-Fix an einem bestehenden stellt die Uhr nicht zurück (seit 03.10.2026; vorher verdeckte der Fix vom 23.09. den Stillstand seit 19.09.). glossary-grow liest NUR artikel, cuts, methoden, vergleich, persoenlichkeiten — nicht die Rezepte. Steht hier Rot, ist in aller Regel der Vorrat leer: SEED_TERMS in scripts/glossary-agent.mjs ist abgearbeitet und die Extraktion findet nichts Neues (steht mit Zahl im Job-Summary des letzten glossary-grow-Laufs). Entscheidung Uwe: Seed-Liste von Hand erweitern — oder den täglichen Lauf und diesen Eintrag stilllegen, weil das Glossar laut docs/glossar-konsolidierung-kandidaten.md ohnehin zusammengelegt statt erweitert wird."
-  },
-  {
     "name": "Content-Entwürfe (Scout + Saison)",
     "typ": "supabase",
     "tabelle": "content_drafts",
@@ -96,6 +88,6 @@
     "tabelle": "knowledge_embeddings",
     "spalte": "indexed_at",
     "maxTage": 7,
-    "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann melden Rezept und Glossar gleichzeitig. Manuell: npm run index:knowledge."
+    "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann meldet die Rezept-Produktion gleichzeitig. Manuell: npm run index:knowledge."
   }
 ]

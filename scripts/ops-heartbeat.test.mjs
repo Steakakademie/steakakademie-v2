@@ -209,7 +209,11 @@ describe('data/ops-heartbeat.json', () => {
 
   it('Agenten-Bereiche zaehlen nur neu hinzugefuegte Dateien', () => {
     expect(nach('Rezept-Produktion')).toMatchObject({ typ: 'git', pfad: 'content/rezepte', nurNeueDateien: true })
-    expect(nach('Glossar')).toMatchObject({ typ: 'git', pfad: 'content/glossar', nurNeueDateien: true })
+    // Gilt fuer jeden Eintrag, der einen ORDNER beobachtet: dort ist „irgendein
+    // Commit" nie eine Lieferung.
+    for (const e of eintraege.filter((x) => x.typ === 'git' && !/\.[a-z]+$/.test(x.pfad))) {
+      expect(e.nurNeueDateien, e.name).toBe(true)
+    }
   })
 
   // Am 03.10.2026 sind Automationen entfernt worden. Ein Eintrag, der auf etwas
@@ -225,6 +229,19 @@ describe('data/ops-heartbeat.json', () => {
 
   it('entfernte Automationen haben keinen Eintrag mehr', () => {
     expect(nach('Ideen-Radar')).toBeUndefined()
+  })
+
+  // Der Glossar-Agent ist seit 03.10.2026 pausiert (Vorrat leer). Zeitplan und
+  // Waechter-Eintrag gehoeren zusammen: Ein Eintrag ohne Zeitplan meldet ab dem
+  // 14. Tag jeden Tag Stillstand, den niemand beheben soll — ein Zeitplan ohne
+  // Eintrag laeuft wieder unbemerkt leer (so war es vom 19.09. bis 03.10.2026).
+  it('Glossar-Agent: Zeitplan und Waechter-Eintrag gibt es nur gemeinsam', () => {
+    const workflow = readFileSync(new URL('../.github/workflows/glossary-grow.yml', import.meta.url), 'utf-8')
+    const ohneKommentare = workflow.split('\n').filter((z) => !/^\s*#/.test(z)).join('\n')
+    const hatZeitplan = /^\s*schedule:/m.test(ohneKommentare)
+    const hatEintrag = eintraege.some((e) => e.pfad === 'content/glossar' || e.datei === 'glossary-grow.yml')
+    expect(hatEintrag).toBe(hatZeitplan)
+    expect(ohneKommentare).toContain('workflow_dispatch')
   })
 
   it('Hofladen-Import: juengster letzter_import, 9 Tage', () => {
