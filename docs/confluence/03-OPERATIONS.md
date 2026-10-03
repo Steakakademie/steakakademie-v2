@@ -4,7 +4,7 @@
 
 ## Stack
 
-- **Frontend:** Next.js 14 App Router, TailwindCSS, Framer Motion, Contentlayer2, TypeScript.
+- **Frontend:** Next.js 16 App Router, TailwindCSS, Framer Motion, Contentlayer2, TypeScript.
 - **Hosting/Deploy:** **Vercel** (Auto-Deploy via GitHub `main`) — kanonisch. Domain `steakakademie.de` (GoDaddy), DNS via Cloudflare (NS `rohin`/`zita.ns.cloudflare.com`), A-Records zeigen auf Vercel; `www` läuft über Cloudflare proxied auf Vercel und wird per `vercel.json` 308 auf die Apex-Domain umgeleitet.
   - Korrigiert 13.08.2026: Hier stand bis dahin „Netlify (Auto-Deploy) + Vercel (verknüpft)". Das war seit der Umstellung falsch herum — belegt durch `server: Vercel` + `x-vercel-id` in der Live-Antwort. Vgl. `compliance/website-rechtscheck.yaml` §3, das Vercel bereits am 07.06.2026 als Host korrigiert hatte.
   - **Netlify: abgebaut am 13.09.2026.** Site `steakakademie-de` baute aus demselben Repo mit. Die frühere Notiz „Builds gestoppt" (13.08.2026) war überholt — Netlify hat weitergebaut, bis das Team am 13.09.2026 das Build-Minuten-Kontingent des Free-Plans aufgebraucht hatte. `netlify.toml` liegt **nicht** mehr im Repo (Stand 13.09.2026 geprüft: keine Netlify-Datei, keine Netlify-Abhängigkeit, kein Netlify-Schritt in den Workflows). Achtung, weiterhin offen bis zur Löschung im Dashboard: Die Kopie `steakakademie-de.netlify.app` war am 13.09.2026 online und lieferte `meta-robots: index, follow` — eine crawlbare Zweitfassung; gegen Duplicate Content schützt allein das Canonical-Tag auf die Hauptdomain. Restschritte (nur im Netlify-Dashboard bzw. GitHub möglich): Site löschen oder Repo-Verbindung trennen, danach die Netlify-GitHub-App entfernen — erst dann fallen die Netlify-Checks an PRs weg.
@@ -60,11 +60,14 @@ Umgesetzt am 09.09.: 301 von `/bbq-grundkurs` und `/danke/bbq-grundkurs` auf `/d
 (`next.config.mjs`), Seiten und Dankeseite entfernt, Konzeptpapier als eingestellt
 gekennzeichnet, Eintrag im Link-Gate zurückgebaut.
 
-**⚠️ NOCH OFFEN — und das ist der gefährliche Teil:** Digistore 696399 ist weiterhin **aktiv**,
-und die `courses`-Zeile `bbq-grundkurs` samt Mapping steht noch. Das ist Absicht: Nimmt man das
+**Stand 03.10.2026 (per Digistore-API gesetzt und zurückgelesen):** 696399 hat einen
+**Verkaufsstopp** (`stop_sales_at` 03.10.2026) — das Produkt ist nicht mehr kaufbar. Die
+`courses`-Zeile `bbq-grundkurs` samt Mapping steht noch, und das war Absicht: Nimmt man das
 Mapping weg, solange das Produkt kaufbar ist, zahlt jemand und landet nirgends — genau der
-Zustand, den wir bei 695900 beklagen. Reihenfolge deshalb zwingend: **erst in Digistore
-abschalten, dann Mapping und Kurszeile aufräumen.** Auf der Kurszeile liegt außerdem eine
+Zustand, den wir bei 695900 beklagen. Die Reihenfolge **erst in Digistore abschalten, dann
+Mapping und Kurszeile aufräumen** ist damit zur Hälfte erfüllt; das Aufräumen steht aus.
+Am selben Tag: VIP 734925 und die Beratungen 734926/734927 stehen auf EUR (waren USD),
+ihr Verkaufsstopp vom 19.09.2026 gilt weiter. Auf der Kurszeile liegt außerdem eine
 Buchung (vermutlich Testkauf aus der Einrichtung) — vor dem Löschen prüfen.
 
 Was mit dem Kurs entfällt, waren zwei echte Argumente, die nicht mit ihm verschwinden: der
@@ -172,9 +175,14 @@ klickbar und im HTML auffindbar.
 
 KAN-9 (Prod-Migrations) · KAN-10 (Danke-URLs) · KAN-11 (Webhook-URLs) · KAN-12 (Env-Vars — **in Vercel**, nicht Netlify; der Jira-Titel nennt ggf. noch Netlify) · KAN-13 (Testkauf-Verifikation) · KAN-15 (ADMIN_PASSWORD rotieren).
 
-## GitHub Actions (Repo `vecmahr/steakakademie-v2`)
+## GitHub Actions (Repo `Steakakademie/steakakademie-v2`)
 
-`auto-fix.yml` (verwaist) · `check-affiliate-links.yml` (Mo 08:00) · `glossary-grow.yml` (So 03:00) · `recipe-grow.yml` (So 03:30). Scripts: `glossary-agent.mjs`, `recipe-agent.mjs`, `recipe-images.mjs`, `check-affiliate-links.mjs`, `cron-scout.mjs`, `fetch-pa-api-images.mjs`.
+**Stand 03.10.2026: 24 Workflows.** Die vollständige Liste ist `.github/workflows/`; welche davon liefern müssen und bis wann, steht in `data/ops-heartbeat.json` (`docs/ops-heartbeat.md`). Die neun Workflows mit Zeitplan (UTC): `recipe-grow.yml` (täglich 03:30) · `hoefe-import.yml` (Mo 03:30) · `social-grow.yml` und `content-grow.yml` (So 04:00) · `saison-grow.yml` (alle 5 Tage 04:30) · `funktionsproben.yml` (täglich 05:23) · `index-knowledge.yml` (täglich 05:30) · `check-affiliate-links.yml` (Mo 08:00) · `ops-heartbeat.yml` (täglich 09:00).
+
+- **Pausiert seit 03.10.2026:** `glossary-grow.yml` — kein Zeitplan mehr, nur Handstart (Vorrat leer; wartet auf die Entscheidung über die Glossar-Konsolidierung).
+- **Entfernt am 03.10.2026:** `auto-fix.yml` (0 Läufe), `newsletter-weekly.yml` samt `scripts/newsletter-weekly.mjs` (nie eine Ausgabe versendet), Ideen-Radar (`ideen-radar.yml`, `scripts/ideen-radar.mjs`, `data/ideen-backlog.json`, `data/rezept-quellen.yaml` — `docs/ideen-radar.md`).
+
+Scripts: `glossary-agent.mjs`, `recipe-agent.mjs`, `recipe-images.mjs`, `check-affiliate-links.mjs`, `cron-scout.mjs`.
 
 ## Rechtssicherheit-Gate (HART)
 

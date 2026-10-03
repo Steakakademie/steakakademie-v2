@@ -64,6 +64,16 @@ module.exports = {
     '/nutzungsbedingungen',            // robots: { index: false }
     '/eigenregie/diagnose',            // robots: { index: false }
     '/fleischpass',                    // robots: { index: false } — in Vorbereitung (02.10.2026)
+    // 03.10.2026: Bestaetigungsseite des Double-Opt-in — noindex, ohne den Klick
+    // aus der Mail ohne Sinn. Sie ist statisch und stand deshalb im Manifest.
+    '/newsletter/bestaetigt',
+    // Ebenfalls noindex. Heute rendern diese Seiten dynamisch und stehen deshalb
+    // nicht im Manifest — der Ausschluss haelt sie auch dann draussen, wenn eine
+    // davon wieder statisch wird. Waechter: src/__tests__/sitemap-noindex.test.ts
+    '/suche',
+    '/gutschein/*',                    // Einloesen + einzelner Gutschein; /gutschein selbst bleibt drin
+    '/eigenregie/lernen',
+    '/eigenregie/lernen/*',
     '/apple-icon.png', // Bild-Route (ImageResponse), kein Dokument, kein Canonical
     // tuwasduwillst.de ist eine eigene Marke (Host-Weiche in next.config.mjs):
     // diese Seiten gehoeren nicht in die Steakakademie-Sitemap.

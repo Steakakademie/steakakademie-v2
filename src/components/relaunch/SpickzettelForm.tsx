@@ -1,8 +1,10 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { NEWSLETTER_CONSENT_TEXT, NEWSLETTER_CONSENT_VERSION } from '@/lib/newsletter-consent';
+import { NEWSLETTER_CONSENT_TEXT } from '@/lib/newsletter-consent';
+import { anmeldungKoerper } from '@/lib/newsletter-anmeldung';
 import { trackEvent } from '@/components/analytics/PlausibleScript';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 
 /**
  * Spickzettel-Anmeldung im Fußbereich — „genau einmal auf der ganzen Website".
@@ -15,6 +17,10 @@ import { trackEvent } from '@/components/analytics/PlausibleScript';
  *    (Prioritäts-Logik: Recht → Fakten → Marke).
  *  - Honeypot-Feld „website".
  *  - consentVersion im Request.
+ *  - Turnstile-Token (seit 03.10.2026): /api/newsletter verlangt eines, sobald
+ *    TURNSTILE_SECRET_KEY gesetzt ist. Ohne Token endete jede Anmeldung über
+ *    dieses Formular mit 403. Der Body kommt aus anmeldungKoerper() — dort
+ *    steht der Vertrag mit der Route, samt Test.
  *
  * source „footer-relaunch": landet in Loops in der Standardgruppe, ist aber
  * getrennt auszählbar — so lässt sich messen, was der Relaunch-Fuß bringt.
@@ -25,12 +31,16 @@ export default function SpickzettelForm() {
   const [email, setEmail] = useState('');
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const emailId = useId();
   const consentId = useId();
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  const canSubmit = emailValid && consent && status !== 'loading';
+  // Mit Site-Key wartet der Knopf auf das Token; ohne Site-Key gibt es kein
+  // Widget und der Server prüft nicht (src/lib/api/turnstile.ts).
+  const wartetAufCaptcha = Boolean(TURNSTILE_SITE_KEY) && !turnstileToken;
+  const canSubmit = emailValid && consent && status !== 'loading' && !wartetAufCaptcha;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -40,24 +50,20 @@ export default function SpickzettelForm() {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email.trim(),
-          source: 'footer-relaunch',
-          website,
-          consentVersion: NEWSLETTER_CONSENT_VERSION,
-        }),
+        body: JSON.stringify(anmeldungKoerper({ email, source: 'footer-relaunch', website, turnstileToken })),
       });
       if (res.ok) {
         trackEvent('Newsletter-Anmeldung', { source: 'footer-relaunch' });
         setStatus('success');
-      } else if (res.status === 429) {
-        setStatus('ratelimit');
-      } else {
-        setStatus('error');
+        return;
       }
+      setStatus(res.status === 429 ? 'ratelimit' : 'error');
     } catch {
       setStatus('error');
     }
+    // Ein Token gilt genau einmal — für den nächsten Versuch ein neues holen.
+    setTurnstileToken('');
+    turnstileReset();
   }
 
   if (status === 'success') {
@@ -116,6 +122,8 @@ export default function SpickzettelForm() {
         />
         <span>{NEWSLETTER_CONSENT_TEXT}</span>
       </label>
+      {/* Turnstile — unsichtbar, bis Cloudflare eine Interaktion braucht; rendert nur mit Site-Key */}
+      <Turnstile action="newsletter" onToken={setTurnstileToken} />
       <p className="sk-footer__note">
         Double-Opt-in. Kein Verkauf deiner Daten. Details in der{' '}
         <a href="/datenschutz" style={{ color: 'inherit', textDecoration: 'underline' }}>Datenschutzerklärung</a>.

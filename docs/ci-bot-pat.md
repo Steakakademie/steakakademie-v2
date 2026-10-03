@@ -1,6 +1,6 @@
 # BOT_PAT — warum die Agenten-Workflows ein eigenes Token brauchen
 
-**Abteilung 1 (Systems & Ops).** Stand 04.09.2026.
+**Abteilung 1 (Systems & Ops).** Stand 04.09.2026, Workflow-Bestand nachgezogen am 03.10.2026.
 
 ## Der Befund
 
@@ -19,7 +19,8 @@ unmergefähig. Das betraf auch das Cut-Foto-Gate vom Juli.
 
 Alle sechs Workflows nutzen jetzt `.github/actions/pr-statt-push` (eine Composite Action,
 ein Ort für die Logik) und bevorzugen das Secret **`BOT_PAT`**. Mit PAT erstellt = Checks
-laufen = PR mergefähig.
+laufen = PR mergefähig. *(Stand 03.10.2026: Es sind noch fünf — `ideen-radar` ist entfernt,
+siehe Tabelle unten.)*
 
 **Ohne `BOT_PAT` funktioniert es nicht verlässlich — `BOT_PAT` ist der Weg, nicht die
 Kür.** Der Rückfall auf `github.token` hat zwei Hürden hintereinander:
@@ -38,8 +39,8 @@ Kür.** Der Rückfall auf `github.token` hat zwei Hürden hintereinander:
 > überflüssig: Ohne PAT bleibt Hürde 2 bestehen.
 
 **Korrektur 04.09.2026 — der Fallback stand hier falsch beschrieben.** Es hieß, ohne PAT
-entstehe der PR trotzdem, nur mit Warnung. Der erste echte Testlauf (`ideen-radar`,
-Run `33927566618`) widerlegte das:
+entstehe der PR trotzdem, nur mit Warnung. Der erste echte Testlauf (`ideen-radar` —
+der Workflow ist am 03.10.2026 entfernt worden —, Run `33927566618`) widerlegte das:
 
     pull request create failed: GraphQL: GitHub Actions is not permitted to
     create or approve pull requests (createPullRequest)
@@ -65,8 +66,8 @@ Damit gibt es drei Zustände statt zwei:
 
 | Workflow | Inhalt | Auto-Merge nach grünen Checks? |
 |---|---|---|
-| `glossary-grow` | Glossar-Text | ✅ ja (kein Review nötig) |
-| `ideen-radar` | Titel/Link/Datum-Backlog | ✅ ja |
+| `glossary-grow` | Glossar-Text | ✅ ja (kein Review nötig) — **pausiert seit 03.10.2026:** kein Zeitplan mehr, nur Handstart |
+| ~~`ideen-radar`~~ | ~~Titel/Link/Datum-Backlog~~ | **entfernt am 03.10.2026** (`docs/ideen-radar.md`) |
 | `train-pork-lora` | eine JSON mit LoRA-URL | ✅ ja |
 | `recipe-grow` | Rezept-Text **+ FLUX-Bild** | ❌ Review (Regel 8c: Bild prüfen) |
 | `regenerate-recipe-images` | FLUX-Bilder | ❌ Review |
@@ -106,7 +107,9 @@ Testläufe gegen Feature-Branches sind damit gefahrlos.
 5. Repo → Settings → General → Pull Requests → ☑ **Allow auto-merge**.
 
 Danach einmal `glossary-grow` per `workflow_dispatch` starten und im Summary prüfen:
-„PR geöffnet", keine PAT-Warnung, Checks laufen an.
+„PR geöffnet", keine PAT-Warnung, Checks laufen an. (Der Handstart geht weiterhin — seit
+03.10.2026 ist nur der Zeitplan des Glossar-Agenten pausiert. Solange sein Vorrat leer
+ist, liefert ein Lauf allerdings keinen Begriff und damit auch keinen PR.)
 
 ## Nebenbei gehärtet: Inputs nie direkt in Shell-Zeilen
 

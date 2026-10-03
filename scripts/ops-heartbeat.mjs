@@ -31,6 +31,11 @@
  * Zustand: eigene Zeile, eigene Ueberschrift, und der Lauf endet mit exit 1. Ein
  * Waechter, der nicht hinsehen kann, darf nicht „alles in Ordnung" melden.
  *
+ * ZUSAGEN-BELEGE (03.10.2026, Waechter Schritt 1): Nach den Bereichen aus
+ * data/ops-heartbeat.json laufen die Belege aus data/zusagen.yaml mit — fuer jede
+ * Zusage auf der Seite die Frage, ob das, wovon sie abhaengt, noch steht
+ * (scripts/zusagen-belege.mjs, docs/waechter.md). Gleiches Urteil, gleicher Meldeweg.
+ *
  * Aufruf:
  *   node scripts/ops-heartbeat.mjs
  *   node scripts/ops-heartbeat.mjs --nur-bericht   # nie exit 1, nur Ausgabe
@@ -317,6 +322,31 @@ async function pruefe(eintrag) {
   }
 }
 
+/**
+ * Zusagen-Belege (Wächter Schritt 1, 03.10.2026) als Heartbeat-Zeilen.
+ *
+ * Bewusst per `import()` und im try: Die Belegprüfung liest YAML (js-yaml), der
+ * Heartbeat selbst kommt mit Node-Bordmitteln aus. Fehlt die Abhängigkeit — etwa
+ * weil `npm ci` im Workflow gescheitert ist —, prüft der Heartbeat seine eigenen
+ * Bereiche trotzdem und meldet die Belege als NICHT GEPRÜFT. Das ist rot, aber es
+ * reißt den Wächter nicht mit.
+ */
+export async function zusagenBelege(lade = () => import('./zusagen-belege.mjs')) {
+  try {
+    const { fuerHeartbeat } = await lade()
+    return await fuerHeartbeat()
+  } catch (err) {
+    return {
+      markdown: '',
+      zeilen: [{
+        name: 'Zusagen-Belege',
+        status: 'uebersprungen',
+        text: `Belegprüfung nicht ladbar (${String(err.message).split('\n')[0]}) — Schritt „npm ci" im Workflow prüfen`,
+      }],
+    }
+  }
+}
+
 async function main() {
   if (!existsSync(CONFIG)) {
     console.error(c.red(`  data/ops-heartbeat.json fehlt.`))
@@ -329,13 +359,18 @@ async function main() {
   const ergebnisse = []
   for (const e of eintraege) ergebnisse.push(await pruefe(e))
 
+  // Wächter Schritt 1: die Belege aus data/zusagen.yaml laufen im selben Urteil mit —
+  // ein Summary, ein Issue, ein Ticket (docs/waechter.md).
+  const zusagen = await zusagenBelege()
+  ergebnisse.push(...zusagen.zeilen)
+
   const symbol = { ok: c.green('OK   '), ueberfaellig: c.red('STILL'), fehler: c.red('FEHL '), uebersprungen: c.yellow('BLIND') }
   for (const r of ergebnisse) console.log(`  ${symbol[r.status]} ${r.name.padEnd(34)} ${c.dim(r.text)}`)
 
   const u = urteil(ergebnisse)
 
   // Job-Summary — die Tabelle, die man im Actions-Tab sofort sieht.
-  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, u.markdown)
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, u.markdown + zusagen.markdown)
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, u.ausgabe)
 
   if (u.zustand === 'lebt') {

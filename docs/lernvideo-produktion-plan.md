@@ -63,7 +63,8 @@ auf `C:\Dev` (Ordnerfreigaben gelten pro Sitzung), und die Rechner-Brücke hat k
 und bricht nach 45 s ab.
 
 **Sondern über GitHub Actions** — exakt das Muster, das im Repo längst läuft
-(`glossary-grow` 03:00 UTC, `recipe-grow` 03:30, `social-grow` sonntags 04:00):
+(`recipe-grow` täglich 03:30 UTC, `social-grow` sonntags 04:00; Stand 03.10.2026 —
+`glossary-grow` ist seitdem pausiert und läuft nur noch per Handstart):
 
 ```
 .github/workflows/lernvideo-render.yml
@@ -79,7 +80,9 @@ und bricht nach 45 s ab.
 
 **Der Gate bleibt:** Die Nacht produziert einen *fertigen Entwurf*, kein
 veröffentlichtes Video. Uwe sieht morgens das Artefakt, gibt frei oder verwirft —
-genau wie beim Newsletter-Workflow.
+genau wie bei den Social-Entwürfen (`social-grow` lädt sie als Artefakt hoch, nichts
+wird automatisch gepostet). Der hier früher genannte Newsletter-Workflow ist am
+03.10.2026 entfernt worden.
 
 ---
 

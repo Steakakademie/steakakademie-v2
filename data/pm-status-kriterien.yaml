@@ -368,6 +368,11 @@ bereiche:
       # solches Feld im Contentlayer-Schema. Entweder die Workflows oder die
       # Regel muessen sich aendern; dieses Kriterium haelt den Widerspruch
       # sichtbar, bis das entschieden ist.
+      # Stand 03.10.2026: Der Absatz oben beschreibt die Messung vom 13.08.2026.
+      # Seit 04.09.2026 oeffnen die Bot-Workflows Pull Requests statt direkt
+      # zu pushen (docs/ci-bot-pat.md). glossary-grow.yml ist seit 03.10.2026
+      # pausiert (kein Zeitplan, nur Handstart). Entfernt am 03.10.2026:
+      # auto-fix.yml, newsletter-weekly.yml, ideen-radar.yml.
       - id: generatoren-pushen-nicht-direkt
         frage: Kein Workflow pusht generierte Artefakte direkt, ohne Pull Request (Regel 4).
         pruefung: generatoren-pushen-nicht-direkt

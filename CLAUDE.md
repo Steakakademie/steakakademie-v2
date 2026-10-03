@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 16.06.2026.
+> Letzte Pflege: 03.10.2026.
 
 ---
 
@@ -131,6 +131,17 @@
   Regel 5: „Werkzeuge werden nie blockiert, Builds nie durch Inhalt" (NICHT §2
   Regel 5 dieser Datei, die etwas anderes regelt). Vision-Check der Hero-Bilder
   (`check-bild-motiv.mjs`) laeuft im PR nur als Bericht.
+- **Zusagen-Gate seit 03.10.2026** (`scripts/check-zusagen.mjs`, Register
+  `data/zusagen.yaml`, Doku `docs/waechter.md`): haengt in `npm run check` und blockiert
+  ueber `P0-Gates pruefen`. Verspricht ein Satz im Seitentext einen Rhythmus, einen
+  Versand, einen Test, eine getippte Bestandszahl oder eine Garantie, braucht er einen
+  Register-Eintrag mit Beleg — oder er wird umformuliert. Ist der Satz gar keine Zusage
+  (Kochanweisung, Herstellerangabe, Verneinung), kommt er mit Grund unter `keine_zusage`
+  ins Register. Altbestand steht in `data/zusagen-baseline.json` (Ratchet): **beheben,
+  nie von Hand eintragen**; danach `npm run check:zusagen:baseline`. Wer einen Satz
+  aendert, der im Register steht, zieht `wo.muster` nach und prueft, ob der Beleg die
+  neue Fassung noch deckt. Bewusst nicht im prebuild. Die Belege selbst laufen taeglich
+  im `ops-heartbeat` mit (§2 Regel 12).
 - **Vercel wurde erst am 05.09.2026 Pflicht — der Punkt darueber hat es seit
   dem 04.09. faelschlich behauptet.** Was die Luecke gekostet hat: PR #52
   (Ideen-Radar, Bot-PR mit Auto-Merge) wurde am 05.09. um 14:38:14 UTC gemergt,
@@ -153,7 +164,8 @@
   gab also keine Garantie, dass Vercel immer meldet.
   `.github/workflows/build-gate.yml` liefert denselben Schutz jetzt repo-eigen:
   contentlayer → tsc
-  → `next build`, rund 2,5-3 min. Vercel baut weiter und meldet weiter, nur
+  → `next build --webpack` (seit 03.10.2026 wie die Produktion, vorher Turbopack),
+  rund 2,5-3 min. Vercel baut weiter und meldet weiter, nur
   blockiert es nicht mehr.
   Belegt statt behauptet (05.09.): mit ausstehendem `Build pruefen` meldete
   GitHub an PR #56 `BLOCKED` und verweigerte den Merge ("the base branch policy
@@ -166,8 +178,8 @@
   Bauzeit ein Host angefragt, den es nicht gibt.
 - **Node hat seit 05.09.2026 genau eine Quelle: `.nvmrc` (Inhalt `24`).** Alle
   setup-node-Stellen lesen sie ueber `node-version-file: .nvmrc` — 26 in 24
-  Workflows am 24.09.2026 nachgezaehlt, am 05.09. waren es 21 in 20
-  (auto-fix.yml nutzt kein setup-node). Neue Workflows ebenso, nie eine Zahl.
+  Workflows am 03.10.2026 nachgezaehlt (Waechter: `scripts/workflows.test.mjs`), am
+  05.09. waren es 21 in 20. Neue Workflows ebenso, nie eine Zahl.
   Und `engines` in package.json
   grenzt sie mit **`>=24 <25`** nach oben ab. Vorher stand die Zahl 21-mal hart
   im Repo — ein Upgrade haette 21 Dateien angefasst und beim ersten vergessenen
@@ -253,7 +265,9 @@
 **Deployment-Status ohne Raten**
 - Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
   `teamId: team_tEPqF2rHcoOrrPEGRD7Q4hl8` — damit liefert die Vercel-MCP
-  `state: READY|ERROR` je Commit. Env-Variablen kann sie **nicht** lesen.
+  `state: READY|ERROR` je Commit. Von den Env-Variablen liefert sie die **Namen** und
+  den Scope (Production/Preview) — am 02. und 03.10.2026 genutzt —, die Werte nie
+  entschluesseln, ausser Uwe verlangt es ausdruecklich.
 
 **Netlify ist abgebaut (13.09.2026) — es gibt genau einen Deploy-Weg: Vercel**
 - Im Repo liegt **keine** Netlify-Konfiguration mehr: kein `netlify.toml`, keine
@@ -261,10 +275,8 @@
   Was bis zum 13.09.2026 noch auf Netlify zeigte, waren ausschliesslich Kommentare
   und Doku-Saetze — sie sind in diesem Zug auf Vercel korrigiert worden. Wer
   „Netlify" im Repo findet, findet damit eine historische Notiz, keine Mechanik.
-  Eine Ausnahme ist offen geblieben: der Kommentar in
-  `.github/workflows/build-guard.yml` („blockiert NICHT den Vercel/Netlify-Deploy")
-  — Workflow-Dateien sind gegen Schreibzugriffe aus der Cowork-Bruecke gesperrt,
-  das aendert Uwe von Hand oder Claude Code lokal.
+  Die letzte Ausnahme — der Kommentar in `.github/workflows/build-guard.yml` — ist seit
+  03.10.2026 korrigiert.
 - Die Netlify-Checks an PRs (Redirect rules, Header rules, Pages changed,
   deploy-preview) stammen aus der **Netlify-GitHub-App plus der Site-Konfiguration
   im Netlify-Dashboard**, nicht aus dem Repo. Sie verschwinden erst, wenn die
@@ -347,7 +359,11 @@
 - `npm run test:e2e` — Playwright (Chromium); lokal gegen den Dev-Server, in CI gegen
   `next start`
 - `npm run check` — alle Inhalts-Gates (Redaktionsvorbehalt, Startseiten-Hierarchie,
-  MDX-Komponenten, Frontmatter, Links, Content-Qualität, Taxonomie, Foodpairing)
+  MDX-Komponenten, Frontmatter, Links, Content-Qualität, Taxonomie, Foodpairing, Zusagen)
+- `npm run pruefstand` — Arbeitsliste: welche veröffentlichten Inhalte noch kein
+  Prüfdatum (`reviewedAt`) tragen; kein Gate
+- `npm run proben` — Funktionsproben (Playwright, `tests/proben/`) gegen `BASE_URL`,
+  Standard ist die Produktion; nur lesend, angemeldete Proben nur mit Testkonto
 - Reihenfolge vor jedem Push steht in Abschnitt A: commit → `npm run build` → push.
 
 **Dateibenennung** (Bestand am 02.10.2026; neue Dateien folgen ihm)
@@ -444,6 +460,12 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Rezept- und Streitfall-Texten steht `<AutorHinweis>` (src/components/). Der Satz
    „basiert auf eigener Praxiserfahrung" gilt nur für `realPerson: true` — bei einer
    Persona wäre er eine Falschaussage.
+   **„Geprüft" nur mit Prüfdatum (Uwe, 03.10.2026):** Eine Prüf-Aussage — sichtbar oder
+   im JSON-LD — gibt es nur an Dokumenten mit `reviewedAt`, dann mit Datum. Ohne Datum
+   steht „fachlich verantwortet von Uwe Yendell". Einzige Quelle:
+   `src/lib/pruefnachweis.ts` (`<AutorHinweis>`, `<Pruefvermerk>`). `reviewed: true` ist
+   nur der Sichtbarkeits-Schalter, kein Prüfnachweis. Pauschale Sätze wie „alle Inhalte
+   werden geprüft" sind tabu — Wächter: `src/__tests__/pruefnachweis.test.ts`.
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
    *Präzisierung Rezepte (Uwe, 13.09.2026):* Bei `content/rezepte/` **ist der PR-Merge
    die Freigabe**. `recipe-grow` läuft mit `auto-merge: false`; ein Rezept kann `main`
@@ -580,6 +602,11 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
      unbemerkt sterben.
    - **Scheitern alle Einzelschritte, ist der Lauf rot.** Ein Skript, das jeden
      Durchgang verliert und trotzdem mit 0 endet, lügt.
+   - **„Nicht geprüft" ist nie grün (03.10.2026).** Kann der Heartbeat einen Punkt nicht
+     prüfen (Secret fehlt, Dienst lehnt ab), ist der Lauf rot — mit Grund.
+   - **Funktionsproben (seit 03.10.2026):** `funktionsproben.yml` benutzt die Seite
+     täglich wie ein Besucher (`tests/proben/`). Anlass: Der Aroma-Matcher antwortete
+     Eingeloggten zwei Wochen lang mit 401, ohne dass ein Lauf rot wurde.
 
 11. **Rezept-Gaumen-Regel (Uwe, 29.09.2026).** Rezepte kommen weiter NUR aus den
    11 BBQ-Hochburgen (Systemprompt §5) — aber ausgewählt nach deutschem Geschmack
@@ -605,6 +632,25 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
      verwirft solche Seeds schon beim Nachlegen und füllt beide Stile getrennt auf.
    - **`pausiert: "<Grund>"` im Seed parkt ein Gericht**, ohne es zu löschen. Pausierte
      Seeds werden nicht erzeugt und zählen nicht zum Vorrat; `--slug` umgeht das.
+
+12. **Keine Zusage ohne Beleg (Wächter-Konzept, von Uwe freigegeben am 03.10.2026).**
+   Anlass: Die Erstinventur fand 150 Zusagen ohne Deckung — „jeden Freitag" ohne eine
+   einzige versendete Ausgabe, sieben Vergleichsseiten mit Gerätetests, die es nie gab.
+   - **Auf der Seite steht nur, was gedeckt ist.** Was von etwas außerhalb des Satzes
+     abhängt (Versand, Rhythmus, Bestand, Prüfung, Garantie), steht mit Beleg in
+     `data/zusagen.yaml`. Das Gate dazu beschreibt Abschnitt A, die Anleitung
+     `docs/waechter.md`.
+   - **Der Beleg wird täglich ausgeführt** (`scripts/zusagen-belege.mjs` im
+     `ops-heartbeat`): gedeckt · gebrochen · abgelaufen · nicht prüfbar. Bricht ein
+     Beleg, kommt der Satz von der Seite, bis der Beleg wieder steht — nicht umgekehrt.
+   - **Vergleichsseiten sind Marktübersichten** nach Herstellerangaben und öffentlich
+     zugänglichen Daten, kein eigener Gerätetest (Uwe, 03.10.2026). „Getestet",
+     „Testsieger", eigene Messwerte und Ich-Erfahrung mit Geräten gibt es dort nicht —
+     Wächter: `src/__tests__/vergleich-keine-testbehauptung.test.ts`. Ein Siegel „Selbst
+     getestet" bekommt nur, was Uwe ausdrücklich bestätigt hat.
+   - **Partnerlink-Regel an einer Stelle:** `src/components/affiliate/produkt-anzeige.ts`.
+     Link mit Partnerprogramm → `/go/…`, „Anzeige", `rel="sponsored …"`. Ohne
+     Partnerprogramm → normaler externer Link, kein „Anzeige", kein Provisions-Satz.
 
 ---
 
@@ -722,7 +768,8 @@ Analytics & Data · CRM & Monetization.
   (01.09.) waren alle sechs Agenten-Workflows stumm: letzter Bot-Commit 27.08., vier Tage
   unbemerkt. Jetzt läuft jeder Bot-Commit über `.github/actions/pr-statt-push` — ein
   Ort für die Logik, eigener Branch je Lauf, PR nach main. Reiner Text/Daten (Glossar,
-  Ideen-Radar, LoRA-JSON) mergt automatisch nach grünen Pflicht-Checks; alles mit
+  LoRA-JSON) mergt automatisch nach grünen Pflicht-Checks (der Ideen-Radar ist am
+  03.10.2026 entfernt, der Glossar-Agent seitdem pausiert — nur Handstart); alles mit
   **KI-Bildern** (Rezepte, Cut-Fotos, Regenerierung) wartet auf Sichtprüfung — Regel 4/8c.
   **`BOT_PAT` ist Voraussetzung, nicht Komfort** (fine-grained, nur dieses Repo,
   Contents+PRs RW — Anleitung `docs/ci-bot-pat.md`). Ohne PAT scheitert es an zwei
@@ -746,15 +793,13 @@ Analytics & Data · CRM & Monetization.
   Query-Seite erkennt das Korpus-Modell selbst (voyage-retrieval.ts). Kochwissen wurde am 22.08.2026 per
   `scripts/kochwissen-reembed.mjs` auf voyage-4 re-embedded — beide Korpora sprechen
   voyage-4 im Speicher. Reranker ist modell-agnostisch.
-  **OFFEN, seit 13.09.2026 belegt: VOYAGE_MODEL war „lokal und auf Netlify" gesetzt — die
-  Produktion laeuft aber auf Vercel.** `src/lib/kochwissen/voyage.ts` liest
+  **`VOYAGE_MODEL` ist im Vercel-Projekt gesetzt (am 02./03.10.2026 ueber die
+  Vercel-Verbindung nachgesehen) — der seit 13.09.2026 offene Punkt ist damit erledigt.**
+  Warum es zaehlt: `src/lib/kochwissen/voyage.ts` liest
   `process.env.VOYAGE_MODEL ?? 'voyage-3.5'`; anders als der Nacht-Index (voyage-retrieval.ts,
-  liest das Modell aus dem Korpus) haengt dieser Pfad allein an der Variable. Fehlt sie im
-  Vercel-Projekt, bettet die Produktion Suchanfragen mit voyage-3.5 ein und vergleicht sie
-  mit einem voyage-4-Korpus: gleiche Dimension, kein Fehler, still schlechtere Treffer.
-  **Zu tun: im Vercel-Dashboard prüfen, ob `VOYAGE_MODEL=voyage-4` in allen Umgebungen
-  gesetzt ist — falls nein, setzen und neu deployen.** Aus dem Repo ist das nicht einsehbar
-  (Vercel-MCP gibt Env-Variablen nicht heraus).
+  liest das Modell aus dem Korpus) haengt dieser Pfad allein an der Variable. Fehlt sie,
+  bettet die Produktion Suchanfragen mit voyage-3.5 ein und vergleicht sie mit einem
+  voyage-4-Korpus: gleiche Dimension, kein Fehler, still schlechtere Treffer.
   Indexierung läuft MANUELL in Uwes Terminal (lokale Cowork-VM hat keinen Netz-Egress);
   der 23:45-Task ist nur noch Wächter (prüft Frische via Supabase, indexiert nicht).
 
@@ -789,7 +834,7 @@ Analytics & Data · CRM & Monetization.
 (Stand dort Mai 2026, seither NICHT nachgeprüft — 03.09.2026):** Digistore24
 Dankeseiten-URLs für 696394/696396 auf `/danke/*` setzen (**696399 entfällt — der
 BBQ-Grundkurs ist am 09.09.2026 eingestellt, die Dankeseite leitet auf `/diplome`;
-das Digistore-Produkt selbst ist noch abzuschalten**), Widerrufs-Checkbox
+das Digistore-Produkt hat seit 03.10.2026 einen Verkaufsstopp**), Widerrufs-Checkbox
 aktivieren, Genehmigung per „Testkauf anlegen" beantragen · `AMAZON_ACCESS_KEY` +
 `AMAZON_SECRET_KEY` in Vercel eintragen, dann `npm run fetch-images` · Google Business
 Profil anlegen und verifizieren · `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Vercel.
@@ -803,7 +848,9 @@ einen Fehlbefund gestützt haben — Statusquelle ist ausschließlich diese Date
 - **Diese `CLAUDE.md`** ist der Anker — committet + gepusht = überlebt jeden Container.
 - **Git/GitHub** ist das Langzeitgedächtnis: früh & oft committen.
 - **Was NICHT in Git lebt** (Supabase-DB, Account-Zugänge), muss separat gesichert werden
-  (Supabase-Backups, 2FA + Recovery-Codes offline, lokale Repo-Kopie).
+  (2FA + Recovery-Codes offline, lokale Repo-Kopie). **Supabase läuft im Free-Tarif
+  ohne automatische Backups (Stand 03.10.2026)** — ein Sicherungsziel ist noch nicht
+  entschieden; bis dahin gibt es von der Datenbank keine Kopie.
 - Confluence-Spiegel `docs/confluence/` für die menschliche Übersicht aktuell halten.
 
 ### Drei Orte für Wissen (Uwe, 04.09.2026 — ersetzt „Zwei-Dateien-Gedächtnis" vom 25.06.2026)

@@ -1,8 +1,9 @@
 -- ============================================================
 -- Hofladen-Radar — CHECK-Grenzen von Deutschland auf DE + AT + CH weiten
 --
--- STAND DIESER DATEI: NOCH NICHT ANGEWENDET. Anwenden nur nach Freigabe durch
--- Uwe; danach wird der Dateiname auf die Ledger-Version umgestellt.
+-- STAND DIESER DATEI: ANGEWENDET am 03.10.2026 (Ledger 20261003074310). Der
+-- Dateiname traegt die Ledger-Version; bis dahin hiess die Datei
+-- 20261003090000_hoefe_grenzen_dach.sql.
 --
 -- Anlass (03.10.2026): 20260913120000_hoefe.sql legt die Tabelle mit
 --   CHECK (lat BETWEEN 47 AND 56)  und  CHECK (lng BETWEEN 5 AND 16)
@@ -39,9 +40,9 @@
 --
 -- Constraint-Namen: Postgres benennt einen Spalten-CHECK ohne eigenen Namen
 -- <tabelle>_<spalte>_check. "hoefe_lng_check" ist aus der Fehlermeldung belegt,
--- "hoefe_lat_check" folgt derselben Regel (nicht an der Datenbank nachgesehen).
--- Sollte der lat-Constraint anders heissen, bleibt er neben dem neuen stehen und
--- der Import meldet weiter Ablehnungen — dann mit dem tatsaechlichen Namen im Log.
+-- "hoefe_lat_check" folgt derselben Regel. Nach dem Anwenden an der Datenbank
+-- nachgesehen (03.10.2026, pg_constraint): genau zwei CHECKs auf public.hoefe,
+-- hoefe_lat_check (45,5–55,5) und hoefe_lng_check (5,5–17,5).
 --
 -- Idempotent: kann mehrfach ausgefuehrt werden.
 -- ============================================================
