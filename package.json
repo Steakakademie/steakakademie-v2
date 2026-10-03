@@ -76,6 +76,7 @@
     "spell:check": "node scripts/spell-check.mjs",
     "spell:check:full": "node scripts/spell-check.mjs --force",
     "heartbeat": "node scripts/ops-heartbeat.mjs --nur-bericht",
+    "pruefstand": "node scripts/pruefstand.mjs",
     "check:taxonomie": "node scripts/check-taxonomy.mjs"
   },
   "dependencies": {
