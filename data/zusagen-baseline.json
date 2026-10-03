@@ -1,0 +1,1523 @@
+{
+  "hinweis": "Zusage-Muster, die es beim Einführen des Gates schon gab und die noch kein Register-Eintrag deckt. Nicht von Hand ergänzen — Beleg ins Register eintragen oder den Satz ändern. Neu schreiben: npm run check:zusagen:baseline",
+  "treffer": [
+    {
+      "id": "591c638931a86638",
+      "klasse": "garantie",
+      "datei": "content/diplom-lektionen/stufe-3/06-internationale-cuts.mdx",
+      "satz": "- Rasse/Herkunft ≠ Garantie: „Wagyu-Kreuzung\" ≠ Vollblut, „Angus\" = Rasse nicht Ort"
+    },
+    {
+      "id": "3a8c654681a1b4b4",
+      "klasse": "pruefung",
+      "datei": "content/diplom-lektionen/stufe-4/03-smart-grilling-pellet.mdx",
+      "satz": "**Im Zweifel mit einem geprüften Einstich-Thermometer gegenmessen** (Stufe 3)."
+    },
+    {
+      "id": "a0dc52c2d78aef04",
+      "klasse": "garantie",
+      "datei": "content/eigenregie/00-ki-und-prompten.mdx",
+      "satz": "„Mach es besser“ hilft nicht, „Kürze auf 80 Wörter und streiche den Satz mit der Garantie“ hilft."
+    },
+    {
+      "id": "bbcc230fae4a6bff",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/00-ki-und-prompten.mdx",
+      "satz": "- [ ] Du hast die Datenschutz-Einstellung deines KI-Tarifs geprüft und bewusst gesetzt."
+    },
+    {
+      "id": "1fc7fa9480ba1df2",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/01-ownership.mdx",
+      "satz": "- [ ] **Analyse und Sonstiges:** Inhaberrechte an Search Console, Unternehmensprofil und Statistik geprüft oder angefordert."
+    },
+    {
+      "id": "bb776797e91debb3",
+      "klasse": "versand",
+      "datei": "content/eigenregie/01-ownership.mdx",
+      "satz": "Bestätige den Code, den GitHub dir per E-Mail schickt."
+    },
+    {
+      "id": "ab5b843a67358a79",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/02-migration.mdx",
+      "satz": "**Beim Live-Gang in Modul 3:** Der Versand wird angeschlossen und mit einer echten Testanfrage geprüft."
+    },
+    {
+      "id": "960d1535c0b83255",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "Stufe 2 ist abgeschlossen, Mail geprüft."
+    },
+    {
+      "id": "9b5c40c90e0f70c6",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "Prüfe außerdem, ob der Anbieter unter dem EU-US Data Privacy Framework zertifiziert ist; Vercel ist es nach eigener Angabe."
+    },
+    {
+      "id": "e7ad26f172b84669",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "\"Du bringst dein Projekt ins Netz, ziehst den DNS zu Cloudflare um und schaltest deine Domain nach Plan um – mit Vorschau-Umgebung, geprüfter E-Mail und einem Rückweg, falls etwas nicht stimmt.\""
+    },
+    {
+      "id": "e899442636b7afcb",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "- [ ] Mail senden und empfangen mit der Geschäftsadresse nachweislich geprüft, Screenshots abgelegt."
+    },
+    {
+      "id": "fdd0c630a225e145",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "\"Deine eigene Domain zeigt auf dein eigenes Projekt – Erreichbarkeit, Weiterleitungen und E-Mail nachweislich geprüft.\""
+    },
+    {
+      "id": "1eabb32f455f0362",
+      "klasse": "versand",
+      "datei": "content/eigenregie/03-live-gehen.mdx",
+      "satz": "Der Status unter `Domains` wechselt von `Pending` auf `Active`, und du bekommst eine Bestätigungsmail."
+    },
+    {
+      "id": "42482a1c0a401ced",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/04-claude-code.mdx",
+      "satz": "nur Text aus geprüfter Quelle einsetzen lassen, nie formulieren lassen |"
+    },
+    {
+      "id": "997c8a5302f48024",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/04-claude-code.mdx",
+      "satz": "Du änderst deine Seite jetzt selbst – gesichert, geprüft, in deinem Tempo."
+    },
+    {
+      "id": "c3f4286b3a9c13a9",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/05-rechtssichere-basis.mdx",
+      "satz": "- [ ] US-Anbieter auf **dataprivacyframework.gov** geprüft."
+    },
+    {
+      "id": "e1013c6e2621b6d6",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/05-rechtssichere-basis.mdx",
+      "satz": "Prüfe auf **dataprivacyframework.gov**, ob dein US-Anbieter zertifiziert ist."
+    },
+    {
+      "id": "8c32c8065f30255e",
+      "klasse": "pruefung",
+      "datei": "content/eigenregie/06-uebergabe-an-dich.mdx",
+      "satz": "\"Ein ausgefülltes Betriebs-Handbuch im eigenen Repository, eine getestete Sicherung, ein einmal geübter Rückweg, aktive Sicherheitsupdates und eine Monats-Routine im Kalender.\""
+    },
+    {
+      "id": "0f6d6f857f61cc86",
+      "klasse": "pruefung",
+      "datei": "content/fleischwissen/schlachtstress-dfd-fleischqualitaet.mdx",
+      "satz": "Also der geprüfte Wortlaut."
+    },
+    {
+      "id": "97038fa556eb8668",
+      "klasse": "pruefung",
+      "datei": "content/fleischwissen/schlachtstress-dfd-fleischqualitaet.mdx",
+      "satz": "**77 %** der geprüften Betriebe erreichten ≥ 95 % Erfolg beim ersten Schuss |"
+    },
+    {
+      "id": "351bdca96e92a5c3",
+      "klasse": "pruefung",
+      "datei": "content/fleischwissen/us-beef-vs-deutsches-rindfleisch.mdx",
+      "satz": "US-Beef im deutschen Handel stammt aus EU-zertifizierten, hormonfreien Programmen."
+    },
+    {
+      "id": "cad5a356dcbdfa7b",
+      "klasse": "pruefung",
+      "datei": "content/fleischwissen/us-beef-vs-deutsches-rindfleisch.mdx",
+      "satz": "Das heißt konkret: **Fleisch von hormonbehandelten Tieren darf in der EU nicht in den Handel.** Das US-Beef, das du in Deutschland kaufst, stammt aus speziellen, EU-zertifizierten Programmen ohne Horm"
+    },
+    {
+      "id": "9f8f46afffafac38",
+      "klasse": "pruefung",
+      "datei": "content/glossar/wagyu-kreuzungen.mdx",
+      "satz": "Besonders in Australien, USA und Europa sind solche Kreuzungen etabliert und zertifiziert."
+    },
+    {
+      "id": "d6d2792544f0a02e",
+      "klasse": "garantie",
+      "datei": "content/glossar/wagyu-zertifikat.mdx",
+      "satz": "\"Wagyu-Zertifikat: Authentische Herkunftsgarantie für echtes Wagyu-Fleisch."
+    },
+    {
+      "id": "9077d1393d5134e5",
+      "klasse": "pruefung",
+      "datei": "content/glossar/wettkampf-bbq.mdx",
+      "satz": "Die Bewertung erfolgt blind durch zertifizierte Judges nach objektiven Kriterien wie Farbe, Textur, Geschmack und Konsistenz."
+    },
+    {
+      "id": "32433e9629b84833",
+      "klasse": "pruefung",
+      "datei": "content/gruender-schmiede/06-der-arbeits-loop.mdx",
+      "satz": "Bei der Steakakademie gilt eine harte Regel: nichts geht live, bevor es geprüft ist — fachlich *und* rechtlich."
+    },
+    {
+      "id": "d8157a7076f651d8",
+      "klasse": "pruefung",
+      "datei": "content/methoden/oberhitze-grillen.mdx",
+      "satz": "Unsere getesteten Empfehlungen mit ehrlicher Einordnung findest du im [Oberhitzegrill-Vergleich ."
+    },
+    {
+      "id": "c4526589e99ccfee",
+      "klasse": "bestandszahl",
+      "datei": "content/persoenlichkeiten/steven-raichlen.mdx",
+      "satz": "Bevor er die Barbecue Bible schrieb, bereiste er drei Jahre lang mehr als 60 Länder und sammelte Wissen über Grilltraditionen, die bis dahin kaum dokumentiert waren."
+    },
+    {
+      "id": "1ccffd36c4e9c415",
+      "klasse": "bestandszahl",
+      "datei": "content/usa/kansas-city.mdx",
+      "satz": "Die **KCBS (Kansas City Barbecue Society)** ist die weltgrößte BBQ-Organisation — mit 20.000+ Mitgliedern und über 400 sanktionierten Wettbewerben jährlich weltweit."
+    },
+    {
+      "id": "14bf1dc2453d92fe",
+      "klasse": "bestandszahl",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "3 Modelle, 12 Wochen, 15 Cuts mit Verkostung nach 21, 28 und 42 Tagen.\""
+    },
+    {
+      "id": "3b21350689abb2e4",
+      "klasse": "garantie",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "- 10 Jahre Kompressorgarantie"
+    },
+    {
+      "id": "53f1f58d472b1165",
+      "klasse": "garantie",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "summary=\"Das DRY AGER DX 1000 (€4.195) für Restaurants, Metzger und ambitionierte Caterer: 100 kg Kapazität, 2 Temperaturzonen, abschließbare Tür, 10 Jahre Kompressorgarantie."
+    },
+    {
+      "id": "0d9e8e16859e5e08",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "**Was wir getestet haben:** DRY AGER DX 500 Premium S, DRY AGER DX 1000 Premium S, Caso DryAged Master 63 — selbst gekaufte Geräte, keine Leihgaben oder Sponsor-Exemplare."
+    },
+    {
+      "id": "7478e6fe4598f4ae",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "**Interessensoffenlegung:** Keine der getesteten Marken hatte Einfluss auf das Testergebnis."
+    },
+    {
+      "id": "d472a501987ee843",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
+      "satz": "**Was wir nicht getestet haben:** Reifung über 60 Tage, alternative Fleischsorten (Schwein, Wild, Fisch), Zubehör-Kompatibilität (Salzwand-System beim DRY AGER), Langzeit-Wartungsaufwand über mehr als"
+    },
+    {
+      "id": "744312b9aa2acc50",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/fleischthermometer.mdx",
+      "satz": "## MEATER Plus — Testsieger für Long Cooks"
+    },
+    {
+      "id": "ba84d2efb53530dd",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/fleischthermometer.mdx",
+      "satz": "\"Wir haben 3 Fleischthermometer über 8 Wochen im Alltag getestet — Smoker, Pfanne, Ofen, Sous-vide."
+    },
+    {
+      "id": "bd726be8e4826bf3",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/fleischthermometer.mdx",
+      "satz": "Wir haben MEATER Plus, Thermapen ONE und Inkbird IBT-4XS 8 Wochen lang getestet."
+    },
+    {
+      "id": "ecbedab930eddc71",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/fleischthermometer.mdx",
+      "satz": "In diesem Test haben wir drei Modelle unter realen Bedingungen getestet: an der Gasgrill-Seitenburner-Pfanne, im Smoker über 14 Stunden, im 100°C-Ofen beim [Reverse Sear und beim [Sous-vide -Setup."
+    },
+    {
+      "id": "eee6e77da6fa5e19",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/fleischthermometer.mdx",
+      "satz": "- Höchste Genauigkeit aller getesteten Modelle"
+    },
+    {
+      "id": "ae38d8ef946d335c",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/grills.mdx",
+      "satz": "**Transparenz:** Alle Produkte wurden selbst getestet."
+    },
+    {
+      "id": "c2e2887e7ef0d127",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/grills.mdx",
+      "satz": "Wir haben alle drei Grilltypen über 3 Monate getestet und zeigen, für wen welches Konzept wirklich funktioniert.\""
+    },
+    {
+      "id": "16276822df6944c0",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "**Was wir getestet haben:** KitchenAid Artisan 5KSM125EMH (4,8 L), KitchenAid Artisan 5KSM60SPXEER (5,6 L), Ankarsrum Assistent Original 6230 — selbst gekaufte Geräte, keine Sponsor-Exemplare."
+    },
+    {
+      "id": "381a2b7f3f7df541",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "Getestet für die BBQ-Küche.\""
+    },
+    {
+      "id": "4ebaf381382e4c8e",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "**Was wir nicht getestet haben:** Eiscreme-Aufsatz, Nudelaufsatz, Getreidemühle, Langzeit-Motorbelastung über mehrere Jahre, Bosch MUM (wird in einem separaten Artikel verglichen)."
+    },
+    {
+      "id": "78b8b7056a653413",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "*Alle drei Geräte wurden selbst gekauft und über 10 Wochen in BBQ-spezifischen Anwendungen getestet."
+    },
+    {
+      "id": "825f2b47df85577f",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "Drei Küchenmaschinen über 10 Wochen mit denselben Rezepten und Zutaten getestet: Burger Buns (Brioche-Rezept, 500g Mehl), Brotteig (Hefe und Sauerteig, 65–80% Hydration), Fleischwolf (Ribeye-Abschnitt"
+    },
+    {
+      "id": "f6cb01fd16edd266",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
+      "satz": "**Interessensoffenlegung:** Keine der getesteten Marken hatte Einfluss auf das Testergebnis."
+    },
+    {
+      "id": "ed2f470767db62e0",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/messer.mdx",
+      "satz": "**Transparenz:** Alle Messer wurden selbst getestet."
+    },
+    {
+      "id": "0a0581ce2ec87e18",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "Ich habe alle vier Geräte unter identischen Bedingungen getestet: gleiche Fleischqualität (Ribeye aus derselben Charge), gleiche Einschubpositionen, gleiche [Kerntemperaturen mit einem kalibrierten So"
+    },
+    {
+      "id": "3724a0a20f231790",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "- Innenraum-zertifiziert — Küche, Balkon, Mietwohnung"
+    },
+    {
+      "id": "3a1f9680113b3832",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "**Was wir nicht getestet haben:** Zubehör-Kompatibilität (Beefer bietet Pizzastein, Gemüsekorb etc.), Gasverbrauch im Langzeittest, Wetterfestigkeit bei Dauernutzung über Winter."
+    },
+    {
+      "id": "406be14fc2a992fb",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "Für Innenräume gibt es den E-Beefer Pro II, der GS-geprüft und für Innenräume freigegeben ist.\""
+    },
+    {
+      "id": "4678376dee8b2385",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "GS-zertifiziert, kein Gas, 800°C aus Steckdose |"
+    },
+    {
+      "id": "61e2934bed1789df",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "**Was wir getestet haben:** Beefer Pro II, Beefer XL II, E-Beefer Pro II, Caso SteakChef 1500 — selbst gekaufte Eigenexemplare, keine Leihgaben, kein Herstellerkontakt vor Veröffentlichung."
+    },
+    {
+      "id": "93c23137b37a4f54",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "Der E-Beefer Pro II ist die Elektro-Version des Beefer Pro II — GS-geprüft für Innenräume, 220V-Steckdose, kein Gas, keine Flasche."
+    },
+    {
+      "id": "b3f9b551d3b187dc",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "GS-zertifiziert für Innenräume, kein Gas, in 5 Minuten betriebsbereit."
+    },
+    {
+      "id": "c3b7d35afff87b3f",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "\"Beefer Pro II, XL II, E-Beefer & Caso SteakChef getestet."
+    },
+    {
+      "id": "ddaebfe9ee79abbf",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
+      "satz": "**Interessensoffenlegung:** Kein der getesteten Marken hatte Einfluss auf das Testergebnis."
+    },
+    {
+      "id": "1482c708ac4ad4aa",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/premium-fleischthermometer.mdx",
+      "satz": "- Höchste Genauigkeit aller getesteten Modelle: ±0,4°C"
+    },
+    {
+      "id": "1a6d1d36aa49992d",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/premium-fleischthermometer.mdx",
+      "satz": "\"Wir haben 5 Premium-Thermometer über 10 Wochen in echten BBQ-Situationen getestet — Smoker, Pfanne, Sous-vide, Oven Roast."
+    },
+    {
+      "id": "34d2022fcbf3c323",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/premium-fleischthermometer.mdx",
+      "satz": "**Was wir nicht getestet haben:** Dieser Vergleich klammert Einstiegsmodelle unter 40 Euro (Govee, alte Inkbird-Varianten) und den MEATER Block bewusst aus — wir haben uns auf das Premium-Segment konz"
+    },
+    {
+      "id": "8853bc01aaec01c7",
+      "klasse": "pruefung",
+      "datei": "content/vergleich/premium-fleischthermometer.mdx",
+      "satz": "**WiFi-Reichweite:** Getestet über 35 Meter durch zwei Wände — stabile Verbindung."
+    },
+    {
+      "id": "8d3bd38f3e686b3b",
+      "klasse": "pruefung",
+      "datei": "src/app/affiliate-disclosure/page.tsx",
+      "satz": "Wir empfehlen nur Produkte, die wir selbst getestet haben oder nach sorgfältiger Recherche für qualitativ hochwertig halten — Testberichte sind als solche gekennzeichnet."
+    },
+    {
+      "id": "b08fa59f66c2ac79",
+      "klasse": "garantie",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Alle Angaben sind nach bestem Wissen erstellt; eine Garantie für Richtigkeit und Vollständigkeit wird nicht übernommen."
+    },
+    {
+      "id": "827c3a8cbf80d64a",
+      "klasse": "pruefung",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Dasselbe gilt für die Produkte „Mein Protokoll\" (persönlicher 8-Wochen-Grillplan) und „Steak-Beichte\" (Diagnose von Grillfehlern): Ihr Ergebnis wird von einem KI-Sprachmodell erstellt und nicht einzel"
+    },
+    {
+      "id": "73df401d4d7e9e28",
+      "klasse": "rhythmus",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Du hast das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von Gründen zu widerrufen."
+    },
+    {
+      "id": "08de334e1edf2a5e",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Alternativ kannst du auch das folgende Muster-Widerrufsformular nutzen und uns per E-Mail oder Post zusenden:"
+    },
+    {
+      "id": "211c6bed93bcd9b1",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Der Vertrag kommt mit unserer Bestätigung per E-Mail zustande."
+    },
+    {
+      "id": "8d6a40beb5bd1aa6",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Nach Bestätigung erhältst du unverzüglich eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
+    },
+    {
+      "id": "92a85ab62d56a8de",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Du erhältst eine automatische Eingangsbestätigung per E-Mail."
+    },
+    {
+      "id": "bc038b8f45e31702",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Nach dem Absenden der Bestellung erhältst du eine Eingangsbestätigung per E-Mail; sie ist noch keine Annahme deines Angebots."
+    },
+    {
+      "id": "e183f8edfd118bcf",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "oder per Post (Adresse siehe Impressum)."
+    },
+    {
+      "id": "fa0067f39e4cd292",
+      "klasse": "versand",
+      "datei": "src/app/agb/page.tsx",
+      "satz": "Nach Prüfung deiner Bestellung senden wir dir per E-Mail eine Rechnung mit den Zahlungsinformationen."
+    },
+    {
+      "id": "d33bf01343950b5b",
+      "klasse": "pruefung",
+      "datei": "src/app/api/aroma-matcher/route.ts",
+      "satz": "Kontingent konnte nicht geprüft werden:"
+    },
+    {
+      "id": "02b49d0b3ed0ec98",
+      "klasse": "bestandszahl",
+      "datei": "src/app/api/chat/route.ts",
+      "satz": "5 Stufen mit je 2 Leveln: Stufe 1 Der Funke (Level 1–2, kostenlos, 7 Lektionen unter ), Stufe 2 Die Flamme bezähmen (3–4), Stufe 3 Hitzekontrolle (5–6), Stufe 4 Präzision & Geschmack (7–8), Stufe 5 De"
+    },
+    {
+      "id": "403bfbfba0d2c239",
+      "klasse": "versand",
+      "datei": "src/app/api/chat/route.ts",
+      "satz": "- Physische Urkunde per Post bestellen:"
+    },
+    {
+      "id": "525e05c4eeef7c7e",
+      "klasse": "rhythmus",
+      "datei": "src/app/ausruestung/messer/page.tsx",
+      "satz": "Ob Wüsthof Classic für die tägliche Mise en place, Miyabi 5000MCD 67 für rasiererscharfe Scheiben oder Wüsthof Tranchiermesser für das perfekte Brisket-Aufschneiden — hier findest du das richtige Mess"
+    },
+    {
+      "id": "a9288245e168d53e",
+      "klasse": "versand",
+      "datei": "src/app/auth/login/page.tsx",
+      "satz": "Wir schicken dir einen Magic Link — kein Passwort nötig."
+    },
+    {
+      "id": "bdb99368ccd9c15d",
+      "klasse": "versand",
+      "datei": "src/app/auth/login/page.tsx",
+      "satz": "oder per E-Mail"
+    },
+    {
+      "id": "9aa9e079e57c5527",
+      "klasse": "pruefung",
+      "datei": "src/app/autoren/[slug]/page.tsx",
+      "satz": "Alle Inhalte werden fachlich geprüft und verantwortet von"
+    },
+    {
+      "id": "114088f0a7df7f6c",
+      "klasse": "pruefung",
+      "datei": "src/app/autoren/page.tsx",
+      "satz": "Fachlich geprüft und verantwortet von Gründer Uwe Yendell."
+    },
+    {
+      "id": "19c655f453a7a07f",
+      "klasse": "pruefung",
+      "datei": "src/app/autoren/page.tsx",
+      "satz": "Alle Inhalte werden fachlich geprüft und verantwortet von Gründer Uwe Yendell (Details im KI-Disclaimer)."
+    },
+    {
+      "id": "5cd249666c34db52",
+      "klasse": "pruefung",
+      "datei": "src/app/autoren/page.tsx",
+      "satz": "Alle Inhalte der Steakakademie fußen auf der Praxis von Gründer Uwe Yendell und werden vor Veröffentlichung auf Richtigkeit geprüft."
+    },
+    {
+      "id": "156f31881d68edd9",
+      "klasse": "pruefung",
+      "datei": "src/app/bbq-news/[slug]/page.tsx",
+      "satz": "Dieser Beitrag wurde mit KI-Unterstützung recherchiert und verfasst und vor der Veröffentlichung redaktionell geprüft und freigegeben."
+    },
+    {
+      "id": "b0cc1785d6c68016",
+      "klasse": "pruefung",
+      "datei": "src/app/bbq-news/page.tsx",
+      "satz": "Hinweis: Beiträge werden KI-gestützt erstellt und aufbereitet sowie redaktionell vor Veröffentlichung geprüft."
+    },
+    {
+      "id": "83fcbbc523a69c86",
+      "klasse": "rhythmus",
+      "datei": "src/app/challenge-teilnahmebedingungen/page.tsx",
+      "satz": "Meldet sich der Gewinner nicht innerhalb von 14 Tagen, verfällt der Anspruch und es kann ein neuer Gewinner bestimmt werden."
+    },
+    {
+      "id": "88a698ac5a8fbdab",
+      "klasse": "rhythmus",
+      "datei": "src/app/challenge-teilnahmebedingungen/page.tsx",
+      "satz": "Das Gewinnspiel läuft monatlich."
+    },
+    {
+      "id": "3ca9e133d60008c0",
+      "klasse": "versand",
+      "datei": "src/app/challenge-teilnahmebedingungen/page.tsx",
+      "satz": "Der Gewinner wird per E-Mail benachrichtigt und um Mitteilung einer Versandadresse innerhalb des Teilnahmegebiets (DE/AT/CH) gebeten."
+    },
+    {
+      "id": "29087fcf5b824441",
+      "klasse": "versand",
+      "datei": "src/app/danke/ds24bestellung/page.tsx",
+      "satz": "Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und eine Willkommens-E-Mail von uns."
+    },
+    {
+      "id": "484a44736b65edb5",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Microsoft ist unter dem EU-US Data Privacy Framework zertifiziert; zusätzlich besteht ein Auftragsverarbeitungsvertrag (Art."
+    },
+    {
+      "id": "6842d466b37b7bf8",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Vercel ist nach dem EU-US Data Privacy Framework zertifiziert; zusätzlich werden EU-Standardvertragsklauseln (Art."
+    },
+    {
+      "id": "87e35655f4f36c0d",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "das EU-US Data Privacy Framework, soweit der Anbieter zertifiziert ist."
+    },
+    {
+      "id": "95975d4ae09c9925",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Data Privacy Framework zertifiziert; für die Übermittlung besteht damit ein Angemessenheitsbeschluss der Europäischen Kommission nach Art."
+    },
+    {
+      "id": "961e2c6fd351320d",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren; Kontodaten wie deine E-Mail-Adresse werden nicht an das KI-Modell übermittelt, und die Chat-Inhalte werden nicht in deinem Konto g"
+    },
+    {
+      "id": "cc5a072d461bf080",
+      "klasse": "pruefung",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "28 DSGVO; USA, EU-Standardvertragsklauseln) auf Qualität und Zulässigkeit geprüft."
+    },
+    {
+      "id": "fe78094ea6046f62",
+      "klasse": "rhythmus",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Konto- und Kursdaten werden für die Dauer des Nutzerkontos gespeichert und nach dessen Löschung innerhalb von 30 Tagen"
+    },
+    {
+      "id": "3ffb2c81f69ed829",
+      "klasse": "versand",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Nach Eingabe deiner E-Mail-Adresse senden wir dir eine Bestätigungsmail."
+    },
+    {
+      "id": "4a49e24cd8f1f6eb",
+      "klasse": "versand",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Hast du eine E-Mail-Adresse angegeben, senden wir dir über Loops (Abschnitt 7) eine Eingangsbestätigung mit Datum und Uhrzeit des Eingangs sowie der angegebenen Bestellnummer und dem Produkt."
+    },
+    {
+      "id": "f0949c3d77c35826",
+      "klasse": "versand",
+      "datei": "src/app/datenschutz/page.tsx",
+      "satz": "Deine Anfrage wird bei Supabase (Abschnitt 9) abgelegt und zusätzlich per E-Mail über unseren Versanddienstleister Loops (Abschnitt 7) an unser Postfach zugestellt."
+    },
+    {
+      "id": "732cf39217bb5f05",
+      "klasse": "pruefung",
+      "datei": "src/app/diplome/DiplomeClient.tsx",
+      "satz": "Zertifiziert."
+    },
+    {
+      "id": "7b7c5788ac497cbb",
+      "klasse": "versand",
+      "datei": "src/app/diplome/page.tsx",
+      "satz": "Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post."
+    },
+    {
+      "id": "a20975a50053eaac",
+      "klasse": "pruefung",
+      "datei": "src/app/diplome/rahmenlehrplan/page.tsx",
+      "satz": "So wird geprüft"
+    },
+    {
+      "id": "c38d0352f6bbb5da",
+      "klasse": "pruefung",
+      "datei": "src/app/diplome/rahmenlehrplan/page.tsx",
+      "satz": "Geprüft wird er bisher nicht: Die gedruckte Urkunde setzt heute allein die bestandene Prüfung voraus."
+    },
+    {
+      "id": "37c0ed3ca6db503f",
+      "klasse": "bestandszahl",
+      "datei": "src/app/diplome/roadmap/RoadmapClient.tsx",
+      "satz": "50 Level"
+    },
+    {
+      "id": "d1c5af71e66381d4",
+      "klasse": "versand",
+      "datei": "src/app/diplome/simulation/SimulationClient.tsx",
+      "satz": "Nach dem Abschluss-Test erreichst du den Grad Grillmeister Bronze — digital zum Teilen kostenlos, auf Wunsch gedruckt per Post ("
+    },
+    {
+      "id": "4f943179edc9458c",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/layout.tsx",
+      "satz": "Grillmeister-Urkunde — digital kostenlos, gedruckt per Post"
+    },
+    {
+      "id": "7cbbb34f280477bd",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/layout.tsx",
+      "satz": "Deine Grillmeister-Urkunde: digital kostenlos zum Teilen, auf Wunsch gedruckt und per Post ("
+    },
+    {
+      "id": "99e49ade9c3df35c",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/layout.tsx",
+      "satz": "Urkunde mit deinem Namen, Grad und Stufe — digital gratis, gedruckt per Post ("
+    },
+    {
+      "id": "662efea7b48a9595",
+      "klasse": "pruefung",
+      "datei": "src/app/diplome/urkunde/page.tsx",
+      "satz": "Konto wird geprüft …"
+    },
+    {
+      "id": "8b671d33360b39ea",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/page.tsx",
+      "satz": "Du erhältst eine Bestätigung deiner Bestellung per E-Mail."
+    },
+    {
+      "id": "94b2d317c9ea03d9",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/page.tsx",
+      "satz": "Wir melden uns per E-Mail an"
+    },
+    {
+      "id": "ad9f01a4c6ccf305",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/page.tsx",
+      "satz": "Für die gedruckte Variante nehmen wir nach dem Absenden per E-Mail Kontakt zur Zahlung auf ("
+    },
+    {
+      "id": "c66145871d628b0e",
+      "klasse": "versand",
+      "datei": "src/app/diplome/urkunde/page.tsx",
+      "satz": "Danach geht die Urkunde in den Druck und per Post zu dir."
+    },
+    {
+      "id": "c840f8cd88fc68d5",
+      "klasse": "bestandszahl",
+      "datei": "src/app/ehrliches-system/page.tsx",
+      "satz": "3 eigenständige Produkte"
+    },
+    {
+      "id": "0b6072de1d948ae4",
+      "klasse": "pruefung",
+      "datei": "src/app/eigenregie/page.tsx",
+      "satz": "Deine Domain zeigt auf dein Projekt — E-Mail und Weiterleitungen geprüft."
+    },
+    {
+      "id": "95198037312923e5",
+      "klasse": "pruefung",
+      "datei": "src/app/erste-kunden-sprint/page.tsx",
+      "satz": "Profi-Koch · Zertifizierter Marketing-Manager · Sport- & Gymnastiklehrer"
+    },
+    {
+      "id": "996a6b6eed450bd7",
+      "klasse": "pruefung",
+      "datei": "src/app/erste-kunden-sprint/page.tsx",
+      "satz": "Ich bin zertifizierter Marketing-Manager."
+    },
+    {
+      "id": "8095f1201bdaa9a5",
+      "klasse": "bestandszahl",
+      "datei": "src/app/eu-steuervergleich/[tier]/page.tsx",
+      "satz": "6 Länder · Freelancer · Solopreneur"
+    },
+    {
+      "id": "9351a86e3d044469",
+      "klasse": "bestandszahl",
+      "datei": "src/app/foodpairing/page.tsx",
+      "satz": "Die große Rezeptanalyse: 56.498 Rezepte."
+    },
+    {
+      "id": "3c712130ef4bd60a",
+      "klasse": "pruefung",
+      "datei": "src/app/foodpairing/page.tsx",
+      "satz": "Nicht geprüft"
+    },
+    {
+      "id": "8987fc4a2336c3ca",
+      "klasse": "pruefung",
+      "datei": "src/app/grillstil/page.tsx",
+      "satz": "Hinweis: Diese Beiträge werden KI-gestützt erstellt und redaktionell vor Veröffentlichung geprüft."
+    },
+    {
+      "id": "0b1dab5b27ca7305",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/lernen/[slug]/page.tsx",
+      "satz": "Chef-Prinzip, ein mitwachsendes Backbone und der tägliche Arbeits-Loop — das ist das Fundament von „Das ehrliche System\": zeigen, wie du arbeitest, nicht nur was du verkaufst."
+    },
+    {
+      "id": "2db4c2f9e39874a0",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/lernen/page.tsx",
+      "satz": "Sechs Module — vom Chef-Prinzip bis zum täglichen Arbeits-Loop."
+    },
+    {
+      "id": "72d450f41dca5aba",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/lernen/page.tsx",
+      "satz": "Vom Chef-Prinzip über das KI-gesteuerte Projekt-Backbone (Jira fürs Tun, Confluence fürs Wissen, eine einzige Wahrheitsquelle) bis zum täglichen Arbeits-Loop, der aus begrenzter Zeit echten Fortschrit"
+    },
+    {
+      "id": "c82daf0cd25c47e3",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/lernen/page.tsx",
+      "satz": "Sechs Module: vom Chef-Prinzip über KI-Projektsteuerung mit Jira + Confluence bis zum täglichen Arbeits-Loop — wie du KI-gesteuert ein Business aufbaust."
+    },
+    {
+      "id": "af661a16c60b3252",
+      "klasse": "pruefung",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Profi-Koch · Zertifizierter Marketing-Manager · Sport- & Gymnastiklehrer"
+    },
+    {
+      "id": "1847d6241c9e93cb",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Ja, und das sagen wir offen: Die Methode arbeitet mit Claude Code — dafür brauchst du ein eigenes Claude-Abo, Empfehlung Max-Tarif (rund 100 € im Monat, monatlich kündbar — aktuelle Preise bei Anthrop"
+    },
+    {
+      "id": "2200b592e1b7b1eb",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Sechs Module — vom Chef-Prinzip bis zum täglichen Arbeits-Loop"
+    },
+    {
+      "id": "54b982369cdbdc6d",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Die echte Methode, KI-gesteuert ein digitales Business aufzubauen — sechs Module vom Chef-Prinzip bis zum täglichen Arbeits-Loop, plus das Gründer-Nachschlagewerk „Das Komplettikon\" und ein Arbeitszei"
+    },
+    {
+      "id": "55d9d6d52529d3a9",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Was an Werkzeug-Kosten anfällt (Claude), sagen wir offen — und Claude ist monatlich kündbar."
+    },
+    {
+      "id": "d84b8851e40ff31b",
+      "klasse": "rhythmus",
+      "datei": "src/app/gruender-schmiede/page.tsx",
+      "satz": "Wie du mit begrenzter Zeit täglich etwas wirklich fertig machst."
+    },
+    {
+      "id": "3d4c41f65e6aee25",
+      "klasse": "pruefung",
+      "datei": "src/app/hoefe/page.tsx",
+      "satz": "Höfe, deren Inhaber die Angaben selbst geprüft haben."
+    },
+    {
+      "id": "2792d1db04b68a0c",
+      "klasse": "pruefung",
+      "datei": "src/app/home-b/page.tsx",
+      "satz": "Selbst getestet, methodisch bewertet."
+    },
+    {
+      "id": "f5c1922d8613e55e",
+      "klasse": "pruefung",
+      "datei": "src/app/home-b/page.tsx",
+      "satz": "Unsere Testsieger"
+    },
+    {
+      "id": "650a7baab8ec65e7",
+      "klasse": "garantie",
+      "datei": "src/app/ki-disclaimer/page.tsx",
+      "satz": "Lebensmittelsicherheits-Garantie"
+    },
+    {
+      "id": "04f2c595e7823e71",
+      "klasse": "pruefung",
+      "datei": "src/app/ki-disclaimer/page.tsx",
+      "satz": "Der Chat setzt ein Nutzerkonto voraus; dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren."
+    },
+    {
+      "id": "224268cb6a1d6475",
+      "klasse": "pruefung",
+      "datei": "src/app/ki-disclaimer/page.tsx",
+      "satz": "Das gilt auch für unsere redaktionellen Personas Marco, Jonas und Elena: Artikel unter ihren Namen entstehen KI-unterstützt und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell."
+    },
+    {
+      "id": "71b44b4a06b3ab5b",
+      "klasse": "pruefung",
+      "datei": "src/app/ki-disclaimer/page.tsx",
+      "satz": "Alle Empfehlungen müssen eigenverantwortlich geprüft werden."
+    },
+    {
+      "id": "9003da7bd224c2d8",
+      "klasse": "pruefung",
+      "datei": "src/app/ki-disclaimer/page.tsx",
+      "satz": "Kerntemperaturen werden nach der Erzeugung maschinell gegen die Referenz der Steakakademie geprüft"
+    },
+    {
+      "id": "6f56e820afd81b30",
+      "klasse": "rhythmus",
+      "datei": "src/app/kontakt/page.tsx",
+      "satz": "Wir melden uns innerhalb von 24–48 Stunden bei dir."
+    },
+    {
+      "id": "9165568c028d1951",
+      "klasse": "versand",
+      "datei": "src/app/kontakt/page.tsx",
+      "satz": "Wir melden uns innerhalb von 24–48 Stunden bei dir."
+    },
+    {
+      "id": "827a71be4d5d6aef",
+      "klasse": "pruefung",
+      "datei": "src/app/mein-protokoll/page.tsx",
+      "satz": "Kerntemperaturen aus der Steakakademie-Referenz, maschinell geprüft"
+    },
+    {
+      "id": "0c1cc6918818f294",
+      "klasse": "bestandszahl",
+      "datei": "src/app/mein-system/page.tsx",
+      "satz": "23 Länder im Vergleich."
+    },
+    {
+      "id": "4af32bb73a54ea9a",
+      "klasse": "bestandszahl",
+      "datei": "src/app/mein-system/page.tsx",
+      "satz": "Interaktiver Netto-Rechner für 23 Länder weltweit."
+    },
+    {
+      "id": "81afa1b7a7b81300",
+      "klasse": "pruefung",
+      "datei": "src/app/nutzungsbedingungen/page.tsx",
+      "satz": "Eingereichte Inhalte werden vor einer Veröffentlichung geprüft: zunächst automatisiert (KI-gestützt), anschließend geben wir sie von Hand frei."
+    },
+    {
+      "id": "81acc4bcf710ac77",
+      "klasse": "bestandszahl",
+      "datei": "src/app/page.tsx",
+      "satz": "In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen, Rezepte, Ausrüstung."
+    },
+    {
+      "id": "871213827d279dc4",
+      "klasse": "pruefung",
+      "datei": "src/app/page.tsx",
+      "satz": "Unsere Testsieger"
+    },
+    {
+      "id": "8b29ef6b207726fa",
+      "klasse": "pruefung",
+      "datei": "src/app/page.tsx",
+      "satz": "Selbst getestet, methodisch bewertet."
+    },
+    {
+      "id": "e7edbe0268d3b440",
+      "klasse": "pruefung",
+      "datei": "src/app/page.tsx",
+      "satz": "Methodisch, geprüft, ohne Bullshit."
+    },
+    {
+      "id": "667a4aff66acc0e3",
+      "klasse": "rhythmus",
+      "datei": "src/app/persoenlichkeiten/page.tsx",
+      "satz": "Wechselt automatisch alle 2 Wochen — heute im Fokus:"
+    },
+    {
+      "id": "e739e55f9c674063",
+      "klasse": "pruefung",
+      "datei": "src/app/pflanzlich/page.tsx",
+      "satz": "Hinweis: Diese Beiträge werden KI-gestützt erstellt und redaktionell vor Veröffentlichung geprüft."
+    },
+    {
+      "id": "44325fe3c546c0b7",
+      "klasse": "bestandszahl",
+      "datei": "src/app/relaunch/page.tsx",
+      "satz": "Alle 10 Techniken →"
+    },
+    {
+      "id": "b6e6c199537a0ec1",
+      "klasse": "bestandszahl",
+      "datei": "src/app/relaunch/page.tsx",
+      "satz": "Lage, Muskel, Marmorierung, Garpunkt — 40 Cuts"
+    },
+    {
+      "id": "d362f1bcd0a261d8",
+      "klasse": "bestandszahl",
+      "datei": "src/app/relaunch/page.tsx",
+      "satz": "40 Cuts im Atlas →"
+    },
+    {
+      "id": "b6950a549605db00",
+      "klasse": "pruefung",
+      "datei": "src/app/relaunch/page.tsx",
+      "satz": "Methodisch, geprüft, ohne Bullshit."
+    },
+    {
+      "id": "230d6b0886b5fd55",
+      "klasse": "pruefung",
+      "datei": "src/app/relaunch/rezepte/[kategorie]/[slug]/page.tsx",
+      "satz": "Drei Modelle, selbst getestet — kabellos vs."
+    },
+    {
+      "id": "bc501e101b0566a7",
+      "klasse": "pruefung",
+      "datei": "src/app/relaunch/vergleich/[slug]/page.tsx",
+      "satz": "Testsieger"
+    },
+    {
+      "id": "e96fca9fe5afbe7e",
+      "klasse": "pruefung",
+      "datei": "src/app/relaunch/vergleich/[slug]/page.tsx",
+      "satz": "Vergleich · Selbst getestet"
+    },
+    {
+      "id": "e6ac9e854f1dfd97",
+      "klasse": "pruefung",
+      "datei": "src/app/rettung/RettungClient.tsx",
+      "satz": "10 Level, strukturiertes Wissen, zertifiziert."
+    },
+    {
+      "id": "b5f6d19aa295dad8",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/community/[slug]/page.tsx",
+      "satz": "Von einem Mitglied der Steakakademie eingereicht und KI-geprüft."
+    },
+    {
+      "id": "7a142ef4c69d6c0a",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/community/page.tsx",
+      "satz": "Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben."
+    },
+    {
+      "id": "8f4f66ddcfa01e82",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/community/page.tsx",
+      "satz": "Jede Einreichung wird erst von einer KI vorgeprüft und dann von uns freigegeben, bevor sie hier erscheint."
+    },
+    {
+      "id": "f80ca5d1f28fe156",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/community/page.tsx",
+      "satz": "Von Mitgliedern der Akademie eingereicht, KI-geprüft, freigegeben."
+    },
+    {
+      "id": "241784a36c6fb047",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/page.tsx",
+      "satz": "Die Rezepte der Steakakademie entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell —"
+    },
+    {
+      "id": "b7a871673331ae9a",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/page.tsx",
+      "satz": "Rezepte von Mitgliedern — KI-geprüft, freigegeben"
+    },
+    {
+      "id": "cb0672ef94973b23",
+      "klasse": "pruefung",
+      "datei": "src/app/rezepte/page.tsx",
+      "satz": "Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, fachlich geprüft von Uwe Yendell."
+    },
+    {
+      "id": "54d605d464b5c821",
+      "klasse": "bestandszahl",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "23 Länder im Netto-Vergleich"
+    },
+    {
+      "id": "33b74171d7890b6b",
+      "klasse": "pruefung",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "Als zertifizierter Marketing-Manager weiß ich wie Online-Sichtbarkeit theoretisch funktioniert."
+    },
+    {
+      "id": "46fe67b4f8c38303",
+      "klasse": "pruefung",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "Profi-Koch · Zertifizierter Marketing-Manager · Sport- & Gymnastiklehrer"
+    },
+    {
+      "id": "c321f263a7b94dd5",
+      "klasse": "rhythmus",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "Für Grundlagen die du einmal selbst einrichten kannst und die dann dauerhaft funktionieren — ohne monatliche Rechnung, ohne Abhängigkeit."
+    },
+    {
+      "id": "d5651aeea500b7e7",
+      "klasse": "rhythmus",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "Einmalig — nicht monatlich"
+    },
+    {
+      "id": "f69aa423e8e8ebf4",
+      "klasse": "rhythmus",
+      "datei": "src/app/seo-sprint/page.tsx",
+      "satz": "Was du wöchentlich in 15 Minuten überprüfst."
+    },
+    {
+      "id": "12e52ea96934d3d3",
+      "klasse": "versand",
+      "datei": "src/app/steak-beichte/page.tsx",
+      "satz": "Diagnose in deinem Postfach"
+    },
+    {
+      "id": "69db45eee12bf4f6",
+      "klasse": "versand",
+      "datei": "src/app/steak-beichte/page.tsx",
+      "satz": "Die KI-Analyse läuft automatisch — du bekommst das Ergebnis per E-Mail sobald es fertig ist."
+    },
+    {
+      "id": "2d0f60ca4a6a5f78",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Alle 23 Länder."
+    },
+    {
+      "id": "313db13cdc6fdb0b",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jährliches Update-Abo: alle Steuersätze, Pflichtabgaben und Regeländerungen für 23 Länder — direkt in deinen Rechner."
+    },
+    {
+      "id": "56bec5a6347dd75f",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Alle 23 Länder aktualisiert"
+    },
+    {
+      "id": "68fc99072c2358f4",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Steuer-Matrix LIVE: Update-Abo für 23 Länder"
+    },
+    {
+      "id": "c217c6ca5e47ee60",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Das Jahres-Update-Abo hält deine Steuer-Matrix für alle 23 Länder aktuell: neue Steuersätze, geänderte Regelungen."
+    },
+    {
+      "id": "d72e807ce320c2fc",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Steuer-Matrix LIVE — Immer aktuelle Steuerdaten für 23 Länder"
+    },
+    {
+      "id": "d82f8461155544f1",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jährliches Update aller 23 Länder"
+    },
+    {
+      "id": "08c7f6eec5a755c5",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jedes Jahr im Januar aktualisiert — neue Steuersätze, geänderte Pflichtabgaben, neue Regelungen."
+    },
+    {
+      "id": "162eda344320d069",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Trotz jährlicher Aktualisierung können kurzfristige Gesetzesänderungen zwischen den Update-Zyklen auftreten."
+    },
+    {
+      "id": "26cd9f9a860f99e5",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jährliches Update-Abo: alle Steuersätze, Pflichtabgaben und Regeländerungen für 23 Länder — direkt in deinen Rechner."
+    },
+    {
+      "id": "2bd6bcfe7ec256c6",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jedes Jahr automatisch aktuell."
+    },
+    {
+      "id": "3433bc45978b4165",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Deutschland passt Grundfreibetrag und Sozialversicherungsgrenzen jedes Jahr an."
+    },
+    {
+      "id": "42359082e1cf4d94",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jedes Jahr im Januar, nach Inkrafttreten der neuen Steuerregelungen."
+    },
+    {
+      "id": "4382a26f4c691650",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jedes Jahr im Januar"
+    },
+    {
+      "id": "96d6d2aa62939c2f",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Anpassung Grundfreibetrag + Sozialversicherungsgrenzen jedes Jahr"
+    },
+    {
+      "id": "a3fb0b0f9c7c51db",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Steuerrecht ändert sich jedes Jahr."
+    },
+    {
+      "id": "ce2e0acc225dd1b3",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Jährliches Update aller 23 Länder"
+    },
+    {
+      "id": "d85c3534a22132e0",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Bestellnummer per E-Mail → Rabatt-Link innerhalb 24h"
+    },
+    {
+      "id": "0b2c1d99de79e762",
+      "klasse": "versand",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Du wirst per E-Mail benachrichtigt sobald der neue Stand verfügbar ist."
+    },
+    {
+      "id": "1ba75ecb022655ff",
+      "klasse": "versand",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Der Rabatt-Link wird dir per E-Mail zugeschickt — oder schreib uns unter pitmaster@steakakademie.de mit deiner Bestellnummer."
+    },
+    {
+      "id": "3ba4b342fe0269f6",
+      "klasse": "versand",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Bestellnummer per E-Mail → Rabatt-Link innerhalb 24h"
+    },
+    {
+      "id": "4d322c46e1716e2c",
+      "klasse": "versand",
+      "datei": "src/app/steuer-matrix-live/page.tsx",
+      "satz": "Du erhältst eine E-Mail-Benachrichtigung sobald der neue Stand verfügbar ist."
+    },
+    {
+      "id": "0ee216b25daf9eae",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Steuer-Matrix — 23 Länder im Vergleich"
+    },
+    {
+      "id": "1f1ae03c0efabb2d",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Steuer-Matrix — 23 Länder im Steuervergleich"
+    },
+    {
+      "id": "4d659db741218147",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Steuer-Vergleich für Solo-Selbstständige: 23 Länder."
+    },
+    {
+      "id": "5ca386bcd6e84956",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Interaktiver Netto-Vergleich für Solo-Selbstständige: Was bleibt in 23 Ländern übrig?"
+    },
+    {
+      "id": "80258cdfe8fff2a9",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "23 Länder — ein Rechner"
+    },
+    {
+      "id": "82c83e0da2acd1fb",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Datengestützte Entscheidungshilfe für Solo-Selbstständige: 23 Länder im Netto-Vergleich."
+    },
+    {
+      "id": "cfd0facdf327c720",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "23 Länder auf einen Blick"
+    },
+    {
+      "id": "d2801349b7cb4451",
+      "klasse": "bestandszahl",
+      "datei": "src/app/steuer-matrix/page.tsx",
+      "satz": "Der Zugang zum Rechner mit allen 23 Ländern ist zurzeit nicht erhältlich."
+    },
+    {
+      "id": "80840f0c5715527c",
+      "klasse": "rhythmus",
+      "datei": "src/app/steuer-matrix/rechner/page.tsx",
+      "satz": "Gib deinen monatlichen Bruttoumsatz ein und vergleiche sofort, wie viel Netto in Deutschland, den Niederlanden, Frankreich, Spanien, Italien und Portugal tatsächlich übrig bleibt — inklusive Krankenve"
+    },
+    {
+      "id": "4d0b898df5a77ecb",
+      "klasse": "bestandszahl",
+      "datei": "src/app/temperatur-guide/page.tsx",
+      "satz": "5 Fleischkategorien · 25+ Gargrade"
+    },
+    {
+      "id": "4dfc81b520c60d08",
+      "klasse": "pruefung",
+      "datei": "src/app/temperatur-guide/page.tsx",
+      "satz": "Tatar-Temperatur, Carpaccio, Beef Tataki — nur bei geprüftem Fleisch"
+    },
+    {
+      "id": "0332fa46b86653cf",
+      "klasse": "rhythmus",
+      "datei": "src/app/temperatur-guide/page.tsx",
+      "satz": "Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt."
+    },
+    {
+      "id": "1e58f09aa225bf95",
+      "klasse": "versand",
+      "datei": "src/app/temperatur-guide/page.tsx",
+      "satz": "Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt."
+    },
+    {
+      "id": "12f43507a09823e4",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Zertifiziert auf Master-Niveau"
+    },
+    {
+      "id": "2130c68e7ae9005a",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Weber-zertifizierter Grillmeister, Koch, Marketing-Manager"
+    },
+    {
+      "id": "3991fc7480852091",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Vom Kochen für die Gruppe zum Weber-zertifizierten Grillmeister."
+    },
+    {
+      "id": "61489dcb7458a6b7",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister."
+    },
+    {
+      "id": "6fb44288f0a44891",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Weber-zertifizierter Grillmeister"
+    },
+    {
+      "id": "7a255e9bfd05a4b3",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH und Kursleiter der dort betriebenen Weber Grillakademie."
+    },
+    {
+      "id": "df38749b9e43a03e",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Zertifizierter Marketing-Manager (Master-Niveau)"
+    },
+    {
+      "id": "f5a4316f0df8a3e6",
+      "klasse": "pruefung",
+      "datei": "src/app/ueber-uns/page.tsx",
+      "satz": "Mit sieben bei der Oma angefangen, später Profi-Koch und Weber-zertifizierter Grillmeister."
+    },
+    {
+      "id": "7ecdc85bad6537db",
+      "klasse": "rhythmus",
+      "datei": "src/app/usa-expedition/page.tsx",
+      "satz": "Jährlich Januar"
+    },
+    {
+      "id": "674169bf757b1e02",
+      "klasse": "versand",
+      "datei": "src/app/usa-expedition/page.tsx",
+      "satz": "Physisches Diplom per Post"
+    },
+    {
+      "id": "24b626a9be2dc8ea",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/[slug]/page.tsx",
+      "satz": "Getestet"
+    },
+    {
+      "id": "34878a00a107b071",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/[slug]/page.tsx",
+      "satz": "Alle getesteten Produkte wurden selbst gekauft und über mehrere Wochen im Praxiseinsatz getestet."
+    },
+    {
+      "id": "f2fb1aed9a6d8e80",
+      "klasse": "bestandszahl",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "26+ Produkte getestet"
+    },
+    {
+      "id": "16729165ef2b78e2",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "Jedes Produkt selbst gekauft und über mehrere Wochen unter Echtbedingungen getestet — vom Sofortlesethermometer mit ±0,4 °C Messtolerranz bis zum Kamado-Keramikgrill mit gusseisernem Rost und Deflekto"
+    },
+    {
+      "id": "41f7710b3f8826d3",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "Praxisnah getestet, ohne Herstellereinfluss."
+    },
+    {
+      "id": "5a6a416e882bad6d",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "Alle Produkte selbst gekauft und wochenlang im Praxiseinsatz geprüft."
+    },
+    {
+      "id": "ceb31907cf1c0e01",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "26+ Produkte getestet"
+    },
+    {
+      "id": "dcefcda23ec2ea43",
+      "klasse": "pruefung",
+      "datei": "src/app/vergleich/page.tsx",
+      "satz": "Jedes Produkt wochenlang im Praxiseinsatz geprüft — keine Herstellerdaten, echte Werte."
+    },
+    {
+      "id": "c58fb4420ba03e32",
+      "klasse": "versand",
+      "datei": "src/app/widerruf/WiderrufForm.tsx",
+      "satz": "Eine Eingangsbestätigung folgt per E-Mail."
+    },
+    {
+      "id": "06403f5033626e58",
+      "klasse": "versand",
+      "datei": "src/app/widerruf/page.tsx",
+      "satz": "Identifikation per E-Mail oder Bestellnummer — kein Login nötig."
+    },
+    {
+      "id": "18022723e7b1c6a5",
+      "klasse": "versand",
+      "datei": "src/app/widerruf/page.tsx",
+      "satz": "Du erhältst eine Eingangsbestätigung per E-Mail."
+    },
+    {
+      "id": "ac8495d4e8f50dbe",
+      "klasse": "pruefung",
+      "datei": "src/components/AutorHinweis.tsx",
+      "satz": "Alle Rezepte basieren auf eigener Praxiserfahrung und werden mehrfach am Grill getestet, bevor sie veröffentlicht werden."
+    },
+    {
+      "id": "ad1eab6ce1b4ce54",
+      "klasse": "pruefung",
+      "datei": "src/components/AutorHinweis.tsx",
+      "satz": "entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell."
+    },
+    {
+      "id": "86d03863936c9ed7",
+      "klasse": "pruefung",
+      "datei": "src/components/affiliate/BuyingGuideBlock.tsx",
+      "satz": "Selbst getestet"
+    },
+    {
+      "id": "e7daae0e54cac4e7",
+      "klasse": "versand",
+      "datei": "src/components/aroma-matcher/AromaMatcher.tsx",
+      "satz": "Wir melden uns, sobald die Aroma-Matrix freigeschaltet wird."
+    },
+    {
+      "id": "0c3ef3c43800873b",
+      "klasse": "rhythmus",
+      "datei": "src/components/baukasten/Anamnese.tsx",
+      "satz": "Laufend, freiwillig und monatlich kündbar"
+    },
+    {
+      "id": "3eef9a44074288bb",
+      "klasse": "rhythmus",
+      "datei": "src/components/baukasten/Anamnese.tsx",
+      "satz": "Der Wartungsvertrag ist freiwillig und monatlich kündbar — bei Kündigung bekommst du ein Übergabe-Paket."
+    },
+    {
+      "id": "c9195d6c1ec4bf33",
+      "klasse": "versand",
+      "datei": "src/components/baukasten/Anamnese.tsx",
+      "satz": "Du bekommst eine Antwort per E-Mail:"
+    },
+    {
+      "id": "8b783a85ed497931",
+      "klasse": "pruefung",
+      "datei": "src/components/diplome/KontextRail.tsx",
+      "satz": "Wir empfehlen nur, was wir selbst getestet haben."
+    },
+    {
+      "id": "50629438024b6246",
+      "klasse": "rhythmus",
+      "datei": "src/components/eigenregie/Diagnose.tsx",
+      "satz": "Was zahlst du heute monatlich für Website, Wartung und Hosting (in €)?"
+    },
+    {
+      "id": "f22612af11464e79",
+      "klasse": "rhythmus",
+      "datei": "src/components/eigenregie/Diagnose.tsx",
+      "satz": "Monatliche Kosten in Euro"
+    },
+    {
+      "id": "e678d67529692837",
+      "klasse": "rhythmus",
+      "datei": "src/components/gruendung/WerkzeugHinweis.tsx",
+      "satz": "monatlich kündbar"
+    },
+    {
+      "id": "09f4d134e8d4738d",
+      "klasse": "rhythmus",
+      "datei": "src/components/home/PlattformPuls.tsx",
+      "satz": "Die Steakakademie wächst — jede Woche"
+    },
+    {
+      "id": "13de5c449e06414e",
+      "klasse": "pruefung",
+      "datei": "src/components/home/ToolBoxes.tsx",
+      "satz": "Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen."
+    },
+    {
+      "id": "a219c2ab8ff3c7a8",
+      "klasse": "pruefung",
+      "datei": "src/components/home/ToolBoxes.tsx",
+      "satz": "Rezept aus geprüftem Wissen — in deinem Schwierigkeitsgrad."
+    },
+    {
+      "id": "2a9d6d93d0df64bd",
+      "klasse": "pruefung",
+      "datei": "src/components/layout/Footer.tsx",
+      "satz": "Wir empfehlen nur Produkte, die wir selbst getestet haben oder für qualitativ hochwertig halten."
+    },
+    {
+      "id": "8265ff51526baabc",
+      "klasse": "pruefung",
+      "datei": "src/components/recipe/RecipeSubmitModal.tsx",
+      "satz": "Hinweis: Jede Einreichung wird automatisiert durch ein KI-System vorgeprüft; veröffentlicht wird sie erst nach unserer Freigabe."
+    },
+    {
+      "id": "9665427d1cc92bef",
+      "klasse": "pruefung",
+      "datei": "src/components/recipe/RecipeSubmitModal.tsx",
+      "satz": "Eingegangen — wird geprüft"
+    },
+    {
+      "id": "cbf3808b584387a9",
+      "klasse": "pruefung",
+      "datei": "src/components/recipe/RecipeSubmitModal.tsx",
+      "satz": "Nur qualitätsgeprüfte Rezepte"
+    },
+    {
+      "id": "bc1a2957a8ee371b",
+      "klasse": "versand",
+      "datei": "src/components/recipe/RecipeSubmitModal.tsx",
+      "satz": "Es besteht kein Vergütungsanspruch; eine Entfernung kann ich jederzeit per E-Mail verlangen."
+    },
+    {
+      "id": "a5fc0953cd2d4844",
+      "klasse": "pruefung",
+      "datei": "src/components/relaunch/Footer.tsx",
+      "satz": "Methodisch · Geprüft · Ohne Zufall"
+    },
+    {
+      "id": "da43756286c6241a",
+      "klasse": "bestandszahl",
+      "datei": "src/components/relaunch/Siegel.tsx",
+      "satz": "Basis-Zertifikat · 7 Lektionen"
+    },
+    {
+      "id": "785eeed940aeef0e",
+      "klasse": "rhythmus",
+      "datei": "src/components/steuer-matrix/TaxCalculator.tsx",
+      "satz": "Monatlicher Bruttoumsatz"
+    }
+  ]
+}
