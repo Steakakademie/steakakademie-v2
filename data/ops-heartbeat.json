@@ -16,6 +16,13 @@
     "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Einen Notbehelf gibt es nicht mehr: Die frühere Netlify-Kopie ist seit 24.09.2026 offline."
   },
   {
+    "name": "Funktionsproben",
+    "typ": "workflow",
+    "datei": "funktionsproben.yml",
+    "maxTage": 2,
+    "hinweis": "funktionsproben läuft täglich (Cron 05:23 UTC) und prüft die Live-Seite im Browser: Kernseiten, Werkzeuge, Zugangstor — mit Testkonto auch Anmeldung, Aroma-Abfrage und Abstimmung. Kein Start seit 2 Tagen = GitHub hat den Cron abgeschaltet (60 Tage ohne Repo-Aktivität) oder der Workflow wurde entfernt/umbenannt — von Hand per workflow_dispatch starten, dann Ursache suchen. Dieser Eintrag sieht nur, DASS die Proben starten; scheitert eine Probe, meldet der Workflow das selbst (rot + Jira-Ticket ops-funktionsproben)."
+  },
+  {
     "name": "Rezept-Produktion",
     "typ": "git",
     "pfad": "content/rezepte",

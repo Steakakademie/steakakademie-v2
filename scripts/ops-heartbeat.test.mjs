@@ -248,6 +248,17 @@ describe('data/ops-heartbeat.json', () => {
     expect(nach('Hofladen-Import')).toMatchObject({ typ: 'supabase', tabelle: 'hoefe', spalte: 'letzter_import', maxTage: 9 })
   })
 
+  // Neue Automation → Eintrag (CLAUDE.md §2 Regel 10). Die Proben melden ihre
+  // Ergebnisse selbst; der Waechter sieht, ob sie ueberhaupt noch starten.
+  it('Funktionsproben: Workflow-Eintrag, 2 Tage — und der Workflow laeuft taeglich, nicht zur vollen Stunde', () => {
+    expect(nach('Funktionsproben')).toMatchObject({ typ: 'workflow', datei: 'funktionsproben.yml', maxTage: 2 })
+    const workflow = readFileSync(new URL('../.github/workflows/funktionsproben.yml', import.meta.url), 'utf-8')
+    const cron = /-\s*cron:\s*'(\d+) (\d+) \* \* \*'/.exec(workflow)
+    expect(cron, 'taeglicher Zeitplan').not.toBeNull()
+    expect(Number(cron[1]), 'Minute').not.toBe(0)
+    expect(workflow).toContain('workflow_dispatch')
+  })
+
   it('Social-Entwürfe: Artefakt social-drafts, 9 Tage — derselbe Name wie im Workflow', () => {
     expect(nach('Social-Entwürfe')).toMatchObject({ typ: 'artefakt', artefakt: 'social-drafts', maxTage: 9 })
     const workflow = readFileSync(new URL('../.github/workflows/social-grow.yml', import.meta.url), 'utf-8')

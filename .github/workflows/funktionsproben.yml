@@ -1,0 +1,159 @@
+name: Funktionsproben
+
+# Tägliche Funktionsproben gegen die LIVE-Seite — Abteilung Systems & Ops.
+#
+# WARUM ES SIE GIBT (03.10.2026): Der Aroma-Matcher antwortete zwei Wochen lang
+# jedem eingeloggten Nutzer mit 401, ohne dass es jemand merkte. Alle Gates waren
+# grün — sie prüfen den Code und einen frischen Build ohne Env, nicht die
+# laufende Seite. Die Proben fragen einmal am Tag die Produktion selbst:
+# Tut die Seite noch, was ein Besucher von ihr will?
+#
+# WAS LÄUFT (tests/proben/, Konfiguration playwright.proben.config.ts):
+#   anonym      — immer. Kernseiten mit Inhalt, Hofladen-Suche, Aroma-Abfrage,
+#                 Suche, Login-Seite, Zugangstor, robots.txt/Sitemap. Nur lesen,
+#                 kein Formular wird abgesendet.
+#   angemeldet  — nur mit den Secrets PROBE_EMAIL und PROBE_PASSWORD (ein
+#                 gekennzeichnetes Testkonto; Freigabe Uwe, 03.10.2026).
+#                 Anmelden, Meine Kurse, Profil, Aroma-Abfrage mit Sitzung,
+#                 eine Abstimmung (dieselbe Stimme erneut), ein Formular bis vor
+#                 das Absenden. Keine Käufe, keine Mails, kein Löschen.
+#   Fehlen die Secrets, läuft nur „anonym" — das Summary sagt das deutlich.
+#
+# Die Proben fangen die Mess-Aufrufe der Seite ab (Plausible, Web-Vitals,
+# Fehler-Endpunkt), damit sie keine Statistik verfälschen.
+#
+# MELDEWEG: Scheitert eine Probe, wird der Lauf rot (GitHub-Fehlermail) und
+# scripts/ops-alert-to-jira.mjs legt ein Ticket an bzw. kommentiert das offene.
+# Dass dieser Workflow selbst noch startet, prüft der Ops-Heartbeat
+# (data/ops-heartbeat.json, Eintrag „Funktionsproben").
+#
+# ÖFFENTLICHES REPO: Für die angemeldeten Proben entstehen keine Traces und
+# keine Screenshots, und hochgeladen wird nur der Ordner der anonymen Proben —
+# eine Sitzung des Testkontos gehört in kein Artefakt.
+#
+# NODE-VERSION: aus `.nvmrc`, wie alle Workflows.
+on:
+  schedule:
+    # 05:23 UTC — vor dem Ops-Heartbeat (09:00 UTC). GitHub startet geplante
+    # Läufe oft Stunden später; die Reihenfolge bleibt dabei erhalten.
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Andere Adresse prüfen (z. B. ein Preview). Leer = https://steakakademie.de. Mit anderer Adresse laufen nur die anonymen Proben.'
+        type: string
+        required: false
+        default: ''
+
+concurrency:
+  group: funktionsproben
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  proben:
+    name: Funktionsproben gegen die Live-Seite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      BASE_URL: ${{ inputs.base_url || 'https://steakakademie.de' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      # Kein Build, keine nativen Pakete nötig — die Proben brauchen nur Playwright.
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      # Wie in e2e.yml: Die Browser-Version hängt an der installierten
+      # Playwright-Version, also am Lockfile. Gleicher Schlüssel, gleicher Cache.
+      - name: Playwright-Browser-Cache
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Chromium installieren
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # Bei Cache-Treffer fehlen trotzdem die System-Bibliotheken des Runners.
+      - name: Chromium-Systemabhaengigkeiten
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      # continue-on-error, damit Summary und Meldung noch laufen. Rot wird der
+      # Job im letzten Schritt — nachdem gemeldet wurde. Die Zugangsdaten des
+      # Testkontos gehen nur an die eigene Seite: Mit einer anderen Adresse
+      # bleiben sie leer, und es laufen nur die anonymen Proben.
+      - name: Proben ausführen
+        id: proben
+        continue-on-error: true
+        env:
+          PROBE_EMAIL: ${{ inputs.base_url == '' && secrets.PROBE_EMAIL || '' }}
+          PROBE_PASSWORD: ${{ inputs.base_url == '' && secrets.PROBE_PASSWORD || '' }}
+        run: npm run proben
+
+      # Grün ohne Zahl ist kein Ergebnis (CLAUDE.md §2 Regel 10): je Gruppe
+      # „bestanden / gesamt", dazu eine Warnung, wenn die angemeldeten Proben
+      # nicht eingerichtet oder nicht ausführbar waren.
+      - name: Ergebnis zusammenfassen
+        id: ergebnis
+        if: always()
+        continue-on-error: true
+        env:
+          PROBE_EMAIL: ${{ secrets.PROBE_EMAIL }}
+        run: node scripts/proben-summary.mjs
+
+      # Nur die anonymen Proben — siehe Kopf (öffentliches Repo).
+      - name: Bericht der anonymen Proben hochladen
+        if: always() && steps.ergebnis.outputs.rot != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: funktionsproben-anonym
+          path: test-results/proben/anonym-*
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Probe gescheitert → Jira-Ticket (KAN, dedup + Eskalation)
+        if: always() && steps.ergebnis.outputs.rot != '0'
+        continue-on-error: true
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          BETROFFEN: ${{ steps.ergebnis.outputs.betroffen }}
+          BERICHT: ${{ steps.ergebnis.outputs.bericht }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-funktionsproben'
+        run: |
+          if [ -n "$BETROFFEN" ]; then
+            export ALERT_SUMMARY="🔴 Funktionsprobe gescheitert — ${BETROFFEN}"
+            export ALERT_DESCRIPTION="Die tägliche Funktionsprobe gegen ${BASE_URL} ist gescheitert: ${BERICHT} Zahlen und Fehlerzeilen stehen im Job-Summary. Run-Log: ${RUN_URL}"
+          else
+            export ALERT_SUMMARY="⚠️ Funktionsproben selbst fehlgeschlagen"
+            export ALERT_DESCRIPTION="Der Workflow funktionsproben ist abgebrochen, bevor er ein Ergebnis melden konnte. Run-Log: ${RUN_URL}"
+          fi
+          node scripts/ops-alert-to-jira.mjs
+
+      - name: Probe gescheitert → Job rot
+        if: always() && steps.ergebnis.outputs.rot != '0'
+        env:
+          BETROFFEN: ${{ steps.ergebnis.outputs.betroffen }}
+        run: |
+          echo "::error::Funktionsproben: ${BETROFFEN:-kein Ergebnis — Auswertung nicht gelaufen} — Details im Job-Summary."
+          exit 1
