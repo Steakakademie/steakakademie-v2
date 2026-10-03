@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { allStreitfalls } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { sichtbareArtikel } from '@/lib/redaktion';
+import { anzahlDiplomLektionen } from '@/lib/plattform-puls';
 import { getAuthorBySlug } from '@/lib/authors';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import StreitfallUmfrage from '@/components/streitfaelle/StreitfallUmfrage';
@@ -136,7 +137,7 @@ export default function StreitfallSeite(props: Props) {
 
       <Weiche
         kicker="Nächster Schritt · Akademie Stufe 1"
-        titel="Der Funke — sieben Lektionen, ohne Login"
+        titel={`Der Funke — ${anzahlDiplomLektionen(1)} Lektionen, ohne Login`}
         text="Grillarten, Zonen, Temperatur statt Farbe: die Grundlagen, auf denen jeder Streitfall hier aufbaut."
         href="/relaunch/diplome"
       />

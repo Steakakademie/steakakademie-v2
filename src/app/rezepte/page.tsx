@@ -11,15 +11,18 @@ import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
 import { ogImages } from '@/lib/og';
 
+// 03.10.2026: Die Testbehauptungen („jedes Rezept mehrfach am Grill getestet") sind
+// raus — ein Grilltest je Rezept ist nicht belegt. Es gilt, was unter jedem Rezept
+// steht (AutorHinweis): KI-unterstützt erstellt, fachlich geprüft und verantwortet.
 export const metadata: Metadata = {
-  title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill',
+  title: 'BBQ-Rezepte vom Grill — mit Portionsrechner und Koch-Coach',
   description:
-    'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — jedes Rezept mehrfach getestet.',
+    'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, fachlich geprüft von Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
   openGraph: {
     images: ogImages('BBQ-Rezepte'),
     title: 'BBQ-Rezepte',
-    description: 'Geprüfte Grill-Rezepte mit interaktivem Koch-Coach und automatischer Portionsskalierung.',
+    description: 'Grill-Rezepte mit interaktivem Koch-Coach und automatischer Portionsskalierung.',
     url: 'https://steakakademie.de/rezepte',
     type: 'website',
   },
@@ -77,7 +80,7 @@ export default function RezepteIndexPage() {
               imageAlt: 'Dry-Aged Ribeye auf dem Grill — Titelbild der Rezept-Sammlung',
               title: 'Rezepte',
               subtitle:
-                'Grill wie ein Akademiker — jedes Rezept mehrfach am Grill getestet, mit Portionsrechner und Schritt-für-Schritt Koch-Coach.',
+                'Grill wie ein Akademiker — mit Portionsrechner und Schritt-für-Schritt Koch-Coach.',
             }}
           />
         </div>
@@ -117,7 +120,11 @@ export default function RezepteIndexPage() {
         <section>
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
             <p className="font-body text-sm text-text-muted max-w-xl mx-auto leading-relaxed">
-              Alle Rezepte der Steakakademie werden vor Veröffentlichung mehrfach am Grill getestet und auf Reproduzierbarkeit geprüft.
+              Die Rezepte der Steakakademie entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und
+              Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell —{' '}
+              <Link href="/ki-disclaimer" className="text-brand-gold hover:text-brand-fire transition-colors underline underline-offset-2">
+                mehr im KI-Disclaimer
+              </Link>.
               Affiliate-Links sind klar gekennzeichnet —{' '}
               <Link href="/affiliate-disclosure" className="text-brand-gold hover:text-brand-fire transition-colors underline underline-offset-2">
                 Offenlegung

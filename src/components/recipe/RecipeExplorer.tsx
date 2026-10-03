@@ -386,7 +386,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
           {/* Ergebnis-Zeile */}
           <p className="font-sans text-xs mt-3 text-center" style={{ color: MUTED }} aria-live="polite">
             {filtered.length === recipes.length
-              ? `${recipes.length} geprüfte Rezepte`
+              ? `${recipes.length} Rezepte`
               : `${filtered.length} von ${recipes.length} Rezepten`}
             {land !== 'alle' && ` · ${land}`}
             {activeMethode && ` · ${activeMethode.label}`}

@@ -8,7 +8,8 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition',
   description:
-    'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Die Pilgerstätten-Karte für ernsthafte Grillmeister.',
+    // 03.10.2026: „Pilgerstätten-Karte" → „Überblick" — eine Karte gibt es auf der Seite nicht.
+    'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Der Pilgerstätten-Überblick für ernsthafte Grillmeister.',
 };
 
 const SACRED_FOUR = [
@@ -100,13 +101,15 @@ const ACADEMY_TOUR = [
   {
     id: 'steakakademie-usa',
     title: 'USA-Diplom',
-    subtitle: 'Steakakademie — Level 8',
+    // 03.10.2026: ohne „Level 8" / „Steak-Sommelier Level 8" — Level 8 der Ausbildung
+    // ist der Thermometer-Profi (src/lib/diplome/stufen.ts); ein USA-Diplom gibt es noch nicht.
+    subtitle: 'Steakakademie — in Planung',
     description:
       'Das Steakakademie-Diplom für US-BBQ-Expertise. Theorieprüfung zu allen vier Stilen, Blindverkostung aus der Beschreibung, Stiltreue-Analyse. Das Zertifikat für die nächste Pilgerfahrt.',
     badge: 'Coming Soon',
     badgeColor: 'text-brand-fire border-brand-fire/30',
     icon: '🔥',
-    details: ['Online-Prüfung', 'Physisches Diplom per Post', 'Steak-Sommelier Level 8', 'Community-Zugang'],
+    details: ['Online-Prüfung', 'Physisches Diplom per Post', 'Community-Zugang'],
     href: '/diplome',
     external: false,
   },
@@ -500,7 +503,7 @@ export default function UsaExpeditionPage() {
             <span style={{ color: '#C8882A' }}>Dann beweise es hier.</span>
           </h2>
           <p className="font-body text-sm leading-relaxed mx-auto mb-8 max-w-md" style={{ color: 'rgba(196,168,130,0.55)' }}>
-            Das Steakakademie USA-Diplom — Level 8. Theorie zu allen vier Stilen,
+            Das Steakakademie USA-Diplom ist in Planung: Theorie zu allen vier Stilen,
             Blindverkostung aus der Beschreibung, Stiltreue-Analyse.
           </p>
           <Link
@@ -511,7 +514,7 @@ export default function UsaExpeditionPage() {
               color: '#C8882A',
             }}
           >
-            Zum USA-Diplom
+            Zum Diplom-System
             <ChevronRight size={14} />
           </Link>
         </section>

@@ -122,12 +122,17 @@ export const RAHMENLEHRPLAN: readonly StufenPlan[] = [
   },
 ];
 
-/** Die didaktische Doktrin, in der jede Lektion gebaut ist. */
+/**
+ * Die didaktische Doktrin, nach der die Lektionen gebaut werden — Bauplan, nicht
+ * Ist-Zustand. Stand 03.10.2026: Leitfrage und Handgriff stehen in 9 von 39
+ * Lektionen (alle Stufe 1), eine Grill-Auswahl mit Verzweigung gibt es nicht.
+ * Die Seite sagt das dazu; die Texte hier behaupten deshalb kein „jede Lektion".
+ */
 export const DOKTRIN: readonly { titel: string; text: string }[] = [
-  { titel: 'Leitfrage zuerst', text: 'Jede Lektion beginnt mit einer Frage, die der Lernende am Ende selbst beantworten kann. Erst die Erwartung, dann der Stoff.' },
+  { titel: 'Leitfrage zuerst', text: 'Die Lektion beginnt mit einer Frage, die der Lernende am Ende selbst beantworten kann. Erst die Erwartung, dann der Stoff.' },
   { titel: 'Nie reiner Fließtext', text: 'Nach jedem Kernschritt eine Handlung oder eine Frage. Wer nur liest, lernt nicht grillen.' },
-  { titel: 'Handgriff am eigenen Grill', text: 'Jede Lektion endet mit einer Aufgabe am Gerät — mit Selbstkontrolle: „Wenn X passiert, hast du es richtig gemacht."' },
+  { titel: 'Handgriff am eigenen Grill', text: 'Die Lektion endet mit einer Aufgabe am Gerät — mit Selbstkontrolle: „Wenn X passiert, hast du es richtig gemacht."' },
   { titel: 'Kerntemperatur statt Uhr', text: 'Alle Temperaturwerte folgen einer einzigen Referenz. Kein Wert wird geschätzt.' },
-  { titel: 'Gerätespur', text: 'Wo Kohle und Gas sich unterscheiden, verzweigt die Lektion. Der Lernende wählt am Anfang seinen Grill.' },
+  { titel: 'Gerätespur', text: 'Zielbild: Wo Kohle und Gas sich unterscheiden, verzweigt die Lektion nach dem Grill des Lernenden. Diese Auswahl gibt es noch nicht — in Stufe 1 stehen beide Geräte nebeneinander im Text.' },
   { titel: 'Der Kurs endet mit dem Saubermachen', text: 'Reinigung ist Teil des Handwerks, nicht Nacharbeit.' },
 ];

@@ -3,7 +3,9 @@ import RettungClient from './RettungClient';
 
 export const metadata: Metadata = {
   title: 'Steak-Rettungs-Bibliothek — 6 Grillfehler',
-  description: 'Die 6 häufigsten Grillkatastrophen und wie du sie rettest: zu durch, zu roh, trocken, außen verbrannt, keine Kruste, Fleisch klebt. Mit Anleitungen.',
+  // 03.10.2026: an die sechs Faelle der Seite angeglichen (RettungClient.tsx) —
+  // „keine Kruste" und „Fleisch klebt" gibt es dort nicht.
+  description: 'Die 6 häufigsten Grillkatastrophen und wie du sie rettest: grau, zäh, durchgegart, kein Smoke Ring, außen verbrannt und innen roh, trocken. Mit Anleitungen.',
   alternates: { canonical: 'https://steakakademie.de/rettung' },
   openGraph: {
     title: 'Steak-Rettungs-Bibliothek — 6 Grillkatastrophen und ihre Lösung',

@@ -16,6 +16,7 @@ import {
   type StufeKey,
 } from '@/lib/diplome/stufen';
 import { FLASHCARDS, type Flashcard } from '@/lib/diplome/flashcards';
+import { urkundePreisText } from '@/lib/urkunde/preis';
 
 // Das Pruefungsergebnis stellt seit dem Audit vom 06.09.2026 ausschliesslich
 // der Server fest (/api/diplome/pruefung) und schreibt es mit service_role.
@@ -242,7 +243,9 @@ const stages: Stage[] = STUFEN.map((s) => ({
   glow: s.glow,
   levels: [...s.levels],
   levelNames: levelsOfStufe(s.nr).map((l) => l.name),
-  badge: s.nr === 5 ? `${s.cert} (postfähige Urkunde)` : `${s.cert} · ${s.badge}`,
+  // 03.10.2026: Stufe 5 hiess hier „(postfähige Urkunde)" — das las sich, als kaeme
+  // die Urkunde mit dem Bestehen. Sie ist je Stufe eine kostenpflichtige Bestellung.
+  badge: `${s.cert} · ${s.badge}`,
   // Der Pruefungssatz kommt aus den Konstanten — vorher versprach er
   // 10/15/20/25/30 Fragen, Fallstudien und eine Videopruefung, die es nicht gab.
   pruefung: pruefungsText(),
@@ -843,14 +846,12 @@ function RoadmapView({
                   <div className="text-[11px] font-sans text-text-muted mb-0.5">Bei Bestehen erhältst du</div>
                   <div className="text-[13px] font-sans font-bold" style={{ color: s.color }}>{s.badge}</div>
                 </div>
-                {s.id === 5 && (
-                  <div
-                    className="ml-auto rounded-lg px-2.5 py-1 text-[10px] font-sans tracking-wider"
-                    style={{ background: `${s.color}20`, border: `1px solid ${s.color}`, color: s.color }}
-                  >
-                    ✉️ Urkunde per Post
-                  </div>
-                )}
+                <div
+                  className="ml-auto rounded-lg px-2.5 py-1 text-[10px] font-sans tracking-wider"
+                  style={{ background: `${s.color}20`, border: `1px solid ${s.color}`, color: s.color }}
+                >
+                  ✉️ Gedruckte Urkunde: optional, {urkundePreisText()}
+                </div>
               </div>
             </div>
           </ExpandSection>
@@ -1683,7 +1684,9 @@ function Quiz({
               border:     passed ? `1px solid ${T.borderMuted}` : 'none',
             }}
           >
-            {passed ? 'Nochmal (neue Fragen)' : 'Erneut versuchen (neue Fragen)'}
+            {/* 03.10.2026: ohne „(neue Fragen)" — in den Stufen 2–5 hat der Pool
+                genau so viele Fragen wie die Pruefung, es kommen dieselben. */}
+            {passed ? 'Nochmal' : 'Erneut versuchen'}
           </button>
         </div>
       </div>
