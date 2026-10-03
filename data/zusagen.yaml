@@ -89,6 +89,8 @@ zusagen:
         muster: "Danach schicken wir dir den Link zum Spickzettel zum Ausdrucken."
       - datei: src/app/newsletter/page.tsx
         muster: "Nach deiner Bestätigung kommt zuerst der Kerntemperatur-Spickzettel als Link zur Druckseite"
+      - datei: src/app/temperatur-guide/page.tsx
+        muster: "Wir schicken dir den Link zum druckfertigen Kerntemperatur-Spickzettel."
     beleg:
       - typ: loops
         art: workflow
@@ -175,7 +177,7 @@ zusagen:
     wo:
       - datei: src/app/widerruf/page.tsx
         muster: "Nach dem Absenden erhältst du eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
-      - datei: src/app/widerruf/WiderrufForm.tsx
+      - datei: src/lib/widerruf-rueckmeldung.ts
         muster: "Eine elektronische Eingangsbestätigung haben wir dir per E-Mail gesendet."
     beleg:
       - typ: loops
@@ -208,6 +210,8 @@ zusagen:
         muster: "Nach dem Kauf bekommst du eine E-Mail mit deinem Login-Link zum Fragebogen."
       - datei: src/app/danke/steak-beichte/page.tsx
         muster: "Du bekommst in wenigen Minuten zwei E-Mails: von der Steakakademie deinen persönlichen Login-Link zum Diagnose-Formular"
+      - datei: src/app/danke/ds24bestellung/page.tsx
+        muster: "Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und von uns eine E-Mail mit deinem Login-Link."
     beleg:
       - typ: loops
         art: transactional
@@ -772,12 +776,18 @@ zusagen:
     seit: "2026-10-03"
 
   - id: community-rezept-erst-nach-freigabe
-    zusage: Ein eingereichtes Rezept erscheint erst nach Freigabe durch einen Menschen.
+    zusage: Ein eingereichtes Rezept wird von einer KI vorgeprüft und erscheint erst nach Freigabe durch einen Menschen.
     wo:
       - datei: src/components/recipe/RecipeSubmitModal.tsx
         muster: "veröffentlicht wird sie erst nach unserer Freigabe"
       - datei: src/app/rezepte/page.tsx
         muster: "veröffentlicht wird erst nach unserer Freigabe"
+      - datei: src/app/rezepte/page.tsx
+        muster: "KI-vorgeprüft, von Hand freigegeben"
+      - datei: src/app/rezepte/community/page.tsx
+        muster: "von einer KI vorgeprüft, von Hand freigegeben"
+      - datei: "src/app/rezepte/community/[slug]/page.tsx"
+        muster: "von einer KI vorgeprüft"
     beleg:
       typ: code
       alle:
@@ -785,6 +795,23 @@ zusagen:
           regex: "published_at: null"
         - datei: src/lib/rezept/einreichung-status.ts
     bei_bruch: Einreichung sofort schließen — ein Rezept, das ohne Freigabe erscheint, bricht Regel 4.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: pruefdatum-am-beitrag
+    zusage: Eine Prüf-Aussage steht nur an Beiträgen, die ein Prüfdatum tragen — dann mit Datum.
+    wo:
+      - datei: src/app/ki-disclaimer/page.tsx
+        muster: "Wurde ein Beitrag fachlich geprüft, steht das Prüfdatum am Beitrag."
+    beleg:
+      typ: code
+      alle:
+        - datei: src/lib/pruefnachweis.ts
+          regex: "export function hatPruefnachweis"
+        - datei: src/components/Pruefvermerk.tsx
+        - datei: src/components/AutorHinweis.tsx
+          regex: "pruefsatz\\("
+    bei_bruch: Den Satz im KI-Hinweis herausnehmen, bis die Prüf-Aussage wieder allein am Prüfdatum hängt.
     abteilung: Redaktion
     seit: "2026-10-03"
 
@@ -842,3 +869,45 @@ keine_zusage:
   - datei: src/app/aging/AgingClient.tsx
     muster: "Tägliche Kontrolle empfohlen"
     grund: Handlungsempfehlung für den Leser beim Reifen, keine Leistung der Seite.
+
+  # Vergleichsseiten (Marktübersichten seit 03.10.2026): Herstellerangaben sind im
+  # Satz als solche gekennzeichnet und keine Zusage der Steakakademie.
+  - datei: content/vergleich/dry-aging-kuehlschrank-vergleich.mdx
+    muster: "Laut Hersteller 10 Jahre Kompressorgarantie"
+    grund: Herstellerangabe, im Satz als solche gekennzeichnet — keine Zusage der Steakakademie.
+
+  - datei: content/vergleich/dry-aging-kuehlschrank-vergleich.mdx
+    muster: "abschließbare Tür mit Alarm, 10 Jahre Kompressorgarantie."
+    grund: Herstellerangabe („laut Hersteller“ im selben Satz) — keine Zusage der Steakakademie.
+
+  - datei: content/vergleich/dry-aging-kuehlschrank-vergleich.mdx
+    muster: "Abmessungen, Garantie und Preis."
+    grund: Nennt ein Vergleichskriterium, verspricht keine Garantie.
+
+  - datei: content/vergleich/fleischthermometer.mdx
+    muster: "Wir haben die Thermometer nicht selbst nachgeprüft."
+    grund: Verneinung — sagt ausdrücklich, dass nicht geprüft wurde.
+
+  - datei: content/vergleich/premium-fleischthermometer.mdx
+    muster: "Wir haben die Thermometer nicht selbst nachgeprüft."
+    grund: Verneinung — sagt ausdrücklich, dass nicht geprüft wurde.
+
+  - datei: content/vergleich/kuechenmaschine-vergleich.mdx
+    muster: "kippbarer Motorkopf, 10 Stufen"
+    grund: Geschwindigkeitsstufen eines Geräts (Produktmerkmal), keine Bestandszahl der Seite.
+
+  - datei: content/vergleich/oberhitzegrill-vergleich.mdx
+    muster: "elektrisch und laut Hersteller GS-geprüft für die Nutzung in Innenräumen."
+    grund: Herstellerangabe zu einem Prüfzeichen, als solche gekennzeichnet — keine eigene Prüfung.
+
+  - datei: content/vergleich/oberhitzegrill-vergleich.mdx
+    muster: "ohne Gas, GS-geprüft und für Innenräume freigegeben."
+    grund: Herstellerangabe („laut Hersteller“ im selben Satz) — keine eigene Prüfung.
+
+  - datei: content/vergleich/oberhitzegrill-vergleich.mdx
+    muster: "Laut Hersteller für Innenräume freigegeben (GS-geprüft)"
+    grund: Herstellerangabe, als solche gekennzeichnet — keine eigene Prüfung.
+
+  - datei: content/vergleich/oberhitzegrill-vergleich.mdx
+    muster: "GS-geprüft für Innenräume, kein Gas, in rund 5 Minuten betriebsbereit."
+    grund: Herstellerangabe („laut Hersteller“ im selben Satz) — keine eigene Prüfung.

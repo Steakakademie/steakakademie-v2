@@ -158,12 +158,6 @@
       "satz": "Bei der Steakakademie gilt eine harte Regel: nichts geht live, bevor es geprüft ist — fachlich *und* rechtlich."
     },
     {
-      "id": "d8157a7076f651d8",
-      "klasse": "pruefung",
-      "datei": "content/methoden/oberhitze-grillen.mdx",
-      "satz": "Unsere getesteten Empfehlungen mit ehrlicher Einordnung findest du im [Oberhitzegrill-Vergleich ."
-    },
-    {
       "id": "c4526589e99ccfee",
       "klasse": "bestandszahl",
       "datei": "content/persoenlichkeiten/steven-raichlen.mdx",
@@ -174,216 +168,6 @@
       "klasse": "bestandszahl",
       "datei": "content/usa/kansas-city.mdx",
       "satz": "Die **KCBS (Kansas City Barbecue Society)** ist die weltgrößte BBQ-Organisation — mit 20.000+ Mitgliedern und über 400 sanktionierten Wettbewerben jährlich weltweit."
-    },
-    {
-      "id": "14bf1dc2453d92fe",
-      "klasse": "bestandszahl",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "3 Modelle, 12 Wochen, 15 Cuts mit Verkostung nach 21, 28 und 42 Tagen.\""
-    },
-    {
-      "id": "3b21350689abb2e4",
-      "klasse": "garantie",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "- 10 Jahre Kompressorgarantie"
-    },
-    {
-      "id": "53f1f58d472b1165",
-      "klasse": "garantie",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "summary=\"Das DRY AGER DX 1000 (€4.195) für Restaurants, Metzger und ambitionierte Caterer: 100 kg Kapazität, 2 Temperaturzonen, abschließbare Tür, 10 Jahre Kompressorgarantie."
-    },
-    {
-      "id": "0d9e8e16859e5e08",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "**Was wir getestet haben:** DRY AGER DX 500 Premium S, DRY AGER DX 1000 Premium S, Caso DryAged Master 63 — selbst gekaufte Geräte, keine Leihgaben oder Sponsor-Exemplare."
-    },
-    {
-      "id": "7478e6fe4598f4ae",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "**Interessensoffenlegung:** Keine der getesteten Marken hatte Einfluss auf das Testergebnis."
-    },
-    {
-      "id": "d472a501987ee843",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/dry-aging-kuehlschrank-vergleich.mdx",
-      "satz": "**Was wir nicht getestet haben:** Reifung über 60 Tage, alternative Fleischsorten (Schwein, Wild, Fisch), Zubehör-Kompatibilität (Salzwand-System beim DRY AGER), Langzeit-Wartungsaufwand über mehr als"
-    },
-    {
-      "id": "744312b9aa2acc50",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/fleischthermometer.mdx",
-      "satz": "## MEATER Plus — Testsieger für Long Cooks"
-    },
-    {
-      "id": "ba84d2efb53530dd",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/fleischthermometer.mdx",
-      "satz": "\"Wir haben 3 Fleischthermometer über 8 Wochen im Alltag getestet — Smoker, Pfanne, Ofen, Sous-vide."
-    },
-    {
-      "id": "bd726be8e4826bf3",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/fleischthermometer.mdx",
-      "satz": "Wir haben MEATER Plus, Thermapen ONE und Inkbird IBT-4XS 8 Wochen lang getestet."
-    },
-    {
-      "id": "ecbedab930eddc71",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/fleischthermometer.mdx",
-      "satz": "In diesem Test haben wir drei Modelle unter realen Bedingungen getestet: an der Gasgrill-Seitenburner-Pfanne, im Smoker über 14 Stunden, im 100°C-Ofen beim [Reverse Sear und beim [Sous-vide -Setup."
-    },
-    {
-      "id": "eee6e77da6fa5e19",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/fleischthermometer.mdx",
-      "satz": "- Höchste Genauigkeit aller getesteten Modelle"
-    },
-    {
-      "id": "ae38d8ef946d335c",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/grills.mdx",
-      "satz": "**Transparenz:** Alle Produkte wurden selbst getestet."
-    },
-    {
-      "id": "c2e2887e7ef0d127",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/grills.mdx",
-      "satz": "Wir haben alle drei Grilltypen über 3 Monate getestet und zeigen, für wen welches Konzept wirklich funktioniert.\""
-    },
-    {
-      "id": "16276822df6944c0",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "**Was wir getestet haben:** KitchenAid Artisan 5KSM125EMH (4,8 L), KitchenAid Artisan 5KSM60SPXEER (5,6 L), Ankarsrum Assistent Original 6230 — selbst gekaufte Geräte, keine Sponsor-Exemplare."
-    },
-    {
-      "id": "381a2b7f3f7df541",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "Getestet für die BBQ-Küche.\""
-    },
-    {
-      "id": "4ebaf381382e4c8e",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "**Was wir nicht getestet haben:** Eiscreme-Aufsatz, Nudelaufsatz, Getreidemühle, Langzeit-Motorbelastung über mehrere Jahre, Bosch MUM (wird in einem separaten Artikel verglichen)."
-    },
-    {
-      "id": "78b8b7056a653413",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "*Alle drei Geräte wurden selbst gekauft und über 10 Wochen in BBQ-spezifischen Anwendungen getestet."
-    },
-    {
-      "id": "825f2b47df85577f",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "Drei Küchenmaschinen über 10 Wochen mit denselben Rezepten und Zutaten getestet: Burger Buns (Brioche-Rezept, 500g Mehl), Brotteig (Hefe und Sauerteig, 65–80% Hydration), Fleischwolf (Ribeye-Abschnitt"
-    },
-    {
-      "id": "f6cb01fd16edd266",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/kuechenmaschine-vergleich.mdx",
-      "satz": "**Interessensoffenlegung:** Keine der getesteten Marken hatte Einfluss auf das Testergebnis."
-    },
-    {
-      "id": "ed2f470767db62e0",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/messer.mdx",
-      "satz": "**Transparenz:** Alle Messer wurden selbst getestet."
-    },
-    {
-      "id": "0a0581ce2ec87e18",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "Ich habe alle vier Geräte unter identischen Bedingungen getestet: gleiche Fleischqualität (Ribeye aus derselben Charge), gleiche Einschubpositionen, gleiche [Kerntemperaturen mit einem kalibrierten So"
-    },
-    {
-      "id": "3724a0a20f231790",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "- Innenraum-zertifiziert — Küche, Balkon, Mietwohnung"
-    },
-    {
-      "id": "3a1f9680113b3832",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "**Was wir nicht getestet haben:** Zubehör-Kompatibilität (Beefer bietet Pizzastein, Gemüsekorb etc.), Gasverbrauch im Langzeittest, Wetterfestigkeit bei Dauernutzung über Winter."
-    },
-    {
-      "id": "406be14fc2a992fb",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "Für Innenräume gibt es den E-Beefer Pro II, der GS-geprüft und für Innenräume freigegeben ist.\""
-    },
-    {
-      "id": "4678376dee8b2385",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "GS-zertifiziert, kein Gas, 800°C aus Steckdose |"
-    },
-    {
-      "id": "61e2934bed1789df",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "**Was wir getestet haben:** Beefer Pro II, Beefer XL II, E-Beefer Pro II, Caso SteakChef 1500 — selbst gekaufte Eigenexemplare, keine Leihgaben, kein Herstellerkontakt vor Veröffentlichung."
-    },
-    {
-      "id": "93c23137b37a4f54",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "Der E-Beefer Pro II ist die Elektro-Version des Beefer Pro II — GS-geprüft für Innenräume, 220V-Steckdose, kein Gas, keine Flasche."
-    },
-    {
-      "id": "b3f9b551d3b187dc",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "GS-zertifiziert für Innenräume, kein Gas, in 5 Minuten betriebsbereit."
-    },
-    {
-      "id": "c3b7d35afff87b3f",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "\"Beefer Pro II, XL II, E-Beefer & Caso SteakChef getestet."
-    },
-    {
-      "id": "ddaebfe9ee79abbf",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/oberhitzegrill-vergleich.mdx",
-      "satz": "**Interessensoffenlegung:** Kein der getesteten Marken hatte Einfluss auf das Testergebnis."
-    },
-    {
-      "id": "1482c708ac4ad4aa",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/premium-fleischthermometer.mdx",
-      "satz": "- Höchste Genauigkeit aller getesteten Modelle: ±0,4°C"
-    },
-    {
-      "id": "1a6d1d36aa49992d",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/premium-fleischthermometer.mdx",
-      "satz": "\"Wir haben 5 Premium-Thermometer über 10 Wochen in echten BBQ-Situationen getestet — Smoker, Pfanne, Sous-vide, Oven Roast."
-    },
-    {
-      "id": "34d2022fcbf3c323",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/premium-fleischthermometer.mdx",
-      "satz": "**Was wir nicht getestet haben:** Dieser Vergleich klammert Einstiegsmodelle unter 40 Euro (Govee, alte Inkbird-Varianten) und den MEATER Block bewusst aus — wir haben uns auf das Premium-Segment konz"
-    },
-    {
-      "id": "8853bc01aaec01c7",
-      "klasse": "pruefung",
-      "datei": "content/vergleich/premium-fleischthermometer.mdx",
-      "satz": "**WiFi-Reichweite:** Getestet über 35 Meter durch zwei Wände — stabile Verbindung."
-    },
-    {
-      "id": "8d3bd38f3e686b3b",
-      "klasse": "pruefung",
-      "datei": "src/app/affiliate-disclosure/page.tsx",
-      "satz": "Wir empfehlen nur Produkte, die wir selbst getestet haben oder nach sorgfältiger Recherche für qualitativ hochwertig halten — Testberichte sind als solche gekennzeichnet."
     },
     {
       "id": "b08fa59f66c2ac79",
@@ -482,40 +266,10 @@
       "satz": "oder per E-Mail"
     },
     {
-      "id": "9aa9e079e57c5527",
-      "klasse": "pruefung",
-      "datei": "src/app/autoren/[slug]/page.tsx",
-      "satz": "Alle Inhalte werden fachlich geprüft und verantwortet von"
-    },
-    {
-      "id": "114088f0a7df7f6c",
-      "klasse": "pruefung",
-      "datei": "src/app/autoren/page.tsx",
-      "satz": "Fachlich geprüft und verantwortet von Gründer Uwe Yendell."
-    },
-    {
-      "id": "19c655f453a7a07f",
-      "klasse": "pruefung",
-      "datei": "src/app/autoren/page.tsx",
-      "satz": "Alle Inhalte werden fachlich geprüft und verantwortet von Gründer Uwe Yendell (Details im KI-Disclaimer)."
-    },
-    {
-      "id": "5cd249666c34db52",
-      "klasse": "pruefung",
-      "datei": "src/app/autoren/page.tsx",
-      "satz": "Alle Inhalte der Steakakademie fußen auf der Praxis von Gründer Uwe Yendell und werden vor Veröffentlichung auf Richtigkeit geprüft."
-    },
-    {
       "id": "156f31881d68edd9",
       "klasse": "pruefung",
       "datei": "src/app/bbq-news/[slug]/page.tsx",
       "satz": "Dieser Beitrag wurde mit KI-Unterstützung recherchiert und verfasst und vor der Veröffentlichung redaktionell geprüft und freigegeben."
-    },
-    {
-      "id": "b0cc1785d6c68016",
-      "klasse": "pruefung",
-      "datei": "src/app/bbq-news/page.tsx",
-      "satz": "Hinweis: Beiträge werden KI-gestützt erstellt und aufbereitet sowie redaktionell vor Veröffentlichung geprüft."
     },
     {
       "id": "83fcbbc523a69c86",
@@ -534,12 +288,6 @@
       "klasse": "versand",
       "datei": "src/app/challenge-teilnahmebedingungen/page.tsx",
       "satz": "Der Gewinner wird per E-Mail benachrichtigt und um Mitteilung einer Versandadresse innerhalb des Teilnahmegebiets (DE/AT/CH) gebeten."
-    },
-    {
-      "id": "29087fcf5b824441",
-      "klasse": "versand",
-      "datei": "src/app/danke/ds24bestellung/page.tsx",
-      "satz": "Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und eine Willkommens-E-Mail von uns."
     },
     {
       "id": "484a44736b65edb5",
@@ -606,12 +354,6 @@
       "klasse": "pruefung",
       "datei": "src/app/diplome/DiplomeClient.tsx",
       "satz": "Zertifiziert."
-    },
-    {
-      "id": "7b7c5788ac497cbb",
-      "klasse": "versand",
-      "datei": "src/app/diplome/page.tsx",
-      "satz": "Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post."
     },
     {
       "id": "a20975a50053eaac",
@@ -800,18 +542,6 @@
       "satz": "Höfe, deren Inhaber die Angaben selbst geprüft haben."
     },
     {
-      "id": "2792d1db04b68a0c",
-      "klasse": "pruefung",
-      "datei": "src/app/home-b/page.tsx",
-      "satz": "Selbst getestet, methodisch bewertet."
-    },
-    {
-      "id": "f5c1922d8613e55e",
-      "klasse": "pruefung",
-      "datei": "src/app/home-b/page.tsx",
-      "satz": "Unsere Testsieger"
-    },
-    {
       "id": "650a7baab8ec65e7",
       "klasse": "garantie",
       "datei": "src/app/ki-disclaimer/page.tsx",
@@ -822,12 +552,6 @@
       "klasse": "pruefung",
       "datei": "src/app/ki-disclaimer/page.tsx",
       "satz": "Der Chat setzt ein Nutzerkonto voraus; dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren."
-    },
-    {
-      "id": "224268cb6a1d6475",
-      "klasse": "pruefung",
-      "datei": "src/app/ki-disclaimer/page.tsx",
-      "satz": "Das gilt auch für unsere redaktionellen Personas Marco, Jonas und Elena: Artikel unter ihren Namen entstehen KI-unterstützt und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell."
     },
     {
       "id": "71b44b4a06b3ab5b",
@@ -884,30 +608,6 @@
       "satz": "In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen, Rezepte, Ausrüstung."
     },
     {
-      "id": "871213827d279dc4",
-      "klasse": "pruefung",
-      "datei": "src/app/page.tsx",
-      "satz": "Unsere Testsieger"
-    },
-    {
-      "id": "8b29ef6b207726fa",
-      "klasse": "pruefung",
-      "datei": "src/app/page.tsx",
-      "satz": "Selbst getestet, methodisch bewertet."
-    },
-    {
-      "id": "e7edbe0268d3b440",
-      "klasse": "pruefung",
-      "datei": "src/app/page.tsx",
-      "satz": "Methodisch, geprüft, ohne Bullshit."
-    },
-    {
-      "id": "667a4aff66acc0e3",
-      "klasse": "rhythmus",
-      "datei": "src/app/persoenlichkeiten/page.tsx",
-      "satz": "Wechselt automatisch alle 2 Wochen — heute im Fokus:"
-    },
-    {
       "id": "e739e55f9c674063",
       "klasse": "pruefung",
       "datei": "src/app/pflanzlich/page.tsx",
@@ -932,76 +632,16 @@
       "satz": "40 Cuts im Atlas →"
     },
     {
-      "id": "b6950a549605db00",
-      "klasse": "pruefung",
-      "datei": "src/app/relaunch/page.tsx",
-      "satz": "Methodisch, geprüft, ohne Bullshit."
-    },
-    {
-      "id": "230d6b0886b5fd55",
-      "klasse": "pruefung",
-      "datei": "src/app/relaunch/rezepte/[kategorie]/[slug]/page.tsx",
-      "satz": "Drei Modelle, selbst getestet — kabellos vs."
-    },
-    {
-      "id": "bc501e101b0566a7",
-      "klasse": "pruefung",
-      "datei": "src/app/relaunch/vergleich/[slug]/page.tsx",
-      "satz": "Testsieger"
-    },
-    {
-      "id": "e96fca9fe5afbe7e",
-      "klasse": "pruefung",
-      "datei": "src/app/relaunch/vergleich/[slug]/page.tsx",
-      "satz": "Vergleich · Selbst getestet"
-    },
-    {
       "id": "e6ac9e854f1dfd97",
       "klasse": "pruefung",
       "datei": "src/app/rettung/RettungClient.tsx",
       "satz": "10 Level, strukturiertes Wissen, zertifiziert."
     },
     {
-      "id": "b5f6d19aa295dad8",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/community/[slug]/page.tsx",
-      "satz": "Von einem Mitglied der Steakakademie eingereicht und KI-geprüft."
-    },
-    {
-      "id": "7a142ef4c69d6c0a",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/community/page.tsx",
-      "satz": "Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben."
-    },
-    {
       "id": "8f4f66ddcfa01e82",
       "klasse": "pruefung",
       "datei": "src/app/rezepte/community/page.tsx",
       "satz": "Jede Einreichung wird erst von einer KI vorgeprüft und dann von uns freigegeben, bevor sie hier erscheint."
-    },
-    {
-      "id": "f80ca5d1f28fe156",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/community/page.tsx",
-      "satz": "Von Mitgliedern der Akademie eingereicht, KI-geprüft, freigegeben."
-    },
-    {
-      "id": "241784a36c6fb047",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/page.tsx",
-      "satz": "Die Rezepte der Steakakademie entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell —"
-    },
-    {
-      "id": "b7a871673331ae9a",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/page.tsx",
-      "satz": "Rezepte von Mitgliedern — KI-geprüft, freigegeben"
-    },
-    {
-      "id": "cb0672ef94973b23",
-      "klasse": "pruefung",
-      "datei": "src/app/rezepte/page.tsx",
-      "satz": "Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, fachlich geprüft von Uwe Yendell."
     },
     {
       "id": "54d605d464b5c821",
@@ -1038,18 +678,6 @@
       "klasse": "rhythmus",
       "datei": "src/app/seo-sprint/page.tsx",
       "satz": "Was du wöchentlich in 15 Minuten überprüfst."
-    },
-    {
-      "id": "12e52ea96934d3d3",
-      "klasse": "versand",
-      "datei": "src/app/steak-beichte/page.tsx",
-      "satz": "Diagnose in deinem Postfach"
-    },
-    {
-      "id": "69db45eee12bf4f6",
-      "klasse": "versand",
-      "datei": "src/app/steak-beichte/page.tsx",
-      "satz": "Die KI-Analyse läuft automatisch — du bekommst das Ergebnis per E-Mail sobald es fertig ist."
     },
     {
       "id": "2d0f60ca4a6a5f78",
@@ -1250,18 +878,6 @@
       "satz": "Tatar-Temperatur, Carpaccio, Beef Tataki — nur bei geprüftem Fleisch"
     },
     {
-      "id": "0332fa46b86653cf",
-      "klasse": "rhythmus",
-      "datei": "src/app/temperatur-guide/page.tsx",
-      "satz": "Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt."
-    },
-    {
-      "id": "1e58f09aa225bf95",
-      "klasse": "versand",
-      "datei": "src/app/temperatur-guide/page.tsx",
-      "satz": "Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt."
-    },
-    {
       "id": "12f43507a09823e4",
       "klasse": "pruefung",
       "datei": "src/app/ueber-uns/page.tsx",
@@ -1316,66 +932,6 @@
       "satz": "Jährlich Januar"
     },
     {
-      "id": "674169bf757b1e02",
-      "klasse": "versand",
-      "datei": "src/app/usa-expedition/page.tsx",
-      "satz": "Physisches Diplom per Post"
-    },
-    {
-      "id": "24b626a9be2dc8ea",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/[slug]/page.tsx",
-      "satz": "Getestet"
-    },
-    {
-      "id": "34878a00a107b071",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/[slug]/page.tsx",
-      "satz": "Alle getesteten Produkte wurden selbst gekauft und über mehrere Wochen im Praxiseinsatz getestet."
-    },
-    {
-      "id": "f2fb1aed9a6d8e80",
-      "klasse": "bestandszahl",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "26+ Produkte getestet"
-    },
-    {
-      "id": "16729165ef2b78e2",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "Jedes Produkt selbst gekauft und über mehrere Wochen unter Echtbedingungen getestet — vom Sofortlesethermometer mit ±0,4 °C Messtolerranz bis zum Kamado-Keramikgrill mit gusseisernem Rost und Deflekto"
-    },
-    {
-      "id": "41f7710b3f8826d3",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "Praxisnah getestet, ohne Herstellereinfluss."
-    },
-    {
-      "id": "5a6a416e882bad6d",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "Alle Produkte selbst gekauft und wochenlang im Praxiseinsatz geprüft."
-    },
-    {
-      "id": "ceb31907cf1c0e01",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "26+ Produkte getestet"
-    },
-    {
-      "id": "dcefcda23ec2ea43",
-      "klasse": "pruefung",
-      "datei": "src/app/vergleich/page.tsx",
-      "satz": "Jedes Produkt wochenlang im Praxiseinsatz geprüft — keine Herstellerdaten, echte Werte."
-    },
-    {
-      "id": "c58fb4420ba03e32",
-      "klasse": "versand",
-      "datei": "src/app/widerruf/WiderrufForm.tsx",
-      "satz": "Eine Eingangsbestätigung folgt per E-Mail."
-    },
-    {
       "id": "06403f5033626e58",
       "klasse": "versand",
       "datei": "src/app/widerruf/page.tsx",
@@ -1386,30 +942,6 @@
       "klasse": "versand",
       "datei": "src/app/widerruf/page.tsx",
       "satz": "Du erhältst eine Eingangsbestätigung per E-Mail."
-    },
-    {
-      "id": "ac8495d4e8f50dbe",
-      "klasse": "pruefung",
-      "datei": "src/components/AutorHinweis.tsx",
-      "satz": "Alle Rezepte basieren auf eigener Praxiserfahrung und werden mehrfach am Grill getestet, bevor sie veröffentlicht werden."
-    },
-    {
-      "id": "ad1eab6ce1b4ce54",
-      "klasse": "pruefung",
-      "datei": "src/components/AutorHinweis.tsx",
-      "satz": "entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell."
-    },
-    {
-      "id": "86d03863936c9ed7",
-      "klasse": "pruefung",
-      "datei": "src/components/affiliate/BuyingGuideBlock.tsx",
-      "satz": "Selbst getestet"
-    },
-    {
-      "id": "e7daae0e54cac4e7",
-      "klasse": "versand",
-      "datei": "src/components/aroma-matcher/AromaMatcher.tsx",
-      "satz": "Wir melden uns, sobald die Aroma-Matrix freigeschaltet wird."
     },
     {
       "id": "0c3ef3c43800873b",
@@ -1430,12 +962,6 @@
       "satz": "Du bekommst eine Antwort per E-Mail:"
     },
     {
-      "id": "8b783a85ed497931",
-      "klasse": "pruefung",
-      "datei": "src/components/diplome/KontextRail.tsx",
-      "satz": "Wir empfehlen nur, was wir selbst getestet haben."
-    },
-    {
       "id": "50629438024b6246",
       "klasse": "rhythmus",
       "datei": "src/components/eigenregie/Diagnose.tsx",
@@ -1452,30 +978,6 @@
       "klasse": "rhythmus",
       "datei": "src/components/gruendung/WerkzeugHinweis.tsx",
       "satz": "monatlich kündbar"
-    },
-    {
-      "id": "09f4d134e8d4738d",
-      "klasse": "rhythmus",
-      "datei": "src/components/home/PlattformPuls.tsx",
-      "satz": "Die Steakakademie wächst — jede Woche"
-    },
-    {
-      "id": "13de5c449e06414e",
-      "klasse": "pruefung",
-      "datei": "src/components/home/ToolBoxes.tsx",
-      "satz": "Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen."
-    },
-    {
-      "id": "a219c2ab8ff3c7a8",
-      "klasse": "pruefung",
-      "datei": "src/components/home/ToolBoxes.tsx",
-      "satz": "Rezept aus geprüftem Wissen — in deinem Schwierigkeitsgrad."
-    },
-    {
-      "id": "2a9d6d93d0df64bd",
-      "klasse": "pruefung",
-      "datei": "src/components/layout/Footer.tsx",
-      "satz": "Wir empfehlen nur Produkte, die wir selbst getestet haben oder für qualitativ hochwertig halten."
     },
     {
       "id": "8265ff51526baabc",
@@ -1500,18 +1002,6 @@
       "klasse": "versand",
       "datei": "src/components/recipe/RecipeSubmitModal.tsx",
       "satz": "Es besteht kein Vergütungsanspruch; eine Entfernung kann ich jederzeit per E-Mail verlangen."
-    },
-    {
-      "id": "a5fc0953cd2d4844",
-      "klasse": "pruefung",
-      "datei": "src/components/relaunch/Footer.tsx",
-      "satz": "Methodisch · Geprüft · Ohne Zufall"
-    },
-    {
-      "id": "da43756286c6241a",
-      "klasse": "bestandszahl",
-      "datei": "src/components/relaunch/Siegel.tsx",
-      "satz": "Basis-Zertifikat · 7 Lektionen"
     },
     {
       "id": "785eeed940aeef0e",
