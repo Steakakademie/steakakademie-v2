@@ -63,6 +63,7 @@ module.exports = {
     '/challenge-teilnahmebedingungen', // robots: { index: false }
     '/nutzungsbedingungen',            // robots: { index: false }
     '/eigenregie/diagnose',            // robots: { index: false }
+    '/fleischpass',                    // robots: { index: false } — in Vorbereitung (02.10.2026)
     '/apple-icon.png', // Bild-Route (ImageResponse), kein Dokument, kein Canonical
     // tuwasduwillst.de ist eine eigene Marke (Host-Weiche in next.config.mjs):
     // diese Seiten gehoeren nicht in die Steakakademie-Sitemap.
