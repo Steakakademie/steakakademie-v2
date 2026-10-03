@@ -17,24 +17,24 @@ import { trackEvent } from '@/components/analytics/PlausibleScript';
 interface CutAtlasClientProps {
   bySpecies: Record<Species, { cuts: Cut[]; primals: Primal[] }>;
   recipeMap: Record<string, CutRecipeRef[]>;
+  /**
+   * Schwein-Tab einblenden. Schwein ist vorübergehend ausgeblendet — analog zum
+   * Cut-Generator. Grund: die Schwein-Cut-Fotos stammen aus Händler-Produktbildern
+   * und sind nach der Rechts-Doktrin (public/images/cuts/CREDITS.md) nicht
+   * verwendbar.
+   *
+   * Der Schalter liegt seit 03.10.2026 in src/app/cuts/page.tsx (SHOW_PORK) und
+   * kommt als Prop herein: Titel, Text und ItemList-Schema der Seite hängen an
+   * demselben Wert. Als Export aus dieser 'use client'-Datei wäre er auf dem
+   * Server ein Client-Verweis und damit immer „wahr“.
+   */
+  showPork?: boolean;
 }
-
-/**
- * Schwein ist vorübergehend ausgeblendet — analog zum Cut-Generator. Grund: die
- * Schwein-Cut-Fotos stammen aus Händler-Produktbildern und sind nach der
- * Rechts-Doktrin (public/images/cuts/CREDITS.md) nicht verwendbar. Sobald
- * lizenzsaubere Fotos vorliegen, hier und in CutGenerator.tsx auf `true` setzen.
- */
-const SHOW_PORK = false;
 
 const ALL_SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
-
-// Erst typisieren, dann filtern: .filter() direkt auf dem Array-Literal laesst
-// TypeScript 'id' zu string verbreitern statt zu Species -> TS2322 im Build.
-const SPECIES_TABS = ALL_SPECIES_TABS.filter((t) => SHOW_PORK || t.id !== 'schwein');
 
 // Zerlegekarte (BullButcherMap) → Katalog. Zonen mit exakt passendem Cut öffnen
 // dessen Detail (Raster filtert auf sein Teilstück); Regions-Zonen filtern nur.
@@ -102,7 +102,11 @@ function MarblingBars({ level }: { level: number }) {
   );
 }
 
-export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientProps) {
+export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false }: CutAtlasClientProps) {
+  // Erst typisieren (ALL_SPECIES_TABS), dann filtern: .filter() direkt auf dem
+  // Array-Literal laesst TypeScript 'id' zu string verbreitern statt zu Species
+  // -> TS2322 im Build.
+  const speciesTabs = ALL_SPECIES_TABS.filter((t) => showPork || t.id !== 'schwein');
   const [species, setSpecies] = useState<Species>('rind');
   const [selectedPrimal, setSelectedPrimal] = useState<string | null>(null);
   const [selectedCutId, setSelectedCutId] = useState<string | null>(null);
@@ -176,8 +180,8 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
   return (
     <div>
       {/* ── Spezies-Umschalter — entfällt bei nur einer Tierart ────────────── */}
-      <div className={`flex items-center gap-2 mb-6 ${SPECIES_TABS.length < 2 ? 'hidden' : ''}`}>
-        {SPECIES_TABS.map((t) => (
+      <div className={`flex items-center gap-2 mb-6 ${speciesTabs.length < 2 ? 'hidden' : ''}`}>
+        {speciesTabs.map((t) => (
           <button
             key={t.id}
             onClick={() => switchSpecies(t.id)}

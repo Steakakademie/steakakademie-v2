@@ -9,9 +9,14 @@
  *     Bleibt bewusst IN der Route statt im Guard: das Frontend (RecipeSubmitModal)
  *     hängt am 401-Shape { error, needsLogin } — der Guard-401 hätte kein needsLogin.
  *  3. KI-Moderation (Doppel-Tor: safe + is_recipe) via generateObject
- *  4. Status ableiten: approved | needs_review | rejected
+ *  4. Status ableiten: needs_review | rejected  (src/lib/rezept/einreichung-status.ts)
+ *     Die KI veröffentlicht nichts (03.10.2026). Was die Vorprüfung besteht, geht
+ *     in die Handprüfung; `approved` + `published_at` setzt allein die
+ *     Admin-Moderation (/admin/rezepte → PATCH /api/admin/rezepte). Vorher ging
+ *     eine Bewertung ab 65 sofort live — gegen die Datenschutzerklärung
+ *     (Abschnitt 10a) und CLAUDE.md § 2 Regel 4 („Kein Auto-Posting").
  *  5. Slug erzeugen (eindeutig), Insert via Service-Role
- *  6. Antwort { status, slug?, message }
+ *  6. Antwort { status, message }
  */
 
 import { anthropic } from '@ai-sdk/anthropic';
@@ -26,6 +31,11 @@ import {
   buildModerationPrompt,
 } from '@/lib/rezept/moderation';
 import { guardRequest } from '@/lib/api/guard';
+import {
+  einreichungsStatus,
+  MELDUNG_ABGELEHNT,
+  MELDUNG_IN_PRUEFUNG,
+} from '@/lib/rezept/einreichung-status';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -129,17 +139,8 @@ export async function POST(req: Request) {
     );
   }
 
-  // 4) Status ableiten
-  let status: 'approved' | 'needs_review' | 'rejected';
-  if (!verdict.safe || !verdict.is_recipe) {
-    status = 'rejected';
-  } else if (verdict.quality_score >= 65) {
-    status = 'approved';
-  } else if (verdict.quality_score >= 45) {
-    status = 'needs_review';
-  } else {
-    status = 'rejected';
-  }
+  // 4) Status ableiten — nie `approved`: freigeben kann nur ein Mensch (s. Kopf).
+  const status = einreichungsStatus(verdict);
 
   // Autor-Name (für Hall of Fame): NUR der selbst gesetzte Profil-Anzeigename wird
   // öffentlich gezeigt. Kein Fallback auf den E-Mail-Lokalteil — der kann den Klarnamen
@@ -179,7 +180,8 @@ export async function POST(req: Request) {
     moderation: verdict,
     rejection_reason: status === 'rejected' ? verdict.user_message : null,
     quality_score: verdict.quality_score,
-    published_at: status === 'approved' ? new Date().toISOString() : null,
+    // Bleibt leer, bis die Admin-Moderation freigibt (PATCH /api/admin/rezepte).
+    published_at: null,
   });
 
   if (insErr) {
@@ -188,25 +190,12 @@ export async function POST(req: Request) {
   }
 
   // 6) Antwort
-  if (status === 'approved') {
-    return NextResponse.json({
-      status,
-      slug,
-      message: verdict.user_message || 'Dein Rezept ist freigegeben und jetzt live.',
-    });
-  }
   if (status === 'needs_review') {
-    return NextResponse.json({
-      status,
-      message:
-        verdict.user_message ||
-        'Dein Rezept sieht gut aus und wird noch kurz redaktionell geprüft. Es erscheint in Kürze.',
-    });
+    // Fester Text statt verdict.user_message — Begründung an MELDUNG_IN_PRUEFUNG.
+    return NextResponse.json({ status, message: MELDUNG_IN_PRUEFUNG });
   }
   return NextResponse.json({
     status,
-    message:
-      verdict.user_message ||
-      'Diese Einreichung entspricht noch nicht unseren Standards. Schau dir gerne veröffentlichte Rezepte als Orientierung an.',
+    message: verdict.user_message || MELDUNG_ABGELEHNT,
   });
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import RechtsZeile from '@/components/layout/RechtsZeile'
 
 export const metadata: Metadata = {
   title: 'Bestellung bestätigt',
@@ -75,6 +76,8 @@ export default function DankePage() {
             masterclass@steakakademie.de
           </a>
         </p>
+
+        <RechtsZeile />
 
       </div>
     </main>

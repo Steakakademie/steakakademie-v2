@@ -8,18 +8,22 @@ import { sichtbareArtikel } from '@/lib/redaktion';
 import { breadcrumbSchema, collectionPageSchema, definedTermSetSchema } from '@/lib/schema';
 import { ogImages } from '@/lib/og';
 
+// 03.10.2026: Zahl statt „vollständig"/„komplett" — Vollstaendigkeit ist nicht belegbar,
+// die Zahl der sichtbaren Begriffe schon (dieselbe Quelle wie im Seitenkopf).
+const GLOSSAR_ANZAHL = sichtbareArtikel(allGlossars).length;
+
 export const metadata: Metadata = {
   // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
   // wuerde ein zweites " | Steakakademie" anhaengen und Platz in der
   // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
   title: { absolute: 'BBQ-Glossar — Fachbegriffe der Steakakademie erklärt' },
   description:
-    'Von Maillard-Reaktion bis Plateauphase: das vollständige BBQ- und Grill-Lexikon. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund.',
+    `Von Maillard-Reaktion bis Plateauphase: das BBQ- und Grill-Lexikon der Steakakademie mit ${GLOSSAR_ANZAHL} Begriffen. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund.`,
   alternates: { canonical: 'https://steakakademie.de/glossar' },
   openGraph: {
     images: ogImages('BBQ-Glossar'),
     title: 'BBQ-Glossar',
-    description: 'Das komplette Fachbegriff-Lexikon für Grillmeister. Maillard-Reaktion, Reverse Sear, Dry Aging — alles erklärt.',
+    description: `Das Fachbegriff-Lexikon für Grillmeister mit ${GLOSSAR_ANZAHL} Begriffen. Maillard-Reaktion, Reverse Sear, Dry Aging — erklärt.`,
     url: 'https://steakakademie.de/glossar',
     type: 'website',
   },
@@ -59,7 +63,7 @@ export default function GlossarPage() {
   const collectionSch = collectionPageSchema(
     'BBQ-Glossar — Fachbegriffe der Steakakademie',
     '/glossar',
-    'Das vollständige Fachbegriff-Lexikon für Grillmeister.',
+    'Das Fachbegriff-Lexikon für Grillmeister.',
   );
   const termSetSch = definedTermSetSchema(sorted.map((g) => ({ title: g.title, url: g.url })));
 

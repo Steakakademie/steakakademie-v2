@@ -102,7 +102,7 @@ export default async function DiplomLektionPage(props: Props) {
   // Kunde nichts).
   //
   // diplomZugang() NUR fuer Bezahlstufen aufrufen: cookies()/auth machen die
-  // Seite dynamisch. Die sieben KOSTENLOSEN Stufe-1-Lektionen muessen statisch
+  // Seite dynamisch. Die KOSTENLOSEN Stufe-1-Lektionen muessen statisch
   // bleiben — sonst fallen sie aus dem Manifest, aus dem next-sitemap seine
   // URLs liest (ist schon einmal passiert).
   const isPaidTier = istBezahlstufe(lektion.stufe);
@@ -123,6 +123,9 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
   const idx = siblings.findIndex((l) => l.lektionSlug === lektion.lektionSlug);
   const prev = idx > 0 ? siblings[idx - 1] : null;
   const next = idx < siblings.length - 1 ? siblings[idx + 1] : null;
+  // Zahl der freien Lektionen aus dem Bestand — stand hier getippt als „sieben",
+  // waehrend Stufe 1 laengst elf hatte (03.10.2026).
+  const stufe1Anzahl = allDiplomLektions.filter((l) => l.stufe === 1).length;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -213,12 +216,15 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                     </h2>
                     <p className="font-body text-text-secondary leading-relaxed max-w-md mx-auto mb-3">
                       Diese Lektion gehört zu Stufe {lektion.stufe} ({meta.cert}) des
-                      kostenpflichtigen Grillmeister-Diploms. Stufe 1 mit sieben
+                      kostenpflichtigen Grillmeister-Diploms. Stufe 1 mit {stufe1Anzahl}{' '}
                       vollständigen Lektionen ist frei zugänglich.
                     </p>
+                    {/* 03.10.2026: Hier stand „Verkaufsstart 01.10.2026 — 99 € für die
+                        ersten 100, danach 149 €". Das Datum ist vorbei, einen Kaufweg
+                        und einen Zaehler gibt es nicht. Kein Datum, kein Preis, bis
+                        beides steht. */}
                     <p className="font-sans text-xs text-text-muted mb-3">
-                      Verkaufsstart 01.10.2026 — Gründungs-Preis 99&nbsp;€ für die ersten 100,
-                      danach 149&nbsp;€.
+                      Die Stufen 2 bis 5 sind derzeit noch nicht buchbar.
                     </p>
                     <p className="font-sans text-xs text-text-muted mb-6">
                       Nach bestandener Prüfung optional dazu bestellbar: die{' '}

@@ -288,7 +288,23 @@ function LoginForm() {
         )}
       </div>
 
-      <p className="font-sans text-xs text-text-muted text-center mt-6">
+      {/* Hinweis an der Stelle, an der das Konto entsteht (03.10.2026): Mindestalter
+          und Verweise standen bisher nur in den Nutzungsbedingungen (§ 2) — hier
+          gab es weder Link noch Altersangabe. Wortlaut folgt § 1 und § 2 dort. */}
+      <p className="font-sans text-xs text-text-muted text-center mt-6 leading-relaxed">
+        Für dein Konto gelten unsere{' '}
+        <Link href="/nutzungsbedingungen" className="underline hover:text-brand-gold transition-colors">
+          Nutzungsbedingungen
+        </Link>
+        ; eigenständig anmelden kannst du dich ab 16 Jahren, darunter nur mit Einwilligung
+        deiner Erziehungsberechtigten. Wie wir deine Daten verarbeiten, steht in der{' '}
+        <Link href="/datenschutz" className="underline hover:text-brand-gold transition-colors">
+          Datenschutzerklärung
+        </Link>
+        .
+      </p>
+
+      <p className="font-sans text-xs text-text-muted text-center mt-4">
         <Link href="/" className="hover:text-brand-gold transition-colors">
           ← Zurück zur Startseite
         </Link>

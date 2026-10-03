@@ -75,8 +75,9 @@ export default function RezeptModerationPage() {
       </div>
 
       <p className="text-[#8a7e6a] text-[11px] mb-4">
-        Grenzfälle (needs_review) + ausstehende Einreichungen. Auto-freigegebene Rezepte erscheinen direkt
-        unter /rezepte/community und tauchen hier nicht auf.
+        Alle Einreichungen, die die KI-Vorprüfung bestanden haben (needs_review), plus ausstehende (pending).
+        Seit 03.10.2026 gibt die KI nichts mehr selbst frei: Unter /rezepte/community erscheint ein Rezept erst
+        nach „Freigeben“ hier. Von der KI abgelehnte Einreichungen (rejected) tauchen hier nicht auf.
       </p>
 
       {err && <p className="text-red-400 text-xs mb-4">{err}</p>}

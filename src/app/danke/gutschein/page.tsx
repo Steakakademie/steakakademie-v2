@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import RechtsZeile from '@/components/layout/RechtsZeile'
 
 export const metadata: Metadata = {
   title: 'Bestellung bestätigt — Geschenkgutschein',
@@ -49,11 +50,12 @@ export default function DankeGutscheinPage() {
           <div className="flex items-start gap-3">
             <span className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-[#F5A623] text-black text-xs font-bold flex items-center justify-center">3</span>
             <div>
-              <p className="text-white text-sm font-medium">Einlösen — jederzeit</p>
+              {/* 03.10.2026: „jederzeit … kein Zeitdruck" stand gegen die Frist (valid_until = Kauf + 3 Jahre). */}
+              <p className="text-white text-sm font-medium">Einlösen — innerhalb von 3 Jahren</p>
               <p className="text-white/60 text-sm">
                 Die beschenkte Person löst den Code unter{' '}
                 <span className="text-white/80">steakakademie.de/gutschein/einloesen</span>{' '}
-                ein und legt sofort los. Kein Abo, kein Zeitdruck.
+                ein und legt sofort los. Kein Abo. Der Gutschein ist 3 Jahre ab Kauf gültig.
               </p>
             </div>
           </div>
@@ -69,6 +71,8 @@ export default function DankeGutscheinPage() {
         >
           Zurück zur Startseite
         </Link>
+
+        <RechtsZeile />
       </div>
     </main>
   )

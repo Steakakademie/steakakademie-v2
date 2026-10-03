@@ -70,7 +70,7 @@ export default async function BbqNewsPage() {
   const rest = newsItems.filter((n) => n.id !== featured?.id);
 
   const mixedMain = rest[0];
-  const mixedList = rest.slice(1, 4);   // "Meistgelesen"-Rail
+  const mixedList = rest.slice(1, 4);   // Rail „Weitere Meldungen" (kein Lesezaehler vorhanden)
   const bandItems = rest.slice(4);
 
   const affiliate = getRecommendedProducts(1)[0];
@@ -110,7 +110,7 @@ export default async function BbqNewsPage() {
           </section>
         )}
 
-        {/* ── Mixed-Density: Sekundär-Feature + Meistgelesen-Rail ─────── */}
+        {/* ── Mixed-Density: Sekundär-Feature + Rail „Weitere Meldungen" ─ */}
         {mixedMain && (
           <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12">
@@ -119,7 +119,8 @@ export default async function BbqNewsPage() {
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-6 h-[3px] bg-brand-fire" />
-                    <h2 className="font-serif text-xl font-bold text-text-light">Meistgelesen</h2>
+                    {/* 03.10.2026: hiess „Meistgelesen" — die Liste ist rest.slice(1, 4), ein Aufrufzaehler existiert nicht. */}
+                    <h2 className="font-serif text-xl font-bold text-text-light">Weitere Meldungen</h2>
                   </div>
                   <div className="section-divider mb-2" />
                   {mixedList.map((it, i) => <CompactItem key={it.id} item={it} rank={i + 1} />)}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { allStreitfalls } from 'contentlayer/generated';
 import { sichtbareArtikel } from '@/lib/redaktion';
+import { anzahlDiplomLektionen } from '@/lib/plattform-puls';
 import { formatDate } from '@/lib/utils';
 import EmberCanvas from '@/components/relaunch/EmberCanvas';
 import Siegel, { STUFEN } from '@/components/relaunch/Siegel';
@@ -168,7 +169,7 @@ export default function RelaunchStartseite() {
             <div className="sk-kicker sk-kicker--warm" style={{ marginBottom: 14 }}>Deine Reise zum Grillmeister</div>
             <h2 className="sk-h sk-h--xl">Fünf Stufen.<br />Ein Diplom.<br />Kein Zufall mehr.</h2>
             <p className="sk-lead" style={{ marginTop: 20, maxWidth: '56ch' }}>
-              35 Lektionen von der ersten Glut bis zum Meister. Stufe 1 liest du ohne Anmeldung — registrieren musst du dich erst, wenn du deinen Fortschritt behalten willst.
+              {anzahlDiplomLektionen()} Lektionen von der ersten Glut bis zum Meister. Stufe 1 liest du ohne Anmeldung — registrieren musst du dich erst, wenn du deinen Fortschritt behalten willst.
             </p>
           </div>
           <div className="sk-stufen">

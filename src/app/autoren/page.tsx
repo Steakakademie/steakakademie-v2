@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   openGraph: {
     images: ogImages('Unsere Autoren'),
     title: 'Unsere Autoren',
-    description: 'Lerne die Experten hinter der Steakakademie kennen — Pitmaster, Enthusiast und Food-Wissenschaftlerin.',
+    // 03.10.2026: an die Seite angeglichen — die Vorschau stellte die Personas als Menschen dar.
+    description: 'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
     url: 'https://steakakademie.de/autoren',
     type: 'website',
   },

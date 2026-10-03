@@ -257,9 +257,13 @@ export default function AgbPage() {
                 In diesem Fall besteht kein Anspruch auf Rückerstattung bereits bezahlter Beträge.
               </p>
               <p>
-                Du kannst dein Konto jederzeit durch Kontaktaufnahme unter{' '}
+                Du kannst dein Konto jederzeit selbst in deinem{' '}
+                <Link href="/diplome/profil" className={linkClass}>Profil</Link> unter
+                „Konto löschen&quot; entfernen oder es durch Kontaktaufnahme unter{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
-                löschen lassen. Mit Löschung erlischt der Zugang zu allen digitalen Inhalten.
+                löschen lassen. Mit Löschung erlischt der Zugang zu allen digitalen Inhalten. Was
+                dabei gelöscht wird und was gespeichert bleibt, steht in der{' '}
+                <Link href="/datenschutz#konto-loeschen" className={linkClass}>Datenschutzerklärung</Link>.
               </p>
             </section>
 
@@ -332,8 +336,8 @@ export default function AgbPage() {
               <h2 className={h2Class}>§ 12 Community-Rezepte, Erfahrungsberichte &amp; nutzergenerierte Inhalte</h2>
               <p className="mb-3">
                 Eingeloggte Nutzer können eigene <strong className="text-text-primary">Rezepte</strong>{' '}
-                einreichen, die nach automatisierter Prüfung auf steakakademie.de veröffentlicht werden
-                können, sowie kurze <strong className="text-text-primary">Erfahrungsberichte zu
+                einreichen, die nach automatisierter Vorprüfung und unserer Freigabe auf
+                steakakademie.de veröffentlicht werden können, sowie kurze <strong className="text-text-primary">Erfahrungsberichte zu
                 Streitfällen</strong> („Stimme aus der Praxis&ldquo;, max. 600 Zeichen, ein Beitrag je
                 Streitfall). Erfahrungsberichte erscheinen ausschließlich nach vorheriger manueller
                 Freigabe durch uns; ein Anspruch auf Veröffentlichung besteht nicht. Für alle diese
@@ -363,9 +367,12 @@ export default function AgbPage() {
                   z.&nbsp;B. „Thomas aus Kassel&ldquo;); gib dort keine Nachnamen und keine Daten Dritter an.
                 </li>
                 <li>
-                  <strong className="text-text-primary">Moderation &amp; Entfernung:</strong> Wir
-                  prüfen Rezept-Einreichungen automatisiert (KI) und Erfahrungsberichte
-                  ausnahmslos manuell vor der Veröffentlichung. Wir behalten uns vor, Inhalte ohne
+                  <strong className="text-text-primary">Moderation &amp; Entfernung:</strong>{' '}
+                  Rezept-Einreichungen durchlaufen zunächst eine automatisierte Vorprüfung (KI);
+                  veröffentlicht wird ein Rezept erst, nachdem wir es freigegeben haben.
+                  Einreichungen, die die Vorprüfung nicht bestehen, werden nicht veröffentlicht.
+                  Erfahrungsberichte prüfen wir ausnahmslos manuell vor der Veröffentlichung. Wir
+                  behalten uns vor, Inhalte ohne
                   Angabe von Gründen abzulehnen, zu bearbeiten oder zu entfernen. Du kannst die
                   Löschung deines veröffentlichten Beitrags jederzeit per E-Mail an{' '}
                   <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}

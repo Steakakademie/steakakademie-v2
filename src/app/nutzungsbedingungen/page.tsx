@@ -28,7 +28,7 @@ export default function NutzungsbedingungenPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Nutzungsbedingungen für die Community
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -104,9 +104,14 @@ export default function NutzungsbedingungenPage() {
 
             <section>
               <h2 className={h2Class}>§ 6 Moderation &amp; KI-Prüfung</h2>
+              {/* Abgleich 03.10.2026: „automatisiert und/oder manuell" ließ offen, dass die
+                  KI allein veröffentlichen konnte — genau das tat der Code bis dahin.
+                  Jetzt: KI-Vorprüfung, Freigabe nur von Hand (src/lib/rezept/einreichung-status.ts). */}
               <p>
-                Eingereichte Inhalte werden vor einer Veröffentlichung geprüft — automatisiert
-                (KI-gestützt) und/oder manuell. Es besteht kein Anspruch auf Veröffentlichung. Wir
+                Eingereichte Inhalte werden vor einer Veröffentlichung geprüft: zunächst
+                automatisiert (KI-gestützt), anschließend geben wir sie von Hand frei. Ohne unsere
+                Freigabe wird nichts veröffentlicht; Einreichungen, die die automatisierte Vorprüfung
+                nicht bestehen, werden nicht veröffentlicht. Es besteht kein Anspruch auf Veröffentlichung. Wir
                 behalten uns vor, Inhalte abzulehnen, zu kürzen, zu bearbeiten oder nach
                 Veröffentlichung zu entfernen. Details zur KI-Prüfung findest du in der{' '}
                 <Link href="/datenschutz" className={linkClass}>Datenschutzerklärung</Link> (Abschnitt 10a).
@@ -144,10 +149,12 @@ export default function NutzungsbedingungenPage() {
               <h2 className={h2Class}>§ 9 Sperrung &amp; Kündigung</h2>
               <p>
                 Bei Verstößen gegen diese Nutzungsbedingungen können wir Inhalte entfernen und das
-                Nutzerkonto vorübergehend oder dauerhaft sperren. Du kannst dein Konto jederzeit durch
-                Nachricht an{' '}
+                Nutzerkonto vorübergehend oder dauerhaft sperren. Du kannst dein Konto jederzeit selbst
+                in deinem <Link href="/diplome/profil" className={linkClass}>Profil</Link> unter
+                &bdquo;Konto löschen&ldquo; entfernen oder es durch Nachricht an{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
-                löschen lassen.
+                löschen lassen. Was dabei gelöscht wird und was gespeichert bleibt, steht in der{' '}
+                <Link href="/datenschutz#konto-loeschen" className={linkClass}>Datenschutzerklärung</Link>.
               </p>
             </section>
 

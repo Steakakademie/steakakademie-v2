@@ -150,7 +150,7 @@ export default function VipPage() {
               source="vip-warteliste"
               eyebrow="Warteliste · Early-Bird"
               headline="Auf die VIP-Warteliste."
-              subline="Du erfährst als Erster, wenn der VIP-Pass startet — mit 20 % Early-Bird-Rabatt. Bis dahin jeden Freitag der Wissens-Brief: ein Stück BBQ-Wissen, das bleibt. Jederzeit abbestellbar."
+              subline="Du erfährst als Erster, wenn der VIP-Pass startet — mit 20 % Early-Bird-Rabatt. Bis dahin der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar."
               cta="Auf die Warteliste"
             />
           </section>
@@ -184,7 +184,7 @@ export default function VipPage() {
               </h3>
               <ol className="mt-2 space-y-1.5 text-sm text-text-secondary">
                 <li>1. E-Mail eintragen, Bestätigungslink klicken (Double-Opt-in).</li>
-                <li>2. Freitags der Wissens-Brief — kein Verkaufsdruck, keine Countdown-Mails.</li>
+                <li>2. Bis dahin der Wissens-Brief, ohne festen Takt — kein Verkaufsdruck, keine Countdown-Mails.</li>
                 <li>3. Zum Start eine Mail mit deinem Early-Bird-Preis. Fertig.</li>
               </ol>
             </div>

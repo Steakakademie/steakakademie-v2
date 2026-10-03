@@ -25,11 +25,14 @@ export function organizationSchema() {
     '@id': ORGANIZATION_ID,
     name: 'Steakakademie',
     url: BASE_URL,
+    // Masse aus der Datei gelesen (03.10.2026, sharp + JPEG-Kopf): 896 × 1152.
+    // Vorher stand hier 512 × 512. Wird public/images/logo-barrel.jpg ersetzt,
+    // aendert sich diese Zeile mit — Waechter: src/__tests__/schema-produkt.test.ts.
     logo: {
       '@type': 'ImageObject',
       url: `${BASE_URL}/images/logo-barrel.jpg`,
-      width: 512,
-      height: 512,
+      width: 896,
+      height: 1152,
     },
     sameAs: [
       'https://www.wikidata.org/wiki/Q140455747',
@@ -174,7 +177,19 @@ export function articleSchema(input: ArticleSchemaInput) {
   };
 }
 
-// ── Produkt + AggregateRating ────────────────────────────────────────────────
+// ── Produkt ──────────────────────────────────────────────────────────────────
+// Das Schema sagt nichts, was die Seite nicht belegt (03.10.2026). Entfernt:
+//   - `review` mit Autor Steakakademie und `reviewRating` = `rating` aus der
+//     Registry. Diese Zahl ist ein von Hand eingetragener Amazon-Durchschnitt,
+//     sichtbar steht sie als „(Ø Amazon)“ — im Schema war sie die Bewertung der
+//     Steakakademie. Aus denselben Zahlen entsteht auch kein `aggregateRating`.
+//   - `availability: InStock` (Lieferbarkeit wird nirgends geprueft) und
+//     `priceValidUntil` (war Bauzeit + 30 Tage, kein Haendlerwert).
+// Ein `Offer` gibt es nur mit `price`, und `price` setzt der Aufrufer nur, wenn
+// die sichtbare Karte genau diesen Einzelpreis zeigt (keine Spanne) — siehe
+// `einzelpreis()` in src/components/affiliate/produkt-anzeige.ts. Ein Product
+// ohne `offers` ist gueltiges schema.org; Google zeigt dafuer nur kein
+// Produkt-Snippet. Das ist gewollt und kein Grund, wieder etwas zu behaupten.
 
 export interface ProductSchemaInput {
   name: string;
@@ -182,13 +197,9 @@ export interface ProductSchemaInput {
   brand: string;
   sku?: string;
   image?: string;
-  price: number;
+  /** Nur setzen, wenn die sichtbare Karte genau diesen Preis zeigt. */
+  price?: number | null;
   affiliateUrl: string;
-  rating?: number;
-  ratingCount?: number;
-  badge?: string;
-  pros?: string[];
-  cons?: string[];
 }
 
 export function productSchema(product: ProductSchemaInput) {
@@ -198,17 +209,16 @@ export function productSchema(product: ProductSchemaInput) {
     name: product.name,
     description: product.description,
     brand: { '@type': 'Brand', name: product.brand },
-    offers: {
+  };
+
+  if (typeof product.price === 'number' && product.price > 0) {
+    schema.offers = {
       '@type': 'Offer',
       price: product.price.toFixed(2),
       priceCurrency: 'EUR',
-      availability: 'https://schema.org/InStock',
       url: product.affiliateUrl,
-      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split('T')[0],
-    },
-  };
+    };
+  }
 
   if (product.image) {
     schema.image = product.image.startsWith('http')
@@ -217,32 +227,62 @@ export function productSchema(product: ProductSchemaInput) {
   }
   if (product.sku) schema.sku = product.sku;
 
-
-  if (product.pros || product.cons) {
-    schema.review = {
-      '@type': 'Review',
-      author: { '@type': 'Organization', name: 'Steakakademie' },
-      reviewBody: [
-        product.pros?.length ? `Vorteile: ${product.pros.join('; ')}.` : '',
-        product.cons?.length ? `Nachteile: ${product.cons.join('; ')}.` : '',
-      ]
-        .filter(Boolean)
-        .join(' '),
-      reviewRating: product.rating
-        ? {
-            '@type': 'Rating',
-            ratingValue: product.rating.toFixed(1),
-            bestRating: '5',
-            worstRating: '1',
-          }
-        : undefined,
-    };
-  }
-
   return schema;
 }
 
-// ── Vergleichsseite: ItemList + ProductGroup ─────────────────────────────────
+// ── Vergleichsseite: ItemList ────────────────────────────────────────────────
+
+/**
+ * Produkt-IDs, die ein Vergleichstext ueber seine Produkt-Bausteine sichtbar
+ * zeigt (`<MDXProductCard id>`, `<MDXComparisonTable ids>`,
+ * `<MDXBuyingGuideBlock id>`), in der Reihenfolge des ersten Auftretens, ohne
+ * Dubletten (03.10.2026).
+ *
+ * Warum: Die ItemList einer Vergleichsseite kam bis dahin aus der Kategorie
+ * der Seite, mit Rueckfall auf `thermometer`. /vergleich/grills und
+ * /vergleich/messer gaben so sechs Thermometer als Grill- bzw. Messer-Liste
+ * aus, und „Die 5 besten …“ listete sechs. Massgeblich ist, was der Text zeigt.
+ *
+ * `<MDXComparisonTable category="…">` wird nicht ausgewertet (im Inhalt nicht
+ * verwendet). Kaeme es dazu, fehlten diese Produkte in der Liste — zu wenig
+ * ist hier die sichere Seite.
+ */
+export function produktIdsImVergleichstext(mdxRoh: string): string[] {
+  const ids: string[] = [];
+  const baustein = /<MDX(?:ProductCard|ComparisonTable|BuyingGuideBlock)\b([^>]*)/g;
+  for (const treffer of mdxRoh.matchAll(baustein)) {
+    const attribut = /\bids?\s*=\s*["']([^"']*)["']/.exec(treffer[1]);
+    if (!attribut) continue;
+    for (const roh of attribut[1].split(',')) {
+      const id = roh.trim();
+      if (id && !ids.includes(id)) ids.push(id);
+    }
+  }
+  return ids;
+}
+
+/**
+ * Welche Produkte gehoeren in die ItemList einer Vergleichsseite? (03.10.2026)
+ *   1. Zeigt der Text Produkt-Bausteine, sind genau diese die Liste
+ *      (unbekannte IDs fallen weg — die Karte rendert dann auch nicht).
+ *   2. Sonst die Karten der Seitenleiste. Der Aufrufer uebergibt sie NUR, wenn
+ *      die Kategorie der Seite ausdruecklich zugeordnet ist — sonst `null`.
+ *   3. Sonst keine: `comparisonPageSchema` gibt dann keine ItemList aus.
+ */
+export function itemListProdukte<T>(
+  mdxRoh: string,
+  findeProdukt: (id: string) => T | undefined,
+  seitenleiste: readonly T[] | null,
+): T[] {
+  const ids = produktIdsImVergleichstext(mdxRoh);
+  if (ids.length > 0) {
+    return ids.flatMap((id) => {
+      const produkt = findeProdukt(id);
+      return produkt === undefined ? [] : [produkt];
+    });
+  }
+  return seitenleiste ? [...seitenleiste] : [];
+}
 
 export interface ComparisonSchemaInput {
   pageTitle: string;
@@ -250,7 +290,10 @@ export interface ComparisonSchemaInput {
   products: ProductSchemaInput[];
 }
 
+/** Ohne Produkte gibt es keine ItemList (`null`) — eine leere Liste oder eine
+ *  mit fremden Produkten waere eine Falschaussage. */
 export function comparisonPageSchema(input: ComparisonSchemaInput) {
+  if (input.products.length === 0) return null;
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',

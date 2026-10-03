@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: 03.10.2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -83,6 +83,7 @@ export default function DatenschutzPage() {
                 <strong className="text-text-primary">Speicherort &amp; Zustellung:</strong> Deine
                 Anfrage wird bei Supabase (Abschnitt 9) abgelegt und zusätzlich per E-Mail über
                 unseren Versanddienstleister Loops (Abschnitt 7) an unser Postfach zugestellt.
+                Das Formular ist durch die Bot-Prüfung Cloudflare Turnstile geschützt (Abschnitt 4a).
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Deine Anfrage bleibt
@@ -143,6 +144,50 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            {/* Abgleich Text ↔ Technik 03.10.2026: Turnstile läuft seit 01.10.2026
+                (docs/bot-schutz-2026-10.md) und stand in keinem Rechtstext. Beschrieben
+                ist nur, was der Code tut: src/components/ui/Turnstile.tsx (Script lädt,
+                sobald ein Formular mit Widget gerendert wird — ohne Klick, ohne Bezug
+                zum Consent-Banner) und src/lib/api/turnstile.ts (Token + Besucher-IP
+                gehen zur Prüfung an Cloudflare). */}
+            <section id="turnstile">
+              <h2 className={h2Class}>4a. Bot-Schutz an Formularen (Cloudflare Turnstile)</h2>
+              <p className="mb-3">
+                Um unsere Formulare vor automatisierten Eingaben (Spam, Bots) zu schützen, nutzen
+                wir die Prüfung &bdquo;Turnstile&ldquo; von Cloudflare (Anbieter siehe Abschnitt 4).
+                Sie ist eingebunden in die Newsletter-Anmeldung, das Kontaktformular sowie die
+                Anmeldung und Registrierung. Die Newsletter-Anmeldung steht unter anderem im
+                Seitenfuß – die Prüfung ist deshalb auf den meisten Seiten dieser Website
+                vorhanden. Für den Widerruf eines Vertrags (Abschnitt 10f) verlangen wir diese
+                Prüfung nicht.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Was beim Seitenaufruf geschieht:</strong>{' '}
+                Sobald eine Seite eines dieser Formulare anzeigt, lädt dein Browser ein Skript und
+                einen Prüfrahmen von <code>challenges.cloudflare.com</code> – ohne dass du dafür
+                etwas anklicken musst und unabhängig von deiner Auswahl im Cookie-Banner. Dabei
+                erhält Cloudflare deine IP-Adresse und die technischen Angaben, die dein Browser bei
+                jedem Abruf mitsendet. Meist läuft die Prüfung unsichtbar ab; nur wenn Cloudflare
+                eine Interaktion verlangt, erscheint ein Kästchen. Welche Merkmale das Skript in
+                deinem Browser auswertet, legt Cloudflare fest:{' '}
+                <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  cloudflare.com/privacypolicy
+                </a>
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Was beim Absenden geschieht:</strong>{' '}
+                Das Skript erzeugt ein Prüfzeichen (Token), das mit dem Formular an unseren Server
+                geht. Bei der Newsletter-Anmeldung und beim Kontaktformular lässt unser Server das
+                Token von Cloudflare bestätigen und übermittelt dafür das Token und deine
+                IP-Adresse. Bei Anmeldung und Registrierung geht das Token zusammen mit deinen
+                Anmeldedaten an Supabase (Abschnitt 9).
+              </p>
+              <p>
+                <strong className="text-text-primary">Zweck:</strong> Abwehr automatisierter
+                Anfragen an unsere Formulare.
+              </p>
+            </section>
+
             <section>
               <h2 className={h2Class}>5. Webanalyse (Plausible Analytics)</h2>
               <p className="mb-3">
@@ -155,6 +200,21 @@ export default function DatenschutzPage() {
                 Plausible erhebt ausschließlich aggregierte, anonyme Nutzungsstatistiken
                 (Seitenaufrufe, Herkunftsland, Gerätekategorie, Referrer). Es werden keine
                 IP-Adressen gespeichert. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.
+              </p>
+              {/* Abgleich 03.10.2026: src/app/go/[product-slug]/route.ts und
+                  src/app/go-fleisch/[cut]/route.ts melden den Klick serverseitig an
+                  plausible.io/api/event und setzen dabei X-Forwarded-For (Besucher-IP)
+                  und User-Agent in den Anfragekopf. Was Plausible damit tut, steht
+                  nicht im Repo — deshalb hier keine Aussage dazu. */}
+              <p className="mb-3">
+                <strong className="text-text-primary">Klick auf eine Produktempfehlung:</strong>{' '}
+                Unsere Empfehlungs-Links führen über eine Weiterleitung auf unserem Server
+                (Adressen, die mit <code>/go/</code> oder <code>/go-fleisch/</code> beginnen) zum
+                jeweiligen Shop. Dabei meldet unser Server den Klick als Ereignis
+                &bdquo;Affiliate-Klick&ldquo; an Plausible – mit dem Partner, der Kennung des
+                Produkts und der Adresse der Seite, von der du kommst. Im Kopf dieser Anfrage
+                reicht unser Server deine IP-Adresse und die Kennung deines Browsers (User-Agent)
+                an Plausible weiter.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
@@ -234,7 +294,13 @@ export default function DatenschutzPage() {
             </section>
 
             {/* Hofladen-Radar (13.09.2026): Karte nur nach Klick (Klick-zum-Laden),
-                Geocoding serverseitig, Standort nur auf Klick, lokaler Merker. */}
+                Geocoding serverseitig, Standort nur auf Klick, lokaler Merker.
+                Abgleich 03.10.2026: „serverseitig" hieß nicht „ohne Dritte" —
+                src/lib/hoefe/geocode.ts schickt den Suchbegriff an api.maptiler.com,
+                ohne MapTiler-Key an nominatim.openstreetmap.org; Antworten liegen
+                30 Tage im Next-fetch-Cache. Der Betreiber von Nominatim ist im Repo
+                nicht mit Anschrift belegt und deshalb nur mit der Adresse des
+                Dienstes genannt. */}
             <section id="hofladen-radar">
               <h2 className={h2Class}>6a. Hofladen-Radar (Karte: MapTiler, Daten: OpenStreetMap)</h2>
               <p className="mb-3">
@@ -242,9 +308,19 @@ export default function DatenschutzPage() {
                 Direktvermarkter in deiner Nähe. Die Hof-Daten stammen aus OpenStreetMap
                 (Lizenz ODbL) und liegen auf unserem eigenen Server (Supabase, Abschnitt 9);
                 bei einer Suche werden nur der eingegebene Ort bzw. die gewählten Koordinaten
-                verarbeitet, um Treffer zu berechnen. Die Umwandlung eines Ortsnamens in
-                Koordinaten führt <strong className="text-text-primary">unser Server</strong> durch –
-                dein Browser sendet dabei nichts an Dritte.
+                verarbeitet, um Treffer zu berechnen.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Suche nach Ort oder Postleitzahl:</strong>{' '}
+                Die Umwandlung deines Suchbegriffs in Koordinaten stößt{' '}
+                <strong className="text-text-primary">unser Server</strong> an. Er sendet den
+                eingegebenen Ort bzw. die Postleitzahl an den Geocoding-Dienst von MapTiler
+                (Anbieter siehe nächster Absatz) oder, falls dieser nicht eingerichtet ist, an
+                den Dienst Nominatim des OpenStreetMap-Projekts
+                (<code>nominatim.openstreetmap.org</code>). Übermittelt wird nur der Suchbegriff;
+                dein Browser sendet dabei nichts an diese Dienste, und deine IP-Adresse geben wir
+                nicht weiter. Das Ergebnis halten wir bis zu 30 Tage in einem Zwischenspeicher
+                vor, damit derselbe Ort nicht erneut angefragt werden muss.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Kartenansicht – nur nach Klick:</strong> Die
@@ -280,9 +356,13 @@ export default function DatenschutzPage() {
 
               <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.1 Anbieter und Empfänger</h3>
               <p className="mb-3">
-                Für den Versand unseres Newsletters und unserer Transaktions-E-Mails
-                (Bestätigungen aus dem Kontaktformular, Widerrufsbestätigungen,
-                Geschenkgutscheine, Login-Links) nutzen wir den Dienst Loops der{' '}
+                Für den Versand unseres Newsletters und unserer Transaktions-E-Mails nutzen wir
+                den Dienst Loops. Über Loops laufen: die Bestätigungsmail der Newsletter-Anmeldung
+                (7.3), die Zustellung deiner Kontaktanfrage an unser Postfach (Abschnitt 2a), die
+                Eingangsbestätigung eines Widerrufs (Abschnitt 10f), der Versand von
+                Geschenkgutscheinen und der Anmeldelink nach einem Kauf (Abschnitt 10) sowie bei
+                der Bestellung einer gedruckten Urkunde die Benachrichtigung an unser Postfach und
+                die Bestellbestätigung an dich (Abschnitt 10e). Anbieter ist die{' '}
                 <strong className="text-text-primary">Astrodon Corporation</strong>,
                 9450 SW Gemini Dr, PMB 22902, Beaverton, Oregon 97008-7105, USA.
               </p>
@@ -319,8 +399,10 @@ export default function DatenschutzPage() {
               <p className="mb-3">
                 Zum Nachweis der Einwilligung nach Art. 7 Abs. 1 DSGVO speichern wir: Zeitpunkt und
                 IP-Adresse der Anmeldung, Zeitpunkt und IP-Adresse der Bestätigung sowie den
-                Wortlaut des Einwilligungstextes, dem du zugestimmt hast. Diese Protokollierung ist
-                zur Erfüllung unserer Rechenschaftspflicht nach Art. 5 Abs. 2 DSGVO erforderlich.
+                Wortlaut des Einwilligungstextes, dem du zugestimmt hast. Diese Angaben werden mit
+                deiner Bestätigung an deinem Kontakt-Eintrag bei Loops gespeichert. Diese
+                Protokollierung ist zur Erfüllung unserer Rechenschaftspflicht nach Art. 5 Abs. 2
+                DSGVO erforderlich.
               </p>
 
               <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.5 Inhalte</h3>
@@ -365,7 +447,18 @@ export default function DatenschutzPage() {
               <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.9 Speicherdauer</h3>
               <ul className="list-disc pl-5 space-y-1 mb-3">
                 <li>Bestätigte Abonnements: bis zum Widerruf.</li>
-                <li>Nicht bestätigte Anmeldungen: automatische Löschung nach 30 Tagen.</li>
+                {/* Abgleich 03.10.2026: Hier stand „automatische Löschung nach 30 Tagen".
+                    Dafür gibt es keinen Mechanismus — und nichts zu löschen: Die Anmeldung
+                    ist zustandslos (src/lib/doi.ts, signiertes Token, 48 h), ein Kontakt
+                    entsteht erst in /api/newsletter/confirm. */}
+                <li>
+                  Nicht bestätigte Anmeldungen: Vor deiner Bestätigung legen wir keinen Eintrag im
+                  Verteiler an und speichern deine Anmeldung nicht bei uns. Deine Angaben
+                  (E-Mail-Adresse, Zeitpunkt und IP-Adresse der Anmeldung, Fassung des
+                  Einwilligungstextes) stecken bis dahin ausschließlich im Bestätigungslink, der
+                  nach 48 Stunden ungültig wird. Für den Versand der Bestätigungsmail gehen deine
+                  E-Mail-Adresse und dieser Link an Loops (7.1).
+                </li>
                 <li>
                   Nach Widerruf: Entfernung aus dem aktiven Verteiler. Deine Adresse wird in eine
                   Sperrliste aufgenommen, damit du keine weiteren E-Mails erhältst. Den
@@ -438,6 +531,71 @@ export default function DatenschutzPage() {
                 Löschung innerhalb von <strong className="text-text-primary">30 Tagen</strong>{' '}
                 entfernt, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
               </p>
+              {/* Abgleich 03.10.2026 mit src/app/api/konto-loeschen/route.ts. Die Liste
+                  nennt nur, was die Route ausdrücklich löscht (TABELLEN_MIT_USER_ID,
+                  Bucket diagnose-images, auth.users) bzw. laut Kopfkommentar bewusst
+                  stehen lässt. Wer dort etwas ändert, ändert es hier und in
+                  src/app/diplome/profil/KontoLoeschen.tsx mit.
+                  NICHT genannt, weil nur über Fremdschlüssel-Kaskade und am Live-Stand
+                  nicht geprüft: bookings, protokoll_gutschriften, aroma_matcher_abfragen,
+                  aroma_matrix_warteliste. */}
+              <p className="mb-3" id="konto-loeschen">
+                <strong className="text-text-primary">Konto löschen:</strong> Du kannst dein Konto
+                jederzeit selbst im{' '}
+                <Link href="/diplome/profil" className={linkClass}>Profil</Link> unter
+                &bdquo;Konto löschen&ldquo; entfernen oder die Löschung per E-Mail an{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
+                verlangen. Löschst du es im Profil, werden dabei sofort und unwiderruflich
+                gelöscht:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>dein Konto mit E-Mail-Adresse und Anmeldedaten,</li>
+                <li>dein Profil (Grillmeister-Vita), dein Lernfortschritt und dein Lesestand der Lektionen,</li>
+                <li>deine Abstimmungen und Erfahrungsberichte zu Streitfällen,</li>
+                <li>
+                  deine Grill-Protokolle sowie deine Steak-Diagnosen samt Guthaben und den dazu
+                  hochgeladenen Fotos.
+                </li>
+              </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Nicht gelöscht</strong> werden dabei Daten,
+                die nicht an deinem Konto hängen, sondern für sich gespeichert sind:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>
+                  <strong className="text-text-primary">Community-Rezepte:</strong> Sie bleiben
+                  gespeichert und werden anonymisiert (Abschnitt 8a).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Bestelldaten aus Käufen über Digistore24</strong>{' '}
+                  (Abschnitt 10), einschließlich der dabei gespeicherten E-Mail-Adresse: Sie
+                  bleiben als Kaufnachweis bestehen; Rechnungs- und Zahlungsdaten unterliegen
+                  gesetzlichen Aufbewahrungspflichten (§ 257 HGB, § 147 AO).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Bestellungen gedruckter Urkunden</strong>{' '}
+                  (Abschnitt 10e) mit E-Mail-Adresse, Name, Lieferadresse und der erzeugten
+                  Druckdatei: Sie bleiben gespeichert – auch Bestellungen, die noch nicht bezahlt
+                  sind –, nur die Verknüpfung zu deinem Konto wird gelöst. Zur Speicherdauer siehe
+                  Abschnitt 10e.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Gutscheine, die du gekauft hast,
+                  Widerrufe und Kontaktanfragen</strong> (Abschnitte 10, 10f und 2a): Sie sind
+                  nicht mit deinem Konto verknüpft, sondern nur über deine E-Mail-Adresse
+                  zuzuordnen, und werden von der Kontolöschung nicht erfasst.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Newsletter:</strong> Die Anmeldung beruht
+                  auf einer eigenen Einwilligung (Abschnitt 7) und endet nicht mit dem Konto. Du
+                  meldest dich über den Abmeldelink in jeder Newsletter-E-Mail ab.
+                </li>
+              </ul>
+              <p className="mb-3">
+                Möchtest du, dass wir auch diese Daten löschen, schreib uns an{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
+                (deine Rechte: Abschnitt 14).
+              </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}
                 <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -446,14 +604,22 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
-            <section>
+            {/* id="community": Sprungziel aus AGB § 12 und dem Einwilligungstext im
+                Rezeptformular (RecipeSubmitModal) — bis 03.10.2026 lief der Anker ins Leere.
+                Abgleich 03.10.2026 mit /api/rezept-einreichen und /api/konto-loeschen:
+                Freigabe nur noch durch einen Menschen (Abschnitt 10a); eine Löschfunktion
+                für eigene Rezepte gibt es nicht (nur E-Mail); bei Kontolöschung werden
+                ALLE Einreichungen anonymisiert behalten, nicht nur veröffentlichte. */}
+            <section id="community" className="scroll-mt-24">
               <h2 className={h2Class}>8a. Community-Rezepte (nutzergenerierte Inhalte)</h2>
               <p className="mb-3">
-                Angemeldete Nutzer können eigene Rezepte einreichen, die nach Prüfung im
-                Community-Bereich veröffentlicht werden. Dabei verarbeiten wir die von dir
-                eingegebenen Inhalte (Rezepttitel, Zutaten, Zubereitungsschritte, von dir
-                gewählter Anzeigename) sowie den Bearbeitungsstatus. Die Speicherung erfolgt
-                bei Supabase (Abschnitt 8).
+                Angemeldete Nutzer können eigene Rezepte einreichen. Nach einer automatisierten
+                Vorprüfung (Abschnitt 10a) und unserer Freigabe können sie im Community-Bereich
+                veröffentlicht werden. Dabei verarbeiten wir die von dir eingegebenen Inhalte
+                (Rezepttitel, Kurzbeschreibung, Portionen, Zubereitungszeit, Zutaten,
+                Zubereitungsschritte, von dir gewählter Anzeigename), das Ergebnis der
+                KI-Vorprüfung (Bewertung und Begründung) sowie den Bearbeitungsstatus. Die
+                Speicherung erfolgt bei Supabase (Abschnitt 9).
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Kein Foto-Upload:</strong> Das Hochladen
@@ -462,16 +628,21 @@ export default function DatenschutzPage() {
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Eingereichte Inhalte
-                werden gespeichert, bis du sie löschst oder die Veröffentlichung widerrufst.
+                bleiben gespeichert, bis du ihre Entfernung verlangst. Eine Funktion, mit der du
+                ein eingereichtes Rezept selbst löschen kannst, gibt es derzeit nicht – schreib uns
+                dazu an{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>.
                 Es gelten ergänzend unsere{' '}
                 <Link href="/nutzungsbedingungen" className={linkClass}>Nutzungsbedingungen</Link>.
               </p>
               <p className="mb-3">
-                <strong className="text-text-primary">Bei Löschung deines Kontos:</strong> Bereits
-                veröffentlichte Rezepte bleiben als Bestandteil des Community-Bereichs erhalten.
-                Dein Anzeigename wird dabei entfernt und durch &bdquo;Ehemaliges Mitglied&ldquo;
-                ersetzt, und die Verknüpfung zu deinem Nutzerkonto wird gelöst — ein Personenbezug
-                besteht danach nicht mehr.
+                <strong className="text-text-primary">Bei Löschung deines Kontos:</strong> Deine
+                Einreichungen werden nicht gelöscht. Veröffentlichte Rezepte bleiben als Bestandteil
+                des Community-Bereichs erhalten; auch noch nicht freigegebene und abgelehnte
+                Einreichungen bleiben in unserer Datenbank gespeichert. In allen wird dein
+                Anzeigename entfernt und durch &bdquo;Ehemaliges Mitglied&ldquo; ersetzt, und die
+                Verknüpfung zu deinem Nutzerkonto wird gelöst — ein Personenbezug besteht danach
+                nicht mehr.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsverhältnis) sowie lit. f
@@ -507,9 +678,36 @@ export default function DatenschutzPage() {
               <p className="mb-3">
                 Zahlungen für digitale Produkte werden über Digistore24 GmbH abgewickelt.
                 Im Rahmen des Bestellvorgangs erhebt Digistore24 die für die Kaufabwicklung
-                erforderlichen Daten (Name, E-Mail, Zahlungsdaten). Diese Daten werden
-                ausschließlich von Digistore24 verarbeitet; wir haben keinen Zugriff auf
-                vollständige Zahlungsdaten.
+                erforderlichen Daten (Name, E-Mail, Zahlungsdaten). Die Zahlung selbst wickelt
+                Digistore24 ab; wir haben keinen Zugriff auf vollständige Zahlungsdaten.
+              </p>
+              {/* Abgleich 03.10.2026: Hier stand, die Daten würden „ausschließlich von
+                  Digistore24 verarbeitet". src/app/api/webhooks/digistore24/route.ts
+                  speichert aber jede Bestellbenachrichtigung in digistore_orders
+                  (ds_order_id, ds_product_id, ds_email, ds_event, raw_payload, raw_body),
+                  legt aus der Käufer-E-Mail ein Konto an (ensureUser), verschickt den
+                  Anmeldelink über Loops (sendMagicLink) und speichert bei Gutscheinen
+                  purchaser_email + gift_message (create_voucher). */}
+              <p className="mb-3">
+                <strong className="text-text-primary">Was wir von Digistore24 erhalten und
+                speichern:</strong> Nach einem Kauf – und bei späteren Ereignissen zu dieser
+                Bestellung, etwa einer Erstattung – sendet Digistore24 eine Bestellbenachrichtigung
+                an unseren Server. Daraus speichern wir bei Supabase (Abschnitt 9) die Bestellnummer,
+                die Produktnummer, deine E-Mail-Adresse, die Art des Ereignisses sowie die
+                Benachrichtigung in der Form, in der Digistore24 sie übermittelt. Welche Angaben sie
+                im Einzelnen enthält, legt Digistore24 fest.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Was wir damit tun:</strong> Mit deiner
+                E-Mail-Adresse legen wir – falls du noch keines hast – automatisch ein Nutzerkonto
+                an (Abschnitt 9), schalten das gekaufte Produkt frei und senden dir über Loops
+                (Abschnitt 7) einen Anmeldelink. Kaufst du einen Geschenkgutschein, legen wir dafür
+                kein Konto an; wir speichern zusätzlich den Gutschein-Code zusammen mit deiner
+                E-Mail-Adresse und – falls Digistore24 sie übermittelt – deiner persönlichen
+                Nachricht und senden dir den Code über Loops zu. Lässt sich eine Bestellung keinem
+                freigeschalteten Produkt zuordnen, meldet unser Server Bestell- und Produktnummer
+                (ohne E-Mail-Adresse) an unsere Fehlerüberwachung (Abschnitt 13a), damit wir uns
+                darum kümmern können.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Rechnungs- und
@@ -521,6 +719,33 @@ export default function DatenschutzPage() {
                 <a href="https://www.digistore24.com/datenschutz" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   digistore24.com/datenschutz
                 </a>
+              </p>
+            </section>
+
+            {/* Neu 03.10.2026 — das Widerrufsformular war in der Datenschutzerklärung
+                nicht beschrieben (nur „Widerrufsbestätigungen" unter 7.1). Stand laut
+                src/app/api/widerruf/route.ts und supabase/migrations/20260531_widerrufe.sql. */}
+            <section id="widerruf">
+              <h2 className={h2Class}>10f. Widerrufsformular</h2>
+              <p className="mb-3">
+                Erklärst du einen Widerruf über das Formular unter{' '}
+                <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>,
+                speichern wir bei Supabase (Abschnitt 9) die Angaben, die du dort machst: deine
+                E-Mail-Adresse und/oder die Bestell- bzw. Vertragsnummer sowie – soweit du sie
+                einträgst – Name, Produkt und Anmerkung. Dazu halten wir den Zeitpunkt fest, zu dem
+                dein Widerruf bei uns eingegangen ist.
+              </p>
+              <p className="mb-3">
+                Hast du eine E-Mail-Adresse angegeben, senden wir dir über Loops (Abschnitt 7) eine
+                Eingangsbestätigung mit Datum und Uhrzeit des Eingangs sowie der angegebenen
+                Bestellnummer und dem Produkt. Gibst du nur eine Bestellnummer an, können wir dir
+                keine E-Mail schicken; die Bestätigung siehst du dann nur auf dem Bildschirm.
+              </p>
+              <p>
+                <strong className="text-text-primary">Speicherdauer:</strong> Eine automatische
+                Löschfrist ist für diese Einträge derzeit nicht eingerichtet. Sie hängen nicht an
+                einem Nutzerkonto und werden deshalb auch bei einer Kontolöschung (Abschnitt 9)
+                nicht entfernt.
               </p>
             </section>
 
@@ -567,30 +792,41 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
-            <section>
-              <h2 className={h2Class}>11. KI-Assistenten „Marco&quot; (Anthropic)</h2>
+            {/* Abgleich 03.10.2026: Hier stand Anthropic als Empfänger. Der Chat läuft
+                aber über Google Gemini — src/app/api/marco/route.ts (@google/genai,
+                GEMINI_MODEL), aufgerufen aus src/components/ai/MarcoWidget.tsx.
+                Übermittelt werden der Verlauf der laufenden Unterhaltung und, falls
+                angehängt, ein Foto (Base64); der Guard verlangt ein angemeldetes Konto
+                (auth: 'user-or-admin'); die Route schreibt nichts in die Datenbank.
+                ENTFERNT, weil für den falschen Empfänger geschrieben: „Anthropic PBC …
+                Auftragsverarbeiter gemäß Art. 28 DSGVO" und „Drittlandübermittlung USA —
+                EU-Standardvertragsklauseln". */}
+            <section id="marco">
+              <h2 className={h2Class}>11. KI-Assistent „Marco&quot; (Google Gemini)</h2>
               <p className="mb-3">
-                Diese Website bietet den KI-Assistenten „Marco&quot; als Chat-Widget an.
+                Diese Website bietet den KI-Assistenten „Marco&quot; als Chat-Widget an. Nutzen
+                kannst du ihn nur, wenn du mit einem Nutzerkonto angemeldet bist (Abschnitt 9).
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-3">
                 <li>
                   <strong className="text-text-primary">Zweck:</strong>{' '}
-                  Bereitstellung von Grillberatung via Chat (Cuts, Temperaturen, Techniken).
+                  Bereitstellung von Grillberatung via Chat (Cuts, Temperaturen, Techniken)
+                  sowie die Einschätzung von Fotos, die du im Chat anhängst.
                 </li>
                 <li>
                   <strong className="text-text-primary">Verarbeitete Daten:</strong>{' '}
-                  Eingegebene Chat-Nachrichten (temporär, keine serverseitige Speicherung
-                  nach Sitzungsende, keine Verknüpfung mit Nutzerprofilen).
+                  Deine Chat-Nachrichten, mit jeder neuen Nachricht der bisherige Verlauf der
+                  laufenden Unterhaltung (deine Fragen und Marcos Antworten) sowie Fotos, die du
+                  anhängst. Dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren;
+                  Kontodaten wie deine E-Mail-Adresse werden nicht an das KI-Modell übermittelt,
+                  und die Chat-Inhalte werden nicht in deinem Konto gespeichert.
                 </li>
                 <li>
-                  <strong className="text-text-primary">Empfänger / Auftragsverarbeiter:</strong>{' '}
-                  Anthropic PBC, 548 Market Street, San Francisco, CA 94104, USA
-                  (Auftragsverarbeiter gemäß Art. 28 DSGVO).
-                </li>
-                <li>
-                  <strong className="text-text-primary">Drittlandübermittlung:</strong>{' '}
-                  USA — Rechtsgrundlage: EU-Standardvertragsklauseln (SCC)
-                  gemäß Art. 46 Abs. 2 lit. c DSGVO.
+                  <strong className="text-text-primary">Empfänger:</strong>{' '}
+                  Google. Die Antworten erzeugt das KI-Modell „Gemini&quot;, das unser Server über
+                  die Gemini-Schnittstelle von Google anspricht (Google Ireland Limited, Gordon
+                  House, Barrow Street, Dublin 4, Irland; ggf. Google LLC, 1600 Amphitheatre
+                  Parkway, Mountain View, CA 94043, USA).
                 </li>
                 <li>
                   <strong className="text-text-primary">Rechtsgrundlage:</strong>{' '}
@@ -598,12 +834,15 @@ export default function DatenschutzPage() {
                   des Beratungsdienstes).
                 </li>
                 <li>
-                  <strong className="text-text-primary">Speicherdauer:</strong>{' '}
-                  Keine serverseitige Speicherung nach Sitzungsende.
+                  <strong className="text-text-primary">Speicherdauer bei uns:</strong>{' '}
+                  Wir speichern weder Nachrichten noch Fotos auf unseren Servern. Der Verlauf
+                  liegt nur in deinem Browser und ist nach dem Neuladen oder Schließen der Seite
+                  nicht mehr abrufbar.
                 </li>
               </ul>
               <p className="mb-3">
-                Wir empfehlen, keine sensiblen personenbezogenen Daten in den Chat einzugeben.
+                Wir empfehlen, keine sensiblen personenbezogenen Daten in den Chat einzugeben und
+                keine Fotos anzuhängen, auf denen Personen zu erkennen sind.
                 Marco ist ein KI-Assistent — keine Rechts-, Steuer- oder Gesundheitsberatung.
               </p>
               <p>
@@ -611,9 +850,9 @@ export default function DatenschutzPage() {
                 <Link href="/ki-disclaimer" className={linkClass}>
                   KI-Disclaimer
                 </Link>
-                {' '}· Anthropic-Datenschutz:{' '}
-                <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
-                  anthropic.com/privacy
+                {' '}· Datenschutzhinweise von Google:{' '}
+                <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  policies.google.com/privacy
                 </a>
               </p>
             </section>
@@ -631,7 +870,9 @@ export default function DatenschutzPage() {
                   <strong className="text-text-primary">Mein Protokoll (8-Wochen-Grillplan):</strong>{' '}
                   Übermittelt werden deine Antworten aus dem Fragebogen — Grilltyp, Erfahrungsstand, Zeit pro
                   Session, Hauptziel, dein Freitext zur Frage, was dich beim Grillen stört, sowie bei einer
-                  Korrektur dein Hinweis, was am Plan nicht passt. Name und E-Mail-Adresse werden nicht
+                  Korrektur dein Hinweis, was am Plan nicht passt. Bei einer Korrektur und bei einem
+                  weiteren Protokoll gehen außerdem die Wochenthemen und Cuts deines zuvor erstellten
+                  Plans mit, damit der neue Plan daran anknüpft. Name und E-Mail-Adresse werden nicht
                   übermittelt. Antworten und Plan speichern wir in deinem Konto, zusammen mit Zeitpunkt und
                   Wortlaut deiner Bestätigung, dass der Plan erstellt werden soll.
                 </li>
@@ -669,6 +910,16 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            {/* Abgleich 03.10.2026: Bis dahin setzte /api/rezept-einreichen bei einer
+                KI-Bewertung ab 65 sofort `approved` + `published_at` — der Satz
+                „endgültige Freigabe … unter menschlicher Kontrolle" war unwahr.
+                Geändert wurde der CODE (src/lib/rezept/einreichung-status.ts): Die KI
+                gibt nichts mehr frei, veröffentlicht wird nur über /admin/rezepte.
+                Der Satz unten ist dem angepasst — mit EINER Präzisierung, die die
+                Kanzlei sehen muss: Eine ABLEHNUNG (unsicher, kein Rezept, Bewertung
+                unter 45) trifft weiterhin die KI allein, ohne dass ein Mensch sie
+                ansieht. Der alte Wortlaut („Freigabe oder Ablehnung … unter
+                menschlicher Kontrolle") hätte das weiter falsch behauptet. */}
             <section>
               <h2 className={h2Class}>10a. KI-Moderation von Community-Einreichungen (Anthropic)</h2>
               <p className="mb-3">
@@ -679,10 +930,15 @@ export default function DatenschutzPage() {
                 eingereichte Rezeptinhalt.
               </p>
               <p className="mb-3">
-                <strong className="text-text-primary">Keine ausschließlich automatisierte
-                Entscheidung:</strong> Die KI-Prüfung ist eine Vorprüfung; die endgültige
-                Freigabe oder Ablehnung erfolgt unter menschlicher Kontrolle (kein automatisierter
-                Einzelfallbeschluss mit Rechtswirkung i.&nbsp;S.&nbsp;v. Art. 22 DSGVO).
+                <strong className="text-text-primary">Keine Veröffentlichung ohne menschliche
+                Freigabe:</strong> Die KI-Prüfung ist eine Vorprüfung. Besteht dein Rezept sie, wird
+                es nicht automatisch veröffentlicht, sondern uns zur Freigabe vorgelegt; es
+                erscheint erst, wenn ein Mensch es freigegeben hat (kein automatisierter
+                Einzelfallbeschluss mit Rechtswirkung i.&nbsp;S.&nbsp;v. Art. 22 DSGVO). Stuft die
+                KI eine Einreichung als unzulässig, nicht als Rezept oder als zu unvollständig ein,
+                wird sie nicht veröffentlicht und uns nicht zur Freigabe vorgelegt. Den Hinweis der
+                KI dazu siehst du direkt nach dem Absenden und in deinem Profil; du kannst das
+                Rezept überarbeiten und neu einreichen.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am Schutz der
@@ -705,10 +961,17 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            {/* Abgleich 03.10.2026: Der Abschnitt nannte nur Voyage AI. Beide Routen
+                (src/app/api/kochwissen/route.ts, …/generieren/route.ts) schicken die
+                Eingabe danach samt den gefundenen Wissenseinträgen an Anthropic
+                (claude-sonnet-4-6); die Startseite sagt es selbst („Claude schreibt dein
+                Rezept", ToolBoxes.tsx). Für Anthropic wird auf die schon bestehenden
+                Angaben in 11a verwiesen statt sie zu wiederholen. */}
             <section>
-              <h2 className={h2Class}>10c. Wissenssuche &amp; Rezept-Generierung (Voyage AI)</h2>
+              <h2 className={h2Class}>10c. Wissenssuche &amp; Rezept-Generierung (Voyage AI, Anthropic)</h2>
               <p className="mb-3">
-                Die Wissenssuche und die „Rezept-Schmiede&quot; wandeln deine Eingabe (Frage bzw.
+                Die Wissenssuche und die „Rezept-Schmiede&quot; stehen nur angemeldeten Nutzern zur
+                Verfügung (Abschnitt 9). Sie wandeln deine Eingabe (Frage bzw.
                 Rezept-Auftrag) serverseitig in einen Vektor um, um passende Einträge unserer
                 Wissensdatenbank zu finden. Dafür nutzen wir den Dienst{' '}
                 <strong className="text-text-primary">Voyage AI Innovations, Inc.</strong>, eine
@@ -717,12 +980,21 @@ export default function DatenschutzPage() {
               </p>
               <p className="mb-3">
                 Verarbeitet wird ausschließlich der von dir eingegebene Text zur Berechnung der
-                Vektor-Darstellung; eine dauerhafte Speicherung deiner Eingabe bei Voyage AI ist uns
+                Vektor-Darstellung und zum Sortieren der gefundenen Einträge; eine dauerhafte
+                Speicherung deiner Eingabe bei Voyage AI ist uns
                 nicht bekannt und nicht beabsichtigt. Es werden keine Nutzerprofile oder Kontodaten
                 übermittelt.
               </p>
               <p className="mb-3">
-                <strong className="text-text-primary">Kein KI-Training mit deinen Daten:</strong> Wir
+                <strong className="text-text-primary">Antwort bzw. Rezept (Anthropic):</strong>{' '}
+                Den Text der Antwort bzw. des Rezepts formuliert anschließend ein KI-Sprachmodell
+                von Anthropic PBC (Anbieter und Angaben zur Übermittlung in die USA: Abschnitt 11a).
+                Dorthin übermittelt unser Server deine Eingabe – bei der Rezept-Schmiede samt deiner
+                Auswahl zu Art, Niveau und Personenzahl – zusammen mit den gefundenen Einträgen
+                unserer Wissensdatenbank. Kontodaten werden auch hier nicht übermittelt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Kein KI-Training mit deinen Daten bei Voyage AI:</strong> Wir
                 haben das Trainings-Opt-out gemäß Ziff. 3(iii) der Voyage-AI-Nutzungsbedingungen
                 aktiviert (Stand: 16.09.2026). Ab diesem Zeitpunkt eingehende Anfragen werden nicht zum
                 Training von KI-Modellen verwendet und nach der Verarbeitung gelöscht. Für Anfragen vor
@@ -730,7 +1002,7 @@ export default function DatenschutzPage() {
                 Nutzungsrecht zu Trainingszwecken haben.
               </p>
               <p className="mb-3">
-                <strong className="text-text-primary">Drittlandübermittlung:</strong> USA — abgesichert
+                <strong className="text-text-primary">Drittlandübermittlung (Voyage AI):</strong> USA — abgesichert
                 über EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
               </p>
               <p className="mb-3">
@@ -750,7 +1022,9 @@ export default function DatenschutzPage() {
               <p className="mb-3">
                 Wenn du eine gedruckte Urkunde bestellst, speichern wir deine Bestellung (Name auf der
                 Urkunde, Level, Versandadresse, E-Mail-Adresse, Zeitpunkt deiner Einwilligung) und
-                übermitteln Name und Versandadresse an unseren Druckdienstleister{' '}
+                übermitteln deinen Namen, deine Versandadresse und deine E-Mail-Adresse, die
+                Druckdatei der Urkunde (mit dem Namen auf der Urkunde und dem Level) sowie eine
+                Bestell- und eine Kundenkennung an unseren Druckdienstleister{' '}
                 <strong className="text-text-primary">Gelato ASA</strong>, Dronning Eufemias Gate 8,
                 0191 Oslo, Norwegen, der die Urkunde druckt und verschickt. Norwegen gehört zum
                 Europäischen Wirtschaftsraum; die DSGVO gilt dort unmittelbar. Gelato verarbeitet die Daten als Auftragsverarbeiter (Art. 28 DSGVO) auf
@@ -770,11 +1044,57 @@ export default function DatenschutzPage() {
                 <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}
                 (keine Einwilligung erforderlich, § 25 Abs. 2 TDDDG):
               </p>
+              {/* Abgleich 03.10.2026 gegen den Code (grep localStorage/sessionStorage/
+                  cookies.set in src/): Die „Theme-Einstellung (hell/dunkel)" gab es nie —
+                  gestrichen. Die Supabase-Anmeldung liegt technisch in Cookies
+                  (sb-…-auth-token), nicht in einem „Token"-Speicher.
+                  Die beiden Listen darunter („Weitere Einträge …", „Weitere Cookies")
+                  sind NEU und nennen nur, was der Code setzt. */}
               <ul className="list-disc pl-5 space-y-1 mb-3">
-                <li><strong className="text-text-primary">localStorage:</strong> Theme-Einstellung (hell/dunkel) — dauerhaft, lokal im Browser</li>
-                <li><strong className="text-text-primary">sessionStorage:</strong> Exit-Intent-Status (wurde das Overlay bereits gezeigt?) — wird nach Schließen des Browsers automatisch gelöscht</li>
-                <li><strong className="text-text-primary">Supabase Auth-Token:</strong> Für eingeloggte Nutzer — sicherer JWT-Token zur Sitzungsverwaltung</li>
+                <li><strong className="text-text-primary">sessionStorage</strong> (Schlüssel <code>sa_exit_shown</code>): Exit-Intent-Status (wurde das Overlay bereits gezeigt?) — wird nach Schließen des Browsers automatisch gelöscht</li>
+                <li><strong className="text-text-primary">Anmelde-Cookies von Supabase</strong> (<code>sb-…-auth-token</code>): nur für eingeloggte Nutzer — sie enthalten das Sitzungs-Token (JWT) zur Sitzungsverwaltung</li>
               </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Weitere Einträge im lokalen Speicher deines
+                Browsers (localStorage):</strong> Sie entstehen erst, wenn du die jeweilige Funktion
+                nutzt, und bleiben in deinem Browser, bis du sie dort löschst.
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li><code>sa-karte-v1</code> — deine Wahl „Immer laden&quot; für die Karte im Hofladen-Radar (Abschnitt 6a)</li>
+                <li>
+                  <code>steakakademie_progress</code>, <code>steakakademie_flashcards_…</code>,{' '}
+                  <code>steakakademie_gelesen</code>, <code>steakakademie_check</code> — dein
+                  Lernstand im Diplom-Bereich (bearbeitete Module und Quiz-Ergebnisse, gewusste
+                  Lernkarten, gelesene Lektionen, bestandene Lektions-Checks). Bist du angemeldet,
+                  speichern wir gelesene Lektionen und bestandene Prüfungen zusätzlich in deinem
+                  Konto (Abschnitt 9).
+                </li>
+                <li><code>sa_griller_name</code> — der Name, den du für deine Auszeichnungs-Karte im Diplom-Bereich eingibst</li>
+                <li><code>gs-planer-v1</code> — deine Eingaben im Arbeitszeit-Planer (Stunden und Aufgaben)</li>
+                <li><code>sk.ansicht</code>, <code>sk.lektionen</code> — gewählte Ansicht und Lesestand im Vorschau-Bereich unter <code>/relaunch</code></li>
+              </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Weitere Cookies:</strong>
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>
+                  <code>sa_ab_home</code> — nur während eines laufenden Tests zweier
+                  Gestaltungsvarianten der Startseite: Beim ersten Aufruf der Startseite wird dir
+                  zufällig eine der beiden Varianten zugeteilt und für 90 Tage in diesem Cookie
+                  gemerkt (Wert <code>a</code> oder <code>b</code>). Meldest du dich mit Variante b
+                  zum Newsletter an, wird das an der Anmeldequelle vermerkt, die wir bei Loops
+                  speichern (Abschnitt 7). Läuft kein Test, wird das Cookie nicht gesetzt.
+                </li>
+                <li>
+                  <code>admin_auth</code> — entsteht ausschließlich, wenn sich der Betreiber im
+                  Verwaltungsbereich anmeldet (Gültigkeit 7 Tage). Besucher erhalten dieses Cookie
+                  nicht.
+                </li>
+              </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Bot-Prüfung an Formularen:</strong> Zu
+                Cloudflare Turnstile siehe Abschnitt 4a.
+              </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Einwilligungspflichtige Cookies (nur nach Opt-in):</strong>{' '}
                 Microsoft Clarity (Abschnitt 6) setzt Cookies für Heatmaps und Sitzungs-Analyse. Diese
@@ -783,7 +1103,7 @@ export default function DatenschutzPage() {
                 Optionen („Alles akzeptieren&quot; und „Ablehnen&quot;); ohne Zustimmung werden keine solchen Cookies
                 gesetzt. Deine Wahl kannst du jederzeit über „Cookie-Einstellungen&quot; im Seitenfuß ändern oder
                 widerrufen. Die gespeicherte Einwilligungs-Entscheidung selbst liegt technisch notwendig im
-                localStorage deines Browsers.
+                localStorage deines Browsers (Schlüssel <code>sa-consent-v1</code>).
               </p>
               <p>
                 <strong className="text-text-primary">Reichweitenmessung ohne Cookies:</strong>{' '}

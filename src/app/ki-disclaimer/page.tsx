@@ -49,6 +49,15 @@ export default function KiDisclaimerPage() {
                 kompetente Grillberatung anzubieten. Die folgende Tabelle gibt einen
                 Überblick über die eingesetzten Systeme:
               </p>
+              {/* Abgleich Text ↔ Technik 03.10.2026. Marco stand hier als „Claude Haiku
+                  (Anthropic PBC)" — der Chat läuft über Google Gemini
+                  (src/app/api/marco/route.ts). Ergänzt: Rezept-Schmiede
+                  (/api/kochwissen/generieren, Claude Sonnet + Voyage AI). Modellnamen ohne
+                  Versionsnummer, weil Marcos Modell per Umgebungsvariable wechselbar ist.
+                  Nicht aufgenommen: die Wissenssuche (/api/kochwissen) — der Endpunkt
+                  existiert, aber keine Oberfläche ruft ihn auf; und der englischsprachige
+                  „Niche Validator" (/tools/niche-validator) — Rest eines Fremdprojekts,
+                  Entscheidung offen. */}
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border border-white/10">
                   <thead>
@@ -71,9 +80,10 @@ export default function KiDisclaimerPage() {
                           Marco „Der Meister&quot;
                         </span>
                       </td>
-                      <td className="px-4 py-3">Claude Haiku (Anthropic PBC)</td>
+                      <td className="px-4 py-3">Gemini (Google)</td>
                       <td className="px-4 py-3">
-                        Grillberatung: Cuts, Temperaturen, Techniken, Kaufempfehlungen
+                        Grillberatung im Chat für angemeldete Nutzer: Cuts, Temperaturen, Techniken,
+                        Kaufempfehlungen sowie die Einschätzung von Fotos, die du anhängst
                       </td>
                     </tr>
                     <tr className="border-b border-white/5">
@@ -84,7 +94,8 @@ export default function KiDisclaimerPage() {
                       </td>
                       <td className="px-4 py-3">Claude (Anthropic PBC) · FLUX (fal.ai)</td>
                       <td className="px-4 py-3">
-                        Automatisierte Prüfung eingereichter Community-Rezepte und Erzeugung von
+                        Automatisierte Vorprüfung eingereichter Community-Rezepte (veröffentlicht
+                        wird erst nach Freigabe durch einen Menschen) und Erzeugung von
                         KI-Symbolbildern
                       </td>
                     </tr>
@@ -105,6 +116,17 @@ export default function KiDisclaimerPage() {
                       <td className="px-4 py-3">Claude Sonnet (Anthropic PBC)</td>
                       <td className="px-4 py-3">
                         Diagnose von Grillfehlern aus deiner Beschreibung und einem optionalen Foto
+                      </td>
+                    </tr>
+                    <tr className="border-b border-white/5">
+                      <td className="px-4 py-3">
+                        <span className="font-semibold text-text-primary">Rezept-Schmiede</span>
+                      </td>
+                      <td className="px-4 py-3">Claude Sonnet (Anthropic PBC) · Voyage AI</td>
+                      <td className="px-4 py-3">
+                        Erstellt für angemeldete Nutzer auf deinen Auftrag hin ein Rezept aus den
+                        Einträgen unserer Wissensdatenbank. Voyage AI sucht die passenden Einträge,
+                        das Sprachmodell formuliert daraus den Text
                       </td>
                     </tr>
                   </tbody>
@@ -139,8 +161,8 @@ export default function KiDisclaimerPage() {
                       Art. 50 Abs. 1 EU AI Act — Transparenzpflicht (Interaktion):
                     </span>{' '}
                     Nutzer werden deutlich darauf hingewiesen, dass sie mit einem
-                    KI-System interagieren. Marco kennzeichnet sich im Chat-Widget
-                    und in seiner Begrüßung explizit als KI-Assistent.
+                    KI-System interagieren. Das Chat-Widget kennzeichnet Marco an der
+                    Schaltfläche („KI&quot;) und im Chatfenster ausdrücklich als KI-Assistenten.
                   </div>
                 </li>
                 <li className="flex gap-3">
@@ -149,9 +171,11 @@ export default function KiDisclaimerPage() {
                     <span className="font-semibold text-text-primary">
                       Art. 50 Abs. 4 EU AI Act — Sichtbare Kennzeichnung KI-erzeugter Inhalte (Deployer-Pflicht):
                     </span>{' '}
-                    Bilder zu Community-Rezepten werden durch KI (FLUX via fal.ai) erzeugt. Sie
-                    sind sichtbar als „KI-Symbolbild&quot; gekennzeichnet und können vom tatsächlichen
-                    Gericht abweichen. Die Transparenzpflicht nach Art. 50 Abs. 4 gilt ab dem
+                    Die meisten Bilder zu unseren Rezepten, ein Teil der Bilder zu Artikeln und
+                    Streitfällen, einzelne Bilder zu Fleischzuschnitten sowie alle Bilder zu
+                    Community-Rezepten sind mit KI erzeugt oder mit KI bearbeitet (FLUX und Nano Banana über fal.ai, vereinzelt Google
+                    Gemini). Sie sind am Bild sichtbar als „KI-Symbolbild&quot; bzw. „KI-Bild&quot;
+                    gekennzeichnet und können vom tatsächlichen Gericht abweichen. Die Transparenzpflicht nach Art. 50 Abs. 4 gilt ab dem
                     2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
                   </div>
                 </li>
@@ -247,17 +271,36 @@ export default function KiDisclaimerPage() {
                 Bei der Nutzung des Chat-Assistenten Marco werden folgende
                 datenschutzrelevante Verarbeitungen vorgenommen:
               </p>
+              {/* Abgleich Text ↔ Technik 03.10.2026 (src/app/api/marco/route.ts,
+                  src/components/ai/MarcoWidget.tsx): Empfänger ist Google (Gemini), nicht
+                  Anthropic; übermittelt werden Verlauf UND Fotos; der Chat verlangt ein
+                  angemeldetes Konto.
+                  ENTFERNT, weil für den falschen Empfänger geschrieben: „Datenübermittlung
+                  an Anthropic (USA) … EU-Standardvertragsklauseln" und der Punkt
+                  „Auftragsverarbeitung: … DPA mit Anthropic geschlossen. Keine Weitergabe an
+                  weitere Dritte." */}
               <ul className="space-y-3 mb-4">
                 <li className="flex gap-3">
                   <span className="shrink-0 font-bold text-brand-gold">→</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Datenübermittlung an Anthropic (USA):
+                      Datenübermittlung an Google:
                     </span>{' '}
-                    Eingegebene Chat-Texte werden zur KI-Verarbeitung an Anthropic PBC,
-                    548 Market Street, San Francisco, CA 94104, USA übertragen.
-                    Rechtsgrundlage für die Drittlandübermittlung: EU-Standardvertragsklauseln
-                    (SCC) gemäß Art. 46 Abs. 2 lit. c DSGVO.
+                    Deine Chat-Nachrichten, mit jeder neuen Nachricht der bisherige Verlauf der
+                    laufenden Unterhaltung sowie Fotos, die du anhängst, werden zur KI-Verarbeitung
+                    an Google übertragen (KI-Modell „Gemini&quot;; Google Ireland Limited, Gordon
+                    House, Barrow Street, Dublin 4, Irland; ggf. Google LLC, 1600 Amphitheatre
+                    Parkway, Mountain View, CA 94043, USA).
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Nur für angemeldete Nutzer:
+                    </span>{' '}
+                    Der Chat setzt ein Nutzerkonto voraus; dein Konto wird bei jeder Anfrage
+                    geprüft, um den Zugang zu gewähren.
                   </div>
                 </li>
                 <li className="flex gap-3">
@@ -266,29 +309,19 @@ export default function KiDisclaimerPage() {
                     <span className="font-semibold text-text-primary">
                       Keine serverseitige Speicherung:
                     </span>{' '}
-                    Chat-Verläufe werden nicht auf Servern von Steakakademie.de gespeichert.
-                    Nach Ende der Browsersitzung sind Chat-Inhalte nicht mehr abrufbar.
+                    Chat-Verläufe und Fotos werden nicht auf Servern von Steakakademie.de
+                    gespeichert. Nach dem Neuladen oder Schließen der Seite sind Chat-Inhalte
+                    nicht mehr abrufbar.
                   </div>
                 </li>
                 <li className="flex gap-3">
                   <span className="shrink-0 font-bold text-brand-gold">→</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Keine Profilverknüpfung:
+                      Keine Speicherung im Konto:
                     </span>{' '}
-                    Chat-Eingaben werden nicht mit Nutzerprofilen, E-Mail-Adressen oder
-                    sonstigen personenbezogenen Daten verknüpft oder gespeichert.
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="shrink-0 font-bold text-brand-gold">→</span>
-                  <div>
-                    <span className="font-semibold text-text-primary">
-                      Auftragsverarbeitung:
-                    </span>{' '}
-                    Anthropic ist Auftragsverarbeiter gemäß Art. 28 DSGVO. Ein
-                    Auftragsverarbeitungsvertrag (DPA) ist mit Anthropic geschlossen.
-                    Keine Weitergabe an weitere Dritte.
+                    Chat-Eingaben werden nicht in deinem Nutzerkonto gespeichert, und Kontodaten
+                    wie deine E-Mail-Adresse werden nicht an das KI-Modell übermittelt.
                   </div>
                 </li>
                 <li className="flex gap-3">
@@ -302,9 +335,20 @@ export default function KiDisclaimerPage() {
                   </div>
                 </li>
               </ul>
+              <p className="text-sm mb-3">
+                Die übrigen KI-Funktionen aus der Tabelle oben übermitteln deine Eingaben an
+                Anthropic PBC (Rezept-Prüfung, Mein Protokoll, Steak-Beichte, Rezept-Schmiede), an
+                Voyage AI (Rezept-Schmiede) und an fal.ai (Bild zu einem Community-Rezept). Was
+                dabei jeweils übermittelt wird, steht in der{' '}
+                <Link href="/datenschutz" className={linkClass}>
+                  Datenschutzerklärung
+                </Link>{' '}
+                (Abschnitte 10a bis 10c und 11a).
+              </p>
               <p className="text-sm">
                 Wir empfehlen, keine sensiblen personenbezogenen Daten (Name, Adresse,
-                Gesundheitsdaten, Bankdaten) in den Chat einzugeben. Vollständige
+                Gesundheitsdaten, Bankdaten) in den Chat einzugeben und keine Fotos anzuhängen,
+                auf denen Personen zu erkennen sind. Vollständige
                 Datenschutzinformationen:{' '}
                 <Link href="/datenschutz" className={linkClass}>
                   Datenschutzerklärung

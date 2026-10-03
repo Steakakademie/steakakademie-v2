@@ -98,13 +98,17 @@ export default function ImpressumPage() {
                 für digitale Dienste (Digital Services Act, DSA) benennen wir folgende zentrale
                 Kontaktstelle für Behörden und Nutzer:
               </p>
+              {/* Abgleich 03.10.2026: Hier stand „Sprachen: Deutsch, Englisch", die
+                  Nutzungsbedingungen (§ 7) nennen für dieselbe Kontaktstelle nur Deutsch.
+                  Vereinheitlicht auf die engere Angabe. Soll Englisch angeboten werden,
+                  beide Stellen gemeinsam ändern — Entscheidung Uwe/Kanzlei. */}
               <p className="mb-3">
                 <strong className="text-text-primary">Kontaktstelle für Nutzer:</strong><br />
                 E-Mail:{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
                   pitmaster@steakakademie.de
                 </a><br />
-                Sprachen: Deutsch, Englisch
+                Sprache: Deutsch
               </p>
               <p>
                 <strong className="text-text-primary">Kontaktstelle für Behörden:</strong><br />
@@ -112,7 +116,7 @@ export default function ImpressumPage() {
                 <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
                   pitmaster@steakakademie.de
                 </a><br />
-                Sprachen: Deutsch, Englisch
+                Sprache: Deutsch
               </p>
             </section>
 

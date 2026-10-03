@@ -8,12 +8,12 @@ import { ogImages } from '@/lib/og';
 export const metadata: Metadata = {
   title: 'Der Wissens-Brief — BBQ-Tipps per Mail',
   description:
-    'Jeden Freitag ein Stück BBQ-Wissen: Kerntemperaturen, Cuts, Technik — präzise und ehrlich. Kostenlos, jederzeit abmeldbar. Direkt in dein Postfach.',
+    'Der Wissens-Brief: zuerst der Kerntemperatur-Spickzettel, dann BBQ-Wissen zu Cuts und Technik — ohne festen Takt, ohne Spam. Kostenlos, jederzeit abbestellbar.',
   alternates: { canonical: 'https://steakakademie.de/newsletter' },
   openGraph: {
     images: ogImages('Der Steakakademie Wissens-Brief'),
     title: 'Der Steakakademie Wissens-Brief',
-    description: 'Jeden Freitag: ein Meister, eine Technik, ein Rezept. Kostenlos per Mail.',
+    description: 'Zuerst der Kerntemperatur-Spickzettel, dann BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Kostenlos per Mail.',
     url: 'https://steakakademie.de/newsletter',
     type: 'website',
   },
@@ -40,11 +40,12 @@ export default function NewsletterPage() {
               </span>
             </div>
             <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-5 max-w-3xl mx-auto">
-              Jeden Freitag ein Stück BBQ-Wissen, das bleibt.
+              BBQ-Wissen, das bleibt.
             </h1>
             <p className="font-body text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto">
               Kein Spam, keine Clickbait-Listen. Das Destillat aus Pitmaster-Wissen,
-              echten Kerntemperaturen und Meister-Techniken — direkt ins Postfach. Kostenlos.
+              echten Kerntemperaturen und Meister-Techniken — direkt ins Postfach.
+              Kostenlos, ohne festen Takt.
             </p>
           </div>
         </section>
@@ -53,16 +54,21 @@ export default function NewsletterPage() {
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="max-w-content mx-auto">
             {/* Nutzt die einheitlichen Defaults der Komponente (Audit 15.08.2026):
-                Geschenk zuerst, Frequenz „jeden Freitag" überall identisch. */}
+                Geschenk zuerst, überall derselbe Wortlaut — seit 03.10.2026 ohne
+                Takt-Zusage (siehe NewsletterSignup.tsx). */}
             <NewsletterSignup source="newsletter-page" />
 
-            {/* Sofort-Wert: der Spickzettel */}
+            {/* Was nach der Anmeldung wirklich kommt (03.10.2026): erst der Link zur
+                Druckseite des Spickzettels, dann die kurze Willkommensstrecke. Mehr
+                ist in Loops nicht angelegt — deshalb steht hier kein Versandtag und
+                keine Zahl. Der Spickzettel kommt als Link, nicht als PDF/Anhang. */}
             <p className="mt-4 text-center font-body text-sm text-text-secondary">
-              Als Willkommensgeschenk bekommst du den{' '}
+              Nach deiner Bestätigung kommt zuerst der{' '}
               <a href="/kerntemperatur-spickzettel" className="font-semibold text-brand-fire hover:underline">
                 Kerntemperatur-Spickzettel
               </a>{' '}
-              — alle Garstufen auf einer Seite, druckfertig für die Grillstation.
+              als Link zur Druckseite — alle Garstufen auf einer Seite. Danach folgen ein
+              paar kurze Mails zum Einstieg, weitere Ausgaben ohne festen Takt.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">

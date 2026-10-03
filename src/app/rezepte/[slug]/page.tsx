@@ -20,7 +20,8 @@ const KATEGORIEN: Record<string, {
   fleisch: {
     label:       'Fleisch-Rezepte',
     subtitle:    'Master-Cuts',
-    description: 'Präzise Rezepte für Premium-Cuts — Ribeye, Brisket, Tomahawk und mehr. Jedes Rezept mehrfach am Grill getestet, mit exakten Gramm- und Temperaturangaben.',
+    // 03.10.2026: ohne „mehrfach am Grill getestet" — nicht belegt.
+    description: 'Präzise Rezepte für Premium-Cuts — Ribeye, Brisket, Tomahawk und mehr. Jedes Rezept mit exakten Gramm- und Temperaturangaben.',
     heroImage:   '/images/rezepte/dry-aged-ribeye-hero.jpg',
     heroAlt:     'Dry-Aged Ribeye über Flammen auf dem Grill — dramatischer Eyecatcher',
   },
@@ -42,14 +43,16 @@ const KATEGORIEN: Record<string, {
   'saucen-rubs': {
     label:       'Saucen, Rubs & Injektionen',
     subtitle:    'Die geheimen Waffen',
-    description: 'Kansas City BBQ Sauce, Texas Dry Rub, Buttermilch-Injektionen — die Elemente, die ein gutes Gericht zur Legende machen. Laborprotokolle statt Schätzwerte.',
+    // 03.10.2026: nur Rezepte nennen, die es gibt (kein Injektions-Rezept im Bestand).
+    description: 'Kansas City BBQ Sauce, Texas Dry Rub, Alabama White Sauce — die Elemente, die ein gutes Gericht zur Legende machen. Laborprotokolle statt Schätzwerte.',
     heroImage:   '/images/articles/brisket-texas-smoked.webp',
     heroAlt:     'Texas Brisket mit Rub-Kruste frisch vom Smoker',
   },
   desserts: {
     label:       'Fire-Desserts',
     subtitle:    'Das süße Finale',
-    description: 'Vom karamellisierten Pfirsich bis zur Flammen-Ananas — Desserts, die das offene Feuer als Instrument nutzen und die Glut bis zur letzten Kohle ausreizen.',
+    // 03.10.2026: Ananas-Rezept gibt es nicht — Cheesecake vom Grill schon.
+    description: 'Vom gegrillten Pfirsich bis zum Cheesecake aus dem Kugelgrill — Desserts, die das offene Feuer als Instrument nutzen und die Glut bis zur letzten Kohle ausreizen.',
     heroImage:   '/images/tomahawk-hero.jpg',
     heroAlt:     'Offenes Feuer am Grill — Glut für Fire-Desserts',
   },
@@ -458,8 +461,8 @@ export default async function RezeptKategoriePage(props: Props) {
                 <div>
                   <p className="font-serif text-lg text-text-light mb-1">Rezepte & Pairing-Protokolle in Arbeit</p>
                   <p className="font-body text-sm text-text-muted leading-relaxed">
-                    Die ersten detaillierten Cocktail-Rezepte und Wein-Pairing-Protokolle werden gerade
-                    geschrieben und am Grill getestet. Der theoretische Rahmen oben gilt bereits heute.
+                    Die ersten detaillierten Cocktail-Rezepte und Wein-Pairing-Protokolle sind in Arbeit.
+                    Der theoretische Rahmen oben gilt bereits heute.
                   </p>
                 </div>
               </div>
@@ -467,8 +470,7 @@ export default async function RezeptKategoriePage(props: Props) {
               <div className="text-center py-24 border border-border-subtle">
                 <p className="font-serif text-2xl text-text-light mb-3">Rezepte in Arbeit</p>
                 <p className="font-body text-sm text-text-muted max-w-md mx-auto">
-                  Diese Kategorie wird gerade mit Feldtest-Protokollen gefüllt. Alle Rezepte werden vor
-                  Veröffentlichung mehrfach getestet.
+                  Für diese Kategorie gibt es noch keine Rezepte.
                 </p>
                 <Link
                   href="/rezepte"

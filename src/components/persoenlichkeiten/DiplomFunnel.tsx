@@ -2,19 +2,21 @@
 
 import Link from 'next/link';
 import { Flame, ChevronRight, Lock } from 'lucide-react';
+import { STUFEN, ERSTE_BEZAHLSTUFE } from '@/lib/diplome/stufen';
 
 interface DiplomFunnelProps {
   personName: string;
   personClaim: string;
 }
 
-const DIPLOM_LEVELS = [
-  { label: 'Bronze', sub: 'Feuer & Grundtechniken', locked: false },
-  { label: 'Silber', sub: 'Cuts & Fleischkunde', locked: false },
-  { label: 'Gold', sub: 'Räuchern & Low & Slow', locked: true },
-  { label: 'Platin', sub: 'Profi-Methoden & Präzision', locked: true },
-  { label: 'Meister', sub: 'Meisterklasse & Prüfung', locked: true },
-];
+// Aus der Diplom-Taxonomie abgeleitet (03.10.2026): Vorher stand hier eine eigene
+// Liste, die Silber als offen zeigte (ist Bezahlstufe) und „Low & Slow" bei Gold
+// fuehrte (gehoert zu Stufe 4).
+const DIPLOM_LEVELS = STUFEN.map((s) => ({
+  label: s.metall,
+  sub: s.title,
+  locked: s.nr >= ERSTE_BEZAHLSTUFE,
+}));
 
 const LEVEL_COLORS: Record<string, string> = {
   Bronze: '#CD7F32',

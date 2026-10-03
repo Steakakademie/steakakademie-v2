@@ -252,8 +252,8 @@ export default function KontaktPage() {
             Sofortantwort gewünscht?
           </p>
           <p className="font-body text-text-light/60 text-sm max-w-md mx-auto">
-            Marco — unser KI-Guide — beantwortet Fragen zu Cuts, Kerntemperaturen und
-            Techniken rund um die Uhr. Unten rechts auf der Seite.
+            Marco — unser KI-Guide — beantwortet angemeldeten Mitgliedern Fragen zu Cuts,
+            Kerntemperaturen und Techniken. Die Anmeldung ist kostenlos. Unten rechts auf der Seite.
           </p>
         </section>
 

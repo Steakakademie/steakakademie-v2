@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
-import { X, ChefHat, Plus, Trash2, ChevronDown, Award, CheckCircle, Clock, AlertCircle, LogIn, ExternalLink } from 'lucide-react';
+import { X, ChefHat, Plus, Trash2, ChevronDown, Award, Clock, AlertCircle, LogIn, ExternalLink } from 'lucide-react';
 import { z } from 'zod';
 
 // ─── Design-Token-Klassen ─────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ export default function RecipeSubmitModal() {
   const [errors, setErrors]       = useState<FieldErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending]     = useState(false);
-  const [result, setResult]       = useState<{ status: string; slug?: string; message: string } | null>(null);
+  const [result, setResult]       = useState<{ status: string; message: string } | null>(null);
 
   // ── Feld-Helfer ──
 
@@ -184,7 +184,7 @@ export default function RecipeSubmitModal() {
       } else if (!res.ok) {
         setResult({ status: 'error', message: data.error ?? 'Etwas ist schiefgelaufen. Bitte später erneut.' });
       } else {
-        setResult({ status: data.status, slug: data.slug, message: data.message });
+        setResult({ status: data.status, message: data.message });
       }
     } catch {
       setResult({ status: 'error', message: 'Netzwerkfehler — bitte später erneut versuchen.' });
@@ -298,9 +298,11 @@ export default function RecipeSubmitModal() {
                     /* ── Ergebnis-State (KI-Urteil) ── */
                     (() => {
                       const s = result?.status ?? 'error';
+                      // Kein `approved` mehr (03.10.2026): Die KI-Vorprüfung gibt nichts frei,
+                      // /api/rezept-einreichen antwortet nur noch mit needs_review oder rejected.
+                      // Veröffentlicht wird erst nach Freigabe unter /admin/rezepte.
                       const cfgMap: Record<string, { Icon: typeof Award; color: string; title: string }> = {
-                        approved:     { Icon: CheckCircle, color: '#7CB342', title: 'Freigegeben — dein Rezept ist live!' },
-                        needs_review: { Icon: Clock,       color: '#C8882A', title: 'Fast geschafft — in Prüfung' },
+                        needs_review: { Icon: Clock,       color: '#C8882A', title: 'Eingegangen — wird geprüft' },
                         rejected:     { Icon: AlertCircle, color: '#E85018', title: 'Noch nicht ganz' },
                         login:        { Icon: LogIn,       color: '#C8882A', title: 'Anmeldung nötig' },
                         error:        { Icon: AlertCircle, color: '#E85018', title: 'Etwas ist schiefgelaufen' },
@@ -324,10 +326,10 @@ export default function RecipeSubmitModal() {
                           </p>
 
                           {/* Aktionen je Ergebnis */}
-                          {s === 'approved' && result?.slug && (
-                            <a href={`/rezepte/community/${result.slug}`}
+                          {s === 'needs_review' && (
+                            <a href="/diplome/profil"
                               className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100">
-                              Rezept ansehen <ExternalLink size={13} />
+                              Stand im Profil ansehen <ExternalLink size={13} />
                             </a>
                           )}
                           {s === 'login' && (
@@ -595,14 +597,15 @@ export default function RecipeSubmitModal() {
                             ein, dass mein gewählter Anzeigename als Autor angezeigt wird. Es besteht
                             kein Vergütungsanspruch; eine Entfernung kann ich jederzeit per E-Mail
                             verlangen. Details:{' '}
-                            <a href="/agb#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">AGB § 13</a>
+                            <a href="/agb#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">AGB § 12</a>
                             {' '}·{' '}
                             <a href="/datenschutz#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">Datenschutz</a>.
                           </span>
                         </label>
                         {errors.einwilligung && <p className={`${errorCls} mt-2`}>{errors.einwilligung}</p>}
                         <p className="mt-3 text-[10px] font-sans text-text-muted leading-relaxed">
-                          Hinweis: Jede Einreichung wird automatisiert durch ein KI-System geprüft.
+                          Hinweis: Jede Einreichung wird automatisiert durch ein KI-System vorgeprüft;
+                          veröffentlicht wird sie erst nach unserer Freigabe.
                           Bitte gib keine personenbezogenen Daten Dritter (Klarnamen, Adressen) in das Rezept ein.
                         </p>
                       </div>
