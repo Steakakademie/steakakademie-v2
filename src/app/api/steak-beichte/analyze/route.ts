@@ -12,18 +12,26 @@
  *  5. Insert diagnosen (Service-Role), return { ok, id }
  *
  * Wenn der LLM-Call NACH dem Credit-Verbrauch fehlschlägt, wird der Credit
- * zurückerstattet (revoke mit Negativ-Betrag via grant), damit der Nutzer
- * nichts für eine fehlgeschlagene Diagnose bezahlt.
+ * zurückerstattet (grant_diagnose_credits mit +1), damit der Nutzer nichts für
+ * eine fehlgeschlagene Diagnose bezahlt.
+ *
+ * Seit 03.10.2026 wird das Ergebnis der Rückbuchung ausgewertet. Vorher sagte
+ * die Antwort immer „dein Guthaben wurde nicht belastet“ — auch wenn die
+ * Rückbuchung selbst gescheitert war (supabase-js wirft bei Datenbankfehlern
+ * nicht, es liefert `{ error }`). Scheitert sie, geht eine Meldung an Sentry
+ * und die Antwort behauptet die Rückbuchung nicht mehr.
  */
 
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateObject } from 'ai';
 import { NextResponse } from 'next/server';
+import * as Sentry from '@sentry/nextjs';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { DiagnoseInputSchema, ReportSchema } from '@/lib/steak-beichte/schema';
 import { SYSTEM_PROMPT, buildUserPrompt } from '@/lib/steak-beichte/prompts';
 import { RateLimiter, jsonError, rateLimitHeaders, rateLimitRequest } from '@/lib/api/guard';
+import { KONTAKT_EMPFAENGER } from '@/lib/kontakt';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -111,9 +119,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Kein Diagnose-Guthaben. Bitte zuerst kaufen.' }, { status: 402 });
   }
 
-  // Ab hier: bei jedem Fehler Credit zurückerstatten.
-  const refund = async () => {
-    await admin.rpc('grant_diagnose_credits', { p_user_id: user.id, p_amount: 1 });
+  // Ab hier: bei jedem Fehler Credit zurückerstatten. Liefert, ob die
+  // Rückbuchung angekommen ist — wirft nie (steht selbst im catch-Zweig).
+  const refund = async (): Promise<boolean> => {
+    let fehler: string;
+    try {
+      const { error } = await admin.rpc('grant_diagnose_credits', { p_user_id: user.id, p_amount: 1 });
+      if (!error) return true;
+      fehler = error.message;
+    } catch (e) {
+      fehler = e instanceof Error ? e.message : String(e);
+    }
+    // Zurückgegebene Fehler erreichen Sentry nicht von selbst (nur geworfene).
+    // Ein verbrauchtes Guthaben ohne Diagnose ist bezahlt und nicht geliefert —
+    // das darf nicht still bleiben. Nur die Konto-ID, keine Eingaben, keine Adresse.
+    console.error('[steak-beichte] refund failed', { userId: user.id, fehler });
+    Sentry.captureMessage('Steak-Beichte: Guthaben verbraucht, Diagnose gescheitert, Rückbuchung gescheitert — von Hand gutschreiben', {
+      level: 'error',
+      fingerprint: ['steak-beichte', 'refund-gescheitert'],
+      tags: { route: 'steak-beichte/analyze' },
+      extra: { userId: user.id, fehler },
+    });
+    return false;
   };
 
   try {
@@ -158,9 +185,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, id: row.id });
   } catch (err: any) {
     console.error('[steak-beichte] analyze failed', err);
-    await refund();
+    const zurueckgebucht = await refund();
     return NextResponse.json(
-      { error: 'Diagnose fehlgeschlagen — dein Guthaben wurde nicht belastet. Bitte erneut versuchen.' },
+      {
+        error: zurueckgebucht
+          ? 'Diagnose fehlgeschlagen — dein Guthaben wurde nicht belastet. Bitte erneut versuchen.'
+          : `Diagnose fehlgeschlagen. Dein Guthaben konnte dabei nicht automatisch zurückgebucht werden — bitte schreib uns an ${KONTAKT_EMPFAENGER}, damit wir es korrigieren.`,
+      },
       { status: 502 },
     );
   }
