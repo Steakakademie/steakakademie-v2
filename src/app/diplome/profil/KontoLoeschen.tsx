@@ -13,7 +13,15 @@
  * Verhalten von /api/konto-loeschen deckungsgleich bleiben. Insbesondere:
  * Community-Rezepte werden NICHT gelöscht, sondern anonymisiert
  * (author_name → 'Ehemaliges Mitglied', user_id → NULL). Wer dort etwas
- * ändert, ändert es hier mit.
+ * ändert, ändert es hier mit — und in der Datenschutzerklärung, Abschnitt 9
+ * („Konto löschen", Anker #konto-loeschen).
+ *
+ * Abgleich 03.10.2026: Der Text nannte als einzige Ausnahme „Rechnungsdaten zu
+ * Käufen". Laut Kopfkommentar der Route bleiben aber auch stehen, was nicht am
+ * Konto, sondern an der E-Mail-Adresse hängt: digistore_orders,
+ * urkunden_bestellungen (auch unbezahlte), vouchers, widerrufe, kontaktanfragen
+ * und der Loops-Kontakt. Das steht jetzt hier. Eine Frist nennt der Text
+ * bewusst nicht — die Route führt diese Punkte als „Entscheidung offen".
  */
 
 import { useState } from 'react';
@@ -71,19 +79,37 @@ export default function KontoLoeschen() {
             eine Wiederherstellung ist nicht möglich. Unwiderruflich gelöscht werden:
           </p>
           <ul className="font-body text-sm text-text-secondary space-y-1 list-disc pl-5">
-            <li>dein Konto samt E-Mail-Adresse und Anmeldedaten</li>
+            <li>dein Konto samt der dort hinterlegten E-Mail-Adresse und den Anmeldedaten</li>
             <li>deine Grillmeister-Vita und dein gesamter Lernfortschritt</li>
-            <li>deine Abstimmungen, Erfahrungsberichte, Grill-Protokolle und Steak-Diagnosen</li>
+            <li>
+              deine Abstimmungen, Erfahrungsberichte, Grill-Protokolle und Steak-Diagnosen —
+              samt Diagnose-Guthaben und hochgeladenen Fotos
+            </li>
           </ul>
           <p className="font-body text-sm text-text-secondary leading-relaxed">
-            <strong className="text-text-primary">Deine veröffentlichten Community-Rezepte bleiben bestehen</strong> —
-            sie gehören inzwischen zum Inhalt der Seite, andere Griller kochen danach.
-            Dein Name wird dabei entfernt und durch &bdquo;Ehemaliges Mitglied&ldquo; ersetzt; eine
+            <strong className="text-text-primary">Deine Community-Rezepte bleiben bestehen</strong> —
+            veröffentlichte gehören inzwischen zum Inhalt der Seite, andere Griller kochen danach;
+            auch noch nicht freigegebene und abgelehnte Einreichungen bleiben gespeichert.
+            Dein Name wird überall entfernt und durch &bdquo;Ehemaliges Mitglied&ldquo; ersetzt; eine
             Zuordnung zu dir ist danach nicht mehr möglich.
           </p>
           <p className="font-body text-xs text-text-muted leading-snug">
-            Rechnungsdaten zu Käufen müssen wir aus gesetzlichen Gründen aufbewahren
-            (§ 257 HGB, § 147 AO) — sie sind danach nicht mehr mit deinem Konto verknüpft.
+            <strong className="text-text-secondary">Nicht gelöscht</strong> wird, was nicht an deinem
+            Konto hängt, sondern für sich mit deiner E-Mail-Adresse gespeichert ist: Bestelldaten
+            aus Käufen über Digistore24 (Rechnungs- und Zahlungsdaten müssen wir aus gesetzlichen
+            Gründen aufbewahren, § 257 HGB, § 147 AO), Bestellungen gedruckter Urkunden samt Name
+            und Lieferadresse, von dir gekaufte Gutscheine, Widerrufe und Kontaktanfragen. Eine
+            Newsletter-Anmeldung läuft weiter, bis du dich über den Link in einer Newsletter-Mail
+            abmeldest. Diese Daten sind danach nicht mehr mit einem Konto verknüpft; möchtest du,
+            dass wir auch sie löschen, schreib an{' '}
+            <a href="mailto:pitmaster@steakakademie.de" className="underline hover:text-brand-gold">
+              pitmaster@steakakademie.de
+            </a>
+            . Einzelheiten:{' '}
+            <a href="/datenschutz#konto-loeschen" className="underline hover:text-brand-gold">
+              Datenschutzerklärung
+            </a>
+            .
           </p>
 
           <div>

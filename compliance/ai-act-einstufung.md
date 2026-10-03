@@ -11,10 +11,24 @@ fremde KI-Systeme über APIs ein:
 
 | System | Anbieter | Zweck |
 |---|---|---|
-| Marco-Chat (Claude API) | Anthropic | BBQ-Fragen der Besucher |
+| Marco-Chat (Gemini API) | Google | BBQ-Fragen und Foto-Analysen angemeldeter Nutzer |
 | Bild-Editing (Nano Banana / FLUX) | fal.ai | Rezept-/Cut-Bilder ab Echtfoto-Basis |
 | Redaktions-Unterstützung | Anthropic | Textentwürfe unter redaktioneller Kontrolle |
-| Rezept-Prüfung Community | Anthropic | Sicherheits-/Qualitätscheck von Einreichungen |
+| Rezept-Prüfung Community | Anthropic | Sicherheits-/Qualitätscheck von Einreichungen (Vorprüfung; Veröffentlichung erst nach Freigabe durch einen Menschen) |
+| Mein Protokoll, Steak-Beichte | Anthropic | Grillplan bzw. Fehlerdiagnose als Kaufprodukt |
+| Rezept-Schmiede, Wissenssuche | Anthropic + Voyage AI | Rezept bzw. Antwort aus der Wissensdatenbank (angemeldete Nutzer) |
+
+**Korrektur 03.10.2026 (Abgleich Text ↔ Technik):** Bis dahin stand Marco hier als
+„Claude API / Anthropic". Der Chat läuft über Google Gemini
+(`src/app/api/marco/route.ts`: `@google/genai`, Modell per `GEMINI_MODEL`), nimmt
+auch Fotos entgegen und ist seit 22.09.2026 nur angemeldet nutzbar. Die letzten
+beiden Zeilen fehlten ganz (Routen: `/api/mein-protokoll/generate`,
+`/api/steak-beichte/analyze`, `/api/kochwissen`, `/api/kochwissen/generieren`).
+Die Community-Rezept-Prüfung veröffentlicht seit 03.10.2026 nichts mehr selbst
+(`src/lib/rezept/einreichung-status.ts`). Nicht aufgenommen: der englische
+„Niche Validator" (`/tools/niche-validator`, Anthropic, ohne Login) — Rest eines
+Fremdprojekts, Entscheidung über Verbleib offen. Offen und aus dem Repo nicht
+belegbar: Vertrag/Auftragsverarbeitung mit Google für die Gemini-API.
 
 Erweiterte Anbieterpflichten würden erst greifen, wenn ein selbst feingetuntes
 Modell als eigenes Produkt vertrieben wird → relevant frühestens bei GF2
