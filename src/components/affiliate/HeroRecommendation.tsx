@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ExternalLink, Flame, Star } from 'lucide-react';
 import { getProductById } from '@/lib/products';
+import { amazonBewertung } from './produkt-anzeige';
 
 const PROVIDER_LABELS: Record<string, string> = {
   amazon: 'Amazon',
@@ -28,6 +29,8 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
   const imageSrc = product.imageUrl ?? product.image;
   const price =
     product.priceMin && product.priceMax ? `${product.priceMin} – ${product.priceMax} €` : `${product.price} €`;
+  // Sterne nur bei Produkten mit Amazon-Link, immer mit Quelle (03.10.2026)
+  const bewertung = amazonBewertung(product);
 
   return (
     <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
@@ -71,18 +74,20 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
         </span>
       )}
 
-      {product.rating && (
+      {bewertung && (
         <div className="flex items-center gap-2 mb-2">
           <div className="flex items-center gap-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
                 size={12}
-                className={i < Math.round(product.rating!) ? 'fill-brand-gold text-brand-gold' : 'text-border-subtle fill-border-subtle'}
+                className={i < Math.round(bewertung.rating) ? 'fill-brand-gold text-brand-gold' : 'text-border-subtle fill-border-subtle'}
               />
             ))}
           </div>
-          <span className="text-xs font-sans text-text-muted">{product.rating.toFixed(1)}</span>
+          <span className="text-xs font-sans text-text-muted">
+            {bewertung.rating.toFixed(1)} <span title="Durchschnittliche Amazon-Kundenbewertung">(Ø Amazon)</span>
+          </span>
         </div>
       )}
 

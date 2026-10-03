@@ -34,7 +34,11 @@ const CATEGORIES: Record<string, CategoryConfig> = {
   },
   ausruestung: {
     title: 'Ausrüstung & Tests',
-    description: 'Thermometer, Grills, Messer — praxiserprobte Produktvergleiche ohne Werbung.',
+    // 03.10.2026: vorher „praxiserprobte Produktvergleiche ohne Werbung“. Die
+    // Vergleiche enthalten Partnerlinks (als Anzeige gekennzeichnet), und ein
+    // Testbeleg liegt nicht vor — beides stand hier falsch. Der Satz steht in
+    // Meta-Description, Seitenkopf und CollectionPage-Schema.
+    description: 'Thermometer, Grills, Messer — Produktvergleiche. Partnerlinks sind als Anzeige gekennzeichnet.',
     label: 'Ausrüstung & Tests',
     canonical: 'https://steakakademie.de/kategorie/ausruestung',
   },

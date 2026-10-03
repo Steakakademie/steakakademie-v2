@@ -12,8 +12,16 @@ import ProductCard from '@/components/affiliate/ProductCard';
 import MDXProductCard from '@/components/mdx/MDXProductCard';
 import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
 import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
-import { getProductsByCategory } from '@/lib/products';
-import { articleSchema, breadcrumbSchema, comparisonPageSchema, faqSchema } from '@/lib/schema';
+import { getProductById, getProductsByCategory } from '@/lib/products';
+import MdxTextLink from '@/components/affiliate/MdxTextLink';
+import { einzelpreis } from '@/components/affiliate/produkt-anzeige';
+import {
+  articleSchema,
+  breadcrumbSchema,
+  comparisonPageSchema,
+  faqSchema,
+  itemListProdukte,
+} from '@/lib/schema';
 import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 
@@ -107,19 +115,8 @@ const mdxComponents = {
   MDXProductCard,
   MDXComparisonTable,
   MDXBuyingGuideBlock,
-  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-    const isAffiliate = href?.startsWith('/go/');
-    return (
-      <a
-        href={href}
-        rel={isAffiliate ? 'sponsored noopener' : undefined}
-        className="text-brand-fire font-medium hover:text-brand-gold transition-colors"
-        {...props}
-      >
-        {children}
-      </a>
-    );
-  },
+  // /go/-Links bekommen ein sichtbares „Anzeige“ (03.10.2026) — siehe MdxTextLink.
+  a: MdxTextLink,
 };
 
 export default function VergleichPage(props: Props) {
@@ -130,6 +127,7 @@ export default function VergleichPage(props: Props) {
   const MDXContent = useMDXComponent(vergleich.body.code);
 
   const slugCategoryMap: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
+    'fleischthermometer':         'thermometer',
     'premium-fleischthermometer': 'thermometer',
     'oberhitzegrill-vergleich':   'oberhitzegrill',
     'dry-aging-kuehlschrank-vergleich': 'dry-ager',
@@ -149,21 +147,34 @@ export default function VergleichPage(props: Props) {
     url: vergleich.url,
   });
 
+  // ItemList nur aus Produkten, die zur Seite gehoeren UND die sie zeigt
+  // (03.10.2026). Vorher kam die Liste aus `sidebarProducts` samt Rueckfall auf
+  // `thermometer`: /vergleich/grills und /vergleich/messer gaben sechs
+  // Thermometer als Grill- bzw. Messer-Vergleich aus.
+  //   1. Zeigt der Text Produkt-Bausteine, sind genau diese die Liste.
+  //   2. Sonst die drei Karten der Seitenleiste — aber nur, wenn die Kategorie
+  //      der Seite ausdruecklich zugeordnet ist (kein Rueckfall).
+  //   3. Sonst keine ItemList (comparisonPageSchema liefert null).
+  // Der Rueckfall `?? 'thermometer'` oben speist damit nur noch die
+  // Seitenleiste.
+  const schemaProdukte = itemListProdukte(
+    vergleich.body.raw,
+    getProductById,
+    slugCategoryMap[params.slug] ? sidebarProducts.slice(0, 3) : null,
+  );
+
+  // Kein `review`, kein `aggregateRating`, keine Lieferbarkeit — und ein Preis
+  // nur, wenn die Karte denselben Einzelpreis zeigt (siehe src/lib/schema.ts).
   const comparisonSch = comparisonPageSchema({
     pageTitle: vergleich.title,
     pageUrl: vergleich.url,
-    products: sidebarProducts.map((p) => ({
+    products: schemaProdukte.map((p) => ({
       name: p.name,
       description: p.description ?? '',
       brand: p.brand,
       sku: p.amazonAsin,
-      price: p.price,
+      price: einzelpreis(p),
       affiliateUrl: p.affiliateUrl,
-      rating: p.rating,
-      ratingCount: p.ratingCount,
-      badge: p.badge,
-      pros: p.pros,
-      cons: p.cons,
     })),
   });
 
@@ -180,7 +191,7 @@ export default function VergleichPage(props: Props) {
     <>
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSch) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSch) }} />
+      {comparisonSch && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSch) }} />}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
       {faqSch && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSch) }} />}
 
