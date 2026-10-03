@@ -1,15 +1,29 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, MapPin, Award, Compass } from 'lucide-react';
+import { ChevronRight, ArrowRight, MapPin, Award, Compass } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+
+/**
+ * USA-Expedition — die vier US-BBQ-Stile (content/usa/) plus Adressen.
+ *
+ * Geführte Roadtrips und ein USA-Diplom sind IN VORBEREITUNG (Entscheidung Uwe,
+ * 03.10.2026). Bis dahin standen hier drei Routen mit Dauer, Preis, Planungsjahr
+ * und dem Knopf „Interesse bekunden", dazu eine Kachel „USA-Diplom" mit
+ * Online-Prüfung und Urkunde per Post. Buchbar war davon nichts, ein USA-Diplom
+ * kennt das Diplom-System nicht (src/lib/diplome/stufen.ts).
+ * Die alte Fassung liegt in der Git-Historie.
+ *
+ * Geblieben ist, was es gibt: die vier Stile, zwei Angebote Dritter mit Link zum
+ * Veranstalter und die Smokehouse-Adressen als Liste — ohne Route, Dauer, Preis
+ * oder Termin. Vorbild für den Vorbereitungs-Hinweis: /fleischpass.
+ */
 
 export const metadata: Metadata = {
   title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition',
   description:
-    // 03.10.2026: „Pilgerstätten-Karte" → „Überblick" — eine Karte gibt es auf der Seite nicht.
-    'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Der Pilgerstätten-Überblick für ernsthafte Grillmeister.',
+    'Die vier großen US-BBQ-Stile — Texas, Kansas City, Memphis, Carolinas —, dazu Camp Brisket an der Texas A&M, die KCBS-Juroren-Schulung und Smokehouse-Adressen nach Region. Der Pilgerstätten-Überblick für ernsthafte Grillmeister.',
 };
 
 const SACRED_FOUR = [
@@ -98,58 +112,26 @@ const ACADEMY_TOUR = [
     href: 'https://kcbs.us',
     external: true,
   },
-  {
-    id: 'steakakademie-usa',
-    title: 'USA-Diplom',
-    // 03.10.2026: ohne „Level 8" / „Steak-Sommelier Level 8" — Level 8 der Ausbildung
-    // ist der Thermometer-Profi (src/lib/diplome/stufen.ts); ein USA-Diplom gibt es noch nicht.
-    subtitle: 'Steakakademie — in Planung',
-    description:
-      'Das Steakakademie-Diplom für US-BBQ-Expertise. Theorieprüfung zu allen vier Stilen, Blindverkostung aus der Beschreibung, Stiltreue-Analyse. Das Zertifikat für die nächste Pilgerfahrt.',
-    badge: 'Coming Soon',
-    badgeColor: 'text-brand-fire border-brand-fire/30',
-    icon: '🔥',
-    details: ['Online-Prüfung', 'Physisches Diplom per Post', 'Community-Zugang'],
-    href: '/diplome',
-    external: false,
-  },
 ];
 
-const PILGRIM_ROUTES = [
+// Adressen nach Region — eine Liste zum Selbstplanen, kein Reiseangebot.
+const PILGERSTAETTEN = [
   {
-    id: 'lone-star-trail',
-    title: 'The Lone Star Trail',
+    id: 'texas',
     region: 'Texas Hill Country & Austin',
-    duration: '7 Tage',
-    stops: ['Franklin Barbecue', 'La Barbecue', 'Snow\'s BBQ', 'Louie Mueller', 'Cooper\'s Old Time Pit Bar-B-Que'],
-    highlight: 'Das ultimative Texas-Brisket-Pilgrimm — 5 ikonische Smokehouses in 7 Tagen.',
-    status: 'Planung 2027',
-    statusColor: 'text-brand-gold',
-    price: 'ab 2.490 €',
+    adressen: ['Franklin Barbecue', 'La Barbecue', 'Snow\'s BBQ', 'Louie Mueller', 'Cooper\'s Old Time Pit Bar-B-Que'],
     image: '/images/articles/brisket-texas-smoked.webp',
   },
   {
     id: 'bbq-belt',
-    title: 'The BBQ Belt',
     region: 'Memphis · Kansas City · St. Louis',
-    duration: '10 Tage',
-    stops: ['Central BBQ Memphis', 'Rendezvous Memphis', 'Arthur Bryant\'s KC', 'Joe\'s KC', 'Pappys Smokehouse'],
-    highlight: 'Drei Städte, drei Stile, ein Roadtrip durch das Herzland des amerikanischen BBQ.',
-    status: 'Planung 2027',
-    statusColor: 'text-brand-gold',
-    price: 'ab 3.290 €',
+    adressen: ['Central BBQ Memphis', 'Rendezvous Memphis', 'Arthur Bryant\'s KC', 'Joe\'s KC', 'Pappys Smokehouse'],
     image: '/images/articles/reverse-sear-cast-iron-steak.webp',
   },
   {
-    id: 'whole-hog-south',
-    title: 'Whole Hog South',
+    id: 'carolinas',
     region: 'North & South Carolina',
-    duration: '5 Tage',
-    stops: ['Skylight Inn Ayden', 'Grady\'s BBQ', 'Scott\'s BBQ', 'Sweatman\'s BBQ'],
-    highlight: 'Das ursprünglichste BBQ Amerikas — Whole Hog in den Carolinas, wo alles begann.',
-    status: 'Konzept',
-    statusColor: 'text-text-muted',
-    price: 'auf Anfrage',
+    adressen: ['Skylight Inn Ayden', 'Grady\'s BBQ', 'Scott\'s BBQ', 'Sweatman\'s BBQ'],
     image: '/images/articles/ribeye-premium-cut.webp',
   },
 ];
@@ -233,7 +215,7 @@ export default function UsaExpeditionPage() {
         {/* ── ASYMMETRISCHES GRID ────────────────────────────────────────── */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
 
-          {/* Row 1: Sacred Four (2/3) + Academy on Tour (1/3) */}
+          {/* Row 1: Sacred Four (2/3) + Lernen vor Ort (1/3) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
 
             {/* ── THE SACRED FOUR — 2/3 Breite ──────────────────────────── */}
@@ -314,15 +296,20 @@ export default function UsaExpeditionPage() {
               </div>
             </div>
 
-            {/* ── ACADEMY ON TOUR — 1/3 Breite ──────────────────────────── */}
+            {/* ── LERNEN VOR ORT — 1/3 Breite, Angebote Dritter ─────────── */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-5">
                 <Award size={14} style={{ color: '#E85018' }} />
                 <span className="font-sans text-[10px] font-bold tracking-[0.22em] uppercase" style={{ color: '#E85018' }}>
-                  Academy on Tour
+                  Lernen vor Ort
                 </span>
                 <div className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.18)' }} />
               </div>
+
+              <p className="font-sans text-[10px] mb-4" style={{ color: '#7A6558' }}>
+                Angebote der jeweiligen Veranstalter, nicht der Steakakademie. Termine, Plätze und
+                Bedingungen stehen dort.
+              </p>
 
               <div className="space-y-4">
                 {ACADEMY_TOUR.map((item) => (
@@ -382,37 +369,37 @@ export default function UsaExpeditionPage() {
             </div>
           </div>
 
-          {/* ── PILGRIM ROUTES — Volle Breite ─────────────────────────────── */}
+          {/* ── PILGERSTÄTTEN — Volle Breite, Adressen ohne Reiseangebot ───── */}
           <div className="mt-8">
             <div className="flex items-center gap-3 mb-5">
               <Compass size={14} style={{ color: '#E85018' }} />
               <span className="font-sans text-[10px] font-bold tracking-[0.22em] uppercase" style={{ color: '#E85018' }}>
-                Pilgrim Routes
+                Pilgerstätten
               </span>
               <div className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.18)' }} />
               <span className="font-sans text-[10px]" style={{ color: '#5A4535' }}>
-                Premium · Geführte Kulinarik-Roadtrips
+                Smokehouse-Adressen nach Region
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {PILGRIM_ROUTES.map((route, i) => (
+              {PILGERSTAETTEN.map((ort, i) => (
                 <div
-                  key={route.id}
-                  className="group relative overflow-hidden"
+                  key={ort.id}
+                  className="relative overflow-hidden"
                   style={{
                     background: '#1E1410',
                     border: '1px solid rgba(200,136,42,0.12)',
                   }}
                 >
-                  {/* Image area */}
+                  {/* Image area — Schmuckbild */}
                   <div className="relative h-40 overflow-hidden">
                     <Image
-                      src={route.image}
-                      alt={route.title}
+                      src={ort.image}
+                      alt=""
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover"
                       style={{ filter: 'brightness(0.45) saturate(0.6)' }}
                     />
                     <div
@@ -421,8 +408,7 @@ export default function UsaExpeditionPage() {
                         background: 'linear-gradient(to bottom, transparent 30%, rgba(30,20,16,0.95) 100%)',
                       }}
                     />
-                    {/* Route number */}
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 left-3" aria-hidden="true">
                       <span
                         className="font-serif font-bold"
                         style={{ fontSize: '3rem', lineHeight: 1, color: 'rgba(200,136,42,0.15)' }}
@@ -430,59 +416,20 @@ export default function UsaExpeditionPage() {
                         0{i + 1}
                       </span>
                     </div>
-                    <div className="absolute bottom-3 right-3">
-                      <span
-                        className={`font-sans text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 border ${route.statusColor} border-current/30`}
-                      >
-                        {route.status}
-                      </span>
-                    </div>
                   </div>
 
                   <div className="p-5">
-                    <h3 className="font-serif text-lg font-bold mb-0.5" style={{ color: '#F0E8D8' }}>
-                      {route.title}
+                    <h3 className="font-serif text-lg font-bold mb-3" style={{ color: '#F0E8D8' }}>
+                      {ort.region}
                     </h3>
-                    <p className="font-sans text-[10px] mb-3" style={{ color: '#7A6558' }}>
-                      {route.region} · {route.duration}
-                    </p>
-
-                    <p className="font-body text-xs leading-relaxed mb-4" style={{ color: 'rgba(196,168,130,0.65)' }}>
-                      {route.highlight}
-                    </p>
-
-                    <div className="mb-4">
-                      <p className="font-sans text-[9px] font-bold tracking-widest uppercase mb-2" style={{ color: '#5A4535' }}>
-                        Stops
-                      </p>
-                      <ul className="space-y-0.5">
-                        {route.stops.slice(0, 3).map((stop) => (
-                          <li key={stop} className="font-sans text-[10px] flex items-center gap-2" style={{ color: '#7A6558' }}>
-                            <span style={{ color: '#C8882A' }}>→</span>
-                            {stop}
-                          </li>
-                        ))}
-                        {route.stops.length > 3 && (
-                          <li className="font-sans text-[10px]" style={{ color: '#5A4535' }}>
-                            + {route.stops.length - 3} weitere
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t pt-3"
-                      style={{ borderColor: 'rgba(200,136,42,0.12)' }}>
-                      <span className="font-sans text-xs font-bold" style={{ color: '#C8882A' }}>
-                        {route.price}
-                      </span>
-                      <Link
-                        href="/kontakt"
-                        className="font-sans text-[10px] font-bold tracking-widest uppercase transition-colors"
-                        style={{ color: '#7A6558' }}
-                      >
-                        Interesse bekunden →
-                      </Link>
-                    </div>
+                    <ul className="space-y-0.5">
+                      {ort.adressen.map((adresse) => (
+                        <li key={adresse} className="font-sans text-[10px] flex items-center gap-2" style={{ color: '#7A6558' }}>
+                          <span style={{ color: '#C8882A' }} aria-hidden="true">→</span>
+                          {adresse}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               ))}
@@ -490,33 +437,43 @@ export default function UsaExpeditionPage() {
           </div>
         </section>
 
-        {/* ── BOTTOM CTA ────────────────────────────────────────────────── */}
+        {/* ── IN VORBEREITUNG — Roadtrips und USA-Diplom ─────────────────── */}
         <section
           className="mt-16 py-20 px-4 text-center"
           style={{ borderTop: '1px solid rgba(200,136,42,0.12)' }}
         >
           <p className="font-sans text-[10px] font-bold tracking-[0.25em] uppercase mb-4" style={{ color: '#E85018' }}>
-            Nächste Stufe
+            In Vorbereitung
           </p>
           <h2 className="font-serif font-bold mb-4" style={{ color: '#F0E8D8', fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}>
-            Du warst nicht in Texas?<br />
-            <span style={{ color: '#C8882A' }}>Dann beweise es hier.</span>
+            Geführte Roadtrips und ein USA-Diplom
           </h2>
-          <p className="font-body text-sm leading-relaxed mx-auto mb-8 max-w-md" style={{ color: 'rgba(196,168,130,0.55)' }}>
-            Das Steakakademie USA-Diplom ist in Planung: Theorie zu allen vier Stilen,
-            Blindverkostung aus der Beschreibung, Stiltreue-Analyse.
+          <p className="font-body text-sm leading-relaxed mx-auto mb-3 max-w-md" style={{ color: 'rgba(196,168,130,0.75)' }}>
+            Beides gibt es noch nicht. Deshalb stehen hier keine Routen zum Buchen, keine Termine
+            und keine Preise.
+          </p>
+          <p className="font-body text-sm leading-relaxed mx-auto mb-8 max-w-md" style={{ color: 'rgba(196,168,130,0.75)' }}>
+            Was es schon gibt: die vier Stile weiter oben — und die Techniken dahinter, zum Nachmachen
+            am eigenen Grill.
           </p>
           <Link
-            href="/diplome"
+            href="/methoden"
             className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-sm tracking-[0.1em] uppercase"
             style={{
               border: '1px solid rgba(200,136,42,0.45)',
               color: '#C8882A',
             }}
           >
-            Zum Diplom-System
-            <ChevronRight size={14} />
+            Zu den Grilltechniken
+            <ArrowRight size={14} />
           </Link>
+          <p className="font-body text-xs leading-relaxed mx-auto mt-6 max-w-md" style={{ color: 'rgba(196,168,130,0.75)' }}>
+            Dazu der{' '}
+            <Link href="/newsletter" className="underline" style={{ color: '#C8882A' }}>
+              Wissens-Brief
+            </Link>
+            : BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam.
+          </p>
         </section>
 
       </main>

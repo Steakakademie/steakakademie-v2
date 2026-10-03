@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Community-Rezepte von Mitgliedern',
   description:
-    'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben. Echte Kreationen zum Nachgrillen.',
+    'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, von einer KI vorgeprüft, von Hand freigegeben. Echte Kreationen zum Nachgrillen.',
   alternates: { canonical: 'https://steakakademie.de/rezepte/community' },
 };
 
@@ -59,8 +59,9 @@ export default async function CommunityIndexPage() {
             Community-Rezepte
           </h1>
           <p className="font-body text-lg text-text-secondary max-w-2xl leading-relaxed mb-10">
-            Von Mitgliedern der Akademie eingereicht, KI-geprüft, freigegeben. Echte Kreationen
-            zum Nachgrillen — kein Redaktions-Content, sondern gelebte Praxis.
+            Von Mitgliedern der Akademie eingereicht. Eine KI prüft jede Einreichung vor, veröffentlicht
+            wird sie erst nach unserer Freigabe von Hand. Echte Kreationen zum Nachgrillen — kein
+            Redaktions-Content, sondern gelebte Praxis.
           </p>
 
           {recipes.length === 0 ? (

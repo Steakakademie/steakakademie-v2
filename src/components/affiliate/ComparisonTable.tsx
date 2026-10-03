@@ -3,7 +3,8 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { amazonBewertung } from './produkt-anzeige';
+import { amazonBewertung, klickKlassen, produktLink } from './produkt-anzeige';
+import PreisMitStand from './PreisMitStand';
 
 interface ComparisonTableProps {
   products: Product[];
@@ -58,8 +59,10 @@ export default function ComparisonTable({ products, className }: ComparisonTable
               <th className="font-sans text-[11px] font-bold tracking-[0.12em] uppercase py-3 px-4 text-left">
                 Preis
               </th>
+              {/* „Einordnung“ statt „Badge“ (03.10.2026): Die Etiketten sind eine
+                  redaktionelle Einordnung nach Datenlage, kein Testergebnis. */}
               <th className="font-sans text-[11px] font-bold tracking-[0.12em] uppercase py-3 px-4 text-left hidden sm:table-cell">
-                Badge
+                Einordnung
               </th>
               <th className="py-3 px-4 w-32" />
             </tr>
@@ -67,8 +70,10 @@ export default function ComparisonTable({ products, className }: ComparisonTable
           <tbody>
             {products.map((product, index) => {
               const rank = index + 1;
-              const isTopPick = product.badge === 'Testsieger' || product.recommended;
-              const affiliateHref = `/go/${product.id}`;
+              // Hervorhebung = redaktionelle Auswahl (`recommended`), kein Testurteil.
+              const isTopPick = product.recommended === true;
+              // Partnerlink → /go/<id> + „Anzeige“; sonst gewoehnlicher externer Link.
+              const link = produktLink(product);
               // Sterne nur bei Produkten mit Amazon-Link (produkt-anzeige.ts)
               const bewertung = amazonBewertung(product);
 
@@ -119,11 +124,11 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                   </td>
 
                   <td className="py-4 px-4">
-                    <span className="font-sans font-bold text-sm text-text-primary whitespace-nowrap">
-                      {product.priceMin && product.priceMax
-                        ? `${product.priceMin}–${product.priceMax} €`
-                        : `${product.price} €`}
-                    </span>
+                    <PreisMitStand
+                      product={product}
+                      className="font-sans font-bold text-sm text-text-primary whitespace-nowrap"
+                      block
+                    />
                   </td>
 
                   <td className="py-4 px-4 hidden sm:table-cell">
@@ -137,16 +142,19 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                   </td>
 
                   <td className="py-4 px-4 text-right">
-                    <span className="block text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted mb-1">
-                      Anzeige
-                    </span>
+                    {link.partner && (
+                      <span className="block text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted mb-1">
+                        Anzeige
+                      </span>
+                    )}
                     <Link
-                      href={affiliateHref}
-                      className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-                      rel="sponsored nofollow noopener"
+                      href={link.href}
+                      prefetch={false}
+                      className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap ${klickKlassen(product)}`}
+                      rel={link.rel}
                       target="_blank"
                     >
-                      Zum Shop →
+                      {link.partner ? 'Zum Shop →' : 'Zum Anbieter →'}
                     </Link>
                   </td>
                 </tr>
@@ -155,8 +163,12 @@ export default function ComparisonTable({ products, className }: ComparisonTable
           </tbody>
         </table>
       </div>
+      {/* Der Provisions-Hinweis steht nur, wenn die Tabelle mindestens einen
+          Partnerlink zeigt — und sagt, woran man ihn erkennt. */}
       <p className="text-[10px] font-sans text-text-muted mt-2 italic">
-        * Affiliate-Links — Preis unverändert für dich
+        {products.some((p) => produktLink(p).partner)
+          ? 'Mit „Anzeige“ markierte Links sind Affiliate-Links — Preis unverändert für dich. Preise laut Produktdaten zum genannten Stand, nicht live.'
+          : 'Preise laut Produktdaten zum genannten Stand, nicht live.'}
       </p>
     </div>
   );

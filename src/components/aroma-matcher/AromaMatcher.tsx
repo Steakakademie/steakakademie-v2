@@ -6,7 +6,14 @@
  * Drei Zustände, eine Komponente:
  *   1. Anonym       → Teaser (festes Beispiel), Cut-Picker gesperrt, Registrieren-CTA
  *   2. Eingeloggt   → Cut-Picker aktiv, Counter „X von 5", Ergebnis mit Aroma-Balken + 3 Clustern
- *   3. Kontingent 0 → letztes Ergebnis unscharf, Modal mit Warteliste (Aroma-Matrix)
+ *   3. Kontingent 0 → letztes Ergebnis unscharf, Modal mit Verweis auf die VIP-Warteliste
+ *
+ * Eine Warteliste, nicht zwei (03.10.2026): Das Modal trug bis dahin per Knopf in
+ * eine eigene „Aroma-Matrix-Warteliste" ein (Tabelle aroma_matrix_warteliste) und
+ * versprach eine Nachricht — verschickt hat sie nichts. „Ohne Limit" ist ein
+ * Baustein des VIP-Passes; dessen Warteliste auf /vip läuft über den Wissens-Brief
+ * (Double-Opt-in, Loops-Gruppe vip_warteliste) und ist die, an die eine Start-Mail
+ * gehen kann. Deshalb führt das Modal jetzt dorthin.
  *
  * Die Seite selbst bleibt statisch (SEO/GEO): der Login-Status kommt erst im
  * Client über POST /api/aroma-matcher {} — kein cookies() im Server-Render.
@@ -180,7 +187,6 @@ export default function AromaMatcher({ cuts, teaser, limit }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
-  const [waitlist, setWaitlist] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
 
   useEffect(() => {
     let alive = true;
@@ -221,12 +227,6 @@ export default function AromaMatcher({ cuts, teaser, limit }: Props) {
     }
     setError(data.error ?? 'Analyse fehlgeschlagen — bitte noch einmal versuchen.');
   }, [status?.unlimited]);
-
-  const joinWaitlist = useCallback(async () => {
-    setWaitlist('sending');
-    const { status: code } = await post<unknown>({ warteliste: true });
-    setWaitlist(code === 200 ? 'done' : 'error');
-  }, []);
 
   const loggedIn = status?.loggedIn === true;
   const remaining = status?.remaining ?? 0;
@@ -337,23 +337,15 @@ export default function AromaMatcher({ cuts, teaser, limit }: Props) {
               </div>
               <h2 id="paywall-title" className="font-serif text-2xl text-text-light">Du hast deine {status?.limit ?? limit} kostenlosen Test-Pairings verbraucht.</h2>
               <p className="mt-2 font-body text-sm leading-relaxed text-text-secondary">
-                Schalte den unbegrenzten Zugriff auf die komplette Aroma-Matrix frei — mit allen Cuts, allen Clustern und künftigen Signature-Matches.
+                Der Aroma-Matcher ohne Limit ist als Baustein des VIP-Passes geplant. Kaufen kannst du
+                ihn noch nicht. Wer auf der VIP-Warteliste steht, erfährt zuerst, wenn er startet.
               </p>
-              {waitlist === 'done' ? (
-                <p className="mt-5 rounded-lg border border-brand-gold/40 bg-surface-elevated p-3 font-sans text-sm text-text-primary">
-                  Du stehst auf der Warteliste. Wir melden uns, sobald die Aroma-Matrix freigeschaltet wird.
-                </p>
-              ) : (
-                <button
-                  type="button"
-                  onClick={joinWaitlist}
-                  disabled={waitlist === 'sending'}
-                  className="mt-5 w-full rounded-lg bg-brand-fire px-6 py-3 font-sans text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-brand-fire/90 disabled:opacity-60"
-                >
-                  {waitlist === 'sending' ? 'Einen Moment …' : 'Auf die Warteliste setzen'}
-                </button>
-              )}
-              {waitlist === 'error' && <p className="mt-2 font-sans text-xs text-brand-fire">Das hat nicht geklappt — bitte noch einmal versuchen.</p>}
+              <Link
+                href="/vip#warteliste"
+                className="mt-5 block w-full rounded-lg bg-brand-fire px-6 py-3 text-center font-sans text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-brand-fire/90"
+              >
+                Zur VIP-Warteliste
+              </Link>
               <p className="mt-3 text-center font-sans text-xs text-text-muted">
                 Deine bereits analysierten Cuts bleiben dir erhalten.
               </p>

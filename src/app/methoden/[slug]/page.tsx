@@ -220,6 +220,7 @@ export default function MethodePage(props: Props) {
                     </Link>
                     <AutorHinweis
                       authorSlug={methode.authorSlug}
+                      dokument={methode}
                       className="text-xs font-sans text-[#6B5A48] mt-1 leading-relaxed"
                     />
                   </div>

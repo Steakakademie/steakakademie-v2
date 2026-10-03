@@ -1,9 +1,10 @@
 # Steakakademie
 
 > Deutschlands methodisch tiefste BBQ-Wissensplattform: Fleischkunde, Cuts,
-> Kerntemperaturen, Grillmethoden und Grillmeister-Diplome. Alle Temperatur-,
-> Cut- und Reifungsangaben sind redaktionell geprüft (kanonische
-> Kerntemperatur-Referenz, Stand 2026). Sprache: Deutsch (DE/AT/CH).
+> Kerntemperaturen, Grillmethoden und Grillmeister-Diplome. Grundlage der
+> Temperaturangaben ist die kanonische Kerntemperatur-Referenz der Steakakademie
+> (Stand 2026). Inhalte entstehen KI-unterstützt und werden fachlich verantwortet
+> von Uwe Yendell. Sprache: Deutsch (DE/AT/CH).
 
 ## Kern-Referenzen
 

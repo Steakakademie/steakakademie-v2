@@ -10,14 +10,16 @@ import RecipeExplorer from '@/components/recipe/RecipeExplorer';
 import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
 import { ogImages } from '@/lib/og';
+import { verantwortungsangabe } from '@/lib/pruefnachweis';
 
 // 03.10.2026: Die Testbehauptungen („jedes Rezept mehrfach am Grill getestet") sind
 // raus — ein Grilltest je Rezept ist nicht belegt. Es gilt, was unter jedem Rezept
-// steht (AutorHinweis): KI-unterstützt erstellt, fachlich geprüft und verantwortet.
+// steht (AutorHinweis): KI-unterstützt erstellt, fachlich verantwortet. „Geprüft“
+// sagt diese Übersicht nicht mehr: Die Aussage gibt es nur am einzelnen Rezept und
+// nur mit Prüfdatum (src/lib/pruefnachweis.ts).
 export const metadata: Metadata = {
   title: 'BBQ-Rezepte vom Grill — mit Portionsrechner und Koch-Coach',
-  description:
-    'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, fachlich geprüft von Uwe Yendell.',
+  description: `Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, ${verantwortungsangabe()}.`,
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
   openGraph: {
     images: ogImages('BBQ-Rezepte'),
@@ -97,7 +99,7 @@ export default function RezepteIndexPage() {
                   <Users size={12} /> Aus der Community
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-2">
-                  Rezepte von Mitgliedern — KI-geprüft, freigegeben
+                  Rezepte von Mitgliedern — KI-vorgeprüft, von Hand freigegeben
                 </h2>
                 <p className="font-body text-text-light/60 leading-relaxed max-w-xl mb-4">
                   Echte Kreationen zum Nachgrillen, eingereicht von der Akademie-Community.
@@ -121,7 +123,7 @@ export default function RezepteIndexPage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
             <p className="font-body text-sm text-text-muted max-w-xl mx-auto leading-relaxed">
               Die Rezepte der Steakakademie entstehen KI-unterstützt auf Grundlage der kanonischen Temperatur- und
-              Cut-Referenz und werden fachlich geprüft und verantwortet von Gründer Uwe Yendell —{' '}
+              Cut-Referenz und werden {verantwortungsangabe({ gruender: true })} —{' '}
               <Link href="/ki-disclaimer" className="text-brand-gold hover:text-brand-fire transition-colors underline underline-offset-2">
                 mehr im KI-Disclaimer
               </Link>.

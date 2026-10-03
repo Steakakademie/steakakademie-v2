@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="sk-footer__brand">
           <Rauchring size={44} inner="#15120f" />
           <span className="sk-wordmark sk-wordmark--30">Steak<span>akademie</span></span>
-          <span className="sk-footer__claim">Methodisch · Geprüft · Ohne Zufall</span>
+          <span className="sk-footer__claim">Methodisch · Präzise · Ohne Zufall</span>
         </div>
 
         <nav className="sk-footer__cols" aria-label="Fußnavigation">
@@ -39,7 +39,7 @@ export default function Footer() {
             <Link href="/relaunch/streitfaelle">Streitfälle</Link>
           </div>
           <div className="sk-footer__col">
-            <span className="sk-footer__head">Tests</span>
+            <span className="sk-footer__head">Vergleiche</span>
             <Link href="/relaunch/vergleich/fleischthermometer">Fleischthermometer</Link>
             <Link href="/vergleich">Grills &amp; Smoker</Link>
             <Link href="/ausruestung/messer">Messer</Link>

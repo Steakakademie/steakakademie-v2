@@ -53,7 +53,7 @@ export default function PlattformPuls({ data }: { data: PulsData }) {
             <Sparkles size={12} /> Eine wachsende Wissensbasis
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light">
-            Die Steakakademie wächst — jede Woche
+            Die Steakakademie wächst
           </h2>
         </div>
 

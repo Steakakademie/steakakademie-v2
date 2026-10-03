@@ -59,7 +59,7 @@ const jsonLd = {
   ],
   url: 'https://steakakademie.de/ueber-uns',
   image: 'https://steakakademie.de/images/uwe-yendell.jpg',
-  email: 'info@steakakademie.de',
+  email: 'pitmaster@steakakademie.de',
   description:
     'Gründer der Steakakademie. Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH und Kursleiter der dort betriebenen Weber Grillakademie. Danach bis 2025 deutschlandweit als Mietkoch tätig. Kocht seit dem siebten Lebensjahr, seit dem Alter von vierzehn für Gruppen.',
   knowsAbout: [
@@ -403,7 +403,7 @@ export default function UeberUnsPage() {
               Das Ehrliche System <ArrowRight size={14} />
             </Link>
             <a
-              href="mailto:info@steakakademie.de"
+              href="mailto:pitmaster@steakakademie.de"
               className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-80 transition-opacity"
               style={{
                 border:     '1px solid rgba(200,136,42,0.35)',
@@ -412,7 +412,7 @@ export default function UeberUnsPage() {
               }}
             >
               <Mail size={14} />
-              info@steakakademie.de
+              pitmaster@steakakademie.de
             </a>
           </section>
 

@@ -310,7 +310,7 @@ export default function StreitfallPage(props: Props) {
             {/* KI-Kennzeichnung (Art. 50 KI-VO) — siehe Kommentar in der
                 Relaunch-Vorlage. */}
             <div className="mt-10 pt-6 border-t border-border-subtle">
-              <AutorHinweis authorSlug={doc.authorSlug} />
+              <AutorHinweis authorSlug={doc.authorSlug} dokument={doc} />
             </div>
 
             <div className="mt-12">

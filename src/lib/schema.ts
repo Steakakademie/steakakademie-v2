@@ -5,6 +5,7 @@
  */
 
 import { getAuthorBySlug } from '@/lib/authors';
+import { FACHLICH_VERANTWORTLICH, pruefdatumIso } from '@/lib/pruefnachweis';
 
 const BASE_URL = 'https://steakakademie.de';
 
@@ -67,7 +68,7 @@ export function websiteSchema() {
     url: BASE_URL,
     name: 'Steakakademie',
     description:
-      'Deutschlands methodisch tiefste BBQ-Wissensplattform — Fleischkunde, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome.',
+      'Deutschlands methodisch tiefste BBQ-Wissensplattform — Fleischkunde, Grilltechniken, Ausrüstungs-Vergleiche und Grillmeister-Diplome.',
     publisher: { '@id': `${BASE_URL}/#organization` },
     inLanguage: 'de-DE',
   };
@@ -123,17 +124,22 @@ export function authorSchemaRef(authorSlug: string) {
 // nicht am Article — deshalb haengen die Felder an mainEntityOfPage.
 // Ohne `reviewedAt` gibt es KEINE Felder: Ein Pruefvermerk ohne Pruefung waere
 // eine Falschaussage.
+//
+// 03.10.2026: Ob ein Datum als Pruefnachweis zaehlt, entscheidet seither allein
+// src/lib/pruefnachweis.ts — dieselbe Regel wie fuer den sichtbaren Hinweis
+// (ISO-Schreibweise, existierender Kalendertag, nicht in der Zukunft). Vorher
+// reichte hier alles, was `new Date()` schluckt: ein deutsch getipptes
+// „03.09.2026" waere als 9. Maerz im Schema gelandet.
 
 export function pruefvermerkSchema(reviewedAt?: string | null) {
-  if (!reviewedAt) return {};
-  const datum = new Date(reviewedAt);
-  if (Number.isNaN(datum.getTime())) return {};
+  const lastReviewed = pruefdatumIso({ reviewedAt });
+  if (!lastReviewed) return {};
   return {
-    lastReviewed: datum.toISOString().slice(0, 10),
+    lastReviewed,
     reviewedBy: {
       '@type': 'Person' as const,
       '@id': FOUNDER_ID,
-      name: 'Uwe Yendell',
+      name: FACHLICH_VERANTWORTLICH,
       url: `${BASE_URL}/ueber-uns`,
     },
   };

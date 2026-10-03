@@ -146,7 +146,7 @@ export default function MesserPage() {
                     { label: 'Reverse Sear — Methodik', href: '/methoden/reverse-sear' },
                     { label: 'Kerntemperaturen: Der komplette Guide', href: '/temperatur-guide' },
                     { label: 'Fleischthermometer im Vergleich', href: '/vergleich/premium-fleischthermometer' },
-                    { label: 'Ausrüstung im Test — Übersicht', href: '/vergleich' },
+                    { label: 'Ausrüstung im Vergleich — Übersicht', href: '/vergleich' },
                   ].map(({ label, href }) => (
                     <Link
                       key={href}

@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     template: '%s | Steakakademie',
   },
   description:
-    'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Techniken, Thermometer-Tests und Grillmeister-Diplome. Für Hobbygriller, die es ernst meinen.',
+    'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Techniken, Ausrüstungs-Vergleiche und Grillmeister-Diplome. Für Hobbygriller, die es ernst meinen.',
   openGraph: {
     type: 'website',
     locale: 'de_DE',

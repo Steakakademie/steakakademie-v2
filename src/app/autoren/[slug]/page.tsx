@@ -8,6 +8,7 @@ import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { allCuts, allArtikels } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
 import { breadcrumbSchema, FOUNDER_ID, ORGANIZATION_ID } from '@/lib/schema';
+import { FACHLICH_VERANTWORTLICH } from '@/lib/pruefnachweis';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -116,8 +117,10 @@ export default async function AutorPage(props: Props) {
               {!author.realPerson && (
                 <p className="text-xs font-sans text-text-muted mb-3">
                   {author.name.split(' ')[0]} ist eine KI-gestützte Redaktionspersona der Steakakademie.
-                  Alle Inhalte werden fachlich geprüft und verantwortet von{' '}
-                  <Link href="/autoren/uwe-yendell" className="underline hover:text-brand-fire">Uwe Yendell</Link>.{' '}
+                  {/* 03.10.2026: ohne „geprüft“ — eine Pruef-Aussage steht nur am
+                      einzelnen Dokument und nur mit Pruefdatum (src/lib/pruefnachweis.ts). */}
+                  Alle Inhalte werden fachlich verantwortet von{' '}
+                  <Link href="/autoren/uwe-yendell" className="underline hover:text-brand-fire">{FACHLICH_VERANTWORTLICH}</Link>.{' '}
                   <Link href="/ki-disclaimer" className="underline hover:text-brand-fire">Mehr im KI-Disclaimer</Link>.
                 </p>
               )}
@@ -186,7 +189,7 @@ export default async function AutorPage(props: Props) {
               </h2>
               <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
                 Uwe Yendell schreibt die Fachinhalte der Steakakademie nicht unter eigenem
-                Namen. Er legt die Fakten fest, prüft sie und verantwortet sie — geschrieben
+                Namen. Er legt die Fakten fest und verantwortet sie — geschrieben
                 werden sie von den Redaktionspersonas{' '}
                 <Link href="/autoren/marco" className="underline hover:text-brand-fire">Marco</Link>,{' '}
                 <Link href="/autoren/jonas" className="underline hover:text-brand-fire">Jonas</Link> und{' '}

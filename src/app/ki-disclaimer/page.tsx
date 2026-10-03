@@ -137,8 +137,9 @@ export default function KiDisclaimerPage() {
                 Alle Antworten werden in Echtzeit durch das KI-Modell generiert und
                 können inhaltliche Fehler enthalten. Das gilt auch für unsere redaktionellen
                 Personas Marco, Jonas und Elena: Artikel unter ihren Namen entstehen
-                KI-unterstützt und werden fachlich geprüft und verantwortet von
-                Gründer Uwe Yendell.
+                KI-unterstützt und werden fachlich verantwortet von
+                Gründer Uwe Yendell. Wurde ein Beitrag fachlich geprüft, steht das
+                Prüfdatum am Beitrag.
               </p>
             </section>
 

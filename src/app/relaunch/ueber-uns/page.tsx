@@ -25,7 +25,7 @@ const REDAKTION: { slug: string; rolle: string }[] = [
   // 06.09.2026: Uwe zeichnet keine Fachartikel mehr als Autor (Entscheidung Uwe).
   // Seine Rolle ist die fachliche Verantwortung — die Personas schreiben.
   { slug: 'uwe-yendell', rolle: 'Gründer · fachliche Verantwortung' },
-  { slug: 'marco', rolle: 'Pitmaster, Tests, Texas' },
+  { slug: 'marco', rolle: 'Pitmaster, Ausrüstung, Texas' },
   { slug: 'elena', rolle: 'USA-Expedition, Carolinas' },
   { slug: 'jonas', rolle: 'USA-Expedition, Memphis' },
 ];

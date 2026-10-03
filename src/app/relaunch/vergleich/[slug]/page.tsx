@@ -4,38 +4,30 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { allVergleiches } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
-import { getProductsByCategory } from '@/lib/products';
 import { anzahlDiplomLektionen } from '@/lib/plattform-puls';
-import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
-import type { Product } from '@/types';
+import { articleSchema, breadcrumbSchema, faqSchema, produktIdsImVergleichstext } from '@/lib/schema';
+import { METHODENSATZ, vergleichsProdukte } from '@/lib/vergleich-seite';
+import { amazonBewertung, preisAnzeige, produktLink, PREIS_OHNE_STAND } from '@/components/affiliate/produkt-anzeige';
 import { skMdx, Crumbs, Faq } from '@/components/relaunch/Prose';
 
 /**
- * Werkzeug / Vergleichstest (Handoff, Ansicht 6): Breite 1100px, Titel auf
- * 16ch, Lead auf 64ch mit Affiliate-Hinweis, darunter die getesteten Modelle
- * als Karten (Testsieger dunkel mit Akzentrahmen), dann der Testbericht.
+ * Werkzeug / Vergleich (Handoff, Ansicht 6): Breite 1100px, Titel auf 16ch,
+ * Lead auf 64ch, darunter die Modelle der Seite als Karten (die redaktionelle
+ * Auswahl dunkel mit Akzentrahmen), dann der Text.
  *
- * Produkte kommen aus products/registry.yaml (dieselbe Zuordnung Slug →
- * Kategorie wie live). Jede Karte trägt „Anzeige" sichtbar VOR dem Klick
- * (LG Köln 12.05.2026, CLAUDE.md § 2 Regel 1), Links laufen über /go/[id]
- * (Tracking-Redirect) mit rel="sponsored nofollow noopener".
+ * Produkte kommen aus products/registry.yaml — dieselbe Zuordnung wie live
+ * (vergleichsProdukte in src/lib/vergleich-seite.ts). Eine Karte mit
+ * Partnerlink trägt „Anzeige" sichtbar VOR dem Klick (LG Köln 12.05.2026,
+ * CLAUDE.md § 2 Regel 1) und läuft über /go/[id] mit rel="sponsored nofollow
+ * noopener". Führt der Link ohne Partner-Parameter zum Anbieter, ist er ein
+ * gewöhnlicher externer Link — ohne „Anzeige" (produktLink).
  *
- * Die drei Infokästen „So haben wir getestet / Was zählt / Transparenz" des
- * Prototyps enthalten konkrete Methodik-Behauptungen, die in den Inhalten nicht
- * belegt sind — sie werden nicht erfunden. testedCount/testDuration aus dem
- * Frontmatter stehen im Kicker.
+ * 03.10.2026: Die Seite ist eine Marktübersicht nach Herstellerangaben, kein
+ * Gerätetest. Der Methodensatz steht sichtbar unter dem Kicker. Der Prototyp
+ * sah drei Infokästen „So haben wir getestet / Was zählt / Transparenz" vor —
+ * sie entfallen, weil es keinen Test gibt, über den sie berichten könnten.
  */
 type Props = { params: Promise<{ slug: string }> };
-
-const SLUG_KATEGORIE: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
-  'fleischthermometer': 'thermometer',
-  'premium-fleischthermometer': 'thermometer',
-  'oberhitzegrill-vergleich': 'oberhitzegrill',
-  'dry-aging-kuehlschrank-vergleich': 'dry-ager',
-  'kuechenmaschine-vergleich': 'kuechenmaschine',
-  'messer': 'messer',
-  'grills': 'grill',
-};
 
 export function generateStaticParams() {
   return allVergleiches.map((v) => ({ slug: v.slug }));
@@ -48,17 +40,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return { title: v.seoTitle ?? v.title, description: v.seoDescription ?? v.excerpt };
 }
 
-function preis(p: Product) {
-  if (p.priceMin && p.priceMax && p.priceMin !== p.priceMax) return `ab ${Math.round(p.priceMin)} €`;
-  return `${Math.round(p.price)} €`;
-}
-
 export default function VergleichSeite(props: Props) {
   const params = use(props.params);
   const v = allVergleiches.find((x) => x.slug === params.slug);
   if (!v) notFound();
   const MDXContent = useMDXComponent(v.body.code);
-  const produkte = SLUG_KATEGORIE[v.slug] ? getProductsByCategory(SLUG_KATEGORIE[v.slug]).slice(0, 3) : [];
+  const produkte = vergleichsProdukte(v.slug, v.body.raw).slice(0, 3);
+  // Gezählt aus den Produkt-Bausteinen des Textes — nicht aus dem Frontmatter.
+  const modelleImText = produktIdsImVergleichstext(v.body.raw).length;
   const faq = (v.faq as Array<{ question: string; answer: string }> | undefined) ?? [];
   const schemas = [
     articleSchema({
@@ -69,29 +58,40 @@ export default function VergleichSeite(props: Props) {
     breadcrumbSchema([{ name: 'Vergleiche', url: '/vergleich' }, { name: v.title, url: v.url }]),
     ...(faq.length ? [faqSchema(faq)] : []),
   ];
+  const hatPartnerkarte = produkte.some((p) => produktLink(p).partner);
 
   return (
     <div className="sk-mid">
       {schemas.map((s, i) => <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />)}
-      <Crumbs items={[{ label: 'Start', href: '/relaunch' }, { label: 'Ausrüstung', href: '/vergleich' }, { label: 'Tests' }]} />
+      <Crumbs items={[{ label: 'Start', href: '/relaunch' }, { label: 'Ausrüstung', href: '/vergleich' }, { label: 'Vergleiche' }]} />
       <div className="sk-kicker sk-kicker--accent" style={{ marginBottom: 14 }}>
-        Vergleich · Selbst getestet{v.testedCount ? ` · ${v.testedCount} Modelle` : ''}{v.testDuration ? ` · ${v.testDuration}` : ''}
+        Vergleich · Marktübersicht{modelleImText > 0 ? ` · ${modelleImText} Modelle` : ''}
       </div>
       <h1 className="sk-h sk-h--page" style={{ maxWidth: '16ch' }}>{v.title}</h1>
       <p className="sk-lead" style={{ marginTop: 20, maxWidth: '64ch' }}>
-        {v.excerpt} <span className="sk-meta sk-meta--14" style={{ display: 'inline' }}>Affiliate-Links gekennzeichnet, Preis für dich unverändert.</span>
+        {v.excerpt}
+      </p>
+      <p className="sk-meta sk-meta--14" style={{ marginTop: 12, maxWidth: '64ch' }} data-methodenhinweis>
+        {METHODENSATZ}
+        {hatPartnerkarte ? ' Affiliate-Links sind mit „Anzeige“ gekennzeichnet, Preis für dich unverändert.' : ''}
       </p>
 
       {produkte.length > 0 && (
         <div className="sk-produkte">
-          {produkte.map((p, i) => {
-            const sieger = i === 0;
+          {produkte.map((p) => {
+            // Hervorgehoben ist die redaktionelle Auswahl (`recommended`) —
+            // nicht mehr schlicht die erste Karte, und nicht als Testurteil.
+            const auswahl = p.recommended === true;
             const bild = p.imageUrl || p.image;
+            const link = produktLink(p);
+            const { preis, stand } = preisAnzeige(p);
+            // Sterne nur bei Amazon-Link und immer mit Quelle (produkt-anzeige.ts).
+            const bewertung = amazonBewertung(p);
             return (
-              <article key={p.id} className={`sk-produkt${sieger ? ' sk-produkt--sieger' : ''}`}>
+              <article key={p.id} className={`sk-produkt${auswahl ? ' sk-produkt--sieger' : ''}`}>
                 <div className="sk-produkt__top">
-                  <span className={sieger ? 'sk-kicker--warm' : 'sk-kicker--accent'}>{p.badge ?? (sieger ? 'Testsieger' : 'Im Test')}</span>
-                  <span className="sk-produkt__anzeige">Anzeige</span>
+                  <span className={auswahl ? 'sk-kicker--warm' : 'sk-kicker--accent'}>{p.badge ?? (auswahl ? 'Unsere Auswahl' : 'Im Vergleich')}</span>
+                  {link.partner && <span className="sk-produkt__anzeige">Anzeige</span>}
                 </div>
                 <div className="sk-produkt__bild">
                   {bild ? (
@@ -104,13 +104,24 @@ export default function VergleichSeite(props: Props) {
                 </div>
                 <div className="sk-h sk-h--sub">{p.name}</div>
                 <div className="sk-meta sk-meta--14">
-                  {p.rating ? `${p.rating.toFixed(1).replace('.', ',')}${p.ratingCount ? ` · ${p.ratingCount.toLocaleString('de-DE')} Bewertungen` : ''}` : 'Modell aus dem Test'}
+                  {bewertung
+                    ? `${bewertung.rating.toFixed(1).replace('.', ',')} (Ø Amazon)${bewertung.ratingCount ? ` · ${bewertung.ratingCount.toLocaleString('de-DE')} Amazon-Bewertungen` : ''}`
+                    : 'Modell aus dieser Übersicht'}
                 </div>
                 {p.pros?.length ? <ul className="sk-produkt__pros">{p.pros.slice(0, 3).map((x) => <li key={x}>{x}</li>)}</ul> : null}
                 <div className="sk-produkt__foot">
-                  <span className="sk-produkt__preis">{preis(p)}</span>
-                  <a href={`/go/${p.id}`} rel="sponsored nofollow noopener" target="_blank" className={`sk-btn ${sieger ? 'sk-btn--primary' : 'sk-btn--outline'}`}>
-                    {p.provider === 'amazon' ? 'Bei Amazon ansehen' : 'Zum Angebot'}
+                  <span className="sk-produkt__preis">
+                    {preis && stand ? (
+                      <>
+                        {preis}{' '}
+                        <span className="sk-meta sk-meta--14" style={{ display: 'inline' }}>{stand}</span>
+                      </>
+                    ) : (
+                      <span className="sk-meta sk-meta--14" style={{ display: 'inline' }}>{PREIS_OHNE_STAND}</span>
+                    )}
+                  </span>
+                  <a href={link.href} rel={link.rel} target="_blank" className={`sk-btn ${auswahl ? 'sk-btn--primary' : 'sk-btn--outline'}`}>
+                    {link.partner && p.provider === 'amazon' ? 'Bei Amazon ansehen' : link.partner ? 'Zum Angebot' : 'Zum Anbieter'}
                   </a>
                 </div>
               </article>

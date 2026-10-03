@@ -2,14 +2,36 @@
  * Siegel der fünf Diplom-Stufen (Handoff, Startseite „Kursprogramm").
  * Ringfarbe, Umlaufschrift und gefüllter Anteil (n/5) je Stufe wie im Prototyp;
  * Stufe 5 trägt zusätzlich den weichen Schein.
+ *
+ * Titel, Grad und „frei" kommen aus der Diplom-Bibliothek (03.10.2026). Vorher
+ * standen sie hier getippt, und die Grade hießen „Basis-Zertifikat · 7 Lektionen"
+ * bis „Offizielles Akademie-Diplom" — so heißt kein Abschluss der Ausbildung, und
+ * Stufe 1 hat nicht sieben Lektionen. Hier bleibt nur, was zum Siegel gehört:
+ * die Ringfarbe. Wächter: Siegel.test.ts.
  */
-export const STUFEN = [
-  { nr: 1, name: 'Der Funke', ring: '#b8703a', umlauf: 'STEAKAKADEMIE · STUFE 1 · DER FUNKE ·', unter: 'Basis-Zertifikat · 7 Lektionen', frei: true },
-  { nr: 2, name: 'Die Flamme bezähmen', ring: '#b9b3a8', umlauf: 'STEAKAKADEMIE · STUFE 2 · DIE FLAMME BEZÄHMEN ·', unter: 'Fortgeschrittenes Zertifikat', frei: false },
-  { nr: 3, name: 'Hitzekontrolle', ring: '#d9a441', umlauf: 'STEAKAKADEMIE · STUFE 3 · HITZEKONTROLLE ·', unter: 'Profi-Zertifikat', frei: false },
-  { nr: 4, name: 'Präzision & Geschmack', ring: '#cfd6d8', umlauf: 'STEAKAKADEMIE · STUFE 4 · PRÄZISION & GESCHMACK ·', unter: 'Experten-Zertifikat', frei: false },
-  { nr: 5, name: 'Der vollendete Pitmaster', ring: '#e2531f', umlauf: 'STEAKAKADEMIE · STUFE 5 · DER VOLLENDETE PITMASTER ·', unter: 'Offizielles Akademie-Diplom', frei: false },
+import { ERSTE_BEZAHLSTUFE, STUFEN as DIPLOM_STUFEN } from '@/lib/diplome/stufen';
+
+const RINGE = [
+  { nr: 1, ring: '#b8703a' },
+  { nr: 2, ring: '#b9b3a8' },
+  { nr: 3, ring: '#d9a441' },
+  { nr: 4, ring: '#cfd6d8' },
+  { nr: 5, ring: '#e2531f' },
 ] as const;
+
+export const STUFEN = RINGE.map(({ nr, ring }) => {
+  const stufe = DIPLOM_STUFEN[nr - 1];
+  return {
+    nr,
+    ring,
+    /** Stufentitel, z. B. „Der Funke" */
+    name: stufe.title,
+    umlauf: `STEAKAKADEMIE · STUFE ${nr} · ${stufe.title.toLocaleUpperCase('de-DE')} ·`,
+    /** Grad der Stufe, z. B. „Grillmeister Bronze" */
+    unter: stufe.cert,
+    frei: nr < ERSTE_BEZAHLSTUFE,
+  };
+});
 
 const UMFANG = 216.8; // 2π · 34.5
 
