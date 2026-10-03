@@ -33,7 +33,7 @@ export default function AffiliateDisclosurePage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Affiliate-Disclosure
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Oktober 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -108,28 +108,39 @@ export default function AffiliateDisclosurePage() {
 
             <section>
               <h2 className={h2Class}>Produktbilder</h2>
+              {/* Abgleich Text ↔ Technik 03.10.2026: Hier stand, wir nutzten „drei
+                  Bildquellen", darunter Original-Produktbilder „bezogen über das Amazon
+                  PA-API". Stand im Repo: products/images.json ist leer (_lastFetch: null),
+                  in products/registry.yaml hat kein Produkt ein Bild, die Amazon-Bildhosts
+                  sind in next.config.mjs bewusst entfernt. Gezeigt wird deshalb überall
+                  ein Platzhalter: in ProductCard ein Kategorie-Symbol mit der Aufschrift
+                  „Symbolbild" (ProductImagePlaceholder), in HeroRecommendation und
+                  BuyingGuideBlock die Hersteller-Initialen. Wer Produktbilder einschaltet,
+                  schreibt diesen Abschnitt im selben Zug wieder um. */}
               <p className="mb-3">
-                Wir nutzen drei Bildquellen, die alle rechtssicher und lizenziert sind:
+                Zu unseren Produktempfehlungen zeigen wir derzeit{' '}
+                <strong className="text-text-primary">keine Produktfotos</strong>. An ihrer Stelle
+                steht ein Platzhalter: je nach Darstellung die Initialen des Herstellers oder ein
+                gezeichnetes Symbol der Produktkategorie mit der Aufschrift{' '}
+                <span className="font-sans text-[10px] font-bold tracking-wider uppercase bg-black/65 text-zinc-200 border border-white/15 px-1.5 py-0.5">
+                  Symbolbild
+                </span>
+                .
+              </p>
+              <p className="mb-3">
+                Vorgesehen, aber noch nicht in Betrieb, sind zwei weitere Darstellungen:
               </p>
               <ul className="list-disc list-inside space-y-1.5 mb-3">
                 <li>
                   <strong className="text-text-primary">Lizenzierte Original-Produktbilder</strong> —
-                  bezogen über das Amazon Product Advertising API (PA-API) oder direkt vom Hersteller
-                  freigegebene Pressebilder. Diese Bilder zeigen das Originalprodukt.
+                  über das Amazon Product Advertising API (PA-API) oder als vom Hersteller
+                  freigegebene Pressebilder. Diese Bildquelle ist nicht angeschlossen.
                 </li>
                 <li>
                   <strong className="text-text-primary">Symbolbilder</strong> — eigens für
                   Steakakademie.de erstellte oder KI-generierte Darstellungen, die das Produkt
-                  repräsentieren, aber optisch vom Originalprodukt abweichen können. Diese
-                  sind mit dem Badge{' '}
-                  <span className="font-sans text-[10px] font-bold tracking-wider uppercase bg-black/65 text-zinc-200 border border-white/15 px-1.5 py-0.5">
-                    Symbolbild
-                  </span>{' '}
-                  klar gekennzeichnet.
-                </li>
-                <li>
-                  <strong className="text-text-primary">Brand-Initialen-Platzhalter</strong> —
-                  wenn kein Produktbild verfügbar ist, zeigen wir die Hersteller-Initialen.
+                  repräsentieren, aber optisch vom Originalprodukt abweichen können. Sie
+                  würden mit demselben Badge „Symbolbild&ldquo; gekennzeichnet.
                 </li>
               </ul>
               <p>

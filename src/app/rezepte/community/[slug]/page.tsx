@@ -7,10 +7,13 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import GenerateImageButton from '@/components/recipe/GenerateImageButton';
 import { createClient } from '@/lib/supabase/server';
+import { SCHWELLE_TOP_SIEGEL } from '@/lib/rezept/einreichung-status';
 
 export const dynamic = 'force-dynamic';
 
-const PITMASTER_SEAL = 85; // quality_score-Schwelle für das Gold-Siegel
+// Gold-Siegel „Top bewertet": hohe Punktzahl in der KI-Vorprüfung — keine Aussage
+// über eine Prüfung durch einen Menschen (bis 03.10.2026 hieß es „Pitmaster-geprüft").
+const SIEGEL_TITEL = `KI-Vorprüfung: ${SCHWELLE_TOP_SIEGEL} von 100 Punkten oder mehr`;
 
 type Zutat = { menge: string; einheit: string; name: string };
 type Schritt = { beschreibung: string };
@@ -113,9 +116,9 @@ export default async function CommunityRecipePage(props: { params: Promise<{ slu
             <span>von <strong className="text-brand-gold">{r.author_name}</strong></span>
             {r.portions && <span className="flex items-center gap-1.5"><Users size={13} /> {r.portions} Portionen</span>}
             {r.prep_time && <span className="flex items-center gap-1.5"><Clock size={13} /> {r.prep_time}</span>}
-            {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
-              <span className="inline-flex items-center gap-1.5 text-brand-gold font-bold">
-                <Award size={13} /> Pitmaster-geprüft
+            {(r.quality_score ?? 0) >= SCHWELLE_TOP_SIEGEL && (
+              <span title={SIEGEL_TITEL} className="inline-flex items-center gap-1.5 text-brand-gold font-bold">
+                <Award size={13} /> Top bewertet (KI-Vorprüfung)
               </span>
             )}
           </div>
@@ -131,10 +134,10 @@ export default async function CommunityRecipePage(props: { params: Promise<{ slu
               <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-black/65 backdrop-blur-sm border border-white/15 text-zinc-200">
                 <Sparkles size={10} /> KI-Symbolbild
               </span>
-              {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
-                <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 backdrop-blur-sm border"
+              {(r.quality_score ?? 0) >= SCHWELLE_TOP_SIEGEL && (
+                <span title={SIEGEL_TITEL} className="absolute top-3 right-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 backdrop-blur-sm border"
                   style={{ background: 'rgba(200,136,42,0.9)', color: '#1a1206', borderColor: 'rgba(255,255,255,0.25)' }}>
-                  <Award size={11} /> Pitmaster-geprüft
+                  <Award size={11} /> Top bewertet
                 </span>
               )}
             </div>

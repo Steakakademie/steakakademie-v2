@@ -5,13 +5,14 @@ import { ChevronRight, ChefHat, Clock, Users, Award, Sparkles } from 'lucide-rea
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
+import { SCHWELLE_TOP_SIEGEL } from '@/lib/rezept/einreichung-status';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Community-Rezepte von Mitgliedern',
   description:
-    'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben. Echte Pitmaster-Kreationen zum Nachgrillen.',
+    'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben. Echte Kreationen zum Nachgrillen.',
   alternates: { canonical: 'https://steakakademie.de/rezepte/community' },
 };
 
@@ -26,7 +27,9 @@ type Card = {
   quality_score: number | null;
 };
 
-const PITMASTER_SEAL = 85;
+// Siegel „Top bewertet": hohe Punktzahl in der KI-Vorprüfung — keine Aussage
+// über eine Prüfung durch einen Menschen (bis 03.10.2026 hieß es „Pitmaster").
+const SIEGEL_TITEL = `KI-Vorprüfung: ${SCHWELLE_TOP_SIEGEL} von 100 Punkten oder mehr`;
 
 export default async function CommunityIndexPage() {
   const supabase = await createClient();
@@ -65,7 +68,8 @@ export default async function CommunityIndexPage() {
               <ChefHat size={28} className="text-brand-gold mx-auto mb-4" />
               <p className="font-serif text-xl font-bold text-text-primary mb-2">Noch keine Community-Rezepte.</p>
               <p className="font-body text-sm text-text-secondary mb-5">
-                Sei der Erste — reiche dein bestes Rezept ein. Gute Rezepte gehen nach KI-Prüfung sofort live.
+                Sei der Erste — reiche dein bestes Rezept ein. Jede Einreichung wird erst von einer KI vorgeprüft
+                und dann von uns freigegeben, bevor sie hier erscheint.
               </p>
               <Link href="/rezepte" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-gold text-ink font-sans font-bold uppercase text-sm tracking-[0.08em]">
                 Zu den Rezepten <ChevronRight size={15} />
@@ -94,10 +98,10 @@ export default async function CommunityIndexPage() {
                     <span className="absolute top-3 left-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
                       <ChefHat size={10} /> {r.author_name}
                     </span>
-                    {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
-                      <span className="absolute top-3 right-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 backdrop-blur-sm border"
+                    {(r.quality_score ?? 0) >= SCHWELLE_TOP_SIEGEL && (
+                      <span title={SIEGEL_TITEL} className="absolute top-3 right-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 backdrop-blur-sm border"
                         style={{ background: 'rgba(200,136,42,0.9)', color: '#1a1206', borderColor: 'rgba(255,255,255,0.25)' }}>
-                        <Award size={10} /> Pitmaster
+                        <Award size={10} /> Top bewertet
                       </span>
                     )}
                   </div>
