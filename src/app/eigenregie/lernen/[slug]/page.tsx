@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { allEigenregieModuls } from 'contentlayer/generated';
 import { requireCourseAccess } from '@/lib/auth/require-course-access';
 import { eigenregieMdx } from '@/components/eigenregie/mdxComponents';
+import { pruefhinweis } from '@/lib/pruefnachweis';
 
 interface Props { params: Promise<{ slug: string }> }
 
@@ -74,7 +75,7 @@ export default async function EigenregieModulPage(props: Props) {
               )}
             </div>
             <p className="mt-10 font-body text-xs text-text-muted">
-              KI-unterstützt erstellt, fachlich verantwortet von Uwe Yendell. Tarif- und Preisangaben: Stand 09/2026. Rechtliche Hinweise sind keine Rechtsberatung.
+              KI-unterstützt erstellt, {pruefhinweis(modul)}. Tarif- und Preisangaben: Stand 09/2026. Rechtliche Hinweise sind keine Rechtsberatung.
             </p>
           </article>
         </div>

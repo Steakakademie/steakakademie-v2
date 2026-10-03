@@ -9,6 +9,7 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Angebotshinweis from '@/components/angebote/Angebotshinweis';
+import Pruefvermerk from '@/components/Pruefvermerk';
 import { hinweiseFuer } from '@/lib/angebote/register';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
@@ -163,6 +164,9 @@ export default function GlossarEntryPage(props: Props) {
           <article className="prose-custom">
             <MDXContent components={mdxComponents} />
           </article>
+
+          {/* Pruefvermerk — erscheint nur, wenn der Eintrag ein `reviewedAt` traegt. */}
+          <Pruefvermerk dokument={entry} className="mt-8 font-sans text-xs text-text-muted leading-relaxed" />
 
           {/* Eigenes Angebot — ein Hinweis nach der Definition. Kein Regal: die
               Einträge sind kurz, mehr Werbung als Inhalt wäre das falsche Verhältnis. */}

@@ -279,7 +279,7 @@ export default function CutPage(props: Props) {
                   >
                     {cut.author}
                   </Link>
-                  <AutorHinweis authorSlug={cut.authorSlug} />
+                  <AutorHinweis authorSlug={cut.authorSlug} dokument={cut} />
                 </div>
               </div>
             </article>

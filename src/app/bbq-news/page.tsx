@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import BuyingGuideBlock from '@/components/affiliate/BuyingGuideBlock';
 import { getNewsItems, type NewsItem, type NewsRegion } from '@/lib/bbq-news';
 import { getRecommendedProducts } from '@/lib/products';
+import { verantwortungsangabe } from '@/lib/pruefnachweis';
 import {
   FeatureHero,
   SecondaryFeature,
@@ -98,8 +99,12 @@ export default async function BbqNewsPage() {
             Was bewegt die Grillwelt? Trends aus den USA, Entwicklungen in Deutschland,
             neue Techniken und Produkte — kuratiert, eingeordnet, ohne Clickbait.
           </p>
+          {/* 03.10.2026: Der Strom mischt freigegebene Scout-News mit Plattform-
+              Inhalten (Artikel, Cuts, Rezepte …). Fuer diese Mischung gibt es
+              keinen gemeinsamen Pruefnachweis — die Zeile nennt deshalb die
+              Verantwortung, nicht eine Pruefung (src/lib/pruefnachweis.ts). */}
           <p className="font-sans text-xs text-text-muted mt-3 max-w-2xl">
-            Hinweis: Beiträge werden KI-gestützt erstellt und aufbereitet sowie redaktionell vor Veröffentlichung geprüft.
+            Hinweis: Beiträge werden KI-gestützt erstellt und aufbereitet und {verantwortungsangabe()}.
           </p>
         </section>
 

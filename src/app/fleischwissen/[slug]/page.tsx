@@ -7,6 +7,7 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BildCredit from '@/components/BildCredit';
+import Pruefvermerk from '@/components/Pruefvermerk';
 import DiplomCTA from '@/components/mdx/DiplomCTA';
 import AffiliateBox from '@/components/mdx/AffiliateBox';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
@@ -260,6 +261,8 @@ export default function FleischwissenArtikel(props: Props) {
                 {autor.statsLabel && (
                   <p className="font-sans text-xs text-text-light/50 mt-3 leading-relaxed">{autor.statsLabel}</p>
                 )}
+                {/* Sichtbares Gegenstueck zum Pruefvermerk im JSON-LD — nur mit `reviewedAt`. */}
+                <Pruefvermerk dokument={doc} className="font-sans text-xs text-text-light/50 mt-1 leading-relaxed" />
               </section>
             )}
 
