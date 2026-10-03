@@ -154,8 +154,8 @@ export default function AffiliateDisclosurePage() {
               <p>
                 Bei Fragen zu Affiliate-Links oder unserer Empfehlungspolitik erreichst du
                 mich unter{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>
+                  pitmaster@steakakademie.de
                 </a>
                 .
               </p>

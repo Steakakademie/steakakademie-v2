@@ -10,8 +10,12 @@
  * ausschliesslich pitmaster@steakakademie.de nachweislich empfaengt. Fuer info@,
  * masterclass@, inspiration@ und uwe@ gibt es keinen Zustellnachweis und keine
  * Verifizierung im Email-Routing — Post dorthin laeuft vermutlich ins Leere.
- * Sortiert wird deshalb ueber ein Betreff-Praefix, die Verteilung uebernehmen
- * Gmail-Filter.
+ * Sortiert wird deshalb ueber ein Betreff-Praefix (betreffTag in
+ * src/lib/kontakt.ts), die Verteilung uebernehmen Gmail-Filter.
+ *
+ * Seit 03.10.2026 nennen auch die Seiten nur noch diese eine Adresse; ihre
+ * Mail-Links tragen dasselbe Praefix (kontaktMailto). Waechter:
+ * src/__tests__/kontaktadressen.test.ts.
  *
  * Der Endpunkt verarbeitet zwei Formate:
  *   - application/json                 → Antwort als JSON (Formular mit JS)
@@ -32,7 +36,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import { createClient } from '@supabase/supabase-js';
-import { CONSENT_TEXT, KONTAKT_EMPFAENGER as EMPFAENGER } from '@/lib/kontakt';
+import { CONSENT_TEXT, KONTAKT_EMPFAENGER as EMPFAENGER, betreffTag } from '@/lib/kontakt';
 import { botCheck, rateLimitRequest } from '@/lib/api/guard';
 import { sendeBetreiberMail } from '@/lib/betreiber-mail';
 
@@ -42,19 +46,6 @@ import { sendeBetreiberMail } from '@/lib/betreiber-mail';
 // oben). Kein Same-Origin-Zwang: Das Formular ohne JavaScript sendet keinen
 // Sec-Fetch-Site-Header, auf den man sich verlassen könnte.
 const RATE = { limit: 5, windowMs: 10 * 60 * 1_000 };
-
-/** Auswahlfeld → Betreff-Praefix fuer die Gmail-Filter. */
-function betreffTag(subject: string): string {
-  switch (subject) {
-    case 'presse':      return '[Presse]';
-    case 'kooperation': return '[Kooperation]';
-    case 'rezept':      return '[Rezept-Idee]';
-    case 'urkunde':     return '[Urkunde]';      // Bestellung gedruckte Urkunde (/diplome/urkunde)
-    case 'hofladen':    return '[Hofladen]';     // Hof melden/bestaetigen (/hoefe)
-    case 'baukasten':   return '[Baukasten]';    // Projekt-Anamnese (tuwasduwillst.de/projekt-anamnese)
-    default:            return '[Allgemein]';   // diplom, feedback, sonstiges, leer
-  }
-}
 
 export async function POST(req: Request) {
   const typ = req.headers.get('content-type') || '';
