@@ -10,6 +10,10 @@ import { getProductById } from '@/lib/products';
  * 2. Plausible-Event feuern (server-side, cookieless — kein GA4, kein Consent nötig)
  * 3. 302 Redirect zur Affiliate-URL
  */
+
+/** So lange darf Plausible den Klick hoechstens aufhalten — wie in /go-fleisch/[cut]. */
+const PLAUSIBLE_TIMEOUT_MS = 1_500;
+
 export async function GET(
   request: NextRequest,
   props0: { params: Promise<{ 'product-slug': string }> }
@@ -44,6 +48,10 @@ export async function GET(
         url:    ref,
         props:  { provider: product.provider, produkt: product.id },
       }),
+      // Zeitgrenze (03.10.2026): Das catch faengt Fehler, kein Haengen. Ohne
+      // sie lief ein schweigendes Plausible in die Funktionsgrenze von 5 s
+      // (vercel.json) — der Affiliate-Klick endete dann ohne Weiterleitung.
+      signal: AbortSignal.timeout(PLAUSIBLE_TIMEOUT_MS),
     });
   } catch {
     // Tracking-Fehler niemals Redirect blockieren

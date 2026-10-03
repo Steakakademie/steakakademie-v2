@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 import { RateLimiter, clientIp, isSameOrigin, jsonError, rateLimitHeaders } from '@/lib/api/guard';
 import { hoefeImUmkreis } from '@/lib/hoefe/db';
 import { geocode, normalisiereOrt } from '@/lib/hoefe/geocode';
-import { zahlAusParam } from '@/lib/hoefe/format';
+import { koordinateAusParam, zahlAusParam } from '@/lib/hoefe/format';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,8 +25,10 @@ export async function GET(request: Request) {
   const km = zahlAusParam(p.get('km'), 30, 5, 100);
   const nurFleisch = p.get('fleisch') === '1';
 
-  let lat = zahlAusParam(p.get('lat'), NaN, 47, 56);
-  let lng = zahlAusParam(p.get('lng'), NaN, 5, 16);
+  // Rahmen DE + AT + CH aus src/lib/hoefe/grenzen.ts — dieselben Zahlen wie Import
+  // und Tabelle. Bis 03.10.2026 stand hier die alte Deutschland-Box (47–56 / 5–16).
+  let lat = koordinateAusParam(p.get('lat'), 'lat');
+  let lng = koordinateAusParam(p.get('lng'), 'lng');
   let ortLabel: string | null = null;
 
   const ort = p.get('ort');

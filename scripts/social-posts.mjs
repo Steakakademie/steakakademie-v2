@@ -10,13 +10,24 @@
  * Usage:
  *   node scripts/social-posts.mjs --only tomahawk-reverse-sear,cedar-plank-lachs
  *   node scripts/social-posts.mjs --limit 5
+ *   node scripts/social-posts.mjs --plan      # nur die Auswahl zeigen, kein API-Aufruf
  * Env: ANTHROPIC_API_KEY (env zuerst, sonst .env.local)
+ *
+ * AUSWAHL (03.10.2026): Ohne --only bestimmt scripts/lib/social-auswahl.mjs, welche
+ * Rezepte dran sind — Neues der letzten 7 Tage zuerst, der Rest aus einem Fenster,
+ * das jede Woche weiterwandert. Vorher nahm das Skript die ersten `--limit` Dateien
+ * aus readdir: jede Woche dieselben fuenf.
+ *
+ * EXITCODE (03.10.2026, CLAUDE.md Regel 10): 0 nur, wenn mindestens ein Entwurf
+ * geschrieben wurde. Fehlender Schluessel, keine Auswahl oder lauter gescheiterte
+ * Generierungen enden mit 1 — vorher war jeder dieser Faelle ein gruener Lauf.
  */
 import { readdir, readFile, writeFile, mkdir } from 'fs/promises'
-import { existsSync } from 'fs'
+import { existsSync, appendFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { callClaude, printCacheStats } from './lib/anthropic.mjs'
+import { waehleRezepte } from './lib/social-auswahl.mjs'
 process.on('exit', () => printCacheStats('  '))
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -28,6 +39,7 @@ const ONLY  = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1].split(',').map(s => s.trim()) : null
 const LIMIT = process.argv.includes('--limit')
   ? parseInt(process.argv[process.argv.indexOf('--limit') + 1], 10) : (ONLY ? Infinity : 5)
+const NUR_PLAN = process.argv.includes('--plan')
 
 let KEY = process.env.ANTHROPIC_API_KEY
 if (!KEY && existsSync(join(ROOT, '.env.local'))) {
@@ -58,18 +70,49 @@ async function gen(title, desc, meat, kat) {
   return r.json()
 }
 
+/** Zahlen ins Job-Summary — auch (und gerade) wenn nichts herauskam. */
+function summary (zeilen) {
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, zeilen.join('\n') + '\n')
+}
+
 async function main() {
   console.log(c.d('\n📣 Social-Posting-Engine (Entwürfe)\n'))
-  if (!KEY) { console.log(c.r('⚠ ANTHROPIC_API_KEY fehlt — Abbruch.')); process.exit(0) }
-  const files = (await readdir(REZEPTE)).filter(f => f.endsWith('.mdx'))
+
+  // Erst lesen, dann auswaehlen: die Auswahl braucht Datum und Status aller Rezepte.
+  const rezepte = []
+  for (const file of (await readdir(REZEPTE)).filter(f => f.endsWith('.mdx')).sort()) {
+    const raw = await readFile(join(REZEPTE, file), 'utf8')
+    rezepte.push({
+      slug: file.replace(/\.mdx$/, ''), raw,
+      publishedAt: fm(raw, 'publishedAt'), status: fm(raw, 'status'),
+      reviewed: fm(raw, 'reviewed') === 'false' ? false : undefined,
+    })
+  }
+
+  let dran, kopf
+  if (ONLY) {
+    dran = rezepte.filter(r => ONLY.includes(r.slug)).slice(0, LIMIT)
+    kopf = `--only: ${dran.length} von ${ONLY.length} genannten Rezepten gefunden`
+  } else {
+    const w = waehleRezepte(rezepte, { limit: LIMIT })
+    dran = w.auswahl
+    kopf = `KW ${w.woche.woche}/${w.woche.jahr} · ${w.verfuegbar} veröffentlichte Rezepte · neu: ${w.frisch.join(', ') || '–'} · Bestand: ${w.bestand.join(', ') || '–'}`
+  }
+  console.log(c.d(`Auswahl — ${kopf}\n`))
+  if (NUR_PLAN) return
+
+  if (!KEY) {
+    summary(['## 📣 Social-Media-Entwürfe', '', '**🔴 0 Entwürfe — ANTHROPIC_API_KEY fehlt.**'])
+    throw new Error('ANTHROPIC_API_KEY fehlt — kein Entwurf erzeugt.')
+  }
+
   await mkdir(OUT, { recursive: true })
   const blocks = []
+  const fehler = []
   let done = 0
-  for (const file of files) {
-    if (done >= LIMIT) break
-    const slug = file.replace(/\.mdx$/, '')
-    if (ONLY && !ONLY.includes(slug)) continue
-    const raw  = await readFile(join(REZEPTE, file), 'utf8')
+  // Genau die Auswahl, nicht mehr: Scheitert eine Generierung, rueckt kein anderes
+  // Rezept nach. Vorher lief die Schleife bei Fehlern durch den ganzen Bestand.
+  for (const { slug, raw } of dran) {
     const title = fm(raw, 'title'), desc = fm(raw, 'description'), meat = fm(raw, 'meatType'), kat = fm(raw, 'kategorie')
     const url  = `/rezepte/${kat}/${slug}`
     const hero = `/images/rezepte/${slug}-hero.jpg`, card = `/images/rezepte/${slug}.jpg`
@@ -87,12 +130,27 @@ async function main() {
         `- **Hashtags:** ${(p.hashtags || []).join(' ')}\n`
       )
       console.log(c.g('✓')); done++
-    } catch (e) { console.log(c.r(`✗ ${e.message}`)) }
+    } catch (e) { console.log(c.r(`✗ ${e.message}`)); fehler.push(`${slug}: ${e.message}`) }
   }
-  if (!blocks.length) { console.log('keine Entwürfe.'); return }
+
+  const bilanz = [
+    '## 📣 Social-Media-Entwürfe', '',
+    `**${done ? '✅' : '🔴'} ${done} von ${dran.length} Entwürfen erzeugt**${fehler.length ? ` · ${fehler.length} fehlgeschlagen` : ''}`, '',
+    `Auswahl — ${kopf}`,
+    ...(fehler.length ? ['', ...fehler.map(f => `- ✗ ${f.slice(0, 200)}`)] : []),
+  ]
+  if (!blocks.length) {
+    summary(bilanz)
+    throw new Error(dran.length ? `alle ${dran.length} Generierungen fehlgeschlagen — kein Entwurf.` : 'keine Rezepte in der Auswahl — kein Entwurf.')
+  }
   const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')
   const path  = join(OUT, `drafts-${stamp}.md`)
-  await writeFile(path, `# Social-Post-Entwürfe — ${stamp}\n\n> Human-gated. Prüfen, anpassen, dann manuell posten/planen (z.B. Postiz). KEIN Auto-Posten.\n\n${blocks.join('\n---\n\n')}`, 'utf8')
+  await writeFile(path, `# Social-Post-Entwürfe — ${stamp}\n\n> Human-gated. Prüfen, anpassen, dann manuell posten/planen (z.B. Postiz). KEIN Auto-Posten.\n>\n> Auswahl — ${kopf}\n\n${blocks.join('\n---\n\n')}`, 'utf8')
+  summary(bilanz)
   console.log(`\n${c.g(`✓ ${done} Entwürfe`)} → ${c.d(path.replace(ROOT, '.'))}\n`)
 }
-main()
+
+main().catch(e => {
+  console.error(c.r(`\n✗ Social-Entwürfe fehlgeschlagen: ${e.message}\n`))
+  process.exit(1)
+})

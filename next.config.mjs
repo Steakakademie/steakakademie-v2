@@ -35,6 +35,31 @@ import { withSentryConfig } from '@sentry/nextjs';
  */
 const isDev = process.env.NODE_ENV === 'development';
 
+/**
+ * Supabase-Storage fuer img-src (03.10.2026)
+ * ------------------------------------------
+ * Die Bilder der Community-Rezepte liegen im oeffentlichen Bucket
+ * `recipe-images` (src/lib/rezept/generate-image.ts) und werden mit
+ * `unoptimized` direkt von dort geladen (/rezepte/community und
+ * /rezepte/community/[slug]). img-src kannte den Host nicht — der Browser hat
+ * jedes dieser Bilder blockiert, ohne Fehlermeldung auf der Seite.
+ *
+ * Erlaubt wird genau der eigene Projekt-Host, zur Bauzeit abgeleitet aus
+ * NEXT_PUBLIC_SUPABASE_URL — kein `*.supabase.co`, sonst duerfte jedes fremde
+ * Supabase-Projekt Bilder liefern. Fehlt die Variable (Build-Gate ohne Env)
+ * oder ist sie keine https-Adresse, kommt NICHTS dazu: kein Platzhalter-Host.
+ */
+function supabaseBildQuelle() {
+  const roh = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!roh) return '';
+  try {
+    const u = new URL(roh);
+    return u.protocol === 'https:' ? ` ${u.origin}` : '';
+  } catch {
+    return '';
+  }
+}
+
 const CSP = [
   "default-src 'self'",
   // challenges.cloudflare.com: Cloudflare Turnstile (Bot-Pruefung an Kontakt,
@@ -44,7 +69,8 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   // api.maptiler.com: Kartenkacheln des Hofladen-Radars (/hoefe) — geladen erst
   // nach Klick des Besuchers (Klick-zum-Laden), siehe HofladenRadar.tsx.
-  "img-src 'self' data: blob: https://*.clarity.ms https://api.maptiler.com",
+  // Dazu der eigene Supabase-Storage (Community-Rezeptbilder), siehe oben.
+  `img-src 'self' data: blob: https://*.clarity.ms https://api.maptiler.com${supabaseBildQuelle()}`,
   "font-src 'self' data:",
   // Sentry steht hier NICHT mehr: seit 08.09.2026 laeuft kein Sentry-Client
   // mehr im Browser (Bundle-Entscheidung, siehe src/lib/fehler-melden.ts).
