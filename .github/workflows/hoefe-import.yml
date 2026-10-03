@@ -1,14 +1,21 @@
 name: Hofladen-Radar importieren (OSM → Supabase)
 
-# Woechentlicher Import aller Hoflaeden (shop=farm) in Deutschland aus
-# OpenStreetMap nach Supabase (Tabelle hoefe) via scripts/hoefe-import.mjs.
-# Schreibt NUR nach Supabase – keine Dateiaenderungen, kein Commit.
+# Woechentlicher Import aller Hoflaeden (shop=farm) in Deutschland, Oesterreich und
+# der Schweiz aus OpenStreetMap nach Supabase (Tabelle hoefe) via
+# scripts/hoefe-import.mjs. Schreibt NUR nach Supabase – keine Dateiaenderungen,
+# kein Commit.
 #
 # Beanspruchte Hoefe (beansprucht = true) werden vom Import nicht ueberschrieben
 # (hoefe_import_upsert). Lizenz der Daten: ODbL, Attribution auf der Website.
 #
 # Benoetigte GitHub-Secrets: NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
-# Voraussetzung: Migration supabase/migrations/20260913120000_hoefe.sql eingespielt.
+# Voraussetzung: Migrationen 20260913120000_hoefe.sql und — fuer AT/CH —
+# 20261003090000_hoefe_grenzen_dach.sql eingespielt. Ohne die zweite lehnt die
+# Tabelle alles oestlich von 16° und suedlich von 47° ab; der Lauf schreibt dann den
+# Rest und endet rot.
+#
+# Ob der Import LIEFERT, prueft der Ops-Heartbeat (data/ops-heartbeat.json,
+# Eintrag „Hofladen-Import": juengster letzter_import, Frist 9 Tage).
 on:
   schedule:
     - cron: '30 3 * * 1'   # montags 03:30 UTC — Overpass ist nachts am wenigsten ausgelastet
@@ -47,14 +54,30 @@ jobs:
           IN_DRY_RUN: ${{ inputs.dry_run }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        # PIPEFAIL IST PFLICHT (03.10.2026). GitHub startet einen run-Schritt ohne
+        # eigene shell-Angabe mit `bash -e {0}` — ohne pipefail. Hinter `| tee`
+        # zaehlt dann der Exitcode von tee, nicht der des Skripts: Die Cron-Laeufe
+        # vom 14.09., 21.09. und 28.09.2026 sind im Skript gescheitert („Import
+        # fehlgeschlagen", exit 1) und wurden gruen gemeldet. Kein Jira-Ticket,
+        # drei Wochen niemand gewarnt. `2>&1`, weil die Fehlermeldung des Skripts
+        # auf stderr geht und sonst im Summary fehlt.
         run: |
+          set -euo pipefail
           ARGS=""
           if [ "$IN_DRY_RUN" = "true" ]; then ARGS="--dry-run"; fi
-          node scripts/hoefe-import.mjs $ARGS | tee import.log
-          echo "## 🥩 Hofladen-Radar Import" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat import.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          node scripts/hoefe-import.mjs $ARGS 2>&1 | tee import.log
+
+      # Eigener Schritt mit always(): Auch ein gescheiterter Lauf schreibt seine
+      # Zahlen ins Summary — gerade dann braucht man sie (aussortiert, abgelehnt).
+      - name: Bilanz ins Job-Summary
+        if: always()
+        run: |
+          {
+            echo "## 🥩 Hofladen-Radar Import"
+            echo '```'
+            if [ -s import.log ]; then cat import.log; else echo "Kein Log — der Import ist nicht gestartet."; fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()

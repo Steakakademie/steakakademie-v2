@@ -88,16 +88,21 @@ jobs:
       # Bilder). Der Schluessel haengt am Lockfile UND am Quelltext: aendert sich
       # Code, wird ein neuer Eintrag geschrieben, die restore-keys liefern dabei
       # den letzten passenden Stand als Startpunkt.
+      # `webpack` steht seit 03.10.2026 im Schluessel: Der Bundler bestimmt, was
+      # in .next/cache liegt. Ohne das Wort wuerden die restore-keys die unter
+      # Turbopack geschriebenen Eintraege weiter als Startpunkt ziehen — nutzlos
+      # fuer webpack und bei jedem Lauf wieder mitgespeichert. Der erste Lauf
+      # nach dieser Aenderung baut deshalb einmal kalt.
       - name: Next-Build-Cache
         uses: actions/cache@v4
         with:
           path: |
             .next/cache
             .contentlayer
-          key: ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
+          key: ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-webpack-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
           restore-keys: |
-            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-${{ hashFiles('**/package-lock.json') }}-
-            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-webpack-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-webpack-
 
       # REIHENFOLGE IST ZWINGEND (CLAUDE.md § A): contentlayer VOR tsc. In einer
       # frischen Kopie existiert `contentlayer/generated` noch nicht; tsc meldet
@@ -109,9 +114,24 @@ jobs:
       - name: Typen pruefen
         run: npx tsc --noEmit
 
-      # Direkt `npx next build` statt `npm run build`: das Skript haengt
-      # seo-image-optimizer.mjs davor und die prebuild-Gates dahinter — die
-      # laufen bereits als eigene Pflicht-Checks (P0-Gates, Stille
-      # Content-Defekte). Doppelt pruefen kostet hier nur Minuten.
+      # `--webpack` IST PFLICHT (03.10.2026): derselbe Bauweg wie die Produktion.
+      # Vercel baut ueber `npm run build` = `next build --webpack` (vercel.json,
+      # package.json), E2E ebenso. Hier stand bis heute das nackte `npx next
+      # build` — in Next 16 ist das Turbopack. Der Pflicht-Check pruefte damit
+      # einen Bundler, den die Produktion nicht benutzt: Er konnte gruen sein,
+      # waehrend der Deploy scheitert, und umgekehrt. Letzteres ist passiert —
+      # die main-Laeufe vom 24.09. und 02.10.2026 (8553df1) sind rot mit einem
+      # Fehler, den es nur unter Turbopack gibt (`Can't resolve
+      # '@vercel/turbopack-next/internal/font/google/font'`), waehrend Vercel
+      # denselben Commit gebaut hat. Der Hauspatch patches/next+16.3.5.patch
+      # (Google-Font-URL ohne Dateiendung) greift nur im webpack-Loader; er wird
+      # hier angewendet, weil `npm ci` oben ohne --ignore-scripts laeuft
+      # (postinstall = patch-package).
+      # Gleiche Begruendung wie bei der Node-Version im Kopf dieser Datei.
+      #
+      # Direkt `npx next build` statt `npm run build`: npm haengt sonst die
+      # prebuild-Gates davor und postbuild (Sitemap, Frontmatter, Links)
+      # dahinter — die Gates laufen bereits als eigene Pflicht-Checks (P0-Gates,
+      # Stille Content-Defekte). Doppelt pruefen kostet hier nur Minuten.
       - name: Next-Build
-        run: npx next build
+        run: npx next build --webpack
