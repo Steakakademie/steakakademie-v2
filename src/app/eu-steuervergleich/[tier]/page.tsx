@@ -106,6 +106,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title:       data.meta.title,
     description: data.meta.description,
     keywords:    data.meta.keywords.join(', '),
+    // 03.10.2026: Fremdprojekt-Rest — bisher nur aus der Sitemap ausgeschlossen,
+    // jetzt auch aus dem Index.
+    robots:      { index: false, follow: false },
     alternates:  { canonical: `https://steakakademie.de/eu-steuervergleich/${params.tier}` },
     openGraph: {
       images: ogImages(data.meta.ogTitle),

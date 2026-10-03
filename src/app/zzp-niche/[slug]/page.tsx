@@ -30,6 +30,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title:       meta.title,
     description: meta.description,
     keywords:    meta.keywords.join(', '),
+    // 03.10.2026: Fremdprojekt-Rest (niederlaendische SEO-Seiten) — bisher nur aus
+    // der Sitemap ausgeschlossen, jetzt auch aus dem Index.
+    robots:      { index: false, follow: false },
     alternates:  { canonical: meta.canonical },
     openGraph: {
       images: ogImages(meta.ogTitle),

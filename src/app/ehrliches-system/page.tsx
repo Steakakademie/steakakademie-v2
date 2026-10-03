@@ -197,7 +197,7 @@ export default async function EhrlichesSystemPage() {
                 {[
                   { icon: <CheckCircle size={14} />, text: 'Echte Zahlen aus dem laufenden Betrieb' },
                   { icon: <CheckCircle size={14} />, text: 'Kein Agentur-Modell, keine vagen Versprechen' },
-                  { icon: <CheckCircle size={14} />, text: '3 eigenständig verkaufbare Säulen' },
+                  { icon: <CheckCircle size={14} />, text: '3 eigenständige Säulen' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/70">
                     <span className="text-brand-gold">{icon}</span>
@@ -234,7 +234,7 @@ export default async function EhrlichesSystemPage() {
             </span>
             <h2 className="font-serif text-3xl font-bold text-text-primary mb-3">Die drei Säulen</h2>
             <p className="font-body text-text-secondary max-w-xl">
-              Jede Säule ist ein eigenständiges Produkt — separat kaufbar, separat anwendbar. Zusammen
+              Jede Säule ist ein eigenständiges Produkt — separat anwendbar. Zusammen
               bilden sie das vollständige Betriebssystem für ein KI-gestütztes Solo-Business.
             </p>
           </div>
@@ -313,7 +313,9 @@ export default async function EhrlichesSystemPage() {
                         href={`/${pillar.slug}`}
                         className="flex items-center gap-2 text-sm font-sans font-semibold text-brand-fire hover:gap-3 transition-[gap]"
                       >
-                        Jetzt kaufen <ArrowRight size={14} />
+                        {/* 03.10.2026: hiess „Jetzt kaufen" — der Link fuehrt nur auf die
+                            Produktseite, und dort ist derzeit keine Saeule buchbar. */}
+                        Zur Seite <ArrowRight size={14} />
                       </Link>
                     ) : (
                       <span className="text-[11px] font-sans text-text-muted bg-surface-base px-3 py-1.5 inline-block">
