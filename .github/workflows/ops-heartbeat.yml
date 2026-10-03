@@ -11,8 +11,14 @@ name: Ops-Heartbeat
 #      bei Besserung automatisch geschlossen
 #   3. Jira-Ticket (KAN) über scripts/ops-alert-to-jira.mjs, inkl. Eskalation
 #
-# Bewusst ohne npm ci: Das Skript nutzt nur Node-Bordmittel. Ein Wächter, der an
-# einer kaputten Abhängigkeit scheitert, ist keiner.
+# Seit 03.10.2026 laufen die Zusagen-Belege mit (Wächter Schritt 1, docs/waechter.md):
+# Für jede Zusage aus data/zusagen.yaml wird ihr Beleg ausgewertet — sendet die
+# Loops-Strecke, antwortet die Seite, hat der Import geschrieben. Gleicher Meldeweg.
+#
+# Der Heartbeat selbst nutzt nur Node-Bordmittel: Ein Wächter, der an einer kaputten
+# Abhängigkeit scheitert, ist keiner. Die Belegprüfung braucht js-yaml — deshalb
+# `npm ci` mit continue-on-error: Scheitert die Installation, prüft der Heartbeat
+# seine eigenen Bereiche trotzdem und meldet die Belege als NICHT GEPRÜFT (rot).
 on:
   schedule:
     - cron: '0 9 * * *'   # Täglich 09:00 UTC (10:00/11:00 Berlin) — nach allen Nacht-Agenten
@@ -38,6 +44,11 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      # Nur für die Zusagen-Belege (js-yaml). Darf scheitern — siehe Kopf.
+      - name: Abhängigkeiten für die Zusagen-Belege
+        continue-on-error: true
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
       # continue-on-error, damit Issue und Jira noch laufen. Rot wird der Job im
       # letzten Schritt — nachdem gemeldet wurde.
       - name: Heartbeat prüfen
@@ -47,6 +58,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Zusagen-Belege vom Typ loops (nur lesende Aufrufe).
+          LOOPS_API_KEY: ${{ secrets.LOOPS_API_KEY }}
         run: node scripts/ops-heartbeat.mjs
 
       - name: Stillstand → GitHub-Issue anlegen oder aktualisieren
@@ -85,7 +98,7 @@ jobs:
               ...befunde.map(b => `- ${b}`),
               '',
               '---',
-              '*Dieses Issue wird bei jedem Lauf aktualisiert und schließt sich selbst, sobald alle Bereiche wieder liefern. Fristen: `data/ops-heartbeat.json` · Doku: `docs/ops-heartbeat.md`*',
+              '*Dieses Issue wird bei jedem Lauf aktualisiert und schließt sich selbst, sobald alle Bereiche wieder liefern. Fristen: `data/ops-heartbeat.json` · Doku: `docs/ops-heartbeat.md` · Zusagen: `data/zusagen.yaml`, `docs/waechter.md`*',
             ].join('\n')
 
             // Label sicherstellen — ohne Label findet der nächste Lauf das Issue nicht wieder.

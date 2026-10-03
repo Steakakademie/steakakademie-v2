@@ -1,0 +1,844 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Zusagen-Register — was die Seite verspricht und woran jedes Versprechen hängt.
+#
+# Konzept: claude.ai-Projekt „Steakakademie", konzept_waechter_2026-10-02
+# (Freigabe Uwe). Abteilung: Systems & Ops. Anleitung: docs/waechter.md.
+#
+# Wozu: Die Erstinventur vom 03.10.2026 fand Sätze wie „jeden Freitag" ohne eine
+# einzige versendete Kampagne. Ein Wächter kann nur prüfen, was er kennt — hier
+# steht es. EIN EINTRAG JE VERSPRECHEN, das von etwas außerhalb des Satzes abhängt.
+#
+# Gelesen von scripts/lib/zusagen.mjs:
+#   · Gate (npm run check:zusagen, Pflicht-Check): Form, Fundstellen, Belege ohne
+#     Netz — und kein Zusage-Muster im Seitentext ohne Eintrag.
+#   · Tägliche Belegprüfung (ops-heartbeat): JEDER Beleg, auch die mit Netz.
+#
+# FELDER
+#   id         kebab-case, eindeutig.
+#   zusage     Ein Satz in eigenen Worten: was versprochen wird.
+#   wo         Fundstellen. `datei` + `muster` — das Textstück, das dort steht. Wird
+#              der Satz geändert, schlägt das Gate an: muster nachziehen UND prüfen,
+#              ob der Beleg die neue Fassung noch deckt.
+#   beleg      Woran die Zusage hängt. Ein Beleg oder eine Liste (alle müssen halten).
+#                code      datei [+ regex]                        ohne Netz
+#                zaehlung  zahl + quelle (glob | datei + regex)   ohne Netz
+#                http      url [+ status, enthaelt, …]            täglich
+#                loops     art (workflow|transactional) + id      täglich
+#                supabase  tabelle + min_zeilen | max_alter_tage  täglich
+#                mensch    was + geprueft_am + gueltig_tage       läuft ab
+#   bei_bruch  Was zu tun ist, wenn der Beleg nicht mehr hält.
+#   abteilung  Systems & Ops · Studio · Redaktion · Wachstum · Kanzlei
+#   seit       Tag der Aufnahme ins Register.
+#
+# NICHT HIER: Preise und Verkaufstermine — die stehen in data/angebote.yaml.
+#
+# `mensch`-Belege vom 03.10.2026 stammen aus der Erstinventur (Namen der
+# Variablen im Hosting, keine Werte). Sie laufen nach 90 Tagen ab und müssen dann
+# neu nachgesehen werden.
+# ══════════════════════════════════════════════════════════════════════════════
+
+zusagen:
+
+  # ─── Newsletter und Spickzettel ──────────────────────────────────────────────
+
+  - id: newsletter-bestaetigungsmail
+    zusage: Nach dem Eintragen kommt eine Bestätigungsmail mit Link (Double-Opt-in).
+    wo:
+      - datei: src/components/ui/NewsletterSignup.tsx
+        muster: "Wir haben dir eine Bestätigungs-Mail geschickt (Double-Opt-in)."
+      - datei: src/components/relaunch/SpickzettelForm.tsx
+        muster: "Bitte bestätige den Link in der E-Mail, die gerade unterwegs ist."
+    beleg:
+      - typ: loops
+        art: transactional
+        id: cmsufizv80g7a0jyvr6gwgtzq
+        variablen: [confirmUrl]
+      - typ: code
+        datei: src/app/api/newsletter/route.ts
+        regex: "process\\.env\\.LOOPS_DOI_TEMPLATE_ID"
+      - typ: mensch
+        was: "Im Hosting (Produktion) sind LOOPS_API_KEY, LOOPS_DOI_TEMPLATE_ID und NEWSLETTER_DOI_SECRET gesetzt"
+        geprueft_am: "2026-10-03"
+        gueltig_tage: 90
+        von: Erstinventur
+    bei_bruch: Anmeldeformulare abschalten oder die Erfolgsmeldung ändern, bis die Bestätigungsmail wieder verschickt wird.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: newsletter-bestaetigungslink-48-stunden
+    zusage: Der Bestätigungslink gilt 48 Stunden.
+    wo:
+      - datei: src/app/newsletter/bestaetigt/page.tsx
+        muster: "Bestätigungslinks sind 48 Stunden gültig."
+    beleg:
+      typ: code
+      datei: src/lib/doi.ts
+      regex: "TOKEN_MAX_AGE_MS = 48 \\* 60 \\* 60 \\* 1000"
+    bei_bruch: Die Stundenzahl im Text an die Konstante angleichen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: spickzettel-link-per-mail
+    zusage: Wer die Anmeldung bestätigt, bekommt den Link zur Spickzettel-Druckseite per Mail.
+    wo:
+      - datei: src/app/cuts/page.tsx
+        muster: "Wir schicken dir den Link zum druckfertigen Spickzettel mit allen Garstufen."
+      - datei: src/app/kerntemperatur-spickzettel/page.tsx
+        muster: "Nach deiner Bestätigung schicken wir dir den Link zu dieser Druckseite"
+      - datei: src/components/relaunch/SpickzettelForm.tsx
+        muster: "Danach schicken wir dir den Link zum Spickzettel zum Ausdrucken."
+      - datei: src/app/newsletter/page.tsx
+        muster: "Nach deiner Bestätigung kommt zuerst der Kerntemperatur-Spickzettel als Link zur Druckseite"
+    beleg:
+      - typ: loops
+        art: workflow
+        id: cmt1wxrmn07uo0j0aofqglkmv
+        betreff: Spickzettel
+      - typ: http
+        url: https://steakakademie.de/kerntemperatur-spickzettel
+        enthaelt: ["Spickzettel drucken"]
+    bei_bruch: Den Satz herausnehmen und direkt auf die Druckseite verlinken, bis die Willkommensstrecke wieder sendet.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: wissens-brief-per-mail
+    zusage: Wer sich einträgt und bestätigt, bekommt Mails vom Wissens-Brief — ohne zugesagten Takt.
+    wo:
+      - datei: src/app/newsletter/page.tsx
+        muster: "Der Wissens-Brief — BBQ-Tipps per Mail"
+      - datei: src/app/newsletter/page.tsx
+        muster: "ohne festen Takt, ohne Spam. Kostenlos per Mail."
+      - datei: src/app/persoenlichkeiten/page.tsx
+        muster: "Kostenlos per Mail — ohne festen Takt, ohne Spam."
+      - datei: src/app/mein-protokoll/plan/PlanNewsletter.tsx
+        muster: "Mehr Grillwissen per E-Mail."
+    beleg:
+      typ: loops
+      art: workflow
+      id: cmt1wxrmn07uo0j0aofqglkmv
+    bei_bruch: Anmeldung abschalten oder den Satz ändern — ohne laufende Strecke kommt nach der Bestätigung keine einzige Mail.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: spickzettel-druckseite
+    zusage: Der Kerntemperatur-Spickzettel steht frei zugänglich auf einer druckbaren Seite.
+    wo:
+      - datei: src/app/page.tsx
+        muster: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
+      - datei: data/angebote.yaml
+        muster: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
+      - datei: src/components/ui/ExitIntent.tsx
+        muster: "Alle Garstufen auf einer Seite, druckfertig für die Grillstation."
+      - datei: src/app/kerntemperatur-spickzettel/page.tsx
+        muster: "auf einer Seite — druckfertig für die Grillstation."
+    beleg:
+      - typ: http
+        url: https://steakakademie.de/kerntemperatur-spickzettel
+        enthaelt: ["Spickzettel drucken"]
+      - typ: code
+        datei: src/app/kerntemperatur-spickzettel/page.tsx
+    bei_bruch: Verweise auf den Spickzettel herausnehmen, bis die Seite wieder antwortet.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  # ─── Formulare: Kontakt und Widerruf ─────────────────────────────────────────
+
+  - id: kontaktformular-kommt-an
+    zusage: Eine abgeschickte Kontaktanfrage erreicht den Betreiber.
+    wo:
+      - datei: src/app/kontakt/page.tsx
+        muster: "Nachricht gesendet!"
+    beleg:
+      - typ: loops
+        art: transactional
+        id: cmt1yg44p0cln0k090q9kifkn
+        variablen: [nachricht, absender]
+      - typ: code
+        alle:
+          - datei: src/app/api/kontakt/route.ts
+          - datei: src/lib/betreiber-mail.ts
+            regex: "process\\.env\\.LOOPS_KONTAKT_TEMPLATE_ID"
+      - typ: supabase
+        tabelle: kontaktanfragen
+        min_zeilen: 1
+      - typ: mensch
+        was: "Im Hosting (Produktion) ist LOOPS_KONTAKT_TEMPLATE_ID gesetzt"
+        geprueft_am: "2026-10-03"
+        gueltig_tage: 90
+        von: Erstinventur
+    bei_bruch: Formular durch die Mail-Adresse ersetzen, bis Speicherung und Benachrichtigung wieder laufen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: widerruf-eingangsbestaetigung
+    zusage: Wer beim Widerruf eine E-Mail-Adresse angibt, bekommt automatisch eine Eingangsbestätigung mit Datum und Uhrzeit.
+    wo:
+      - datei: src/app/widerruf/page.tsx
+        muster: "Nach dem Absenden erhältst du eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
+      - datei: src/app/widerruf/WiderrufForm.tsx
+        muster: "Eine elektronische Eingangsbestätigung haben wir dir per E-Mail gesendet."
+    beleg:
+      - typ: loops
+        art: transactional
+        id: cmpus12wa2hm60jxk0ek9c6f2
+        variablen: [datum]
+      - typ: code
+        datei: src/app/api/widerruf/route.ts
+        regex: "process\\.env\\.LOOPS_WIDERRUF_TEMPLATE_ID"
+      - typ: http
+        url: https://steakakademie.de/widerruf
+        enthaelt: ["Widerrufsformular"]
+      - typ: mensch
+        was: "Im Hosting (Produktion) ist LOOPS_WIDERRUF_TEMPLATE_ID gesetzt"
+        geprueft_am: "2026-10-03"
+        gueltig_tage: 90
+        von: Erstinventur
+    bei_bruch: Sofort an die Kanzlei-Abteilung melden — bis zur Reparatur jeden Widerruf von Hand bestätigen.
+    abteilung: Kanzlei
+    seit: "2026-10-03"
+
+  # ─── Kauf, Zugang, Konto ─────────────────────────────────────────────────────
+
+  - id: kauf-login-link-per-mail
+    zusage: Nach dem Kauf verschickt die Steakakademie eine Mail mit persönlichem Login-Link.
+    wo:
+      - datei: src/app/danke/mein-protokoll/page.tsx
+        muster: "Du bekommst in wenigen Minuten zwei E-Mails: von der Steakakademie deinen persönlichen Login-Link zum Fragebogen"
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Nach dem Kauf bekommst du eine E-Mail mit deinem Login-Link zum Fragebogen."
+      - datei: src/app/danke/steak-beichte/page.tsx
+        muster: "Du bekommst in wenigen Minuten zwei E-Mails: von der Steakakademie deinen persönlichen Login-Link zum Diagnose-Formular"
+    beleg:
+      - typ: loops
+        art: transactional
+        id: cmpr6ctsj034n0j1augvw7puo
+        variablen: [magic_link]
+      - typ: code
+        datei: src/app/api/webhooks/digistore24/route.ts
+        regex: "process\\.env\\.LOOPS_MAGIC_LINK_TEMPLATE_ID"
+      - typ: mensch
+        was: "Im Hosting (Produktion) sind LOOPS_MAGIC_LINK_TEMPLATE_ID, DIGISTORE_IPN_PASSPHRASE und DIGISTORE_WEBHOOK_TOKEN gesetzt"
+        geprueft_am: "2026-10-03"
+        gueltig_tage: 90
+        von: Erstinventur
+    bei_bruch: Verkauf anhalten — ohne Login-Link kommt ein Käufer nicht an seine Leistung.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: kauf-schaltet-zugang-frei
+    zusage: Ein Kauf schaltet den Zugang zum Kurs automatisch frei.
+    wo:
+      - datei: src/app/danke/ds24bestellung/page.tsx
+        muster: "Dein Kurs-Zugang wird automatisch freigeschaltet"
+    beleg:
+      - typ: code
+        datei: src/app/api/webhooks/digistore24/route.ts
+        regex: "rpc\\('grant_course_access'"
+      - typ: supabase
+        tabelle: digistore_products
+        min_zeilen: 1
+    bei_bruch: Verkauf anhalten und offene Käufe von Hand freischalten.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: meine-kurse-zeigt-kauf
+    zusage: Der gekaufte Plan ist später unter „Meine Kurse" zu finden — nach Anmeldung.
+    wo:
+      - datei: src/app/danke/mein-protokoll/page.tsx
+        muster: "Später findest du deinen Plan jederzeit unter"
+    beleg:
+      - typ: code
+        datei: src/app/meine-kurse/page.tsx
+        regex: "'mein-protokoll': '/mein-protokoll/plan'"
+      - typ: http
+        url: https://steakakademie.de/meine-kurse
+        status: 307
+        location_enthaelt: /auth/login
+    bei_bruch: Den Satz auf den direkten Link zum Plan ändern.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: gutschein-per-mail
+    zusage: Nach dem Kauf eines Gutscheins kommt der Code per Mail, mit Link zur druckbaren Seite.
+    wo:
+      - datei: src/app/gutschein/page.tsx
+        muster: "Sofort per E-Mail"
+      - datei: src/app/gutschein/page.tsx
+        muster: "Du bekommst sofort einen Gutschein mit Code per E-Mail"
+      - datei: src/app/danke/gutschein/page.tsx
+        muster: "Dein Geschenkgutschein wird erstellt und kommt per E-Mail."
+    beleg:
+      - typ: loops
+        art: transactional
+        id: cmpfkyigy0bw401dneu24vuo2
+        variablen: [voucher_code, voucher_url]
+      - typ: code
+        datei: src/app/api/webhooks/digistore24/route.ts
+        regex: "process\\.env\\.LOOPS_VOUCHER_TEMPLATE_ID"
+      - typ: mensch
+        was: "Im Hosting (Produktion) ist LOOPS_VOUCHER_TEMPLATE_ID gesetzt"
+        geprueft_am: "2026-10-03"
+        gueltig_tage: 90
+        von: Erstinventur
+    bei_bruch: Gutschein-Verkauf nicht einschalten, solange die Zustellmail fehlt.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: gutschein-einloesen-schaltet-frei
+    zusage: Ein eingelöster Gutschein-Code schaltet das Produkt sofort frei.
+    wo:
+      - datei: src/app/gutschein/page.tsx
+        muster: "Code auf der Einlöse-Seite eingeben — Produkt ist sofort freigeschaltet."
+    beleg:
+      typ: code
+      datei: src/app/api/gutschein/redeem/route.ts
+      regex: "rpc\\('redeem_voucher'"
+    bei_bruch: Einlöse-Seite sperren und Codes von Hand einlösen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: konto-kostenlos
+    zusage: Das Mitglieder-Konto kostet nichts und braucht keine Zahlungsdaten.
+    wo:
+      - datei: src/app/page.tsx
+        muster: "Kein Abo, keine Kreditkarte."
+      - datei: src/app/home-b/page.tsx
+        muster: "Kein Abo, keine Kreditkarte."
+    beleg:
+      - typ: code
+        datei: src/app/auth/login/page.tsx
+        regex: "supabase\\.auth\\.signInWithOtp"
+      - typ: http
+        url: https://steakakademie.de/auth/login
+    bei_bruch: Den Satz streichen, sobald die Anmeldung an eine Zahlung gebunden wird.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  # ─── Mein Protokoll ──────────────────────────────────────────────────────────
+
+  - id: mein-protokoll-acht-wochen
+    zusage: Ein Protokoll ist ein Plan über genau acht Wochen.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Ein Protokoll ist ein Plan über 8 Wochen."
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Ein Protokoll ist ein persönlicher Plan über 8 Wochen."
+      - datei: src/app/mein-protokoll/fragebogen/page.tsx
+        muster: "das System generiert deinen persönlichen 8-Wochen-Grillplan"
+    beleg:
+      typ: code
+      datei: src/lib/mein-protokoll/generierung.ts
+      regex: "weeks:\\s+z\\.array\\(Week\\)\\.length\\(8\\)"
+    bei_bruch: Wochenzahl im Text an das Erzeugungsschema angleichen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: mein-protokoll-fuenf-fragen
+    zusage: Der Fragebogen hat fünf Fragen.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Du beantwortest 5 Fragen zu deinem Grill"
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "5 Fragen. Keine Pflichtfelder ohne Sinn."
+      - datei: src/app/mein-protokoll/fragebogen/page.tsx
+        muster: "Beantworte 5 Fragen"
+      - datei: src/app/mein-protokoll/fragebogen/page.tsx
+        muster: "5 Fragen. Dann dein Plan."
+    beleg:
+      typ: zaehlung
+      zahl: 5
+      quelle:
+        datei: src/lib/mein-protokoll/schema.ts
+        regex: "^  (?:grillType|experience|timePerSession|mainGoal|frustration):"
+    bei_bruch: Zahl im Text an den Fragebogen angleichen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: mein-protokoll-eine-korrektur
+    zusage: Zu jedem Protokoll gehört genau eine kostenlose Korrektur.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Zu jedem Protokoll gehört eine kostenlose Korrektur"
+      - datei: src/app/danke/mein-protokoll/page.tsx
+        muster: "Zu jedem Protokoll gehört eine kostenlose Korrektur"
+      - datei: src/app/mein-protokoll/plan/page.tsx
+        muster: "steht dir eine kostenlose Korrektur zu"
+    beleg:
+      typ: code
+      alle:
+        - datei: supabase/migrations/20261002160432_mein_protokoll_guthaben.sql
+          regex: "korrektur_von uuid REFERENCES public\\.protokolle"
+        - datei: src/app/api/mein-protokoll/generate/route.ts
+          regex: "auftrag\\.modus === 'korrektur'"
+    bei_bruch: Den Satz streichen und betroffenen Käufern die Korrektur von Hand anbieten.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: mein-protokoll-plan-erst-nach-fragebogen
+    zusage: Der Plan wird erst erzeugt, wenn der Fragebogen mit Bestätigung abgeschickt ist.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Der Plan wird erst erstellt, wenn du den Fragebogen abschickst."
+    beleg:
+      typ: code
+      datei: src/lib/mein-protokoll/schema.ts
+      regex: "bestaetigt:\\s+z\\.literal\\(true\\)"
+    bei_bruch: Kanzlei-Abteilung informieren — an diesem Satz hängt der Hinweis zum Widerrufsrecht.
+    abteilung: Kanzlei
+    seit: "2026-10-03"
+
+  - id: mein-protokoll-plan-druckbar
+    zusage: Der Plan lässt sich über die Druckfunktion des Browsers drucken und als PDF sichern.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Über die Druckfunktion deines Browsers speicherst du ihn auch als PDF."
+    beleg:
+      typ: code
+      datei: src/app/mein-protokoll/plan/PrintButton.tsx
+      regex: "window\\.print\\(\\)"
+    bei_bruch: Den Satz streichen, bis der Druckknopf wieder da ist.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  # ─── Grillmeister-Diplom ─────────────────────────────────────────────────────
+
+  - id: diplom-zehn-level
+    zusage: Das Diplom hat zehn Level.
+    wo:
+      - datei: src/app/diplome/page.tsx
+        muster: "Grillmeister-Diplom: 10 Level BBQ-Ausbildung"
+      - datei: src/app/diplome/page.tsx
+        muster: "10 Level von Bronze bis Grillmeister"
+      - datei: src/app/diplome/page.tsx
+        muster: "Systematisch zum Grillmeister: 10 Level"
+      - datei: src/app/diplome/simulation/SimulationClient.tsx
+        muster: "10 Level. Von den Grundlagen bis zur Meisterklasse."
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "10 Level BBQ-Kompetenz"
+      - datei: src/app/rettung/RettungClient.tsx
+        muster: "10 Level, strukturiertes Wissen"
+    beleg:
+      typ: zaehlung
+      zahl: 10
+      quelle:
+        datei: src/lib/diplome/stufen.ts
+        regex: "^  \\{ id: \\d+,\\s+stufe: \\d,"
+    bei_bruch: Zahl im Text an LEVELS in src/lib/diplome/stufen.ts angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: diplom-fuenf-stufen
+    zusage: Das Diplom hat fünf Stufen.
+    wo:
+      - datei: src/app/diplome/roadmap/layout.tsx
+        muster: "Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung"
+      - datei: src/app/diplome/roadmap/layout.tsx
+        muster: "5 Stufen von Bronze bis Meister"
+      - datei: src/app/diplome/roadmap/layout.tsx
+        muster: "Interaktive BBQ-Ausbildung in 5 Stufen"
+      - datei: src/app/diplome/roadmap/RoadmapClient.tsx
+        muster: "Grillmeister-Ausbildung in 5 Stufen"
+      - datei: src/app/diplome/profil/ProfilClient.tsx
+        muster: "Alle 5 Stufen — Bronze bis Meister"
+      - datei: src/app/diplome/DiplomeClient.tsx
+        muster: "Eine Ausbildung in 5 präzisen Stufen."
+      - datei: src/components/home/DiplomaProgressSection.tsx
+        muster: "Eine Ausbildung in 5 präzisen Stufen."
+      - datei: src/app/griller/[slug]/page.tsx
+        muster: "von 5 Stufen bestanden"
+    beleg:
+      typ: zaehlung
+      zahl: 5
+      quelle:
+        datei: src/lib/diplome/stufen.ts
+        regex: "^    nr: \\d, key: "
+    bei_bruch: Zahl im Text an STUFEN in src/lib/diplome/stufen.ts angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: diplom-lektionen-gesamt
+    zusage: Das Diplom umfasst 39 Lektionen.
+    wo:
+      - datei: public/llms.txt
+        muster: "5-stufiges Curriculum (Bronze bis Meister), 39 Lektionen."
+    beleg:
+      typ: zaehlung
+      zahl: 39
+      quelle:
+        glob: content/diplom-lektionen/*/*.mdx
+    bei_bruch: Zahl in public/llms.txt an den Bestand angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: diplom-stufe-1-frei
+    zusage: Stufe 1 ist ohne Konto und ohne Zahlung lesbar; ab Stufe 2 ist der Inhalt gesperrt.
+    wo:
+      - datei: src/app/diplome/DiplomeClient.tsx
+        muster: "Stufe 1 kannst du sofort lesen"
+      - datei: src/app/grillstil/page.tsx
+        muster: "Stufe 1 (Bronze) ist kostenlos und ohne Konto lesbar."
+      - datei: src/app/relaunch/page.tsx
+        muster: "Stufe 1 liest du ohne Anmeldung"
+      - datei: src/app/diplome/rahmenlehrplan/page.tsx
+        muster: "Stufe 1 ist frei."
+      - datei: data/angebote.yaml
+        muster: "Stufe 1 des Grillmeister-Diploms — kostenlos, ohne Konto."
+    beleg:
+      - typ: code
+        datei: src/lib/diplome/stufen.ts
+        regex: "export const ERSTE_BEZAHLSTUFE = 2"
+      - typ: http
+        url: https://steakakademie.de/diplome/lernen/stufe-1/brennstoffkunde
+        enthaelt: ["Brennstoff"]
+        enthaelt_nicht: ["kostenpflichtigen Grillmeister-Diploms"]
+      - typ: http
+        url: https://steakakademie.de/diplome/lernen/stufe-2/fleischanatomie
+        enthaelt: ["kostenpflichtigen Grillmeister-Diploms"]
+    bei_bruch: Sofort prüfen, ob Stufe 1 versehentlich gesperrt oder Stufe 2 versehentlich offen ist — dann Text oder Sperre richten.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: diplom-pruefung-regeln
+    zusage: Die Stufenprüfung zieht bis zu 10 Fragen, bestanden ist ab 80 Prozent, und sie ist sofort wiederholbar.
+    wo:
+      - datei: src/lib/diplome/stufen.ts
+        muster: "% richtig · sofort wiederholbar"
+    beleg:
+      typ: code
+      alle:
+        - datei: src/lib/diplome/stufen.ts
+          regex: "export const QUIZ_FRAGEN_PRO_PRUEFUNG = 10"
+        - datei: src/lib/diplome/stufen.ts
+          regex: "export const QUIZ_BESTEHENSQUOTE = 80"
+        - datei: src/app/api/diplome/pruefung/route.ts
+    bei_bruch: Prüfungsordnung im Rahmenlehrplan und Konstanten wieder in Deckung bringen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: diplom-pruefung-auswertung
+    zusage: Nach der Prüfung gibt es eine Auswertung mit Erklärung zu jeder falsch beantworteten Frage.
+    wo:
+      - datei: src/app/diplome/roadmap/RoadmapClient.tsx
+        muster: "Die Auswertung kommt am Ende — mit Erklärung zu jeder Frage, die nicht gestimmt hat."
+    beleg:
+      typ: code
+      datei: src/app/api/diplome/pruefung/route.ts
+      regex: "explain"
+    bei_bruch: Den Satz streichen, bis die Auswertung wieder Erklärungen liefert.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: diplom-fortschritt-im-konto
+    zusage: Mit kostenlosem Konto wird der Lernfortschritt gespeichert.
+    wo:
+      - datei: src/app/diplome/DiplomeClient.tsx
+        muster: "Erstelle dein kostenloses Konto und speichere deinen Fortschritt."
+      - datei: src/app/page.tsx
+        muster: "dein Diplom-Fortschritt wird gespeichert"
+      - datei: src/app/home-b/page.tsx
+        muster: "dein Diplom-Fortschritt wird gespeichert"
+    beleg:
+      typ: code
+      datei: src/components/diplome/LektionFortschritt.tsx
+      regex: "from\\('lesson_progress'\\)"
+    bei_bruch: Den Satz herausnehmen, bis der Lesestand nachweislich im Konto ankommt (Funktionsprobe, Wächter Schritt 2).
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: diplom-lesestand-ohne-konto
+    zusage: Ohne Konto merkt sich das Gerät, welche Lektionen gelesen sind.
+    wo:
+      - datei: src/components/diplome/LektionFortschritt.tsx
+        muster: "Ohne Konto bleibt dein Lesestand auf diesem Gerät."
+    beleg:
+      typ: code
+      datei: src/components/diplome/LektionFortschritt.tsx
+      regex: "window\\.localStorage\\.setItem\\(STORAGE_KEY"
+    bei_bruch: Den Hinweis streichen oder die Speicherung auf dem Gerät wiederherstellen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: diplom-oeffentliche-vita
+    zusage: Bestandene Stufen lassen sich auf einer öffentlichen Profil-Seite zeigen.
+    wo:
+      - datei: src/app/diplome/profil/ProfilClient.tsx
+        muster: "Mach deine bestandenen Stufen öffentlich teilbar — eine eigene Profil-Seite mit deinen Medaillen."
+    beleg:
+      typ: code
+      datei: src/app/griller/[slug]/page.tsx
+    bei_bruch: Den Satz streichen, bis die Profil-Seite wieder ausgeliefert wird.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  # ─── Hofladen-Radar ──────────────────────────────────────────────────────────
+
+  - id: hoefe-woechentlich-aktualisiert
+    zusage: Die Hof-Daten werden wöchentlich aus OpenStreetMap aktualisiert.
+    wo:
+      - datei: src/app/hoefe/page.tsx
+        muster: "wöchentlich aktualisiert"
+    beleg:
+      - typ: supabase
+        tabelle: hoefe
+        spalte: letzter_import
+        max_alter_tage: 9
+      - typ: code
+        datei: .github/workflows/hoefe-import.yml
+        regex: "cron: '30 3 \\* \\* 1'"
+    bei_bruch: Das Wort „wöchentlich" herausnehmen, bis der Montags-Import wieder schreibt — Ursache steht im Job-Summary des letzten hoefe-import-Laufs.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: hoefe-radar-bestand
+    zusage: Der Hofladen-Radar findet Direktvermarkter in der Nähe.
+    wo:
+      - datei: src/components/home/ToolBoxes.tsx
+        muster: "Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick."
+      - datei: src/components/hoefe/HofladenHinweis.tsx
+        muster: "Der Hofladen-Radar zeigt Direktvermarkter in deiner Nähe"
+      - datei: src/app/hoefe/page.tsx
+        muster: "finde Direktvermarkter in deiner Nähe"
+    beleg:
+      - typ: supabase
+        tabelle: hoefe
+        min_zeilen: 5000
+      - typ: http
+        url: https://steakakademie.de/hoefe
+        enthaelt: ["OpenStreetMap"]
+    bei_bruch: Radar aus Navigation und Startseite nehmen, bis der Bestand wieder da ist.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  # ─── Werkzeuge ───────────────────────────────────────────────────────────────
+
+  - id: steak-rettung-sechs-grillfehler
+    zusage: Die Steak-Rettung behandelt sechs Grillfehler.
+    wo:
+      - datei: src/components/layout/Header.tsx
+        muster: "Steak-Rettung: 6 Grillfehler"
+      - datei: src/components/layout/Footer.tsx
+        muster: "Steak-Rettung: 6 Grillfehler"
+      - datei: src/app/rettung/page.tsx
+        muster: "Steak-Rettungs-Bibliothek — 6 Grillfehler"
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Sechs Grillfehler und ihre Lösung"
+    beleg:
+      typ: zaehlung
+      zahl: 6
+      im_text: ["6", "Sechs"]
+      quelle:
+        datei: src/app/rettung/RettungClient.tsx
+        regex: "^    id: '"
+    bei_bruch: Zahl in Navigation und Text an die Szenarien angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: cut-generator-vier-fragen
+    zusage: Der Cut-Generator kommt mit vier Fragen zum Ergebnis.
+    wo:
+      - datei: src/app/cuts/page.tsx
+        muster: "In 4 Fragen zum perfekten Cut"
+      - datei: src/app/cut-generator/page.tsx
+        muster: "Beantworte 4 Fragen"
+      - datei: src/app/api/og/cut/route.tsx
+        muster: "In 4 Fragen zum perfekten Steak-Cut"
+    beleg:
+      typ: zaehlung
+      zahl: 4
+      quelle:
+        datei: src/components/cuts/CutGenerator.tsx
+        regex: "(?<=^const STEPS = \\[[^\\]]*)'[a-z-]+'"
+    bei_bruch: Zahl im Text an STEPS im Cut-Generator angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: cut-atlas-vierzig-teilstuecke
+    zusage: Der Cut-Atlas zeigt 40 Rinder-Teilstücke.
+    wo:
+      - datei: src/app/cuts/page.tsx
+        muster: "mit allen 40 Teilstücken"
+    beleg:
+      typ: zaehlung
+      zahl: 40
+      quelle:
+        datei: src/lib/cuts-catalog.ts
+        regex: "species: 'rind',\\n\\s+primal:"
+    bei_bruch: Zahl im Bildtext an den Katalog angleichen — und prüfen, ob das Poster noch stimmt.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: foodpairing-ueber-hundert-studien
+    zusage: Das Foodpairing stützt sich auf über 100 Fachstudien.
+    wo:
+      - datei: src/components/home/ToolBoxes.tsx
+        muster: "belegt aus über 100 Fachstudien"
+    beleg:
+      typ: zaehlung
+      zahl: 100
+      vergleich: mindestens
+      quelle:
+        datei: data/foodpairing/belege.tsv
+        regex: "\\t(10\\.\\d{4,9}/[^\\t\\n]+)\\t"
+        eindeutig: true
+    bei_bruch: Zahl im Text senken oder Quellen nachtragen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: terroir-sechs-regionen
+    zusage: Meat Terroir vergleicht sechs Regionen.
+    wo:
+      - datei: src/app/terroir/page.tsx
+        muster: "6 Regionen im Vergleich"
+    beleg:
+      typ: zaehlung
+      zahl: 6
+      quelle:
+        datei: src/app/terroir/TerroirClient.tsx
+        regex: "^    id: '"
+    bei_bruch: Zahl in der Seitenbeschreibung an ORIGINS angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: messer-elf-produkte
+    zusage: Die Messer-Übersicht führt elf Messer.
+    wo:
+      - datei: src/app/ausruestung/messer/page.tsx
+        muster: "11 Messer"
+    beleg:
+      typ: zaehlung
+      zahl: 11
+      quelle:
+        datei: products/registry.yaml
+        regex: "^  category: messer$"
+    bei_bruch: Zahl im Text an products/registry.yaml angleichen.
+    abteilung: Wachstum
+    seit: "2026-10-03"
+
+  - id: menue-planer-einkaufsliste
+    zusage: Der Menü-Planer rechnet die Einkaufsliste auf die gewählte Personenzahl um.
+    wo:
+      - datei: src/app/menue/page.tsx
+        muster: "die Einkaufsliste rechnet alle Mengen automatisch um"
+      - datei: src/components/menue/MenueComposer.tsx
+        muster: "Die Einkaufsliste rechnet alle Mengen auf deine Personenzahl um."
+    beleg:
+      - typ: http
+        url: https://steakakademie.de/menue
+        enthaelt: ["Einkaufsliste"]
+      - typ: code
+        datei: src/components/menue/MenueComposer.tsx
+    bei_bruch: Menü-Planer aus der Navigation nehmen, bis er wieder antwortet.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: rezepte-portionsrechner-koch-coach
+    zusage: Rezepte haben einen Portionsrechner und einen Koch-Coach für die einzelnen Schritte.
+    wo:
+      - datei: src/app/rezepte/page.tsx
+        muster: "mit Portionsrechner und Schritt-für-Schritt Koch-Coach"
+    beleg:
+      typ: code
+      alle:
+        - datei: src/components/recipe/PortionCalculator.tsx
+        - datei: src/components/recipe/CookCoach.tsx
+    bei_bruch: Den Satz an die vorhandenen Bausteine angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: marco-nur-fuer-mitglieder
+    zusage: Marco steht angemeldeten Mitgliedern kostenlos zur Verfügung.
+    wo:
+      - datei: src/components/ai/MarcoWidget.tsx
+        muster: "Marco ist Mitgliedern vorbehalten — melde dich kostenlos an"
+    beleg:
+      typ: code
+      datei: src/app/api/marco/route.ts
+      regex: "auth: 'user-or-admin'"
+    bei_bruch: Den Hinweis an die tatsächliche Zugangsregel der Marco-Schnittstelle angleichen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: rezept-schmiede-nur-fuer-mitglieder
+    zusage: Die Rezept-Schmiede steht angemeldeten Mitgliedern kostenlos zur Verfügung.
+    wo:
+      - datei: src/components/home/ToolBoxes.tsx
+        muster: "Die Rezept-Schmiede ist Mitgliedern vorbehalten — melde dich kostenlos an"
+    beleg:
+      typ: code
+      datei: src/app/api/kochwissen/generieren/route.ts
+      regex: "auth: 'user-or-admin'"
+    bei_bruch: Den Hinweis an die tatsächliche Zugangsregel der Schnittstelle angleichen.
+    abteilung: Systems & Ops
+    seit: "2026-10-03"
+
+  - id: community-rezept-erst-nach-freigabe
+    zusage: Ein eingereichtes Rezept erscheint erst nach Freigabe durch einen Menschen.
+    wo:
+      - datei: src/components/recipe/RecipeSubmitModal.tsx
+        muster: "veröffentlicht wird sie erst nach unserer Freigabe"
+      - datei: src/app/rezepte/page.tsx
+        muster: "veröffentlicht wird erst nach unserer Freigabe"
+    beleg:
+      typ: code
+      alle:
+        - datei: src/app/api/rezept-einreichen/route.ts
+          regex: "published_at: null"
+        - datei: src/lib/rezept/einreichung-status.ts
+    bei_bruch: Einreichung sofort schließen — ein Rezept, das ohne Freigabe erscheint, bricht Regel 4.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  # ─── Geschäftsfeld 3 ─────────────────────────────────────────────────────────
+
+  - id: eigenregie-sechs-module
+    zusage: Der Kurs Eigenregie besteht aus einer Diagnose und sechs veröffentlichten Modulen.
+    wo:
+      - datei: src/app/eigenregie/page.tsx
+        muster: "Diagnose + 6 Module"
+      - datei: src/app/eigenregie/page.tsx
+        muster: "Diagnose plus sechs Module mit prüfbaren Ergebnissen."
+      - datei: src/app/eigenregie/lernen/page.tsx
+        muster: "Erst die Diagnose, dann sechs Module."
+    beleg:
+      typ: zaehlung
+      zahl: 6
+      im_text: ["6", "sechs"]
+      quelle:
+        glob: content/eigenregie/0[1-6]-*.mdx
+        frontmatter: { status: published }
+    bei_bruch: Zahl im Text an die veröffentlichten Module angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+  - id: gruender-schmiede-sechs-module
+    zusage: Die Gründer-Schmiede besteht aus sechs Modulen.
+    wo:
+      - datei: src/app/gruender-schmiede/page.tsx
+        muster: "Gründer-Schmiede — 6 Module zum KI-Business"
+      - datei: src/app/gruender-schmiede/lernen/page.tsx
+        muster: "Sechs Module — meine echte Methode."
+    beleg:
+      typ: zaehlung
+      zahl: 6
+      im_text: ["6", "Sechs"]
+      quelle:
+        glob: content/gruender-schmiede/*.mdx
+    bei_bruch: Zahl im Text an die Module in content/gruender-schmiede angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-03"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# KEINE ZUSAGE — Sätze, die ein Zusage-Muster treffen, aber nichts versprechen
+# (Kochanweisung, Zitat, Rechtsbegriff). Jeder Eintrag mit Grund. Das ist der
+# Ausweg für Fehltreffer in NEUEM Text; der Altbestand steht in der Baseline.
+# ══════════════════════════════════════════════════════════════════════════════
+
+keine_zusage:
+
+  - datei: src/app/mein-protokoll/page.tsx
+    muster: "Du hast samstags 2 Stunden oder sonntags einen halben Tag?"
+    grund: Beispiel für die Zeit des Lesers, kein Rhythmus der Steakakademie.
+
+  - datei: src/app/aging/AgingClient.tsx
+    muster: "Tägliche Kontrolle empfohlen"
+    grund: Handlungsempfehlung für den Leser beim Reifen, keine Leistung der Seite.
