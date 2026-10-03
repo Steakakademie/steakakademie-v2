@@ -63,7 +63,8 @@ const NAV_CATEGORIES: NavCategory[] = [
       { label: 'Aroma-Tuning', href: '/#werkzeuge' },
       { label: 'Rezept-Schmiede', href: '/#werkzeuge' },
       { label: 'Hofladen-Radar', href: '/hoefe' },
-      { label: 'Fleischpass — Grill-Logbuch', href: '/fleischpass' },
+      // Fleischpass am 02.10.2026 herausgenommen: Das Logbuch gibt es noch nicht,
+      // die Seite steht auf „in Vorbereitung" (Zugang nur über /vip).
       { label: 'Menü-Planer', href: '/menue' },
       { label: 'Suche', href: '/suche' },
     ],

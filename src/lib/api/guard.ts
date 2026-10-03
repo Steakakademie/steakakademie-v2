@@ -7,6 +7,7 @@
  *   2. Rate-Limit — Fixed-Window pro IP + Endpunkt-Schlüssel.
  *   3. Body       — Content-Type, Größenlimit, JSON-Parse, Zod-Schema.
  *   4. Auth       — optional: eingeloggter Supabase-Nutzer ODER Admin-Cookie.
+ *                   Vier Modi, siehe GuardOptions.auth.
  *   5. Bots       — optional: Honeypot-Feld (still verwerfen) und Cloudflare-
  *                   Turnstile-Token (src/lib/api/turnstile.ts), seit 01.10.2026.
  *
@@ -44,8 +45,23 @@ export type GuardOptions<S extends z.ZodTypeAny> = {
   maxBodyBytes?: number;
   /** Same-Origin erzwingen (Default true). Nur für reine Server-zu-Server-Routen abschalten. */
   requireSameOrigin?: boolean;
-  /** Zusätzlich Login (Supabase-Session) oder Admin-Cookie verlangen. */
-  auth?: 'none' | 'user-or-admin' | 'admin';
+  /**
+   * Wer darf, und was steht danach in `principal`:
+   *   'none'          (Default) niemand wird aufgelöst — `principal` ist IMMER
+   *                   `anonymous`, auch mit gültiger Sitzung. Billig (kein
+   *                   Supabase-Aufruf), aber wer danach `principal.kind === 'user'`
+   *                   erwartet, bekommt ihn nie.
+   *   'optional'      Admin → admin, gültige Sitzung → user, sonst anonymous.
+   *                   Weist niemanden ab. Für Routen, die anonym etwas zeigen
+   *                   und eingeloggt mehr können (Aroma-Matcher).
+   *   'user-or-admin' Login oder Admin-Cookie Pflicht, sonst 401.
+   *   'admin'         nur Admin-Cookie, sonst 401.
+   *
+   * 'optional' gibt es seit 03.10.2026: Der Aroma-Matcher lief mit 'none' und
+   * wertete `principal` aus — jeder Eingeloggte bekam 401 „Anmeldung
+   * erforderlich“, die Tabelle aroma_matcher_abfragen blieb leer.
+   */
+  auth?: 'none' | 'optional' | 'user-or-admin' | 'admin';
   /**
    * Name eines Honeypot-Felds im Body (z. B. 'website'). Ist es befüllt, war es
    * ein Bot: Er bekommt ein freundliches `{ ok: true }` mit 200 — und nichts
@@ -220,7 +236,9 @@ async function resolvePrincipal(req: Request, mode: NonNullable<GuardOptions<z.Z
   if (await isAdminRequest(req)) return { kind: 'admin' };
   if (mode === 'admin') return null;
   const userId = await userIdFromRequest(req);
-  return userId ? { kind: 'user', userId } : null;
+  if (userId) return { kind: 'user', userId };
+  // 'optional' weist nie ab: ohne Sitzung bleibt es beim anonymen Besucher.
+  return mode === 'optional' ? { kind: 'anonymous' } : null;
 }
 
 // ─── Haupt-Guard ─────────────────────────────────────────────────────────────

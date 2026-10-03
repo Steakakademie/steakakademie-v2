@@ -8,6 +8,8 @@ import { sichtbareArtikel } from '@/lib/redaktion';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import Angebotshinweis from '@/components/angebote/Angebotshinweis';
+import { hinweiseFuer } from '@/lib/angebote/register';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
 import { ogImages } from '@/lib/og';
@@ -161,6 +163,14 @@ export default function GlossarEntryPage(props: Props) {
           <article className="prose-custom">
             <MDXContent components={mdxComponents} />
           </article>
+
+          {/* Eigenes Angebot — ein Hinweis nach der Definition. Kein Regal: die
+              Einträge sind kurz, mehr Werbung als Inhalt wäre das falsche Verhältnis. */}
+          <Angebotshinweis
+            hinweis={hinweiseFuer({ typ: 'glossar', slug: entry.slug, felder: { category: entry.category } }).imText}
+            seite="glossar"
+            variante="karte"
+          />
 
           {/* Related glossary entries */}
           {related.length > 0 && (

@@ -35,7 +35,6 @@ const FOOTER_LINKS = {
     { label: 'Aroma-Matcher', href: '/aroma-matcher' },
     { label: 'Cut-Generator', href: '/cut-generator' },
     { label: 'Hofladen-Radar', href: '/hoefe' },
-    { label: 'Fleischpass — Grill-Logbuch', href: '/fleischpass' },
     { label: 'Menü-Planer', href: '/menue' },
     { label: 'Suche', href: '/suche' },
   ],

@@ -6,12 +6,17 @@ import { useSearchParams }     from 'next/navigation';
 import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
 import OAuthButtons from '@/components/auth/OAuthButtons';
 import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
+import { sicheresZiel } from '@/lib/auth/sicheres-ziel';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const redirectTo   = searchParams.get('redirectTo') ?? '/diplome/profil';
+  // 03.10.2026: `redirectTo` ist fremdbestimmt (jeder kann einen Login-Link mit
+  // beliebigem Wert verschicken) und landet unten in `window.location.href` —
+  // `javascript:…` oder `//fremder-host` liefen dort ungeprueft. Nur interne
+  // Pfade, sonst Standardziel (src/lib/auth/sicheres-ziel.ts).
+  const redirectTo   = sicheresZiel(searchParams.get('redirectTo'));
   const urlError     = searchParams.get('error');
 
   const [email,    setEmail]    = useState('');
@@ -47,7 +52,9 @@ function LoginForm() {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}`,
+        // Kodiert wie in OAuthButtons (03.10.2026): unkodiert haengt ein `&` im
+        // Ziel dem Callback fremde Parameter an und schneidet das Ziel ab.
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
         captchaToken,
       },
     });
@@ -95,7 +102,7 @@ function LoginForm() {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}`, captchaToken },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`, captchaToken },
     });
     if (error) {
       turnstileReset();

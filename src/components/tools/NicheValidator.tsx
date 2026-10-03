@@ -54,11 +54,13 @@ export default function NicheValidator() {
 
   const leadFormRef = useRef<HTMLFormElement>(null);
   const [leadTurnstile, setLeadTurnstile] = useState('');
+  const [leadFehler, setLeadFehler] = useState(false);
 
   async function handleLead(e: React.FormEvent) {
     e.preventDefault();
     if (!leadEmail || !object?.niche || leadState !== 'idle') return;
     setLeadState('sending');
+    setLeadFehler(false);
     try {
       const res = await fetch('/api/niche-validator/lead', {
         method: 'POST',
@@ -78,6 +80,9 @@ export default function NicheValidator() {
     } catch {
       turnstileReset();
       setLeadState('idle');
+      // 03.10.2026: Vorher sprang das Formular wortlos zurück. Seit die Route
+      // ehrlich scheitert (keine Mail → kein success), muss man das auch sehen.
+      setLeadFehler(true);
     }
   }
 
@@ -526,6 +531,11 @@ export default function NicheValidator() {
                         </span>
                       </label>
                     </form>
+                    {leadFehler && (
+                      <p role="alert" className="text-xs font-sans text-brand-fire mt-3">
+                        That didn’t go through — no email was sent. Please try again in a few minutes.
+                      </p>
+                    )}
                     <p className="text-[10px] font-sans text-text-muted/60 mt-2">
                       Confirmation email required (double opt-in) · Never shared
                     </p>
