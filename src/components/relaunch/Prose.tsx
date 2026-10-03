@@ -5,6 +5,7 @@ import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
 import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
 import BBQPairing from '@/components/article/BBQPairing';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
+import ProseLink from '@/components/relaunch/ProseLink';
 
 /**
  * MDX-Komponenten für Lesetext auf der hellen Ebene des Relaunches.
@@ -42,8 +43,8 @@ export const skMdx = {
   ),
   th: (p: React.ThHTMLAttributes<HTMLTableCellElement>) => <th className="sk-prose__th" {...p} />,
   td: (p: React.TdHTMLAttributes<HTMLTableCellElement>) => <td className="sk-prose__td" {...p} />,
-  a: ({ href = '', ...p }: React.AnchorHTMLAttributes<HTMLAnchorElement>) =>
-    href.startsWith('/') ? <Link href={href} className="sk-prose__a" {...p} /> : <a href={href} className="sk-prose__a" rel="noopener" {...p} />,
+  // /go/-Links sind Partnerlinks: rel und „Anzeige“ wie auf den Alt-Seiten (03.10.2026) — siehe ProseLink.
+  a: ProseLink,
   img: ({ src = '', alt = '', title }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <figure className="sk-prose__figure">
       {/* eslint-disable-next-line @next/next/no-img-element */}

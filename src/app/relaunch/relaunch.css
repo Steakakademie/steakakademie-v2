@@ -416,6 +416,10 @@
 .sk-prose__strong { font-weight: 600; color: var(--sk-light-text); }
 .sk-prose__hr { border: 0; border-top: 1px solid var(--sk-light-border); margin: 10px 0; }
 .sk-prose__a { color: var(--sk-accent-text); text-decoration: underline; text-underline-offset: 3px; }
+/* Partnerlink im Lesetext (ProseLink.tsx): Das Etikett „Anzeige" kommt aus
+   MdxTextLink und ist dort für dunklen Grund gefärbt — hier erbt es die
+   Textfarbe der Umgebung, damit es auf hell (und in dunklen Blöcken) lesbar ist. */
+.sk-prose__partner > span { color: inherit; }
 .sk-prose__tablewrap { overflow-x: auto; border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); background: var(--sk-light-card); }
 .sk-prose__table { border-collapse: collapse; width: 100%; font-size: 16px; }
 .sk-prose__th { text-align: left; padding: 12px 18px; background: var(--sk-light-text); color: var(--sk-dark-text); font-family: var(--sk-display); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
