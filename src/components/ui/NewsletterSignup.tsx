@@ -65,11 +65,16 @@ function hexToRgbTriple(hex: string): string {
  */
 export default function NewsletterSignup({
   source = 'default',
-  // Einheitliches Versprechen (Audit 15.08.2026): Geschenk zuerst, Frequenz konsistent
-  // „jeden Freitag". Diese Defaults sind die Single Source der Anmelde-Copy — Aufrufer
-  // überschreiben sie nur noch, wenn der Kontext es wirklich verlangt.
+  // Einheitliches Versprechen (Audit 15.08.2026): Geschenk zuerst. Diese Defaults sind
+  // die Single Source der Anmelde-Copy — Aufrufer überschreiben sie nur noch, wenn der
+  // Kontext es wirklich verlangt.
+  // KEIN TAKT (03.10.2026): Bis hierher stand „jeden Freitag“. Einen Wochenversand gab
+  // es nie — in Loops ist keine Kampagne versendet, der Wochen-Workflow ein leerer
+  // Entwurf. Was die Anmeldung wirklich auslöst: die Willkommensstrecke, deren erste
+  // Mail den Link zur Druckseite des Spickzettels bringt. Wer einen festen Versandtag
+  // einführt, stellt den Takt hier wieder ein — nicht vorher.
   headline = 'Der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite.',
-  subline = 'Druckfertig für die Grillstation. Dazu jeden Freitag ein Stück BBQ-Wissen, das bleibt — präzise, ehrlich, jederzeit abbestellbar.',
+  subline = 'Druckfertig für die Grillstation. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar.',
   cta = 'Spickzettel sichern',
   eyebrow = 'Kostenloses Geschenk',
   accentColor,

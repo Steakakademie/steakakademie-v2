@@ -7,10 +7,16 @@ import { allPersoenlichkeits } from 'contentlayer/generated';
 
 export const metadata: Metadata = {
   title: 'BBQ-Persönlichkeiten der Grillszene',
-  description: 'Lucky Maurer, Aaron Franklin, Francis Mallmann und mehr — die einflussreichsten Köche und Pitmasters der Grillszene. Alle zwei Wochen neu vorgestellt.',
+  description: 'Lucky Maurer, Aaron Franklin, Francis Mallmann und mehr — die einflussreichsten Köche und Pitmasters der Grillszene im Porträt.',
 };
 
-/** Woche-basierte Rotation — alle 2 Wochen eine neue Person im Spotlight */
+/**
+ * Woche-basierte Rotation — alle 2 Wochen rückt eine ANDERE Person aus dem Bestand
+ * in den Fokus. Das ist ein Wechsel des Aufmachers, kein neues Porträt: Der Bestand
+ * wächst dadurch nicht. Bis 03.10.2026 stand auf dieser Seite dreimal „alle zwei
+ * Wochen neu vorgestellt“ — das letzte Porträt ist vom 23.05.2026, kein Workflow
+ * erzeugt neue. Der Banner unten sagt deshalb nur, was die Funktion tut.
+ */
 function getCurrentFeatured(slugs: string[]): number {
   const weeksSinceEpoch = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
   return Math.floor(weeksSinceEpoch / 2) % slugs.length;
@@ -54,8 +60,8 @@ export default function PersoenlichkeitenPage() {
                 Menschen, die das Grillen geprägt haben.
               </h1>
               <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Pitmasters, Wagyu-Pioniere, Feuer-Philosophen — alle zwei Wochen stellen
-                wir eine Persönlichkeit vor, die die BBQ-Welt verändert hat.
+                Pitmasters, Wagyu-Pioniere, Feuer-Philosophen — hier stellen wir
+                Persönlichkeiten vor, die die BBQ-Welt verändert haben.
               </p>
             </div>
           </div>
@@ -69,7 +75,7 @@ export default function PersoenlichkeitenPage() {
           </div>
         </div>
 
-        {/* Featured — Person der Woche */}
+        {/* Featured — Person im Fokus (Rotation, siehe getCurrentFeatured) */}
         {featured && (
           <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="mb-6">
@@ -122,7 +128,7 @@ export default function PersoenlichkeitenPage() {
                 Alle Porträts
               </h2>
               <p className="text-text-muted text-sm font-sans mb-8">
-                {allPersoenlichkeits.length} Persönlichkeiten — fortlaufend erweitert
+                {allPersoenlichkeits.length} Persönlichkeiten
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {rest.map(person => (
@@ -151,16 +157,19 @@ export default function PersoenlichkeitenPage() {
           </section>
         )}
 
-        {/* Newsletter CTA */}
+        {/* Newsletter CTA — 03.10.2026: ohne Takt und ohne Porträt-Zusage (der
+            Wissens-Brief verschickt keine Porträts). Das Ziel war /#newsletter; eine
+            Sprungmarke mit dieser id gab es nirgends, der Klick landete oben auf der
+            Startseite. Jetzt die Anmeldeseite selbst. */}
         <section className="border-t border-border-subtle py-14 px-4 text-center bg-surface-dark">
           <p className="text-text-light/40 text-sm font-sans mb-2">
-            Alle 2 Wochen eine neue BBQ-Legende.
+            Kostenlos per Mail — ohne festen Takt, ohne Spam.
           </p>
           <h3 className="font-serif text-2xl font-bold text-text-light mb-6">
-            Newsletter: Nie ein Porträt verpassen.
+            Der Wissens-Brief: BBQ-Wissen, das bleibt.
           </h3>
           <Link
-            href="/#newsletter"
+            href="/newsletter"
             className="inline-flex items-center gap-2 px-8 py-4 border border-brand-gold/60 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
           >
             Zum Newsletter anmelden

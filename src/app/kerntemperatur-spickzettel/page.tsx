@@ -233,13 +233,17 @@ export default function SpickzettelPage() {
               also ein Klick zwischen Interesse und Eintrag. Header und Top-Bar zeigen
               jetzt hierher, deshalb steht das Formular direkt hier.
               Hinweis: Solange es die PDF-Fassung nicht gibt (Block B1), ist diese Seite
-              frei zugänglich — das Formular sammelt, der Inhalt bleibt indexierbar. */}
+              frei zugänglich — das Formular sammelt, der Inhalt bleibt indexierbar.
+              03.10.2026: Deshalb verspricht der Text auch keine „druckfertige Fassung
+              im Postfach“ mehr — per Mail kommt der Link zu genau dieser Druckseite,
+              kein PDF und kein Anhang. Und kein Versandtag: einen Wochenversand gibt
+              es nicht (siehe NewsletterSignup.tsx). */}
           <div className="mt-10 print:hidden">
             <NewsletterSignup
               source="spickzettel-seite"
               eyebrow="Kostenloses Geschenk"
-              headline="Diese Seite als Spickzettel ins Postfach."
-              subline="Wir schicken dir die druckfertige Fassung — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Kostenlos, jederzeit abbestellbar."
+              headline="Diesen Spickzettel als Link ins Postfach."
+              subline="Nach deiner Bestätigung schicken wir dir den Link zu dieser Druckseite, damit du sie am Grill sofort wiederfindest. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Kostenlos, jederzeit abbestellbar."
               cta="Spickzettel sichern"
             />
           </div>

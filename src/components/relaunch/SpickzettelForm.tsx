@@ -63,7 +63,7 @@ export default function SpickzettelForm() {
   if (status === 'success') {
     return (
       <p className="sk-text sk-text--16" role="status" style={{ color: '#d9cfc2' }}>
-        Fast geschafft: Bitte bestätige den Link in der E-Mail, die gerade unterwegs ist. Danach kommt der Spickzettel.
+        Fast geschafft: Bitte bestätige den Link in der E-Mail, die gerade unterwegs ist. Danach schicken wir dir den Link zum Spickzettel zum Ausdrucken.
       </p>
     );
   }

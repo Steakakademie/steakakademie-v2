@@ -29,7 +29,7 @@ export default function SeriesBadge({
       {/* Series label + progress */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire">
-          Die 50 Meister des Feuers
+          Die {totalCount} Meister des Feuers
         </span>
         <span className="text-[10px] font-sans text-text-muted">
           {currentOrder} / {totalCount}
