@@ -196,7 +196,7 @@ angebote:
     anlaesse:
       - typ: rezept
         wenn: { difficulty: [Fortgeschritten, Profi] }
-        satz: "Du grillst auf diesem Niveau? Für dich entsteht der VIP-Bereich — Werkzeuge ohne Limit und grammgenaue Profi-Rezepte."
+        satz: "Du grillst auf diesem Niveau? Für dich ist der VIP-Bereich geplant — Werkzeuge ohne Limit und grammgenaue Profi-Rezepte."
 
   - id: steak-beichte
     name: Steak-Beichte
