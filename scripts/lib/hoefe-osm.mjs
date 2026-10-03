@@ -6,6 +6,11 @@
  * diese Daten zeigt (© OpenStreetMap-Mitwirkende), ist Pflicht.
  */
 
+// Der Rahmen DE + AT + CH kommt aus EINER Datei (03.10.2026) — dieselbe, die auch
+// die Suche (/api/hoefe) liest. Begruendung und Extrempunkte: src/lib/hoefe/grenzen.ts.
+// JSON statt .ts, damit dieses Skript ohne Build unter Node laeuft.
+import GRENZEN from '../../src/lib/hoefe/grenzen.json' with { type: 'json' };
+
 // Overpass: nwr = node + way + relation, out center liefert fuer Flaechen den
 // Mittelpunkt. Regex-Flag fuer "case-insensitive" ist bei Overpass `,i` als
 // Suffix — `(?i)` ist dort ein statischer Fehler (am 13.09.2026 belegt).
@@ -55,9 +60,10 @@ export function fleischAusTags(tags = {}) {
  * Grobe Bounding-Box DE + AT + CH (inkl. Liechtenstein, das mittendrin liegt).
  * DE 47,3–55,1 N / 5,9–15,0 E · AT 46,4–49,0 N / 9,5–17,2 E · CH 45,8–47,8 N / 6,0–10,5 E.
  * Genauer filtert die Overpass-Abfrage (Landesgrenzen); das hier faengt nur Ausreisser.
+ * Die Zahlen stehen in src/lib/hoefe/grenzen.json und nirgends sonst.
  */
 export function imDachRaum(lat, lng) {
-  return lat >= 45.5 && lat <= 55.5 && lng >= 5.5 && lng <= 17.5;
+  return lat >= GRENZEN.latMin && lat <= GRENZEN.latMax && lng >= GRENZEN.lngMin && lng <= GRENZEN.lngMax;
 }
 
 export function slugAusName(name, osmId) {
@@ -86,17 +92,29 @@ function normUrl(u) {
   return null;
 }
 
-/** OSM-Element (Overpass JSON) → Zeile fuer hoefe_import_upsert. null = unbrauchbar. */
-export function hofAusElement(el) {
+/**
+ * Warum ein OSM-Element NICHT uebernommen wird — null heisst: brauchbar.
+ * Eigene Funktion (03.10.2026), damit der Import zaehlen kann, was er aussortiert:
+ * vorher verschwand ein Hof ausserhalb des Rahmens ohne jede Spur im Log.
+ */
+export function ausschlussGrund(el) {
   const tags = el.tags ?? {};
   const lat = el.lat ?? el.center?.lat;
   const lng = el.lon ?? el.center?.lon;
-  if (typeof lat !== 'number' || typeof lng !== 'number') return null;
-  if (!imDachRaum(lat, lng)) return null;
-
+  if (typeof lat !== 'number' || typeof lng !== 'number') return 'ohneKoordinate';
+  if (!imDachRaum(lat, lng)) return 'ausserhalb';
   // Ohne Namen ist ein Hof im Radar wertlos (kein Profil, keine Suche).
+  if (!(tags.name ?? tags['name:de'] ?? '').trim()) return 'ohneName';
+  return null;
+}
+
+/** OSM-Element (Overpass JSON) → Zeile fuer hoefe_import_upsert. null = unbrauchbar. */
+export function hofAusElement(el) {
+  if (ausschlussGrund(el)) return null;
+  const tags = el.tags ?? {};
+  const lat = el.lat ?? el.center?.lat;
+  const lng = el.lon ?? el.center?.lon;
   const name = (tags.name ?? tags['name:de'] ?? '').trim();
-  if (!name) return null;
 
   const osmId = `${el.type[0]}${el.id}`;
   const { verkauft_fleisch, fleischarten } = fleischAusTags(tags);
@@ -123,15 +141,29 @@ export function hofAusElement(el) {
   };
 }
 
-/** Sortiert unbrauchbare Elemente aus und entdoppelt Slugs (letzter gewinnt nicht — erster bleibt). */
-export function hoefeAusElementen(elements) {
+/**
+ * Sortiert unbrauchbare Elemente aus, entdoppelt Slugs (erster bleibt) und zaehlt mit,
+ * was aus welchem Grund wegfiel. Ein Datensatz ausserhalb des Rahmens kostet damit
+ * genau diesen einen Datensatz — nicht den Lauf — und steht als Zahl in der Bilanz.
+ */
+export function hoefeMitBilanz(elements) {
+  const bilanz = { elemente: elements.length, ohneKoordinate: 0, ausserhalb: 0, ohneName: 0, doppelt: 0 };
   const gesehen = new Set();
-  const out = [];
+  const hoefe = [];
   for (const el of elements) {
+    const grund = ausschlussGrund(el);
+    if (grund) { bilanz[grund]++; continue; }
     const h = hofAusElement(el);
-    if (!h || gesehen.has(h.slug)) continue;
+    if (gesehen.has(h.slug)) { bilanz.doppelt++; continue; }
     gesehen.add(h.slug);
-    out.push(h);
+    hoefe.push(h);
   }
-  return out;
+  return { hoefe, bilanz };
 }
+
+/** Wie hoefeMitBilanz, nur die Zeilen. */
+export function hoefeAusElementen(elements) {
+  return hoefeMitBilanz(elements).hoefe;
+}
+
+export { GRENZEN as DACH_GRENZEN };

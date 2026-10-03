@@ -9,6 +9,10 @@ import { activeMeatPartner, buildMeatTargetUrl } from '@/lib/cut-affiliate';
  * Spiegelt /go/[product-slug]: Plausible-Event (server-side, cookieless) + 302.
  * Ziel ist der aktive Fleischpartner (Primär falls live, sonst Amazon-Fallback).
  */
+
+/** So lange darf Plausible den Klick hoechstens aufhalten — wie in /go/[product-slug]. */
+const PLAUSIBLE_TIMEOUT_MS = 1_500;
+
 export async function GET(request: NextRequest, props0: { params: Promise<{ cut: string }> }) {
   const params = await props0.params;
   const cut = getCutById(params.cut);
@@ -41,6 +45,9 @@ export async function GET(request: NextRequest, props0: { params: Promise<{ cut:
         url: ref,
         props: { provider: partner.id, produkt: `cut-${cut.id}`, typ: 'fleisch' },
       }),
+      // Zeitgrenze (03.10.2026): Das catch faengt Fehler, kein Haengen. Ohne
+      // sie wartete der Klick so lange, wie Plausible schwieg.
+      signal: AbortSignal.timeout(PLAUSIBLE_TIMEOUT_MS),
     });
   } catch {
     // Tracking-Fehler niemals Redirect blockieren

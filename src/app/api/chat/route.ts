@@ -74,12 +74,19 @@ const ChatBody = z.object({
     .max(30),
 });
 
+// Login-Pflicht (03.10.2026): Diese Route hat keinen Aufrufer mehr — das Widget
+// spricht seit dem Wechsel auf Gemini mit /api/marco. Sie blieb aber anonym
+// erreichbar, 30 Anthropic-Aufrufe je IP in 10 Minuten auf unsere Rechnung.
+// Jetzt dieselbe Schranke wie /api/marco: eingeloggter Nutzer ODER Admin-Cookie.
+// Der Guard laeuft in der Edge-Runtime (nur Web-APIs: @supabase/ssr liest die
+// Cookies aus dem Request, die Admin-Signatur nutzt Web Crypto).
 export async function POST(req: Request) {
   const guard = await guardRequest(req, {
     key: 'chat',
     rate: { limit: 30, windowMs: 10 * 60_000 },
     schema: ChatBody,
     maxBodyBytes: 64 * 1024,
+    auth: 'user-or-admin',
   });
   if (!guard.ok) return guard.response;
   const { messages } = guard.body;

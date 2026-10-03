@@ -7,6 +7,11 @@ import { allArtikels } from 'contentlayer/generated';
 import { sichtbareArtikel, nurVeroeffentlicht, istEntwurf } from '@/lib/redaktion';
 import { ogImages } from '@/lib/og';
 
+// Stuendlich neu (03.10.2026): Die Liste zeigt Artikel ab ihrem `publishedAt`.
+// Ohne das stand ein faelliger Artikel erst nach dem naechsten Deploy in der Liste,
+// waehrend Startseite und Suche ihn schon verlinkten.
+export const revalidate = 3600;
+
 /** JSON-LD sicher einbetten: verhindert das Ausbrechen aus dem script-Tag. */
 const ldJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
 

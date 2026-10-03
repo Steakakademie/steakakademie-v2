@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { sicheresZiel } from '@/lib/auth/sicheres-ziel';
 
 /**
  * Social Login (Google, Amazon) für die Login-Seite.
@@ -38,7 +39,9 @@ export default function OAuthButtons({ redirectTo, disabled = false, onError }: 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        // 03.10.2026: nur interne Pfade — der Callback prueft noch einmal, aber
+        // ein fremdes Ziel soll gar nicht erst in den Anmeldelink geraten.
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(sicheresZiel(redirectTo))}`,
       },
     });
     // Ohne Fehler leitet der Browser jetzt zum Anbieter weiter; der Zustand

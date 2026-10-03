@@ -66,21 +66,40 @@ import { digistoreSignature } from '@/lib/digistore/signature';
  * (Server-SDK, sentry.server.config.ts) legt ein neues Issue an und mailt.
  * Fingerprint pro Produkt, damit jede Bestellung im selben Issue landet und
  * nicht als Rauschen untergeht.
+ *
+ * Zwei weitere Gruende seit 03.10.2026 — beide endeten vorher nur im Log:
+ *   mapping-lesefehler        Die Produkt-Zuordnung liess sich nicht LESEN
+ *                             (Datenbankfehler). Das sah aus wie „unbekanntes
+ *                             Produkt" und wurde mit 200 quittiert — Digistore
+ *                             wiederholte nicht, der Kaeufer bekam nichts.
+ *   verarbeitung-gescheitert  Zugang, Guthaben, Gutschein oder Kaufmail sind
+ *                             gescheitert. Die Route antwortet mit 500 und
+ *                             Digistore wiederholt — aber ein Fehler, der sich
+ *                             bei jeder Wiederholung gleich wiederholt (Loops
+ *                             lehnt die Vorlage ab), erreichte niemanden:
+ *                             Zurueckgegebene 5xx meldet Sentry nicht von selbst.
  */
+type AlarmGrund = 'kein-mapping' | 'kurs-unpublished' | 'mapping-lesefehler' | 'verarbeitung-gescheitert';
+
 function alarmKassiertOhneAuslieferung(
-  grund: 'kein-mapping' | 'kurs-unpublished',
-  info: { productId: string; orderId: string; event: string; courseSlug?: string | null },
+  grund: AlarmGrund,
+  info: { productId: string; orderId: string; event: string; courseSlug?: string | null; fehler?: string },
 ) {
-  const text =
-    grund === 'kein-mapping'
-      ? `Digistore-Bestellung fuer unbekanntes Produkt ${info.productId} — kassiert ohne Auslieferung`
-      : `Digistore-Bestellung fuer Produkt ${info.productId} → Kurs "${info.courseSlug}" ist NICHT veroeffentlicht — Kaeufer sieht nichts`;
-  console.error('[ds-webhook] ALARM', grund, info);
-  Sentry.captureMessage(text, {
+  const text: Record<AlarmGrund, string> = {
+    'kein-mapping': `Digistore-Bestellung fuer unbekanntes Produkt ${info.productId} — kassiert ohne Auslieferung`,
+    'kurs-unpublished': `Digistore-Bestellung fuer Produkt ${info.productId} → Kurs "${info.courseSlug}" ist NICHT veroeffentlicht — Kaeufer sieht nichts`,
+    'mapping-lesefehler': `Digistore-Webhook: Produkt-Zuordnung fuer ${info.productId} nicht lesbar — mit 500 beantwortet, Digistore wiederholt`,
+    'verarbeitung-gescheitert': `Digistore-Webhook: Verarbeitung von "${info.event}" fuer Produkt ${info.productId} gescheitert — mit 500 beantwortet, Digistore wiederholt`,
+  };
+  // Fehlertexte koennen die Kaeuferadresse enthalten („refund for unknown
+  // user: …") — die gehoert nicht nach Sentry (sendDefaultPii: false).
+  const fehler = info.fehler?.replace(/[^\s@:<>()]+@[^\s@<>()]+/g, '<email>').slice(0, 500) ?? null;
+  console.error('[ds-webhook] ALARM', grund, { ...info, fehler });
+  Sentry.captureMessage(text[grund], {
     level: 'error',
     fingerprint: ['ds-webhook', grund, info.productId],
     tags: { ds_product_id: info.productId, ds_event: info.event, grund },
-    extra: { orderId: info.orderId, courseSlug: info.courseSlug ?? null },
+    extra: { orderId: info.orderId, courseSlug: info.courseSlug ?? null, fehler },
   });
 }
 
@@ -331,11 +350,22 @@ export async function POST(req: Request) {
   );
 
   // 1) Produkt → Mapping aus DB (Kurs, Gutschein, Credits)
-  const { data: mapping } = await supabase
+  const { data: mapping, error: mappingErr } = await supabase
     .from('digistore_products')
     .select('course_id, is_voucher, voucher_credit_amount, credit_amount, courses(slug, title, published)')
     .eq('ds_product_id', productId)
     .maybeSingle();
+
+  // „Nicht lesbar" ist nicht „nicht gefunden" (03.10.2026). Bis dahin wurde
+  // `error` verworfen: Ein Datenbankfehler lief als unbekanntes Produkt weiter
+  // und endete unten mit 200 — fuer Digistore erledigt, fuer den Kaeufer nicht.
+  // 500 → Digistore stellt erneut zu. Bewusst OHNE Zeile in digistore_orders:
+  // Die Datenbank antwortet gerade nicht verlaesslich, und die Wiederholung
+  // legt die Zeile im richtigen Zweig (Kurs, Credits, Gutschein) selbst an.
+  if (mappingErr) {
+    alarmKassiertOhneAuslieferung('mapping-lesefehler', { productId, orderId, event, fehler: mappingErr.message });
+    return new Response('Product lookup failed', { status: 500 });
+  }
 
   const courseId       = mapping?.course_id ?? null;
   const courseSlug     = (mapping?.courses as any)?.slug  ?? null;
@@ -484,6 +514,7 @@ export async function POST(req: Request) {
     return new Response('OK (event recorded)', { status: 200 });
   } catch (err: any) {
     console.error('[ds-webhook] processing failed', err);
+    alarmKassiertOhneAuslieferung('verarbeitung-gescheitert', { productId, orderId, event, courseSlug, fehler: err?.message });
     await supabase
       .from('digistore_orders')
       .update({
@@ -575,6 +606,7 @@ async function handleCreditProduct(
     return new Response('OK (event recorded)', { status: 200 });
   } catch (err: any) {
     console.error('[ds-webhook] credit processing failed', err);
+    alarmKassiertOhneAuslieferung('verarbeitung-gescheitert', { productId, orderId, event, courseSlug, fehler: err?.message });
     await supabase
       .from('digistore_orders')
       .update({ processing_status: 'failed', error_message: err?.message ?? 'unknown error' })
@@ -662,6 +694,7 @@ async function handleVoucherProduct(
     return new Response('OK (event recorded)', { status: 200 });
   } catch (err: any) {
     console.error('[ds-webhook] voucher processing failed', err);
+    alarmKassiertOhneAuslieferung('verarbeitung-gescheitert', { productId, orderId, event, fehler: err?.message });
     await supabase
       .from('digistore_orders')
       .update({ processing_status: 'failed', error_message: err?.message ?? 'unknown error' })
