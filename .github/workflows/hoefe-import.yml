@@ -10,9 +10,9 @@ name: Hofladen-Radar importieren (OSM → Supabase)
 #
 # Benoetigte GitHub-Secrets: NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
 # Voraussetzung: Migrationen 20260913120000_hoefe.sql und — fuer AT/CH —
-# 20261003090000_hoefe_grenzen_dach.sql eingespielt. Ohne die zweite lehnt die
-# Tabelle alles oestlich von 16° und suedlich von 47° ab; der Lauf schreibt dann den
-# Rest und endet rot.
+# 20261003074310_hoefe_grenzen_dach.sql eingespielt (die zweite ist seit 03.10.2026
+# angewendet). Ohne sie lehnt die Tabelle alles oestlich von 16° und suedlich von
+# 47° ab; der Lauf schreibt dann den Rest und endet rot.
 #
 # Ob der Import LIEFERT, prueft der Ops-Heartbeat (data/ops-heartbeat.json,
 # Eintrag „Hofladen-Import": juengster letzter_import, Frist 9 Tage).

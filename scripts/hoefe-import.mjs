@@ -9,7 +9,7 @@
  *
  * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (.env.local oder Secrets)
  * Voraussetzung: supabase/migrations/20260913120000_hoefe.sql eingespielt — und fuer
- * Oesterreich/Schweiz 20261003090000_hoefe_grenzen_dach.sql (weitet die CHECK-Grenzen).
+ * Oesterreich/Schweiz 20261003074310_hoefe_grenzen_dach.sql (weitet die CHECK-Grenzen).
  *
  * Exitcode (03.10.2026, CLAUDE.md Regel 10 „Gruen ist kein Ergebnis"):
  *   0 = es wurde geschrieben und die Datenbank hat keine Zeile abgelehnt
@@ -112,7 +112,7 @@ async function main() {
     throw new Error(
       `${r.abgelehnt.length} Hoefe von der Datenbank abgelehnt (${r.nachgefahreneBloecke} Bloecke zeilenweise nachgefahren).` +
       (grenzen
-        ? ' Die Tabelle hat engere Grenzen als der Code — Migration supabase/migrations/20261003090000_hoefe_grenzen_dach.sql ist nicht angewendet.'
+        ? ' Die Tabelle hat engere Grenzen als der Code — die Grenzen setzt supabase/migrations/20261003074310_hoefe_grenzen_dach.sql (angewendet 03.10.2026), die Zahlen im Code stehen in src/lib/hoefe/grenzen.json.'
         : ' Code und Tabelle passen nicht zusammen — Ursache am Constraint-Namen oben ablesen.'),
     );
   }

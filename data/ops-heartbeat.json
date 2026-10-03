@@ -65,7 +65,7 @@
     "spalte": "letzter_import",
     "filter": "letzter_import=not.is.null",
     "maxTage": 9,
-    "hinweis": "hoefe-import läuft montags und setzt bei jedem geschriebenen Hof letzter_import. Kein frischer Zeitstempel seit 9 Tagen = der Wochenlauf hat nichts geschrieben. So war es vom 15.09. bis 03.10.2026: drei Cron-Läufe scheiterten im Skript und wurden grün gemeldet (fehlendes pipefail hinter `| tee`). Zuerst das Job-Summary des letzten hoefe-import-Laufs lesen: Steht dort »von der Datenbank abgelehnt … hoefe_lat_check / hoefe_lng_check«, ist die Migration supabase/migrations/20261003090000_hoefe_grenzen_dach.sql nicht angewendet (Freigabe Uwe). Sonst: Overpass erreichbar? Supabase-Secrets?"
+    "hinweis": "hoefe-import läuft montags und setzt bei jedem geschriebenen Hof letzter_import. Kein frischer Zeitstempel seit 9 Tagen = der Wochenlauf hat nichts geschrieben. So war es vom 15.09. bis 03.10.2026: drei Cron-Läufe scheiterten im Skript und wurden grün gemeldet (fehlendes pipefail hinter `| tee`). Zuerst das Job-Summary des letzten hoefe-import-Laufs lesen: Steht dort »von der Datenbank abgelehnt … hoefe_lat_check / hoefe_lng_check«, sind sich Tabelle und Code über die Grenzen uneins: Die Tabelle bekommt sie aus supabase/migrations/20261003074310_hoefe_grenzen_dach.sql (angewendet am 03.10.2026), der Code aus src/lib/hoefe/grenzen.json. Sonst: Overpass erreichbar? Supabase-Secrets?"
   },
   {
     "name": "Social-Entwürfe",
