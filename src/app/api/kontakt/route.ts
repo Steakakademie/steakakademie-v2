@@ -34,6 +34,7 @@ export const dynamic = 'force-dynamic';
 import { createClient } from '@supabase/supabase-js';
 import { CONSENT_TEXT, KONTAKT_EMPFAENGER as EMPFAENGER } from '@/lib/kontakt';
 import { botCheck, rateLimitRequest } from '@/lib/api/guard';
+import { sendeBetreiberMail } from '@/lib/betreiber-mail';
 
 // Eingangsschutz (01.10.2026): 5 Nachrichten / IP / 10 min und Turnstile-Token
 // über die Helfer des zentralen Guards. guardRequest selbst passt hier nicht,
@@ -134,46 +135,14 @@ export async function POST(req: Request) {
     }
   }
 
-  // 2) Zustellen per Loops.
-  const apiKey     = process.env.LOOPS_API_KEY;
-  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID;
-  let mailSent = false;
-  if (apiKey && templateId) {
-    try {
-      const d = new Date(receivedAt);
-      const datum = d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' });
-      const zeit  = d.toLocaleTimeString('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' });
-      const resp = await fetch('https://app.loops.so/api/v1/transactional', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          transactionalId: templateId,
-          // Empfaenger ist das Postfach, nicht der Absender — die Mail geht an
-          // Uwe. Die Absenderadresse steht in den Variablen und gehoert im
-          // Template in den Reply-To.
-          email: EMPFAENGER,
-          // Loops-Variablennamen sind case-sensitive → beide Schreibweisen
-          // senden, wie in /api/widerruf.
-          dataVariables: {
-            betreff_tag: tag,          Betreff_tag: tag,
-            name,                      Name: name,
-            absender: email,           Absender: email,
-            reply_to: email,           Reply_to: email,
-            nachricht: message,        Nachricht: message,
-            thema: subject || '—',     Thema: subject || '—',
-            datum,                     Datum: datum,
-            zeit,                      Zeit: zeit,
-          },
-        }),
-      });
-      mailSent = resp.ok;
-      if (!resp.ok) {
-        console.error('[kontakt] loops', resp.status, (await resp.text()).slice(0, 300));
-      }
-    } catch (e) {
-      console.error('[kontakt] loops error', e);
-    }
-  } else {
+  // 2) Zustellen per Loops. Der Versand selbst steht seit 03.10.2026 in
+  //    src/lib/betreiber-mail.ts — /api/widerruf nutzt denselben Weg.
+  const versand = await sendeBetreiberMail(
+    { betreffTag: tag, name, absender: email, nachricht: message, thema: subject || '—', receivedAt },
+    { quelle: 'kontakt' },
+  );
+  const mailSent = versand.ok;
+  if (!versand.ok && versand.grund === 'nicht-konfiguriert') {
     console.warn('[kontakt] LOOPS_API_KEY oder LOOPS_KONTAKT_TEMPLATE_ID fehlt — nur gespeichert.');
   }
 
@@ -190,7 +159,7 @@ export async function POST(req: Request) {
   // Gespeichert ODER zugestellt reicht fuer ein ehrliches "angekommen".
   const angekommen = Boolean(zeileId) || mailSent;
   if (!angekommen) {
-    return antwort(req, alsFormular, { error: 'Die Nachricht konnte nicht entgegengenommen werden. Bitte schreib direkt an pitmaster@steakakademie.de.' }, 502);
+    return antwort(req, alsFormular, { error: `Die Nachricht konnte nicht entgegengenommen werden. Bitte schreib direkt an ${EMPFAENGER}.` }, 502);
   }
   return antwort(req, alsFormular, { ok: true, receivedAt, mailSent }, 200);
 }

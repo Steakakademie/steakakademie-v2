@@ -3,6 +3,12 @@
 import { useRef, useState } from 'react';
 import HoneypotFeld, { honeypotWert } from '@/components/ui/HoneypotFeld';
 import { CheckCircle2, Loader2 } from 'lucide-react';
+import { KONTAKT_EMPFAENGER } from '@/lib/kontakt';
+
+// 03.10.2026: Scheitert die Übermittlung (kein Netz, Antwort ohne JSON), nennt
+// die Meldung den Weg, der immer geht — statt „Failed to fetch“.
+const FEHLER_MIT_AUSWEG =
+  `Dein Widerruf konnte nicht übermittelt werden. Bitte schick ihn per E-Mail an ${KONTAKT_EMPFAENGER}.`;
 
 const inputCls = 'w-full border px-4 py-2.5 text-sm font-sans bg-transparent';
 const inputStyle = { borderColor: 'rgba(200,136,42,0.25)' } as const;
@@ -32,16 +38,18 @@ export default function WiderrufForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), orderRef: orderRef.trim(), name: name.trim(), product: product.trim(), reason: reason.trim(), website: honeypotWert(formRef.current) }),
       });
-      const data = await res.json();
-      if (!res.ok || !data?.ok) throw new Error(data?.error ?? 'Widerruf konnte nicht verarbeitet werden.');
+      // Auch eine Antwort ohne JSON (Zeitüberschreitung der Plattform) muss als
+      // Fehler ankommen — mit dem Weg per E-Mail, nicht mit einer Parser-Meldung.
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) { setError(data?.error ?? FEHLER_MIT_AUSWEG); return; }
       const d = new Date(data.receivedAt);
       setDone({
         datum: d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }),
         zeit:  d.toLocaleTimeString('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' }),
         emailSent: !!data.emailSent,
       });
-    } catch (err: any) {
-      setError(err?.message ?? 'Etwas ist schiefgelaufen. Bitte erneut versuchen.');
+    } catch {
+      setError(FEHLER_MIT_AUSWEG);
     } finally {
       setLoading(false);
     }
