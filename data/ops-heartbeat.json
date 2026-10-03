@@ -19,8 +19,9 @@
     "name": "Rezept-Produktion",
     "typ": "git",
     "pfad": "content/rezepte",
+    "nurNeueDateien": true,
     "maxTage": 4,
-    "hinweis": "recipe-grow läuft täglich 03:30 UTC und soll 1 Rezept/Tag als PR liefern. Kein neuer Commit = entweder Seed-Vorrat leer (scripts/recipe-seeds.mjs prüfen) oder die PRs werden nicht gemergt."
+    "hinweis": "recipe-grow läuft täglich 03:30 UTC und soll 1 Rezept/Tag als PR liefern. Gezählt wird nur eine NEU HINZUGEFÜGTE Datei — eine Korrektur an einem bestehenden Rezept stellt die Uhr nicht zurück (seit 03.10.2026). Keine neue Datei = entweder Seed-Vorrat leer (scripts/recipe-seeds.mjs prüfen) oder die PRs werden nicht gemergt."
   },
   {
     "name": "Rezept-Workflow",
@@ -33,8 +34,9 @@
     "name": "Glossar",
     "typ": "git",
     "pfad": "content/glossar",
+    "nurNeueDateien": true,
     "maxTage": 14,
-    "hinweis": "glossary-grow zieht neue Begriffe AUS dem Content. Steht die Rezept- und Artikelproduktion, läuft das Glossar zwangsläufig mit leer — erst die Quelle prüfen, dann den Glossar-Agenten."
+    "hinweis": "Gezählt wird nur ein NEU HINZUGEFÜGTER Glossar-Eintrag — ein Hand-Fix an einem bestehenden stellt die Uhr nicht zurück (seit 03.10.2026; vorher verdeckte der Fix vom 23.09. den Stillstand seit 19.09.). glossary-grow liest NUR artikel, cuts, methoden, vergleich, persoenlichkeiten — nicht die Rezepte. Steht hier Rot, ist in aller Regel der Vorrat leer: SEED_TERMS in scripts/glossary-agent.mjs ist abgearbeitet und die Extraktion findet nichts Neues (steht mit Zahl im Job-Summary des letzten glossary-grow-Laufs). Entscheidung Uwe: Seed-Liste von Hand erweitern — oder den täglichen Lauf und diesen Eintrag stilllegen, weil das Glossar laut docs/glossar-konsolidierung-kandidaten.md ohnehin zusammengelegt statt erweitert wird."
   },
   {
     "name": "Content-Entwürfe (Scout + Saison)",
@@ -70,6 +72,23 @@
     "datei": "check-affiliate-links.yml",
     "maxTage": 10,
     "hinweis": "Läuft montags. Tote Partnerlinks kosten direkt Umsatz — der Ausfall dieser Prüfung fällt sonst nirgends auf."
+  },
+  {
+    "name": "Hofladen-Import",
+    "typ": "supabase",
+    "tabelle": "hoefe",
+    "spalte": "letzter_import",
+    "filter": "letzter_import=not.is.null",
+    "maxTage": 9,
+    "hinweis": "hoefe-import läuft montags und setzt bei jedem geschriebenen Hof letzter_import. Kein frischer Zeitstempel seit 9 Tagen = der Wochenlauf hat nichts geschrieben. So war es vom 15.09. bis 03.10.2026: drei Cron-Läufe scheiterten im Skript und wurden grün gemeldet (fehlendes pipefail hinter `| tee`). Zuerst das Job-Summary des letzten hoefe-import-Laufs lesen: Steht dort »von der Datenbank abgelehnt … hoefe_lat_check / hoefe_lng_check«, ist die Migration supabase/migrations/20261003090000_hoefe_grenzen_dach.sql nicht angewendet (Freigabe Uwe). Sonst: Overpass erreichbar? Supabase-Secrets?"
+  },
+  {
+    "name": "Social-Entwürfe",
+    "typ": "artefakt",
+    "artefakt": "social-drafts",
+    "minBytes": 300,
+    "maxTage": 9,
+    "hinweis": "social-grow läuft sonntags und lädt die Entwürfe als Artefakt »social-drafts« hoch (30 Tage haltbar, human-gated, kein Auto-Posten). Kein Artefakt seit 9 Tagen = der Lauf hat keinen einzigen Entwurf erzeugt — ANTHROPIC_API_KEY prüfen, dann das Job-Summary des letzten Laufs (dort stehen Auswahl und Fehler je Rezept). Der Wächter sieht nur, DASS Entwürfe entstehen — nicht, ob jemand sie abholt: Die Entwürfe erreichen niemanden von selbst."
   },
   {
     "name": "Wissensindex-Workflow",

@@ -8,7 +8,16 @@
  *   node scripts/hoefe-import.mjs --dry-run  # nur zaehlen, nichts schreiben
  *
  * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (.env.local oder Secrets)
- * Voraussetzung: supabase/migrations/20260913120000_hoefe.sql eingespielt.
+ * Voraussetzung: supabase/migrations/20260913120000_hoefe.sql eingespielt — und fuer
+ * Oesterreich/Schweiz 20261003090000_hoefe_grenzen_dach.sql (weitet die CHECK-Grenzen).
+ *
+ * Exitcode (03.10.2026, CLAUDE.md Regel 10 „Gruen ist kein Ergebnis"):
+ *   0 = es wurde geschrieben und die Datenbank hat keine Zeile abgelehnt
+ *   1 = Overpass/Supabase nicht erreichbar · nichts Brauchbares geliefert · nichts
+ *       geschrieben · oder die Datenbank hat Zeilen abgelehnt (der Rest ist dann
+ *       trotzdem angekommen — siehe scripts/lib/hoefe-schreiben.mjs)
+ * Der Workflow braucht dafuer `pipefail`: hinter `| tee` zaehlte bis 03.10.2026 der
+ * Exitcode von tee, drei gescheiterte Wochenlaeufe wurden gruen gemeldet.
  *
  * Warum kein Supabase-Edge-Function: das Repo betreibt alle Importe als
  * GitHub-Actions-Cron mit denselben zwei Secrets (import-foodpairing, saison-grow).
@@ -21,7 +30,8 @@ import { createClient } from '@supabase/supabase-js';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import { OVERPASS_QUERY, hoefeAusElementen } from './lib/hoefe-osm.mjs';
+import { OVERPASS_QUERY, DACH_GRENZEN, hoefeMitBilanz } from './lib/hoefe-osm.mjs';
+import { schreibeHoefe, ablehnungenNachGrund } from './lib/hoefe-schreiben.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: join(__dirname, '..', '.env.local') });
@@ -66,13 +76,22 @@ async function ladeOsm() {
   throw new Error(`Overpass nicht erreichbar:\n${fehler.join('\n')}`);
 }
 
+const de = (n) => String(n).replace('.', ',');
+
 async function main() {
   console.log(`Hofladen-Radar Import${DRY_RUN ? ' (Trockenlauf)' : ''}`);
   const elements = await ladeOsm();
-  const hoefe = hoefeAusElementen(elements);
+  const { hoefe, bilanz } = hoefeMitBilanz(elements);
   const mitFleisch = hoefe.filter((h) => h.verkauft_fleisch === true).length;
   const mitAdresse = hoefe.filter((h) => h.plz && h.ort).length;
   console.log(`OSM-Elemente: ${elements.length} · brauchbar (mit Name): ${hoefe.length} · Fleisch belegt: ${mitFleisch} · mit PLZ+Ort: ${mitAdresse}`);
+  // Was vor dem Schreiben wegfiel — einzeln, mit Zahl (03.10.2026). Ein Hof ausserhalb
+  // des Rahmens kostet diesen einen Datensatz, nicht den Lauf.
+  const g = DACH_GRENZEN;
+  console.log(`Aussortiert: ${bilanz.ausserhalb} ausserhalb des Rahmens (Breite ${de(g.latMin)}–${de(g.latMax)}, Laenge ${de(g.lngMin)}–${de(g.lngMax)}) · ${bilanz.ohneName} ohne Name · ${bilanz.ohneKoordinate} ohne Koordinate · ${bilanz.doppelt} doppelt`);
+
+  // Overpass hat geantwortet, aber nichts Brauchbares geliefert: kein Normalzustand.
+  if (hoefe.length === 0) throw new Error('kein einziger brauchbarer Hof in der Overpass-Antwort');
 
   if (DRY_RUN) return;
 
@@ -81,17 +100,24 @@ async function main() {
   if (!url || !key) throw new Error('NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY fehlen');
   const admin = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
 
-  let eingefuegt = 0, aktualisiert = 0, uebersprungen = 0;
-  for (let i = 0; i < hoefe.length; i += CHUNK) {
-    const teil = hoefe.slice(i, i + CHUNK);
-    const { data, error } = await admin.rpc('hoefe_import_upsert', { p_rows: teil });
-    if (error) throw new Error(`Upsert Chunk ${i / CHUNK + 1}: ${error.message}`);
-    const r = Array.isArray(data) ? data[0] : data;
-    eingefuegt += r?.eingefuegt ?? 0;
-    aktualisiert += r?.aktualisiert ?? 0;
-    uebersprungen += r?.uebersprungen ?? 0;
+  const r = await schreibeHoefe(hoefe, (zeilen) => admin.rpc('hoefe_import_upsert', { p_rows: zeilen }), { chunk: CHUNK });
+  console.log(`Fertig: ${r.eingefuegt} neu · ${r.aktualisiert} aktualisiert · ${r.uebersprungen} uebersprungen (beansprucht/Slug-Konflikt) · ${r.abgelehnt.length} von der Datenbank abgelehnt`);
+
+  if (r.abgelehnt.length > 0) {
+    for (const [grund, anzahl] of ablehnungenNachGrund(r.abgelehnt)) console.log(`  abgelehnt wegen ${grund}: ${anzahl}`);
+    console.log(`  Beispiele: ${r.abgelehnt.slice(0, 5).map((a) => `${a.name} (${a.osm_id})`).join(' · ')}`);
+    const grenzen = r.abgelehnt.some((a) => /^hoefe_(lat|lng)_check$/.test(a.grund));
+    // Der Rest ist geschrieben. Rot wird der Lauf trotzdem: Code und Tabelle sind sich
+    // uneins, und das behebt kein weiterer Wochenlauf, sondern nur ein Mensch.
+    throw new Error(
+      `${r.abgelehnt.length} Hoefe von der Datenbank abgelehnt (${r.nachgefahreneBloecke} Bloecke zeilenweise nachgefahren).` +
+      (grenzen
+        ? ' Die Tabelle hat engere Grenzen als der Code — Migration supabase/migrations/20261003090000_hoefe_grenzen_dach.sql ist nicht angewendet.'
+        : ' Code und Tabelle passen nicht zusammen — Ursache am Constraint-Namen oben ablesen.'),
+    );
   }
-  console.log(`Fertig: ${eingefuegt} neu · ${aktualisiert} aktualisiert · ${uebersprungen} uebersprungen (beansprucht/Slug-Konflikt)`);
+  // Alles gelesen, nichts geschrieben: ein Lauf ohne Ergebnis ist nicht gruen.
+  if (r.eingefuegt + r.aktualisiert + r.uebersprungen === 0) throw new Error('kein einziger Hof geschrieben');
 }
 
 main().catch((e) => {
