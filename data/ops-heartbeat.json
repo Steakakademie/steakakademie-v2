@@ -60,13 +60,6 @@
     "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen (bzw. noch nie, und der älteste Entwurf wartet länger als die Frist). Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
   },
   {
-    "name": "Ideen-Radar",
-    "typ": "git",
-    "pfad": "data/ideen-backlog.json",
-    "maxTage": 7,
-    "hinweis": "ideen-radar läuft alle 3 Tage und aktualisiert den Backlog per PR mit Auto-Merge."
-  },
-  {
     "name": "Affiliate-Link-Prüfung",
     "typ": "workflow",
     "datei": "check-affiliate-links.yml",
