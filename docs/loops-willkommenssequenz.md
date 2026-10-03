@@ -4,6 +4,13 @@
 > Absender: `login@steakakademie.de` ist Auth — für Marketing den Loops-Standard-Absender nutzen.
 > Stimme: direkt, ehrlich, Pitmaster — kein Marketing-Sprech. Jede Mail EIN Job.
 > Abstände: Mail 1 sofort · Mail 2 +2 Tage · Mail 3 +3 Tage · Mail 4 +3 Tage.
+>
+> **Stand 03.10.2026 — Takt-Zusage prüfen:** Die Website verspricht beim Wissens-Brief
+> keinen Takt mehr („ohne festen Takt, ohne Spam"), und einen automatischen Wochenversand
+> gibt es nicht. Die Mailtexte unten nennen aber noch an drei Stellen den Freitag (Mail 1,
+> 2 und 4). Am 03.10.2026 in Loops nachgesehen: Die dort gespeicherten Mails 1, 2 und 4 tragen
+> den Satz noch. Ändern lässt er sich nur bei pausiertem Workflow — Mailtext ist
+> Außenauftritt, also Uwes Freigabe (CLAUDE.md §2 Regel 4). Danach diese Vorlage nachziehen.
 
 ---
 

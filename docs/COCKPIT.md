@@ -31,15 +31,26 @@
 **Läuft:** Vercel-Produktion (`steakakademie.de`), Supabase-Auth (Magic Link), Branch
 Protection auf `main` mit vier Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
 prüfen`, `Build pruefen`, `Unit-Tests pruefen` — alle aus GitHub Actions), dazu
-`E2E pruefen` (Playwright, noch nicht Pflicht), 25 GitHub-Actions-Workflows (Stand 24.09.2026),
+`E2E pruefen` (Playwright, noch nicht Pflicht), 24 GitHub-Actions-Workflows (Stand 03.10.2026),
 Sentry-Monitoring, Ops-Alert → Jira (KAN), **Ops-Heartbeat** (täglich 09:00 UTC,
 `docs/ops-heartbeat.md`) — prüft Ergebnisse statt Läufe und schlägt an, wenn eine
-Automation aufhört zu liefern, auch wenn sie grün bleibt.
+Automation aufhört zu liefern, auch wenn sie grün bleibt; „nicht geprüft" ist dort rot ·
+**Funktionsproben** (seit 03.10.2026, täglich 05:23 UTC, `npm run proben`, `tests/proben/`):
+15 anonyme, nur lesende Proben im Browser gegen die Live-Seite; scheitert eine, wird der
+Lauf rot und meldet nach Jira · **Wächter Schritt 1** (seit 03.10.2026, `docs/waechter.md`):
+Register `data/zusagen.yaml` (43 Zusagen), Zusagen-Gate in `npm run check` (blockiert über
+`P0-Gates pruefen`), tägliche Belegprüfung im Heartbeat · Hofladen-Import (montags; Lauf
+vom 03.10.2026 grün, 8.626 Höfe, Rahmen DE+AT+CH).
 
 **Hängt:** Der Build-Gate baut ohne Env-Variablen — Supabase-gestützte Bereiche rendern
 dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das reichen soll,
 ist offen ·
-`_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
+`_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14) ·
+*03.10.2026:* 6 angemeldete Funktionsproben laufen nur mit Testkonto (Secrets `PROBE_EMAIL` /
+`PROBE_PASSWORD`), sonst steht „nicht eingerichtet" im Job-Summary; ob die Anmeldung im
+Automatisierungs-Browser durchgeht, ist offen (`docs/bot-schutz-2026-10.md`) ·
+Zusagen-Baseline: 168 Altbestand-Treffer ohne Beleg (`data/zusagen-baseline.json`) —
+beheben, nie von Hand eintragen.
 
 **Nächster Schritt (07.09.):** Relaunch (#62) und Diplom-Audit (#63) sind auf `main` und live;
 Suche (#65), Autorenstimmen (#66), Migrations-Härtung + YAML (#67) liegen als grüne PRs zum Merge.
@@ -51,11 +62,12 @@ Cut-Detailseite. Build-Gate-Datenlage: bleibt bei Übersetzung + Durchlauf (Ents
 `course_progress`, Kauf → Zugang über `courses.slug = grillmeister-diplom` — **Digistore-Produkt dafür
 existiert noch nicht** (6 Produkte gelistet, keins fürs Diplom); `AUDIT-Ausbildungssystem-2026-09-06.md`.
 
-*Hofladen-Radar 13.09.2026 (Branch `feat/hofladen-radar`, PR offen):* `/hoefe` + `/hoefe/[slug]`,
+*Hofladen-Radar (gebaut 13.09.2026):* `/hoefe` + `/hoefe/[slug]`,
 Umkreissuche (SQL-Haversine, kein PostGIS), OSM-Wochenimport als Actions-Cron, Karte per
-Klick-zum-Laden (MapTiler). **Uwe:** Migration `20260913120000_hoefe.sql` einspielen, Workflow
-„Hofladen-Radar importieren" einmal starten, `NEXT_PUBLIC_MAPTILER_KEY` in Vercel — Konzept und
-Abweichungen vom Briefing in `docs/hofladen-radar.md`.
+Klick-zum-Laden (MapTiler) — Konzept und Abweichungen vom Briefing in `docs/hofladen-radar.md`.
+*Stand 03.10.2026:* Migration `20261003074310_hoefe_grenzen_dach.sql` angewendet, Import-Lauf
+grün (8.626 Höfe, vorher 6.069). Aus dem Stand 13.09. nicht nachgeprüft:
+`NEXT_PUBLIC_MAPTILER_KEY` in Vercel.
 
 *Erledigt 05.09.2026 (Relaunch):* Alt-Site archiviert (Tag `archiv/website-v1-2026-09`,
 Branch `archiv/website-v1` — beide auf origin, Bundle + Abbild in `C:\Dev\_archiv\`,
@@ -129,8 +141,12 @@ Lernvideo-Produktion mit Marcos Stimme. Danach OpenMontage stilllegen.
 ## 3 · Redaktion
 
 **Läuft:** 64 Cuts im Katalog, 334 MDX-Dateien ohne Frontmatter-Fehler, keine toten
-internen Links, Glossar- und Rezept-Agent (täglich 03:00 / 03:30 UTC), Rechtschreibprüfung
+internen Links, Rezept-Agent (täglich 03:30 UTC), Rechtschreibprüfung
 (report-only), MDX-Komponenten-Gate im `prebuild`.
+*03.10.2026:* Vergleichsseiten sind **Marktübersichten** nach Herstellerangaben und öffentlich
+zugänglichen Daten — kein eigener Gerätetest (Wächter-Test
+`src/__tests__/vergleich-keine-testbehauptung.test.ts`) · „Geprüft" steht nur noch mit
+Prüfdatum (`reviewedAt`, einzige Quelle `src/lib/pruefnachweis.ts`).
 *13.09.:* Rezept-Nachschub automatisiert — `data/rezept-seeds.json` (34 Gerichte aus den
 11 BBQ-Hochburgen) wird von `scripts/recipe-seeds.mjs` aufgefüllt, sobald der Vorrat unter
 10 offene Seeds fällt. Der Agent läuft damit nicht mehr trocken.
@@ -143,16 +159,15 @@ nachgeholt, es läuft ab jetzt wieder 1 Rezept/Tag ·
 `data/kerntemperatur-referenz.yaml` — Fachentscheidung offen, welche Seite recht hat ·
 `content/cuts/pulled-pork.mdx` hat keinen Katalog-Eintrag (Seite existiert, aus dem
 Atlas nicht erreichbar) · `id: 'roastbeef'` ≠ `slug: 'rumpsteak'` (einziger ID/Slug-Bruch) ·
-**Ideen-Radar sammelt Altbestand:** 25 der 79 Einträge in `data/ideen-backlog.json` sind älter als ein Jahr
-(23 aus 2024, 2 aus 2025) — der 21-Tage-Frischefilter aus dem BBQ-News-Scout (03.09.,
-`MAX_AGE_DAYS` in `scripts/cron-scout.mjs`) greift hier nicht, `scripts/ideen-radar.mjs`
-kennt keine Altersgrenze. Als reiner Themenspeicher unkritisch; vor dem nächsten
-Pipeline-Ausbau aber entscheiden, ob Altes gefiltert oder bewusst als Evergreen markiert
-wird, sonst geht es unbesehen als „aktuell" in die Content-Pipeline. Geprüft 05.09.2026:
-keine ausgeschlossenen Quellen (bbqingwiththenolands, usa-kulinarisch), keine Duplikate
-in `id`, `link` oder Titel.
+*03.10.2026:* **Prüfdaten:** 15 von 408 veröffentlichten Dokumenten tragen ein Prüfdatum — bei
+allen anderen erscheint keine Prüf-Aussage · **Glossar-Agent pausiert** (kein Zeitplan, nur
+Handstart): Vorrat leer, wartet auf die Entscheidung über die Glossar-Konsolidierung
+(`docs/glossar-konsolidierung-kandidaten.md`) · Ideen-Radar entfernt (Vermerk und
+Quellen-Ausschlüsse: `docs/ideen-radar.md`).
 
-**Nächster Schritt:** Rind-Kerntemperaturen entscheiden — Katalog an YAML angleichen
+**Nächster Schritt (03.10.2026):** Erste Tranche Prüfdaten — Arbeitsliste mit
+`npm run pruefstand`; `reviewedAt` (JJJJ-MM-TT) setzt nur Uwe von Hand.
+Weiterhin: Rind-Kerntemperaturen entscheiden — Katalog an YAML angleichen
 oder YAML korrigieren. Kein Raten (Regel 8c). *Hinweis 07.09.:* `meta.ziehtemperatur` in der
 YAML erklärt 52–54 °C ausdrücklich als Ziehwert — die 7 Cuts sind möglicherweise kein
 Widerspruch, sondern nur unbeschriftet (Zieh- statt Serviertemperatur). Vor dem Angleichen
@@ -172,12 +187,16 @@ Audit-Rest R15 (Elemente ab Stufe 2, 0 Bilder in 35 Lektionen) braucht ein Regel
 
 **Läuft:** Affiliate-Link-Checker (Mo 08:00 UTC), Social-Post-Entwürfe als Artifact
 (human-gated, kein Auto-Posting), GEO-Check, Content-Wachstum (So 04:00 UTC),
-`products/registry.yaml` mit 32 Einträgen.
+`products/registry.yaml` mit 32 Einträgen · Loops-Willkommensstrecke (4 Mails) sendet,
+Mail 1 liefert den Spickzettel-Link (03.10.2026).
 
 **Hängt:** `lastChecked` in der Registry überall 22.05.2026 (~3 Monate ungeprüft) ·
 4 offene Affiliate-TODOs (Santosgrills, Grillfürst, Ankerkraut, Otto Gourmet) ·
 5 Einträge ohne jeden Affiliate-Parameter = aktuell reine Gratis-Links ·
-Newsletter-Versand seit 10.08. nur noch manuell nach Vorschau-Freigabe.
+*03.10.2026:* Newsletter ohne festen Takt — es gibt keinen automatischen Wochenversand ·
+`/prive` und `/usa-expedition` stehen auf „in Vorbereitung" (keine Preise, keine Buchung) ·
+VIP: **eine** Warteliste (`/vip#warteliste`, Loops-Gruppe `vip_warteliste`), Bausteine
+„geplant", kein Startdatum.
 
 **Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
 mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).

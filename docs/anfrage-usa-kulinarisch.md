@@ -7,15 +7,26 @@ versenden (Regel 4).
 Adresse ist dort bewusst nicht im Klartext hinterlegt — deshalb steht sie auch
 hier nicht. Bitte den Link auf der Seite benutzen, nicht raten.
 
+**Stand 03.10.2026 — vor dem Versand lesen:** Der Ideen-Radar, auf den sich dieser
+Entwurf stützt, ist am 03.10.2026 entfernt worden (`docs/ideen-radar.md`). Der
+Mailtext unten beschreibt ihn noch als laufenden Aufbau („Wir bauen gerade eine
+Themenrecherche auf") — so stimmt der Satz nicht mehr. Der Ausschluss selbst gilt
+weiter. Den Text vor dem Versand an den heutigen Stand anpassen; das ist Uwes
+Entscheidung, deshalb ist der Entwurf hier unverändert.
+
 **Warum überhaupt fragen:** Ihr Impressum untersagt kommerziellen Portalen die
 Nutzung ausdrücklich und lädt im selben Absatz zur Anfrage ein. Wir haben ihre
-Seite deshalb gar nicht erst in den Ideen-Radar aufgenommen — das ist der
-belastbarste Satz, den wir in der Mail sagen können, und er stimmt.
+Seite deshalb gar nicht erst in den Ideen-Radar aufgenommen (Stand 27.08.2026;
+der Radar ist seit 03.10.2026 entfernt, die Seite steht weiter auf der
+Ausschlussliste) — das ist der belastbarste Satz, den wir in der Mail sagen
+können, und er stimmt.
 
 **Was realistisch dabei herauskommt:** entweder eine Absage (dann bleibt alles
 wie es ist), eine Erlaubnis mit Auflagen (dann Auflagen wörtlich in
-`data/rezept-quellen.yaml` dokumentieren und die Quelle aufnehmen), oder eine
-gegenseitige Verlinkung. Alle drei Ergebnisse sind besser als Schweigen.
+`docs/ideen-radar.md`, Abschnitt „Zwei Quellen sind ausgeschlossen", dokumentieren —
+die frühere Steuerdatei `data/rezept-quellen.yaml` gibt es seit 03.10.2026 nicht
+mehr), oder eine gegenseitige Verlinkung. Alle drei Ergebnisse sind besser als
+Schweigen.
 
 **Falls sie zusagt:** Antwort als PDF in `compliance/` ablegen. Eine mündliche
 oder per Mail erteilte Erlaubnis ist nur so viel wert wie ihr Nachweis.

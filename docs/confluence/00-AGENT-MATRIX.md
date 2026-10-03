@@ -10,10 +10,17 @@
 | 1 | **AGB/Rechts-Compliance-Scanner** | CronCreate (Remote) gegen `compliance/website-rechtscheck.yaml` (21 Komponenten) | täglich 06:00 UTC | ✅ aktiv |
 | 5 | **Affiliate-Link-Checker** | GitHub Actions `check-affiliate-links.yml` → `npm run check-links:json`, öffnet/schließt GitHub Issue | Mo 08:00 UTC | ✅ aktiv |
 | 6 | **Social Media Senior Director** | GitHub Actions `social-grow.yml` → `scripts/social-posts.mjs` (Claude Haiku), Post-Entwürfe als Artifact `social-drafts`; trägt Werbekennzeichnungs-Pflicht (LG Köln 12.05.2026) | So 04:00 UTC | ✅ aktiv (human-gated, **kein** Auto-Posten) |
-| 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), committet `content/glossar` | So 03:00 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
-| 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | So 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
-| — | **Auto-Fix-Agent** | GitHub Actions `auto-fix.yml` → `claude-code-action@beta`, öffnet PR bei Issue-Label `auto-fix` | event-driven | ⚠️ vorhanden, aber **verwaist** — hängt am nicht existenten „Mingma Post-Agent" |
+| 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), legt neue Begriffe unter `content/glossar` als PR vor | nur Handstart (`workflow_dispatch`) | ⏸️ **pausiert seit 03.10.2026** — kein Zeitplan mehr; Vorrat leer, wartet auf die Entscheidung über die Glossar-Konsolidierung (`docs/glossar-konsolidierung-kandidaten.md`) |
+| 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | täglich 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | — | **cron-scout** | `scripts/cron-scout.mjs` | manuell/`cron:scout` | ⚠️ blockiert bis ADMIN_PASSWORD rotiert (KAN-15) |
+
+## Entfernt am 03.10.2026
+
+| Automation | Was gelöscht ist | Grund |
+|------------|------------------|-------|
+| **Auto-Fix-Agent** | `auto-fix.yml` | 0 Läufe — war verwaist |
+| **Newsletter-Workflow** | `newsletter-weekly.yml`, `scripts/newsletter-weekly.mjs` | nie eine Ausgabe versendet; es gibt keinen automatischen Wochenversand |
+| **Ideen-Radar** | `ideen-radar.yml`, `scripts/ideen-radar.mjs`, `data/ideen-backlog.json`, `data/rezept-quellen.yaml` | sammelte, ohne dass etwas die Einträge verarbeitete — Vermerk und Quellen-Ausschlüsse in `docs/ideen-radar.md` |
 
 ## Geplant, noch nicht gebaut
 
@@ -32,7 +39,7 @@
 - **Agent 2 + 10** zusammenlegen (beide GSC) → ein SEO/Index-Monitor.
 - **Agent 1 + 8** überschneiden sich (beide Rechts/Compliance) → prüfen, ob 8 in 1 aufgeht.
 - **Agent 3** referenziert gelöschtes `recipe-scraper/` → Roadmap-Eintrag bereinigen oder neu spezifizieren.
-- **Auto-Fix-Agent** entweder an realen Alert-Trigger anschließen oder als dormant markieren.
+- ~~**Auto-Fix-Agent** entweder an realen Alert-Trigger anschließen oder als dormant markieren.~~ Erledigt 03.10.2026: entfernt (siehe oben).
 
 ## Virtuelle AI-Workforce (Rovo-Orchestrator-Ebene)
 

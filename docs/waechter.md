@@ -97,5 +97,5 @@ Ein Treffer ist in Ordnung, wenn ein Register-Muster ihn ganz enthält oder er i
 
 | Schritt | Inhalt |
 |---|---|
-| 2 | **Funktionsproben:** ein gekennzeichnetes Testkonto benutzt die Seite täglich wie ein Besucher (anmelden, Lektion abhaken, abstimmen). Fängt „still kaputt". |
+| 2 | **Funktionsproben:** Die anonymen Proben laufen seit 03.10.2026 täglich (`.github/workflows/funktionsproben.yml`, `tests/proben/`). Offen ist der angemeldete Teil: Ein gekennzeichnetes Testkonto benutzt die Seite wie ein Mitglied (anmelden, Aroma-Abfrage, abstimmen) — er läuft erst, wenn das Testkonto eingerichtet ist. Fängt „still kaputt". |
 | 3 | **Systemkarte und „Wächter fragen":** der Zustand außerhalb des Codes als lesbare Übersicht; jede Frage zu einer Zusage wird mit Beleg und Uhrzeit beantwortet. |
