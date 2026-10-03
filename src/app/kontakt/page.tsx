@@ -6,31 +6,32 @@ import Link from 'next/link';
 import { ChevronRight, Mail, MessageSquare, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { CONSENT_TEXT, KONTAKT_EMPFAENGER } from '@/lib/kontakt';
+import { CONSENT_TEXT, KONTAKT_EMPFAENGER, kontaktMailto } from '@/lib/kontakt';
 
 type FormState = 'idle' | 'sending' | 'sent' | 'error';
 
+// Ein Postfach, drei Anliegen (03.10.2026): Vorher stand je Kachel eine eigene
+// Adresse, für die es keinen Zustellnachweis gibt (siehe /api/kontakt). Jetzt
+// geht alles an KONTAKT_EMPFAENGER; das Anliegen steht im Betreff-Präfix, nach
+// dem das Postfach sortiert — dasselbe Präfix wie beim Formular darunter.
 const CONTACT_OPTIONS = [
   {
     icon: MessageSquare,
     title: 'Frage zum Diplom-System',
     desc: 'Hilfe bei Levels, Freischaltung oder Urkunden.',
-    mailto: 'masterclass@steakakademie.de',
-    label: 'masterclass@steakakademie.de',
+    href: kontaktMailto('diplom', 'Frage zum Diplom-System'),
   },
   {
     icon: Mail,
     title: 'Allgemeiner Kontakt',
     desc: 'Feedback, Ideen, Kooperationen, Presse.',
-    mailto: 'info@steakakademie.de',
-    label: 'info@steakakademie.de',
+    href: kontaktMailto(),
   },
   {
     icon: Award,
     title: 'Rezept-Idee einreichen',
     desc: 'Du hast ein BBQ-Rezept das die Welt kennen muss?',
-    mailto: 'inspiration@steakakademie.de',
-    label: 'inspiration@steakakademie.de',
+    href: kontaktMailto('rezept'),
   },
 ];
 
@@ -125,8 +126,8 @@ export default function KontaktPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
             {CONTACT_OPTIONS.map(opt => (
               <a
-                key={opt.mailto}
-                href={`mailto:${opt.mailto}`}
+                key={opt.title}
+                href={opt.href}
                 className="group block border border-brand-gold/15 bg-surface-elevated p-6 hover:border-brand-gold/40 transition-colors"
               >
                 <opt.icon size={20} className="text-brand-gold mb-3" />
@@ -134,7 +135,7 @@ export default function KontaktPage() {
                   {opt.title}
                 </h3>
                 <p className="text-xs font-body text-text-muted mb-3 leading-relaxed">{opt.desc}</p>
-                <span className="text-xs font-sans text-brand-gold/70">{opt.label}</span>
+                <span className="text-xs font-sans text-brand-gold/70">{KONTAKT_EMPFAENGER}</span>
               </a>
             ))}
           </div>

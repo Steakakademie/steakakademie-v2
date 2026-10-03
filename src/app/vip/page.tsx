@@ -9,7 +9,7 @@ import { ogImages } from '@/lib/og';
 
 /**
  * /vip — Warteliste fuer den VIP-Pass (Lead-Magnet, Uwe-Plan vom 18.09.2026:
- * Phase 1 ab 01.10. Warteliste mit Early-Bird, Phase 3 Go-Live ca. Nov/Dez 2026).
+ * Warteliste mit Early-Bird).
  *
  * Bewusst KEIN Kaufbutton: Digistore-Produkt 734925 ist gesperrt, bis Webhook-
  * Mapping (734925 → VIP-Rolle), Testkauf und die VIP-Bausteine stehen. Die
@@ -17,9 +17,17 @@ import { ogImages } from '@/lib/og';
  * `vip-warteliste` → Loops-Gruppe `vip_warteliste`, damit die Launch-Mail an
  * genau diese Gruppe geht.
  *
- * Preis: 49 € im Jahr (Uwe, 19.09.2026; Digistore-Plan 1507301). Die Monats-
- * option steht hier absichtlich nicht mit Zahl — Konzept (4,99) und Digistore
- * (5,99) widersprechen sich noch; Uwe entscheidet.
+ * EINE Warteliste (03.10.2026): Dies ist die einzige. Das Sperr-Modal des
+ * Aroma-Matchers trug bis dahin in eine zweite ein (aroma_matrix_warteliste,
+ * ohne jeden Versand) — es verweist jetzt auf `#warteliste` dieser Seite.
+ *
+ * Kein Startdatum auf der Seite (03.10.2026): Drei der vier Bausteine sind noch
+ * nicht gebaut. Sie heissen „geplant", nicht „bald", und einen Termin nennt die
+ * Seite erst, wenn er steht. Vorher stand an vier Stellen „Start Ende 2026".
+ *
+ * Preis: 49 € im Jahr (Uwe, 19.09.2026; Digistore-Plan 1507301). Eine
+ * Monatsoption steht hier bewusst nicht — Preise werden auf dieser Seite nur
+ * genannt, wenn sie mit Digistore uebereinstimmen, und nicht nebenbei eingefuehrt.
  */
 
 export const dynamic = 'force-static';
@@ -29,12 +37,12 @@ const TITEL = 'VIP-SteakAkademiker — der Pass für Griller, die es genau wisse
 export const metadata: Metadata = {
   title: 'VIP-SteakAkademiker — Warteliste',
   description:
-    'Aroma-Matcher ohne Limit, Räucherholz-Finder komplett, Profi-Rezepte grammgenau und dein Grill-Logbuch: Der VIP-Pass der Steakakademie startet Ende 2026. Jetzt auf die Warteliste — mit Early-Bird-Vorteil.',
+    'Aroma-Matcher ohne Limit, Räucherholz-Finder, Profi-Rezepte grammgenau und Grill-Logbuch: Der VIP-Pass der Steakakademie ist in Vorbereitung. Jetzt auf die Warteliste — mit Early-Bird-Vorteil.',
   alternates: { canonical: 'https://steakakademie.de/vip' },
   openGraph: {
-    images: ogImages('VIP-SteakAkademiker', 'Warteliste — Start Ende 2026'),
+    images: ogImages('VIP-SteakAkademiker', 'Warteliste — in Vorbereitung'),
     title: TITEL,
-    description: 'Der VIP-Pass der Steakakademie startet Ende 2026. Jetzt auf die Warteliste.',
+    description: 'Der VIP-Pass der Steakakademie ist in Vorbereitung. Jetzt auf die Warteliste.',
     url: 'https://steakakademie.de/vip',
     type: 'website',
   },
@@ -44,36 +52,39 @@ const BAUSTEINE = [
   {
     icon: Wine,
     titel: 'Aroma-Matcher ohne Limit',
-    text: `Rub, Räucherholz und das passende Glas zu jedem Cut — mit einem Satz, warum. Gratis sind ${FREE_LIMIT} Cuts, als VIP alle, so oft du willst.`,
-    status: 'live',
+    // Der Matcher selbst läuft, mit Freikontingent. „Ohne Limit" gibt es noch
+    // nicht — die API kennt keine VIP-Stufe (src/app/api/aroma-matcher/route.ts).
+    text: `Rub, Räucherholz und das passende Glas zu jedem Cut — mit einem Satz, warum. Der Matcher läuft schon: ${FREE_LIMIT} Cuts sind gratis. Ohne Limit ist für den VIP-Pass geplant.`,
+    status: 'teils',
     href: '/aroma-matcher',
   },
   {
     icon: Trees,
-    titel: 'Räucherholz-Finder komplett',
-    text: 'Welches Holz zu welchem Grillgut, in welcher Dosierung, welche Mischungen. Die Warnliste der ungeeigneten Hölzer bleibt für alle frei.',
-    status: 'bald',
+    titel: 'Räucherholz-Finder',
+    text: 'Welches Holz zu welchem Grillgut, in welcher Dosierung, welche Mischungen. Die Warnliste der ungeeigneten Hölzer soll für alle frei sein.',
+    status: 'geplant',
   },
   {
     icon: Scale,
     titel: 'Profi-Rezepte grammgenau',
-    text: 'Die meistgesuchten Grillrezepte im DACH-Raum — Pulled Pork, 3-2-1-Ribs, Brisket, Pastrami, Picanha — mit Rub-Verhältnissen in Gramm, Pökel-Prozenten, Kerntemperaturen nach Dicke und Drink-Pairing. Werbefrei, druckfertig.',
-    status: 'bald',
+    text: 'Die großen Grillklassiker — Pulled Pork, 3-2-1-Ribs, Brisket, Pastrami, Picanha — mit Rub-Verhältnissen in Gramm, Pökel-Prozenten, Kerntemperaturen nach Dicke und Drink-Pairing. Werbefrei, druckfertig.',
+    status: 'geplant',
   },
   {
     icon: NotebookPen,
     titel: 'Grill-Logbuch',
-    text: 'Dein Fleischpass hält fest, was du wann wie gegrillt hast — und lernt daraus: Stellschrauben für kalt, windig, Gas oder Kohle, dick oder dünn.',
-    status: 'bald',
+    text: 'Der Fleischpass soll festhalten, was du wann wie gegrillt hast — Cut, Methode, Temperaturen, dein Urteil.',
+    status: 'geplant',
     href: '/fleischpass',
   },
 ] as const;
+
+const STATUS_ETIKETT = { teils: 'Gratis-Teil live', geplant: 'Geplant' } as const;
 
 const BLEIBT_FREI = [
   'Cut-Atlas, Grilltechniken, Kerntemperaturen und alle Wissensartikel',
   'Alle Rezepte in Esslöffel, Teelöffel und Stück',
   `${FREE_LIMIT} Cuts im Aroma-Matcher`,
-  'Die Warnliste der ungeeigneten Räucherhölzer',
   'Marco, der KI-Grillmeister — auch als Sommelier am Grill',
   'Aroma-Tuning, Rezept-Schmiede, Hofladen-Radar',
 ];
@@ -93,7 +104,7 @@ export default function VipPage() {
           {/* Kopf */}
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-brand-gold">
-              <Crown size={12} /> VIP-SteakAkademiker · Start Ende 2026
+              <Crown size={12} /> VIP-SteakAkademiker · in Vorbereitung
             </span>
             <h1 className="mt-2 font-serif text-3xl leading-tight text-text-primary sm:text-4xl">
               Der Pass für Griller, die es genau wissen wollen.
@@ -101,8 +112,9 @@ export default function VipPage() {
             <p className="mt-4 font-body text-[1.05rem] leading-relaxed text-text-secondary">
               Die Steakakademie bleibt frei — das Wissen, die Cuts, die Rezepte. Der VIP-Pass legt
               die Profi-Schicht darüber: grammgenau statt Esslöffel, ohne Limit statt Kontingent,
-              druckfertig statt Werbung. Er startet Ende 2026. Wer auf der Warteliste steht,
-              erfährt es zuerst und bekommt den Early-Bird-Preis.
+              druckfertig statt Werbung. Er ist in Vorbereitung; einen Starttermin nennen wir erst,
+              wenn er steht. Wer auf der Warteliste steht, erfährt es zuerst und bekommt den
+              Early-Bird-Preis.
             </p>
             <p className="mt-3 font-sans text-sm text-text-muted">
               <span className="font-semibold text-text-primary">49 € im Jahr.</span> Warteliste: 20 % Early-Bird-Rabatt
@@ -124,10 +136,10 @@ export default function VipPage() {
                     </div>
                     <span
                       className={`shrink-0 px-2 py-0.5 text-[10px] font-sans font-bold uppercase tracking-[0.18em] ${
-                        b.status === 'live' ? 'bg-brand-gold text-ink' : 'border border-border-subtle text-text-muted'
+                        b.status === 'teils' ? 'bg-brand-gold text-ink' : 'border border-border-subtle text-text-muted'
                       }`}
                     >
-                      {b.status === 'live' ? 'Live' : 'Bald'}
+                      {STATUS_ETIKETT[b.status]}
                     </span>
                   </div>
                   <p className="text-sm leading-relaxed text-text-secondary">{b.text}</p>
@@ -175,9 +187,9 @@ export default function VipPage() {
                 <Lock size={16} className="text-brand-gold" /> Warum noch kein Kaufbutton?
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                Weil wir nichts verkaufen, was noch nicht da ist. Der Aroma-Matcher läuft, Räucherholz-Finder,
-                Profi-Rezepte und Grill-Logbuch sind in Arbeit. Der Pass kommt, wenn alle vier Bausteine stehen —
-                und die Warteliste erfährt es zuerst.
+                Weil wir nichts verkaufen, was noch nicht da ist. Der Aroma-Matcher läuft mit Freikontingent;
+                Räucherholz-Finder, Profi-Rezepte und Grill-Logbuch sind geplant und noch nicht gebaut. Der Pass
+                kommt, wenn alle vier Bausteine stehen — und die Warteliste erfährt es zuerst.
               </p>
               <h3 className="mt-5 font-sans text-xs font-bold uppercase tracking-[0.18em] text-text-muted">
                 So funktioniert die Warteliste

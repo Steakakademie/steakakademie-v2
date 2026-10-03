@@ -84,7 +84,7 @@ const FAQ = [
   },
   {
     q: 'Gibt es Support bei Fragen?',
-    a: 'Du erreichst uns unter info@steakakademie.de. Keine automatisierten Ticketsysteme — direkter Kontakt.',
+    a: 'Du erreichst uns unter pitmaster@steakakademie.de. Keine automatisierten Ticketsysteme — direkter Kontakt.',
   },
 ];
 

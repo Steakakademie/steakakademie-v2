@@ -43,7 +43,7 @@ export default function DiplomeSeite() {
           <div className="sk-diplome__head">
             <Siegel nr={1} size={72} />
             <div>
-              <div className="sk-kicker sk-kicker--13 sk-kicker--accent">Stufe 1 · Basis-Zertifikat · frei</div>
+              <div className="sk-kicker sk-kicker--13 sk-kicker--accent">Stufe 1 · {STUFEN[0].unter} · frei</div>
               <h2 className="sk-h" style={{ fontWeight: 800, fontSize: 40 }}>Der Funke</h2>
             </div>
           </div>

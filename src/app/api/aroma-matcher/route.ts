@@ -9,6 +9,10 @@
  *                             außer der Cut wurde schon analysiert (Wiederholung frei).
  *                             402, wenn das Kontingent erschöpft ist.
  *   { warteliste: true }    → Konto auf die Aroma-Matrix-Warteliste setzen.
+ *                             OHNE AUFRUFER seit 03.10.2026: Die Oberfläche verweist
+ *                             auf die VIP-Warteliste (/vip#warteliste, Loops-Gruppe
+ *                             vip_warteliste) — eine Warteliste, nicht zwei. Der
+ *                             Zweig trägt weiter ein, verschickt aber nichts.
  *
  * Anonym: Status kommt zurück (loggedIn=false); cutId/warteliste → 401.
  * Admin-Cookie: unbegrenzt, nichts wird verbucht.

@@ -4,7 +4,7 @@
  * Werkzeuge-Sektion der Startseite (Position 5, Konzept Uwe 19.09.2026,
  * Design-Canvas „Aroma-Matcher – Darstellung", Artboard „Startseite-B"):
  *   6 Kacheln 3×2 — Aroma-Matcher (Platz 1, Bild, Gold-Rahmen, NEU + VIP) ·
- *   Cut-Atlas · Foodpairing · Rezept-Schmiede · Hofladen-Radar · Räucherholz-Finder (BALD, VIP)
+ *   Cut-Atlas · Foodpairing · Rezept-Schmiede · Hofladen-Radar · Räucherholz-Finder (GEPLANT, VIP)
  *   darunter das Marco-Band „Sommelier am Grill" (öffnet den Chat per sk:marco-Event)
  *   darunter die ruhige VIP-Zeile → /vip (Warteliste).
  *
@@ -559,7 +559,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
               <p className="text-xs text-text-secondary mb-2">
                 Was passt zu deinem Cut? Rub, Holz und das passende Glas — mit einem Satz, warum.
               </p>
-              <p className="text-[11px] text-text-muted mb-4">{freeLimit} Cuts gratis · VIP ohne Limit</p>
+              <p className="text-[11px] text-text-muted mb-4">{freeLimit} Cuts gratis · ohne Limit: für den VIP-Pass geplant</p>
               <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
                 Cut wählen <ChevronRight size={14} />
               </span>
@@ -638,7 +638,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
               „Holz wässern" — Scheite auf Glut mit Rauch. */}
           <div
             className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
-            aria-label="Räucherholz-Finder — bald verfügbar"
+            aria-label="Räucherholz-Finder — geplant, noch nicht verfügbar"
           >
             <div className="relative min-h-40 w-full flex-1">
               <Image
@@ -651,7 +651,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
             </div>
             <div className="flex flex-col p-5">
               <div className="mb-2 flex gap-2">
-                <Badge muted>Bald</Badge>
+                <Badge muted>Geplant</Badge>
                 <Badge filled>VIP</Badge>
               </div>
               <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
@@ -661,7 +661,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
               <p className="text-xs text-text-secondary mb-4">
                 Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
               </p>
-              <span className="text-[11px] text-text-muted">Erscheint für VIP-SteakAkademiker.</span>
+              <span className="text-[11px] text-text-muted">Geplant als Baustein des VIP-Passes.</span>
             </div>
           </div>
         </div>
@@ -719,12 +719,12 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
           <span className="flex items-center gap-3 text-sm text-text-secondary">
             <Badge filled>VIP</Badge>
             <span>
-              <span className="font-semibold text-text-light">VIP-SteakAkademiker:</span> Aroma-Matcher ohne Limit,
-              Räucherholz-Finder komplett, Profi-Rezepte grammgenau.
+              <span className="font-semibold text-text-light">VIP-SteakAkademiker — in Vorbereitung:</span> Aroma-Matcher
+              ohne Limit, Räucherholz-Finder, Profi-Rezepte grammgenau.
             </span>
           </span>
           <span className="inline-flex shrink-0 items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-            <Crown size={13} /> 49 € im Jahr · Mehr erfahren <ChevronRight size={14} />
+            <Crown size={13} /> 49 € im Jahr · Zur Warteliste <ChevronRight size={14} />
           </span>
         </Link>
       </div>
