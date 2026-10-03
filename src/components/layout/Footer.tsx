@@ -51,7 +51,6 @@ const FOOTER_LINKS = {
     // verschenkter Platz und fuer den Nutzer eine Enttaeuschung beim zweiten Klick.
     { label: 'Autoren & Redaktion', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
-    { label: 'Privé — Premium & Corporate', href: '/prive' },
     { label: 'VIP-SteakAkademiker', href: '/vip' },
   ],
   // Uwe, 30.08.2026: Spalte "Ehrliches System" ausgebaut — dieselbe Entscheidung

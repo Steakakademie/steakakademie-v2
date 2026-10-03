@@ -49,7 +49,7 @@ export default function AutorHinweis({
     return (
       <p className={className}>
         {variante === 'rezept'
-          ? 'Steakakademie-Autor. Alle Rezepte basieren auf eigener Praxiserfahrung und werden mehrfach am Grill getestet, bevor sie veröffentlicht werden.'
+          ? 'Steakakademie-Autor. Alle Rezepte basieren auf eigener Praxiserfahrung.'
           : 'Steakakademie-Autor. Jeder Artikel basiert auf eigener Praxiserfahrung und methodisch belegten Angaben.'}
       </p>
     );

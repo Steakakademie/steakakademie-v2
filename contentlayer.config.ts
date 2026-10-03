@@ -195,8 +195,6 @@ export const Vergleich = defineDocumentType(() => ({
     // nach EU AI Act Art. 50 Abs. 4.
     imageSource: { type: 'string' },
     imageAI: { type: 'boolean', default: false },
-    testedCount: { type: 'number' },
-    testDuration: { type: 'string' },
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     faq: { type: 'json' },

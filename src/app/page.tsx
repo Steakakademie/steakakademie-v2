@@ -88,7 +88,7 @@ export default async function HomePage() {
             </h1>
             <p className="font-body text-base sm:text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto mb-7">
               In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
-              Rezepte, Ausrüstung. Methodisch, fachlich verantwortet, ohne Bullshit.
+              Rezepte, Ausrüstung. Methodisch, präzise, ohne Bullshit.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-2.5">

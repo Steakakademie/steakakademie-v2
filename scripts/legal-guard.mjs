@@ -124,9 +124,28 @@ for (const f of affiliateFiles) {
     }
   }
 
+  // Seit 03.10.2026 kommt rel nicht mehr als Literal, sondern aus einer Quelle
+  // (produkt-anzeige.ts → produktLink()). Ein dynamisches rel muss von dort stammen,
+  // sonst greift die Literal-Prüfung oben ins Leere.
+  if (/rel=\{/.test(txt) && !/produktLink\(|REL_PARTNERLINK|REL_EXTERN/.test(txt)) {
+    add('Affiliate rel', f, 'dynamisches rel={…} ohne produktLink()/REL_PARTNERLINK — rel nur aus produkt-anzeige.ts beziehen');
+  }
+
   // Komponenten, die einen Affiliate-Link rendern, brauchen ein sichtbares Label.
   if (isAffiliateLinkComponent && !/Anzeige|Werbung/.test(txt)) {
     add('Werbekennzeichnung', f, "kein sichtbares 'Anzeige'-/'Werbung'-Label in der Komponente");
+  }
+}
+
+// Die eine Quelle selbst: Der Partnerlink-rel muss 'sponsored' tragen.
+{
+  const quelle = join(ROOT, 'src', 'components', 'affiliate', 'produkt-anzeige.ts');
+  const txt = existsSync(quelle) ? readFileSync(quelle, 'utf8') : '';
+  const m = txt.match(/REL_PARTNERLINK\s*=\s*['"]([^'"]*)['"]/);
+  if (!m) {
+    add('Affiliate rel', quelle, 'REL_PARTNERLINK nicht gefunden — die Quelle für rel der Partnerlinks fehlt');
+  } else if (!/sponsored/.test(m[1])) {
+    add('Affiliate rel', quelle, `REL_PARTNERLINK = '${m[1]}' ohne 'sponsored' — Partnerlinks als bezahlt auszeichnen`);
   }
 }
 

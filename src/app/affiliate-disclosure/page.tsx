@@ -83,7 +83,7 @@ export default function AffiliateDisclosurePage() {
             <section>
               <h2 className={h2Class}>Transparenz & Unabhängigkeit</h2>
               <p className="mb-3">
-                Wir empfehlen nur Produkte, die wir selbst getestet haben oder nach sorgfältiger Recherche für qualitativ hochwertig halten — Testberichte sind als solche gekennzeichnet.
+                Wir empfehlen nur Produkte, die wir nach sorgfältiger Recherche für qualitativ hochwertig halten. Unsere Vergleichsseiten sind Marktübersichten nach Herstellerangaben und öffentlich zugänglichen Daten — keine eigenen Gerätetests.
                 Die Affiliate-Vergütung beeinflusst unsere Empfehlungen <strong className="text-text-primary">nicht</strong>.
                 Wir lehnen Produkte ab, die unsere Standards nicht erfüllen — unabhängig von
                 einer möglichen Provision.
