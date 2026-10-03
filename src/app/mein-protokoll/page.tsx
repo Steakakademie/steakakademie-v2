@@ -443,7 +443,7 @@ export default function MeinProtokollPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose für Grillfehler' },
-                  { label: 'Fleischpass', href: '/fleischpass', note: 'Grill-Logbuch für deine Sessions' },
+                  { label: 'Steak-Rettung', href: '/rettung', note: 'Sechs Grillfehler und ihre Lösung' },
                   { label: 'Diplom-System', href: '/diplome', note: '10 Level BBQ-Kompetenz' },
                 ].map(({ label, href, note }) => (
                   <Link

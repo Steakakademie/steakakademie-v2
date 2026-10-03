@@ -1,0 +1,279 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Angebots-Register — die EINE Liste der eigenen Angebote der Steakakademie.
+#
+# Konzept: claude.ai-Projekt „Steakakademie", konzept_produkt_einbindung_2026-10-02
+# (Freigabe Uwe, 02.10.2026). Abteilung: Wachstum.
+#
+# Wozu: Rezepte, Glossar und Temperatur-Guide tragen die Besucher, die Produkte
+# standen auf eigenen Seiten ohne Weg dorthin. Die Seitenvorlagen fragen dieses
+# Register: Was passt zu dieser Seite? — und zeigen EINEN Hinweis im Text und
+# höchstens drei am Seitenende.
+#
+# NEUES ANGEBOT = ein Eintrag hier. Es erscheint überall, wo seine Anlässe
+# zutreffen. Keine Inhaltsdatei und keine Vorlage muss dafür angefasst werden.
+#
+# Gelesen von src/lib/angebote/register.ts (prüft die Form beim Bauen — ein
+# Tippfehler bricht den Build, statt still einen Hinweis zu verlieren).
+#
+# FELDER
+#   id          Schlüssel, klein, mit Bindestrich. Geht als Kennung in die Klick-Messung.
+#   name        Anzeigename.
+#   url         Ziel. Muss eine vorhandene Seite sein.
+#   art         gratis | bezahlt | warteliste
+#   status      live       → Hinweis erscheint
+#               ab_datum   → Hinweis erscheint mit „ab <Datum>"; Feld `ab` ist Pflicht.
+#                            Der Status wechselt NICHT von selbst: der Verkaufsstart
+#                            hängt an einem Bescheid, nicht am Kalender.
+#               warteliste → Hinweis erscheint mit „Warteliste"
+#               pausiert   → erscheint nirgends. Immer mit `grund`.
+#   preis_text  Was als Preis gezeigt wird („ab 19 €"). Preise stehen NUR hier.
+#   knopf       Beschriftung des Links.
+#   gewicht     Wie oft das Angebot im Verhältnis zu anderen passenden gezeigt wird
+#               (Standard 1). Die Wahl je Seite ist fest, nicht zufällig: dieselbe
+#               Seite zeigt immer denselben Hinweis.
+#   anlaesse    Wann das Angebot passt:
+#                 typ   rezept | glossar | temperatur-guide
+#                 wenn  Bedingungen auf Frontmatter-Feldern; alle müssen zutreffen,
+#                       eine Liste heißt „eines davon". Ohne `wenn`: immer.
+#                 satz  Der Satz an genau dieser Stelle. Du-Form, eine Aussage.
+#
+# REGELN (Konzept Abschnitt 5)
+#   · Anlass statt Banner: kein Anlass, kein Hinweis.
+#   · Was gratis ist, heißt gratis. Was noch nicht kaufbar ist, nennt das Datum.
+#   · Geschäftsfeld 3 (Eigenregie, Gründer-Schmiede, Steuer-Matrix) steht hier,
+#     hat aber bewusst KEINE Anlässe in Grill-Inhalten — andere Zielgruppe.
+# ══════════════════════════════════════════════════════════════════════════════
+
+angebote:
+
+  # ─── Kostenlos und live ──────────────────────────────────────────────────────
+
+  - id: diplom
+    name: Grillmeister-Diplom
+    url: /diplome
+    art: gratis
+    status: live
+    preis_text: Stufe 1 kostenlos
+    knopf: Stufe 1 lesen
+    gewicht: 2
+    anlaesse:
+      - typ: glossar
+        wenn: { category: ["Techniken & Methoden", "Thermodynamik", "Chemie & Physik", "Fleischkunde", "Reifung"] }
+        satz: "Ein Begriff ist ein Baustein. Den Zusammenhang liefert Stufe 1 des Grillmeister-Diploms — kostenlos, ohne Konto."
+      - typ: rezept
+        wenn: { kategorie: fleisch }
+        satz: "Du willst wissen, warum es so funktioniert? Stufe 1 des Grillmeister-Diploms erklärt die Grundlagen — kostenlos, ohne Konto."
+      - typ: temperatur-guide
+        satz: "Die Zahlen kennst du jetzt. Was dahintersteckt, erklärt Stufe 1 des Grillmeister-Diploms — kostenlos, ohne Konto."
+
+  - id: spickzettel
+    name: Kerntemperatur-Spickzettel
+    url: /kerntemperatur-spickzettel
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Spickzettel öffnen
+    gewicht: 2
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: fleisch }
+        satz: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
+      - typ: glossar
+        wenn: { category: ["Thermodynamik", "Techniken & Methoden"] }
+        satz: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
+
+  - id: steak-rettung
+    name: Steak-Rettung
+    url: /rettung
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Zur Steak-Rettung
+    gewicht: 2
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: fleisch }
+        satz: "Nicht so geworden wie geplant? Sechs Grillfehler — und wie du sie rettest."
+      - typ: temperatur-guide
+        satz: "Zu durch, zu roh, keine Kruste? Sechs Grillfehler — und wie du sie rettest."
+
+  - id: aroma-matcher
+    name: Aroma-Matcher
+    url: /aroma-matcher
+    art: gratis
+    status: live
+    preis_text: Kostenlos testen
+    knopf: Aroma-Matcher öffnen
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: [fleisch, wine-spirits] }
+        satz: "Welcher Rub, welches Holz, welcher Drink zu deinem Cut passt — der Aroma-Matcher zeigt es."
+      - typ: glossar
+        wenn: { category: ["Würzung & Marinaden", "Cuts & Teilstücke"] }
+        satz: "Welcher Rub, welches Holz, welcher Drink zu welchem Cut passt — der Aroma-Matcher zeigt es."
+
+  - id: cut-generator
+    name: Cut-Generator
+    url: /cut-generator
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Cut finden
+    anlaesse:
+      - typ: glossar
+        wenn: { category: ["Cuts & Teilstücke", "Fleischkunde"] }
+        satz: "Welcher Cut passt zu dir? Vier Fragen, eine Empfehlung."
+
+  - id: hofladen-radar
+    name: Hofladen-Radar
+    url: /hoefe
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Höfe finden
+    # Auf Fleisch-Rezepten und Cut-Seiten steht der Radar schon über den eigenen
+    # Baustein HofladenHinweis — deshalb hier kein Anlass für `rezept`, sonst
+    # stünde er doppelt. Wird in Schritt 2 hierher umgezogen.
+    anlaesse:
+      - typ: glossar
+        wenn: { category: ["Fleischkunde", "Reifung", "Cuts & Teilstücke"] }
+        satz: "Gutes Fleisch beginnt beim Erzeuger. Der Hofladen-Radar zeigt Direktvermarkter in deiner Nähe."
+
+  - id: menue-planer
+    name: Menü-Planer
+    url: /menue
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Menü planen
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: [beilagen, desserts, saucen-rubs, fisch] }
+        satz: "Aus einzelnen Rezepten wird ein Menü — mit Einkaufsliste."
+
+  - id: foodpairing
+    name: Foodpairing
+    url: /foodpairing
+    art: gratis
+    status: live
+    preis_text: Kostenlos
+    knopf: Aromen vergleichen
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: [saucen-rubs, beilagen] }
+        satz: "Welche Aromen zusammenpassen — und warum."
+      - typ: glossar
+        wenn: { category: "Würzung & Marinaden" }
+        satz: "Welche Aromen zusammenpassen — und warum."
+
+  # ─── Bezahlprodukte und Wartelisten ──────────────────────────────────────────
+
+  - id: mein-protokoll
+    name: Mein Protokoll
+    url: /mein-protokoll
+    art: bezahlt
+    status: ab_datum
+    ab: 2026-11-01
+    preis_text: ab 19 €
+    knopf: Mein Protokoll ansehen
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: fleisch, difficulty: [Einfach, Mittel] }
+        satz: "Ein Rezept ist eine Session. Mein Protokoll macht daraus einen Plan für acht Wochen — auf deinen Grill zugeschnitten."
+      - typ: glossar
+        wenn: { category: "Techniken & Methoden" }
+        satz: "Eine Technik lernst du durch Wiederholung in der richtigen Reihenfolge. Mein Protokoll plant dir acht Wochen."
+      - typ: temperatur-guide
+        satz: "Temperaturen wissen ist das eine, sie treffen das andere. Mein Protokoll plant dir acht Wochen Übung — auf deinen Grill zugeschnitten."
+
+  - id: vip
+    name: VIP-SteakAkademiker
+    url: /vip
+    art: warteliste
+    status: warteliste
+    preis_text: Warteliste
+    knopf: Auf die Warteliste
+    anlaesse:
+      - typ: rezept
+        wenn: { difficulty: [Fortgeschritten, Profi] }
+        satz: "Du grillst auf diesem Niveau? Für dich entsteht der VIP-Bereich — Werkzeuge ohne Limit und grammgenaue Profi-Rezepte."
+
+  - id: steak-beichte
+    name: Steak-Beichte
+    url: /steak-beichte
+    art: bezahlt
+    # Verkauf bis zur Gewerbeanmeldung aus (Uwe, 02.10.2026: „Beide auf ‚ab 1.
+    # November'"; Regel vom 27.09.: keine bezahlten Bestellungen vorher).
+    # DIESER STATUS STEUERT AUCH DIE SEITE: /steak-beichte zeigt die Kaufknöpfe
+    # nur bei `live` (verkaufsstand() in src/lib/angebote/register.ts).
+    # Verkaufsstart = diese Zeile auf `live` setzen, `ab` entfernen.
+    status: ab_datum
+    ab: 2026-11-01
+    preis_text: ab 7 €
+    knopf: Zur Steak-Beichte
+    anlaesse:
+      - typ: rezept
+        wenn: { kategorie: fleisch }
+        satz: "Nicht so geworden wie auf dem Bild? Beschreib, was schiefging — mit Foto, wenn du magst — und erfahre die Ursache."
+
+  # ─── Zurückgestellt: erscheinen nirgends ─────────────────────────────────────
+
+  - id: fleischpass
+    name: Fleischpass
+    url: /fleischpass
+    art: bezahlt
+    status: pausiert
+    grund: >-
+      Das Logbuch gibt es noch nicht (02.10.2026 geprüft: keine Route außer der
+      Seite selbst, keine Tabelle). Die Seite steht auf „in Vorbereitung". Kein
+      Hinweis, bis es gebaut ist. Preis und Zuschnitt (einzeln oder VIP-Baustein)
+      sind nicht entschieden.
+    preis_text: ""
+    knopf: Zum Fleischpass
+    anlaesse: []
+
+  - id: gutscheine
+    name: Geschenkgutscheine
+    url: /gutschein
+    art: bezahlt
+    status: pausiert
+    grund: >-
+      Alle Gutschein-Produkte stehen auf „In Vorbereitung" (kein Digistore-Produkt
+      verknüpft). Vorgesehener Anlass: saisonal ab November.
+    preis_text: ""
+    knopf: Gutscheine ansehen
+    anlaesse: []
+
+  # ─── Geschäftsfeld 3: geführt, aber ohne Anlässe in Grill-Inhalten ───────────
+
+  - id: eigenregie
+    name: Eigenregie
+    url: /eigenregie
+    art: bezahlt
+    status: pausiert
+    grund: Geschäftsfeld 3 — andere Zielgruppe, kein Hinweis in Grill-Inhalten (Konzept, Frage 4).
+    preis_text: ""
+    knopf: Zu Eigenregie
+    anlaesse: []
+
+  - id: gruender-schmiede
+    name: Gründer-Schmiede
+    url: /gruender-schmiede
+    art: bezahlt
+    status: pausiert
+    grund: >-
+      Geschäftsfeld 3, kein Hinweis in Grill-Inhalten. Auf der Seite seit 03.09.2026
+      nicht buchbar („durch ein neues Produkt abgelöst", Entscheidung Uwe).
+    preis_text: ""
+    knopf: Zur Gründer-Schmiede
+    anlaesse: []
+
+  - id: steuer-matrix
+    name: Steuer-Matrix
+    url: /steuer-matrix
+    art: bezahlt
+    status: pausiert
+    grund: Geschäftsfeld 3 — andere Zielgruppe, kein Hinweis in Grill-Inhalten (Konzept, Frage 4).
+    preis_text: ""
+    knopf: Zur Steuer-Matrix
+    anlaesse: []

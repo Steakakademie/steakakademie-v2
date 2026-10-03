@@ -15,6 +15,9 @@ import type { RecipeIngredient } from './recipe/PortionCalculator';
 import type { RecipeStep } from './recipe/CookCoach';
 import RecipeSubmitModal from './recipe/RecipeSubmitModal';
 import HofladenHinweis from './hoefe/HofladenHinweis';
+import Angebotshinweis from '@/components/angebote/Angebotshinweis';
+import AngebotsRegal from '@/components/angebote/AngebotsRegal';
+import { hinweiseFuer } from '@/lib/angebote/register';
 
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
@@ -110,6 +113,13 @@ interface RecipeTemplateProps {
 
 export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTemplateProps) {
   const MDXContent  = useMDXComponent(recipe.body.code);
+
+  // Eigene Angebote, die zu diesem Rezept passen (data/angebote.yaml).
+  const angebote = hinweiseFuer({
+    typ: 'rezept',
+    slug: recipe.slug ?? recipe._raw?.flattenedPath ?? recipe.title,
+    felder: { kategorie: recipe.kategorie, difficulty: recipe.difficulty, meatType: recipe.meatType },
+  });
   const ingredients = recipe.ingredients as RecipeIngredient[];
   const steps       = recipe.steps       as RecipeStep[];
   const hasPairing  = !!(recipe.whiskeyName && recipe.wineName);
@@ -314,6 +324,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
             {/* Interaktiver Koch-Coach */}
             <CookCoach steps={steps} />
 
+            {/* Eigenes Angebot — der eine Hinweis im Text, nach dem Kochen (Wissens-Höhepunkt) */}
+            <Angebotshinweis hinweis={angebote.imText} seite="rezept" />
+
             {/* Aroma-Foodpairing (geteilte Moleküle) → Deeplink in die Rezept-Schmiede */}
             <AromaPairing meatType={recipe.meatType} />
 
@@ -331,6 +344,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
                 affiliateLinkWine={recipe.wineLink}
               />
             )}
+
+            {/* Eigene Angebote — Regal am Ende der Hauptspalte, höchstens drei */}
+            <AngebotsRegal hinweise={angebote.regal} seite="rezept" />
 
             {/* Autor-Box */}
             <div className="mt-10 p-5 bg-surface-base border border-border-subtle flex gap-4">
