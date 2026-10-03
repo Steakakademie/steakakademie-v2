@@ -460,7 +460,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
           {rezeptLinks.length > 0 && (
             <div className="mt-3 border-t border-border-subtle pt-2.5">
               <p className="text-[10px] font-bold uppercase tracking-wide text-brand-gold mb-1.5">
-                Erprobte Rezepte aus unserer Rezeptwelt
+                Passende Rezepte aus unserer Rezeptwelt
               </p>
               <ul className="space-y-1">
                 {rezeptLinks.map((l) => (

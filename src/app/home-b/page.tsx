@@ -10,7 +10,7 @@ import FrischSaisonal from '@/components/home/FrischSaisonal';
 import ToolBoxes from '@/components/home/ToolBoxes';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
-import { getPlattformPuls } from '@/lib/plattform-puls';
+import { getPlattformPuls, anzahlDiplomLektionen } from '@/lib/plattform-puls';
 import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
 import { STARTSEITEN_ARTIKEL } from '@/lib/startseiten-artikel';
@@ -562,7 +562,7 @@ export default async function HomeVariantB() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { stat: '35',   label: 'Diplom-Lektionen — Bronze bis Meister' },
+                { stat: String(anzahlDiplomLektionen()), label: 'Diplom-Lektionen — Bronze bis Meister' },
                 { stat: '30',   label: 'Jahre Lehrerfahrung hinter der Methodik' },
                 { stat: '100%', label: 'Affiliate-transparent' },
                 { stat: '2026', label: 'Inhalte aktuell' },

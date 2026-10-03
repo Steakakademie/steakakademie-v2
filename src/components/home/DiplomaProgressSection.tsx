@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+// Grade aus der einen Quelle (03.10.2026): Hier standen „Basis-Zertifikat" bis
+// „Offizielles Akademie-Diplom" — so heisst kein Abschluss der Ausbildung.
+import { STUFEN as DIPLOM_STUFEN } from '@/lib/diplome/stufen';
 
 // Echte Münz-Renders (Bullenkopf-Design) — füllen den Badge-Slot im Pedestal.
 function RenderBadge({ tier, alt }: { tier: string; alt: string }) {
@@ -116,7 +119,7 @@ const STUFEN = [
     badge: <RenderBadge tier="bronze" alt="Bronze-Medaille" />,
     stufe: 'Stufe 1',
     name: 'Der Funke',
-    zertifikat: 'Basis-Zertifikat',
+    zertifikat: DIPLOM_STUFEN[0].cert,
     glowColor: 'radial-gradient(circle, #c47c3a80, transparent)',
     glowIntensity: 0.6,
   },
@@ -124,7 +127,7 @@ const STUFEN = [
     badge: <RenderBadge tier="silber" alt="Silber-Medaille" />,
     stufe: 'Stufe 2',
     name: 'Die Flamme bezähmen',
-    zertifikat: 'Fortgeschrittenes Zertifikat',
+    zertifikat: DIPLOM_STUFEN[1].cert,
     glowColor: 'radial-gradient(circle, #c0d0e080, transparent)',
     glowIntensity: 0.6,
   },
@@ -132,7 +135,7 @@ const STUFEN = [
     badge: <RenderBadge tier="gold" alt="Gold-Medaille" />,
     stufe: 'Stufe 3',
     name: 'Hitzekontrolle',
-    zertifikat: 'Profi-Zertifikat',
+    zertifikat: DIPLOM_STUFEN[2].cert,
     glowColor: 'radial-gradient(circle, #f5c84280, transparent)',
     glowIntensity: 0.7,
   },
@@ -140,7 +143,7 @@ const STUFEN = [
     badge: <RenderBadge tier="platin" alt="Platin-Medaille" />,
     stufe: 'Stufe 4',
     name: 'Präzision & Geschmack',
-    zertifikat: 'Experten-Zertifikat',
+    zertifikat: DIPLOM_STUFEN[3].cert,
     glowColor: 'radial-gradient(circle, #a8d0f090, transparent)',
     glowIntensity: 0.7,
   },
@@ -148,7 +151,7 @@ const STUFEN = [
     badge: <RenderBadge tier="master" alt="Meister-Medaille" />,
     stufe: 'Stufe 5',
     name: 'Der vollendete Pitmaster',
-    zertifikat: 'Offizielles Akademie-Diplom',
+    zertifikat: DIPLOM_STUFEN[4].cert,
     glowColor: 'radial-gradient(circle, #f5c842cc, transparent)',
     glowIntensity: 1.0,
     large: true,

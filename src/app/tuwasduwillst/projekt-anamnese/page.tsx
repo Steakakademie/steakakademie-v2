@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Anamnese from '@/components/baukasten/Anamnese';
+import { BLOECKE } from '@/lib/baukasten/anamnese';
 
 /**
  * Projekt-Anamnese für den Website-Baukasten (KONZEPT-Website-Baukasten-2026-09-25, Abschnitt 13).
@@ -8,7 +9,8 @@ import Anamnese from '@/components/baukasten/Anamnese';
  */
 export const metadata: Metadata = {
   title: { absolute: 'Projekt-Anamnese: Was kostet deine Website? — tuwasduwillst.de' },
-  description: 'Sechs kurze Schritte, ein ehrliches Ergebnis: Umfang, Richtpreis, Mietkauf-Rate und der nächste Schritt für deine Website. Ohne Anmeldung.',
+  // Schrittzahl aus dem Formular selbst (03.10.2026: getippt stand „Sechs", das Formular hat sieben).
+  description: `${BLOECKE.length} kurze Schritte, ein ehrliches Ergebnis: Umfang, Richtpreis, Mietkauf-Rate und der nächste Schritt für deine Website. Ohne Anmeldung.`,
   alternates: { canonical: 'https://tuwasduwillst.de/projekt-anamnese' },
   robots: { index: false, follow: false },
 };

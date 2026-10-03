@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { allVergleiches } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { getProductsByCategory } from '@/lib/products';
+import { anzahlDiplomLektionen } from '@/lib/plattform-puls';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import type { Product } from '@/types';
 import { skMdx, Crumbs, Faq } from '@/components/relaunch/Prose';
@@ -133,7 +134,7 @@ export default function VergleichSeite(props: Props) {
         <Link href="/relaunch/diplome" className="sk-card sk-card--dark" style={{ gap: 6, border: 0 }}>
           <span className="sk-kicker sk-kicker--13 sk-kicker--warm">Weiter im Diplom</span>
           <span className="sk-h sk-h--card">Stufe 1 · Der Funke</span>
-          <span className="sk-meta sk-meta--14">Sieben Lektionen, ohne Login.</span>
+          <span className="sk-meta sk-meta--14">{anzahlDiplomLektionen(1)} Lektionen, ohne Login.</span>
         </Link>
       </div>
     </div>

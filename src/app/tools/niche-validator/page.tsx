@@ -6,7 +6,8 @@ export const metadata: Metadata = {
   title: 'The Niche Authority Validator · AuthorityOS',
   description:
     'A 45-second strategic audit of any niche. Get a verdict, TAM estimate, pillar pages, buyer personas, revenue projection, and the contrarian angle most builders miss. Free. No login.',
-  robots: { index: true, follow: true },
+  // 03.10.2026: Fremdprojekt-Rest (englisches „AuthorityOS"-Werkzeug) — raus aus dem Index.
+  robots: { index: false, follow: false },
   openGraph: {
     images: ogImages('The Niche Authority Validator'),
     title: 'The Niche Authority Validator',

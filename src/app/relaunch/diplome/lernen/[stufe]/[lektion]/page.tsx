@@ -17,7 +17,7 @@ import { LektionAbschluss, LektionBalken } from '@/components/relaunch/LektionFo
  * docs/konzept-diplom-stufe-2-5.md): Stufe 1 ist der freie Trichter, Stufen 2–5
  * zeigen öffentlich nur den Anreißer; der Volltext öffnet sich mit Kauf-
  * Berechtigung (heute: Admin-Cookie). cookies() wird NUR für Bezahlstufen
- * gelesen, damit die sieben Stufe-1-Lektionen statisch bleiben und im Sitemap
+ * gelesen, damit die Stufe-1-Lektionen statisch bleiben und im Sitemap
  * stehen. Wer das hier lockert, öffnet das Produkt.
  *
  * Die Kontrollfrage des Prototyps hat in den Lektionen keine Datenbasis — an
@@ -65,6 +65,8 @@ function LektionInhalt({ l, gesperrt }: { l: NonNullable<ReturnType<typeof finde
   const geschwister = allDiplomLektions.filter((x) => x.stufe === l.stufe).sort((a, b) => a.order - b.order);
   const idx = geschwister.findIndex((x) => x.lektionSlug === l.lektionSlug);
   const naechste = geschwister[idx + 1];
+  // Aus dem Bestand gezaehlt statt getippt („sieben" bei elf Lektionen, 03.10.2026).
+  const stufe1Anzahl = allDiplomLektions.filter((x) => x.stufe === 1).length;
 
   return (
     <>
@@ -96,8 +98,9 @@ function LektionInhalt({ l, gesperrt }: { l: NonNullable<ReturnType<typeof finde
             <p className="sk-prose__p" style={{ color: '#d9cfc2' }}>{l.excerpt}</p>
             <div className="sk-kicker sk-kicker--13 sk-kicker--warm" style={{ marginTop: 20 }}>Teil der Grillmeister-Ausbildung</div>
             <p className="sk-h sk-h--24" style={{ marginTop: 8 }}>Diese Lektion gehört zu Stufe {l.stufe} des Grillmeister-Diploms.</p>
+            {/* 03.10.2026: ohne Datum und Preis — der genannte Verkaufsstart ist vorbei, einen Kaufweg gibt es nicht. */}
             <p className="sk-text sk-text--16" style={{ marginTop: 10 }}>
-              Stufe 1 mit sieben vollständigen Lektionen ist frei zugänglich. Verkaufsstart 01.10.2026 — Gründungs-Preis 99 € für die ersten 100, danach 149 €.
+              Stufe 1 mit {stufe1Anzahl} vollständigen Lektionen ist frei zugänglich. Die Stufen 2 bis 5 sind derzeit noch nicht buchbar.
             </p>
             <div className="sk-cta-row" style={{ marginTop: 20 }}>
               <Link href="/relaunch/diplome" className="sk-btn sk-btn--primary">Zur Ausbildung</Link>

@@ -314,8 +314,8 @@ export default function AgingClient() {
               Dry Aging selbst meistern.
             </h2>
             <p className="mx-auto mb-8 max-w-md font-body text-sm leading-relaxed text-text-light/50">
-              Level 4 des Steak-Diploms deckt alle Aspekte der Fleischreifung ab —
-              von den Grundlagen bis zur professionellen Heimreifung.
+              In Level 4 des Steak-Diploms geht es um Reifung und Lagerung:
+              Marmorierung, Dry und Wet Aging, Lagern und Einkauf.
             </p>
             <Link
               href="/diplome"

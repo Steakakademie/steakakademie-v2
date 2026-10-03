@@ -17,6 +17,7 @@ import BBQPairing from '@/components/article/BBQPairing';
 import BildCredit from '@/components/BildCredit';
 import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
 import KeyFacts from '@/components/KeyFacts';
+import { inhaltsverzeichnis, knotenText, ueberschriftSlug } from '@/lib/inhaltsverzeichnis';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -51,8 +52,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 // ── MDX-Komponenten Override ──────────────────────────────────────────────────
 
 const mdxComponents = {
+  // Die id kommt aus derselben Slug-Funktion wie das Inhaltsverzeichnis in der
+  // Seitenleiste (03.10.2026) — vorher hatte keine Ueberschrift eine id, die
+  // Sprunglinks liefen ins Leere. scrollMarginTop: der Kopf ist sticky.
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
+      id={ueberschriftSlug(knotenText(children)) || undefined}
+      style={{ scrollMarginTop: '6rem' }}
       className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mt-10 mb-4 leading-tight border-b border-border-subtle pb-3"
       {...props}
     >
@@ -138,6 +144,9 @@ export default function CutPage(props: Props) {
 
   const MDXContent = useMDXComponent(cut.body.code);
   const relatedProducts = getProductsByCategory('thermometer').slice(0, 3);
+  // Aus den h2-Ueberschriften DIESES Dokuments — die Liste war fest auf Ribeye
+  // verdrahtet und stand so auch auf Brisket und Pulled Pork (03.10.2026).
+  const abschnitte = inhaltsverzeichnis(cut.body.raw);
 
   // Schema.org JSON-LD — Article + BreadcrumbList (GEO/Burggraben 3)
   const articleSchema = {
@@ -277,44 +286,25 @@ export default function CutPage(props: Props) {
 
             {/* Sidebar */}
             <aside className="space-y-6">
-              {/* Inhaltsverzeichnis */}
-              <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
-                <div className="border-t-2 border-text-primary -mt-5 mb-4 pt-4">
-                  <h3 className="font-sans font-bold text-sm text-text-primary">
-                    Inhalt
-                  </h3>
+              {/* Inhaltsverzeichnis — aus den Ueberschriften des Dokuments */}
+              {abschnitte.length > 0 && (
+                <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
+                  <div className="border-t-2 border-text-primary -mt-5 mb-4 pt-4">
+                    <h3 className="font-sans font-bold text-sm text-text-primary">
+                      Inhalt
+                    </h3>
+                  </div>
+                  <ul className="space-y-2 text-sm font-sans text-text-secondary">
+                    {abschnitte.map((a) => (
+                      <li key={a.id}>
+                        <a href={`#${a.id}`} className="hover:text-brand-fire transition-colors">
+                          {a.titel}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2 text-sm font-sans text-text-secondary">
-                  <li>
-                    <a href="#was-ist-ein-ribeye-überhaupt" className="hover:text-brand-fire transition-colors">
-                      Was ist ein Ribeye?
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#marmorierung-was-die-zahlen-bedeuten" className="hover:text-brand-fire transition-colors">
-                      Marmorierung verstehen
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#kerntemperaturen-für-ribeye" className="hover:text-brand-fire transition-colors">
-                      Kerntemperaturen
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#drei-zubereitungsmethoden" className="hover:text-brand-fire transition-colors">
-                      Zubereitungsmethoden
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#einkauf-worauf-achten" className="hover:text-brand-fire transition-colors">
-                      Einkaufstipps
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#faq" className="hover:text-brand-fire transition-colors">FAQ</a>
-                  </li>
-                </ul>
-              </div>
+              )}
 
               {/* Produkt-Empfehlung */}
               {relatedProducts[0] && (

@@ -6,7 +6,8 @@ import { LektionMarker } from '@/components/relaunch/LektionFortschritt';
 
 export const metadata: Metadata = {
   title: 'Grillmeister-Diplome — Vom Funken zum Pitmaster',
-  description: 'Fünf Stufen, 35 Lektionen, je eine Prüfung pro Stufe. Stufe 1 ist frei zugänglich.',
+  // Zahl aus dem Bestand, nicht getippt (03.10.2026: „35" bei 39 Lektionen).
+  description: `Fünf Stufen, ${allDiplomLektions.length} Lektionen, je eine Prüfung pro Stufe. Stufe 1 ist frei zugänglich.`,
 };
 
 /**
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
  * Lektionsliste, rechts „Der ganze Pfad" mit allen fünf Stufen und die
  * Karte „Fortschritt behalten".
  *
- * Lektionen kommen aus content/diplom-lektionen (5 × 7). Stufe 1 ist frei,
+ * Lektionen kommen aus content/diplom-lektionen. Stufe 1 ist frei,
  * Stufen 2–5 sind das kostenpflichtige Diplom — die Lektionsseiten zeigen dort
  * nur den Anreißer (gleiche Regel wie live). Die Prüfung je Stufe läuft heute
  * auf der Roadmap; hier wird verlinkt, nichts nachgebaut.
@@ -32,7 +33,7 @@ export default function DiplomeSeite() {
           <div className="sk-kicker sk-kicker--warm" style={{ marginBottom: 14 }}>Akademie · Grillmeister-Diplome</div>
           <h1 className="sk-h" style={{ fontWeight: 900, fontSize: 'clamp(44px, 6.5vw, 88px)', lineHeight: .92 }}>Vom Funken zum Pitmaster.</h1>
           <p className="sk-lead" style={{ marginTop: 20, maxWidth: '60ch' }}>
-            Fünf Stufen, 35 Lektionen, je eine Prüfung pro Stufe. Klar strukturiert, auf den Punkt, ohne Füllstoff. Stufe 1 ist frei zugänglich — ein Account speichert deinen Fortschritt, mehr nicht.
+            Fünf Stufen, {allDiplomLektions.length} Lektionen, je eine Prüfung pro Stufe. Klar strukturiert, auf den Punkt, ohne Füllstoff. Stufe 1 ist frei zugänglich — ein Account speichert deinen Fortschritt, mehr nicht.
           </p>
         </div>
       </section>

@@ -11,7 +11,9 @@ import { ogImages } from '@/lib/og';
 export const metadata: Metadata = {
   title: 'Streitfälle am Grill — klare Entscheidungen',
   description:
-    'Salzen vorher oder nachher, Edelstahl oder Guss: die strittigen Grillfragen mit beiden Positionen und einer klaren Entscheidung aus 30 Jahren Praxis.',
+    // 03.10.2026: ohne „aus 30 Jahren Praxis" — die Entscheidungen zeichnet die
+    // KI-Persona Marco; eine Persona hat keine 30 Jahre Praxis.
+    'Salzen vorher oder nachher, Edelstahl oder Guss: die strittigen Grillfragen mit beiden Positionen und einer klaren Entscheidung — fachlich verantwortet von Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/streitfaelle' },
   openGraph: {
     images: ogImages('Streitfälle am Grill'),

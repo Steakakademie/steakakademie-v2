@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { STUFEN, DIPLOM_HINWEIS, QUIZ_FRAGEN_PRO_PRUEFUNG, QUIZ_BESTEHENSQUOTE } from '@/lib/diplome/stufen';
 import { RAHMENLEHRPLAN, DOKTRIN } from '@/lib/diplome/rahmenlehrplan';
+import { FRAGEN } from '@/lib/diplome/fragen';
 import { courseSchema, breadcrumbSchema } from '@/lib/schema';
 
 /**
@@ -26,14 +27,18 @@ import { courseSchema, breadcrumbSchema } from '@/lib/schema';
  * verlinkt; sonst steht „geplant" dran. Kein „fertig", wo nichts liegt (Regel 7).
  */
 
+// Aus den Daten gezaehlt, nicht getippt: In den Metadaten stand „41 Lernziele",
+// waehrend die Seite selbst 42 rechnete und zeigte (03.10.2026).
+const LERNZIELE_GESAMT = RAHMENLEHRPLAN.reduce((n, s) => n + s.lernziele.length, 0);
+
 export const metadata: Metadata = {
   title: 'Rahmenlehrplan Grillmeister-Diplom: Was ein Grillmeister können muss',
   description:
-    'Der Rahmenlehrplan des Grillmeister-Diploms der Steakakademie: fünf Stufen, 41 Lernziele, Prüfungsordnung und praktische Nachweise — von Grillmeister Bronze bis Grillmeister Meisterklasse.',
+    `Der Rahmenlehrplan des Grillmeister-Diploms der Steakakademie: fünf Stufen, ${LERNZIELE_GESAMT} Lernziele, Prüfungsordnung und praktische Nachweise — von Grillmeister Bronze bis Grillmeister Meisterklasse.`,
   alternates: { canonical: 'https://steakakademie.de/diplome/rahmenlehrplan' },
   openGraph: {
     title: 'Rahmenlehrplan Grillmeister-Diplom',
-    description: 'Fünf Stufen, 41 Lernziele, Prüfungsordnung: Was ein Grillmeister können muss — verbindlich aufgeschrieben.',
+    description: `Fünf Stufen, ${LERNZIELE_GESAMT} Lernziele, Prüfungsordnung: Was ein Grillmeister können muss — verbindlich aufgeschrieben.`,
     url: 'https://steakakademie.de/diplome/rahmenlehrplan',
     type: 'website',
   },
@@ -41,8 +46,23 @@ export const metadata: Metadata = {
 
 export default function RahmenlehrplanPage() {
   const vorhanden = new Map(allDiplomLektions.map((l) => [l.lektionSlug, l]));
-  const gesamt = RAHMENLEHRPLAN.reduce((n, s) => n + s.lernziele.length, 0);
+  const gesamt = LERNZIELE_GESAMT;
   const fertig = RAHMENLEHRPLAN.reduce((n, s) => n + s.lernziele.filter((z) => z.lektionSlug && vorhanden.has(z.lektionSlug)).length, 0);
+
+  // Pruefungsordnung und Bauplan: Zahlen aus Fragenbank und Lektionsbestand.
+  // 03.10.2026 — vorher stand „mindestens drei Fragen je Lektion" und „keine
+  // Lektion bleibt ungeprueft" fuer alle Stufen; das gilt nur fuer Stufe 1.
+  const lektionenStufe1 = allDiplomLektions.filter((l) => l.stufe === 1);
+  const poolStufe1 = FRAGEN[STUFEN[0].key].length;
+  const poolWeitere = STUFEN.slice(1).map((s) => FRAGEN[s.key].length);
+  const poolMin = Math.min(...poolWeitere);
+  const poolMax = Math.max(...poolWeitere);
+  const poolWeitereText = poolMin === poolMax ? `je ${poolMin}` : `${poolMin} bis ${poolMax}`;
+  // Solange der Pool nicht groesser ist als eine Pruefung, kommt jedes Mal alles dran.
+  const kleinePools = poolMax <= QUIZ_FRAGEN_PRO_PRUEFUNG;
+  const mitLeitfrageUndHandgriff = lektionenStufe1.filter(
+    (l) => l.body.raw.includes('<Leitfrage') && l.body.raw.includes('<Handgriff'),
+  ).length;
 
   const courseSch = courseSchema({
     name: 'Grillmeister-Diplom der Steakakademie — Rahmenlehrplan',
@@ -85,7 +105,7 @@ export default function RahmenlehrplanPage() {
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Fünf Stufen, {gesamt} Lernziele, jedes als überprüfbare Fähigkeit formuliert. Dazu ein
-                praktischer Nachweis je Stufe und eine Prüfungsordnung, die alle Lektionen abdeckt.
+                praktischer Nachweis je Stufe und eine Prüfungsordnung.
                 Der Plan entstand aus sieben Kurs-Produktionsbüchern und der Praxis eines Kursleiters,
                 der über Jahre Grillkurse für einen der großen Hersteller geleitet hat.
               </p>
@@ -93,7 +113,7 @@ export default function RahmenlehrplanPage() {
                 {[
                   { icon: <CheckCircle2 size={14} />, text: `${fertig} von ${gesamt} Lektionen veröffentlicht` },
                   { icon: <Clock size={14} />, text: `Prüfung: bis zu ${QUIZ_FRAGEN_PRO_PRUEFUNG} Fragen, ${QUIZ_BESTEHENSQUOTE} % richtig` },
-                  { icon: <GitBranch size={14} />, text: 'Gerätespur Kohle / Gas' },
+                  { icon: <GitBranch size={14} />, text: 'Lernziele für Kohle und Gas' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/55">
                     <span className="text-brand-gold">{icon}</span>
@@ -216,19 +236,34 @@ export default function RahmenlehrplanPage() {
               <h2 className="font-serif text-3xl font-bold text-text-light mb-6">So wird geprüft</h2>
               <div className="space-y-4 font-body text-text-light/70 leading-relaxed">
                 <p>
-                  Jede Stufe hat einen Fragenpool mit mindestens drei Fragen je Lektion. Die Prüfung zieht
-                  daraus bis zu {QUIZ_FRAGEN_PRO_PRUEFUNG} Fragen — höchstens eine je Lektion, damit keine
-                  Lektion ungeprüft bleibt — und ist bestanden ab {QUIZ_BESTEHENSQUOTE} Prozent richtigen
-                  Antworten. Jeder Durchgang zieht neu.
+                  Jede Stufe hat einen eigenen Fragenpool, und jede Frage gehört zu einer Lektion. Die
+                  Prüfung stellt bis zu {QUIZ_FRAGEN_PRO_PRUEFUNG} Fragen und ist bestanden ab{' '}
+                  {QUIZ_BESTEHENSQUOTE} Prozent richtigen Antworten.
                 </p>
+                <p>
+                  In Stufe 1 umfasst der Pool {poolStufe1} Fragen zu {lektionenStufe1.length} Lektionen.
+                  Die Prüfung zieht daraus {QUIZ_FRAGEN_PRO_PRUEFUNG} — höchstens eine je Lektion —, und
+                  jeder Durchgang zieht neu.
+                </p>
+                {kleinePools && (
+                  <p>
+                    In den Stufen 2 bis 5 umfasst der Pool derzeit {poolWeitereText} Fragen. Dort stellt
+                    jede Prüfung alle Fragen des Pools: Ein neuer Durchgang bringt dieselben Fragen, und
+                    nicht jede Lektion ist mit einer Frage vertreten.
+                  </p>
+                )}
                 <p>
                   Die Ziehung und die Bewertung laufen auf unserem Server; der Browser sieht die Lösungen
                   erst mit dem Ergebnis. Wer nicht besteht, bekommt zu jeder falschen Antwort die Erklärung
                   und die Lektion, in der sie steht.
                 </p>
+                {/* 03.10.2026: als Zielbild gefasst — die Urkunden-Bestellung prueft nur die
+                    bestandene Pruefung, ein Foto-/Protokoll-Upload existiert nicht. */}
                 <p>
-                  Ab Stufe 3 gehört zur gedruckten Urkunde zusätzlich der praktische Nachweis — ein Foto mit
-                  Kurzprotokoll. Das ist der Unterschied zwischen „Quiz bestanden“ und „kann es“.
+                  Der praktische Nachweis je Stufe ist oben als Aufgabe beschrieben. Geprüft wird er
+                  bisher nicht: Die gedruckte Urkunde setzt heute allein die bestandene Prüfung voraus.
+                  Zielbild ist, ihn ab Stufe 3 als Foto mit Kurzprotokoll zur Urkunde zu verlangen — das
+                  ist der Unterschied zwischen „Quiz bestanden“ und „kann es“.
                 </p>
               </div>
             </div>
@@ -240,9 +275,16 @@ export default function RahmenlehrplanPage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-10">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
-                Wie jede Lektion gebaut ist
+                Wie die Lektionen gebaut werden
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary">Sechs Regeln, kein Fließtext</h2>
+              {/* 03.10.2026: Bauplan statt Ist-Behauptung — Leitfrage und Handgriff stehen
+                  bisher nur in Stufe 1, gezaehlt aus dem Lektionsbestand. */}
+              <p className="font-body text-text-secondary leading-relaxed mt-4 max-w-content">
+                Diese Regeln sind der Bauplan. Umgesetzt sind sie in Stufe 1: Leitfrage und Handgriff
+                stehen dort in {mitLeitfrageUndHandgriff} von {lektionenStufe1.length} Lektionen. Für
+                die Stufen 2 bis 5 sind sie das Zielbild.
+              </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {DOKTRIN.map((d, i) => (
@@ -264,7 +306,9 @@ export default function RahmenlehrplanPage() {
             <div className="max-w-content mx-auto text-center">
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-4">Stufe 1 ist frei.</h2>
               <p className="font-body text-text-secondary mb-8">
-                Elf Lektionen, eine Prüfung, der Grad Grillmeister Bronze — ohne Konto, ohne Kosten.
+                {lektionenStufe1.length} Lektionen und die Prüfung — ohne Konto, ohne Kosten. Den Grad{' '}
+                {STUFEN[0].cert} trägt ein kostenloses Konto ein: Ohne Anmeldung wird das Bestehen
+                nicht gespeichert.
               </p>
               <Link
                 href="/diplome"

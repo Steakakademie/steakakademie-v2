@@ -331,8 +331,8 @@ export default function TerroirClient() {
               <span className="text-brand-gold">Fleisch-Sommelier.</span>
             </h2>
             <p className="mx-auto mb-8 max-w-md font-body text-sm leading-relaxed text-text-light/50">
-              Level 9 des Steak-Diploms widmet sich vollständig dem Thema Herkunft,
-              Marmorierung und Premium-Verkostung.
+              Im Steak-Diplom behandelt Level 6 Herkunft und internationale Cuts,
+              Level 9 die Wagyu-Sensorik und das Verkosten.
             </p>
             <Link
               href="/diplome"

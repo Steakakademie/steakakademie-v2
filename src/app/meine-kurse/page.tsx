@@ -8,7 +8,8 @@ import { ChevronRight, BookOpen, Lock, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title:       'Meine Kurse',
-  description: 'Deine gebuchten Kurse und Diplom-Fortschritt auf Steakakademie.de.',
+  // 03.10.2026: ohne „Diplom-Fortschritt" — den zeigt /diplome/profil, nicht diese Seite.
+  description: 'Deine gebuchten Kurse auf Steakakademie.de.',
   robots: { index: false, follow: false },
 };
 
@@ -30,20 +31,22 @@ const G_BG     = { background: 'linear-gradient(135deg, rgba(200,136,42,0.08) 0%
 
 // Kurs-Slug → reale Route (es gibt keine /kurse/[slug]-Route; jeder Kurs hat eine Top-Level-Seite)
 const COURSE_ROUTES: Record<string, string> = {
-  'steak-beichte': '/steak-beichte',
+  // 03.10.2026: Kaeufer landeten auf der Verkaufsseite zurueck. Ziele wie in der
+  // Kauf-Mail (TOOL_REDIRECT im Digistore-Webhook) bzw. der Kursbereich selbst.
+  'steak-beichte': '/steak-beichte/diagnose',
   // Direkt zum Plan: die Seite führt selbst zum Fragebogen, solange es keinen gibt.
   // Die Verkaufsseite /mein-protokoll war für Käufer eine Sackgasse.
   'mein-protokoll': '/mein-protokoll/plan',
   // Eingestellt 09.09.2026 — der Eintrag bleibt fuer Bestandsbuchungen, zeigt
   // aber auf das Diplom, das den Stoff uebernommen hat.
   'bbq-grundkurs': '/diplome',
-  'gruender-schmiede': '/gruender-schmiede',
-  'gruendung-sprint': '/gruender-schmiede', // Legacy-Slug (Migration 006)
+  'gruender-schmiede': '/gruender-schmiede/lernen',
+  'gruendung-sprint': '/gruender-schmiede/lernen', // Legacy-Slug (Migration 006)
   'steuer-matrix': '/steuer-matrix',
-  'eigenregie': '/eigenregie',
+  'eigenregie': '/eigenregie/lernen',
   // Legacy-Slug: Kaeufe vor der Umbenennung (07.09.2026) koennen den alten
   // Wert noch tragen, falls die Migration nicht gelaufen ist.
-  'agentur-killer-sprint': '/eigenregie',
+  'agentur-killer-sprint': '/eigenregie/lernen',
 };
 
 /** Route zu einem Kurs; Fallback: Konvention Top-Level-Route = Slug. */
