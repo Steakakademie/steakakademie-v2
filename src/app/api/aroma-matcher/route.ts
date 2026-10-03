@@ -55,7 +55,10 @@ export async function POST(req: Request) {
       warteliste: z.boolean().optional(),
     }),
     maxBodyBytes: 2 * 1024,
-    auth: 'none',
+    // 'optional', nicht 'none' (03.10.2026): 'none' löst niemanden auf — die
+    // Zweige für Admin und eingeloggte Nutzer unten waren damit unerreichbar,
+    // jede Cut-Abfrage endete mit 401.
+    auth: 'optional',
   });
   if (!guard.ok) return guard.response;
   const { cutId, warteliste } = guard.body;

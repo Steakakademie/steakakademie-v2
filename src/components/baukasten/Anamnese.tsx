@@ -7,7 +7,9 @@ import {
   type Antworten, type Ergebnis, type Frage, type Position,
 } from '@/lib/baukasten/anamnese';
 import { formatBetrag, type Waehrung } from '@/lib/baukasten/preise';
-import { CONSENT_TEXT } from '@/lib/kontakt';
+import { anfrageKoerper } from '@/lib/baukasten/anfrage';
+import { CONSENT_TEXT, KONTAKT_EMPFAENGER } from '@/lib/kontakt';
+import Turnstile, { TURNSTILE_SITE_KEY, turnstileReset } from '@/components/ui/Turnstile';
 
 /**
  * Projekt-Anamnese (KONZEPT-Website-Baukasten-2026-09-25, Abschnitt 13).
@@ -172,6 +174,19 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
   const [falle, setFalle] = useState('');
   const [status, setStatus] = useState<Status>('offen');
   const [fehler, setFehler] = useState('');
+  // Turnstile (03.10.2026): /api/kontakt verlangt ein Token, sobald das Secret
+  // gesetzt ist — ohne es antwortete die Route auf jede Anfrage mit 403.
+  // Gleiches Muster wie src/app/kontakt/page.tsx.
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const wartetAufCaptcha = Boolean(TURNSTILE_SITE_KEY) && !turnstileToken;
+  // Kommt nach ein paar Sekunden kein Token (Skript blockiert, Netz weg), bleibt
+  // der Knopf gesperrt — dann muss da stehen, warum, und wie es trotzdem geht.
+  const [captchaHaengt, setCaptchaHaengt] = useState(false);
+  useEffect(() => {
+    if (!wartetAufCaptcha) return;
+    const t = setTimeout(() => setCaptchaHaengt(true), 8000);
+    return () => clearTimeout(t);
+  }, [wartetAufCaptcha]);
 
   const wertgespraech = e.naechsterSchritt === 'wertgespraech';
 
@@ -185,7 +200,7 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
       const res = await fetch('/api/kontakt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, subject: 'baukasten', message, consent, website: falle }),
+        body: JSON.stringify(anfrageKoerper({ name, email, message, consent, website: falle, turnstileToken })),
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(j.error || 'Senden fehlgeschlagen.');
@@ -193,6 +208,10 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
     } catch (err) {
       setFehler(err instanceof Error ? err.message : 'Senden fehlgeschlagen.');
       setStatus('fehler');
+      // Ein Token gilt genau einmal — für den nächsten Versuch ein neues holen.
+      setCaptchaHaengt(false);
+      setTurnstileToken('');
+      turnstileReset();
     }
   }
 
@@ -297,10 +316,25 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
               <input type="checkbox" checked={consent} onChange={(ev) => setConsent(ev.target.checked)} required className="mt-1 h-4 w-4 accent-[#E85018]" />
               <span>{CONSENT_TEXT} Mehr in der <a href="https://steakakademie.de/datenschutz" className="underline">Datenschutzerklärung</a>.</span>
             </label>
-            {status === 'fehler' && <p role="alert" className="font-sans text-sm" style={{ color: FEUER }}>{fehler}</p>}
-            <button type="submit" disabled={status === 'sendet' || !consent}
+            {status === 'fehler' && (
+              <p role="alert" className="font-sans text-sm" style={{ color: FEUER }}>
+                {fehler} Du erreichst uns auch direkt unter{' '}
+                <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="underline">{KONTAKT_EMPFAENGER}</a>.
+              </p>
+            )}
+            {/* Unsichtbar, zeigt sich nur, wenn Cloudflare eine Interaktion braucht.
+                Rendert nur mit NEXT_PUBLIC_TURNSTILE_SITE_KEY. */}
+            <Turnstile action="baukasten" onToken={setTurnstileToken} />
+            {wartetAufCaptcha && captchaHaengt && (
+              <p role="status" className="font-sans text-sm text-[#F4EFE9]/75">
+                Die Sicherheitsprüfung lädt nicht. Bitte lade die Seite neu oder schalte den Werbeblocker für diese Seite aus —
+                oder schick deine Anfrage direkt an{' '}
+                <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="underline">{KONTAKT_EMPFAENGER}</a>.
+              </p>
+            )}
+            <button type="submit" disabled={status === 'sendet' || wartetAufCaptcha || !consent}
               className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-white disabled:opacity-40" style={{ background: FEUER }}>
-              <Send size={16} aria-hidden /> {status === 'sendet' ? 'Wird gesendet …' : wertgespraech ? 'Wertgespräch anfragen' : 'Angebot anfragen'}
+              <Send size={16} aria-hidden /> {status === 'sendet' ? 'Wird gesendet …' : wartetAufCaptcha ? 'Sicherheitsprüfung …' : wertgespraech ? 'Wertgespräch anfragen' : 'Angebot anfragen'}
             </button>
           </form>
         )}
