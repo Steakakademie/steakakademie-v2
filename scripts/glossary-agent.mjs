@@ -379,15 +379,39 @@ ${entry.praxistipp}
 
 // ─── 4. TERMS-INDEX AUFBAUEN ──────────────────────────────────────────────────
 
+/**
+ * Titel aus dem Frontmatter eines Glossar-Eintrags — mit oder ohne Anfuehrungszeichen.
+ *
+ * Bis 03.10.2026 verlangte der Index-Bau doppelte Anfuehrungszeichen
+ * (`title: "…"`). YAML braucht sie nur, wenn der Wert Sonderzeichen enthaelt;
+ * 183 von 184 Eintraegen stehen ohne da. Folge: terms.json hatte genau einen
+ * Eintrag („Rare (Englisch: Blutig)" — der einzige mit Doppelpunkt im Titel),
+ * und `--link` haette nur diesen einen Begriff verlinkt. Gelesen wird nur das
+ * Frontmatter, nicht der Fliesstext.
+ */
+export function titelAusFrontmatter (content) {
+  const fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(content)
+  if (!fm) return null
+  const m = /^title:[ \t]*(.*?)[ \t\r]*$/m.exec(fm[1])
+  if (!m) return null
+  let wert = m[1]
+  const quote = /^(["'])(.*)\1$/.exec(wert)
+  if (quote) {
+    wert = quote[1] === '"' ? quote[2].replace(/\\"/g, '"') : quote[2].replace(/''/g, "'")
+  }
+  wert = wert.trim()
+  return wert || null
+}
+
 async function buildTermsIndex() {
   const entries = []
   try {
     for (const f of await readdir(GLOSSAR_DIR)) {
       if (!f.endsWith('.mdx')) continue
       const content = await readFile(join(GLOSSAR_DIR, f), 'utf-8')
-      const titleMatch = content.match(/^title:\s*"(.+)"/m)
-      if (titleMatch) {
-        entries.push({ term: titleMatch[1], slug: basename(f, '.mdx') })
+      const term = titelAusFrontmatter(content)
+      if (term) {
+        entries.push({ term, slug: basename(f, '.mdx') })
       }
     }
   } catch { /* Glossar-Ordner noch leer */ }

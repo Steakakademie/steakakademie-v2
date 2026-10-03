@@ -6,8 +6,8 @@
  * ebenfalls mit exit 0 geendet.
  */
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
-import { laufBilanz } from './glossary-agent.mjs'
+import { readFileSync, readdirSync } from 'node:fs'
+import { laufBilanz, titelAusFrontmatter } from './glossary-agent.mjs'
 
 const basis = { quellDateien: 45, gesamt: 191 }
 
@@ -72,5 +72,47 @@ describe('glossary-agent — Absturz ist rot', () => {
 
   it('der Import dieser Datei startet keinen Lauf (Schutz fuer genau diesen Test)', () => {
     expect(quelle).toContain('import.meta.url === pathToFileURL(process.argv[1]).href')
+  })
+})
+
+// ─── terms.json: Titel mit und ohne Anfuehrungszeichen (03.10.2026) ──────────
+// Der Index-Bau las nur `title: "…"`. 183 von 184 Eintraegen stehen ohne
+// Anfuehrungszeichen da — terms.json hatte deshalb genau einen Eintrag.
+describe('glossary-agent — titelAusFrontmatter', () => {
+  const mdx = (titelZeile) => `---\n${titelZeile}\nslug: x\ncategory: Fleischkunde\n---\n\n## Definition\n\ntitle: nicht dieser\n`
+  const GLOSSAR = new URL('../content/glossar/', import.meta.url)
+  const dateien = readdirSync(GLOSSAR).filter((f) => f.endsWith('.mdx'))
+
+  it('ohne Anfuehrungszeichen — der Normalfall im Bestand', () => {
+    expect(titelAusFrontmatter(mdx('title: Bark'))).toBe('Bark')
+    expect(titelAusFrontmatter(mdx('title: 3-2-1-Methode'))).toBe('3-2-1-Methode')
+    expect(titelAusFrontmatter(mdx('title: Baby Back Ribs'))).toBe('Baby Back Ribs')
+  })
+
+  it('mit doppelten und einfachen Anfuehrungszeichen', () => {
+    expect(titelAusFrontmatter(mdx('title: "Rare (Englisch: Blutig)"'))).toBe('Rare (Englisch: Blutig)')
+    expect(titelAusFrontmatter(mdx("title: 'Dry Aged'"))).toBe('Dry Aged')
+    expect(titelAusFrontmatter(mdx('title: "Der \\"Stall\\""'))).toBe('Der "Stall"')
+  })
+
+  it('CRLF-Dateien und Leerraum am Zeilenende', () => {
+    expect(titelAusFrontmatter('---\r\ntitle: Bark  \r\nslug: bark\r\n---\r\n\r\nText')).toBe('Bark')
+  })
+
+  it('nur das Frontmatter zaehlt — ein „title:" im Fliesstext nicht', () => {
+    expect(titelAusFrontmatter('---\nslug: x\n---\n\ntitle: Falsch\n')).toBeNull()
+    expect(titelAusFrontmatter('kein Frontmatter\ntitle: Falsch\n')).toBeNull()
+    expect(titelAusFrontmatter(mdx('title:'))).toBeNull()
+  })
+
+  it('Bestand: jeder Glossar-Eintrag liefert einen Titel — der Index wird so lang wie der Ordner', () => {
+    expect(dateien.length).toBeGreaterThan(100)
+    const ohneTitel = dateien.filter((f) => !titelAusFrontmatter(readFileSync(new URL(f, GLOSSAR), 'utf-8')))
+    expect(ohneTitel).toEqual([])
+  })
+
+  it('Gegenprobe: das alte Muster (nur doppelte Anfuehrungszeichen) fand im Bestand fast nichts', () => {
+    const alt = dateien.filter((f) => /^title:\s*"(.+)"/m.test(readFileSync(new URL(f, GLOSSAR), 'utf-8')))
+    expect(alt.length).toBeLessThan(dateien.length / 10)
   })
 })
