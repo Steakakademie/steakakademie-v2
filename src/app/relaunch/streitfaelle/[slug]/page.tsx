@@ -131,6 +131,7 @@ export default function StreitfallSeite(props: Props) {
           Streitfaellen fehlte die Kennzeichnung damit ganz. */}
       <AutorHinweis
         authorSlug={doc.authorSlug}
+        dokument={doc}
         className="sk-meta sk-meta--14"
         linkClassName="sk-more"
       />

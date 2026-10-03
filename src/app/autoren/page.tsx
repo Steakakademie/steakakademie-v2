@@ -6,20 +6,26 @@ import Footer from '@/components/layout/Footer';
 import { getAllAuthors } from '@/lib/authors';
 import { breadcrumbSchema } from '@/lib/schema';
 import { ogImages } from '@/lib/og';
+import { alsSatzanfang, verantwortungsangabe } from '@/lib/pruefnachweis';
+
+// 03.10.2026: Hier stand „Fachlich geprüft und verantwortet“ — pauschal fuer alle
+// Inhalte. Eine Pruef-Aussage gibt es nur noch am einzelnen Dokument und nur mit
+// Pruefdatum (src/lib/pruefnachweis.ts); die Seite nennt die Verantwortung.
+const VERANTWORTUNG = verantwortungsangabe({ gruender: true });
+const PERSONAS_BESCHREIBUNG = `Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. ${alsSatzanfang(VERANTWORTUNG)}.`;
 
 export const metadata: Metadata = {
   // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
   // wuerde ein zweites " | Steakakademie" anhaengen und Platz in der
   // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
   title: { absolute: 'Unsere Autoren — Die Köpfe hinter der Steakakademie' },
-  description:
-    'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
+  description: PERSONAS_BESCHREIBUNG,
   alternates: { canonical: 'https://steakakademie.de/autoren' },
   openGraph: {
     images: ogImages('Unsere Autoren'),
     title: 'Unsere Autoren',
     // 03.10.2026: an die Seite angeglichen — die Vorschau stellte die Personas als Menschen dar.
-    description: 'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
+    description: PERSONAS_BESCHREIBUNG,
     url: 'https://steakakademie.de/autoren',
     type: 'website',
   },
@@ -76,7 +82,7 @@ export default function AutorenIndexPage() {
               Die Köpfe hinter<br className="hidden sm:block" /> der Steakakademie
             </h1>
             <p className="font-body text-lg text-text-secondary leading-relaxed max-w-2xl">
-              Marco, Jonas und Elena sind unsere redaktionellen KI-Personas — jede mit eigenem Blickwinkel. Alle Inhalte werden fachlich geprüft und verantwortet von Gründer Uwe Yendell (Details im KI-Disclaimer).
+              Marco, Jonas und Elena sind unsere redaktionellen KI-Personas — jede mit eigenem Blickwinkel. Alle Inhalte werden {VERANTWORTUNG} (Details im KI-Disclaimer).
             </p>
           </div>
         </section>
@@ -144,9 +150,9 @@ export default function AutorenIndexPage() {
         <section className="border-t border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
             <p className="font-body text-sm text-text-muted max-w-xl mx-auto leading-relaxed">
-              Alle Inhalte der Steakakademie fußen auf der Praxis von Gründer Uwe Yendell und werden vor
-              Veröffentlichung auf Richtigkeit geprüft. Artikel unter den Namen Marco, Jonas und Elena
-              entstehen KI-unterstützt und werden fachlich von ihm verantwortet.
+              Alle Inhalte der Steakakademie fußen auf der Praxis von Gründer Uwe Yendell. Artikel unter
+              den Namen Marco, Jonas und Elena entstehen KI-unterstützt und werden fachlich von ihm
+              verantwortet.
               Affiliate-Links sind klar gekennzeichnet —{' '}
               <Link href="/affiliate-disclosure" className="text-brand-gold hover:text-brand-fire transition-colors underline underline-offset-2">
                 Offenlegung

@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="sk-footer__brand">
           <Rauchring size={44} inner="#15120f" />
           <span className="sk-wordmark sk-wordmark--30">Steak<span>akademie</span></span>
-          <span className="sk-footer__claim">Methodisch · Geprüft · Ohne Zufall</span>
+          <span className="sk-footer__claim">Methodisch · Fachlich verantwortet · Ohne Zufall</span>
         </div>
 
         <nav className="sk-footer__cols" aria-label="Fußnavigation">

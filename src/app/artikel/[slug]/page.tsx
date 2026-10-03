@@ -7,6 +7,7 @@ import { allArtikels } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import Pruefvermerk from '@/components/Pruefvermerk';
 import { sichtbareArtikel, istEntwurf } from '@/lib/redaktion';
 // 03.09.2026: Diese Route registrierte bisher NUR HTML-Overrides. Ein MDX mit
 // <DiplomCTA> oder <AffiliateBox> unter content/artikel/ hat den Build mit
@@ -249,7 +250,8 @@ export default function ArtikelDetailPage(props: Props) {
                 </p>
                 <p className="font-body text-sm text-text-light/70">
                   Diese Seite ist nur in der Entwicklungsumgebung erreichbar. Nach der
-                  redaktionellen Prüfung <code>reviewed: true</code> setzen.
+                  redaktionellen Prüfung <code>reviewed: true</code> und das Prüfdatum{' '}
+                  <code>reviewedAt</code> setzen.
                 </p>
               </div>
             )}
@@ -282,6 +284,11 @@ export default function ArtikelDetailPage(props: Props) {
                   </>
                 ) : null}
               </div>
+              {/* Sichtbares Gegenstueck zum Pruefvermerk im JSON-LD — nur mit
+                  `reviewedAt` und, wie das Schema, nie an einem Entwurf. */}
+              {!entwurf && (
+                <Pruefvermerk dokument={artikel} className="font-sans text-xs text-text-light/50 mt-2 leading-relaxed" />
+              )}
             </div>
           </div>
         </section>

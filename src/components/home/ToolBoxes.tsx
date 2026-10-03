@@ -316,10 +316,10 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
       } else if (res.status === 429) {
         setHinweis(String(data?.error ?? 'Zu viele Anfragen — bitte gleich noch einmal versuchen.'));
       } else {
-        setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen.');
+        setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus dem Wissen der Steakakademie Rezepte erzeugen.');
       }
     } catch {
-      setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen.');
+      setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus dem Wissen der Steakakademie Rezepte erzeugen.');
     } finally {
       setLoading(false);
     }
@@ -346,7 +346,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
         <ChefHat size={18} />
         <h3 className="font-serif text-lg font-bold text-text-light">Rezept-Schmiede</h3>
       </div>
-      <p className="text-xs text-text-secondary mb-3">Rezept aus geprüftem Wissen — in deinem Schwierigkeitsgrad.</p>
+      <p className="text-xs text-text-secondary mb-3">Rezept aus dem Wissen der Steakakademie — in deinem Schwierigkeitsgrad.</p>
 
       <div className="flex gap-1.5 mb-2">
         {NIVEAUS.map(({ n, label }) => (
