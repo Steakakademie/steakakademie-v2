@@ -184,7 +184,8 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
           src={recipe.heroImage || recipe.image}
           alt={`${recipe.imageAlt} — ${recipe.imageAI ? 'KI-generiertes Symbolbild' : 'Symbolbild'}`}
           fill
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover hero-fullbleed-image"
         />

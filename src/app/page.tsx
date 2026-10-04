@@ -117,7 +117,8 @@ export default async function HomePage() {
             src={heroArticle.image}
             alt={heroArticle.imageAlt}
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             sizes="100vw"
             className="object-cover hero-fullbleed-image"
           />

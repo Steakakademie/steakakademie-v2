@@ -12,11 +12,20 @@
  * zeigt sich nur, wenn Cloudflare wirklich eine Interaktion braucht. Für die
  * meisten Besucher ändert sich an der Oberfläche nichts.
  *
+ * Lazy (seit 04.10.2026): Script und Widget laden erst bei der ersten Interaktion
+ * mit dem umgebenden Formular (Fokus, Tippen, Autofill, Tastendruck, Tippen/Klick).
+ * Messung 04.10.2026 (Lighthouse mobil): Eager geladen machte Turnstile 2,06 von
+ * 2,9 MB der Startseite aus (drei Newsletter-Formulare = drei Widgets, je ~580 KiB
+ * Challenge-Nachladung) und auf jeder Seite ~790 KiB plus 400 ms Scripting. Das
+ * Token ist in der Regel da, bevor eine E-Mail-Adresse getippt ist (nicht gemessen); Formulare, die
+ * den Knopf bis zum Token sperren, bleiben bis dahin kurz gesperrt. `eager` stellt
+ * das alte Verhalten wieder her (Login).
+ *
  * CSP: script-src und frame-src erlauben https://challenges.cloudflare.com
  * (next.config.mjs).
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
@@ -57,16 +66,34 @@ type Props = {
   appearance?: 'always' | 'execute' | 'interaction-only';
   theme?: 'light' | 'dark' | 'auto';
   className?: string;
+  /** true = sofort beim Laden rendern (altes Verhalten). Standard: erst bei Interaktion. */
+  eager?: boolean;
 };
 
-export default function Turnstile({ onToken, action, appearance = 'interaction-only', theme = 'dark', className }: Props) {
+/** Ereignisse im umgebenden Formular, die das Widget laden. `input`/`change` fangen Autofill ab. */
+export const LAZY_EREIGNISSE = ['focusin', 'pointerdown', 'touchstart', 'keydown', 'input', 'change'] as const;
+
+export default function Turnstile({ onToken, action, appearance = 'interaction-only', theme = 'dark', className, eager = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const [aktiv, setAktiv] = useState(eager);
   const idRef = useRef<string | null>(null);
   const onTokenRef = useRef(onToken);
   useEffect(() => { onTokenRef.current = onToken; }, [onToken]);
 
+  // Auslöser: erste Interaktion im Formular (Fallback: Elternelement/Dokument).
   useEffect(() => {
-    if (!TURNSTILE_SITE_KEY || !ref.current) return;
+    if (aktiv || !TURNSTILE_SITE_KEY || !ref.current) return;
+    const ziel: EventTarget = ref.current.closest('form') ?? ref.current.parentElement ?? document;
+    const los = () => {
+      setAktiv(true);
+      LAZY_EREIGNISSE.forEach((e) => ziel.removeEventListener(e, los, true));
+    };
+    LAZY_EREIGNISSE.forEach((e) => ziel.addEventListener(e, los, { capture: true, passive: true }));
+    return () => LAZY_EREIGNISSE.forEach((e) => ziel.removeEventListener(e, los, true));
+  }, [aktiv]);
+
+  useEffect(() => {
+    if (!aktiv || !TURNSTILE_SITE_KEY || !ref.current) return;
     let abgebaut = false;
     ladeScript()
       .then(() => {
@@ -91,7 +118,7 @@ export default function Turnstile({ onToken, action, appearance = 'interaction-o
       }
       idRef.current = null;
     };
-  }, [action, appearance, theme]);
+  }, [aktiv, action, appearance, theme]);
 
   if (!TURNSTILE_SITE_KEY) return null;
   return <div ref={ref} className={className} />;
