@@ -922,8 +922,10 @@ Doku-, Paper- und Bilddateien bleiben dabei außen vor — das ist kein Defekt. 
 Lauf, der `semantic_hash` füllt, ist `graphify extract . --backend gemini
 --max-concurrency 1`. Vorher immer `graphify check-update .` fragen: keine
 Ausgabe = keine Re-Extraktion fällig (08.09.2026 der Fall), dann den teuren Lauf
-sparen. Gegenprobe danach: `graphify query "datenschutz"` muss echte Symbole
-liefern (`DatenschutzPage()` mit Zeilennummer), nicht nur den Dateinamen.
+sparen. Gegenprobe danach: `graphify query "DatenschutzPage"` muss den Code liefern
+(`DatenschutzPage()` mit Zeilennummer). Das Wort „datenschutz" allein trifft
+zuerst den Abschnitt „Datenschutz" in `docs/urkunden-druck-automatisierung.md` —
+das ist kein Fehler, sondern Namensgleichheit (05.10.2026).
 
 **Die Auto-Hooks sind entfernt.** `post-commit` und `post-checkout` stießen bei
 jedem Commit bzw. Branch-Wechsel einen vollen Rebuild an. Weil ein Label-Lauf
@@ -1003,23 +1005,19 @@ liegt zwar bereit (sucht graphify zur Laufzeit statt mit absolutem Pfad), ist in
 `.claude/settings.json` aber nicht als PreToolUse-Hook verdrahtet — dort steht
 nur `SessionStart`.
 
-**Bekannter Defekt, unverändert in 0.9.56 (07.09.2026):** Drei Seiten unter
-`src/app/` melden Syntaxfehler und liefern kaum Symbole —
-`datenschutz/page.tsx` (Fehler ab Zeile 1, **0** Symbole),
-`methoden/page.tsx` (Zeile 57, 3 Symbole), `nutzungsbedingungen/page.tsx`
-(Zeile 17, 2 Symbole). Der Code ist in Ordnung: TypeScript kompiliert die
-Dateien, der Vercel-Build ist grün. Ausgeschlossen wurden außerdem BOM
-(alle drei beginnen mit `imp`, sauberes UTF-8), JSX-Fragmente (`<>` nutzen 127
-andere `.tsx` fehlerfrei) und ein nacktes `&` im JSX-Text (49 andere Dateien).
-**Heiße Spur:** `tree-sitter-typescript==0.23.2` läuft gegen
-`tree-sitter==0.25.2` — die TSX-Grammatik ist zwei Generationen älter als der
-Parser-Kern, während JavaScript und Python bereits bei 0.25 stehen; 0.23.2 ist
-zugleich die neueste veröffentlichte Version dieser Grammatik. Ein Bugreport
-gehört nach https://github.com/Graphify-Labs/graphify/issues. Reproduktion:
-
-```powershell
-graphify update .   # Warnung "3 file(s) had syntax errors" in der Ausgabe
-```
+**Parser-Defekt behoben in 0.9.61 (05.10.2026, belegt).** Bis 0.9.56 meldeten
+drei Seiten unter `src/app/` Syntaxfehler und lieferten kaum Symbole:
+`datenschutz/page.tsx` (0 Symbole), `methoden/page.tsx` (3),
+`nutzungsbedingungen/page.tsx` (2). Der Code war nie das Problem (TypeScript
+kompiliert, Vercel-Build grün). Mit graphify 0.9.61 läuft `graphify update .`
+ohne die Warnung „file(s) had syntax errors"; im Graphen stehen jetzt
+`DatenschutzPage()` (L12), `MethodenIndexPage()` und
+`NutzungsbedingungenPage()` samt `metadata`. Die Ursache ist nicht ermittelt:
+`tree-sitter-typescript` blieb bei 0.23.2 gegen `tree-sitter` 0.25.2, die frühere
+„heiße Spur" (Grammatik-Abstand) hat sich damit nicht bestätigt — vermutet wird
+eine geänderte TSX-Behandlung in graphify selbst (Annahme, nicht geprüft). Ein
+Bugreport ist nicht mehr nötig. Tritt die Warnung wieder auf: erst
+`graphify --version` und die drei Dateien prüfen, bevor etwas anderes vermutet wird.
 
 ### MCP-Server (07.09.2026, Cowork-Teil ergaenzt 09.09.2026)
 
