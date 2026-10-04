@@ -37,8 +37,9 @@ badges:
   beef_lowslow: { c: 93, range: [90, 96], label: "Low & Slow" }       # Brisket/Short Ribs — Kollagen → Gelatine
   wagyu:        { c: 52, range: [50, 54], label: "Medium Rare" }      # Fett schmilzt früh
   # Flank Steak (Teilstück-Eintrag, 05.10.2026): Werte = beef_mr und = Angabe im
-  # veröffentlichten Rezept flank-steak-grillen (52–55 °C). Abgeleitet, KEINE eigene
-  # Messreihe für dieses Teilstück — Uwe bestätigt oder korrigiert den Wert.
+  # veröffentlichten Rezept flank-steak-grillen (52–55 °C). Von Uwe bestätigt
+  # (05.10.2026). Herkunft bleibt: abgeleitet, KEINE eigene Messreihe für dieses
+  # Teilstück.
   beef_flank:   { c: 54, range: [52, 55], label: "Medium Rare" }
   lamb_mr:      { c: 56, range: [54, 57], label: "Medium Rare" }
   lamb_done:    { c: 70, range: [70, 75], label: "durch" }            # Keule durch
