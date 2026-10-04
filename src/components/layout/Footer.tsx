@@ -114,7 +114,7 @@ export default function Footer() {
             <p className="mt-3 text-sm font-body text-text-light/60 leading-relaxed max-w-[220px]">
               Deutschlands methodisch tiefste BBQ-Wissensplattform. Für Hobbygriller, die es ernst meinen.
             </p>
-            <div className="mt-5 flex items-center gap-1 text-xs font-sans text-text-light/35 tracking-widest uppercase">
+            <div className="mt-5 flex items-center gap-1 text-xs font-sans text-text-light/55 tracking-widest uppercase">
               <Flame size={12} className="text-brand-gold" />
               Seit 2026
             </div>
@@ -123,7 +123,7 @@ export default function Footer() {
           {/* Link columns */}
           {Object.entries(FOOTER_LINKS).map(([title, links]) => (
             <div key={title}>
-              <h3 className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/35 mb-4">
+              <h3 className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/55 mb-4">
                 {title}
               </h3>
               <ul className="space-y-2.5">
@@ -146,7 +146,7 @@ export default function Footer() {
       {/* Affiliate disclosure + legal */}
       <div className="border-t border-brand-gold/10">
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-[11px] font-sans text-text-light/35 leading-relaxed mb-4 max-w-3xl">
+          <p className="text-[11px] font-sans text-text-light/55 leading-relaxed mb-4 max-w-3xl">
             <strong className="text-text-light/50">Affiliate-Hinweis:</strong> Einige Links auf dieser Seite sind Affiliate-Links.
             Wenn du über sie kaufst, erhalten wir eine kleine Provision — der Preis für dich ändert sich nicht.
             Produktempfehlungen sind eine redaktionelle Einordnung nach Herstellerangaben — kein eigener Gerätetest.
@@ -158,7 +158,7 @@ export default function Footer() {
           >
             Vertrag widerrufen
           </Link>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] font-sans text-text-light/35">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] font-sans text-text-light/55">
             <span>© {year} Steakakademie</span>
             <Link href="/impressum" className="hover:text-text-light/60 transition-colors">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-text-light/60 transition-colors">Datenschutz</Link>

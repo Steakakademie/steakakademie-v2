@@ -41,7 +41,7 @@ export default function FleischwissenPage() {
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
             <Link href="/wissen" className="hover:text-brand-gold transition-colors">Wissen</Link>
@@ -85,7 +85,7 @@ export default function FleischwissenPage() {
 
                     <p className="font-body text-text-light/70 leading-relaxed mb-4">{teil.excerpt}</p>
 
-                    <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55">
                       <span className="flex items-center gap-1.5">
                         <Calendar size={12} />
                         {teil.formattedDate}

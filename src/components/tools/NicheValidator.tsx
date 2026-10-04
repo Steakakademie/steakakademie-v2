@@ -156,7 +156,7 @@ export default function NicheValidator() {
           </form>
 
           {/* Trust line */}
-          <div className="mt-8 flex items-center justify-center gap-6 flex-wrap text-[10px] font-sans tracking-[0.14em] uppercase text-text-muted/60">
+          <div className="mt-8 flex items-center justify-center gap-6 flex-wrap text-[10px] font-sans tracking-[0.14em] uppercase text-text-muted">
             <span>Powered by Claude Sonnet</span>
             <span className="hidden sm:inline">·</span>
             <span>No login required</span>
@@ -308,7 +308,7 @@ export default function NicheValidator() {
                       </div>
                       {p.searchDifficulty !== undefined && (
                         <div className="shrink-0 text-right">
-                          <span className="text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-text-muted/60 block mb-1">
+                          <span className="text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-text-muted block mb-1">
                             KD
                           </span>
                           <span className={`text-sm font-sans font-bold ${
@@ -347,7 +347,7 @@ export default function NicheValidator() {
                     )}
                     {p.buyingPower && (
                       <div className="flex items-center justify-between border-t border-border-subtle/60 pt-2">
-                        <span className="text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-text-muted/60">
+                        <span className="text-[9px] font-sans font-bold tracking-[0.14em] uppercase text-text-muted">
                           Buying Power
                         </span>
                         <div className="flex gap-0.5">
@@ -522,7 +522,7 @@ export default function NicheValidator() {
                           disabled={leadState === 'sending'}
                           className="mt-0.5 shrink-0 w-3.5 h-3.5 accent-brand-gold cursor-pointer"
                         />
-                        <span className="text-[11px] font-sans text-text-muted/70 leading-relaxed group-hover:text-text-muted transition-colors">
+                        <span className="text-[11px] font-sans text-text-muted leading-relaxed group-hover:text-text-muted transition-colors">
                           I agree to receive the analysis brief and the AuthorityOS email series.
                           Unsubscribe at any time.{' '}
                           <a href="/datenschutz" target="_blank" rel="noopener noreferrer" className="underline hover:text-brand-gold">
@@ -536,7 +536,7 @@ export default function NicheValidator() {
                         That didn’t go through — no email was sent. Please try again in a few minutes.
                       </p>
                     )}
-                    <p className="text-[10px] font-sans text-text-muted/60 mt-2">
+                    <p className="text-[10px] font-sans text-text-muted mt-2">
                       Confirmation email required (double opt-in) · Never shared
                     </p>
                   </>

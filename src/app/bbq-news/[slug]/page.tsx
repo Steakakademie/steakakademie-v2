@@ -105,7 +105,7 @@ export default async function BbqNewsDetailPage(props: Props) {
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} aria-hidden="true" />
             <Link href="/bbq-news" className="hover:text-brand-gold transition-colors">BBQ-News</Link>
@@ -162,7 +162,7 @@ export default async function BbqNewsDetailPage(props: Props) {
               (scripts/content-grow) und wird vor Veroeffentlichung in
               /admin/review von der Redaktion freigegeben. Der Satz beschreibt
               genau das — nicht mehr, nicht weniger. */}
-          <p className="mt-12 pt-5 border-t border-white/10 font-sans text-xs text-text-light/45 leading-relaxed">
+          <p className="mt-12 pt-5 border-t border-white/10 font-sans text-xs text-text-light/55 leading-relaxed">
             Dieser Beitrag wurde mit KI-Unterstützung recherchiert und verfasst und vor der Veröffentlichung
             redaktionell geprüft und freigegeben. Mehr dazu im{' '}
             <Link href="/ki-disclaimer" className="underline hover:text-brand-gold transition-colors">KI-Hinweis</Link>.

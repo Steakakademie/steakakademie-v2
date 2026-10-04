@@ -18,6 +18,7 @@ import HeroRecommendation from '@/components/affiliate/HeroRecommendation';
 import EquipmentFooter from '@/components/affiliate/EquipmentFooter';
 import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
 import BildCredit from '@/components/BildCredit';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -71,9 +72,9 @@ const mdxComponents = {
     <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-[#2C2218]" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0 rounded-md ring-1 ring-[#C3AB80]">
+    <ScrollBereich className="mb-6 -mx-4 sm:mx-0 rounded-md ring-1 ring-[#C3AB80]">
       <table className="min-w-full border-collapse font-sans text-sm bg-[#E8D8B4]" {...props}>{children}</table>
-    </div>
+    </ScrollBereich>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
     <thead className="bg-[#2D2218] text-[#F0E8D8]" {...props}>{children}</thead>
@@ -152,7 +153,7 @@ export default function MethodePage(props: Props) {
             {/* Breadcrumb — oben */}
             <div className="absolute top-0 left-0 right-0">
               <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40" aria-label="Breadcrumb">
+                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
                   <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
                   <ChevronRight size={12} />
                   <Link href="/methoden" className="hover:text-brand-gold transition-colors">Grilltechniken</Link>
@@ -170,7 +171,7 @@ export default function MethodePage(props: Props) {
               <p className="font-body text-lg text-text-light/60 leading-relaxed mb-5 max-w-2xl">
                 {methode.excerpt}
               </p>
-              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/40">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55">
                 <Link href={`/autoren/${methode.authorSlug}`} className="hover:text-brand-gold transition-colors">
                   {methode.author}
                 </Link>

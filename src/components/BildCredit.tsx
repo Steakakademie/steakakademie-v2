@@ -54,7 +54,7 @@ export default function BildCredit({ source, ai = false, variant = 'hero' }: Bil
 
   if (variant === 'inline') {
     return (
-      <p className="mt-2 text-[11px] font-sans text-text-muted/70">
+      <p className="mt-2 text-[11px] font-sans text-text-muted">
         {credit && (
           <>
             designed by {credit.autor ?? 'unbekannt'}{' '}

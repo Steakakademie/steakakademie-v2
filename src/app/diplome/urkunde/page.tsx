@@ -148,7 +148,7 @@ export default function UrkundePage() {
         {/* Header */}
         <section className="border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/diplome" className="hover:text-brand-gold transition-colors">Diplom-System</Link>
@@ -187,11 +187,11 @@ export default function UrkundePage() {
             <p className="text-brand-gold/40 text-xs uppercase tracking-[0.3em] font-sans mb-6">
               Steakakademie · Deutschland · MMXXVI
             </p>
-            <p className="text-text-light/40 text-sm font-body mb-4">Diese Urkunde bestätigt, dass</p>
+            <p className="text-text-light/55 text-sm font-body mb-4">Diese Urkunde bestätigt, dass</p>
             <p className="text-3xl md:text-5xl font-serif font-bold text-text-light mb-4 min-h-[1.4em]">
               {form.nameAufUrkunde || <span className="text-text-light/20 italic">Dein Name</span>}
             </p>
-            <p className="text-text-light/40 text-sm font-body mb-2">die Prüfung zum</p>
+            <p className="text-text-light/55 text-sm font-body mb-2">die Prüfung zum</p>
             <p className="text-2xl font-serif font-bold text-brand-gold mb-6 min-h-[1.4em]">
               {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/20 italic">Level wählen</span>}
             </p>
@@ -223,7 +223,7 @@ export default function UrkundePage() {
         {/* Bestellung */}
         <section className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
           {konto === 'laedt' && (
-            <p className="text-center text-sm font-sans text-text-light/40">Konto wird geprüft …</p>
+            <p className="text-center text-sm font-sans text-text-light/55">Konto wird geprüft …</p>
           )}
 
           {konto === null && (
@@ -310,13 +310,13 @@ export default function UrkundePage() {
                     </option>
                   ))}
                 </select>
-                <p className="mt-1.5 text-[11px] font-sans text-text-light/40">
+                <p className="mt-1.5 text-[11px] font-sans text-text-light/55">
                   Angezeigt werden nur Level aus Stufen, die in deinem Konto als bestanden stehen.
                 </p>
               </div>
 
               <div className="pt-2 border-t border-brand-gold/10">
-                <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-text-light/40 mb-3 mt-3">
+                <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-text-light/55 mb-3 mt-3">
                   Versandadresse
                 </p>
               </div>

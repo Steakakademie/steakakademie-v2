@@ -50,7 +50,7 @@ export default function CutGeneratorPage() {
       <main className="min-h-screen bg-surface-base">
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/cuts" className="hover:text-brand-gold transition-colors">Cut-Atlas</Link>
@@ -88,7 +88,7 @@ export default function CutGeneratorPage() {
         <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <CutGenerator bySpecies={bySpecies} recipeMap={recipeMap} />
 
-          <p className="text-center text-text-light/40 text-sm font-sans mt-8">
+          <p className="text-center text-text-light/55 text-sm font-sans mt-8">
             Lieber selbst stöbern?{' '}
             <Link href="/cuts" className="text-brand-gold hover:underline">Zum vollständigen Cut-Atlas →</Link>
           </p>

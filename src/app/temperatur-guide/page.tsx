@@ -143,7 +143,7 @@ export default function TemperaturGuidePage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/methoden" className="hover:text-brand-gold transition-colors">Wissen</Link>
@@ -1002,7 +1002,7 @@ export default function TemperaturGuidePage() {
                     <p className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted mb-2">{item.label}</p>
                     <p className="font-mono text-xl font-bold text-brand-fire mb-1">{item.pull}</p>
                     <p className="text-[10px] font-sans text-text-muted">vom Grill nehmen</p>
-                    <div className="my-2 text-text-muted/50 text-xs">↓ Ruhe</div>
+                    <div className="my-2 text-text-muted text-xs">↓ Ruhe</div>
                     <p className="font-mono text-lg font-bold text-brand-gold">{item.final}</p>
                     <p className="text-[10px] font-sans text-text-muted">Serviertemperatur</p>
                   </div>

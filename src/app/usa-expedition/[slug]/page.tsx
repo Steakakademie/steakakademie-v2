@@ -10,6 +10,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ChevronRight, MapPin, Flame } from 'lucide-react';
 import { authorSchemaRef } from '@/lib/schema';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -90,9 +91,9 @@ const mdxComponents = {
     </blockquote>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto my-6">
+    <ScrollBereich className="my-6">
       <table className="w-full text-sm border-collapse" {...props}>{children}</table>
-    </div>
+    </ScrollBereich>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <th className="bg-surface-raised px-4 py-2 text-left font-semibold text-text-primary border border-border-subtle" {...props}>

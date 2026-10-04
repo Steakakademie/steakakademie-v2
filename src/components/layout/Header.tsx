@@ -167,7 +167,7 @@ export default function Header() {
         Gratis: der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite
         <Link
           href="/kerntemperatur-spickzettel"
-          className="ml-3 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors"
+          className="ml-3 inline-block py-1.5 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors"
         >
           Jetzt sichern →
         </Link>
@@ -187,7 +187,7 @@ export default function Header() {
             <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-2.5 shrink-0">
               <Image
                 src="/images/logo-barrel.jpg"
-                alt="Steakakademie"
+                alt=""
                 width={56}
                 height={56}
                 className="rounded-full object-cover"
@@ -268,14 +268,14 @@ export default function Header() {
             >
               <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 <form onSubmit={handleSearch} className="flex items-center gap-3">
-                  <Search size={16} className="text-text-light/40 shrink-0" />
+                  <Search size={16} className="text-text-light/55 shrink-0" />
                   <input
                     ref={searchRef}
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Brisket, Thermometer, Reverse Sear …"
-                    className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
+                    className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/55 border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
                   />
                   <button
                     type="submit"
@@ -286,7 +286,7 @@ export default function Header() {
                   <button
                     type="button"
                     onClick={() => setSearchOpen(false)}
-                    className="text-text-light/40 hover:text-text-light transition-colors"
+                    className="text-text-light/55 hover:text-text-light transition-colors"
                   >
                     <X size={16} />
                   </button>
@@ -363,7 +363,7 @@ export default function Header() {
             transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
           >
             <div className="p-6">
-              <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-4">
+              <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/55 mb-4">
                 Kategorien
               </p>
               <ul className="space-y-0">
@@ -382,7 +382,7 @@ export default function Header() {
                   auf dem Handy kein Menuepunkt zu Aroma-Matcher, Hofladen-Radar & Co. */}
               {NAV_CATEGORIES.filter((c) => c.name === 'Tools').map((tools) => (
                 <div key="tools-mobile" className="mt-6">
-                  <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-3">
+                  <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/55 mb-3">
                     Werkzeuge
                   </p>
                   <ul className="grid grid-cols-2 gap-x-4 gap-y-2">

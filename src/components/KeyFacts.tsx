@@ -71,7 +71,7 @@ export default function KeyFacts({ facts, title = 'Kurz & knapp', quelle, varian
       </dl>
 
       {quelle && (
-        <p className={`mt-4 font-sans text-[11px] ${dunkel ? 'text-text-light/45' : 'text-text-muted'}`}>{quelle}</p>
+        <p className={`mt-4 font-sans text-[11px] ${dunkel ? 'text-text-light/55' : 'text-text-muted'}`}>{quelle}</p>
       )}
     </aside>
   );

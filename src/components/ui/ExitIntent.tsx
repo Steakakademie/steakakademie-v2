@@ -154,7 +154,7 @@ export default function ExitIntent() {
 
               <button
                 onClick={() => setVisible(false)}
-                className="w-full text-center text-[10px] font-sans text-text-muted/50 hover:text-text-muted transition-colors pb-4"
+                className="w-full text-center text-[10px] font-sans text-text-muted hover:text-text-muted transition-colors pb-4"
               >
                 Nein danke, ich verpasse das lieber
               </button>

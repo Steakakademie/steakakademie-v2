@@ -57,7 +57,7 @@ export default function StreitfaellePage() {
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
             <span className="text-text-light/65">Streitfälle</span>
@@ -115,7 +115,7 @@ export default function StreitfaellePage() {
                       {s.merksatz}
                     </p>
                   ) : (
-                    <span className="font-sans text-xs text-text-light/40">Entscheidung folgt</span>
+                    <span className="font-sans text-xs text-text-light/55">Entscheidung folgt</span>
                   )}
                 </Link>
               ))}

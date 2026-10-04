@@ -1,5 +1,6 @@
 import type React from 'react';
 import { Schnelluebersicht, Achtung, ProTipp, Leitfrage, Umweg, Werkzeug, Ergebnis, Rechtlich } from '@/components/mdx/Callouts';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 /** MDX-Bausteine der Eigenregie-Module (Server-Komponenten). */
 export const eigenregieMdx = {
@@ -18,7 +19,7 @@ export const eigenregieMdx = {
   strong: (p: React.HTMLAttributes<HTMLElement>) => <strong className="font-bold text-text-primary" {...p} />,
   a: (p: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a className="text-brand-fire underline hover:no-underline" {...p} />,
   table: (p: React.TableHTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto my-6"><table className="w-full text-sm font-body border-collapse" {...p} /></div>
+    <ScrollBereich className="my-6"><table className="w-full text-sm font-body border-collapse" {...p} /></ScrollBereich>
   ),
   th: (p: React.ThHTMLAttributes<HTMLTableCellElement>) => <th className="text-left font-sans font-bold text-text-primary border-b-2 border-border-subtle py-2 pr-4 align-top" {...p} />,
   td: (p: React.TdHTMLAttributes<HTMLTableCellElement>) => <td className="border-b border-border-subtle py-2 pr-4 text-text-secondary align-top" {...p} />,

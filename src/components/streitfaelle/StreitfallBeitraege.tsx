@@ -143,7 +143,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
                   )}&body=${encodeURIComponent(
                     'Gemeldeter Beitrag von "' + b.anzeigename + '" (' + slug + ')\n\nGrund der Meldung:\n',
                   )}`}
-                  className="font-sans text-[11px] text-text-light/40 underline underline-offset-2 hover:text-text-light/70 shrink-0"
+                  className="font-sans text-[11px] text-text-light/55 underline underline-offset-2 hover:text-text-light/70 shrink-0"
                   aria-label={`Beitrag von ${b.anzeigename} melden`}
                 >
                   Inhalt melden
@@ -153,7 +153,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
           ))}
         </ul>
       ) : (
-        <p className="font-sans text-xs text-text-light/45">
+        <p className="font-sans text-xs text-text-light/55">
           Noch keine Stimmen — deine könnte die erste sein.
         </p>
       )}
@@ -161,7 +161,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
       {/* Formular: nur fuer Angemeldete, ein Beitrag je Nutzer und Streitfall. */}
       {angemeldet && !schonEingereicht && (
         <form onSubmit={einreichen} className="mt-6 space-y-3">
-          <p className="font-sans text-xs text-text-light/45">
+          <p className="font-sans text-xs text-text-light/55">
             Wie machst du es? Kurz und konkret — veröffentlicht wird nur eine Auswahl,
             mit Vorname und Ort.
           </p>
@@ -188,7 +188,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
             style={{ border: '1px solid rgba(200,136,42,0.18)', background: 'rgba(0,0,0,0.25)' }}
           />
           <div className="flex items-center justify-between gap-4">
-            <span className="font-sans text-xs text-text-light/45 tabular-nums">
+            <span className="font-sans text-xs text-text-light/55 tabular-nums">
               {text.length}/{MAX_ZEICHEN} Zeichen
             </span>
             <button
@@ -204,14 +204,14 @@ export default function StreitfallBeitraege({ slug }: Props) {
       )}
 
       {angemeldet && schonEingereicht && (
-        <p className="mt-4 font-sans text-xs text-text-light/45">
+        <p className="mt-4 font-sans text-xs text-text-light/55">
           {hinweis ??
             'Du hast zu diesem Streitfall schon einen Beitrag geschrieben. Beiträge werden gelegentlich gesichtet, veröffentlicht wird nur eine Auswahl.'}
         </p>
       )}
 
       {angemeldet === false && (
-        <p className="mt-4 font-sans text-xs text-text-light/45">
+        <p className="mt-4 font-sans text-xs text-text-light/55">
           <Link href="/auth/login" className="text-brand-gold hover:underline">
             Anmelden
           </Link>

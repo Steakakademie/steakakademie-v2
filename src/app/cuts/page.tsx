@@ -79,7 +79,7 @@ export default function CutsPage() {
         {/* Hero */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Cut-Atlas</span>
@@ -184,7 +184,7 @@ export default function CutsPage() {
                 <Download size={15} />
                 Poster herunterladen
               </a>
-              <p className="font-sans text-xs text-text-light/45 leading-relaxed">
+              <p className="font-sans text-xs text-text-light/55 leading-relaxed">
                 SVG, 16:9 — auf dem Telefon am besten antippen und in voller Größe öffnen.
                 Für die Küchenwand in jeder gewünschten Größe ausdruckbar.
               </p>
@@ -210,7 +210,7 @@ export default function CutsPage() {
 
         {/* CTA */}
         <section className="border-t border-border-subtle py-14 px-4 text-center bg-surface-dark">
-          <p className="text-text-light/40 text-sm font-sans mb-2">Wissen allein reicht nicht.</p>
+          <p className="text-text-light/55 text-sm font-sans mb-2">Wissen allein reicht nicht.</p>
           <h3 className="font-serif text-2xl font-bold text-text-light mb-6">Werde zum Master of Steak.</h3>
           <Link
             href="/diplome"

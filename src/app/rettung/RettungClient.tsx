@@ -137,7 +137,7 @@ export default function RettungClient() {
         {/* Header */}
         <section className="border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Steak-Rettung</span>
@@ -176,7 +176,7 @@ export default function RettungClient() {
                     <span className="text-3xl">{s.emoji}</span>
                     <div>
                       <p className="font-serif text-lg font-bold text-text-light">{s.problem}</p>
-                      <p className="mt-0.5 text-sm font-body text-text-light/40">{s.symptom}</p>
+                      <p className="mt-0.5 text-sm font-body text-text-light/55">{s.symptom}</p>
                     </div>
                   </div>
                   <Plus

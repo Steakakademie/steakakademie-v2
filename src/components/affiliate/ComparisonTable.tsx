@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 import { amazonBewertung, klickKlassen, produktLink } from './produkt-anzeige';
 import PreisMitStand from './PreisMitStand';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface ComparisonTableProps {
   products: Product[];
@@ -43,7 +44,7 @@ function StarRating({ rating }: { rating: number }) {
 export default function ComparisonTable({ products, className }: ComparisonTableProps) {
   return (
     <div className={cn('w-full', className)}>
-      <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+      <ScrollBereich className="-mx-4 px-4 md:mx-0 md:px-0">
         <table className="w-full min-w-[620px] border-collapse">
           <thead>
             <tr className="bg-text-primary text-white">
@@ -162,7 +163,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
             })}
           </tbody>
         </table>
-      </div>
+      </ScrollBereich>
       {/* Der Provisions-Hinweis steht nur, wenn die Tabelle mindestens einen
           Partnerlink zeigt — und sagt, woran man ihn erkennt. */}
       <p className="text-[10px] font-sans text-text-muted mt-2 italic">

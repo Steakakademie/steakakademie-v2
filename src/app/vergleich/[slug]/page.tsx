@@ -25,6 +25,7 @@ import {
 } from '@/lib/schema';
 import { Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -82,9 +83,9 @@ const mdxComponents = {
     <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-text-light/75" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0">
+    <ScrollBereich className="mb-6 -mx-4 sm:mx-0">
       <table className="min-w-full border-collapse font-sans text-sm" {...props}>{children}</table>
-    </div>
+    </ScrollBereich>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
     <thead style={{ backgroundColor: '#0D0D0D' }} {...props}>{children}</thead>
@@ -191,7 +192,7 @@ export default function VergleichPage(props: Props) {
       <main>
         {/* Breadcrumb */}
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
             <Link href="/vergleich" className="hover:text-brand-gold transition-colors">Vergleiche</Link>
@@ -221,7 +222,7 @@ export default function VergleichPage(props: Props) {
 
                 {/* Author meta */}
                 <div
-                  className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45 pb-6"
+                  className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55 pb-6"
                   style={{ borderBottom: '1px solid rgba(200,136,42,0.15)' }}
                 >
                   <Link href={`/autoren/${vergleich.authorSlug}`} className="flex items-center gap-2 hover:text-brand-gold transition-colors">
@@ -252,7 +253,7 @@ export default function VergleichPage(props: Props) {
                   priority
                 />
               </div>
-              <p className="text-xs font-sans text-text-light/40 mb-1 italic">
+              <p className="text-xs font-sans text-text-light/55 mb-1 italic">
                 {vergleich.imageAlt}
               </p>
               {/* Bildnachweis unter der Bildunterschrift — diese Seite hat keinen

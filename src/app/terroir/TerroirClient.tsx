@@ -148,7 +148,7 @@ export default function TerroirClient() {
         {/* Header */}
         <section className="border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Meat-Terroir</span>
@@ -180,7 +180,7 @@ export default function TerroirClient() {
               <div key={item.title} className="border border-brand-gold/15 bg-surface-elevated p-5 text-center">
                 <p className="mb-2 text-3xl">{item.emoji}</p>
                 <p className="mb-1 font-serif text-base font-bold text-text-light">{item.title}</p>
-                <p className="text-xs font-body leading-relaxed text-text-light/40">{item.text}</p>
+                <p className="text-xs font-body leading-relaxed text-text-light/55">{item.text}</p>
               </div>
             ))}
           </div>
@@ -209,7 +209,7 @@ export default function TerroirClient() {
                   </span>
                 </div>
                 <p className="mb-0.5 font-serif text-lg font-bold text-text-light">{o.region}</p>
-                <p className="mb-3 text-xs font-sans text-text-light/40">{o.land} · {o.rasse}</p>
+                <p className="mb-3 text-xs font-sans text-text-light/55">{o.land} · {o.rasse}</p>
 
                 {/* Intensitäts-Bar */}
                 <div className="mb-3">
@@ -227,7 +227,7 @@ export default function TerroirClient() {
 
                 <div className="flex flex-wrap gap-1">
                   {o.geschmacksprofil.map((g) => (
-                    <span key={g} className="bg-surface-dark px-2 py-0.5 text-[10px] font-sans text-text-light/40">
+                    <span key={g} className="bg-surface-dark px-2 py-0.5 text-[10px] font-sans text-text-light/55">
                       {g}
                     </span>
                   ))}
@@ -257,7 +257,7 @@ export default function TerroirClient() {
               >
                 <button
                   onClick={() => setSelected(null)}
-                  className="mb-4 flex items-center gap-2 text-xs font-sans text-text-light/40 hover:text-brand-gold transition-colors"
+                  className="mb-4 flex items-center gap-2 text-xs font-sans text-text-light/55 hover:text-brand-gold transition-colors"
                 >
                   <X size={14} />
                   Zurück zur Übersicht

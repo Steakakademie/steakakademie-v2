@@ -48,7 +48,7 @@ export default function CutBestellen({ cut, kategorie }: { cut?: string; kategor
               </a>
             ))}
           </div>
-          <p className="text-[10px] font-sans text-text-muted/70 mt-3">
+          <p className="text-[10px] font-sans text-text-muted mt-3">
             Einfache Suchlinks, keine Affiliate-Links — wir bekommen dafür keine Provision. Sortiment,
             Preis und Versand liegen beim jeweiligen Händler.
           </p>

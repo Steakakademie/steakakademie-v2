@@ -137,7 +137,7 @@ export default function Glutbett({ slugs, color, variant = 'klein', label = true
       </div>
 
       {label && (
-        <p className="mt-2 font-sans text-[11px] tracking-wide text-text-light/45">
+        <p className="mt-2 font-sans text-[11px] tracking-wide text-text-light/55">
           {vollstaendig
             ? 'Das Feuer brennt — alle Lektionen verstanden.'
             : `${anzahl} von ${gesamt} Kohlen glühen`}

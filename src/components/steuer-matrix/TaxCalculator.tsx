@@ -167,7 +167,7 @@ export default function TaxCalculator() {
           const groupCountries = COUNTRIES.filter((c) => c.group === group);
           return (
             <div key={group} className="mb-3">
-              <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted/60 mr-2">
+              <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted mr-2">
                 {groupLabel[group]}
               </span>
               <div className="inline-flex flex-wrap gap-1.5 mt-1">

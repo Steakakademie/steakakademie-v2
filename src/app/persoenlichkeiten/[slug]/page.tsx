@@ -164,7 +164,7 @@ export default function PersoenlichkeitPage(props0: Props) {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/persoenlichkeiten" className="hover:text-brand-gold transition-colors">Persönlichkeiten</Link>
@@ -177,8 +177,8 @@ export default function PersoenlichkeitPage(props0: Props) {
               <span className="text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-brand-fire bg-brand-fire/10 px-3 py-1">
                 {CATEGORY_LABELS[person.category] ?? person.category}
               </span>
-              <span className="text-text-light/40 text-xs font-sans">{person.nationality}</span>
-              {person.born && <span className="text-text-light/40 text-xs font-sans">*{person.born}</span>}
+              <span className="text-text-light/55 text-xs font-sans">{person.nationality}</span>
+              {person.born && <span className="text-text-light/55 text-xs font-sans">*{person.born}</span>}
 
               {/* Read time — credibility signal */}
               <span className="flex items-center gap-1 text-text-light/30 text-xs font-sans ml-auto">
@@ -353,7 +353,7 @@ export default function PersoenlichkeitPage(props0: Props) {
                     <h3 className="font-serif font-bold text-text-light text-sm leading-snug mb-1 group-hover:text-brand-gold transition-colors">
                       {p.title.split('—')[0].trim()}
                     </h3>
-                    <p className="text-text-light/40 text-xs font-sans mb-3">{p.nationality}</p>
+                    <p className="text-text-light/55 text-xs font-sans mb-3">{p.nationality}</p>
                     {/* Micro-claim for skim-readers */}
                     <p className="text-[10px] font-body text-text-light/30 leading-relaxed line-clamp-2">
                       {p.claim}
