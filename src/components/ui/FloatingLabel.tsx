@@ -114,7 +114,7 @@ export function FloatingLabelTextarea({
         <span
           className={
             'absolute bottom-3 right-3.5 text-[10px] font-sans pointer-events-none ' +
-            (near ? 'text-brand-fire' : 'text-text-muted/50')
+            (near ? 'text-brand-fire' : 'text-text-muted')
           }
         >
           {value.length}/{maxLength}

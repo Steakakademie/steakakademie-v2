@@ -18,6 +18,7 @@ import BildCredit from '@/components/BildCredit';
 import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
 import KeyFacts from '@/components/KeyFacts';
 import { inhaltsverzeichnis, knotenText, ueberschriftSlug } from '@/lib/inhaltsverzeichnis';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -89,17 +90,17 @@ const mdxComponents = {
     </ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0">
+    <ScrollBereich className="mb-6 -mx-4 sm:mx-0">
       <table
         className="min-w-full border-collapse font-sans text-sm"
         {...props}
       >
         {children}
       </table>
-    </div>
+    </ScrollBereich>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead className="bg-text-muted text-white" {...props}>
+    <thead className="bg-surface-elevated text-text-light" {...props}>
       {children}
     </thead>
   ),
@@ -223,7 +224,7 @@ export default function CutPage(props: Props) {
             {/* Breadcrumb — oben */}
             <div className="absolute top-0 left-0 right-0">
               <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40" aria-label="Breadcrumb">
+                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
                   <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
                   <ChevronRight size={12} />
                   <Link href="/kategorie/cuts" className="hover:text-brand-gold transition-colors">Cuts &amp; Fleischkunde</Link>
@@ -241,7 +242,7 @@ export default function CutPage(props: Props) {
               <p className="font-body text-lg text-text-light/60 leading-relaxed mb-5 max-w-2xl">
                 {cut.excerpt}
               </p>
-              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/40">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55">
                 <Link href={`/autoren/${cut.authorSlug}`} className="hover:text-brand-gold transition-colors">
                   {cut.author}
                 </Link>

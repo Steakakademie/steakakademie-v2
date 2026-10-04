@@ -61,7 +61,7 @@ export default function RedeemForm({ initialCode = '' }: { initialCode?: string 
           placeholder="SA-XXXX-XXXX"
           autoComplete="off"
           spellCheck={false}
-          className="w-full bg-surface-base border border-border-subtle px-4 py-3 font-mono text-lg tracking-widest text-text-primary uppercase placeholder:text-text-muted/50 focus:border-brand-gold transition-colors duration-150"
+          className="w-full bg-surface-base border border-border-subtle px-4 py-3 font-mono text-lg tracking-widest text-text-primary uppercase placeholder:text-text-muted focus:border-brand-gold transition-colors duration-150"
         />
       </div>
 

@@ -429,7 +429,7 @@ nav a, header button, .nav-sharp {
 .hof-popup { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
 .hof-popup strong { color: #F0E8D8; font-size: 14px; }
 .hof-popup a { color: #E85018; font-weight: 700; }
-.leaflet-control-attribution { background: rgba(15, 10, 6, .85) !important; color: #947D6C !important; font-size: 10px; }
+.leaflet-control-attribution { background: rgba(15, 10, 6, .85) !important; color: #9F8A7B !important; font-size: 10px; }
 .leaflet-control-attribution a { color: #C4A882 !important; }
 .leaflet-bar a { background: #1E1410 !important; color: #E6D5C3 !important; border-color: #3A2A1E !important; }
 .theme-ember .leaflet-container { background: #F1EDE4; }/* ── GLUTBETT (09.09.2026) ───────────────────────────────────────────────
@@ -556,4 +556,12 @@ nav a, header button, .nav-sharp {
   .sa-beam__rot, .sa-goldglanz, .sa-manifest-glut, .sa-cta-puls { animation: none; }
   .sa-cta-puls { opacity: 0.6; }
   .sa-glutfunke, .sa-linienimpuls { display: none; }
+}
+
+/* Breadcrumb-Links: Trefferfläche mindestens 24 px hoch (WCAG 2.2 / 2.5.8).
+   Zentral statt an 80 Stellen; der Text bleibt 12 px, nur die Fläche wächst. */
+nav[aria-label="Breadcrumb"] a {
+  display: inline-block;
+  min-width: 24px;
+  padding-block: 0.4rem;
 }

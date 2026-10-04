@@ -271,7 +271,7 @@ export default function DiplomeClient({
             </div>
             <Link
               href="/manifest"
-              className="inline-block text-xs font-sans text-text-muted/50 hover:text-text-muted transition-colors"
+              className="inline-block text-xs font-sans text-text-muted hover:text-text-muted transition-colors"
             >
               Das Steak-Manifest &rarr;
             </Link>
@@ -307,7 +307,7 @@ export default function DiplomeClient({
                 </div>
               ))}
             </div>
-            <p className="text-text-light/30 text-xs font-sans mt-4">
+            <p className="text-text-light/55 text-xs font-sans mt-4">
               Stufe 1 ist frei zugänglich &mdash; die weiteren Stufen folgen Schritt für Schritt
             </p>
           </div>

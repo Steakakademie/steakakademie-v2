@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 const inputCls =
   'w-full bg-surface-elevated border border-border-subtle px-3 py-2.5 text-sm font-body ' +
-  'text-text-primary placeholder:text-text-muted/55 focus:border-brand-gold ' +
+  'text-text-primary placeholder:text-text-muted focus:border-brand-gold ' +
   'focus:ring-1 focus:ring-brand-gold/25 transition-colors';
 
 const selectCls =

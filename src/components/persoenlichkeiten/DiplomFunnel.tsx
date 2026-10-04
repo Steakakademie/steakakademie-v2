@@ -87,7 +87,7 @@ export default function DiplomFunnel({ personName, personClaim }: DiplomFunnelPr
         </Link>
 
         {/* Social proof micro-copy */}
-        <p className="text-[10px] font-sans text-text-light/30 mt-4">
+        <p className="text-[10px] font-sans text-text-light/55 mt-4">
           Kostenlos · Kein Account nötig · Jederzeit weiter
         </p>
 

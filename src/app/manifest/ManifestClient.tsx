@@ -79,7 +79,7 @@ export default function ManifestClient() {
         {/* Header */}
         <section className="border-b border-brand-gold/15 py-20 px-4">
           <div className="max-w-editorial mx-auto">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-8" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-8" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Das Manifest</span>

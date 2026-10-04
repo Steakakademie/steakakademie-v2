@@ -14,6 +14,7 @@ import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
 import { serie, teilBySlug, nachbarn } from '@/lib/fleischwissen';
 import { Calendar, Clock, ChevronRight, ChevronLeft, RotateCcw } from 'lucide-react';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -79,9 +80,9 @@ const mdxComponents = {
     <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-text-light/75" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0">
+    <ScrollBereich className="mb-6 -mx-4 sm:mx-0">
       <table className="min-w-full border-collapse font-sans text-sm" {...props}>{children}</table>
-    </div>
+    </ScrollBereich>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
     <thead style={{ backgroundColor: '#0D0D0D' }} {...props}>{children}</thead>
@@ -156,7 +157,7 @@ export default function FleischwissenArtikel(props: Props) {
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
             <Link href="/wissen" className="hover:text-brand-gold transition-colors">Wissen</Link>
@@ -177,7 +178,7 @@ export default function FleischwissenArtikel(props: Props) {
               <p className="font-body text-lg text-text-light/75 leading-relaxed mb-6">{doc.excerpt}</p>
 
               <div
-                className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45 pb-6"
+                className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55 pb-6"
                 style={{ borderBottom: '1px solid rgba(200,136,42,0.15)' }}
               >
                 <Link href={`/autoren/${doc.authorSlug}`} className="hover:text-brand-gold transition-colors">

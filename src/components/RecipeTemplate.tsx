@@ -222,7 +222,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
           <div className="absolute top-0 left-0 right-0">
             <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
               <nav
-                className="flex items-center gap-1.5 text-xs font-sans text-text-light/40"
+                className="flex items-center gap-1.5 text-xs font-sans text-text-light/55"
                 aria-label="Breadcrumb"
               >
                 <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
@@ -245,7 +245,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
             <p className="font-body text-lg text-text-light/60 leading-relaxed mb-5 max-w-2xl">
               {recipe.description}
             </p>
-            <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/40">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55">
               <Link
                 href={`/autoren/${recipe.authorSlug}`}
                 className="hover:text-brand-gold transition-colors"

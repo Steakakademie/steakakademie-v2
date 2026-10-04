@@ -39,7 +39,7 @@ export default function ArticleCard({
           <p className="font-body text-base leading-relaxed mb-4 line-clamp-3 text-text-light/70">
             {excerpt}
           </p>
-          <div className="flex items-center gap-2 text-xs font-sans text-text-light/45">
+          <div className="flex items-center gap-2 text-xs font-sans text-text-light/55">
             <span>{author}</span>
             <span className="text-brand-gold/40">—</span>
             <span>{formattedDate}</span>
@@ -78,7 +78,7 @@ export default function ArticleCard({
               {title}
             </h3>
           </Link>
-          <p className="text-[11px] font-sans text-text-light/45 mt-1.5">{formattedDate}</p>
+          <p className="text-[11px] font-sans text-text-light/55 mt-1.5">{formattedDate}</p>
         </div>
       </article>
     );
@@ -110,7 +110,7 @@ export default function ArticleCard({
           <p className="font-body text-sm text-text-light/65 leading-relaxed line-clamp-2 hidden sm:block mb-2">
             {excerpt}
           </p>
-          <div className="flex items-center gap-2 text-xs font-sans text-text-light/45">
+          <div className="flex items-center gap-2 text-xs font-sans text-text-light/55">
             <span>{author}</span>
             <span className="text-brand-gold/40">—</span>
             <span>{formattedDate}</span>
@@ -141,7 +141,7 @@ export default function ArticleCard({
         <h2 className="font-serif text-xl font-bold mt-2 mb-2 leading-snug article-title-link group-hover:text-brand-gold line-clamp-3">
           {title}
         </h2>
-        <div className="flex items-center gap-2 text-xs font-sans text-text-light/45 mb-2">
+        <div className="flex items-center gap-2 text-xs font-sans text-text-light/55 mb-2">
           <span>{author}</span>
           <span className="text-brand-gold/40">—</span>
           <span>{formattedDate}</span>

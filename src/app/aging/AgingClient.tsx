@@ -129,7 +129,7 @@ function MetricBar({ value, label, accentClass }: { value: number; label: string
   return (
     <div>
       <div className="mb-1 flex justify-between text-xs font-sans">
-        <span className="text-text-light/40">{label}</span>
+        <span className="text-text-light/55">{label}</span>
         <span className={accentClass}>{value}%</span>
       </div>
       <div className="h-1.5 overflow-hidden bg-surface-dark">
@@ -155,7 +155,7 @@ export default function AgingClient() {
         {/* Header */}
         <section className="border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Aging Matrix</span>
@@ -257,7 +257,7 @@ export default function AgingClient() {
                   <p className="mb-2 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/30">Risiken & Anforderungen</p>
                   <ul className="space-y-1">
                     {active.risiken.map((r) => (
-                      <li key={r} className="flex gap-2 text-xs font-body text-text-light/40">
+                      <li key={r} className="flex gap-2 text-xs font-body text-text-light/55">
                         <span className="mt-0.5 text-brand-gold/50">›</span>
                         {r}
                       </li>

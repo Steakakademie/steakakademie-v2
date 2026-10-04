@@ -131,7 +131,7 @@ export default function GlossarPage() {
               <p className="font-body text-text-muted text-lg">
                 Das Glossar wird beim nächsten Build automatisch befüllt.
               </p>
-              <p className="font-mono text-xs text-text-muted/50 mt-2">
+              <p className="font-mono text-xs text-text-muted mt-2">
                 node scripts/glossary-agent.mjs
               </p>
             </div>

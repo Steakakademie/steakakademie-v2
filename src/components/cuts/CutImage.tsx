@@ -85,7 +85,7 @@ export default function CutImage({ src, alt, label, className = '', accent = '#C
           >
             {label.charAt(0)}
           </span>
-          <span className="mt-1 text-[9px] font-sans uppercase tracking-[0.12em] text-text-light/40">
+          <span className="mt-1 text-[9px] font-sans uppercase tracking-[0.12em] text-text-light/55">
             Foto folgt
           </span>
         </div>

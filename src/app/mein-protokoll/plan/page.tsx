@@ -181,7 +181,7 @@ export default async function PlanPage(props: { searchParams: Promise<{ nr?: str
                   Ausrüstung ansehen <ArrowRight size={15} />
                 </Link>
               </div>
-              <p className="text-[10px] font-sans text-text-muted/60 mt-3">Unabhängige Empfehlungen — keine bezahlten Platzierungen.</p>
+              <p className="text-[10px] font-sans text-text-muted mt-3">Unabhängige Empfehlungen — keine bezahlten Platzierungen.</p>
             </div>
 
             {/* Newsletter-Anmeldung (Element 2). Bis 02.10.2026 versprach sie eine

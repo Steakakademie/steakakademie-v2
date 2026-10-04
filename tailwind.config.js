@@ -26,7 +26,7 @@ module.exports = {
         // Text — warm on dark
         'text-primary':     '#E6D5C3',   // main body text
         'text-secondary':   '#C4A882',   // secondary text
-        'text-muted':       '#947D6C',   // captions/meta — WCAG AA: 4.85:1 auf surface-base (war #7A6558 = 3.43:1, FAIL)
+        'text-muted':       '#9F8A7B',   // captions/meta — WCAG AA: 4,72:1 auf surface-elevated, 5,5:1+ auf den übrigen Flächen (04.10.2026; war #947D6C = 4,00:1 auf elevated)
         'text-light':       '#F0E8D8',   // headings/emphasis on dark
 
         // Borders — subtle on dark
@@ -49,12 +49,12 @@ module.exports = {
             '--tw-prose-headings':      '#E6D5C3',
             '--tw-prose-links':         '#E85018',
             '--tw-prose-bold':          '#F0E8D8',
-            '--tw-prose-counters':      '#947D6C',
+            '--tw-prose-counters':      '#9F8A7B',
             '--tw-prose-bullets':       '#C8882A',
             '--tw-prose-hr':            '#3A2A1E',
             '--tw-prose-quotes':        '#E6D5C3',
             '--tw-prose-quote-borders': '#C8882A',
-            '--tw-prose-captions':      '#947D6C',
+            '--tw-prose-captions':      '#9F8A7B',
             '--tw-prose-code':          '#E85018',
             '--tw-prose-pre-bg':        '#1E1410',
             fontFamily:  'Source Serif 4, Georgia, serif',

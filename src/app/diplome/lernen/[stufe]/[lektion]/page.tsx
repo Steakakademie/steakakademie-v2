@@ -156,7 +156,7 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
         {/* Header-Band */}
         <section className="bg-surface-dark border-b" style={{ borderColor: `${meta.color}30` }}>
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/diplome" className="hover:text-brand-gold transition-colors">Diplom-System</Link>
@@ -172,7 +172,7 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
               >
                 Stufe {lektion.stufe} · {meta.cert}
               </span>
-              <span className="text-[10px] font-sans text-text-light/40 uppercase tracking-wider">
+              <span className="text-[10px] font-sans text-text-light/55 uppercase tracking-wider">
                 Lektion {lektion.order} · Level {lektion.level}
               </span>
             </div>

@@ -183,7 +183,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
               Dein perfekter Cut
             </span>
             <h2 className="font-serif text-3xl font-bold text-text-light mt-1.5">{result.nameDE}</h2>
-            <p className="text-text-light/40 text-sm italic">{result.nameEN}</p>
+            <p className="text-text-light/55 text-sm italic">{result.nameEN}</p>
             <p className="font-body text-text-light/75 text-sm leading-relaxed mt-3">{result.blurb}</p>
 
             <div className="mt-4">
@@ -232,7 +232,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
         {/* Alternativen */}
         {alternatives.length > 0 && (
           <div className="border-t border-brand-gold/10 px-6 sm:px-8 py-6">
-            <h3 className="text-[10px] font-sans font-bold text-text-light/40 uppercase tracking-[0.18em] mb-3">
+            <h3 className="text-[10px] font-sans font-bold text-text-light/55 uppercase tracking-[0.18em] mb-3">
               Passt auch zu dir
             </h3>
             <div className="grid grid-cols-3 gap-3">
@@ -266,7 +266,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
             className={`px-4 py-2 text-sm font-sans font-bold border transition-colors ${
               species === t.id
                 ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
-                : 'border-border-subtle text-text-light/45 hover:border-brand-gold/30'
+                : 'border-border-subtle text-text-light/55 hover:border-brand-gold/30'
             }`}
           >
             {t.label}
@@ -334,7 +334,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
       {step > 0 && (
         <button
           onClick={() => setStep(step - 1)}
-          className="mt-6 text-xs font-sans text-text-light/40 hover:text-brand-gold transition-colors"
+          className="mt-6 text-xs font-sans text-text-light/55 hover:text-brand-gold transition-colors"
         >
           ← Zurück
         </button>
@@ -366,7 +366,7 @@ function OptBtn({ label, hint, onClick, active }: { label: string; hint?: string
         <span className="font-serif text-lg font-bold text-text-light">{label}</span>
         <ChevronRight size={16} className="text-brand-gold opacity-0 group-hover:opacity-100 transition-opacity" />
       </span>
-      {hint && <span className="block text-text-light/45 text-xs font-sans mt-0.5">{hint}</span>}
+      {hint && <span className="block text-text-light/55 text-xs font-sans mt-0.5">{hint}</span>}
     </button>
   );
 }

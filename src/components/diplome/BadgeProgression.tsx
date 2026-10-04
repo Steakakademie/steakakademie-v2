@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { STUFEN } from '@/lib/diplome/stufen';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // ── Parchment scroll (Stufe 5 only) ──────────────────────────────────────────
 function ParchmentScroll() {
@@ -202,7 +203,7 @@ export default function BadgeProgression() {
         </div>
 
         {/* Badge row — horizontal scroll on mobile */}
-        <div className="overflow-x-auto pb-4">
+        <ScrollBereich label="Die fünf Diplom-Stufen, horizontal scrollbar" className="pb-4">
           <div
             className="flex items-end justify-center gap-6 lg:gap-10"
             style={{ minWidth: 'max-content', margin: '0 auto', padding: '0 16px' }}
@@ -254,7 +255,7 @@ export default function BadgeProgression() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollBereich>
 
         {/* Divider */}
         <div className="flex items-center justify-center gap-4 mt-12">

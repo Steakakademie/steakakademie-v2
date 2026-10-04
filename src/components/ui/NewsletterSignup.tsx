@@ -37,6 +37,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Marken-DNA (CLAUDE.md §2.3) — Default-Akzente.
 const BRAND_GOLD = '#C8882A';
 const BRAND_FIRE = '#E85018';
+// Feuer als TEXT auf surface-elevated (#2D2218): #E85018 hat dort nur 4,13:1, #EB6534 hat 4,76:1.
+const BRAND_FIRE_TEXT = '#EB6534';
 const BRAND_INK = '#120C07';
 
 /** "#C8882A" → "200 136 42", damit die Farbe in `rgb(… / <alpha>)` alpha-fähig wird. */
@@ -85,6 +87,7 @@ export default function NewsletterSignup({
   const accentVars = {
     '--nl-gold': hexToRgbTriple(accentColor ?? BRAND_GOLD),
     '--nl-fire': hexToRgbTriple(accentColor ?? BRAND_FIRE),
+    '--nl-fire-text': hexToRgbTriple(accentColor ?? BRAND_FIRE_TEXT),
     '--nl-on-accent': accentTextColor ?? BRAND_INK,
   } as React.CSSProperties;
 
@@ -195,13 +198,12 @@ export default function NewsletterSignup({
 
   // ── Formular ────────────────────────────────────────────────────────────────
   return (
-    <section
+    <div
       className={cn(
         'border border-[rgb(var(--nl-gold)/0.15)] bg-surface-elevated p-6 sm:p-7 not-prose',
         className,
       )}
       style={accentVars}
-      aria-label="Newsletter-Anmeldung"
     >
       <div className="flex items-start gap-4">
         <div className="w-10 h-10 bg-[rgb(var(--nl-fire)/0.1)] border border-[rgb(var(--nl-fire)/0.25)] flex items-center justify-center shrink-0">
@@ -209,7 +211,7 @@ export default function NewsletterSignup({
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-[rgb(var(--nl-fire))] mb-1.5">
+          <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-[rgb(var(--nl-fire-text))] mb-1.5">
             {eyebrow}
           </p>
           <h2 className="font-serif font-bold text-text-primary text-lg leading-snug mb-1.5">
@@ -314,7 +316,7 @@ export default function NewsletterSignup({
               Rechte du hast, steht in der{' '}
               <a
                 href="/datenschutz"
-                className="text-[rgb(var(--nl-fire))] hover:underline"
+                className="text-[rgb(var(--nl-fire-text))] underline underline-offset-2 hover:no-underline"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -326,7 +328,7 @@ export default function NewsletterSignup({
             {/* Fehlermeldung */}
             {status === 'error' && errorMsg && (
               <p
-                className="flex items-center gap-1.5 text-xs font-body text-[rgb(var(--nl-fire))]"
+                className="flex items-center gap-1.5 text-xs font-body text-[rgb(var(--nl-fire-text))]"
                 role="alert"
               >
                 <AlertCircle size={13} className="shrink-0" />
@@ -351,6 +353,6 @@ export default function NewsletterSignup({
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

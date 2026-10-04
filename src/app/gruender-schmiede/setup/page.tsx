@@ -101,7 +101,7 @@ export default function SetupShowcasePage() {
         {/* Hero */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-8" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-8" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/gruender-schmiede" className="hover:text-brand-gold transition-colors">Gründer-Schmiede</Link>

@@ -474,7 +474,7 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                       Dein Name · 2026
                     </p>
                     <div className="h-px bg-brand-gold/20 my-3" />
-                    <p className="text-[9px] font-body text-text-muted/60 leading-relaxed">
+                    <p className="text-[9px] font-body text-text-muted leading-relaxed">
                       Hat Level 1 — Glut-Lehrling erfolgreich<br />
                       abgeschlossen und die Grundlagen des Grillens<br />
                       durch Prüfung nachgewiesen.

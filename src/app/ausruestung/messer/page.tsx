@@ -56,7 +56,7 @@ export default function MesserPage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
             {/* Breadcrumb */}
             <nav
-              className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6"
+              className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-6"
               aria-label="Breadcrumb"
             >
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>

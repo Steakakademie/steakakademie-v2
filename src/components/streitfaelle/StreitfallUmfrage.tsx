@@ -176,7 +176,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
         })}
       </ul>
 
-      <p className="mt-4 font-sans text-xs text-text-light/45">
+      <p className="mt-4 font-sans text-xs text-text-light/55">
         {gesamt > 0
           ? `${gesamt.toLocaleString('de-DE')} ${gesamt === 1 ? 'Stimme' : 'Stimmen'}`
           : 'Noch keine Stimmen — deine wäre die erste.'}

@@ -18,6 +18,7 @@ import AutorHinweis from '@/components/AutorHinweis';
 import AffiliateBox from '@/components/mdx/AffiliateBox';
 import { sichtbareArtikel } from '@/lib/redaktion';
 import { Calendar, ChevronRight, RotateCcw, Scale, AlertTriangle, Sparkles } from 'lucide-react';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -78,9 +79,9 @@ const mdxComponents = {
     <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-text-light/75" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0">
+    <ScrollBereich className="mb-6 -mx-4 sm:mx-0">
       <table className="min-w-full border-collapse font-sans text-sm" {...props}>{children}</table>
-    </div>
+    </ScrollBereich>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
     <thead style={{ backgroundColor: '#0D0D0D' }} {...props}>{children}</thead>
@@ -165,7 +166,7 @@ export default function StreitfallPage(props: Props) {
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
             <Link href="/streitfaelle" className="hover:text-brand-gold transition-colors">Streitfälle</Link>
@@ -197,7 +198,7 @@ export default function StreitfallPage(props: Props) {
               )}
 
               <div
-                className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45 pb-6"
+                className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/55 pb-6"
                 style={{ borderBottom: '1px solid rgba(200,136,42,0.15)' }}
               >
                 <Link href={`/autoren/${doc.authorSlug}`} className="flex items-center gap-2 hover:text-brand-gold transition-colors">
@@ -220,7 +221,7 @@ export default function StreitfallPage(props: Props) {
             <div className="cinema-frame mb-3 aspect-[16/9]">
               <Image src={doc.image} alt={doc.imageAlt} width={800} height={500} className="w-full h-full object-cover" priority />
             </div>
-            <p className="text-xs font-sans text-text-light/40 mb-10 italic">
+            <p className="text-xs font-sans text-text-light/55 mb-10 italic">
               {doc.imageAlt}
               {doc.imageAI && ' · KI-generiert'}
             </p>
@@ -254,8 +255,8 @@ export default function StreitfallPage(props: Props) {
               ) : (
                 <div className="p-7" style={{ border: '1px dashed rgba(200,136,42,0.4)' }}>
                   <div className="flex items-center gap-2.5 mb-3">
-                    <Scale size={18} className="text-text-light/40" />
-                    <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase text-text-light/40">
+                    <Scale size={18} className="text-text-light/55" />
+                    <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase text-text-light/55">
                       Die Entscheidung folgt
                     </span>
                   </div>
@@ -269,7 +270,7 @@ export default function StreitfallPage(props: Props) {
               <div className="mt-6 flex items-start gap-3 p-5" style={{ background: 'rgba(255,255,255,0.03)' }}>
                 <Sparkles size={17} className="text-brand-gold shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase text-text-light/45 block mb-1.5">
+                  <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase text-text-light/55 block mb-1.5">
                     Wenn du nur einen Satz mitnimmst
                   </span>
                   <p className="font-body text-lg text-text-light leading-relaxed">{doc.merksatz}</p>

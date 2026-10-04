@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 // Grade aus der einen Quelle (03.10.2026): Hier standen „Basis-Zertifikat" bis
 // „Offizielles Akademie-Diplom" — so heisst kein Abschluss der Ausbildung.
 import { STUFEN as DIPLOM_STUFEN } from '@/lib/diplome/stufen';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // Echte Münz-Renders (Bullenkopf-Design) — füllen den Badge-Slot im Pedestal.
 function RenderBadge({ tier, alt }: { tier: string; alt: string }) {
@@ -252,11 +253,14 @@ export default function DiplomaProgressSection() {
         </div>
 
         {/* ── Badge progression ── */}
-        <div className="flex items-end justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-16 overflow-x-auto md:overflow-visible pb-4">
+        <ScrollBereich
+          label="Die fünf Diplom-Stufen, horizontal scrollbar"
+          className="flex items-end justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-16 md:overflow-visible pb-4"
+        >
           {STUFEN.map((stufe, i) => (
             <BadgePedestal key={i} {...stufe} />
           ))}
-        </div>
+        </ScrollBereich>
 
         {/* ── Connector line between badges (decorative) ── */}
         <div className="hidden md:block relative -mt-12 mb-12 max-w-3xl mx-auto overflow-hidden py-1">

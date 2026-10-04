@@ -168,12 +168,18 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                     key={s.url}
                     onClick={() => go(i)}
                     aria-label={`Zu Folie ${i + 1}: ${s.title}`}
-                    className="h-1.5 rounded-full transition-[width,background-color] duration-300"
-                    style={{
-                      width: i === idx ? 22 : 6,
-                      background: i === idx ? '#C8882A' : 'rgba(0,0,0,0.18)',
-                    }}
-                  />
+                    className="flex h-6 min-w-6 items-center justify-center"
+                  >
+                    {/* Der Punkt bleibt klein; die Trefferfläche des Buttons ist 24 px (WCAG 2.5.8). */}
+                    <span
+                      aria-hidden="true"
+                      className="block h-1.5 rounded-full transition-[width,background-color] duration-300"
+                      style={{
+                        width: i === idx ? 22 : 6,
+                        background: i === idx ? '#C8882A' : 'rgba(0,0,0,0.18)',
+                      }}
+                    />
+                  </button>
                 ))}
               </div>
             )}

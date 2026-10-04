@@ -188,7 +188,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
             className={`px-4 py-2 text-sm font-sans font-bold border transition-colors ${
               species === t.id
                 ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
-                : 'border-border-subtle text-text-light/45 hover:border-brand-gold/30'
+                : 'border-border-subtle text-text-light/55 hover:border-brand-gold/30'
             }`}
           >
             {t.label}
@@ -313,7 +313,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
             {activePrimal ? (
               <>
                 {activePrimal.nameDE}{' '}
-                <span className="text-text-light/40 text-base font-normal italic">
+                <span className="text-text-light/55 text-base font-normal italic">
                   · {activePrimal.nameEN}
                 </span>
               </>
@@ -353,7 +353,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
                 />
                 <div className="p-3">
                   <h3 className="font-serif font-bold text-text-light text-sm leading-tight">{cut.nameDE}</h3>
-                  <p className="mt-0.5 text-text-light/40 text-xs font-sans italic">{cut.nameEN}</p>
+                  <p className="mt-0.5 text-text-light/55 text-xs font-sans italic">{cut.nameEN}</p>
                   <div className="mt-2 flex items-center justify-between">
                     <MarblingBars level={cut.dna.marbling} />
                     <PriceLevel level={cut.price} />
@@ -429,7 +429,7 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
       <div className="p-6 sm:p-8">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light">{cut.nameDE}</h2>
-          <span className="text-text-light/40 text-sm italic">{cut.nameEN}</span>
+          <span className="text-text-light/55 text-sm italic">{cut.nameEN}</span>
         </div>
         {primal && (
           <p className="text-brand-gold/70 text-xs font-sans uppercase tracking-[0.12em] mt-1">
@@ -453,26 +453,26 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
             <div className="flex items-start gap-3">
               <Flame size={16} className="text-brand-fire mt-0.5 shrink-0" />
               <div>
-                <p className="text-[10px] font-sans font-bold text-text-light/40 uppercase tracking-[0.12em]">Garstufe</p>
+                <p className="text-[10px] font-sans font-bold text-text-light/55 uppercase tracking-[0.12em]">Garstufe</p>
                 <p className="text-text-light text-sm font-body">{cut.doneness}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Thermometer size={16} className="text-brand-fire mt-0.5 shrink-0" />
               <div>
-                <p className="text-[10px] font-sans font-bold text-text-light/40 uppercase tracking-[0.12em]">Kerntemperatur</p>
+                <p className="text-[10px] font-sans font-bold text-text-light/55 uppercase tracking-[0.12em]">Kerntemperatur</p>
                 <p className="text-text-light text-sm font-body">{cut.coreTemp}</p>
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-sans font-bold text-text-light/40 uppercase tracking-[0.12em] mb-1.5">Preis · Schwierigkeit</p>
+              <p className="text-[10px] font-sans font-bold text-text-light/55 uppercase tracking-[0.12em] mb-1.5">Preis · Schwierigkeit</p>
               <div className="flex items-center gap-4">
                 <PriceLevel level={cut.price} />
                 <LevelDots level={cut.level} />
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-sans font-bold text-text-light/40 uppercase tracking-[0.12em] mb-2">Methoden</p>
+              <p className="text-[10px] font-sans font-bold text-text-light/55 uppercase tracking-[0.12em] mb-2">Methoden</p>
               <div className="flex flex-wrap gap-1.5">
                 {cut.methods.map((m) => (
                   <span key={m} className="px-2 py-0.5 text-xs font-sans bg-surface-elevated border border-brand-gold/15 text-text-light/70">
