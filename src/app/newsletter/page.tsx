@@ -64,7 +64,7 @@ export default function NewsletterPage() {
                 keine Zahl. Der Spickzettel kommt als Link, nicht als PDF/Anhang. */}
             <p className="mt-4 text-center font-body text-sm text-text-secondary">
               Nach deiner Bestätigung kommt zuerst der{' '}
-              <a href="/kerntemperatur-spickzettel" className="font-semibold text-brand-fire hover:underline">
+              <a href="/kerntemperatur-spickzettel" className="font-semibold text-brand-fire underline underline-offset-2 hover:no-underline">
                 Kerntemperatur-Spickzettel
               </a>{' '}
               als Link zur Druckseite — alle Garstufen auf einer Seite. Danach folgen ein
@@ -91,7 +91,7 @@ export default function NewsletterPage() {
               Der Wissens-Brief enthält Werbung und Affiliate-Links. Abmeldung jederzeit
               mit einem Klick. Kein Verkauf deiner Daten und keine Weitergabe an Dritte
               für deren eigene Werbezwecke — Details in der{' '}
-              <a href="/datenschutz" className="text-brand-fire hover:underline">Datenschutzerklärung</a>.
+              <a href="/datenschutz" className="text-brand-fire underline underline-offset-2 hover:no-underline">Datenschutzerklärung</a>.
             </p>
           </div>
         </section>

@@ -316,7 +316,7 @@ export default function ProductCard({
     return (
       <div className={cn('flex items-center gap-4 py-3 border-b border-border-subtle', className)}>
         {rank && (
-          <span className="font-serif text-2xl font-bold text-brand-gold/30 w-6 shrink-0">
+          <span className="font-serif text-2xl font-bold text-brand-gold/65 w-6 shrink-0">
             {rank}
           </span>
         )}

@@ -227,7 +227,7 @@ export default function RettungClient() {
                       <div className="flex items-center justify-between border-t border-border-subtle pt-4">
                         <p className="text-xs font-sans text-text-muted">
                           Dieses Wissen gehört zu{' '}
-                          <span className="text-brand-gold/70">{s.level}</span>
+                          <span className="text-brand-gold">{s.level}</span>
                         </p>
                         <Link
                           href="/diplome"

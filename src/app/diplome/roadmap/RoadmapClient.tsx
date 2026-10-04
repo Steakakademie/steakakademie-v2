@@ -109,8 +109,9 @@ const T = {
   text:         '#e8e0d0',
   textGold:     '#e8c88a',
   textMuted:    '#8a7a6a',
-  textDim:      '#666',
-  textFaint:    '#444',
+  // 04.10.2026: #666 (3,2:1) und #444 (1,9:1) lagen als Text unter WCAG AA.
+  textDim:      '#8C8C8C',
+  textFaint:    '#858585',
   card:         '#c8b898',
   success:      '#7CB342',
   successBg:    'rgba(124,179,66,0.15)',
@@ -560,7 +561,7 @@ export default function RoadmapClient({
         {/* Breadcrumb */}
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <nav className="flex items-center justify-between gap-4" aria-label="Breadcrumb">
-            <div className="flex items-center gap-1.5 text-xs font-sans text-text-light/30">
+            <div className="flex items-center gap-1.5 text-xs font-sans text-text-light/55">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <Link href="/diplome" className="hover:text-brand-gold transition-colors">Diplom-System</Link>
@@ -581,7 +582,7 @@ export default function RoadmapClient({
             {prog.hydrated && (prog.progress.bestandene_module.length > 0 || prog.progress.streak_count > 0) && (
               <button
                 onClick={handleReset}
-                className="text-[10px] font-sans text-text-light/20 hover:text-text-light/50 transition-colors"
+                className="text-[10px] font-sans text-text-light/55 hover:text-text-light/50 transition-colors"
                 title="Fortschritt zurücksetzen"
               >Fortschritt zurücksetzen</button>
             )}

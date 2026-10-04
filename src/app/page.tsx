@@ -416,7 +416,7 @@ export default async function HomePage() {
                   gegen „jeden Freitag" auf /newsletter und im Exit-Intent, und
                   erwähnte als einzige das Geschenk nicht. Sie nutzt jetzt die
                   einheitlichen Defaults der Komponente. */}
-              <NewsletterSignup source="homepage-sidebar" />
+              <NewsletterSignup source="homepage-sidebar" bereich="Seitenleiste" />
 
               {/* Beliebte Themen */}
               <div className="bg-surface-card border border-border-subtle p-5">

@@ -115,7 +115,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
 
                     {/* Text */}
                     <div className="p-5">
-                      <span className="text-[9px] font-sans font-bold uppercase tracking-[0.16em] text-[#8A7256]">
+                      <span className="text-[9px] font-sans font-bold uppercase tracking-[0.16em] text-[#544433]">
                         {KIND_LABEL[slide.kind]}
                       </span>
                       <h3 className="font-serif text-lg sm:text-xl font-bold leading-snug mt-1 mb-2 text-[#1C140D] group-hover:text-[#A8701C] transition-colors">
@@ -135,7 +135,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                       style={{ background: 'rgba(232,80,24,0.07)', border: '1px solid rgba(232,80,24,0.22)' }}
                     >
                       <ChefHat size={14} className="text-brand-fire shrink-0" />
-                      <span className="text-[11px] font-sans text-[#8A7256] shrink-0">{slide.pairing.label}:</span>
+                      <span className="text-[11px] font-sans text-[#544433] shrink-0">{slide.pairing.label}:</span>
                       <span className="text-[12px] font-sans font-semibold text-[#1C140D] truncate group-hover/p:text-brand-fire transition-colors">
                         {slide.pairing.title}
                       </span>

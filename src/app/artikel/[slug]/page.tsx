@@ -24,6 +24,7 @@ import AffiliateBox from '@/components/mdx/AffiliateBox';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
 import { authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -166,12 +167,12 @@ const mdxComponents = {
     </ScrollBereich>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th
+    <MdxTh
       className="border-b border-border-subtle py-2 pr-4 font-sans text-xs font-bold tracking-wide uppercase text-brand-gold"
       {...props}
     >
       {children}
-    </th>
+    </MdxTh>
   ),
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td className="border-b border-border-subtle/50 py-2 pr-4 align-top text-text-primary" {...props}>
@@ -334,7 +335,7 @@ export default function ArtikelDetailPage(props: Props) {
             <div className="mt-10">
               <Link
                 href="/artikel"
-                className="font-sans text-sm font-bold text-brand-fire hover:underline underline-offset-4"
+                className="font-sans text-sm font-bold text-brand-fire underline underline-offset-2 hover:no-underline underline-offset-4"
               >
                 ← Alle Artikel
               </Link>

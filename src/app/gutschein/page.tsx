@@ -38,7 +38,7 @@ export default function GutscheinLandingPage() {
             ].map(({ icon: Icon, title, text }) => (
               <div key={title} className="bg-surface-card border border-border-subtle p-6 text-center">
                 <Icon size={26} className="text-brand-gold mx-auto mb-3" />
-                <h3 className="font-sans font-bold text-sm text-text-primary mb-2">{title}</h3>
+                <h2 className="font-sans font-bold text-sm text-text-primary mb-2">{title}</h2>
                 <p className="font-body text-sm text-text-secondary leading-relaxed">{text}</p>
               </div>
             ))}

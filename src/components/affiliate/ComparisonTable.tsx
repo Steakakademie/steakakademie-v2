@@ -43,11 +43,14 @@ function StarRating({ rating }: { rating: number }) {
 
 export default function ComparisonTable({ products, className }: ComparisonTableProps) {
   return (
+    // Dunkle Tabelle (04.10.2026): Die Zeilen waren noch `bg-white` aus der Zeit vor
+    // dem dunklen Design — mit den hellen Text-Tokens stand Creme auf Weiß (1,43:1),
+    // Produktname, Preis und Kopfzeile waren praktisch unlesbar.
     <div className={cn('w-full', className)}>
       <ScrollBereich className="-mx-4 px-4 md:mx-0 md:px-0">
         <table className="w-full min-w-[620px] border-collapse">
           <thead>
-            <tr className="bg-text-primary text-white">
+            <tr className="bg-surface-dark text-brand-gold">
               <th className="font-sans text-[11px] font-bold tracking-[0.12em] uppercase py-3 px-4 text-left w-10">
                 #
               </th>
@@ -65,7 +68,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
               <th className="font-sans text-[11px] font-bold tracking-[0.12em] uppercase py-3 px-4 text-left hidden sm:table-cell">
                 Einordnung
               </th>
-              <th className="py-3 px-4 w-32" />
+              <th className="py-3 px-4 w-32"><span className="sr-only">Zum Angebot</span></th>
             </tr>
           </thead>
           <tbody>
@@ -81,12 +84,12 @@ export default function ComparisonTable({ products, className }: ComparisonTable
               return (
                 <tr
                   key={product.id}
-                  className="border-b border-border-subtle bg-white transition-colors hover:bg-surface-base"
+                  className="border-b border-border-subtle bg-surface-card transition-colors hover:bg-surface-elevated"
                 >
                   {/* Rank cell carries the gold left-border highlight for top picks */}
                   <td
                     className={cn(
-                      'py-4 px-4 font-serif text-xl font-bold text-border-subtle',
+                      'py-4 px-4 font-serif text-xl font-bold text-text-muted',
                       isTopPick && 'border-l-4 border-l-brand-gold pl-3'
                     )}
                   >
@@ -102,7 +105,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                           alt={product.name}
                           width={56}
                           height={56}
-                          className="object-contain h-14 w-14 shrink-0"
+                          className="object-contain h-14 w-14 shrink-0 bg-white"
                         />
                       )}
                       <div>
@@ -151,7 +154,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                     <Link
                       href={link.href}
                       prefetch={false}
-                      className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap ${klickKlassen(product)}`}
+                      className={`inline-flex items-center gap-1.5 bg-brand-gold text-ink font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap ${klickKlassen(product)}`}
                       rel={link.rel}
                       target="_blank"
                     >

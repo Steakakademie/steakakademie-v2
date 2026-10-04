@@ -140,7 +140,7 @@ export default async function PflanzlichPage() {
               einem Steak. Mit Methode statt Beilagen-Denken.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#vegetarisch" className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3" style={{ background: GREEN, color: '#fff', borderRadius: '2px' }}>
+              <a href="#vegetarisch" className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3" style={{ background: GREEN, color: '#120C07', borderRadius: '2px' }}>
                 Vegetarisch <ChevronRight size={15} />
               </a>
               <a href="#vegan" className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3" style={{ border: `1.5px solid ${GREEN}`, color: '#fff', borderRadius: '2px' }}>
