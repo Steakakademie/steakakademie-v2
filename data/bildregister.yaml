@@ -707,3 +707,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-02
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/kuerbis-kartoffel-salat-grill.jpg:
+    status: ki
+    quelle: Adobe Firefly (Prompt "Hokkaido und Kartoffeln gegrillt, warm mit Apfelessig-Vinaigrette, Kuerbiskernen und Petersilie"), von Uwe Yendell erzeugt, ersetzt das FLUX-Bild aus PR 293
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-03
+    hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; Flaschenetiketten im Bild (Kuerbiskernoel, Apple Cider Vinegar) sind KI-erzeugt, Marken nicht geprueft
