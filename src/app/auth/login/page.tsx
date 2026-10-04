@@ -242,7 +242,7 @@ function LoginForm() {
 
               {/* Turnstile VOR dem Knopf: Wenn Cloudflare eine Interaktion will,
                   sieht man das Kaestchen, bevor man auf „Senden" drueckt. */}
-              <Turnstile action="login" onToken={setCaptcha} />
+              <Turnstile action="login" onToken={setCaptcha} eager />
 
               <button
                 type="submit"
