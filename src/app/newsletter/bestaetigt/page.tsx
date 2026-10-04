@@ -95,7 +95,7 @@ export default async function NewsletterBestaetigtPage(props: {
               <p className="font-body text-base text-text-secondary leading-relaxed mb-10">
                 Klick den Link aus der E-Mail in ein paar Minuten noch einmal an. Klappt es dann immer
                 noch nicht, schreib uns an{' '}
-                <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="text-brand-gold hover:underline">
+                <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="text-brand-gold underline underline-offset-2 hover:no-underline">
                   {KONTAKT_EMPFAENGER}
                 </a>
                 .

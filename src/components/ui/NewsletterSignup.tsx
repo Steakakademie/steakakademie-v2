@@ -28,6 +28,14 @@ interface NewsletterSignupProps {
   accentColor?: string;
   /** Textfarbe auf dem Akzent-Button (Kontrast zu `accentColor`). Default: Ink. */
   accentTextColor?: string;
+  /**
+   * Unterscheidet mehrere Anmeldeboxen auf derselben Seite für Screenreader:
+   * „Newsletter-Anmeldung (Seitenfuß)". Landmarks mit gleicher Rolle brauchen
+   * verschiedene Namen (axe: landmark-unique). Ohne Angabe heißt die Box
+   * „Newsletter-Anmeldung" — an diesem Namen hängen tests/e2e/newsletter.spec.ts
+   * und tests/proben/anonym.spec.ts.
+   */
+  bereich?: string;
   /** Zusätzliche Klassen für den äußeren Container. */
   className?: string;
 }
@@ -81,6 +89,7 @@ export default function NewsletterSignup({
   eyebrow = 'Kostenloses Geschenk',
   accentColor,
   accentTextColor,
+  bereich,
   className,
 }: NewsletterSignupProps) {
   // Eine Sub-Brand-Farbe ersetzt beide Akzente; sonst bleibt es bei gold/fire.
@@ -198,12 +207,13 @@ export default function NewsletterSignup({
 
   // ── Formular ────────────────────────────────────────────────────────────────
   return (
-    <div
+    <section
       className={cn(
         'border border-[rgb(var(--nl-gold)/0.15)] bg-surface-elevated p-6 sm:p-7 not-prose',
         className,
       )}
       style={accentVars}
+      aria-label={bereich ? `Newsletter-Anmeldung (${bereich})` : 'Newsletter-Anmeldung'}
     >
       <div className="flex items-start gap-4">
         <div className="w-10 h-10 bg-[rgb(var(--nl-fire)/0.1)] border border-[rgb(var(--nl-fire)/0.25)] flex items-center justify-center shrink-0">
@@ -358,6 +368,6 @@ export default function NewsletterSignup({
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

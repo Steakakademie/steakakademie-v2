@@ -17,6 +17,15 @@ const BASE_URL = 'https://steakakademie.de';
 export const ORGANIZATION_ID = `${BASE_URL}/#organization`;
 export const FOUNDER_ID = `${BASE_URL}/ueber-uns#person`;
 
+/**
+ * Macht aus einem Frontmatter-Pfad (`/images/…`) eine absolute URL. Strukturierte
+ * Daten brauchen absolute Bild-URLs — ein relativer Pfad ist für einen Crawler, der
+ * das JSON-LD ohne Seitenkontext auswertet, keine Adresse.
+ */
+export function absoluteUrl(pfad: string): string {
+  return pfad.startsWith('http') ? pfad : `${BASE_URL}${pfad.startsWith('/') ? '' : '/'}${pfad}`;
+}
+
 // ── Organisation & Website ───────────────────────────────────────────────────
 
 export function organizationSchema() {
@@ -168,7 +177,7 @@ export function articleSchema(input: ArticleSchemaInput) {
     '@id': `${BASE_URL}${input.url}#article`,
     headline: input.headline,
     description: input.description,
-    image: { '@type': 'ImageObject', url: input.image.startsWith('http') ? input.image : `${BASE_URL}${input.image}` },
+    image: { '@type': 'ImageObject', url: absoluteUrl(input.image) },
     datePublished: input.datePublished,
     dateModified: input.dateModified ?? input.datePublished,
     keywords: input.keywords?.join(', '),

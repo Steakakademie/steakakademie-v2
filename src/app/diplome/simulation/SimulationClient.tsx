@@ -98,7 +98,7 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
               <BookOpen size={10} />
               Diplom-Simulation
             </span>
-            <span className="text-[10px] font-sans text-text-light/30">
+            <span className="text-[10px] font-sans text-text-light/55">
               Schritt {step + 1} von {TOTAL}
             </span>
           </div>
@@ -142,13 +142,13 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                           style={{
                             borderColor: l.unlocked ? '#C8882A' : 'rgba(255,255,255,0.1)',
                             background: l.unlocked ? 'rgba(200,136,42,0.15)' : 'transparent',
-                            color: l.unlocked ? '#C8882A' : 'rgba(255,255,255,0.2)',
+                            color: l.unlocked ? '#C8882A' : 'rgba(255,255,255,0.5)',
                           }}
                         >
                           {l.unlocked ? l.emoji : <Lock size={12} />}
                         </div>
                         {l.unlocked && (
-                          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-sans text-brand-gold/70">
+                          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-sans text-brand-gold">
                             offen
                           </div>
                         )}
@@ -168,7 +168,7 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                     <Flame size={14} />
                     Erste Lektion erleben
                   </button>
-                  <p className="text-[10px] font-sans text-text-light/25">
+                  <p className="text-[10px] font-sans text-text-light/55">
                     ~2 Minuten · Keine Anmeldung nötig
                   </p>
                 </div>
@@ -536,14 +536,14 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                 </Link>
 
                 {/* Social proof */}
-                <p className="text-[10px] font-sans text-text-light/30 mb-10">
+                <p className="text-[10px] font-sans text-text-light/55 mb-10">
                   Lesen ohne Account · Eigenes Tempo · Gedruckte Urkunde optional ({urkundePreisMitVersand()})
                 </p>
 
                 {/* Divider */}
                 <div className="flex items-center gap-3 max-w-xs mx-auto mb-6">
                   <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-[10px] font-sans text-text-light/30">oder</span>
+                  <span className="text-[10px] font-sans text-text-light/55">oder</span>
                   <div className="flex-1 h-px bg-white/10" />
                 </div>
 
@@ -561,7 +561,7 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                 <div className="mt-10 pt-8 border-t border-white/8">
                   <Link
                     href="/persoenlichkeiten"
-                    className="text-xs font-sans text-text-light/30 hover:text-brand-gold transition-colors"
+                    className="text-xs font-sans text-text-light/55 hover:text-brand-gold transition-colors"
                   >
                     ← Zur Persönlichkeiten-Übersicht
                   </Link>

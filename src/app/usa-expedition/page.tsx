@@ -61,7 +61,7 @@ const SACRED_FOUR = [
     style: 'Memphis Style',
     icon: '🐖',
     color: 'from-purple-950/80 to-surface-base',
-    accent: '#9B6AB0',
+    accent: '#A97CBD',
     signature: 'Dry Ribs — Rub-only, kein Sauce-Kompromiss',
     pillars: ['Dry Ribs', 'Wet Ribs', 'Pulled Pork', 'Spaghetti'],
     creed:
@@ -255,10 +255,10 @@ export default function UsaExpeditionPage() {
                         </span>
                       </div>
 
-                      <h3 className="font-serif text-xl font-bold mb-1 group-hover:text-brand-gold transition-colors"
+                      <h2 className="font-serif text-xl font-bold mb-1 group-hover:text-brand-gold transition-colors"
                         style={{ color: '#F0E8D8' }}>
                         {region.state}
-                      </h3>
+                      </h2>
                       <p className="font-sans text-[11px] mb-3" style={{ color: region.accent }}>
                         {region.signature}
                       </p>
@@ -272,7 +272,7 @@ export default function UsaExpeditionPage() {
                           <span
                             key={p}
                             className="font-sans text-[9px] tracking-wide px-2 py-0.5"
-                            style={{ background: 'rgba(200,136,42,0.07)', color: '#7A6558' }}
+                            style={{ background: 'rgba(200,136,42,0.07)', color: '#9F8A7B' }}
                           >
                             {p}
                           </span>
@@ -281,7 +281,7 @@ export default function UsaExpeditionPage() {
 
                       <div className="flex items-center justify-between border-t pt-3"
                         style={{ borderColor: 'rgba(200,136,42,0.12)' }}>
-                        <span className="font-sans text-[10px]" style={{ color: '#5A4535' }}>
+                        <span className="font-sans text-[10px]" style={{ color: '#9F8A7B' }}>
                           {region.legend}
                         </span>
                         <ChevronRight
@@ -306,7 +306,7 @@ export default function UsaExpeditionPage() {
                 <div className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.18)' }} />
               </div>
 
-              <p className="font-sans text-[10px] mb-4" style={{ color: '#7A6558' }}>
+              <p className="font-sans text-[10px] mb-4" style={{ color: '#9F8A7B' }}>
                 Angebote der jeweiligen Veranstalter, nicht der Steakakademie. Termine, Plätze und
                 Bedingungen stehen dort.
               </p>
@@ -334,18 +334,18 @@ export default function UsaExpeditionPage() {
                       <h3 className="font-serif text-base font-bold mb-0.5" style={{ color: '#F0E8D8' }}>
                         {item.title}
                       </h3>
-                      <p className="font-sans text-[10px] mb-3" style={{ color: '#7A6558' }}>
+                      <p className="font-sans text-[10px] mb-3" style={{ color: '#9F8A7B' }}>
                         {item.subtitle}
                       </p>
 
-                      <p className="font-body text-xs leading-relaxed mb-4" style={{ color: 'rgba(196,168,130,0.65)' }}>
+                      <p className="font-body text-xs leading-relaxed mb-4" style={{ color: 'rgba(196,168,130,0.8)' }}>
                         {item.description}
                       </p>
 
                       <ul className="space-y-1 mb-4">
                         {item.details.map((d) => (
                           <li key={d} className="flex items-center gap-2 font-sans text-[10px]"
-                            style={{ color: '#5A4535' }}>
+                            style={{ color: '#9F8A7B' }}>
                             <span style={{ color: '#C8882A' }}>·</span>
                             {d}
                           </li>
@@ -377,7 +377,7 @@ export default function UsaExpeditionPage() {
                 Pilgerstätten
               </span>
               <div className="h-px flex-1" style={{ background: 'rgba(200,136,42,0.18)' }} />
-              <span className="font-sans text-[10px]" style={{ color: '#5A4535' }}>
+              <span className="font-sans text-[10px]" style={{ color: '#9F8A7B' }}>
                 Smokehouse-Adressen nach Region
               </span>
             </div>
@@ -424,7 +424,7 @@ export default function UsaExpeditionPage() {
                     </h3>
                     <ul className="space-y-0.5">
                       {ort.adressen.map((adresse) => (
-                        <li key={adresse} className="font-sans text-[10px] flex items-center gap-2" style={{ color: '#7A6558' }}>
+                        <li key={adresse} className="font-sans text-[10px] flex items-center gap-2" style={{ color: '#9F8A7B' }}>
                           <span style={{ color: '#C8882A' }} aria-hidden="true">→</span>
                           {adresse}
                         </li>

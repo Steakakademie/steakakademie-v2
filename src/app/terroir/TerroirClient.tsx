@@ -214,8 +214,8 @@ export default function TerroirClient() {
                 {/* Intensitäts-Bar */}
                 <div className="mb-3">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="text-[10px] font-sans text-text-light/30">Geschmacksintensität</span>
-                    <span className="text-[10px] font-sans text-brand-gold/60">{o.intensitaet}/100</span>
+                    <span className="text-[10px] font-sans text-text-light/55">Geschmacksintensität</span>
+                    <span className="text-[10px] font-sans text-brand-gold">{o.intensitaet}/100</span>
                   </div>
                   <div className="h-1 overflow-hidden bg-surface-dark">
                     <div
@@ -267,7 +267,7 @@ export default function TerroirClient() {
                   <span className="text-5xl">{selected.flag}</span>
                   <div>
                     <h2 className="font-serif text-3xl font-bold text-text-light">{selected.region}</h2>
-                    <p className="text-brand-gold/70 font-sans text-sm">{selected.land} · {selected.rasse}</p>
+                    <p className="text-brand-gold font-sans text-sm">{selected.land} · {selected.rasse}</p>
                   </div>
                 </div>
 
@@ -294,7 +294,7 @@ export default function TerroirClient() {
                   </div>
 
                   <div>
-                    <p className="mb-2 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/30">Geschmacksprofil</p>
+                    <p className="mb-2 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/55">Geschmacksprofil</p>
                     <div className="flex flex-wrap gap-2">
                       {selected.geschmacksprofil.map((g) => (
                         <span key={g} className="border border-brand-gold/20 px-3 py-1 text-xs font-sans text-brand-gold">

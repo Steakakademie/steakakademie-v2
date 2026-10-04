@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Printer, RotateCcw, ArrowRight } from 'lucide-react';
 import { berechneWeg, type Antworten } from '@/lib/eigenregie/diagnose';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 type Option<T extends string> = { wert: T; label: string };
 type Frage =
@@ -88,7 +89,7 @@ export default function Diagnose({ kurspreis, imKurs = false }: { kurspreis: num
         <p className="font-body text-text-secondary mb-8">{w.amortisation.text}</p>
 
         <h3 className="font-serif text-xl font-bold text-text-primary mb-3">Deine Werkzeuge</h3>
-        <div className="overflow-x-auto mb-8">
+        <ScrollBereich className="mb-8">
           <table className="w-full text-sm">
             <tbody className="divide-y divide-border-subtle">
               {w.werkzeuge.map((t) => (
@@ -100,7 +101,7 @@ export default function Diagnose({ kurspreis, imKurs = false }: { kurspreis: num
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollBereich>
 
         <div className="flex flex-wrap gap-3 print:hidden">
           <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 px-5 py-3 border border-border-subtle font-sans text-sm font-bold text-text-primary hover:border-brand-gold">

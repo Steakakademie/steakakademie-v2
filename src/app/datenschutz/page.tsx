@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function DatenschutzPage() {
-  const linkClass = 'text-brand-fire hover:underline';
+  const linkClass = 'text-brand-fire underline underline-offset-2 hover:no-underline';
   const h2Class = 'font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3';
 
   return (

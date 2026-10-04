@@ -19,6 +19,7 @@ import EquipmentFooter from '@/components/affiliate/EquipmentFooter';
 import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
 import BildCredit from '@/components/BildCredit';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -80,7 +81,7 @@ const mdxComponents = {
     <thead className="bg-[#2D2218] text-[#F0E8D8]" {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase" {...props}>{children}</th>
+    <MdxTh className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase" {...props}>{children}</MdxTh>
   ),
   td: ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
     <td className="px-4 py-3 border-b border-[#C3AB80] text-[#3A2E22]" {...props}>{children}</td>
@@ -223,7 +224,7 @@ export default function MethodePage(props: Props) {
                     <AutorHinweis
                       authorSlug={methode.authorSlug}
                       dokument={methode}
-                      className="text-xs font-sans text-[#6B5A48] mt-1 leading-relaxed"
+                      className="text-xs font-sans text-[#544433] mt-1 leading-relaxed"
                     />
                   </div>
                 </div>
@@ -243,13 +244,13 @@ export default function MethodePage(props: Props) {
                   <dl className="space-y-3 text-sm font-sans">
                     {methode.difficulty && (
                       <div>
-                        <dt className="text-[#6B5A48] text-xs uppercase tracking-wide mb-0.5">Schwierigkeit</dt>
+                        <dt className="text-[#544433] text-xs uppercase tracking-wide mb-0.5">Schwierigkeit</dt>
                         <dd className="font-bold text-[#1C140D]">{methode.difficulty}</dd>
                       </div>
                     )}
                     {methode.timeMinutes && (
                       <div>
-                        <dt className="text-[#6B5A48] text-xs uppercase tracking-wide mb-0.5">Zeitaufwand</dt>
+                        <dt className="text-[#544433] text-xs uppercase tracking-wide mb-0.5">Zeitaufwand</dt>
                         <dd className="font-bold text-[#1C140D]">{methode.timeMinutes} Minuten</dd>
                       </div>
                     )}

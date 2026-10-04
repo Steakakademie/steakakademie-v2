@@ -97,7 +97,7 @@ function CatBadge({ category }: { category: RoadmapKategorie }) {
   return (
     <span
       className="inline-block whitespace-nowrap rounded-full px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-[0.06em]"
-      style={{ color: c, background: `${c}1A`, border: `1px solid ${c}40` }}
+      style={{ color: `color-mix(in srgb, ${c} 65%, white)`, background: `${c}1A`, border: `1px solid ${c}40` }}
     >
       {category}
     </span>
@@ -392,6 +392,7 @@ export default function ArbeitszeitPlaner() {
                 className="min-w-0 flex-1 rounded-sm border border-border-subtle bg-surface-base px-3 py-1.5 font-body text-sm text-text-primary focus:border-brand-fire"
               />
               <select
+                aria-label="Kategorie der neuen Aufgabe"
                 value={ntCat}
                 onChange={(e) => setNtCat(e.target.value as RoadmapKategorie)}
                 className="rounded-sm border border-border-subtle bg-surface-base px-2 py-1.5 font-sans text-sm text-text-primary focus:border-brand-fire"

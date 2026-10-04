@@ -211,7 +211,7 @@ export default function SteakBeichtePage() {
                   <span
                     key={p}
                     className="text-xs font-sans px-3 py-1.5 border"
-                    style={{ borderColor: 'rgba(200,136,42,0.2)', color: 'rgba(255,255,255,0.45)', background: 'rgba(200,136,42,0.04)' }}
+                    style={{ borderColor: 'rgba(200,136,42,0.2)', color: 'rgba(255,255,255,0.55)', background: 'rgba(200,136,42,0.04)' }}
                   >
                     {p}
                   </span>
@@ -239,7 +239,7 @@ export default function SteakBeichtePage() {
                   <div className="flex items-center gap-3 mb-4">
                     <span
                       className="font-sans text-xs font-bold"
-                      style={{ color: 'rgba(200,136,42,0.5)' }}
+                      style={{ color: '#C8882A' }}
                     >
                       {step}
                     </span>

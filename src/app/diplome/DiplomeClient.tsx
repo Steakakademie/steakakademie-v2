@@ -64,7 +64,7 @@ export default function DiplomeClient({
 
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
             {/* Breadcrumb */}
-            <nav className="flex items-center justify-center gap-1.5 text-xs font-sans text-text-light/30 mb-10" aria-label="Breadcrumb">
+            <nav className="flex items-center justify-center gap-1.5 text-xs font-sans text-text-light/55 mb-10" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/50">Diplom-System</span>
@@ -297,7 +297,7 @@ export default function DiplomeClient({
                   <div className={`w-9 h-9 flex items-center justify-center text-sm border transition-colors ${
                     !level.locked
                       ? 'border-brand-gold bg-brand-gold/20 text-brand-gold'
-                      : 'border-brand-gold/15 bg-transparent text-text-light/20'
+                      : 'border-brand-gold/15 bg-transparent text-text-light/55'
                   }`}>
                     {level.id}
                   </div>

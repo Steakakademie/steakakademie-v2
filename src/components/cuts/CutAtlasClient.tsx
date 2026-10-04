@@ -215,7 +215,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
             </div>
           )}
 
-          <p className="mt-3 flex items-center gap-2 text-xs font-sans uppercase tracking-[0.14em] text-brand-gold/60">
+          <p className="mt-3 flex items-center gap-2 text-xs font-sans uppercase tracking-[0.14em] text-brand-gold">
             <MousePointerClick size={14} />
             {species === 'rind'
               ? 'Klicke eine Muskelgruppe auf dem Stier'
@@ -260,7 +260,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
                       <h3 className="font-serif text-2xl font-bold text-text-light leading-tight">
                         {activePrimal.nameDE}
                       </h3>
-                      <p className="mt-0.5 text-brand-gold/60 text-xs font-sans uppercase tracking-[0.12em]">
+                      <p className="mt-0.5 text-brand-gold text-xs font-sans uppercase tracking-[0.12em]">
                         {activePrimal.nameEN} · {filteredCuts.length}{' '}
                         {filteredCuts.length === 1 ? 'Cut' : 'Cuts'}
                       </p>
@@ -294,7 +294,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
                   <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-brand-gold/25 text-brand-gold">
                     <MousePointerClick size={24} />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-text-light">Wähle eine Muskelgruppe</h3>
+                  <h2 className="font-serif text-xl font-bold text-text-light">Wähle eine Muskelgruppe</h2>
                   <p className="mt-2 max-w-xs font-body text-sm text-text-light/50">
                     Klicke {species === 'rind' ? 'auf dem Stier' : 'auf dem Tier'} auf ein Teilstück —
                     das Raster unten filtert dann auf die passenden Cuts.
@@ -320,7 +320,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap, showPork = false 
             ) : (
               <>Alle Cuts</>
             )}
-            <span className="ml-2 text-brand-gold/60 text-sm font-sans font-bold">
+            <span className="ml-2 text-brand-gold text-sm font-sans font-bold">
               {filteredCuts.length}
             </span>
           </h2>
@@ -432,7 +432,7 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
           <span className="text-text-light/55 text-sm italic">{cut.nameEN}</span>
         </div>
         {primal && (
-          <p className="text-brand-gold/70 text-xs font-sans uppercase tracking-[0.12em] mt-1">
+          <p className="text-brand-gold text-xs font-sans uppercase tracking-[0.12em] mt-1">
             {primal.nameDE} · {cut.origin}
           </p>
         )}
@@ -531,7 +531,7 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
             </Link>
           )}
         </div>
-        <p className="text-text-light/30 text-[11px] font-sans mt-2 leading-relaxed">{offer.disclosure}</p>
+        <p className="text-text-light/55 text-[11px] font-sans mt-2 leading-relaxed">{offer.disclosure}</p>
       </div>
     </div>
   );
