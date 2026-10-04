@@ -12,17 +12,18 @@ import ProductCard from '@/components/affiliate/ProductCard';
 import MDXProductCard from '@/components/mdx/MDXProductCard';
 import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
 import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
-import { getProductById, getProductsByCategory } from '@/lib/products';
 import MdxTextLink from '@/components/affiliate/MdxTextLink';
 import { einzelpreis } from '@/components/affiliate/produkt-anzeige';
+import Methodenhinweis from '@/components/vergleich/Methodenhinweis';
+import { METHODENSATZ, vergleichsProdukte } from '@/lib/vergleich-seite';
 import {
   articleSchema,
   breadcrumbSchema,
   comparisonPageSchema,
   faqSchema,
-  itemListProdukte,
+  produktIdsImVergleichstext,
 } from '@/lib/schema';
-import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
+import { Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 
 interface Props {
@@ -126,15 +127,15 @@ export default function VergleichPage(props: Props) {
 
   const MDXContent = useMDXComponent(vergleich.body.code);
 
-  const slugCategoryMap: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
-    'fleischthermometer':         'thermometer',
-    'premium-fleischthermometer': 'thermometer',
-    'oberhitzegrill-vergleich':   'oberhitzegrill',
-    'dry-aging-kuehlschrank-vergleich': 'dry-ager',
-    'kuechenmaschine-vergleich':  'kuechenmaschine',
-  };
-  const pageCategory = slugCategoryMap[params.slug] ?? 'thermometer';
-  const sidebarProducts = getProductsByCategory(pageCategory);
+  // Produkte der Seite (03.10.2026): die Produkt-Bausteine des Textes, sonst
+  // die dem Slug ausdruecklich zugeordneten — nie eine fremde Kategorie. Vorher
+  // fiel alles Unbekannte auf `thermometer` zurueck: /vergleich/grills und
+  // /vergleich/messer zeigten in der Seitenleiste Thermometer.
+  const seitenProdukte = vergleichsProdukte(params.slug, vergleich.body.raw);
+  const sidebarProducts = seitenProdukte.slice(0, 3);
+  // Die Zahl im Methodenhinweis ist gezaehlt (Bausteine im Text), nicht aus dem
+  // Frontmatter gelesen. Seiten ohne Bausteine nennen keine Zahl.
+  const modelleImText = produktIdsImVergleichstext(vergleich.body.raw).length;
 
   const articleSch = articleSchema({
     headline: vergleich.title,
@@ -148,20 +149,12 @@ export default function VergleichPage(props: Props) {
   });
 
   // ItemList nur aus Produkten, die zur Seite gehoeren UND die sie zeigt
-  // (03.10.2026). Vorher kam die Liste aus `sidebarProducts` samt Rueckfall auf
-  // `thermometer`: /vergleich/grills und /vergleich/messer gaben sechs
-  // Thermometer als Grill- bzw. Messer-Vergleich aus.
+  // (03.10.2026):
   //   1. Zeigt der Text Produkt-Bausteine, sind genau diese die Liste.
-  //   2. Sonst die drei Karten der Seitenleiste — aber nur, wenn die Kategorie
-  //      der Seite ausdruecklich zugeordnet ist (kein Rueckfall).
+  //   2. Sonst die Karten der Seitenleiste (dem Slug ausdruecklich zugeordnet).
   //   3. Sonst keine ItemList (comparisonPageSchema liefert null).
-  // Der Rueckfall `?? 'thermometer'` oben speist damit nur noch die
-  // Seitenleiste.
-  const schemaProdukte = itemListProdukte(
-    vergleich.body.raw,
-    getProductById,
-    slugCategoryMap[params.slug] ? sidebarProducts.slice(0, 3) : null,
-  );
+  // Dieselbe Regel wie fuer die Seitenleiste — siehe vergleichsProdukte().
+  const schemaProdukte = modelleImText > 0 ? seitenProdukte : sidebarProducts;
 
   // Kein `review`, kein `aggregateRating`, keine Lieferbarkeit — und ein Preis
   // nur, wenn die Karte denselben Einzelpreis zeigt (siehe src/lib/schema.ts).
@@ -213,7 +206,7 @@ export default function VergleichPage(props: Props) {
             <article>
               {/* Article header */}
               <header className="mb-10">
-                <span className="category-label">Vergleich &amp; Test</span>
+                <span className="category-label">Vergleich &amp; Marktübersicht</span>
                 <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-light mt-3 mb-5 leading-tight">
                   {vergleich.title}
                 </h1>
@@ -221,35 +214,10 @@ export default function VergleichPage(props: Props) {
                   {vergleich.excerpt}
                 </p>
 
-                {/* Test-Metadata — Redaktionelle Gold-Karte */}
-                {(vergleich.testedCount || vergleich.testDuration) && (
-                  <div
-                    className="flex flex-wrap gap-6 mb-6 p-5"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(200,136,42,0.09) 0%, rgba(232,80,24,0.03) 100%)',
-                      border: '1px solid rgba(200,136,42,0.22)',
-                    }}
-                  >
-                    {vergleich.testedCount && (
-                      <div className="flex items-center gap-3 text-sm font-sans">
-                        <FlaskConical size={18} className="text-brand-gold" />
-                        <div>
-                          <span className="text-text-light/50 text-xs block tracking-wide">Getestet</span>
-                          <span className="font-bold text-text-light text-base">{vergleich.testedCount} Modelle</span>
-                        </div>
-                      </div>
-                    )}
-                    {vergleich.testDuration && (
-                      <div className="flex items-center gap-3 text-sm font-sans">
-                        <Calendar size={18} className="text-brand-gold" />
-                        <div>
-                          <span className="text-text-light/50 text-xs block tracking-wide">Testdauer</span>
-                          <span className="font-bold text-text-light text-base">{vergleich.testDuration}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                {/* Methodenhinweis — sichtbar oben auf JEDER Vergleichsseite
+                    (03.10.2026). Stand hier vorher: „Getestet: N Modelle ·
+                    Testdauer: …“ aus dem Frontmatter. */}
+                <Methodenhinweis modelle={modelleImText} />
 
                 {/* Author meta */}
                 <div
@@ -315,7 +283,7 @@ export default function VergleichPage(props: Props) {
                     {vergleich.author}
                   </Link>
                   <p className="text-xs font-sans text-text-light/55 mt-1.5 leading-relaxed">
-                    Alle getesteten Produkte wurden selbst gekauft und über mehrere Wochen im Praxiseinsatz getestet.
+                    {METHODENSATZ}
                   </p>
                 </div>
               </div>
@@ -323,7 +291,7 @@ export default function VergleichPage(props: Props) {
 
             {/* Sidebar — Redaktionelle Karten */}
             <aside className="space-y-6">
-              {sidebarProducts.slice(0, 3).map((product) => (
+              {sidebarProducts.map((product) => (
                 <ProductCard key={product.id} product={product} variant="sidebar" />
               ))}
 

@@ -12,6 +12,7 @@ import KontextRail from '@/components/diplome/KontextRail';
 import LektionFortschritt from '@/components/diplome/LektionFortschritt';
 import LektionsCheck from '@/components/diplome/LektionsCheck';
 import Glutbett from '@/components/diplome/Glutbett';
+import Pruefvermerk from '@/components/Pruefvermerk';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
@@ -269,6 +270,9 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                   „{lektion.merksatz}&quot;
                 </p>
               </div>
+
+              {/* Pruefvermerk — erscheint nur, wenn die Lektion ein `reviewedAt` traegt. */}
+              <Pruefvermerk dokument={lektion} className="mt-4 font-sans text-xs text-text-muted leading-relaxed" />
 
               {/* Verstaendnis-Check (09.09.2026). Steht bewusst VOR dem
                   Abhaken-Knopf: erst pruefen, ob es sitzt, dann abhaken. Der

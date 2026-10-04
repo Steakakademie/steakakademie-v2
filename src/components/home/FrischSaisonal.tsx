@@ -46,7 +46,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
           {/* ── Linke Seite: Einordnung ─────────────────────────────── */}
           <div className="lg:col-span-7">
             <p className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-3">
-              <Flame size={12} /> Im Feuer — diese Woche
+              <Flame size={12} /> Im Feuer — frisch &amp; saisonal
             </p>
             <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold leading-[1.1] mb-4 text-[#1C140D]">
               Frisch aus dem Feuer.<br className="hidden sm:block" />{' '}

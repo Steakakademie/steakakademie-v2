@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import HoneypotFeld, { honeypotWert } from '@/components/ui/HoneypotFeld';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { KONTAKT_EMPFAENGER } from '@/lib/kontakt';
+import { BESTAETIGUNGS_TEXT, bestaetigungsLage, type BestaetigungsLage } from '@/lib/widerruf-rueckmeldung';
 
 // 03.10.2026: Scheitert die Übermittlung (kein Netz, Antwort ohne JSON), nennt
 // die Meldung den Weg, der immer geht — statt „Failed to fetch“.
@@ -22,7 +23,7 @@ export default function WiderrufForm() {
 
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState<string | null>(null);
-  const [done, setDone]         = useState<{ datum: string; zeit: string; emailSent: boolean } | null>(null);
+  const [done, setDone]         = useState<{ datum: string; zeit: string; lage: BestaetigungsLage } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const canSubmit = (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || orderRef.trim().length > 0) && !loading;
@@ -46,7 +47,9 @@ export default function WiderrufForm() {
       setDone({
         datum: d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' }),
         zeit:  d.toLocaleTimeString('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' }),
-        emailSent: !!data.emailSent,
+        // Was zur Eingangsbestätigung stimmt, hängt davon ab, ob eine Mail rausging
+        // und ob es überhaupt eine Adresse gab — siehe widerruf-rueckmeldung.ts.
+        lage: bestaetigungsLage({ emailSent: !!data.emailSent, email }),
       });
     } catch {
       setError(FEHLER_MIT_AUSWEG);
@@ -66,9 +69,7 @@ export default function WiderrufForm() {
           Dein Widerruf ist bei uns eingegangen am <strong>{done.datum} um {done.zeit} Uhr</strong>.
         </p>
         <p className="font-body text-sm text-text-secondary leading-relaxed mt-2">
-          {done.emailSent
-            ? 'Eine elektronische Eingangsbestätigung haben wir dir per E-Mail gesendet.'
-            : 'Bitte notiere dir Datum und Uhrzeit als Nachweis. Eine Eingangsbestätigung folgt per E-Mail.'}
+          {BESTAETIGUNGS_TEXT[done.lage]}
         </p>
       </div>
     );

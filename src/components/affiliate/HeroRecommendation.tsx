@@ -2,7 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ExternalLink, Flame, Star } from 'lucide-react';
 import { getProductById } from '@/lib/products';
-import { amazonBewertung } from './produkt-anzeige';
+import { amazonBewertung, klickKlassen, produktLink } from './produkt-anzeige';
+import PreisMitStand from './PreisMitStand';
 
 const PROVIDER_LABELS: Record<string, string> = {
   amazon: 'Amazon',
@@ -26,11 +27,13 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
   if (!product) return null;
 
   const providerLabel = PROVIDER_LABELS[product.provider] ?? 'Händler';
+  const buttonText = providerLabel === 'Händler' ? 'Beim Anbieter ansehen' : `Bei ${providerLabel} ansehen`;
   const imageSrc = product.imageUrl ?? product.image;
-  const price =
-    product.priceMin && product.priceMax ? `${product.priceMin} – ${product.priceMax} €` : `${product.price} €`;
   // Sterne nur bei Produkten mit Amazon-Link, immer mit Quelle (03.10.2026)
   const bewertung = amazonBewertung(product);
+  // „Anzeige“ und Affiliate-Hinweis nur beim Partnerlink (03.10.2026) — sonst
+  // gewoehnlicher externer Link zum Anbieter, siehe produkt-anzeige.ts.
+  const link = produktLink(product);
 
   return (
     <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
@@ -38,7 +41,9 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
         <h3 className="font-sans font-bold text-sm text-text-primary flex items-center gap-2">
           <Flame size={14} className="text-brand-fire" /> Marcos Empfehlung
         </h3>
-        <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">Anzeige</span>
+        {link.partner && (
+          <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">Anzeige</span>
+        )}
       </div>
 
       <p className="font-body text-[0.9rem] leading-relaxed text-text-secondary mb-4">{pitch}</p>
@@ -91,29 +96,37 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
         </div>
       )}
 
-      <p className="text-lg font-sans font-bold text-text-primary mb-3">{price}</p>
+      <p className="mb-3">
+        <PreisMitStand product={product} className="text-lg font-sans font-bold text-text-primary" />
+      </p>
 
       <Link
-        href={`/go/${product.id}`}
+        href={link.href}
       // KAN-75: KEIN Prefetch. Next laedt sonst /go/<id> im Voraus, die Route
       // antwortet mit 302 auf den Haendler — und der Browser folgt der
       // Weiterleitung ohne Klick. Damit ginge die Besucher-IP beim blossen
       // Scrollen an Amazon. Aufgefallen 20.08.2026 durch die neue CSP.
       prefetch={false}
-        className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-zone=hero plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-        rel="sponsored nofollow noopener"
+        className={`btn-affiliate w-full justify-center text-sm mb-2 ${klickKlassen(product, 'hero')}`}
+        rel={link.rel}
         target="_blank"
       >
         <ExternalLink size={14} />
-        Bei {providerLabel} ansehen
+        {buttonText}
       </Link>
 
-      <p className="text-[10px] font-sans text-text-muted text-center leading-relaxed">
-        * Affiliate-Link — Preis unverändert für dich.{' '}
-        <Link href="/affiliate-disclosure" className="underline hover:text-brand-gold">
-          Mehr
-        </Link>
-      </p>
+      {link.partner ? (
+        <p className="text-[10px] font-sans text-text-muted text-center leading-relaxed">
+          * Affiliate-Link — Preis unverändert für dich.{' '}
+          <Link href="/affiliate-disclosure" className="underline hover:text-brand-gold">
+            Mehr
+          </Link>
+        </p>
+      ) : (
+        <p className="text-[10px] font-sans text-text-muted text-center leading-relaxed">
+          Externer Link zum Anbieter — kein Partnerlink
+        </p>
+      )}
     </div>
   );
 }

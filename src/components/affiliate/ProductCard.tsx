@@ -3,7 +3,11 @@ import Image from 'next/image';
 import { ExternalLink, Star, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
-import { amazonBewertung } from './produkt-anzeige';
+import { amazonBewertung, klickKlassen, produktLink } from './produkt-anzeige';
+import PreisMitStand from './PreisMitStand';
+
+/** Hinweis unter dem Button, wenn der Link KEIN Partnerlink ist. */
+const HINWEIS_KEIN_PARTNERLINK = 'Externer Link zum Anbieter — kein Partnerlink';
 
 function SymbolicBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   // Rechtlich relevanter Hinweis: KI-/generisches Bild, nicht das Originalprodukt
@@ -214,12 +218,20 @@ export default function ProductCard({
   className,
 }: ProductCardProps) {
   const providerLabel = PROVIDER_LABELS[product.provider] ?? 'Händler';
+  // „Bei Händler ansehen“ war kein Deutsch — ohne benannten Anbieter neutral.
+  const buttonText = providerLabel === 'Händler' ? 'Beim Anbieter ansehen' : `Bei ${providerLabel} ansehen`;
   // KAN-75 (20.08.2026): Die Links tragen prefetch={false}. Ohne das laedt Next
   // /go/<id> im Voraus, sobald die Karte in den Viewport kommt; die Route
   // antwortet mit 302 auf den Haendler, und der Browser folgt der Weiterleitung
   // — die Besucher-IP ginge beim blossen Scrollen an Amazon, ohne Klick und
   // ohne Einwilligung. Aufgefallen erst durch die neue CSP, vorher unsichtbar.
-  const affiliateHref = `/go/${product.id}`;
+  //
+  // 03.10.2026: Nur ein Partnerlink laeuft ueber /go/<id> und traegt „Anzeige“
+  // samt Provisions-Hinweis. Fuehrt der Link ohne Partner-Parameter zum
+  // Anbieter (beefer.de, dry-ager.com, otto.de), ist er ein gewoehnlicher
+  // externer Link — siehe produktLink() in produkt-anzeige.ts.
+  const link = produktLink(product);
+  const tracking = klickKlassen(product);
   // imageUrl (PA-API) hat Vorrang vor image (manuell in YAML)
   const imageSrc = product.imageUrl ?? product.image;
   // Sterne nur bei Produkten mit Amazon-Link, immer mit Quelle (03.10.2026) —
@@ -234,9 +246,11 @@ export default function ProductCard({
           <span className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-brand-fire">
             Empfehlung
           </span>
-          <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
-            Anzeige
-          </span>
+          {link.partner && (
+            <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+              Anzeige
+            </span>
+          )}
         </div>
 
         <div className="relative mb-3 flex justify-center bg-surface-base p-3">
@@ -275,25 +289,23 @@ export default function ProductCard({
           </div>
         )}
 
-        <p className="text-lg font-sans font-bold text-text-primary mb-3">
-          {product.priceMin && product.priceMax
-            ? `${product.priceMin} – ${product.priceMax} €`
-            : `${product.price} €`}
+        <p className="mb-3">
+          <PreisMitStand product={product} className="text-lg font-sans font-bold text-text-primary" />
         </p>
 
         <Link
-          href={affiliateHref}
+          href={link.href}
           prefetch={false}
-          className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-          rel="sponsored nofollow noopener"
+          className={`btn-affiliate w-full justify-center text-sm mb-2 ${tracking}`}
+          rel={link.rel}
           target="_blank"
         >
           <ExternalLink size={14} />
-          Bei {providerLabel} ansehen
+          {buttonText}
         </Link>
 
         <p className="text-[10px] font-sans text-text-muted text-center leading-relaxed">
-          * Affiliate-Link — Preis unverändert für dich
+          {link.partner ? '* Affiliate-Link — Preis unverändert für dich' : HINWEIS_KEIN_PARTNERLINK}
         </p>
       </div>
     );
@@ -332,20 +344,22 @@ export default function ProductCard({
                 {product.badge}
               </span>
             )}
-            <span className="text-[9px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted">
-              Anzeige
-            </span>
+            {link.partner && (
+              <span className="text-[9px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted">
+                Anzeige
+              </span>
+            )}
           </div>
         </div>
         <div className="shrink-0 text-right">
-          <p className="font-sans font-bold text-sm text-text-primary mb-1.5">
-            {product.price} €
+          <p className="mb-1.5">
+            <PreisMitStand product={product} className="font-sans font-bold text-sm text-text-primary" block />
           </p>
           <Link
-            href={affiliateHref}
-          prefetch={false}
-            className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-            rel="sponsored nofollow noopener"
+            href={link.href}
+            prefetch={false}
+            className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 ${tracking}`}
+            rel={link.rel}
             target="_blank"
           >
             Ansehen
@@ -386,9 +400,11 @@ export default function ProductCard({
           <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
             {product.brand}
           </span>
-          <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
-            Anzeige
-          </span>
+          {link.partner && (
+            <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+              Anzeige
+            </span>
+          )}
         </div>
         <h3 className="font-sans font-bold text-lg text-text-primary mb-2 leading-snug">
           {product.name}
@@ -420,10 +436,8 @@ export default function ProductCard({
         )}
 
         <div className="flex items-end justify-between mb-4">
-          <p className="text-2xl font-sans font-bold text-text-primary">
-            {product.priceMin && product.priceMax
-              ? `${product.priceMin}–${product.priceMax} €`
-              : `${product.price} €`}
+          <p>
+            <PreisMitStand product={product} className="text-2xl font-sans font-bold text-text-primary" block />
           </p>
           {product.recommended && (
             <span className="text-[10px] font-sans font-bold tracking-wide uppercase text-brand-gold border border-brand-gold/30 px-2 py-1">
@@ -433,18 +447,18 @@ export default function ProductCard({
         </div>
 
         <Link
-          href={affiliateHref}
+          href={link.href}
           prefetch={false}
-          className={`btn-affiliate w-full justify-center plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-          rel="sponsored nofollow noopener"
+          className={`btn-affiliate w-full justify-center ${tracking}`}
+          rel={link.rel}
           target="_blank"
         >
           <ExternalLink size={15} />
-          Bei {providerLabel} ansehen
+          {buttonText}
         </Link>
 
         <p className="text-[10px] font-sans text-text-muted text-center mt-2 leading-relaxed">
-          * Wir erhalten eine Provision — Preis für dich unverändert
+          {link.partner ? '* Wir erhalten eine Provision — Preis für dich unverändert' : HINWEIS_KEIN_PARTNERLINK}
         </p>
       </div>
     </div>

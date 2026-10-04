@@ -39,7 +39,10 @@ function collect(): Hit[] {
     ...of(allCuts, 'Cut', 'excerpt'),
     ...of(allMethodes, 'Grilltechnik', 'excerpt'),
     ...of(allArtikels, 'Artikel', 'excerpt'),
-    ...of(allVergleiches, 'Test & Vergleich', 'excerpt'),
+    // Hiess bis 03.10.2026 „Test & Vergleich“ — die Seiten sind Marktübersichten,
+    // kein Gerätetest. Dieselbe Bezeichnung steht in TYP_REIHENFOLGE der
+    // Relaunch-Suche (src/app/relaunch/suche/page.tsx).
+    ...of(allVergleiches, 'Vergleich', 'excerpt'),
     ...of(allRecipes, 'Rezept', 'excerpt'),
     ...of(allGlossars, 'Glossar', 'shortDefinition'),
     ...of(allUsaBbqStyles, 'USA-Expedition', 'excerpt'),

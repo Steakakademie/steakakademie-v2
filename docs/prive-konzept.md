@@ -3,7 +3,8 @@
 > Premium-/B2B-Bereich. Modell: **Eigenverkauf** des Event-Gutscheins über Steakakademie;
 > Lieferung durch **Uwe selbst ODER Partner-Caterer/Locations** (Erfüllungsgehilfe).
 > Status: Entwurf — Preise/Inhalte + Recht (siehe `compliance/prive-event-rechtscheck.yaml`)
-> vor Go-Live finalisieren. Seite `/prive` bereits gebaut (noindex, anfrage-basiert).
+> vor Go-Live finalisieren. Seite `/prive` steht seit 03.10.2026 auf „in Vorbereitung"
+> (noindex, ohne Pakete, Preise und Anfrageweg) — die Pakete unten sind Entwurf, nicht Angebot.
 
 ---
 

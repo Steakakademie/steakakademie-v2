@@ -1,6 +1,6 @@
 {
   "hinweis": "Bekannte Befunde beim Einführen des Gates. Nicht von Hand ergänzen — beheben statt eintragen. Neu schreiben: node scripts/check-content-qualitaet.mjs --update-baseline",
-  "stand": "2026-09-21",
+  "stand": "2026-10-03",
   "befunde": [
     {
       "id": "1b8e32163783c599",
@@ -57,18 +57,6 @@
       "text": "Synonym von „stall\" (data/taxonomie.yaml)"
     },
     {
-      "id": "56e5e7809898fa2d",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/glossar/presa.mdx",
-      "text": "schwein: 58–62 °C unter Minimum 63 °C"
-    },
-    {
-      "id": "bdb8644588fe85e2",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/glossar/secreto.mdx",
-      "text": "schwein: 58–62 °C unter Minimum 63 °C"
-    },
-    {
       "id": "dd06dd73e9f114bc",
       "regel": "glossar-dublette",
       "datei": "content/glossar/wagyu-farm.mdx",
@@ -97,36 +85,6 @@
       "regel": "glossar-dublette",
       "datei": "content/glossar/wagyu-zubereitungen.mdx",
       "text": "Füllwort-Permutation von „wagyu\" (-zubereitungen)"
-    },
-    {
-      "id": "ddd3dc67541e1674",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/rezepte/iberico-pluma.mdx",
-      "text": "schwein: 58–62 °C unter Minimum 63 °C"
-    },
-    {
-      "id": "5f6d23230e802bef",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/rezepte/iberico-presa.mdx",
-      "text": "schwein: 62 °C unter Minimum 63 °C"
-    },
-    {
-      "id": "21f191f923417cb6",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/rezepte/iberico-secreto.mdx",
-      "text": "schwein: 58–62 °C unter Minimum 63 °C"
-    },
-    {
-      "id": "5b15f276a156602e",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/rezepte/wagyu-burger.mdx",
-      "text": "hack: 55–57 °C unter Minimum 70 °C"
-    },
-    {
-      "id": "06677c340117621c",
-      "regel": "kerntemperatur-sicherheit",
-      "datei": "content/rezepte/wagyu-burger.mdx",
-      "text": "hack: 55 °C unter Minimum 70 °C"
     }
   ]
 }

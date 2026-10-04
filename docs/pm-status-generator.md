@@ -260,6 +260,12 @@ gehoert Uwe, nicht dem Generator. Das Kriterium
 `generatoren-pushen-nicht-direkt` haelt den Widerspruch so lange sichtbar,
 bis er entschieden ist — und faellt weg oder wird gruen, je nachdem wie.
 
+**Nachtrag 03.10.2026:** Der Abschnitt beschreibt die Messung vom 13.08.2026. Seit
+04.09.2026 oeffnen die Bot-Workflows Pull Requests, statt direkt zu pushen
+(`docs/ci-bot-pat.md`); ob das Kriterium damit gruen ist, wurde fuer diesen Nachtrag
+nicht neu gemessen. `glossary-grow.yml` ist seit 03.10.2026 pausiert — kein Zeitplan
+mehr, der Handstart gilt weiter.
+
 ## Warnung: grep taugt nicht zur Befundaufnahme
 
 Waehrend dieser Migration haben oberflaechliche Textsuchen **vier** Befunde

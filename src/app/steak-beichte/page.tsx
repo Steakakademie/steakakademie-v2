@@ -54,8 +54,11 @@ const STEPS = [
   {
     Icon: FileSearch,
     step: '03',
-    title: 'Diagnose in deinem Postfach',
-    desc: 'Du bekommst: die Ursache, warum es passiert ist, und die 2–3 konkreten Änderungen die das nächste Mal den Unterschied machen.',
+    // 03.10.2026: Hier stand „Diagnose in deinem Postfach". Die Analyse-Route
+    // verschickt keine Mail — sie speichert das Ergebnis und das Formular leitet
+    // auf /steak-beichte/diagnose/[id] weiter (analyze/route.ts, DiagnoseForm.tsx).
+    title: 'Diagnose direkt auf der Seite',
+    desc: 'Du bekommst: die Ursache, warum es passiert ist, und die 2–3 konkreten Änderungen die das nächste Mal den Unterschied machen. Das Ergebnis erscheint im Browser und bleibt in deinem Konto gespeichert.',
   },
 ];
 
@@ -94,7 +97,7 @@ const FAQ = [
   },
   {
     q: 'Wie schnell bekomme ich die Diagnose?',
-    a: 'In der Regel innerhalb weniger Minuten nach Einreichung. Die KI-Analyse läuft automatisch — du bekommst das Ergebnis per E-Mail sobald es fertig ist.',
+    a: 'Die KI-Analyse startet, sobald du das Formular abschickst — rechne mit etwa einer Minute. Das Ergebnis erscheint direkt auf der Seite; eine E-Mail mit der Diagnose verschicken wir nicht. Solange du angemeldet bist, findest du sie unter demselben Link wieder.',
   },
   {
     q: 'Was wenn ich mit der Diagnose nicht einverstanden bin?',

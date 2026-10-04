@@ -5,7 +5,7 @@
  *   - dieser Datei (Suche: /api/hoefe, Geocoding),
  *   - scripts/lib/hoefe-osm.mjs (Wochenimport),
  * und sie muss zu den CHECK-Constraints der Tabelle `hoefe` passen
- * (supabase/migrations/20261003090000_hoefe_grenzen_dach.sql). Den Gleichstand
+ * (supabase/migrations/20261003074310_hoefe_grenzen_dach.sql). Den Gleichstand
  * erzwingt src/__tests__/hoefe-grenzen.test.ts.
  *
  * Warum das zaehlt: Bis hierher standen die Grenzen an vier Stellen mit zwei

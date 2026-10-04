@@ -41,7 +41,7 @@ export default function DankePage() {
             <span className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-[#F5A623] text-black text-xs font-bold flex items-center justify-center">1</span>
             <div>
               <p className="text-white text-sm font-medium">E-Mail prüfen</p>
-              <p className="text-white/50 text-sm">Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und eine Willkommens-E-Mail von uns.</p>
+              <p className="text-white/50 text-sm">Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und von uns eine E-Mail mit deinem Login-Link.</p>
             </div>
           </div>
 
@@ -72,8 +72,8 @@ export default function DankePage() {
 
         <p className="mt-4 text-white/30 text-xs">
           Die Abbuchung erfolgt durch Digistore24.com. Bei Fragen:{' '}
-          <a href="mailto:masterclass@steakakademie.de" className="underline hover:text-white/60 transition-colors">
-            masterclass@steakakademie.de
+          <a href="mailto:pitmaster@steakakademie.de" className="underline hover:text-white/60 transition-colors">
+            pitmaster@steakakademie.de
           </a>
         </p>
 

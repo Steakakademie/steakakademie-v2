@@ -362,7 +362,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
                 >
                   {recipe.author}
                 </Link>
-                <AutorHinweis authorSlug={recipe.authorSlug} variante="rezept" />
+                <AutorHinweis authorSlug={recipe.authorSlug} variante="rezept" dokument={recipe} />
               </div>
             </div>
           </div>

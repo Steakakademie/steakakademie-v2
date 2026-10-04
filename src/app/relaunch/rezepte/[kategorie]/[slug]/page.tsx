@@ -197,9 +197,9 @@ export default function RezeptSeite(props: Props) {
       </section>
 
       <Weiche
-        kicker="Dafür brauchst du · Test"
+        kicker="Dafür brauchst du · Vergleich"
         titel="Fleischthermometer im Vergleich 2026"
-        text="Drei Modelle, selbst getestet — kabellos vs. Kabel, Genauigkeit, App. Affiliate-Links gekennzeichnet."
+        text="Drei Modelle nach Herstellerangaben — kabellos vs. Kabel, Genauigkeit, App. Kein eigener Gerätetest. Affiliate-Links gekennzeichnet."
         href="/relaunch/vergleich/fleischthermometer"
       />
     </div>

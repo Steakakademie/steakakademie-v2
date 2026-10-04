@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   // Seite der Domain.
   title: { absolute: 'Steakakademie — BBQ Wissen, Cuts & Grillmeister-Diplome' },
   description:
-    'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome für ernsthafte Hobbygriller.',
+    'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Ausrüstungs-Vergleiche und Grillmeister-Diplome für ernsthafte Hobbygriller.',
   alternates: { canonical: '/' },
 };
 
@@ -88,7 +88,7 @@ export default async function HomePage() {
             </h1>
             <p className="font-body text-base sm:text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto mb-7">
               In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
-              Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
+              Rezepte, Ausrüstung. Methodisch, präzise, ohne Bullshit.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -369,19 +369,21 @@ export default async function HomePage() {
                 <div className="flex items-center gap-3">
                   <Award size={20} className="text-brand-gold" />
                   <h2 className="font-serif text-2xl font-bold text-text-primary">
-                    Unsere Testsieger
+                    Unsere Auswahl
                   </h2>
                 </div>
                 <Link
                   href="/kategorie/ausruestung"
                   className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase text-brand-fire hover:text-brand-gold transition-colors"
                 >
-                  Alle Tests <ChevronRight size={14} />
+                  Alle Vergleiche <ChevronRight size={14} />
                 </Link>
               </div>
               <div className="section-divider" />
+              {/* 03.10.2026: ohne Test-Aussage — die Auswahl ist eine redaktionelle
+                  Einordnung nach Herstellerangaben (src/lib/vergleich-seite.ts). */}
               <p className="text-sm font-sans text-text-muted mb-8 -mt-3">
-                Selbst getestet, methodisch bewertet. Affiliate-Links gekennzeichnet.
+                Redaktionelle Auswahl nach Herstellerangaben — kein eigener Gerätetest. Affiliate-Links sind als Anzeige gekennzeichnet.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recommendedProducts.map((product) => (
@@ -427,7 +429,7 @@ export default async function HomePage() {
                     { label: 'Kerntemperaturen', href: '/temperatur-guide', icon: Thermometer },
                     { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear', icon: Flame },
                     { label: 'Ribeye Guide', href: '/cuts/ribeye', icon: BookOpen },
-                    { label: 'Thermometer Test', href: '/vergleich/fleischthermometer', icon: Thermometer },
+                    { label: 'Thermometer-Vergleich', href: '/vergleich/fleischthermometer', icon: Thermometer },
                     { label: 'Brisket komplett', href: '/cuts/brisket', icon: BookOpen },
                   ].map(({ label, href, icon: Icon }) => (
                     <li key={href}>

@@ -54,7 +54,7 @@ export default function RelaunchStartseite() {
           <div className="sk-hero__kicker">Die methodisch tiefste BBQ-Plattform auf Deutsch</div>
           <h1 className="sk-h sk-h--hero">Gutes Fleisch verdient keinen Zufall.</h1>
           <p className="sk-hero__lead">
-            Du hast Hunger. Du hast ein Stück Fleisch, das einem Tier gehört hat. Was jetzt passiert, entscheidest du — nach Gefühl oder nach Wissen. Hier lernst du das Zweite. Methodisch, geprüft, ohne Bullshit.
+            Du hast Hunger. Du hast ein Stück Fleisch, das einem Tier gehört hat. Was jetzt passiert, entscheidest du — nach Gefühl oder nach Wissen. Hier lernst du das Zweite. Methodisch, präzise, ohne Bullshit.
           </p>
           <nav className="sk-pills" aria-label="Rubriken">
             <Link href="/relaunch/cuts" className="sk-pill">Cuts &amp; Fleischkunde</Link>

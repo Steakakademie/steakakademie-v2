@@ -16,6 +16,13 @@
     "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Einen Notbehelf gibt es nicht mehr: Die frühere Netlify-Kopie ist seit 24.09.2026 offline."
   },
   {
+    "name": "Funktionsproben",
+    "typ": "workflow",
+    "datei": "funktionsproben.yml",
+    "maxTage": 2,
+    "hinweis": "funktionsproben läuft täglich (Cron 05:23 UTC) und prüft die Live-Seite im Browser: Kernseiten, Werkzeuge, Zugangstor — mit Testkonto auch Anmeldung, Aroma-Abfrage und Abstimmung. Kein Start seit 2 Tagen = GitHub hat den Cron abgeschaltet (60 Tage ohne Repo-Aktivität) oder der Workflow wurde entfernt/umbenannt — von Hand per workflow_dispatch starten, dann Ursache suchen. Dieser Eintrag sieht nur, DASS die Proben starten; scheitert eine Probe, meldet der Workflow das selbst (rot + Jira-Ticket ops-funktionsproben)."
+  },
+  {
     "name": "Rezept-Produktion",
     "typ": "git",
     "pfad": "content/rezepte",
@@ -29,14 +36,6 @@
     "datei": "recipe-grow.yml",
     "maxTage": 2,
     "hinweis": "Der Workflow selbst hat nicht mehr gestartet. GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft nur ein manueller Start oder ein Commit."
-  },
-  {
-    "name": "Glossar",
-    "typ": "git",
-    "pfad": "content/glossar",
-    "nurNeueDateien": true,
-    "maxTage": 14,
-    "hinweis": "Gezählt wird nur ein NEU HINZUGEFÜGTER Glossar-Eintrag — ein Hand-Fix an einem bestehenden stellt die Uhr nicht zurück (seit 03.10.2026; vorher verdeckte der Fix vom 23.09. den Stillstand seit 19.09.). glossary-grow liest NUR artikel, cuts, methoden, vergleich, persoenlichkeiten — nicht die Rezepte. Steht hier Rot, ist in aller Regel der Vorrat leer: SEED_TERMS in scripts/glossary-agent.mjs ist abgearbeitet und die Extraktion findet nichts Neues (steht mit Zahl im Job-Summary des letzten glossary-grow-Laufs). Entscheidung Uwe: Seed-Liste von Hand erweitern — oder den täglichen Lauf und diesen Eintrag stilllegen, weil das Glossar laut docs/glossar-konsolidierung-kandidaten.md ohnehin zusammengelegt statt erweitert wird."
   },
   {
     "name": "Content-Entwürfe (Scout + Saison)",
@@ -60,13 +59,6 @@
     "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen (bzw. noch nie, und der älteste Entwurf wartet länger als die Frist). Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
   },
   {
-    "name": "Ideen-Radar",
-    "typ": "git",
-    "pfad": "data/ideen-backlog.json",
-    "maxTage": 7,
-    "hinweis": "ideen-radar läuft alle 3 Tage und aktualisiert den Backlog per PR mit Auto-Merge."
-  },
-  {
     "name": "Affiliate-Link-Prüfung",
     "typ": "workflow",
     "datei": "check-affiliate-links.yml",
@@ -80,7 +72,7 @@
     "spalte": "letzter_import",
     "filter": "letzter_import=not.is.null",
     "maxTage": 9,
-    "hinweis": "hoefe-import läuft montags und setzt bei jedem geschriebenen Hof letzter_import. Kein frischer Zeitstempel seit 9 Tagen = der Wochenlauf hat nichts geschrieben. So war es vom 15.09. bis 03.10.2026: drei Cron-Läufe scheiterten im Skript und wurden grün gemeldet (fehlendes pipefail hinter `| tee`). Zuerst das Job-Summary des letzten hoefe-import-Laufs lesen: Steht dort »von der Datenbank abgelehnt … hoefe_lat_check / hoefe_lng_check«, ist die Migration supabase/migrations/20261003090000_hoefe_grenzen_dach.sql nicht angewendet (Freigabe Uwe). Sonst: Overpass erreichbar? Supabase-Secrets?"
+    "hinweis": "hoefe-import läuft montags und setzt bei jedem geschriebenen Hof letzter_import. Kein frischer Zeitstempel seit 9 Tagen = der Wochenlauf hat nichts geschrieben. So war es vom 15.09. bis 03.10.2026: drei Cron-Läufe scheiterten im Skript und wurden grün gemeldet (fehlendes pipefail hinter `| tee`). Zuerst das Job-Summary des letzten hoefe-import-Laufs lesen: Steht dort »von der Datenbank abgelehnt … hoefe_lat_check / hoefe_lng_check«, sind sich Tabelle und Code über die Grenzen uneins: Die Tabelle bekommt sie aus supabase/migrations/20261003074310_hoefe_grenzen_dach.sql (angewendet am 03.10.2026), der Code aus src/lib/hoefe/grenzen.json. Sonst: Overpass erreichbar? Supabase-Secrets?"
   },
   {
     "name": "Social-Entwürfe",
@@ -103,6 +95,6 @@
     "tabelle": "knowledge_embeddings",
     "spalte": "indexed_at",
     "maxTage": 7,
-    "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann melden Rezept und Glossar gleichzeitig. Manuell: npm run index:knowledge."
+    "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann meldet die Rezept-Produktion gleichzeitig. Manuell: npm run index:knowledge."
   }
 ]

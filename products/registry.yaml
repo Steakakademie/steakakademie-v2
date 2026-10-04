@@ -24,7 +24,8 @@
   cons:
     - "App erforderlich (kein Display)"
     - "Akku-Ladestation als Schwachstelle"
-  badge: "Testsieger"
+  # Etikett = redaktionelle Einordnung nach Datenlage, kein Testurteil (03.10.2026).
+  badge: "Unsere Auswahl"
   lastChecked: "2026-05-22"
   recommended: true
 
@@ -42,12 +43,12 @@
   description: "Schnellstes Sofortlesethermometer — 1 Sekunde Messzeit"
   pros:
     - "1-Sekunden-Ablesung — schnellstes Thermometer"
-    - "Kalibriert auf ±0,4°C Genauigkeit"
+    - "Genauigkeit laut Hersteller besser als ±0,5 °C"
     - "Drehbares Display, wasserdicht"
   cons:
     - "Kein Funk/Wireless"
     - "Nur ein Sensor"
-  badge: "Genauigkeitssieger"
+  badge: "Präzision laut Datenblatt"
   lastChecked: "2026-05-22"
   recommended: false
 
@@ -345,7 +346,7 @@
   pros:
     - "32 Damastlagen, VG-MAX Kern — 61 HRC, rasiererscharf ab Werk"
     - "Pakkaholz-Griff — hygienisch, feuchtigkeitsresistent"
-    - "Bestes Damast-Preis-Leistungs-Verhältnis unter €200"
+    - "Damast-Einstieg mit starkem Preis-Leistungs-Verhältnis"
   cons:
     - "20 cm Klinge — für große Hände oder lange Cuts ggf. etwas kurz"
     - "Nicht für Knochen oder gefrorenes Fleisch geeignet"
@@ -412,12 +413,12 @@
   description: "Das meistempfohlene Einstiegsmesser der Welt — in Profiküchen auf 6 Kontinenten im Einsatz"
   pros:
     - "Fibrox-Griff — rutschsicher selbst mit fettig-nassen Händen"
-    - "Preis-Leistungs-Champion: Profi-Schärfe für €42"
+    - "Profi-Schärfe zum Einstiegspreis"
     - "Spülmaschinenfest — Profiküchen-Alltag ohne Sorgen"
   cons:
     - "Kein Damast, kein edler Look — reines Funktionsmesser"
     - "Weicherer Stahl (56 HRC) — häufiger nachschärfen"
-  badge: "Preis-Leistungs-Sieger"
+  badge: "Preis-Leistung nach Datenlage"
   lastChecked: "2026-05-28"
   recommended: false
 
@@ -560,7 +561,7 @@
   cons:
     - "Gasgerät (Propan) — Flaschenwechsel erforderlich"
     - "Nur Oberhitze — kein klassisches Grillprinzip"
-  badge: "Testsieger 2026"
+  badge: "Unsere Auswahl"
   lastChecked: "2026-05-22"
   recommended: true
 
@@ -652,7 +653,7 @@
     - "UV-Sterilisationsbox — aktiver Schimmelschutz"
     - "0,1°C-Temperaturschritte, elektronisch geregelt"
   cons:
-    - "Hoher Anschaffungspreis (€2.295)"
+    - "Hoher Anschaffungspreis"
     - "Dauerbetrieb — nicht für saisonale Nutzung wirtschaftlich"
   badge: "Referenzgerät"
   lastChecked: "2026-05-22"
@@ -674,7 +675,7 @@
     - "Abschließbare Tür mit Alarm — für semi-professionellen Einsatz"
     - "10 Jahre Kompressorgarantie"
   cons:
-    - "€4.195 — für die meisten Hobbyköche kein sinnvoller Invest"
+    - "Sehr hoher Preis — für die meisten Hobbyköche kein sinnvoller Invest"
     - "165 cm hoch, 70 cm breit — benötigt festen kühlen Stellplatz"
   badge: "Semi-Profi"
   lastChecked: "2026-05-22"

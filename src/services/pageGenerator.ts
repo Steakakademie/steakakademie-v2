@@ -104,7 +104,9 @@ function buildMeta(ev: NLEvaluation): PageMeta {
     title,
     description,
     keywords: [niche.targetKeyword, ...niche.secondaryKeywords, `zzp belasting ${niche.category}`],
-    canonical: `https://steakakademie.nl/zzp-niche/${niche.slug}`,
+    // Eigene URL (03.10.2026): Hier stand steakakademie.nl. Der Canonical zeigt auf
+    // die Adresse, unter der die Seite liegt; sie bleibt noindex (zzp-niche/[slug]/page.tsx).
+    canonical: `https://steakakademie.de/zzp-niche/${niche.slug}`,
     ogTitle:   title,
     ogDescription: description,
   };

@@ -49,7 +49,7 @@ describe('hoefe/grenzen', () => {
   });
 
   it('die Migration setzt genau diese Grenzen', () => {
-    const sql = lies('supabase/migrations/20261003090000_hoefe_grenzen_dach.sql');
+    const sql = lies('supabase/migrations/20261003074310_hoefe_grenzen_dach.sql');
     const lat = /ADD CONSTRAINT hoefe_lat_check CHECK \(lat BETWEEN ([\d.]+) AND ([\d.]+)\)/.exec(sql);
     const lng = /ADD CONSTRAINT hoefe_lng_check CHECK \(lng BETWEEN ([\d.]+) AND ([\d.]+)\)/.exec(sql);
     expect(lat?.slice(1, 3).map(Number)).toEqual([DACH_GRENZEN.latMin, DACH_GRENZEN.latMax]);

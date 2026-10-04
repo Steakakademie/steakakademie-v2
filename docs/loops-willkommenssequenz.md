@@ -4,6 +4,17 @@
 > Absender: `login@steakakademie.de` ist Auth — für Marketing den Loops-Standard-Absender nutzen.
 > Stimme: direkt, ehrlich, Pitmaster — kein Marketing-Sprech. Jede Mail EIN Job.
 > Abstände: Mail 1 sofort · Mail 2 +2 Tage · Mail 3 +3 Tage · Mail 4 +3 Tage.
+>
+> **Stand 03.10.2026 — an den Stand der Website angeglichen.** Die Texte unten sind die
+> Fassung, die seit 03.10.2026 in Loops gespeichert ist (Workflow kurz pausiert, vier Mails
+> über die API geändert, Workflow wieder gestartet — Status danach `Sending`). Geändert:
+> kein „jeden Freitag" mehr (der Wissens-Brief hat keinen festen Takt), Unterschrift
+> „Deine Steakakademie" statt „Uwe" (CLAUDE.md §2 Regel 3), Ruhezeit 5–7 Minuten laut
+> `data/kerntemperatur-referenz.yaml`, Mail 3 ohne „35 Lektionen … komplett kostenlos"
+> (frei ist Stufe 1), Mail 4 ohne Preis (die Steak-Beichte ist noch nicht kaufbar).
+> **Loops lehnt Änderungen ab, solange der Workflow sendet** — erst pausieren (neue Kontakte
+> werden 24 Stunden vorgehalten, laufende bleiben an ihrer Stelle), dann ändern, dann starten.
+> Wird die Steak-Beichte kaufbar, gehört der Preis wieder in Mail 4.
 
 ---
 
@@ -25,11 +36,12 @@ https://steakakademie.de/kerntemperatur-spickzettel
 Drei Regeln, die wichtiger sind als jede Tabelle:
 1. Miss im dicksten Punkt — nie am Knochen.
 2. Nimm das Fleisch ~3 °C vor dem Ziel runter (es zieht nach).
-3. Lass es ruhen. Steaks 3–5 Minuten, große Braten länger.
+3. Lass es ruhen. Steaks 5–7 Minuten, große Braten länger.
 
-Jeden Freitag bekommst du ab jetzt ein Stück BBQ-Wissen, das bleibt.
+Ab jetzt bekommst du den Wissens-Brief: BBQ-Wissen, das bleibt — ohne
+festen Takt, ohne Spam.
 
-Uwe — Steakakademie
+Deine Steakakademie
 ```
 
 ## Mail 2 — +2 Tage (bestes Wissen, Vertrauen)
@@ -41,7 +53,7 @@ Der häufigste Steak-Killer ist nicht zu viel Hitze — es ist das
 fehlende Ruhen.
 
 Schneidest du sofort an, läuft der Saft aufs Brett statt im Fleisch zu
-bleiben. 3–5 Minuten Geduld machen aus einem guten Steak ein sehr gutes.
+bleiben. 5–7 Minuten Geduld machen aus einem guten Steak ein sehr gutes.
 
 Warum das physikalisch so ist, und wie du mit Reverse Sear Kruste UND
 perfekten Kern bekommst, liest du hier:
@@ -49,14 +61,14 @@ perfekten Kern bekommst, liest du hier:
 → https://steakakademie.de/methoden/reverse-sear
 → https://steakakademie.de/temperatur-guide
 
-Freitag gibt's das nächste Stück Wissen.
+In ein paar Tagen kommt das nächste Stück Wissen.
 
-Uwe — Steakakademie
+Deine Steakakademie
 ```
 
 ## Mail 3 — +3 Tage (Diplom = Bindung)
-**Betreff:** Vom Funken zum Pitmaster — dein kostenloser Lernweg
-**Preheader:** 35 Lektionen, 5 Stufen, null Euro.
+**Betreff:** Vom Funken zum Pitmaster — Stufe 1 ist kostenlos
+**Preheader:** Stufe 1 ist frei — Lektion für Lektion.
 
 ```
 Die meisten lernen Grillen aus zusammengewürfelten YouTube-Videos.
@@ -64,40 +76,40 @@ Das Ergebnis: Lücken, die man nicht sieht — bis das teure Stück Fleisch
 danebengeht.
 
 Die Grillmeister-Ausbildung der Steakakademie ist ein strukturierter
-Lernweg: 5 Stufen von Bronze bis Meister, 35 Lektionen — von der
-Feuerführung bis zur Wettkampf-Präsentation. Komplett kostenlos.
+Lernweg in 5 Stufen — von der Feuerführung bis zur
+Wettkampf-Präsentation. Stufe 1 ist komplett kostenlos.
 
 → Starte mit Stufe 1: https://steakakademie.de/diplome
 
-Nimm dir eine Lektion pro Tag. In fünf Wochen grillst du anders.
+Nimm dir eine Lektion pro Tag — nach Stufe 1 grillst du anders.
 
-Uwe — Steakakademie
+Deine Steakakademie
 ```
 
 ## Mail 4 — +3 Tage (Produktbrücke, ehrlich)
-**Betreff:** Wenn's mal schiefgeht: Sag mir, was passiert ist
-**Preheader:** Die Steak-Beichte — Diagnose statt Daumendrücken.
+**Betreff:** Wenn's mal schiefgeht: Diagnose statt Daumendrücken
+**Preheader:** Die Steak-Beichte — was sie ist und wofür sie gedacht ist.
 
 ```
 Irgendwann passiert es jedem: 45 Euro Tomahawk, außen verbrannt, innen
 grau. Der Moment, in dem man entweder flucht — oder versteht, was
 schiefging.
 
-Dafür gibt es die Steak-Beichte: Du beschreibst (oder fotografierst),
-was passiert ist, und bekommst eine ehrliche Diagnose mit
-Korrektur-Protokoll für den nächsten Versuch. Eine Diagnose kostet 7 €
-— weniger als das nächste verdorbene Steak.
+Dafür ist die Steak-Beichte gedacht: Du beschreibst (oder
+fotografierst), was passiert ist, und bekommst eine ehrliche Diagnose
+mit Korrektur-Protokoll für den nächsten Versuch. Den aktuellen Stand
+und den Starttermin findest du auf der Seite.
 
 → https://steakakademie.de/steak-beichte
 
 Und falls du gerade dabei bist, dir nebenbei etwas Eigenes aufzubauen:
-Ich dokumentiere auf der Steakakademie auch, WIE dieses Projekt
+Auf der Steakakademie ist auch dokumentiert, WIE dieses Projekt
 entsteht — KI-gesteuert, als Ein-Personen-Betrieb. Falls dich das
 interessiert: https://steakakademie.de/ehrliches-system
 
-Ab jetzt: jeden Freitag der Wissens-Brief. Gute Glut!
+Ab jetzt kommt der Wissens-Brief ohne festen Takt. Gute Glut!
 
-Uwe — Steakakademie
+Deine Steakakademie
 ```
 
 ---

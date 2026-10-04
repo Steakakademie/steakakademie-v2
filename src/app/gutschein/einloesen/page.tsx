@@ -32,8 +32,8 @@ export default async function GutscheinEinloesenPage(props: { searchParams: Prom
 
         <p className="text-center text-xs font-sans text-text-muted mt-6 leading-relaxed">
           Probleme beim Einlösen? Schreib uns an{' '}
-          <a href="mailto:masterclass@steakakademie.de" className="underline hover:text-brand-gold">
-            masterclass@steakakademie.de
+          <a href="mailto:pitmaster@steakakademie.de" className="underline hover:text-brand-gold">
+            pitmaster@steakakademie.de
           </a>
         </p>
       </main>

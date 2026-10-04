@@ -27,11 +27,11 @@ function stufeEinsLektionen(): LektionLink[] {
 
 export const metadata: Metadata = {
   title: 'Grillmeister-Diplom: 10 Level BBQ-Ausbildung',
-  description: 'Das strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
+  description: 'Das strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch und schalte Level für Level frei.',
   alternates: { canonical: 'https://steakakademie.de/diplome' },
   openGraph: {
     title: 'Grillmeister-Diplom: 10 Level BBQ-Ausbildung',
-    description: 'Systematisch zum Grillmeister: 10 Level, echte Urkunden, klare Progression.',
+    description: 'Systematisch zum Grillmeister: 10 Level, klare Progression.',
     url: 'https://steakakademie.de/diplome',
     images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
@@ -46,7 +46,7 @@ export default function DiplomePage() {
     // beweisen koennen — § 5 UWG. Die Websuche vom selben Tag fand Online-Grillkurse
     // vor uns; ob es kein vergleichbares Stufen-Diplom gibt, ist ungeprueft.
     description:
-      'Das strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
+      'Das strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch und schalte Level für Level frei.',
     url: '/diplome',
   });
   const breadcrumbSch = breadcrumbSchema([{ name: 'Diplome', url: '/diplome' }]);

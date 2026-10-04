@@ -459,26 +459,26 @@ export default async function HomeVariantB() {
           </section>
         </DarkBand>
 
-        {/* ── TESTSIEGER — weisse Insel im Creme-Grund ── */}
+        {/* ── AUSWAHL — weisse Insel im Creme-Grund ── */}
         {recommendedProducts.length > 0 && (
           <section className="py-12 my-4" style={{ background: '#FFFFFF', borderTop: `1px solid ${HAIR}`, borderBottom: `1px solid ${HAIR}` }}>
             <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Award size={20} style={{ color: EMBER }} />
-                  <h2 className="font-serif text-2xl font-bold" style={{ color: INK }}>Unsere Testsieger</h2>
+                  <h2 className="font-serif text-2xl font-bold" style={{ color: INK }}>Unsere Auswahl</h2>
                 </div>
                 <Link
                   href="/kategorie/ausruestung"
                   className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase hover:underline"
                   style={{ color: EMBER }}
                 >
-                  Alle Tests <ChevronRight size={14} />
+                  Alle Vergleiche <ChevronRight size={14} />
                 </Link>
               </div>
               <div className="border-t-2 mt-2 mb-3" style={{ borderColor: INK }} />
               <p className="text-sm font-sans mb-8" style={{ color: MUT }}>
-                Selbst getestet, methodisch bewertet. Affiliate-Links gekennzeichnet.
+                Redaktionelle Auswahl nach Herstellerangaben — kein eigener Gerätetest. Affiliate-Links sind als Anzeige gekennzeichnet.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recommendedProducts.map((product) => (

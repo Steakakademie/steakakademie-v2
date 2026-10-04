@@ -1,7 +1,7 @@
 # Social-Media-Grundausstattung — Copy-Paste-Paket
 
 > **Zweck:** Alles, was du in die Kanäle einträgst, fertig formuliert — du klickst nur noch *einfügen*.
-> **Stand:** 08.06.2026 · **Link-in-Bio überall:** `https://steakakademie.de/newsletter`
+> **Stand:** 08.06.2026, Kontaktadresse angepasst 03.10.2026 · **Link-in-Bio überall:** `https://steakakademie.de/newsletter`
 > **Was ich NICHT kann:** mich einloggen / Einstellungen klicken (Konto-Schutz). Das bleibt bei dir.
 > **Konsistenz-Regel:** überall gleicher Name, gleiches Profilbild, gleicher Link.
 
@@ -12,7 +12,7 @@
 - **Name:** Steakakademie
 - **Handles:** @steakakademie (IG · TikTok · YouTube) · facebook.com/steakakademie.de
 - **Website:** steakakademie.de · **Link-in-Bio:** steakakademie.de/newsletter
-- **Kontakt:** info@steakakademie.de (B2B/Presse) · inspiration@steakakademie.de (Kooperationen)
+- **Kontakt:** pitmaster@steakakademie.de — eine Adresse für alles (seit 03.10.2026; `info@` und `inspiration@` werden nicht mehr genannt)
 - **Positionierung:** Deutschlands BBQ-Wissensplattform — deutsche Präzision trifft Texas-Seele. Ehrlich, autoritativ, kein Clickbait.
 - **Look (entschieden):** Warm & Rustikal — warmes Holz, weiches Tageslicht, dezente Glut. Markenfarben Gold `#C8882A`, Feuer `#E85018`, dunkler Bourbon-Grund.
 
@@ -29,7 +29,7 @@ Kerntemperaturen · Cuts · Technik — präzise & ehrlich
 👇 Gratis Wissens-Brief
 ```
 - **Website-Link:** https://steakakademie.de/newsletter
-- **Öffentliche Kontaktdaten:** E-Mail info@steakakademie.de · Ort Wuppertal
+- **Öffentliche Kontaktdaten:** E-Mail pitmaster@steakakademie.de · Ort Wuppertal
 - **Profil zu „Professionell/Creator" umstellen** (gibt Statistiken + Kontakt-Button)
 - **Story-Highlights anlegen (Cover je 1 Symbol):** `Cuts` · `Temperaturen` · `Methoden` · `Diplom` · `Rezepte`
 - **3 Pinned Posts (Idee):** 1) Manifest-Auszug (Markenstatement) · 2) Kerntemperatur-Spickzettel · 3) Cut-Grafik (Rind)
@@ -69,7 +69,7 @@ langjähriger Trainer.
 
 👉 Gratis Wissens-Brief: https://steakakademie.de/newsletter
 🌐 Website: https://steakakademie.de
-📩 Kontakt: info@steakakademie.de
+📩 Kontakt: pitmaster@steakakademie.de
 ```
 - **Links (im Kanal-Header):** Website · Wissens-Brief · Instagram · TikTok
 - **Banner:** 2560×1440 px (sicht­barer Bereich auf Handy: mittige 1546×423 px) — siehe Bild-Specs unten
@@ -89,7 +89,7 @@ und ein Diplom-System vom Funken bis zum Meister. Ehrlich, autoritativ,
 nachkochbar. 👉 Gratis Wissens-Brief auf steakakademie.de/newsletter
 ```
 - **Aktions-Button:** „Mehr dazu" → https://steakakademie.de/newsletter
-- **Website:** steakakademie.de · **E-Mail:** info@steakakademie.de · **Ort:** Wuppertal
+- **Website:** steakakademie.de · **E-Mail:** pitmaster@steakakademie.de · **Ort:** Wuppertal
 - **⚠️ Impressum-Pflicht (DE):** Im Feld „Impressum" der Seite die URL `https://steakakademie.de/impressum` eintragen — sonst abmahnfähig.
 - **Titelbild (Cover):** 820×312 px (mobil 640×360 sichtbar) — siehe Bild-Specs
 

@@ -3,6 +3,19 @@ import remarkGfm from 'remark-gfm';
 import { format, parseISO } from 'date-fns';
 import { de } from 'date-fns/locale';
 
+// ── `reviewed` und `reviewedAt` — zwei verschiedene Dinge (03.10.2026) ───────
+// `reviewed` (Vorgabe `true`) ist ein SCHALTER fuer die Veroeffentlichung: nur
+// ein ausdrueckliches `reviewed: false` haelt ein Dokument zurueck
+// (src/lib/redaktion.ts). Der Vorgabewert haelt den Altbestand sichtbar — er
+// belegt keine Pruefung, er sagt nur, dass niemand das Feld gesetzt hat.
+// `reviewedAt` ist der NACHWEIS: das Datum, an dem Uwe das Dokument geprueft hat.
+// Er setzt es von Hand (CLAUDE.md §2 Regel 4); es hat bewusst KEINEN
+// Vorgabewert. Die Aussage „geprueft“ — sichtbar wie im JSON-LD — gibt es nur
+// mit diesem Datum (src/lib/pruefnachweis.ts). Stand je Sammlung:
+// `npm run pruefstand`.
+// Wer die Vorgabewerte von `status`/`reviewed` aendert, aendert, was auf der
+// Seite erscheint — das ist eine Entscheidung von Uwe, kein Aufraeumen.
+
 // ── ARTIKEL ──────────────────────────────────────────────────────────────────
 
 export const Artikel = defineDocumentType(() => ({
@@ -43,8 +56,9 @@ export const Artikel = defineDocumentType(() => ({
     // Die Befreiung von der KI-Kennzeichnungspflicht haengt daran, dass jeder
     // Entwurf geprueft und verantwortet wird. Damit das im Code pruefbar ist
     // und nicht nur in compliance/ai-act-einstufung.md steht, tragen Artikel
-    // den Zustand selbst. Defaults sind bewusst „veroeffentlicht/geprueft":
-    // der Altbestand kennt die Felder nicht und darf sich nicht veraendern.
+    // den Zustand selbst. Die Defaults halten den Altbestand SICHTBAR: er kennt
+    // die Felder nicht und darf sich nicht veraendern. Ein Pruefnachweis sind
+    // sie nicht — der ist allein `reviewedAt` (siehe Dateikopf).
     // Durchgesetzt von scripts/check-redaktionsvorbehalt.mjs (prebuild).
     status:   { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
     reviewed: { type: 'boolean', default: true },
@@ -96,6 +110,9 @@ export const Cut = defineDocumentType(() => ({
     // Optional: FAQ-Paare {question, answer} für FAQPage-Schema (GEO/Rich Results).
     // Optional gehalten, damit bestehende Cuts ohne faq nicht brechen.
     faq: { type: 'json' },
+    // Pruefnachweis (03.10.2026): optional, ohne Vorgabewert, kein Einfluss auf
+    // die Sichtbarkeit. Ohne das Feld konnte ein Cut gar kein Pruefdatum tragen.
+    reviewedAt: { type: 'date' },
   },
   computedFields: {
     slug: {
@@ -138,6 +155,8 @@ export const Methode = defineDocumentType(() => ({
     timeMinutes: { type: 'number' },
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
+    // Pruefnachweis (03.10.2026): optional, ohne Vorgabewert — wie bei Cut.
+    reviewedAt: { type: 'date' },
   },
   computedFields: {
     slug: {
@@ -176,8 +195,6 @@ export const Vergleich = defineDocumentType(() => ({
     // nach EU AI Act Art. 50 Abs. 4.
     imageSource: { type: 'string' },
     imageAI: { type: 'boolean', default: false },
-    testedCount: { type: 'number' },
-    testDuration: { type: 'string' },
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     faq: { type: 'json' },
@@ -267,6 +284,9 @@ export const Glossar = defineDocumentType(() => ({
     // scripts/glossary-agent.mjs ausdruecklich als draft/false.
     status:          { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
     reviewed:        { type: 'boolean', default: true },
+    // Pruefnachweis (03.10.2026): Das Feld fehlte hier — ein Glossar-Eintrag
+    // konnte kein Pruefdatum tragen. Optional, ohne Vorgabewert.
+    reviewedAt:      { type: 'date' },
   },
   computedFields: {
     url: {
@@ -339,6 +359,7 @@ export const Recipe = defineDocumentType(() => ({
     // Redaktionsvorbehalt — gleiche Felder und Defaults wie Artikel/Streitfall.
     // Die Defaults halten den gesamten Altbestand (118 Rezepte ohne diese Felder)
     // unveraendert sichtbar; der Rezept-Agent setzt sie ab 13.09.2026 explizit.
+    // `reviewedAt` setzt kein Agent — nur Uwe von Hand (siehe Dateikopf).
     status:         { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
     reviewed:       { type: 'boolean', default: true },
     reviewedAt:     { type: 'date' },
@@ -549,9 +570,9 @@ export const Streitfall = defineDocumentType(() => ({
     // (compliance/ai-act-einstufung.md Punkt 3). Aufgefallen an einem
     // Pipeline-Entwurf fuer Frage #11, der als erster Streitfall aus der
     // automatisierten Content-Pipeline kam.
-    // Defaults wie bei Artikel und Fleischwissen bewusst
-    // „veroeffentlicht/geprueft": die acht bestehenden Streitfaelle kennen die
-    // Felder nicht und duerfen sich nicht veraendern.
+    // Defaults wie bei Artikel und Fleischwissen: sie halten die acht
+    // bestehenden Streitfaelle sichtbar, die die Felder nicht kennen. Ein
+    // Pruefnachweis ist allein `reviewedAt` (siehe Dateikopf).
     status:   { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
     reviewed: { type: 'boolean', default: true },
     reviewedAt: { type: 'date' },

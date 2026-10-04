@@ -71,7 +71,10 @@ Bild-Route `apple-icon.png`. Alle aus der Sitemap genommen (siehe Tabelle).
    - Managed Ruleset **Bot Protection** zunächst auf **Log**, nach einer Woche
      Beobachtung auf **Challenge**. Vorher: `ops-heartbeat` und E2E rufen die
      Seite per curl auf — eine Bypass-Regel (eigener Header) für diese Läufe,
-     sonst meldet der Wächter rot.
+     sonst meldet der Wächter rot. Nachtrag 03.10.2026: Eine Regel „Bot
+     Protection: Challenge" träfe auch die täglichen Funktionsproben
+     (`funktionsproben.yml`, ein Browser gegen die Live-Seite) — sie gehören
+     in dieselbe Ausnahme.
    - **AI Bots** Ruleset: auf **Log**, nicht Deny — das Ruleset trifft auch die
      erwünschten Such-Crawler. Die Trennung macht die robots.txt.
    - **Attack Challenge Mode** nur im Angriffsfall von Hand einschalten.

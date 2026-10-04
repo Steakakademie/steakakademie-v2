@@ -106,7 +106,11 @@ und als eigene Reihe „Steak-Grundlagen" führen, nicht als Grundlagen-Werkstat
 ## Prozess
 
 1. Claude Code schreibt einen Batch je Session, `reviewed: false`.
-2. Uwe liest über `/artikel` (lokal, `npm run dev`), prüft Fachliches, setzt `reviewed: true`.
+2. Uwe liest über `/artikel` (lokal, `npm run dev`), prüft Fachliches, setzt `reviewed: true`
+   **und `reviewedAt` (JJJJ-MM-TT)**. Seit 03.10.2026 gilt: `reviewed: true` schaltet nur
+   noch die Sichtbarkeit — die Aussage „geprüft" erscheint auf der Seite ausschließlich
+   mit Prüfdatum (`src/lib/pruefnachweis.ts`). `reviewedAt` setzt nur Uwe von Hand; was
+   noch ohne Datum ist, zeigt `npm run pruefstand`.
 3. Build-Gate `check-redaktionsvorbehalt.mjs` lässt nichts Ungeprüftes in den Build
    → dokumentierter Redaktionsvorbehalt (AI Act Art. 50).
 4. Batch 1–3 reichen für den Launch; 4–5 dürfen in den Oktober rutschen.

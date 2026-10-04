@@ -1,4 +1,5 @@
 import type { AnchorHTMLAttributes } from 'react';
+import { REL_PARTNERLINK } from './produkt-anzeige';
 
 /** Ein Markdown-Link auf `/go/<id>` ist ein Partnerlink (Tracking-Redirect zum Händler). */
 export function istPartnerlink(href?: string | null): boolean {
@@ -22,7 +23,7 @@ export default function MdxTextLink({ href, children, ...props }: AnchorHTMLAttr
     <>
       <a
         href={href}
-        rel={partnerlink ? 'sponsored nofollow noopener' : undefined}
+        rel={partnerlink ? REL_PARTNERLINK : undefined}
         className="text-brand-fire font-medium hover:text-brand-gold transition-colors"
         {...props}
       >

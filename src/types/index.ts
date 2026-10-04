@@ -89,7 +89,9 @@ export interface Product {
   description?: string;
   pros?: string[];
   cons?: string[];
-  badge?: string; // z.B. "Testsieger", "Preis-Leistung"
+  /** Redaktionelle Einordnung nach Datenlage, z. B. "Unsere Auswahl",
+   *  "Preis-Leistung" — nie ein Testurteil (kein „…sieger“). */
+  badge?: string;
   /** Für Messer-Kategorie: premium | damast | mittelklasse | bbq-spezial */
   segment?: string;
   lastChecked: string; // ISO date
