@@ -215,7 +215,7 @@ function SidebarCTA({ niche }: { niche: string }) {
       </p>
       <Link
         href="/zzp-niche"
-        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 font-sans font-bold text-sm text-white rounded-sm transition-opacity hover:opacity-90"
+        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 font-sans font-bold text-sm text-ink rounded-sm transition-opacity hover:opacity-90"
         style={{ background: '#E85018' }}
       >
         Bereken mijn netto
@@ -297,7 +297,7 @@ export default async function ZZPNichePage(props: Props) {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/zzp-niche"
-                className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm text-white rounded-sm transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm text-ink rounded-sm transition-opacity hover:opacity-90"
                 style={{ background: '#E85018' }}
               >
                 {hero.ctaLabel}

@@ -289,7 +289,7 @@ export default async function PlanPage(props: { searchParams: Promise<{ nr?: str
                   <Link
                     href="/steak-beichte"
                     className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
-                    style={{ background: '#E85018', color: '#fff' }}
+                    style={{ background: '#E85018', color: '#120C07' }}
                   >
                     Session analysieren lassen <ArrowRight size={15} />
                   </Link>

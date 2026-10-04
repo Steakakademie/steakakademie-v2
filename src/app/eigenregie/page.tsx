@@ -134,7 +134,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
               und änderst ihn danach selbst, mit Claude Code als Werkzeug.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/eigenregie/diagnose" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-white font-sans font-bold">
+              <Link href="/eigenregie/diagnose" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold">
                 Kostenlose Diagnose starten <ArrowRight size={16} />
               </Link>
               <a href="#kaufen" className="inline-flex items-center gap-2 px-6 py-3 border border-text-light/30 text-text-light font-sans font-bold hover:border-brand-gold">
@@ -263,7 +263,7 @@ export default async function EigenregiePage(props: { searchParams: Promise<{ lo
             )}
 
             {kaufbar ? (
-              <a href={CHECKOUT_URL} className="inline-flex items-center gap-2 px-8 py-4 bg-brand-fire text-white font-sans font-bold text-base" rel="nofollow">
+              <a href={CHECKOUT_URL} className="inline-flex items-center gap-2 px-8 py-4 bg-brand-fire text-ink font-sans font-bold text-base" rel="nofollow">
                 Jetzt für {euro(angebot.preis)} starten <ArrowRight size={18} />
               </a>
             ) : (

@@ -72,7 +72,7 @@ export default function EquipmentFooter({ title, productIds }: { title?: string;
                   // Weiterleitung ohne Klick. Damit ginge die Besucher-IP beim blossen
                   // Scrollen an Amazon. Aufgefallen 20.08.2026 durch die neue CSP.
                   prefetch={false}
-                  className={`inline-flex items-center gap-1.5 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-2 hover:bg-[#cc4412] transition-colors ${klickKlassen(product, 'footer')}`}
+                  className={`inline-flex items-center gap-1.5 bg-brand-fire text-ink font-sans text-[11px] font-bold tracking-wide px-3 py-2 hover:bg-[#cc4412] transition-colors ${klickKlassen(product, 'footer')}`}
                   rel={link.rel}
                   target="_blank"
                 >

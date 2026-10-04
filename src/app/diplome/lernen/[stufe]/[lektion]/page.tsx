@@ -237,7 +237,7 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link
                         href="/diplome"
-                        className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest text-white bg-brand-fire hover:opacity-90 transition-opacity"
+                        className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest text-ink bg-brand-fire hover:opacity-90 transition-opacity"
                       >
                         Zur Ausbildung <ArrowRight size={14} />
                       </Link>

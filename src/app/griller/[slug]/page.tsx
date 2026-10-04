@@ -97,7 +97,7 @@ export default async function GrillerProfilePage(props: Props) {
           <div className="text-center mt-14">
             <Link
               href="/diplome"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition-colors"
             >
               Eigenes Diplom starten <ChevronRight size={15} />
             </Link>

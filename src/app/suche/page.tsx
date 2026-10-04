@@ -54,7 +54,7 @@ export default async function SuchePage(
             </div>
             <button
               type="submit"
-              className="shrink-0 bg-brand-fire text-white font-sans text-xs font-bold tracking-widest uppercase px-5 py-3.5 hover:opacity-90 transition-opacity"
+              className="shrink-0 bg-brand-fire text-ink font-sans text-xs font-bold tracking-widest uppercase px-5 py-3.5 hover:opacity-90 transition-opacity"
             >
               Suchen
             </button>

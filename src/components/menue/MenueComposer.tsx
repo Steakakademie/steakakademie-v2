@@ -175,7 +175,7 @@ export default function MenueComposer({ rezepte }: { rezepte: MenuRezept[] }) {
                   onClick={() => setPersonen((p) => Math.max(1, p - 1))}
                   disabled={personen <= 1}
                   aria-label="Weniger Personen"
-                  className="w-7 h-7 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-white disabled:opacity-30 transition-colors"
+                  className="w-7 h-7 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-ink disabled:opacity-30 transition-colors"
                 >
                   <Minus size={12} />
                 </button>
@@ -186,7 +186,7 @@ export default function MenueComposer({ rezepte }: { rezepte: MenuRezept[] }) {
                   onClick={() => setPersonen((p) => Math.min(30, p + 1))}
                   disabled={personen >= 30}
                   aria-label="Mehr Personen"
-                  className="w-7 h-7 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-white disabled:opacity-30 transition-colors"
+                  className="w-7 h-7 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-ink disabled:opacity-30 transition-colors"
                 >
                   <Plus size={12} />
                 </button>

@@ -148,7 +148,7 @@ export default async function MeineKursePage() {
               </p>
               <Link
                 href="/diplome"
-                className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm text-white rounded-sm transition-opacity hover:opacity-90 mt-2"
+                className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm text-ink rounded-sm transition-opacity hover:opacity-90 mt-2"
                 style={{ background: '#E85018' }}
               >
                 Zum Diplom-System

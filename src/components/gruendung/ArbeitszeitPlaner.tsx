@@ -280,7 +280,7 @@ export default function ArbeitszeitPlaner() {
                 </span>
                 <button
                   onClick={() => setMaskOpen(false)}
-                  className="rounded-sm bg-brand-fire px-5 py-2 font-sans text-sm font-bold text-white transition-opacity hover:opacity-90"
+                  className="rounded-sm bg-brand-fire px-5 py-2 font-sans text-sm font-bold text-ink transition-opacity hover:opacity-90"
                 >
                   Timetable bauen
                 </button>
@@ -411,7 +411,7 @@ export default function ArbeitszeitPlaner() {
               />
               <button
                 onClick={addTask}
-                className="inline-flex items-center gap-1 rounded-sm bg-brand-fire px-3 py-1.5 font-sans text-sm font-bold text-white transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-1 rounded-sm bg-brand-fire px-3 py-1.5 font-sans text-sm font-bold text-ink transition-opacity hover:opacity-90"
               >
                 <Plus size={14} /> Add
               </button>

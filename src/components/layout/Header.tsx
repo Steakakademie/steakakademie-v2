@@ -240,7 +240,7 @@ export default function Header() {
               </Link>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 shrink-0 ml-1"
+                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-ink hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 shrink-0 ml-1"
                 aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
                 aria-expanded={mobileOpen}
               >

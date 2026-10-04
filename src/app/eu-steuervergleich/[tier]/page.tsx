@@ -460,7 +460,7 @@ function TierCTA({ current }: { current: string }) {
           <Link
             key={tier}
             href={`/eu-steuervergleich/${tier}`}
-            className="inline-flex items-center gap-2 px-4 py-2.5 font-sans font-bold text-sm rounded-sm text-white transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 px-4 py-2.5 font-sans font-bold text-sm rounded-sm text-ink transition-opacity hover:opacity-90"
             style={{ background: '#E85018' }}
           >
             {TIER_LABELS[tier]}

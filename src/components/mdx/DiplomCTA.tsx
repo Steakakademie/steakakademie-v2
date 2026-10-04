@@ -98,7 +98,7 @@ export function DiplomCTA({ modul, headline, text, cta = 'Zum Diplom' }: DiplomC
 
       <Link
         href={ziel.href}
-        className="inline-flex items-center gap-2 px-5 py-3 font-sans text-sm font-bold text-white transition-opacity hover:opacity-85"
+        className="inline-flex items-center gap-2 px-5 py-3 font-sans text-sm font-bold text-ink transition-opacity hover:opacity-85"
         style={{ backgroundColor: '#E85018' }}
       >
         {cta}

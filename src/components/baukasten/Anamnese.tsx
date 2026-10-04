@@ -79,7 +79,7 @@ export default function Anamnese() {
         </button>
         <button type="button" disabled={!blockOk}
           onClick={() => (letzter ? setFertig(true) : setBlock((b) => b + 1))}
-          className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-ink transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: FEUER }}>
           {letzter ? 'Ergebnis zeigen' : 'Weiter'} <ArrowRight size={16} aria-hidden />
         </button>
@@ -333,7 +333,7 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
               </p>
             )}
             <button type="submit" disabled={status === 'sendet' || wartetAufCaptcha || !consent}
-              className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-white disabled:opacity-40" style={{ background: FEUER }}>
+              className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-ink disabled:opacity-40" style={{ background: FEUER }}>
               <Send size={16} aria-hidden /> {status === 'sendet' ? 'Wird gesendet …' : wartetAufCaptcha ? 'Sicherheitsprüfung …' : wertgespraech ? 'Wertgespräch anfragen' : 'Angebot anfragen'}
             </button>
           </form>

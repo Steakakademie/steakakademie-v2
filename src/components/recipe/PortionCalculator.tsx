@@ -120,7 +120,7 @@ export default function PortionCalculator({ basePortions, ingredients }: Props) 
               onClick={() => setPortions(p => Math.max(1, p - 1))}
               disabled={portions <= 1}
               aria-label="Portionen verringern"
-              className="w-9 h-9 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-[background-color,color,opacity]"
+              className="w-9 h-9 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition-[background-color,color,opacity]"
             >
               <Minus size={14} />
             </button>
@@ -136,7 +136,7 @@ export default function PortionCalculator({ basePortions, ingredients }: Props) 
               onClick={() => setPortions(p => Math.min(20, p + 1))}
               disabled={portions >= 20}
               aria-label="Portionen erhöhen"
-              className="w-9 h-9 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-[background-color,color,opacity]"
+              className="w-9 h-9 flex items-center justify-center border border-brand-fire/40 text-brand-fire hover:bg-brand-fire hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed transition-[background-color,color,opacity]"
             >
               <Plus size={14} />
             </button>
