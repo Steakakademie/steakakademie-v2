@@ -19,6 +19,7 @@ import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
 import KeyFacts from '@/components/KeyFacts';
 import { inhaltsverzeichnis, knotenText, ueberschriftSlug } from '@/lib/inhaltsverzeichnis';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -105,12 +106,12 @@ const mdxComponents = {
     </thead>
   ),
   th: ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
-    <th
+    <MdxTh
       className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase"
       {...props}
     >
       {children}
-    </th>
+    </MdxTh>
   ),
   td: ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
     <td

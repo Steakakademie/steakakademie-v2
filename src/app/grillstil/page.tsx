@@ -162,7 +162,7 @@ export default async function GrillstilPage() {
               >
                 <div className="flex items-center justify-between mb-5">
                   <Icon size={24} className="text-brand-gold" />
-                  <span className="font-serif text-3xl font-bold text-brand-gold/30">{nr}</span>
+                  <span className="font-serif text-3xl font-bold text-brand-gold/65">{nr}</span>
                 </div>
                 <h3 className="font-serif text-xl font-bold mb-3 text-text-light">{title}</h3>
                 <p className="font-body leading-relaxed flex-1 text-text-secondary">{text}</p>

@@ -79,33 +79,33 @@ export default function WiderrufForm() {
     <form ref={formRef} onSubmit={submit} className="space-y-5">
       <HoneypotFeld />
       <div>
-        <label className="font-serif text-sm font-bold text-text-primary block mb-2">E-Mail-Adresse</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="deine@email.de"
+        <label htmlFor="widerruf-email" className="font-serif text-sm font-bold text-text-primary block mb-2">E-Mail-Adresse</label>
+        <input id="widerruf-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="deine@email.de"
           className={inputCls} style={inputStyle} autoComplete="email" />
       </div>
       <div>
-        <label className="font-serif text-sm font-bold text-text-primary block mb-2">
+        <label htmlFor="widerruf-bestellnummer" className="font-serif text-sm font-bold text-text-primary block mb-2">
           Bestell-/Vertragsnummer <span className="font-sans font-normal text-text-muted">(alternativ zur E-Mail)</span>
         </label>
-        <input type="text" value={orderRef} onChange={(e) => setOrderRef(e.target.value)} maxLength={120}
+        <input id="widerruf-bestellnummer" type="text" value={orderRef} onChange={(e) => setOrderRef(e.target.value)} maxLength={120}
           placeholder="z. B. ABCD1234" className={inputCls} style={inputStyle} />
       </div>
       <p className="text-xs font-sans text-text-muted -mt-2">Mindestens eines der beiden Felder ist erforderlich.</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="font-serif text-sm font-bold text-text-primary block mb-2">Name <span className="font-sans font-normal text-text-muted">(optional)</span></label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} className={inputCls} style={inputStyle} autoComplete="name" />
+          <label htmlFor="widerruf-name" className="font-serif text-sm font-bold text-text-primary block mb-2">Name <span className="font-sans font-normal text-text-muted">(optional)</span></label>
+          <input id="widerruf-name" type="text" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} className={inputCls} style={inputStyle} autoComplete="name" />
         </div>
         <div>
-          <label className="font-serif text-sm font-bold text-text-primary block mb-2">Produkt/Vertrag <span className="font-sans font-normal text-text-muted">(optional)</span></label>
-          <input type="text" value={product} onChange={(e) => setProduct(e.target.value)} maxLength={160} placeholder="z. B. Steuer-Matrix LIVE" className={inputCls} style={inputStyle} />
+          <label htmlFor="widerruf-produkt" className="font-serif text-sm font-bold text-text-primary block mb-2">Produkt/Vertrag <span className="font-sans font-normal text-text-muted">(optional)</span></label>
+          <input id="widerruf-produkt" type="text" value={product} onChange={(e) => setProduct(e.target.value)} maxLength={160} placeholder="z. B. Steuer-Matrix LIVE" className={inputCls} style={inputStyle} />
         </div>
       </div>
 
       <div>
-        <label className="font-serif text-sm font-bold text-text-primary block mb-2">Anmerkung <span className="font-sans font-normal text-text-muted">(optional)</span></label>
-        <textarea value={reason} onChange={(e) => setReason(e.target.value)} maxLength={2000} rows={3} className={inputCls} style={inputStyle} />
+        <label htmlFor="widerruf-anmerkung" className="font-serif text-sm font-bold text-text-primary block mb-2">Anmerkung <span className="font-sans font-normal text-text-muted">(optional)</span></label>
+        <textarea id="widerruf-anmerkung" value={reason} onChange={(e) => setReason(e.target.value)} maxLength={2000} rows={3} className={inputCls} style={inputStyle} />
       </div>
 
       {error && (

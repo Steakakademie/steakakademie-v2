@@ -75,7 +75,7 @@ export default function PersoenlichkeitenPage() {
 
         {/* Rotation Banner */}
         <div className="bg-brand-gold/10 border-b border-brand-gold/20 px-4 py-2">
-          <div className="max-w-editorial mx-auto flex items-center gap-2 text-xs font-sans text-brand-gold/70">
+          <div className="max-w-editorial mx-auto flex items-center gap-2 text-xs font-sans text-brand-gold">
             <RotateCcw size={12} />
             <span>Im Fokus: <strong className="text-brand-gold">{featured?.title?.split('—')[0]?.trim()}</strong> — der Aufmacher wechselt durch den Bestand</span>
           </div>
@@ -100,8 +100,8 @@ export default function PersoenlichkeitenPage() {
                     <span className="text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-brand-fire bg-brand-fire/10 px-3 py-1">
                       {CATEGORY_LABELS[featured.category] ?? featured.category}
                     </span>
-                    <span className="text-text-light/30 text-xs font-sans">{featured.nationality}</span>
-                    {featured.born && <span className="text-text-light/30 text-xs font-sans">*{featured.born}</span>}
+                    <span className="text-text-light/55 text-xs font-sans">{featured.nationality}</span>
+                    {featured.born && <span className="text-text-light/55 text-xs font-sans">*{featured.born}</span>}
                   </div>
                   <h2 className="font-serif text-3xl md:text-4xl font-bold text-text-light mb-3 leading-tight group-hover:text-brand-gold transition-colors">
                     {featured.title}
@@ -110,7 +110,7 @@ export default function PersoenlichkeitenPage() {
                     {featured.excerpt}
                   </p>
                   <div className="border border-brand-gold/20 bg-brand-gold/5 px-4 py-3 inline-block mb-6">
-                    <p className="text-xs font-sans text-brand-gold/70">
+                    <p className="text-xs font-sans text-brand-gold">
                       <span className="font-bold text-brand-gold">Claim to fame:</span> {featured.claim}
                     </p>
                   </div>

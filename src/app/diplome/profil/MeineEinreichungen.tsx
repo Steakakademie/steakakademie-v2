@@ -71,7 +71,7 @@ export default function MeineEinreichungen() {
                 </div>
                 {r.status === 'approved' && (
                   <Link href={`/rezepte/community/${r.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-brand-gold hover:underline shrink-0">
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-brand-gold underline underline-offset-2 hover:no-underline shrink-0">
                     Ansehen <ExternalLink size={12} />
                   </Link>
                 )}

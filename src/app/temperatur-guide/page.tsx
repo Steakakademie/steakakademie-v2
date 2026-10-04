@@ -12,6 +12,7 @@ import { getProductsByCategory } from '@/lib/products';
 import KeyFacts from '@/components/KeyFacts';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
 import { badge, spanne, mindestwert } from '@/lib/kerntemperatur-referenz';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // Werte für Schwein nach Teilstück, Geflügel und Wildschwein kommen aus
 // data/kerntemperatur-referenz.yaml (Uwe, 29.09.2026: „sollte auf Dauer
@@ -248,7 +249,7 @@ export default function TemperaturGuidePage() {
                     href={href}
                     className="flex items-center gap-2 text-sm font-sans text-text-secondary hover:text-brand-gold transition-colors py-0.5"
                   >
-                    <span className="text-brand-gold/50 font-mono text-[10px] w-4 shrink-0">{num}</span>
+                    <span className="text-brand-gold font-mono text-[10px] w-4 shrink-0">{num}</span>
                     {label}
                   </Link>
                 </li>
@@ -271,7 +272,7 @@ export default function TemperaturGuidePage() {
             </p>
 
             {/* Rind-Tabelle */}
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Kerntemperaturen Rind und Steak">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -353,7 +354,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
 
             {/* Rind — Info-Box */}
             <div className="bg-surface-card border border-border-subtle p-6">
@@ -383,7 +384,7 @@ export default function TemperaturGuidePage() {
               Lieber sofort loslegen?{' '}
               <Link
                 href="/kerntemperatur-spickzettel"
-                className="font-semibold text-brand-fire hover:underline"
+                className="font-semibold text-brand-fire underline underline-offset-2 hover:no-underline"
               >
                 Alle Werte auf einer Seite — zum Ausdrucken
               </Link>
@@ -406,7 +407,7 @@ export default function TemperaturGuidePage() {
               gegenüber der früher verbreiteten Ansicht, Schwein müsse komplett grau durchgegart sein.
             </p>
 
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Kerntemperaturen Schwein">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -504,7 +505,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
 
             <div className="bg-surface-card border border-border-subtle p-6">
               <h3 className="font-serif text-lg font-bold text-text-primary mb-3">
@@ -534,7 +535,7 @@ export default function TemperaturGuidePage() {
               Rindfleisch. Well Done ist bei Lamm meist Geschmackssache, nicht Sicherheitsfrage.
             </p>
 
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Kerntemperaturen Lamm">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -609,7 +610,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
           </section>
 
           {/* ═══════════════════════════════════════════════════════════════
@@ -644,7 +645,7 @@ export default function TemperaturGuidePage() {
               </div>
             </div>
 
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Kerntemperaturen Geflügel">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -730,7 +731,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
 
             <div className="bg-surface-card border border-border-subtle p-6">
               <h3 className="font-serif text-lg font-bold text-text-primary mb-3">
@@ -761,7 +762,7 @@ export default function TemperaturGuidePage() {
               unter Bedingungen rosa bleiben (siehe Hinweis unter der Tabelle).
             </p>
 
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Kerntemperaturen Wild">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -857,7 +858,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
 
             <div className="bg-amber-950/40 border border-amber-600/40 p-5">
               <div className="flex gap-3">
@@ -926,7 +927,7 @@ export default function TemperaturGuidePage() {
             </div>
 
             {/* Ruhephase Tabelle */}
-            <div className="overflow-x-auto mb-8">
+            <ScrollBereich className="mb-8">
               <table className="w-full border-collapse text-sm font-sans" aria-label="Ruhephase nach Fleischgröße">
                 <thead>
                   <tr className="border-b-2 border-brand-gold/40">
@@ -986,7 +987,7 @@ export default function TemperaturGuidePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollBereich>
 
             <div className="bg-surface-card border border-brand-gold/25 p-6">
               <h3 className="font-sans text-xs font-bold tracking-[0.14em] uppercase text-brand-gold mb-3">
@@ -1103,7 +1104,7 @@ export default function TemperaturGuidePage() {
                 Wassertemperatur — das ist der physikalische Vorteil der Methode. Es gibt kein Übergaren,
                 kein Carryover im klassischen Sinn. Die &quot;Kerntemperatur&quot; ist daher gleichzeitig die Zieltemperatur.
               </p>
-              <div className="overflow-x-auto">
+              <ScrollBereich>
                 <table className="w-full border-collapse text-xs font-sans" aria-label="Sous Vide Temperaturen">
                   <thead>
                     <tr className="border-b border-brand-gold/25">
@@ -1130,7 +1131,7 @@ export default function TemperaturGuidePage() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </ScrollBereich>
             </div>
           </section>
 
@@ -1178,6 +1179,7 @@ export default function TemperaturGuidePage() {
           <div className="mb-16">
             <NewsletterSignup
               source="temperatur-guide-vor-faq"
+              bereich="vor den FAQ"
               eyebrow="Kostenloses Geschenk"
               headline="Die ganze Tabelle passt auf eine Seite."
               subline="Wir schicken dir den Link zum druckfertigen Kerntemperatur-Spickzettel. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Jederzeit abbestellbar."

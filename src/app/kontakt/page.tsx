@@ -131,11 +131,11 @@ export default function KontaktPage() {
                 className="group block border border-brand-gold/15 bg-surface-elevated p-6 hover:border-brand-gold/40 transition-colors"
               >
                 <opt.icon size={20} className="text-brand-gold mb-3" />
-                <h3 className="font-serif font-bold text-text-primary mb-1 group-hover:text-brand-gold transition-colors">
+                <h2 className="font-serif font-bold text-text-primary mb-1 group-hover:text-brand-gold transition-colors">
                   {opt.title}
-                </h3>
+                </h2>
                 <p className="text-xs font-body text-text-muted mb-3 leading-relaxed">{opt.desc}</p>
-                <span className="text-xs font-sans text-brand-gold/70">{KONTAKT_EMPFAENGER}</span>
+                <span className="text-xs font-sans text-brand-gold">{KONTAKT_EMPFAENGER}</span>
               </a>
             ))}
           </div>
@@ -167,20 +167,20 @@ export default function KontaktPage() {
               >
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelClass}>Name</label>
-                    <input name="name" value={form.name} onChange={handleChange} required
+                    <label htmlFor="kontakt-name" className={labelClass}>Name</label>
+                    <input id="kontakt-name" name="name" value={form.name} onChange={handleChange} required
                       placeholder="Max Mustermann" className={inputClass} />
                   </div>
                   <div>
-                    <label className={labelClass}>E-Mail</label>
-                    <input name="email" type="email" value={form.email} onChange={handleChange} required
+                    <label htmlFor="kontakt-email" className={labelClass}>E-Mail</label>
+                    <input id="kontakt-email" name="email" type="email" value={form.email} onChange={handleChange} required
                       placeholder="max@example.de" className={inputClass} />
                   </div>
                 </div>
 
                 <div>
-                  <label className={labelClass}>Betreff</label>
-                  <select name="subject" value={form.subject} onChange={handleChange} className={inputClass}>
+                  <label htmlFor="kontakt-betreff" className={labelClass}>Betreff</label>
+                  <select id="kontakt-betreff" name="subject" value={form.subject} onChange={handleChange} className={inputClass}>
                     <option value="">Bitte wählen…</option>
                     <option value="diplom">Frage zum Diplom-System</option>
                     <option value="rezept">Rezept-Idee einreichen</option>
@@ -193,8 +193,8 @@ export default function KontaktPage() {
                 </div>
 
                 <div>
-                  <label className={labelClass}>Nachricht</label>
-                  <textarea name="message" value={form.message} onChange={handleChange} required
+                  <label htmlFor="kontakt-nachricht" className={labelClass}>Nachricht</label>
+                  <textarea id="kontakt-nachricht" name="message" value={form.message} onChange={handleChange} required
                     rows={5} placeholder="Deine Nachricht…"
                     className={`${inputClass} resize-none`} />
                 </div>
@@ -216,7 +216,7 @@ export default function KontaktPage() {
                   <span className="text-text-secondary text-xs font-body leading-relaxed">
                     {CONSENT_TEXT}{' '}
                     Weitere Infos in der{' '}
-                    <Link href="/datenschutz" className="text-brand-gold hover:underline">Datenschutzerklärung</Link>.
+                    <Link href="/datenschutz" className="text-brand-gold underline underline-offset-2 hover:no-underline">Datenschutzerklärung</Link>.
                   </span>
                 </label>
 
@@ -224,7 +224,7 @@ export default function KontaktPage() {
                   <p role="alert" className="border border-brand-fire/40 bg-brand-fire/10 px-4 py-3 text-sm font-body text-text-primary">
                     {fehler || 'Die Nachricht konnte nicht zugestellt werden.'}{' '}
                     Du erreichst uns auch direkt unter{' '}
-                    <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="text-brand-gold hover:underline">
+                    <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="text-brand-gold underline underline-offset-2 hover:no-underline">
                       {KONTAKT_EMPFAENGER}
                     </a>.
                   </p>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 export const metadata: Metadata = {
   title: 'KI-Disclaimer — Hinweise zu KI-Assistenten',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function KiDisclaimerPage() {
-  const linkClass = 'text-brand-fire hover:underline';
+  const linkClass = 'text-brand-fire underline underline-offset-2 hover:no-underline';
   const h2Class =
     'font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3';
 
@@ -58,7 +59,7 @@ export default function KiDisclaimerPage() {
                   existiert, aber keine Oberfläche ruft ihn auf; und der englischsprachige
                   „Niche Validator" (/tools/niche-validator) — Rest eines Fremdprojekts,
                   Entscheidung offen. */}
-              <div className="overflow-x-auto">
+              <ScrollBereich>
                 <table className="w-full text-sm border border-white/10">
                   <thead>
                     <tr className="border-b border-white/10 bg-white/5">
@@ -131,7 +132,7 @@ export default function KiDisclaimerPage() {
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </ScrollBereich>
               <p className="mt-4 text-xs text-text-muted">
                 Marco ist eine KI-gesteuerte Persona — kein menschlicher Berater.
                 Alle Antworten werden in Echtzeit durch das KI-Modell generiert und

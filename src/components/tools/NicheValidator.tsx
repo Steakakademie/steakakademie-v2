@@ -288,7 +288,7 @@ export default function NicheValidator() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="text-[10px] font-sans font-bold text-brand-gold/70">
+                          <span className="text-[10px] font-sans font-bold text-brand-gold">
                             0{i + 1}
                           </span>
                           <h4 className="font-serif text-base font-bold text-text-primary leading-tight">

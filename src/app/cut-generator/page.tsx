@@ -90,7 +90,7 @@ export default function CutGeneratorPage() {
 
           <p className="text-center text-text-light/55 text-sm font-sans mt-8">
             Lieber selbst stöbern?{' '}
-            <Link href="/cuts" className="text-brand-gold hover:underline">Zum vollständigen Cut-Atlas →</Link>
+            <Link href="/cuts" className="text-brand-gold underline underline-offset-2 hover:no-underline">Zum vollständigen Cut-Atlas →</Link>
           </p>
         </section>
       </main>

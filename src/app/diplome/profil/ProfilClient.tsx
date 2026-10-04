@@ -147,7 +147,7 @@ export default function ProfilClient() {
                 </button>
                 {isPublic && slug && (
                   <a href={`/griller/${slug}`} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm font-sans text-brand-gold hover:underline">
+                    className="inline-flex items-center gap-1.5 text-sm font-sans text-brand-gold underline underline-offset-2 hover:no-underline">
                     Profil ansehen <ExternalLink size={13} />
                   </a>
                 )}

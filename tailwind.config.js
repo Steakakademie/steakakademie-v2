@@ -33,6 +33,12 @@ module.exports = {
         'border-subtle':    '#3A2A1E',   // subtle border
         'border-strong':    '#C8882A',   // gold border
       },
+      textColor: {
+        // Feuer als TEXT (04.10.2026): #E85018 hat auf surface-elevated nur 4,13:1.
+        // #EB6534 kommt auf 4,76:1 (elevated) bis 5,78:1 (base). Betrifft NUR
+        // text-brand-fire — bg-/border-/ring-brand-fire bleiben #E85018.
+        'brand-fire': '#EB6534',
+      },
       fontFamily: {
         serif: ['Playfair Display', 'Georgia', 'serif'],
         body:  ['Source Serif 4', 'Georgia', 'serif'],

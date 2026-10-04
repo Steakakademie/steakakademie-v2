@@ -65,7 +65,7 @@ export default function DiplomFunnel({ personName, personClaim }: DiplomFunnelPr
                 </div>
                 <p
                   className="text-[8px] font-sans mt-1 tracking-wider uppercase"
-                  style={{ color: level.locked ? 'rgba(255,255,255,0.2)' : LEVEL_COLORS[level.label] }}
+                  style={{ color: level.locked ? 'rgba(255,255,255,0.5)' : LEVEL_COLORS[level.label] }}
                 >
                   {level.label}
                 </p>
