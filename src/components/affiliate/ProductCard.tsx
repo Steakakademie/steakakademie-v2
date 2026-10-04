@@ -358,7 +358,7 @@ export default function ProductCard({
           <Link
             href={link.href}
             prefetch={false}
-            className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 ${tracking}`}
+            className={`inline-flex items-center gap-1 bg-brand-fire text-ink font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100 ${tracking}`}
             rel={link.rel}
             target="_blank"
           >

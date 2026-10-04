@@ -350,7 +350,7 @@ export default function DiplomSimulation({ lektionenStufe1 }: { lektionenStufe1:
                           quizAnswer === opt.id
                             ? opt.correct
                               ? 'border-emerald-500 bg-emerald-500 text-white'
-                              : 'border-brand-fire bg-brand-fire text-white'
+                              : 'border-brand-fire bg-brand-fire text-ink'
                             : 'border-brand-gold/30 text-text-muted group-hover:border-brand-gold/60'
                         }`}>
                           {quizAnswer === opt.id

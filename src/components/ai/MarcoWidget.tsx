@@ -266,7 +266,7 @@ export default function MarcoWidget() {
                 </p>
                 <Link
                   href={`/auth/login?redirectTo=${encodeURIComponent(pathname || '/')}`}
-                  className="rounded-lg bg-brand-fire px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+                  className="rounded-lg bg-brand-fire px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-ink transition-opacity hover:opacity-90"
                 >
                   Jetzt kostenlos anmelden
                 </Link>
@@ -380,7 +380,7 @@ export default function MarcoWidget() {
               <button
                 type="submit"
                 disabled={isLoading || (!input.trim() && !selectedImage)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center bg-brand-fire text-white transition-colors hover:bg-brand-fire/80 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-9 w-9 shrink-0 items-center justify-center bg-brand-fire text-ink transition-colors hover:bg-brand-fire/80 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Senden"
               >
                 <Send size={14} />

@@ -704,7 +704,7 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
             ))}
             <MarcoStarter
               frage=""
-              className="mt-1 rounded-lg bg-brand-fire px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-white hover:opacity-90 transition-opacity"
+              className="mt-1 rounded-lg bg-brand-fire px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-ink hover:opacity-90 transition-opacity"
             >
               Marco fragen
             </MarcoStarter>

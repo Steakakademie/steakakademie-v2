@@ -115,7 +115,7 @@ export function AffiliateBox({ id, href, headline, text, cta }: AffiliateBoxProp
           prefetch={false}
           rel="sponsored nofollow noopener"
           target="_blank"
-          className={`inline-flex items-center gap-2 bg-brand-fire text-white font-sans text-sm font-bold tracking-wide uppercase px-5 py-2.5 hover:bg-brand-gold transition-colors ${PLAUSIBLE(product.provider, product.id)}`}
+          className={`inline-flex items-center gap-2 bg-brand-fire text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-2.5 hover:bg-brand-gold transition-colors ${PLAUSIBLE(product.provider, product.id)}`}
         >
           {cta ?? 'Zum Angebot'}
           <ChevronRight size={16} aria-hidden="true" />

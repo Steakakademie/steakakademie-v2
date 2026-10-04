@@ -318,7 +318,7 @@ export default function AromaMatcher({ cuts, teaser, limit }: Props) {
                 <p className="mt-2 font-body text-sm text-text-secondary">Kein Abo, keine Kreditkarte — nur ein Konto bei der Steakakademie.</p>
                 <Link
                   href="/auth/login?redirectTo=/aroma-matcher"
-                  className="mt-4 inline-block rounded-lg bg-brand-fire px-6 py-3 font-sans text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-brand-fire/90"
+                  className="mt-4 inline-block rounded-lg bg-brand-fire px-6 py-3 font-sans text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:bg-brand-fire/90"
                 >
                   Jetzt kostenlos registrieren
                 </Link>
@@ -342,7 +342,7 @@ export default function AromaMatcher({ cuts, teaser, limit }: Props) {
               </p>
               <Link
                 href="/vip#warteliste"
-                className="mt-5 block w-full rounded-lg bg-brand-fire px-6 py-3 text-center font-sans text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-brand-fire/90"
+                className="mt-5 block w-full rounded-lg bg-brand-fire px-6 py-3 text-center font-sans text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:bg-brand-fire/90"
               >
                 Zur VIP-Warteliste
               </Link>

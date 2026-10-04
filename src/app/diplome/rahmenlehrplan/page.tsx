@@ -313,7 +313,7 @@ export default function RahmenlehrplanPage() {
               </p>
               <Link
                 href="/diplome"
-                className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-sm uppercase tracking-[0.08em] bg-brand-fire text-text-light hover:bg-brand-gold transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-sm uppercase tracking-[0.08em] bg-brand-fire text-ink hover:bg-brand-gold transition-colors"
               >
                 Zum Diplom-System <ChevronRight size={16} />
               </Link>

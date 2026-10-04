@@ -234,7 +234,7 @@ export default function UrkundePage() {
                 oder fang mit Stufe 1 an, sie ist kostenlos.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Link href="/auth/login?redirectTo=/diplome/urkunde" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold uppercase text-sm tracking-[0.08em]">
+                <Link href="/auth/login?redirectTo=/diplome/urkunde" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold uppercase text-sm tracking-[0.08em]">
                   Anmelden <ChevronRight size={15} />
                 </Link>
                 <Link href="/diplome/lernen/stufe-1/grillarten" className="inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold uppercase text-sm tracking-[0.08em]">
@@ -251,7 +251,7 @@ export default function UrkundePage() {
                 Sobald eine Stufenprüfung in deinem Konto als bestanden steht, kannst du hier die
                 gedruckte Urkunde dafür bestellen.
               </p>
-              <Link href="/diplome/roadmap" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold uppercase text-sm tracking-[0.08em]">
+              <Link href="/diplome/roadmap" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold uppercase text-sm tracking-[0.08em]">
                 Zur Roadmap <ChevronRight size={15} />
               </Link>
             </div>

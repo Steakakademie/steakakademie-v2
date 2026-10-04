@@ -199,7 +199,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
               href={offer.href}
               target="_blank"
               rel="nofollow sponsored noopener"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-fire text-white font-sans font-bold text-sm uppercase tracking-[0.04em] hover:brightness-110 transition"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans font-bold text-sm uppercase tracking-[0.04em] hover:brightness-110 transition"
             >
               <ShoppingCart size={16} /> {result.nameDE} kaufen
             </a>

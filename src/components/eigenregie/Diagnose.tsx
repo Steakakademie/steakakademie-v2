@@ -111,11 +111,11 @@ export default function Diagnose({ kurspreis, imKurs = false }: { kurspreis: num
             <RotateCcw size={16} /> Antworten ändern
           </button>
           {imKurs ? (
-            <Link href="/eigenregie/lernen/01-ownership" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-white font-sans text-sm font-bold">
+            <Link href="/eigenregie/lernen/01-ownership" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans text-sm font-bold">
               Mit Modul 1 starten <ArrowRight size={16} />
             </Link>
           ) : (
-            <Link href="/eigenregie#kaufen" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-white font-sans text-sm font-bold">
+            <Link href="/eigenregie#kaufen" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans text-sm font-bold">
               Zum Angebot <ArrowRight size={16} />
             </Link>
           )}
@@ -165,7 +165,7 @@ export default function Diagnose({ kurspreis, imKurs = false }: { kurspreis: num
           )}
         </fieldset>
       ))}
-      <button type="submit" disabled={!vollstaendig} className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-white font-sans font-bold disabled:opacity-40 disabled:cursor-not-allowed">
+      <button type="submit" disabled={!vollstaendig} className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold disabled:opacity-40 disabled:cursor-not-allowed">
         Meinen Weg anzeigen <ArrowRight size={16} />
       </button>
       {!vollstaendig ? <p className="font-body text-xs text-text-muted">Beantworte die Fragen 1–7, dann erscheint dein Weg.</p> : null}

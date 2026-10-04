@@ -161,7 +161,7 @@ export default function DiplomeClient({
 
                 <Link
                   href={stufe1[0].url}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
                 >
                   Mit Lektion 1 anfangen &rarr;
                 </Link>
@@ -243,7 +243,7 @@ export default function DiplomeClient({
           <div className="text-center mt-12 space-y-5 max-w-xl mx-auto">
             <Link
               href="/diplome/roadmap"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
             >
               Roadmap &mdash; Was du in jeder Stufe lernst &rarr;
             </Link>

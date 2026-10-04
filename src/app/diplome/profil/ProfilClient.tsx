@@ -110,7 +110,7 @@ export default function ProfilClient() {
           {state === 'anon' && (
             <div className="border border-border-subtle bg-surface-elevated p-6">
               <p className="font-body text-text-secondary mb-4">Melde dich an, um dein Profil zu verwalten und deinen Fortschritt zu speichern.</p>
-              <Link href="/auth/login" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-text-light font-sans font-bold uppercase text-sm tracking-[0.08em]">
+              <Link href="/auth/login" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans font-bold uppercase text-sm tracking-[0.08em]">
                 Anmelden <ChevronRight size={15} />
               </Link>
             </div>

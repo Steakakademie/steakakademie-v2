@@ -132,7 +132,7 @@ export default function KontoLoeschen() {
             type="button"
             onClick={() => void loeschen()}
             disabled={!bestaetigt || laeuft}
-            className="inline-flex items-center gap-2 px-5 py-2.5 border border-brand-fire text-brand-fire font-sans font-bold uppercase text-xs tracking-[0.08em] hover:bg-brand-fire hover:text-text-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-brand-fire">
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-brand-fire text-brand-fire font-sans font-bold uppercase text-xs tracking-[0.08em] hover:bg-brand-fire hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-brand-fire">
             <Trash2 size={14} />
             {laeuft ? 'Wird gelöscht…' : 'Konto endgültig löschen'}
           </button>

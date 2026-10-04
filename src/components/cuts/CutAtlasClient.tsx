@@ -516,7 +516,7 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
             href={offer.href}
             target="_blank"
             rel="nofollow sponsored noopener"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-fire text-white font-sans font-bold text-sm tracking-[0.04em] uppercase hover:brightness-110 transition"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans font-bold text-sm tracking-[0.04em] uppercase hover:brightness-110 transition"
           >
             <ShoppingCart size={16} />
             {cut.nameDE} kaufen
