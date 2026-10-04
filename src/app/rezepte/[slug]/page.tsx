@@ -10,6 +10,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 import RecipeExplorer from '@/components/recipe/RecipeExplorer';
 import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // ─── Kategorie-Definitionen ──────────────────────────────────────────────────
 
@@ -287,7 +288,7 @@ export default async function RezeptKategoriePage(props: Props) {
                   Keine Pauschalaussagen — jeder Cut hat eine andere Fett- und Proteinstruktur,
                   die spezifische Tanninlevels und Säurewerte verlangt.
                 </p>
-                <div className="overflow-x-auto">
+                <ScrollBereich>
                   <table className="w-full text-sm border-collapse">
                     <thead>
                       <tr style={{ borderBottom: '1px solid rgba(200,136,42,0.25)' }}>
@@ -324,7 +325,7 @@ export default async function RezeptKategoriePage(props: Props) {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </ScrollBereich>
               </div>
             </section>
 
@@ -338,7 +339,7 @@ export default async function RezeptKategoriePage(props: Props) {
                   Destillate haben eine andere Aufgabe als Wein — sie ergänzen durch Aromatik,
                   nicht durch Struktur. Die Faustregel: Rauch zu Rauch, Süße zu Karamell, Würze zu Fett.
                 </p>
-                <div className="overflow-x-auto">
+                <ScrollBereich>
                   <table className="w-full text-sm border-collapse">
                     <thead>
                       <tr style={{ borderBottom: '1px solid rgba(200,136,42,0.25)' }}>
@@ -372,7 +373,7 @@ export default async function RezeptKategoriePage(props: Props) {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </ScrollBereich>
               </div>
             </section>
 

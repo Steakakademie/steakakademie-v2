@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 03.10.2026.
+> Letzte Pflege: 04.10.2026.
 
 ---
 
@@ -322,6 +322,21 @@
   ab. Ein Timeout dort ist eine Ueberdeckung, keine Regression. Seit 02.09.2026 startet
   jeder E2E-Test mit getroffener Consent-Entscheidung (`storageState` in
   playwright.config.ts); Banner-Tests heben das gezielt auf — tests/e2e/helpers/consent.ts.
+
+**Landmarks, Rollen und `aria-label` sind Test-Anker (04.10.2026)**
+- Vor jeder Aenderung an `<section aria-label>`, `role=` oder einem `aria-label`:
+  `grep -rn "<der Name>" tests/` — und zwar `tests/e2e/` UND `tests/proben/`. Anlass:
+  #300 machte aus `<section aria-label="Newsletter-Anmeldung">` ein `<div>`. Daran
+  hingen vier E2E-Tests und die taegliche Funktionsprobe gegen die Produktion
+  (`getByRole('region', { name: 'Newsletter-Anmeldung' })`). `E2E pruefen` war rot,
+  ist aber kein Pflicht-Check — der PR wurde trotzdem gemergt, repariert in #301.
+- Daraus folgt fuer die Uebergabe: ein laufender oder roter `E2E pruefen` wird
+  ausdruecklich genannt, nie als „laeuft noch, nicht Pflicht" abgetan.
+- **Lokale Mess-Laeufe (axe, Screenshots, E2E) nach einem neuen Build:** vorher den alten
+  Server beenden — `pgrep -f "^next-server" | xargs -r kill`. Ein ueberlebender
+  `next start` liefert das HTML des alten Builds ohne dessen CSS; axe meldet dann
+  Tausende Scheinfehler (334 statt 3 Kontrastfehler am 04.10.2026). `pgrep -x
+  next-server` findet den Prozess nicht (er heisst `next-server (v…)`).
 
 **Berichtspflicht**
 - Jede Uebergabe nennt ausdruecklich, **was NICHT geprueft wurde**. „Gates gruen"

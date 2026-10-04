@@ -169,9 +169,9 @@ export function CompactItem({ item, rank }: { item: NewsItem; rank?: number }) {
             <span className="text-[10px] font-sans font-bold tracking-wider uppercase" style={{ color: accent.color }}>
               {accent.label} · {item.category}
             </span>
-            <h4 className="font-serif text-base font-bold text-text-light leading-snug mt-1 group-hover:text-brand-gold transition-colors">
+            <h3 className="font-serif text-base font-bold text-text-light leading-snug mt-1 group-hover:text-brand-gold transition-colors">
               {item.title}
-            </h4>
+            </h3>
             <time className="text-[11px] font-sans text-text-muted mt-1 block" dateTime={item.isoDate}>{item.date}</time>
           </div>
         </div>,

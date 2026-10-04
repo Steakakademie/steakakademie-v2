@@ -137,7 +137,7 @@ export default function UrkundePage() {
     }
   }
 
-  const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-light text-sm font-body focus:border-brand-gold/60 transition-colors placeholder:text-text-light/20';
+  const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-light text-sm font-body focus:border-brand-gold/60 transition-colors placeholder:text-text-light/55';
   const labelClass = 'block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-1.5';
 
   return (
@@ -184,24 +184,24 @@ export default function UrkundePage() {
             <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-brand-gold/30" />
             <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-brand-gold/30" />
 
-            <p className="text-brand-gold/40 text-xs uppercase tracking-[0.3em] font-sans mb-6">
+            <p className="text-brand-gold text-xs uppercase tracking-[0.3em] font-sans mb-6">
               Steakakademie · Deutschland · MMXXVI
             </p>
             <p className="text-text-light/55 text-sm font-body mb-4">Diese Urkunde bestätigt, dass</p>
             <p className="text-3xl md:text-5xl font-serif font-bold text-text-light mb-4 min-h-[1.4em]">
-              {form.nameAufUrkunde || <span className="text-text-light/20 italic">Dein Name</span>}
+              {form.nameAufUrkunde || <span className="text-text-light/55 italic">Dein Name</span>}
             </p>
             <p className="text-text-light/55 text-sm font-body mb-2">die Prüfung zum</p>
             <p className="text-2xl font-serif font-bold text-brand-gold mb-6 min-h-[1.4em]">
-              {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/20 italic">Level wählen</span>}
+              {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/55 italic">Level wählen</span>}
             </p>
-            <p className="text-text-light/30 text-sm font-body mb-2">
+            <p className="text-text-light/55 text-sm font-body mb-2">
               erfolgreich abgelegt hat und den Grad
             </p>
             <p className="text-lg font-serif font-bold text-text-light/80 mb-8 min-h-[1.4em]">
-              {selectedStufe ? gradMitTraeger(selectedStufe) : <span className="text-text-light/20 italic">Grillmeister — · Steakakademie</span>}
+              {selectedStufe ? gradMitTraeger(selectedStufe) : <span className="text-text-light/55 italic">Grillmeister — · Steakakademie</span>}
             </p>
-            <div className="flex items-center justify-center gap-8 text-text-light/20 text-xs font-sans">
+            <div className="flex items-center justify-center gap-8 text-text-light/55 text-xs font-sans">
               <div className="text-center">
                 <div className="w-16 border-t border-text-light/15 mb-1 mx-auto" />
                 <span>Datum</span>
@@ -214,7 +214,7 @@ export default function UrkundePage() {
             </div>
             {/* Pflichtzeile (Rahmenlehrplan §1): haelt den Grad von der Kammer-Qualifikation
                 „Zertifizierter Grillmeister" auseinander — auf jeder Urkunde, auch der digitalen. */}
-            <p className="mt-8 text-[10px] font-sans tracking-[0.14em] uppercase text-text-light/25">
+            <p className="mt-8 text-[10px] font-sans tracking-[0.14em] uppercase text-text-light/55">
               {DIPLOM_HINWEIS}
             </p>
           </motion.div>
@@ -379,7 +379,7 @@ export default function UrkundePage() {
                 <span className="text-text-light/50 text-xs font-body leading-relaxed">{URKUNDE_CONSENT_TEXT}</span>
               </label>
 
-              <p className="text-text-light/30 text-xs font-body leading-relaxed">
+              <p className="text-text-light/55 text-xs font-body leading-relaxed">
                 Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
                 Absenden per E-Mail Kontakt zur Zahlung auf ({urkundePreisText()}, Versand inklusive).
                 Deine Adresse wird ausschließlich für Druck und Versand verwendet und dafür an unseren

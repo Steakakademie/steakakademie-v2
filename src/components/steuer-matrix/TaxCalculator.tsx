@@ -12,6 +12,7 @@ import { calculateGB } from '@/services/gbEvaluator';
 import { calculateEE } from '@/services/eeEvaluator';
 import { calculateAE } from '@/services/aeEvaluator';
 import { ChevronDown, Info } from 'lucide-react';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
@@ -297,7 +298,7 @@ export default function TaxCalculator() {
       {/* ── Jahres-Zusammenfassung ───────────────────────────────────────────── */}
       <div className="bg-surface-dark border border-border-subtle p-6">
         <h3 className="font-serif text-lg font-bold text-text-light mb-5">Jahresübersicht</h3>
-        <div className="overflow-x-auto">
+        <ScrollBereich>
           <table className="w-full text-sm font-sans">
             <thead>
               <tr className="text-[10px] font-bold tracking-[0.12em] uppercase text-text-muted border-b border-border-subtle">
@@ -323,7 +324,7 @@ export default function TaxCalculator() {
               })}
             </tbody>
           </table>
-        </div>
+        </ScrollBereich>
 
         <p className="mt-5 text-[11px] font-sans text-text-muted leading-relaxed">
           ⚠️ Diese Berechnung ist eine vereinfachte Entscheidungshilfe — keine Steuerberatung.

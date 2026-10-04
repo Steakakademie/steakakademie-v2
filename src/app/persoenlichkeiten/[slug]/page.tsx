@@ -181,7 +181,7 @@ export default function PersoenlichkeitPage(props0: Props) {
               {person.born && <span className="text-text-light/55 text-xs font-sans">*{person.born}</span>}
 
               {/* Read time — credibility signal */}
-              <span className="flex items-center gap-1 text-text-light/30 text-xs font-sans ml-auto">
+              <span className="flex items-center gap-1 text-text-light/55 text-xs font-sans ml-auto">
                 <Clock size={11} />
                 {readTime} Min. Lesezeit
               </span>
@@ -197,7 +197,7 @@ export default function PersoenlichkeitPage(props0: Props) {
 
             {/* Claim box */}
             <div className="border border-brand-gold/20 bg-brand-gold/5 px-5 py-3 inline-block">
-              <p className="text-xs font-sans text-brand-gold/70">
+              <p className="text-xs font-sans text-brand-gold">
                 <span className="font-bold text-brand-gold">Claim to fame:</span>{' '}
                 {person.claim}
               </p>
@@ -222,7 +222,7 @@ export default function PersoenlichkeitPage(props0: Props) {
 
                 {/* Steckbrief */}
                 <div className="border border-brand-gold/15 bg-surface-elevated p-5 space-y-4 lg:sticky lg:top-6">
-                  <h3 className="text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-brand-fire">Steckbrief</h3>
+                  <h2 className="text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-brand-fire">Steckbrief</h2>
                   <dl className="space-y-3">
                     {person.nationality && (
                       <div>
@@ -339,7 +339,7 @@ export default function PersoenlichkeitPage(props0: Props) {
             <div className="max-w-editorial mx-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-serif text-xl font-bold text-text-light">Weitere Meister entdecken</h2>
-                <Link href="/persoenlichkeiten" className="text-xs font-sans text-brand-gold/70 hover:text-brand-gold transition-colors">
+                <Link href="/persoenlichkeiten" className="text-xs font-sans text-brand-gold hover:text-text-light transition-colors">
                   Alle {total} Profile →
                 </Link>
               </div>
@@ -355,7 +355,7 @@ export default function PersoenlichkeitPage(props0: Props) {
                     </h3>
                     <p className="text-text-light/55 text-xs font-sans mb-3">{p.nationality}</p>
                     {/* Micro-claim for skim-readers */}
-                    <p className="text-[10px] font-body text-text-light/30 leading-relaxed line-clamp-2">
+                    <p className="text-[10px] font-body text-text-light/55 leading-relaxed line-clamp-2">
                       {p.claim}
                     </p>
                   </Link>

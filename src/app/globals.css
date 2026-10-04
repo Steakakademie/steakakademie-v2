@@ -59,6 +59,21 @@
 .reading-light .text-text-muted     { color: #544433 !important; } /* WCAG-Fix: war #6B5A48 = 3.40:1 auf Pergament, jetzt 4.81:1 (AA) */
 .reading-light .fill-border-subtle  { fill:  #D8C7AE !important; }
 .reading-light .text-border-subtle  { color: #D8C7AE !important; }
+/* Feuer als Text auf Pergament (04.10.2026): #E85018 hat dort 2,5:1. #7E2C08 kommt
+   auf 4,8:1 (dunkelste Verlaufsstelle) bis 6,3:1 (Karte). In dunklen Kästen
+   innerhalb des Layers bleibt die helle Feuer-Schrift. */
+.reading-light .text-brand-fire,
+.reading-light [class*="nl-fire-text"] { color: #7E2C08 !important; }
+/* Gold-Etikett der Produktkarte (bg-brand-gold/15 + text-brand-gold) auf Pergament: 1,8:1 */
+.reading-light .bg-brand-gold\/15.text-brand-gold { color: #6A4407 !important; }
+.reading-light .bg-surface-dark .text-brand-fire,
+.reading-light .bg-ink .text-brand-fire { color: #EB6534 !important; }
+/* Eingabefelder behalten im Lese-Layer ihren dunklen Grund (bg-surface-dark wird
+   hier nicht umgefärbt) — dann darf die Schrift nicht mit umgefärbt werden, sonst
+   steht #1C140D auf #0F0A06 (1,08:1) und die Eingabe ist unsichtbar. */
+.reading-light input.bg-surface-dark.text-text-primary,
+.reading-light textarea.bg-surface-dark.text-text-primary,
+.reading-light select.bg-surface-dark.text-text-primary { color: #E6D5C3 !important; }
 
 /* Fallback-Farbe für Crawler & Old Browsers */
 html {

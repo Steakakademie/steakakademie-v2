@@ -212,7 +212,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
 
       {angemeldet === false && (
         <p className="mt-4 font-sans text-xs text-text-light/55">
-          <Link href="/auth/login" className="text-brand-gold hover:underline">
+          <Link href="/auth/login" className="text-brand-gold underline underline-offset-2 hover:no-underline">
             Anmelden
           </Link>
           {' '}zum Mitschreiben — ein Beitrag je Streitfall, veröffentlicht wird nur eine Auswahl.

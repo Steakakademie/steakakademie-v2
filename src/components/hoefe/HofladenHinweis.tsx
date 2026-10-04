@@ -21,11 +21,11 @@ export default function HofladenHinweis({
 
   if (variante === 'inline') {
     return (
-      <aside className="my-8 flex flex-col gap-3 rounded-xl border border-brand-gold/25 bg-surface-card p-5 sm:flex-row sm:items-center sm:justify-between">
+      <aside aria-label={titel} className="my-8 flex flex-col gap-3 rounded-xl border border-brand-gold/25 bg-surface-card p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2 text-brand-fire">
             <Radar size={18} />
-            <h3 className="font-serif text-lg font-bold text-text-light">{titel}</h3>
+            <h2 className="font-serif text-lg font-bold text-text-light">{titel}</h2>
           </div>
           <p className="mt-1 text-sm text-text-secondary">{text}</p>
         </div>

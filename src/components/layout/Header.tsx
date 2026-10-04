@@ -163,15 +163,18 @@ export default function Header() {
       {/* Top-Bar — Leadmagnet statt Produkt (Audit 15.08.2026: der Trichter braucht
           die stärkste Fläche über der Navigation, die Diplome sind site-weit sonst
           bereits 4× verlinkt). */}
-      <div className="bg-surface-dark border-b border-brand-gold/20 text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4 text-text-light/60">
+      <aside
+        aria-label="Kostenloser Kerntemperatur-Spickzettel"
+        className="bg-surface-dark border-b border-brand-gold/20 text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4 text-text-light/60"
+      >
         Gratis: der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite
         <Link
           href="/kerntemperatur-spickzettel"
-          className="ml-3 inline-block py-1.5 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors"
+          className="ml-3 inline-block py-1.5 text-brand-gold underline underline-offset-2 hover:text-brand-gold transition-colors"
         >
           Jetzt sichern →
         </Link>
-      </div>
+      </aside>
 
       <header
         className={cn(

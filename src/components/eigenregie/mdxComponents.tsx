@@ -1,6 +1,7 @@
 import type React from 'react';
 import { Schnelluebersicht, Achtung, ProTipp, Leitfrage, Umweg, Werkzeug, Ergebnis, Rechtlich } from '@/components/mdx/Callouts';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 /** MDX-Bausteine der Eigenregie-Module (Server-Komponenten). */
 export const eigenregieMdx = {
@@ -21,10 +22,10 @@ export const eigenregieMdx = {
   table: (p: React.TableHTMLAttributes<HTMLTableElement>) => (
     <ScrollBereich className="my-6"><table className="w-full text-sm font-body border-collapse" {...p} /></ScrollBereich>
   ),
-  th: (p: React.ThHTMLAttributes<HTMLTableCellElement>) => <th className="text-left font-sans font-bold text-text-primary border-b-2 border-border-subtle py-2 pr-4 align-top" {...p} />,
+  th: (p: React.ThHTMLAttributes<HTMLTableCellElement>) => <MdxTh className="text-left font-sans font-bold text-text-primary border-b-2 border-border-subtle py-2 pr-4 align-top" {...p} />,
   td: (p: React.TdHTMLAttributes<HTMLTableCellElement>) => <td className="border-b border-border-subtle py-2 pr-4 text-text-secondary align-top" {...p} />,
   pre: (p: React.HTMLAttributes<HTMLPreElement>) => (
-    <pre className="my-6 overflow-x-auto bg-[#1b1714] text-[#f6f1e2] p-4 text-[0.85rem] leading-relaxed rounded-sm" {...p} />
+    <pre tabIndex={0} className="my-6 overflow-x-auto bg-[#1b1714] text-[#f6f1e2] p-4 text-[0.85rem] leading-relaxed rounded-sm" {...p} />
   ),
   code: (p: React.HTMLAttributes<HTMLElement>) => <code className="font-mono text-[0.9em]" {...p} />,
   hr: () => <hr className="border-border-subtle my-8" />,

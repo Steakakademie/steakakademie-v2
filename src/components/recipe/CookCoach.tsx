@@ -54,6 +54,7 @@ export default function CookCoach({ steps }: Props) {
         <div
           className="mt-3 h-1 bg-surface-base rounded-full overflow-hidden"
           role="progressbar"
+          aria-label="Fortschritt der Zubereitung"
           aria-valuenow={done.size}
           aria-valuemin={0}
           aria-valuemax={steps.length}
@@ -129,7 +130,7 @@ export default function CookCoach({ steps }: Props) {
                   {step.tip && !isDone && (
                     <div className="mt-3 flex items-start gap-2 bg-brand-gold/5 border border-brand-gold/20 px-3 py-2.5">
                       <Flame size={12} className="text-brand-gold mt-0.5 shrink-0" />
-                      <p className="text-xs font-sans text-brand-gold/80 leading-relaxed">
+                      <p className="text-xs font-sans text-brand-gold leading-relaxed">
                         <span className="font-bold text-brand-gold">Pitmaster-Tipp:</span>{' '}
                         {step.tip}
                       </p>

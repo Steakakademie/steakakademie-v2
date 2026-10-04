@@ -60,8 +60,8 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   active:     { label: 'Aktiv',         color: '#4ade80' },
   confirmed:  { label: 'Aktiv',         color: '#4ade80' },
   pending:    { label: 'Ausstehend',    color: '#C8882A' },
-  cancelled:  { label: 'Storniert',     color: '#7A6558' },
-  refunded:   { label: 'Erstattet',     color: '#7A6558' },
+  cancelled:  { label: 'Storniert',     color: '#9F8A7B' },
+  refunded:   { label: 'Erstattet',     color: '#9F8A7B' },
 };
 
 export default async function MeineKursePage() {

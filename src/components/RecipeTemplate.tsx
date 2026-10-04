@@ -369,7 +369,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
           </div>
 
           {/* ── Sidebar ── */}
-          <aside className="space-y-6">
+          <aside aria-label="Zubehör und Empfehlungen zum Rezept" className="space-y-6">
             {/* Equipment aus Registry */}
             {hardwareProducts.length > 0 && (
               <div className="bg-surface-elevated border border-border-subtle overflow-hidden sticky top-24">

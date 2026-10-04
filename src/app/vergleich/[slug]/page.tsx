@@ -26,6 +26,7 @@ import {
 import { Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -91,7 +92,7 @@ const mdxComponents = {
     <thead style={{ backgroundColor: '#0D0D0D' }} {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase text-brand-gold" {...props}>{children}</th>
+    <MdxTh className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase text-brand-gold" {...props}>{children}</MdxTh>
   ),
   td: ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
     <td className="px-4 py-3 border-b border-border-subtle text-text-light/70" style={{ borderBottomColor: 'rgba(61,34,16,0.6)' }} {...props}>{children}</td>

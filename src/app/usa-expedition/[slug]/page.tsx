@@ -11,6 +11,7 @@ import Footer from '@/components/layout/Footer';
 import { ChevronRight, MapPin, Flame } from 'lucide-react';
 import { ORGANIZATION_ID, absoluteUrl, authorSchemaRef } from '@/lib/schema';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -96,9 +97,9 @@ const mdxComponents = {
     </ScrollBereich>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th className="bg-surface-raised px-4 py-2 text-left font-semibold text-text-primary border border-border-subtle" {...props}>
+    <MdxTh className="bg-surface-raised px-4 py-2 text-left font-semibold text-text-primary border border-border-subtle" {...props}>
       {children}
-    </th>
+    </MdxTh>
   ),
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td className="px-4 py-2 border border-border-subtle text-text-secondary" {...props}>

@@ -144,6 +144,7 @@ export default function ExitIntent() {
                     Versprechen. Jetzt dasselbe Angebot wie überall sonst. */}
                 <NewsletterSignup
                   source="exit-intent"
+                  bereich="Hinweisfenster"
                   eyebrow="Warte kurz — bevor du gehst"
                   headline="Nimm den Kerntemperatur-Spickzettel mit."
                   subline="Alle Garstufen auf einer Seite, druckfertig für die Grillstation. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Double-Opt-In, jederzeit abbestellbar."

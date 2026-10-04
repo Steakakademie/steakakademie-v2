@@ -60,7 +60,7 @@ export default function MesserClient({ products }: Props) {
               <span
                 className={[
                   'ml-2 text-[11px] font-mono',
-                  isActive ? 'text-ink/60' : 'text-text-muted',
+                  isActive ? 'text-ink/80' : 'text-text-muted',
                 ].join(' ')}
               >
                 {counts[key]}
