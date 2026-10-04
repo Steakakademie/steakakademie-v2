@@ -22,7 +22,7 @@ import AffiliateBox from '@/components/mdx/AffiliateBox';
 // 19.09.2026: Callouts registriert — der Pökel-Artikel nutzt <Schnelluebersicht>/<Achtung>;
 // als Entwurf unsichtbar, nach Freigabe brach der Vercel-Build (Expected component `Achtung`).
 import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
-import { authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
+import { ORGANIZATION_ID, absoluteUrl, authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
 import ScrollBereich from '@/components/ui/ScrollBereich';
 
 interface Props {
@@ -198,7 +198,9 @@ export default function ArtikelDetailPage(props: Props) {
         headline: artikel.title,
         description: artikel.excerpt,
         datePublished: artikel.publishedAt,
-        ...(artikel.updatedAt && { dateModified: artikel.updatedAt }),
+        // Ohne eigenes Änderungsdatum gilt das Veröffentlichungsdatum — wie in
+        // articleSchema() (src/lib/schema.ts). Vorher fehlte das Feld dann ganz.
+        dateModified: artikel.updatedAt ?? artikel.publishedAt,
         // Person NUR fuer reale Autoren — Marco, Elena und Jonas sind
         // KI-Personas und wurden hier bis 02.10.2026 als Person ausgezeichnet.
         author: authorSchemaRef(artikel.authorSlug),
@@ -207,7 +209,9 @@ export default function ArtikelDetailPage(props: Props) {
           '@id': `https://steakakademie.de${artikel.url}`,
           ...pruefvermerkSchema(artikel.reviewedAt),
         },
-        ...(artikel.image && { image: artikel.image }),
+        // Verweis auf die eine Organisations-Entität (layout.tsx), keine zweite.
+        publisher: { '@id': ORGANIZATION_ID },
+        ...(artikel.image && { image: absoluteUrl(artikel.image) }),
       };
 
   // FAQPage-Schema (03.09.2026). Gleiche Grenze wie beim Article-Schema: ein
