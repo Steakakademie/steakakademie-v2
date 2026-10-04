@@ -139,7 +139,8 @@ export default function MethodePage(props: Props) {
             src={methode.image}
             alt={methode.imageAlt}
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             sizes="100vw"
             className="object-cover hero-fullbleed-image"
           />

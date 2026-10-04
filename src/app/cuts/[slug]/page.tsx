@@ -210,7 +210,8 @@ export default function CutPage(props: Props) {
             src={cut.image}
             alt={cut.imageAlt}
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             sizes="100vw"
             className="object-cover hero-fullbleed-image"
           />
