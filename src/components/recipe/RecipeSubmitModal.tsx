@@ -597,9 +597,9 @@ export default function RecipeSubmitModal() {
                             ein, dass mein gewählter Anzeigename als Autor angezeigt wird. Es besteht
                             kein Vergütungsanspruch; eine Entfernung kann ich jederzeit per E-Mail
                             verlangen. Details:{' '}
-                            <a href="/agb#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">AGB § 12</a>
+                            <a href="/agb#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold underline underline-offset-2 hover:no-underline">AGB § 12</a>
                             {' '}·{' '}
-                            <a href="/datenschutz#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">Datenschutz</a>.
+                            <a href="/datenschutz#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold underline underline-offset-2 hover:no-underline">Datenschutz</a>.
                           </span>
                         </label>
                         {errors.einwilligung && <p className={`${errorCls} mt-2`}>{errors.einwilligung}</p>}

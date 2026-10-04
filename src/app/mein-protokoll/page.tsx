@@ -216,7 +216,7 @@ export default function MeinProtokollPage() {
               {STEPS.map(({ Icon, step, title, desc }) => (
                 <div key={step} className="bg-surface-base border border-border-subtle p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="font-sans text-xs font-bold" style={{ color: 'rgba(200,136,42,0.5)' }}>
+                    <span className="font-sans text-xs font-bold" style={{ color: '#C8882A' }}>
                       {step}
                     </span>
                     <Icon size={18} className="text-brand-gold" />

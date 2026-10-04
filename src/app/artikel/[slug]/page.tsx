@@ -22,8 +22,9 @@ import AffiliateBox from '@/components/mdx/AffiliateBox';
 // 19.09.2026: Callouts registriert — der Pökel-Artikel nutzt <Schnelluebersicht>/<Achtung>;
 // als Entwurf unsichtbar, nach Freigabe brach der Vercel-Build (Expected component `Achtung`).
 import { Schnelluebersicht, Achtung, ProTipp, TempBox, Leitfrage, Handgriff } from '@/components/mdx/Callouts';
-import { authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
+import { ORGANIZATION_ID, absoluteUrl, authorSchemaRef, faqSchema, pruefvermerkSchema } from '@/lib/schema';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -166,12 +167,12 @@ const mdxComponents = {
     </ScrollBereich>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th
+    <MdxTh
       className="border-b border-border-subtle py-2 pr-4 font-sans text-xs font-bold tracking-wide uppercase text-brand-gold"
       {...props}
     >
       {children}
-    </th>
+    </MdxTh>
   ),
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td className="border-b border-border-subtle/50 py-2 pr-4 align-top text-text-primary" {...props}>
@@ -198,7 +199,9 @@ export default function ArtikelDetailPage(props: Props) {
         headline: artikel.title,
         description: artikel.excerpt,
         datePublished: artikel.publishedAt,
-        ...(artikel.updatedAt && { dateModified: artikel.updatedAt }),
+        // Ohne eigenes Änderungsdatum gilt das Veröffentlichungsdatum — wie in
+        // articleSchema() (src/lib/schema.ts). Vorher fehlte das Feld dann ganz.
+        dateModified: artikel.updatedAt ?? artikel.publishedAt,
         // Person NUR fuer reale Autoren — Marco, Elena und Jonas sind
         // KI-Personas und wurden hier bis 02.10.2026 als Person ausgezeichnet.
         author: authorSchemaRef(artikel.authorSlug),
@@ -207,7 +210,9 @@ export default function ArtikelDetailPage(props: Props) {
           '@id': `https://steakakademie.de${artikel.url}`,
           ...pruefvermerkSchema(artikel.reviewedAt),
         },
-        ...(artikel.image && { image: artikel.image }),
+        // Verweis auf die eine Organisations-Entität (layout.tsx), keine zweite.
+        publisher: { '@id': ORGANIZATION_ID },
+        ...(artikel.image && { image: absoluteUrl(artikel.image) }),
       };
 
   // FAQPage-Schema (03.09.2026). Gleiche Grenze wie beim Article-Schema: ein
@@ -334,7 +339,7 @@ export default function ArtikelDetailPage(props: Props) {
             <div className="mt-10">
               <Link
                 href="/artikel"
-                className="font-sans text-sm font-bold text-brand-fire hover:underline underline-offset-4"
+                className="font-sans text-sm font-bold text-brand-fire underline underline-offset-2 hover:no-underline underline-offset-4"
               >
                 ← Alle Artikel
               </Link>

@@ -95,7 +95,7 @@ export default function Footer() {
       <div className="border-b border-brand-gold/10">
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="max-w-content mx-auto">
-            <NewsletterSignup source="footer" />
+            <NewsletterSignup source="footer" bereich="Seitenfuß" />
           </div>
         </div>
       </div>

@@ -91,7 +91,7 @@ function NicheCard({ page, rank }: { page: NLPageContent; rank: number }) {
             className="font-sans text-[10px] font-bold tabular-nums px-2 py-0.5"
             style={{
               background: ev.marketScore >= 80 ? 'rgba(200,136,42,0.15)' : 'rgba(255,255,255,0.04)',
-              color: ev.marketScore >= 80 ? '#C8882A' : '#7A6558',
+              color: ev.marketScore >= 80 ? '#C8882A' : '#9F8A7B',
             }}
           >
             {ev.marketScore}/100

@@ -16,6 +16,7 @@ import {
   BUEROKRATIE_DISCLAIMER,
   type Pflichtgrad,
 } from '@/lib/gruendung-buerokratie';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 const GOLD = '#C8882A';
 const FIRE = '#E85018';
@@ -39,7 +40,7 @@ function PflichtBadge({ grad }: { grad: Pflichtgrad }) {
   return (
     <span
       className="inline-block whitespace-nowrap rounded-full px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-[0.08em]"
-      style={{ color: c, background: `${c}1A`, border: `1px solid ${c}40` }}
+      style={{ color: `color-mix(in srgb, ${c} 65%, white)`, background: `${c}1A`, border: `1px solid ${c}40` }}
     >
       {PFLICHT_LABEL[grad]}
     </span>
@@ -129,7 +130,7 @@ export default function GruendungsBuerokratie() {
           kicker="Anträge & Behörden"
           title="Was muss beantragt werden?"
         />
-        <div className="overflow-x-auto rounded-sm border border-border-subtle">
+        <ScrollBereich className="rounded-sm border border-border-subtle">
           <table className="w-full border-collapse text-left font-body text-[0.9rem]">
             <thead>
               <tr className="bg-surface-elevated text-text-primary">
@@ -152,7 +153,7 @@ export default function GruendungsBuerokratie() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollBereich>
       </section>
 
       {/* 3) Kosten 6 Monate */}
@@ -166,7 +167,7 @@ export default function GruendungsBuerokratie() {
           Ab dem Tag der Gewerbeanmeldung — typischer Fall: solo, hauptberuflich, Einzelunternehmen,
           Kleinunternehmer. Der mit Abstand größte Posten ist die Krankenversicherung.
         </p>
-        <div className="overflow-x-auto rounded-sm border border-border-subtle">
+        <ScrollBereich className="rounded-sm border border-border-subtle">
           <table className="w-full border-collapse text-left font-body text-[0.9rem]">
             <thead>
               <tr className="bg-surface-elevated text-text-primary">
@@ -189,7 +190,7 @@ export default function GruendungsBuerokratie() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollBereich>
         <p className="mt-3 font-body text-[0.82rem] italic leading-relaxed text-text-muted">
           Faustregel: Die ersten 6 Monate kosten dich abseits der Krankenversicherung wenig —
           der Kapitalbedarf entsteht v. a. durch KV + deine Lebenshaltung, solange noch kein
@@ -236,7 +237,7 @@ export default function GruendungsBuerokratie() {
           kicker="Welche Hülle passt?"
           title="Rechtsform-Schnellvergleich"
         />
-        <div className="overflow-x-auto rounded-sm border border-border-subtle">
+        <ScrollBereich className="rounded-sm border border-border-subtle">
           <table className="w-full border-collapse text-left font-body text-[0.88rem]">
             <thead>
               <tr className="bg-surface-elevated text-text-primary">
@@ -264,7 +265,7 @@ export default function GruendungsBuerokratie() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollBereich>
       </section>
 
       {/* Anti-Scam — Das ehrliche System */}

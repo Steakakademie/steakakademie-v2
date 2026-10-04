@@ -52,12 +52,12 @@ export default function ImpressumPage() {
                   Rufnummer eingetragen ist, besteht hier ein Restrisiko. */}
               <p>
                 E-Mail:{' '}
-                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire underline underline-offset-2 hover:no-underline">
                   pitmaster@steakakademie.de
                 </a>
                 <br />
                 Kontaktformular:{' '}
-                <a href="/kontakt" className="text-brand-fire hover:underline">
+                <a href="/kontakt" className="text-brand-fire underline underline-offset-2 hover:no-underline">
                   steakakademie.de/kontakt
                 </a>
               </p>
@@ -105,7 +105,7 @@ export default function ImpressumPage() {
               <p className="mb-3">
                 <strong className="text-text-primary">Kontaktstelle für Nutzer:</strong><br />
                 E-Mail:{' '}
-                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire underline underline-offset-2 hover:no-underline">
                   pitmaster@steakakademie.de
                 </a><br />
                 Sprache: Deutsch
@@ -113,7 +113,7 @@ export default function ImpressumPage() {
               <p>
                 <strong className="text-text-primary">Kontaktstelle für Behörden:</strong><br />
                 E-Mail:{' '}
-                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire underline underline-offset-2 hover:no-underline">
                   pitmaster@steakakademie.de
                 </a><br />
                 Sprache: Deutsch
@@ -156,7 +156,7 @@ export default function ImpressumPage() {
 
             <p className="text-sm text-text-muted pt-4 border-t border-border-subtle">
               Quelle:{' '}
-              <a href="https://www.e-recht24.de" target="_blank" rel="noopener noreferrer" className="text-brand-fire hover:underline">
+              <a href="https://www.e-recht24.de" target="_blank" rel="noopener noreferrer" className="text-brand-fire underline underline-offset-2 hover:no-underline">
                 eRecht24
               </a>
             </p>

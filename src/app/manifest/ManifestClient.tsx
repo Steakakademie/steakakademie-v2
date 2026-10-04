@@ -115,7 +115,7 @@ export default function ManifestClient() {
             >
               <div className="py-10 border-b border-brand-gold/10 last:border-b-0">
                 <div className="flex items-baseline gap-6">
-                  <span className="thesis-nr text-brand-gold/30 font-serif text-4xl font-bold w-12 shrink-0 leading-none">
+                  <span className="thesis-nr text-brand-gold/65 font-serif text-4xl font-bold w-12 shrink-0 leading-none">
                     {t.nr}
                   </span>
                   <div>
@@ -146,11 +146,11 @@ export default function ManifestClient() {
                 Steakakademie<br />MMXXVI
               </span>
             </div>
-            <p className="font-body text-text-light/30 text-sm max-w-sm mx-auto leading-relaxed">
+            <p className="font-body text-text-light/55 text-sm max-w-sm mx-auto leading-relaxed">
               Dieses Manifest gilt. Nicht weil wir es gesagt haben,
               sondern weil das Fleisch es verdient.
             </p>
-            <p className="text-brand-gold/60 font-serif font-bold text-xl mt-4">
+            <p className="text-brand-gold font-serif font-bold text-xl mt-4">
               steakakademie.de
             </p>
           </motion.div>

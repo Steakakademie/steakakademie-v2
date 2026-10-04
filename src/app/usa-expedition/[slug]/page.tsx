@@ -9,8 +9,9 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { ChevronRight, MapPin, Flame } from 'lucide-react';
-import { authorSchemaRef } from '@/lib/schema';
+import { ORGANIZATION_ID, absoluteUrl, authorSchemaRef } from '@/lib/schema';
 import ScrollBereich from '@/components/ui/ScrollBereich';
+import MdxTh from '@/components/mdx/MdxTh';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -96,9 +97,9 @@ const mdxComponents = {
     </ScrollBereich>
   ),
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th className="bg-surface-raised px-4 py-2 text-left font-semibold text-text-primary border border-border-subtle" {...props}>
+    <MdxTh className="bg-surface-raised px-4 py-2 text-left font-semibold text-text-primary border border-border-subtle" {...props}>
       {children}
-    </th>
+    </MdxTh>
   ),
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td className="px-4 py-2 border border-border-subtle text-text-secondary" {...props}>
@@ -123,16 +124,15 @@ export default function UsaExpeditionSlugPage(props: Props) {
     '@type': 'Article',
     headline: entry.title,
     description: entry.excerpt,
-    image: entry.image,
+    image: absoluteUrl(entry.image),
     datePublished: entry.publishedAt,
+    // UsaBbqStyle hat kein updatedAt-Feld; ohne Änderungsdatum gilt das
+    // Veröffentlichungsdatum (wie in articleSchema()).
+    dateModified: entry.publishedAt,
     // Person NUR fuer reale Autoren — KI-Personas wurden hier bis 02.10.2026
     // als Person ausgezeichnet.
     author: authorSchemaRef(entry.authorSlug),
-    publisher: {
-      '@type': 'Organization',
-      name: 'Steakakademie',
-      url: 'https://steakakademie.de',
-    },
+    publisher: { '@id': ORGANIZATION_ID },
   };
 
   const breadcrumbSchema = {

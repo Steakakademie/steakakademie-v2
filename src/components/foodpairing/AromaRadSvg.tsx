@@ -40,8 +40,11 @@ export default function AromaRadSvg({ zentrum, zentrumSub, punkte, aktiv, onWaeh
   const fs = kompakt ? 15 : 14.5;
   const vb = kompakt ? '-235 -168 470 336' : '-250 -205 500 410';
 
+  // Mit klickbaren Punkten ist das SVG eine Gruppe, kein Bild: In role="img" sind
+  // Kind-Elemente für Screenreader unsichtbar — die Schaltflächen darin wären nicht
+  // erreichbar (axe: nested-interactive).
   return (
-    <svg viewBox={vb} className={className} role="img" aria-label={titel}>
+    <svg viewBox={vb} className={className} role={onWaehlen ? 'group' : 'img'} aria-label={titel}>
       <title>{titel}</title>
       <circle r={R} fill="none" stroke="#C8882A" strokeOpacity={0.18} strokeDasharray="3 5" />
       <circle r={R * 0.62} fill="none" stroke="#C8882A" strokeOpacity={0.1} />

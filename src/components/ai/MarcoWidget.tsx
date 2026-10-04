@@ -172,7 +172,7 @@ export default function MarcoWidget() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="rounded-2xl border border-brand-gold/40 bg-text-primary px-4 py-2 text-xs text-brand-gold shadow-xl font-sans cursor-pointer hover:border-brand-gold/70 transition-colors"
+            className="rounded-2xl border border-brand-gold/40 bg-text-primary px-4 py-2 text-xs font-semibold text-ink shadow-xl font-sans cursor-pointer hover:border-brand-gold/70 transition-colors"
           >
             Frag Marco — deinen KI-BBQ-Guide 🥩
           </motion.button>

@@ -183,7 +183,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
         {angemeldet === false && (
           <>
             {' · '}
-            <Link href="/auth/login" className="text-brand-gold hover:underline">
+            <Link href="/auth/login" className="text-brand-gold underline underline-offset-2 hover:no-underline">
               Anmelden zum Abstimmen
             </Link>
           </>

@@ -8,6 +8,7 @@ import { STUFEN, DIPLOM_HINWEIS, QUIZ_FRAGEN_PRO_PRUEFUNG, QUIZ_BESTEHENSQUOTE }
 import { RAHMENLEHRPLAN, DOKTRIN } from '@/lib/diplome/rahmenlehrplan';
 import { FRAGEN } from '@/lib/diplome/fragen';
 import { courseSchema, breadcrumbSchema } from '@/lib/schema';
+import ScrollBereich from '@/components/ui/ScrollBereich';
 
 /**
  * /diplome/rahmenlehrplan — der oeffentliche Rahmenlehrplan des Grillmeister-
@@ -140,7 +141,7 @@ export default function RahmenlehrplanPage() {
                 Glut-Lehrling bis zum Master of Steak — ist der Rang in der Community. Rang motiviert,
                 Grad qualifiziert.
               </p>
-              <div className="overflow-x-auto">
+              <ScrollBereich>
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border-subtle">
@@ -161,7 +162,7 @@ export default function RahmenlehrplanPage() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </ScrollBereich>
               <p className="mt-6 text-xs font-sans text-text-muted">{DIPLOM_HINWEIS}</p>
             </div>
           </div>

@@ -226,7 +226,7 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
               <RotateCcw size={15} /> Nochmal
             </button>
           </div>
-          <p className="text-text-light/30 text-[11px] font-sans leading-relaxed">{offer.disclosure}</p>
+          <p className="text-text-light/55 text-[11px] font-sans leading-relaxed">{offer.disclosure}</p>
         </div>
 
         {/* Alternativen */}

@@ -186,7 +186,7 @@ export default function AgingClient() {
                 className={`border px-5 py-2.5 text-sm font-sans font-bold transition-colors duration-300 ${
                   active.days === s.days
                     ? `${s.borderClass} bg-surface-elevated ${s.accentClass}`
-                    : 'border-brand-gold/15 text-text-light/30 hover:border-brand-gold/30 hover:text-text-light/60'
+                    : 'border-brand-gold/15 text-text-light/55 hover:border-brand-gold/30 hover:text-text-light/60'
                 }`}
               >
                 {s.label}
@@ -219,7 +219,7 @@ export default function AgingClient() {
                 </div>
 
                 <div>
-                  <p className="mb-2 text-xs font-sans text-text-light/30">Geschmacksprofil</p>
+                  <p className="mb-2 text-xs font-sans text-text-light/55">Geschmacksprofil</p>
                   <div className="flex flex-wrap gap-2">
                     {active.profil.map((p) => (
                       <span key={p} className={`border ${active.borderClass} px-3 py-1 text-xs font-sans ${active.accentClass}`}>
@@ -230,7 +230,7 @@ export default function AgingClient() {
                 </div>
 
                 <div className="border border-brand-gold/15 bg-surface-elevated p-4">
-                  <p className="mb-1 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/30">Für wen?</p>
+                  <p className="mb-1 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/55">Für wen?</p>
                   <p className="text-sm font-body leading-relaxed text-text-light/60">{active.fuerWen}</p>
                 </div>
               </div>
@@ -247,14 +247,14 @@ export default function AgingClient() {
                   ].map((c) => (
                     <div key={c.label} className="border border-brand-gold/10 bg-surface-elevated p-3 text-center">
                       <p className="mb-1 text-lg">{c.emoji}</p>
-                      <p className="text-[10px] font-sans text-text-light/30">{c.label}</p>
+                      <p className="text-[10px] font-sans text-text-light/55">{c.label}</p>
                       <p className="text-xs font-sans font-bold text-text-light/70">{c.value}</p>
                     </div>
                   ))}
                 </div>
 
                 <div>
-                  <p className="mb-2 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/30">Risiken & Anforderungen</p>
+                  <p className="mb-2 text-[10px] font-sans font-bold uppercase tracking-wider text-text-light/55">Risiken & Anforderungen</p>
                   <ul className="space-y-1">
                     {active.risiken.map((r) => (
                       <li key={r} className="flex gap-2 text-xs font-body text-text-light/55">
@@ -266,7 +266,7 @@ export default function AgingClient() {
                 </div>
 
                 <div className={`border ${active.borderClass} p-3`}>
-                  <p className="text-xs font-sans text-text-light/30">
+                  <p className="text-xs font-sans text-text-light/55">
                     Kruste: <span className="text-text-light/50">{active.crust}</span>
                   </p>
                 </div>
@@ -277,7 +277,7 @@ export default function AgingClient() {
 
         {/* Timeline */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <h2 className="mb-6 text-center text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-text-light/30">Reifegrad-Timeline</h2>
+          <h2 className="mb-6 text-center text-[10px] font-sans font-bold uppercase tracking-[0.18em] text-text-light/55">Reifegrad-Timeline</h2>
           <div className="relative max-w-lg mx-auto">
             <div className="absolute left-0 right-0 top-4 h-px bg-brand-gold/10" />
             <div className="relative flex justify-between">
@@ -294,7 +294,7 @@ export default function AgingClient() {
                   }`}>
                     <div className={`h-2.5 w-2.5 transition-colors ${active.days === s.days ? 'bg-brand-gold' : 'bg-surface-elevated'}`} />
                   </div>
-                  <span className={`text-[10px] font-sans font-bold transition-colors ${active.days === s.days ? s.accentClass : 'text-text-light/20'}`}>
+                  <span className={`text-[10px] font-sans font-bold transition-colors ${active.days === s.days ? s.accentClass : 'text-text-light/55'}`}>
                     {s.days}d
                   </span>
                 </button>
