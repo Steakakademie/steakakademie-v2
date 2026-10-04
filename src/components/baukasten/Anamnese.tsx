@@ -323,8 +323,13 @@ function ErgebnisAnsicht({ a, e, kopf, neu, zurueck }: {
               </p>
             )}
             {/* Unsichtbar, zeigt sich nur, wenn Cloudflare eine Interaktion braucht.
-                Rendert nur mit NEXT_PUBLIC_TURNSTILE_SITE_KEY. */}
-            <Turnstile action="baukasten" onToken={setTurnstileToken} />
+                Rendert nur mit NEXT_PUBLIC_TURNSTILE_SITE_KEY.
+                `eager` (04.10.2026): Das Formular erscheint erst im letzten Schritt —
+                sofort laden kostet beim Seitenaufruf nichts. Ohne `eager` wartete das
+                Widget auf die erste Eingabe, der 8-Sekunden-Wächter oben lief aber schon:
+                Der Hinweis „Die Sicherheitsprüfung lädt nicht" stand dann da, bevor
+                überhaupt etwas geladen werden sollte. */}
+            <Turnstile action="baukasten" onToken={setTurnstileToken} eager />
             {wartetAufCaptcha && captchaHaengt && (
               <p role="status" className="font-sans text-sm text-[#F4EFE9]/75">
                 Die Sicherheitsprüfung lädt nicht. Bitte lade die Seite neu oder schalte den Werbeblocker für diese Seite aus —

@@ -273,6 +273,11 @@ export default function NewsletterSignup({
                     <Loader2 size={14} className="animate-spin motion-reduce:animate-none" />
                     Sendet…
                   </>
+                ) : emailValid && consent && wartetAufCaptcha ? (
+                  // Das Turnstile-Widget lädt erst bei der ersten Eingabe (Turnstile.tsx).
+                  // Ist das Formular schneller ausgefüllt, als das Token kommt, steht hier,
+                  // warum der Knopf noch gesperrt ist — wie auf /kontakt.
+                  'Sicherheitsprüfung…'
                 ) : (
                   cta
                 )}

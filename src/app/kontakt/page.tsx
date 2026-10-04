@@ -232,8 +232,12 @@ export default function KontaktPage() {
 
                 {/* Turnstile (unsichtbar, zeigt sich nur bei Bedarf). Rendert nur mit
                     NEXT_PUBLIC_TURNSTILE_SITE_KEY; ohne JavaScript legt das Widget
-                    selbst ein verstecktes Feld cf-turnstile-response ins Formular. */}
-                <Turnstile action="kontakt" onToken={setTurnstileToken} />
+                    selbst ein verstecktes Feld cf-turnstile-response ins Formular.
+                    `eager` (04.10.2026): Der Knopf zeigt „Sicherheitsprüfung…", solange
+                    kein Token da ist. Mit Laden erst bei Interaktion stand das schon
+                    beim Seitenaufruf auf dem Knopf. Das Formular ist der Zweck dieser
+                    Seite — hier wird sofort geladen, wie vor dem 04.10.2026. */}
+                <Turnstile action="kontakt" onToken={setTurnstileToken} eager />
 
                 <button
                   type="submit"
