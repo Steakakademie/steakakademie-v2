@@ -714,3 +714,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-03
     hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; zweite Generierung (4. Oktober), Etikett am Glaskaennchen ist unleserlicher KI-Text, keine erkennbare Marke
+  images/rezepte/damper-brot-grill.jpg:
+    status: ki
+    quelle: KI-generiertes Bild, von Uwe Yendell bereitgestellt (4. Oktober 2026), ersetzt das FLUX-Bild aus PR 298; Werkzeug nicht dokumentiert
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-04
+    hinweis: Anbieter und Tarif nicht dokumentiert, kommerzielle Nutzung pruefen; C2PA-Marker nicht geprueft; Aufloesung nur 688x384
