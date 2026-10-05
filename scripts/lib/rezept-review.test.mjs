@@ -104,6 +104,81 @@ describe('analysiere — Zahlen, Referenz, Titel, Status', () => {
   })
 })
 
+// Kerntemperaturen nach Garphase. Anlass: Montreal Smoked Meat (05.10.2026) nannte als Ende des
+// Raeucherns 75–80 °C im Schritt und 70–72 °C im Abschnitt; eine flache Liste zeigt das nicht.
+describe('analysiere — Kerntemperaturen nach Phase', () => {
+  function rezept (schritte, text = 'Fliesstext.') {
+    const steps = schritte.map(([titel, beschr]) => `  - title: ${titel}\n    description: "${beschr}"`).join('\n')
+    return `---
+title: Phasenrezept
+kategorie: fleisch
+meatType: Brisket
+image: /images/rezepte/test.jpg
+status: "published"
+reviewed: true
+steps:
+${steps}
+---
+
+${text}
+`
+  }
+
+  it('meldet denselben Garpunkt mit abweichenden Werten (Schritt gegen Abschnitt)', () => {
+    const a = analysiere(rezept(
+      [['Räuchern', 'Das Fleisch räuchert, bis die Kerntemperatur 75–80 °C erreicht.']],
+      '## Das Räuchern\n\nDas Brisket raucht, bis es eine Kerntemperatur von 70–72 °C erreicht.',
+    ))
+    const raeuchern = a.kernNachPhase.find((p) => p.phase === 'Räuchern')
+    expect(raeuchern.werte.map((w) => w.wert)).toEqual(['75–80', '70–72'])
+    expect(raeuchern.konflikt).toBe(true)
+    expect(a.auffaelligkeiten.join(' ')).toMatch(/Phase „Räuchern" uneinheitlich: 75–80 °C \(Schritt „Räuchern"\) ↔ 70–72 °C \(Abschnitt „Das Räuchern"\)/)
+  })
+  it('weist Werte ohne Satzbezug ueber den Schritt-Titel der richtigen Phase zu', () => {
+    const a = analysiere(rezept([['Dämpfen', 'Nach dieser Zeit sollte eine Kerntemperatur von 93 °C erreicht sein.']]))
+    expect(a.kernNachPhase).toEqual([{ phase: 'Dämpfen', werte: [{ wert: '93', quelle: 'Schritt „Dämpfen"' }], konflikt: false }])
+  })
+  it('93 und 90–93 sind kein Widerspruch (Ueberschneidung), 74 und 75 auch nicht (Toleranz 2 °C)', () => {
+    const a = analysiere(rezept(
+      [['Dämpfen', 'Kerntemperatur 93 °C.']],
+      '## Das Dämpfen\n\nDie Kerntemperatur am Ende des Dämpfens: 90–93 °C. Beim Wickeln liegt die Kerntemperatur bei 74 °C, laut Schritt bei 75 °C.',
+    ))
+    expect(a.kernNachPhase.every((p) => !p.konflikt)).toBe(true)
+    expect(a.auffaelligkeiten.join(' ')).not.toMatch(/uneinheitlich/)
+  })
+  it('„zieht sich zusammen" ist kein Ziehwert; „vom Grill nehmen" schon', () => {
+    const a = analysiere(rezept([['Dämpfen', 'Die Kerntemperatur am Ende: 90–93 °C, dann zieht sich das Fleisch kaum noch zusammen.'], ['Grillen', 'Bei einer Kerntemperatur von 51 °C vom Grill nehmen.']]))
+    expect(a.kernNachPhase.find((p) => p.phase === 'Dämpfen').werte[0].wert).toBe('90–93')
+    expect(a.kernNachPhase.find((p) => p.phase === 'Ziehwert').werte[0].wert).toBe('51')
+  })
+  it('vergleicht Zieh- und Endwert nicht gegeneinander', () => {
+    const a = analysiere(rezept([['Grillen', 'Ziel ist eine Kerntemperatur von 54 °C. Bei einer Kerntemperatur von 51 °C vom Grill nehmen.']]))
+    expect(a.auffaelligkeiten.join(' ')).not.toMatch(/uneinheitlich/)
+  })
+  it('„gemessen vor dem Ruhen" gehoert nicht zur Phase Ruhen', () => {
+    const a = analysiere(rezept([['Grillen', 'Die Kerntemperatur von 54 °C gemessen VOR dem Ruhen.']]))
+    expect(a.kernNachPhase.find((p) => p.phase === 'Ruhen')).toBeUndefined()
+  })
+  it('Reverse Sear (Anbraten) wird nicht verglichen — Zieh- und Endwert stehen dort gewollt nebeneinander', () => {
+    const a = analysiere(rezept([['Anbraten', 'Erst bei 45 °C Kerntemperatur indirekt, dann sear bis eine Kerntemperatur von 52 °C erreicht ist.']]))
+    expect(a.kernNachPhase.find((p) => p.phase === 'Anbraten').konflikt).toBe(false)
+  })
+  it('zaehlt nur Saetze mit „Kern": Holzbrett und Ofen gehoeren nicht dazu', () => {
+    const a = analysiere(rezept([['Ruhen', 'Auf dem vorgewaermten Holzbrett (85 °C) ruhen lassen. Der Ofen steht auf 70 °C.']]))
+    expect(a.kernNachPhase).toEqual([])
+    expect(a.kerntemperaturen.sort()).toEqual(['70', '85'])
+  })
+  it('Abschnitt zeigt die Phasen und markiert den Widerspruch', () => {
+    const a = analysiere(rezept(
+      [['Räuchern', 'Kerntemperatur 75–80 °C.']],
+      '## Das Räuchern\n\nDas Brisket raucht bis zu einer Kerntemperatur von 70–72 °C.',
+    ))
+    const t = rezeptAbschnitt('x', a)
+    expect(t).toMatch(/Kerntemperaturen nach Phase/)
+    expect(t).toMatch(/\*\*Räuchern:\*\* 75–80 °C ↔ 70–72 °C ⚠️ uneinheitlich/)
+  })
+})
+
 describe('checklisteMarkdown', () => {
   const a = analysiere(mdx({ text: 'Das ist Physik.' }))
 
