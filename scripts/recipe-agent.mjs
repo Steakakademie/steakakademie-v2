@@ -638,6 +638,16 @@ function entnummeriere(titel) {
   return t.replace(/^(?:\*\*|__)/, '').replace(/(?:\*\*|__)$/, '').trim()
 }
 
+/**
+ * Markenzusatz am Ende eines seoTitle entfernen. src/app/layout.tsx haengt per
+ * Template '%s | Steakakademie' selbst an; stand er schon im seoTitle, lautete der
+ * <title> doppelt „… | Steakakademie | Steakakademie" (14 Rezepte, behoben 05.10.2026).
+ * Greift auch, wenn das Modell trotz Prompt ein Trennzeichen + Marke anhaengt.
+ */
+function ohneMarkenzusatz (titel) {
+  return String(titel).replace(/\s*[|–—-]\s*Steakakademie\s*$/i, '').trim()
+}
+
 function parseStructuredText(text) {
   const data = {
     author: 'Marco', authorSlug: 'marco',
@@ -675,7 +685,8 @@ function parseStructuredText(text) {
         WINE_PROFILE: 'wineProfile', WINE_LINK: 'wineLink',
       }
       if (map[key]) {
-        data[map[key]] = ['SERVINGS', 'CALORIES'].includes(key) ? Number(val) : val
+        data[map[key]] = ['SERVINGS', 'CALORIES'].includes(key) ? Number(val)
+          : key === 'SEO_TITLE' ? ohneMarkenzusatz(val) : val
         section = null
       } else if (key === 'CORE_TEMP') {
         // Ziel-Kerntemperatur fuer validate(); "keine" bei Beilagen & Co. Wird nicht
@@ -785,7 +796,7 @@ COOK_TIME: [ISO8601]
 TOTAL_TIME: [ISO8601]
 SERVINGS: [Zahl]
 CALORIES: [Zahl]
-SEO_TITLE: [max. 60 Zeichen | Steakakademie]
+SEO_TITLE: [max. 44 Zeichen, OHNE Markenzusatz — das Seiten-Layout hängt ' | Steakakademie' selbst an]
 SEO_DESCRIPTION: [150-160 Zeichen]
 WHISKEY_NAME: [Passender Whisky oder leer lassen]
 WHISKEY_TYPE: [z.B. Bourbon]
@@ -1146,4 +1157,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
