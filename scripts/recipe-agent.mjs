@@ -783,7 +783,25 @@ function gaumenBlock (seed) {
   return seedStil(seed) === 'vertraut' ? GAUMEN_VERTRAUT : GAUMEN_ORIGINAL
 }
 
-async function generateRecipe(seed) {
+/**
+ * Rueckmeldung an das Modell, wenn der vorherige Versuch von validate() oder dem
+ * Quality-Gate abgelehnt wurde. Bis 05.10.2026 lief der zweite Versuch mit exakt
+ * demselben Prompt: ein blindes Neuwuerfeln, das denselben Fehler wiederholen konnte
+ * (und ein sonst gutes Rezept nach VERSUCHE Anlaeufen verwarf). Kommt nur in die
+ * Nutzer-Nachricht, nie in den System-Prompt — der bleibt wortgleich und cachebar.
+ * Leer, solange es keine Ablehnung gab.
+ */
+function korrekturBlock (fehler) {
+  const liste = (fehler ?? [])
+    .map((f) => String(f).replace(/\s+/g, ' ').trim().slice(0, 300))
+    .filter(Boolean)
+    .slice(0, 8)
+  if (liste.length === 0) return ''
+  return `KORREKTUR (dein vorheriger Versuch wurde automatisch abgelehnt): Behebe genau diese Punkte und halte dich sonst an das Format und die Vorgaben oben.\n${liste.map((f) => `- ${f}`).join('\n')}\n`
+}
+
+async function generateRecipe(seed, fehler = []) {
+  const korrektur = korrekturBlock(fehler)
   // Phase 1: Strukturiertes Textformat — kein JSON, kein Parsing-Problem
   const metaPrompt = `Generiere strukturierte Rezept-Metadaten für steakakademie.de.
 Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
@@ -842,7 +860,7 @@ Rezept-Kontext:
 
 ${gaumenBlock(seed)}
 
-Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Kommentar außerhalb des Formats.`
+${korrektur}Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Kommentar außerhalb des Formats.`
 
   const metaResp = await generateText({
     model:    anthropic('claude-haiku-4-5-20251001'),
@@ -879,7 +897,7 @@ Konzept: ${seed.concept}
 
 ${gaumenBlock(seed)}
 
-Format: Reines Markdown, keine Frontmatter, kein JSON.
+${korrektur}Format: Reines Markdown, keine Frontmatter, kein JSON.
 Struktur:
 - Intro (2-3 Sätze: Warum ist dieses Gericht besonders)
 - ## [Sinnvoller Abschnitt 1] (Wissenschaft/Hintergrund)
@@ -1071,6 +1089,9 @@ async function main() {
   for (const seed of toGenerate) {
     let data = null
     let letzteFehler = []
+    // Nur Validierungsfehler gehen ans Modell zurueck — ein API-Fehler (Timeout,
+    // 429) sagt dem Modell nichts ueber den Inhalt.
+    let rueckmeldung = []
 
     for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
       const anlauf = versuch > 1 ? c.dim(` (Versuch ${versuch}/${VERSUCHE})`) : ''
@@ -1078,7 +1099,7 @@ async function main() {
 
       let kandidat
       try {
-        kandidat = await generateRecipe(seed)
+        kandidat = await generateRecipe(seed, rueckmeldung)
       } catch (err) {
         console.log(c.red('FEHLER'))
         console.error(c.dim(`    ${err.message}`))
@@ -1103,6 +1124,7 @@ async function main() {
       console.log(c.yellow('VALIDIERUNGSFEHLER'))
       errors.forEach(e => console.error(c.dim(`    ✗ ${e}`)))
       letzteFehler = errors
+      rueckmeldung = errors
       // Nur beim letzten Anlauf ausgeben — sonst flutet es das Log.
       if (versuch === VERSUCHE) {
         // Der Kopf der Antwort half bei Lauf #101 nicht weiter: Die 1500 Zeichen
@@ -1162,4 +1184,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }

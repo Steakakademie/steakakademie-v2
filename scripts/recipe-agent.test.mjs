@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -522,5 +522,40 @@ describe('validate — seoTitle-Laenge', () => {
   it('ein fehlender seoTitle ist kein Fehler (optionales Feld)', () => {
     expect(validate(datensatz(undefined), SEED)).toEqual([])
     expect(validate(datensatz(''), SEED)).toEqual([])
+  })
+})
+
+describe('Retry mit Fehler-Rueckmeldung', () => {
+  const quelle = readFileSync(new URL('./recipe-agent.mjs', import.meta.url), 'utf8')
+
+  it('korrekturBlock ist leer, solange es keine Ablehnung gab', () => {
+    expect(korrekturBlock([])).toBe('')
+    expect(korrekturBlock(undefined)).toBe('')
+    expect(korrekturBlock(['', '   '])).toBe('')
+  })
+  it('korrekturBlock nennt jeden Ablehnungsgrund', () => {
+    const block = korrekturBlock(['seoTitle zu lang: 51 Zeichen', 'Zu wenige Schritte'])
+    expect(block).toContain('KORREKTUR')
+    expect(block).toContain('- seoTitle zu lang: 51 Zeichen')
+    expect(block).toContain('- Zu wenige Schritte')
+  })
+  it('korrekturBlock kappt Laenge und Anzahl und glaettet Zeilenumbrueche', () => {
+    const viele = Array.from({ length: 12 }, (_, i) => `Fehler ${i}`)
+    expect(korrekturBlock(viele).split('\n').filter((z) => z.startsWith('- '))).toHaveLength(8)
+    const lang = korrekturBlock(['x'.repeat(1000)])
+    expect(lang.split('\n')[1].length).toBeLessThanOrEqual(302)
+    expect(korrekturBlock(['a\nb\n\nc'])).toContain('- a b c')
+  })
+  it('die Schleife reicht die Validierungsfehler an den naechsten Versuch weiter', () => {
+    expect(quelle).toContain('generateRecipe(seed, rueckmeldung)')
+    expect(quelle).toMatch(/letzteFehler = errors\s+rueckmeldung = errors/)
+  })
+  it('ein API-Fehler wird NICHT als Rueckmeldung ans Modell gegeben', () => {
+    expect(quelle).not.toMatch(/rueckmeldung = \[err\.message\]/)
+    expect(quelle).toMatch(/letzteFehler = \[err\.message\]/)
+  })
+  it('beide Prompts (Metadaten und Artikel) tragen den Block, der System-Prompt nicht', () => {
+    expect(quelle.match(/\$\{korrektur\}/g)).toHaveLength(2)
+    expect(systemPrompt()).not.toContain('KORREKTUR')
   })
 })
