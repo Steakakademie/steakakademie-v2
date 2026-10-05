@@ -179,6 +179,75 @@ ${text}
   })
 })
 
+// Referenz-Vorschlag nach Hauptprodukt. Anlass: Im ersten Agenten-PR mit der Checkliste (#327, Aussie
+// Snags, 05.10.2026) bekamen „Rindsbratwürste" beef_mr (52–55 °C) statt Hack (70–72 °C), weil „Rind"
+// vor jeder Wurst-Regel stand. Die Reihenfolge der Regeln ist Teil des Vertrags.
+describe('analysiere — Referenz-Vorschlag nach Hauptprodukt', () => {
+  const referenz = {
+    badges: {
+      burger: { c: 70, range: [70, 72], label: 'durchgegart' },
+      beef_mr: { c: 54, range: [52, 55], label: 'Medium Rare' },
+    },
+  }
+  function schluessel(meatType, title = 'Testrezept') {
+    const text = `---
+title: ${title}
+kategorie: fleisch
+meatType: ${meatType}
+image: /images/rezepte/test.jpg
+steps:
+  - title: Grillen
+    description: "Kerntemperatur 72 °C."
+  - title: Servieren
+    description: "Anrichten."
+---
+
+Kern 72 °C.
+`
+    return analysiere(text, { referenz }).referenz?.schluessel ?? null
+  }
+
+  it.each([
+    ['Rindsbratwürste', 'burger'],
+    ['Rinderhackfleisch', 'burger'],
+    ['Rinderwurst', 'burger'],
+    ['Schweinsbratwurst', 'burger'],
+    ['Wagyu-Hack', 'burger'],
+    ['Lammköfte', 'burger'],
+    ['Smash Burger Patty', 'burger'],
+  ])('%s → %s (Hack und Wurst sind durchzugaren)', (meatType, erwartet) => {
+    expect(schluessel(meatType)).toBe(erwartet)
+  })
+
+  it('Geflügelhack bleibt bei Geflügel (Mindestwert 72 °C, nicht 70)', () => {
+    expect(schluessel('Hähnchenhack')).toBe('poultry')
+  })
+  it('Teilstuecke ohne Hack/Wurst bleiben unveraendert', () => {
+    expect(schluessel('Rinderfilet')).toBe('beef_mr')
+    expect(schluessel('Flank Steak')).toBe('beef_flank')
+    expect(schluessel('Lammkarree')).toBe('lamb_mr')
+    expect(schluessel('Schweinenacken')).toBe('pork_juicy')
+    expect(schluessel('Brisket')).toBe('beef_lowslow')
+  })
+  it('die Checkliste zeigt bei Wurst den Hack-Korridor, nicht Medium Rare', () => {
+    const a = analysiere(`---
+title: Aussie Snags
+kategorie: fleisch
+meatType: Rindsbratwürste
+image: /images/rezepte/test.jpg
+steps:
+  - title: Grillen
+    description: "Kerntemperatur von 72 °C erreichen."
+---
+
+Text.
+`, { referenz })
+    const t = rezeptAbschnitt('aussie-snags', a)
+    expect(t).toMatch(/Referenz-Vorschlag `burger`: 70–72 °C/)
+    expect(t).not.toMatch(/beef_mr/)
+  })
+})
+
 describe('checklisteMarkdown', () => {
   const a = analysiere(mdx({ text: 'Das ist Physik.' }))
 
