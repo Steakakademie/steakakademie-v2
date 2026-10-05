@@ -8,6 +8,101 @@
 > einer US-basierten WebSearch und liefern eine Trefferliste, keine deutsche
 > SERP-Position.** Vergleiche über diese Grenze hinweg sind nicht 1:1 belastbar.
 
+## KW41 — 05.10.2026
+
+> **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach KW40 (28.09.2026). Neue Kalenderwoche → Zähler „Wochen ohne Backlink" wird hochgezählt. **Clarity-Fenster:** Die Quellen-Abfrage lief 28.09.–05.10., die Top-Seiten-Abfrage 29.09.–05.10. (Clarity hat die Fenster selbst gewählt, 1 Tag Versatz) — Quellen- und Seitenzahlen sind nicht exakt deckungsgleich.
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ Vorwoche (28.09.) | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz ~30** (Seite 4, Position 4) | `steakakademie.de/temperatur-guide` | ⚪ Seite 4 gehalten; 34 → 30 ist nur Indikator (Seite 3 lieferte diesmal 9 statt 10 organische Treffer, Toleranz ±3, Differenz 4 ≈ Zählrauschen) | ⚪ nicht vergleichbar (Methodenwechsel KW39) |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 9** organischen Treffern (nur Seite 1 geprüft) | — | = | = |
+| Brand-Query „Steakakademie" | **Platz 1** | `steakakademie.de/` | = | = (Baseline: Platz 1) |
+
+**Zählweise Leit-Query:** Seite 1: 7 · Seite 2: 10 · Seite 3: 9 · Seite 4: Position 4 (`steakakademie.de/temperatur-guide`, per DOM-Link verifiziert) → 7+10+9+4 = **30**. Mitbewerber direkt vor uns auf Seite 4: der-ludwig.de, kuhteilen.ch, Facebook (hr). Seite 1 unverändert dominiert von Grillfürst, block-house, little-london, AMA-Grillclub, Trautmann.
+
+**Brand:** Organisch 1. `steakakademie.de/`, 2. GrillKonzept (fremd), 3. Facebook (fremd), 4. GrillKonzept, 5. GrillKonzept, 6. `steakakademie.de/diplome`, 7. WR.de, 8. GrillKonzept. Kein GitHub unter den ersten 8.
+
+### Google AI Overview
+
+Leit-Query: vorhanden („Übersicht mit KI"), zitiert Grillfürst (primär), AMA-Grillclub, shop.block-house.de. Volltextsuche „steakakademie" im `document.body.innerText`: **kein Treffer** — wir werden nicht zitiert. Kopf-Keyword: ebenfalls AIO (Der Grillfluencer/YouTube, Grillfürst, Metzgerei Trautmann) — wir nicht genannt. Δ Vorwoche: Quellen leicht variiert (Trautmann/AMA neu sichtbar), keine Bewegung zu uns. Nur inline sichtbare Quellen ausgezählt, „Alle anzeigen" nicht aufgeklappt.
+
+### Traffic (Microsoft Clarity, Non-Bot-Sessions, ~7 Tage)
+
+| Quelle | Sessions (28.09.–05.10.) | Δ KW40 (21.–28.09.) |
+|---|---|---|
+| Direct | 18 | −5 (23) |
+| steakakademie.de (Eigenverweis) | 13 | +12 (1) |
+| **google** | **9** | −1 (10) |
+| **bing** | **7** | +1 (6) |
+| duckduckgo.com | 4 | = |
+| www.checkout-ds24.com | 4 | neu |
+| yahoo | 2 | +1 |
+| ui.awin.com | 1 | neu |
+
+Gesamt ≈ 58 Sessions (KW40: ≈ 47). Bing:Google = 7:9 — der KW40-Umschwung (Google vor Bing) hat sich **stabilisiert**, bleibt aber bei dieser Fallzahl ein Einzelbefund, kein Trend. Enthält Uwes eigene Aufrufe; Größenordnung, keine Statistik.
+
+**Auffällig, nicht attribuiert:** Eigenverweis `steakakademie.de` 13 (von 1) — sehr wahrscheinlich interne Navigation/Eigentests, aus Clarity nicht entscheidbar. `checkout-ds24.com` (4) und `ui.awin.com` (1) sind neue Referrer (Digistore-Checkout bzw. Awin-Affiliate-Rückkehr) — ob echte Kaufinteressenten oder Uwe beim Testen, nicht entscheidbar.
+
+**Top-Seiten (29.09.–05.10.):** `/temperatur-guide` **9** (KW40: 2, +7) · `/` 7 (13) · `/diplome/lernen/stufe-1/grillarten` 5 · `/danke/steak-beichte` 4 (neu) · `/persoenlichkeiten/francis-mallmann` 2 · `/rezepte/fleisch/iberico-secreto` 2 · je 1: blitz-mayonnaise, streitfaelle/salzen-vorher-oder-nachher, diplome/profil, fleischwissen/gras-vs-getreide. **`/hoefe` taucht nicht mehr in den Top 10 auf** (KW40: 2, zwei Wochen zuvor 22) — Einbruch bestätigt, Ursache weiter ungeklärt. `/auth/login` ebenfalls nicht mehr in Top 10.
+
+### Off-Page-Delta
+
+WebSearch `"steakakademie.de" -site:steakakademie.de`: **0 echte Backlinks — unverändert.** Treffer ausschließlich Namensvettern (Facebook Steakakademie, GrillKonzept ×6, Oberpfalz-Beef, Wikipedia „Akademie"). Neue Kalenderwoche → **13 Wochen in Folge ohne Backlink** (Vorwert 12). Keine nofollow-Prüfung (kein Link). Hinweis: WebSearch ist US-basiert, Umfeldrecherche, keine Position.
+
+### Technik-Status
+
+| Check | Ergebnis | Status |
+|---|---|---|
+| www → non-www, Wurzel | 308, `location: https://steakakademie.de/` | 🟢 |
+| www → non-www, `/temperatur-guide` | 308, `location: https://steakakademie.de/temperatur-guide` | 🟢 |
+| Apex | 200, keine Location | 🟢 |
+| `/llms.txt` | 200 `text/plain; charset=utf-8`, **1.809 Byte** (Vorwert 1.533) | 🟢 — Größenänderung erklärbar durch Commits #292/#294 vom 03.10. (llms.txt-Änderung, `git log`), Inhalt kein Fehler |
+| `/robots.txt` letzte Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` | 🟢 |
+
+Geprüft per curl (Statuscode/Header) auf Uwes Rechner statt mit `web_fetch`; Methodik-Datei schreibt Statuscodes vor, `web_fetch` liefert sie nicht.
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig.** `docs/geo-baseline.md`: nächste Fälligkeit **29.10.2026** (Auftragstext nannte das nicht; Datei ist die Quelle). Zuständig: Task `geo-recheck-baseline`.
+- **Bing Webmaster Tools** angebunden (24.09.); Bing-Kennzahlen weiterhin nicht abgefragt (kein Zugriffsweg in dieser Session).
+- **Google Search Console:** siehe Handlungsempfehlung — Grundannahme geprüft.
+- `/hoefe`-Einbruch (22 → 2 → 0 in Top 10) weiter unbeobachtet.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Seite 4 (Platz ~30) gehalten, Vorwoche Platz 34 = Zählrauschen. Brand Platz 1. Kopf-Keyword nicht in den ersten 9. |
+| AI Overview / GEO | 🔴 | Beide AIOs vorhanden, wir in beiden nicht zitiert (Grillfürst, AMA, Trautmann, block-house dominieren). |
+| Traffic | 🟡 | ≈58 Sessions (Vorwoche ≈47); Bing 7 / Google 9; `/temperatur-guide` 9 Sessions = meistbesuchte Seite; `/hoefe` weg. Kleine Fallzahl. |
+| Off-Page | 🔴 | 0 Backlinks, 13 Wochen in Folge. |
+| Technik | 🟢 | Alle fünf Checks per Statuscode/Header grün (308/308/200/200/Sitemap-Zeile). |
+
+### Handlungsempfehlung (max. 1)
+
+**Search-Console-Property verifizieren, bevor an eine API gedacht wird (Uwe, ~5 Min, 0 €):** search.google.com/search-console öffnen — existiert die Property `steakakademie.de` und zeigt sie Daten? Falls nein: Domain-Property per DNS-TXT über Cloudflare anlegen (0 €), Daten laufen dann ab Verifizierung auf; API-Anbindung erst danach.
+
+*Streichungs-/Annahmenprüfung (Empfehlung stand zum zweiten Mal im Log):* Die Annahme „Property existiert (ohne www)" stammt aus dem Auftragstext und ist **nicht belegt**. Gegenindiz: Der Bing-GSC-Import scheiterte am 24.09. mit „keine Daten vorhanden" — passt zu einer nicht verifizierten oder leeren Property. Aus dieser Session ist GSC nicht erreichbar, die Annahme bleibt daher offen. Deshalb Empfehlung von „API anbinden" auf „Existenz/Daten prüfen" umformuliert — die API-Variante setzt eine Grundlage voraus, die nicht belegt ist.
+
+*Nachrichtlich, nicht gezählt:* Eigenverweis-Sprung (13) und neue Digistore/Awin-Referrer — nächste Woche gegenprüfen. Danach unverändert: echte Backlinks (kein spamfreier 15-Minuten-Weg, CLAUDE.md Regel 5).
+
+### Trend in einem Satz
+
+Ranking (Seite 4), Brand (Platz 1) und Technik sind stabil, die Sichtbarkeit in den AI Overviews bleibt bei null, und `/temperatur-guide` ist erstmals die meistbesuchte Seite — bei ≈58 Sessions aber nur ein Größenordnungshinweis.
+
+### Was NICHT geprüft wurde
+
+- **Kopf-Keyword nur Seite 1** (9 Treffer), nicht Seiten 1–5.
+- **AIO-Quellenlisten** nicht aufgeklappt („Alle anzeigen"/„+N").
+- **Bing-DE-Position, Perplexity, ChatGPT** — gehören in den GEO-Re-Check (29.10.).
+- **Bing-Webmaster-Kennzahlen** und **Search-Console-Daten** (Impressionen, CTR, Ø-Position) — kein Zugriff; GSC-Property-Existenz unverifiziert.
+- **Ursache** von `/hoefe`-Einbruch, Eigenverweis-Sprung und Digistore/Awin-Referrern — Clarity attribuiert nicht.
+- **Clarity-Fenster** der zwei Abfragen um einen Tag versetzt (28.09. vs 29.09.).
+- **Techn. Checks per curl** (Uwes Rechner) statt `web_fetch`.
+- **Nichts committet** — Uwe committet selbst.
+
 ## KW40 — 28.09.2026
 
 > **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach dem letzten Eintrag (KW39,
