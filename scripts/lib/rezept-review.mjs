@@ -240,7 +240,53 @@ export function analysiere (mdx, opt = {}) {
     behauptungen,
     auffaelligkeiten,
     vorabFreigabe,
+    zutaten: Array.isArray(fm.ingredients) ? fm.ingredients : [],
+    schritte,
+    servings: fm.servings ?? null,
   }
+}
+
+/** ISO-8601-Dauer (PT15M, PT3H, PT168H, PT1H30M) als kurze Lesefassung; unbekannte Form unveraendert. */
+export function dauerLesbar (iso) {
+  const m = /^PT(?:(\d+)H)?(?:(\d+)M)?$/.exec(String(iso ?? ''))
+  if (!m || (!m[1] && !m[2])) return iso ? String(iso) : ''
+  const h = m[1] ? Number(m[1]) : 0
+  const min = m[2] ? Number(m[2]) : 0
+  return [h ? `${h} Std.` : '', min ? `${min} Min.` : ''].filter(Boolean).join(' ')
+}
+
+/**
+ * Zutaten und Schritte als Liste. Warum: GitHub zeigt das YAML-Frontmatter als Tabelle, und
+ * verschachtelte Listen (ingredients, steps) werden darin zu einer unlesbar breiten Tabelle —
+ * Mengen und Zubereitung sind im Datei-View praktisch unsichtbar (05.10.2026, Uwe). Diese
+ * Ansicht gibt dasselbe als Text, damit der Review-PR zeigt, was auf der Seite stehen wird.
+ * Reine Wiedergabe der Frontmatter-Felder, nichts wird ergaenzt oder umgerechnet.
+ */
+export function rezeptLesbar (a) {
+  const z = []
+  if (a.zutaten?.length) {
+    z.push(`**Zutaten${a.servings ? ` (Basis ${a.servings} Portionen)` : ''}:**`)
+    z.push('')
+    for (const i of a.zutaten) {
+      const menge = [i?.amount, i?.unit].filter((x) => x !== undefined && x !== null && x !== '').join(' ')
+      z.push(`- ${menge ? `${menge} ` : ''}${i?.name ?? ''}${i?.note ? ` _(${i.note})_` : ''}`)
+    }
+  } else {
+    z.push('**Zutaten:** ⚠️ keine im Frontmatter gefunden.')
+  }
+  z.push('')
+  if (a.schritte?.length) {
+    z.push('**Zubereitung:**')
+    z.push('')
+    a.schritte.forEach((s, n) => {
+      const dauer = dauerLesbar(s?.duration)
+      z.push(`${n + 1}. **${s?.title ?? ''}**${dauer ? ` (${dauer})` : ''} — ${String(s?.description ?? '').trim()}`)
+      if (s?.tip) z.push(`   - ${String(s.tip).trim()}`)
+    })
+  } else {
+    z.push('**Zubereitung:** ⚠️ keine Schritte im Frontmatter gefunden.')
+  }
+  return z.join('\n')
 }
 
 /** Markdown-Abschnitt fuer ein Rezept. */
@@ -252,6 +298,13 @@ export function rezeptAbschnitt (slug, a) {
     z.push('**⚠️ Auffälligkeiten (automatisch, bitte ansehen):**')
     for (const f of a.auffaelligkeiten) z.push(`- [ ] ${f}`)
   }
+  z.push('')
+  z.push('<details open>')
+  z.push('<summary><b>Rezept lesbar: Zutaten und Zubereitung</b> (aus dem Frontmatter, GitHub zeigt es dort nur als unlesbare Tabelle)</summary>')
+  z.push('')
+  z.push(rezeptLesbar(a))
+  z.push('')
+  z.push('</details>')
   z.push('')
   z.push('**Zahlen zum Gegenprüfen:**')
   if (a.kerntemperaturen.length) {
@@ -290,7 +343,7 @@ export function rezeptAbschnitt (slug, a) {
 }
 
 /** Gesamte Checkliste fuer den PR-Text. */
-export function checklisteMarkdown (rezepte, { maxZeichen = 20000 } = {}) {
+export function checklisteMarkdown (rezepte, { maxZeichen = 30000 } = {}) {
   if (rezepte.length === 0) return ''
   const kopf = [
     '## 🔎 Review-Checkliste (automatisch erzeugt)',
