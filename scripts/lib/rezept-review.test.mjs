@@ -1,0 +1,140 @@
+// Tests fuer die Review-Hilfen der Agenten-PRs (scripts/lib/rezept-review.mjs).
+//
+// Anlass: Beim Rote-Bete-Salsa-Rezept (PR #310) fand erst eine Handpruefung einen
+// Garzeit-Widerspruch (Schritt 5–6 Min./Seite, Text 2–3), eine unbelegte „Physik"-Aussage
+// und einen Geosmin-Satz. Die Fixtures unten bilden genau diese Muster nach.
+import { describe, it, expect } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { analysiere, checklisteMarkdown, rezeptAbschnitt } from './rezept-review.mjs'
+
+function mdx ({ schritt = 'Grillen.', text = 'Kern 54 °C.', fm = '' } = {}) {
+  return `---
+title: Testrezept
+kategorie: fleisch
+meatType: Flank Steak
+image: /images/rezepte/test.jpg
+imageAI: true
+imageAlt: Flank Steak auf Tortilla
+status: "published"
+reviewed: true
+${fm}
+steps:
+  - title: Grillen
+    description: "${schritt}"
+  - title: Servieren
+    description: "Anrichten."
+---
+
+${text}
+`
+}
+
+describe('analysiere — Garzeit pro Seite', () => {
+  it('meldet unterschiedliche Angaben (Schritt gegen Fliesstext)', () => {
+    const a = analysiere(mdx({
+      schritt: 'Je 5–6 Minuten pro Seite grillen.',
+      text: 'Die Methode: heisse Flamme, 2–3 Minuten pro Seite, bis die Kerntemperatur stimmt.',
+    }))
+    expect(a.auffaelligkeiten.join(' ')).toMatch(/unterschiedlich angegeben: 5–6 \/ 2–3/)
+  })
+  it('schweigt bei einheitlicher Angabe (auch mit anderer Schreibweise des Bindestrichs)', () => {
+    const a = analysiere(mdx({
+      schritt: 'Je 2-3 Minuten pro Seite grillen.',
+      text: 'Nach 2 – 3 Minuten pro Seite wenden, Kern 54 °C.',
+    }))
+    expect(a.auffaelligkeiten).toEqual([])
+  })
+})
+
+describe('analysiere — Fachaussagen', () => {
+  it('markiert die Erklaer-Prosa aus dem Rote-Bete-Rezept', () => {
+    const a = analysiere(mdx({
+      text: 'Rote Bete liefert Erdigkeit: Geosmin ist hitzebeständig und bleibt präsent.\n\nDas ist kein Stilmittel — es ist Physik.',
+    }))
+    expect(a.behauptungen).toHaveLength(2)
+    expect(a.behauptungen.join(' ')).toMatch(/Geosmin/)
+    expect(a.behauptungen.join(' ')).toMatch(/Physik/)
+  })
+  it('ignoriert Ueberschriften („Die Physik des Grillens" steht in 46 Bestandsrezepten)', () => {
+    const a = analysiere(mdx({ text: '## Warum Butterflying die Physik verändert\n\nEine Keule ist ein geometrisches Problem.' }))
+    expect(a.behauptungen).toEqual([])
+  })
+  it('ignoriert alltaegliche Woerter (Stoff, Prozent) — sonst waere die Liste in jedem PR laut', () => {
+    const a = analysiere(mdx({ text: 'Der Stoff ist dicht. Rund 20 Prozent Fett und 5 % Salz.' }))
+    expect(a.behauptungen).toEqual([])
+  })
+  it('kuerzt lange Saetze und liefert hoechstens 6', () => {
+    const satz = `Das ist Physik ${'x '.repeat(200)}.`
+    const a = analysiere(mdx({ text: Array.from({ length: 9 }, () => satz).join(' ') }))
+    expect(a.behauptungen).toHaveLength(6)
+    expect(a.behauptungen[0].length).toBeLessThanOrEqual(171)
+  })
+})
+
+describe('analysiere — Zahlen, Referenz, Titel, Status', () => {
+  it('sammelt Kerntemperaturen im Kernbereich, nicht die Grilltemperatur', () => {
+    const a = analysiere(mdx({ schritt: 'Grill auf 250 °C heizen, Kern 52–55 °C.', text: 'Ziel 54 °C, Holzbrett 85 °C.' }))
+    expect(a.kerntemperaturen.sort()).toEqual(['52–55', '54', '85'].sort())
+  })
+  it('schlaegt den Referenz-Schluessel vor und zeigt dessen Korridor', () => {
+    const referenz = { badges: { beef_flank: { c: 54, range: [52, 55], label: 'Medium Rare' } } }
+    const a = analysiere(mdx({ text: 'Ziel ist 54 °C Kerntemperatur.' }), { referenz })
+    expect(a.referenz).toEqual({ schluessel: 'beef_flank', c: 54, range: [52, 55], label: 'Medium Rare' })
+    expect(rezeptAbschnitt('x', a)).toMatch(/Referenz-Vorschlag `beef_flank`: 52–55 °C \(Ziel 54/)
+  })
+  it('meldet ein Fleischrezept ganz ohne Kerntemperatur (Regel 8c)', () => {
+    const a = analysiere(mdx({ text: 'Einfach grillen, bis es gut aussieht.' }))
+    expect(a.auffaelligkeiten.join(' ')).toMatch(/Keine Kerntemperatur im Text, obwohl die Referenz `beef_flank`/)
+  })
+  it('meldet das NICHT bei Beilagen und nicht, wenn eine Temperatur genannt ist', () => {
+    const beilage = mdx({ text: 'Mais grillen.' }).replace('kategorie: fleisch', 'kategorie: beilagen').replace('meatType: Flank Steak', 'meatType: Mais')
+    expect(analysiere(beilage).auffaelligkeiten).toEqual([])
+    expect(analysiere(mdx({ text: 'Kern 54 °C.' })).auffaelligkeiten).toEqual([])
+  })
+  it('meldet einen seoTitle mit Markenzusatz', () => {
+    const a = analysiere(mdx({ fm: 'seoTitle: "Flank Steak | Steakakademie"' }))
+    expect(a.auffaelligkeiten.join(' ')).toMatch(/doppelter Titel/)
+  })
+  it('erkennt die vorab gesetzte Freigabe (Merge macht sie wahr)', () => {
+    expect(analysiere(mdx()).vorabFreigabe).toBe(true)
+  })
+  it('meldet den „Not:"-Prompt NICHT pro Rezept (stand in 86 von 131 Bestandsrezepten: Rauschen)', () => {
+    const a = analysiere(mdx({ fm: 'imagePrompt: "Sliced steak. Not: whole steak, no char marks."' }))
+    expect(a.auffaelligkeiten).toEqual([])
+  })
+})
+
+describe('checklisteMarkdown', () => {
+  const a = analysiere(mdx({ text: 'Das ist Physik.' }))
+
+  it('ist leer, wenn es keine Rezepte gibt', () => {
+    expect(checklisteMarkdown([])).toBe('')
+  })
+  it('enthaelt Kopf, Slug, Checkboxen und den Hinweis auf offene Punkte', () => {
+    const t = checklisteMarkdown([{ slug: 'test-rezept', analyse: a }])
+    expect(t).toContain('## 🔎 Review-Checkliste')
+    expect(t).toContain('`test-rezept`')
+    expect(t).toContain('- [ ] Zeigt das Bild genau das')
+    expect(t).toMatch(/fal\.ai-Tarif und C2PA/)
+    expect(t).toMatch(/reviewedAt/)
+  })
+  it('kuerzt auf maxZeichen (PR-Text hat eine Obergrenze)', () => {
+    const t = checklisteMarkdown([{ slug: 'a', analyse: a }, { slug: 'b', analyse: a }], { maxZeichen: 300 })
+    expect(t.length).toBeLessThan(330)
+    expect(t).toMatch(/gekürzt/)
+  })
+})
+
+describe('Einbau in den Workflow recipe-grow', () => {
+  const wf = readFileSync(new URL('../../.github/workflows/recipe-grow.yml', import.meta.url), 'utf8')
+
+  it('erzeugt die Checkliste VOR dem PR-Schritt (danach ist der Arbeitsbaum sauber)', () => {
+    const iCheck = wf.indexOf('recipe-review-checkliste.mjs')
+    const iPr = wf.indexOf('uses: ./.github/actions/pr-statt-push')
+    expect(iCheck).toBeGreaterThan(-1)
+    expect(iCheck).toBeLessThan(iPr)
+  })
+  it('reicht den Text in die PR-Beschreibung', () => {
+    expect(wf).toContain('steps.checkliste.outputs.text')
+  })
+})
