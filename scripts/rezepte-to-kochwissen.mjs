@@ -104,5 +104,27 @@ for (const file of files) {
 }
 
 const csv = ['Titel; Kategorie; Cut/Zutat; Schwierigkeit; Keywords; Quelle-Fundstelle; Inhalt_normalisiert', ...rows].join('\n') + '\n'
+
+// --check: nichts schreiben, nur vergleichen. Haengt in `npm run check` (und damit im
+// Pflicht-Check „P0-Gates pruefen"): ein neues oder geaendertes Rezept ohne neu erzeugte
+// CSV bricht dort ab, statt erst im Unit-Test der CI (PR #310, 05.10.2026).
+if (process.argv.includes('--check')) {
+  const norm = (s) => s.replace(/\r\n/g, '\n')
+  const vorhanden = await readFile(OUT, 'utf8').catch(() => '')
+  if (norm(vorhanden) === norm(csv)) {
+    console.log(`✅ Kochwissen-CSV aktuell (${rows.length} Rezepte)`)
+    process.exit(0)
+  }
+  const alt = new Set(norm(vorhanden).split('\n'))
+  const neu = new Set(norm(csv).split('\n'))
+  const geaendert = [...neu].filter((z) => z && !alt.has(z)).map((z) => z.split(';')[0])
+  const entfernt  = [...alt].filter((z) => z && !neu.has(z)).map((z) => z.split(';')[0])
+  console.error('✗ Kochwissen-CSV ist nicht aktuell — die Rezepte weichen von data/kochwissen/steakakademie-rezepte-1.csv ab.')
+  if (geaendert.length) console.error(`  neu oder geaendert (${geaendert.length}): ${geaendert.slice(0, 5).join(' | ')}${geaendert.length > 5 ? ' …' : ''}`)
+  if (entfernt.length)  console.error(`  nicht mehr vorhanden (${entfernt.length}): ${entfernt.slice(0, 5).join(' | ')}${entfernt.length > 5 ? ' …' : ''}`)
+  console.error('  Abhilfe: node scripts/rezepte-to-kochwissen.mjs  — und die CSV mit-committen.')
+  process.exit(1)
+}
+
 await writeFile(OUT, csv, 'utf8')
 console.log(`✅ ${rows.length} Rezepte → ${OUT}`)
