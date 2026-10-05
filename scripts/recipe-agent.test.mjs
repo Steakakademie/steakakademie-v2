@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { ohneVerneinung, zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -602,5 +602,35 @@ describe('Zeitfelder — Tage als Stunden (Lauf vom 05.10.2026, montreal-smoked-
     expect(zeile).toBeDefined()
     expect(zeile).toContain('PT168H')
     expect(zeile).toMatch(/nie P7D/)
+  })
+})
+
+// imagePrompt ohne Verneinung. FLUX kennt keine Negativ-Prompts und zeichnet das Genannte eher
+// ein: „Not: … no coleslaw" brachte Krautsalat, „whole brisket in background" Grillstreifen und
+// Flamme ins Montreal-Bild (05.10.2026). Der Prompt verlangte das „Not:" sogar ausdruecklich.
+describe('imagePrompt — keine Verneinung', () => {
+  const quelle = readFileSync(new URL('./recipe-agent.mjs', import.meta.url), 'utf8')
+
+  it('entfernt den „Not:"-Schwanz und schliesst mit einem Punkt', () => {
+    expect(ohneVerneinung('Sliced flank steak on a tortilla. Not: whole steak, no char marks.'))
+      .toBe('Sliced flank steak on a tortilla.')
+    expect(ohneVerneinung('Sliced steak on a board, Not: whole steak')).toBe('Sliced steak on a board,.')
+  })
+  it('laesst einen Prompt ohne Verneinung unveraendert (und ergaenzt nur den Schlusspunkt)', () => {
+    expect(ohneVerneinung('Thin slices of beef on rye bread.')).toBe('Thin slices of beef on rye bread.')
+    expect(ohneVerneinung('Thin slices of beef on rye bread')).toBe('Thin slices of beef on rye bread.')
+  })
+  it('der Parser wendet es auf IMAGE_PROMPT an', () => {
+    const daten = parseStructuredText(KOPF)
+    expect(KOPF).toMatch(/IMAGE_PROMPT:.*Not:/)       // die Fixture traegt die Verneinung noch
+    expect(daten.imagePrompt).not.toMatch(/Not:/i)
+    expect(daten.imagePrompt).toMatch(/^Yakitori skewers of chicken thigh cubes/)
+  })
+  it('der Anfrage-Prompt verlangt keine Verneinung mehr, sondern verbietet sie', () => {
+    const zeile = quelle.split('\n').find((z) => z.startsWith('IMAGE_PROMPT:'))
+    expect(zeile).toBeDefined()
+    expect(zeile).not.toMatch(/zwingend "Not:"/)
+    expect(zeile).toMatch(/NIE Verneinungen/)
+    expect(zeile).toMatch(/kein "Not:"/)
   })
 })

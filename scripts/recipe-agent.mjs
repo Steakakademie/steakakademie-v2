@@ -643,6 +643,20 @@ function entnummeriere(titel) {
 }
 
 /**
+ * Verneinungs-Schwanz aus dem imagePrompt entfernen („… Not: whole steak, no char marks.").
+ * FLUX kennt keine Negativ-Prompts und zeichnet das Genannte eher ein: im Rote-Bete-Rezept
+ * kam so ein zweites Gericht ins Bild, im Montreal-Rezept Krautsalat, Grillstreifen und Flamme
+ * (05.10.2026). Der Prompt verlangt keine Verneinung mehr; das hier faengt sie ab, falls das
+ * Modell sie trotzdem schreibt. Das „Not:" stand bisher immer am Ende.
+ */
+function ohneVerneinung (text) {
+  const roh = String(text)
+  const i = roh.search(/\bNot:/i)
+  const kopf = (i >= 0 ? roh.slice(0, i) : roh).trim()
+  return kopf && !/[.!?]$/.test(kopf) ? `${kopf}.` : kopf
+}
+
+/**
  * Markenzusatz am Ende eines seoTitle entfernen. src/app/layout.tsx haengt per
  * Template '%s | Steakakademie' selbst an; stand er schon im seoTitle, lautete der
  * <title> doppelt „… | Steakakademie | Steakakademie" (14 Rezepte, behoben 05.10.2026).
@@ -690,7 +704,8 @@ function parseStructuredText(text) {
       }
       if (map[key]) {
         data[map[key]] = ['SERVINGS', 'CALORIES'].includes(key) ? Number(val)
-          : key === 'SEO_TITLE' ? ohneMarkenzusatz(val) : val
+          : key === 'SEO_TITLE' ? ohneMarkenzusatz(val)
+          : key === 'IMAGE_PROMPT' ? ohneVerneinung(val) : val
         section = null
       } else if (key === 'CORE_TEMP') {
         // Ziel-Kerntemperatur fuer validate(); "keine" bei Beilagen & Co. Wird nicht
@@ -809,7 +824,7 @@ Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 TITLE: [Titel max. 70 Zeichen]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
-IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
+IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Nur beschreiben, was ZU SEHEN IST — auch die Menge ("a single tortilla", "only sliced beef"). NIE Verneinungen: kein "Not:", kein "no …", kein "without …". Der Bildgenerator kennt keine Verneinung und zeichnet das Genannte gerade ein. Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
 BESCHAFFUNG: [Wo gibt es ALLE Zutaten? Genau eines von: "Supermarkt" | "Supermarkt + Metzger" | "Supermarkt + Asia-Laden/Online" (nur bei einer einzigen Spezialzutat mit Ersatz in deren Anmerkung)]
 CORE_TEMP: [Ziel-Kerntemperatur des Hauptprodukts in °C als Zahl, gemessen vor dem Ruhen, gemäß Kerntemperatur-Referenz — bei Beilagen, Saucen, Desserts und Getränken: keine]
@@ -1195,4 +1210,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { ohneVerneinung, zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
