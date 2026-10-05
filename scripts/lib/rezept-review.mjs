@@ -33,13 +33,22 @@ const BEHAUPTUNG = /\b(Studie|Studien|Physik|bewiesen|nachweislich|wissenschaftl
 
 // Zuordnung Hauptprodukt → Vorschlag fuer den Referenz-Schluessel. Nur ein Vorschlag
 // zum Gegenpruefen, kein Urteil; die Referenz selbst bleibt data/kerntemperatur-referenz.yaml.
+//
+// REIHENFOLGE ZAEHLT (erster Treffer gilt): Geflügel/Ente/Gans zuerst (Hähnchenhack gehoert zu
+// Geflügel, Mindestwert 72 °C), dann Hack und Wurst, erst danach die Teilstuecke. Vorher stand
+// die Rind-Regel vor jeder Wurst-Regel: „Rindsbratwürste" bekamen beef_mr (52–55 °C) statt Hack
+// (≥ 70 °C), und die Checkliste im Aussie-Snags-PR (#327, 05.10.2026) haette 72 °C als
+// ausserhalb des Korridors erscheinen lassen. Im Bestand betraf es auch Adana-Kebab,
+// Boerewors, Koefte, Smash-Burger (beef_mr), Wagyu-Burger (wagyu) und Schweinsbratwurst (pork_juicy).
 const REFERENZ_VORSCHLAG = [
-  [/flank/i, 'beef_flank'],
-  [/lamm/i, 'lamb_mr'],
-  [/wagyu/i, 'wagyu'],
   [/ente/i, 'duck_breast'],
   [/gans/i, 'goose_whole'],
   [/h(?:ä|ae)hnchen|chicken|pute|truthahn|gefl(?:ü|ue)gel/i, 'poultry'],
+  // Muster wie SICHERHEITS_MUSTER.hackfleisch in scripts/recipe-agent.mjs, plus „snag"
+  [/hack|burger|w(?:u|ü|ue)rst|sausage|snag|\blinks\b|[cć]evap|kofta|k(?:ö|oe)fte|frikadell|tsukune/i, 'burger'],
+  [/flank/i, 'beef_flank'],
+  [/lamm/i, 'lamb_mr'],
+  [/wagyu/i, 'wagyu'],
   [/schwein|pork|spareribs/i, 'pork_juicy'],
   [/brisket|short ?ribs/i, 'beef_lowslow'],
   [/steak|rind|ribeye|entrec|filet|roastbeef|tomahawk|porterhouse|t-bone|picanha/i, 'beef_mr'],
