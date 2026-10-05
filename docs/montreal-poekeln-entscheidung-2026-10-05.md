@@ -1,6 +1,10 @@
 # Montreal Smoked Meat: Pökeln — Entscheidungsvorlage (05.10.2026)
 
-> **Status: Entwurf zur Entscheidung durch Uwe. Nichts davon ist am Rezept umgesetzt.**
+> **Entscheidung (Uwe, 05.10.2026): Option A, Trockenpökeln.** Das Rezept ist im PR „Montreal:
+> Trockenpökeln" entsprechend umgestellt (als Entwurf). **Offen und Voraussetzung für den Merge:**
+> Fachprüfung der Mengen (Abschnitt 5) und Probecharge mit 1 kg (Abschnitt 5).
+>
+> **Status der Vorlage: Entscheidung gefallen, Umsetzung wartet auf die Fachprüfung.**
 > Die Zahlen unten sind **Rechnungen mit ausgewiesenen Annahmen**, keine geprüften Dosierungen.
 > Nitrit ist giftig. Vor einer Umsetzung muss eine Fachperson (Fleischer, Lebensmittelchemie,
 > Verbraucherzentrale) die Mengen bestätigen.
