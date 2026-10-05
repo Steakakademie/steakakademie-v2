@@ -20,11 +20,16 @@ const DIR = join(ROOT, 'content', 'rezepte')
 
 const rezepte = readdirSync(DIR).filter((f) => f.endsWith('.mdx'))
 const mitBriefing = rezepte.find((f) => /^imagePrompt:/m.test(readFileSync(join(DIR, f), 'utf8')))
+// Der Drama-Look gilt nur fuer Grillgut (Beilagen, Saucen, Rubs, Desserts werden uebersprungen).
+const grillgutMitBriefing = rezepte.find((f) => {
+  const t = readFileSync(join(DIR, f), 'utf8')
+  return /^imagePrompt:/m.test(t) && /^kategorie:\s*"?(fleisch|fisch)"?\s*$/m.test(t)
+})
 const ohneBriefing = rezepte.find((f) => !/^imagePrompt:/m.test(readFileSync(join(DIR, f), 'utf8')))
 
-function prompt(datei) {
+function prompt(datei, look) {
   const slug = datei.replace(/\.mdx$/, '')
-  const aus = execFileSync(process.execPath, [SKRIPT, '--dry-run', '--force', '--only', slug], {
+  const aus = execFileSync(process.execPath, [SKRIPT, '--dry-run', '--force', ...(look ? ['--look', look] : []), '--only', slug], {
     cwd: ROOT, encoding: 'utf8', env: { ...process.env, FAL_KEY: '' },
   })
   // ANSI-Farben raus; der Prompt steht in der Zeile nach „◇ <slug>"
@@ -56,5 +61,34 @@ describe('recipe-images — Bild-Prompt', () => {
     expect(p).toMatch(/plated on a rustic warm wooden board/)
     expect(p).toMatch(/a subtle grill and glowing ember atmosphere softly blurred in the background/)
     expect(p).toMatch(/a little fresh herb garnish/)
+  })
+})
+
+// Keine Standard-Verneinungen. FLUX kennt keine Negativ-Prompts: „no people" setzt eher Personen
+// in den Prompt als sie herauszuhalten. Der Suffix „no text, no watermark, no people" stand an
+// jedem Bild; „(not oily)", „(not raw and cold, not burnt black)" und „no raw red patches …" in den
+// Stilklauseln. Drei Echtbilder ohne sie (Briefing, Fallback, Drama-Look): weder Text noch
+// Wasserzeichen noch Personen (05.10.2026). Bewusst ausgenommen: „clearly a DUCK, not a chicken"
+// (Tier-Absicherung gegen den Rinderbias der LoRA).
+describe('recipe-images — keine Standard-Verneinungen', () => {
+  const VERNEINUNG = /\bno text\b|\bno watermark\b|\bno people\b|\(not |\bno raw red\b|\bno bloody\b/
+
+  it('im Quelltext steht keine dieser Verneinungen mehr', () => {
+    const quelle = readFileSync(SKRIPT, 'utf8')
+    expect(quelle.match(VERNEINUNG)).toBeNull()
+  })
+  it('Prompt mit Briefing', () => {
+    expect(prompt(mitBriefing)).not.toMatch(VERNEINUNG)
+  })
+  it.skipIf(!ohneBriefing)('Prompt im Fallback', () => {
+    expect(prompt(ohneBriefing)).not.toMatch(VERNEINUNG)
+  })
+  it.skipIf(!grillgutMitBriefing)('Prompt im Drama-Look', () => {
+    const p = prompt(grillgutMitBriefing, 'dramatic')
+    expect(p).toMatch(/hot cast-iron grill grate/)      // es ist wirklich der Drama-Pfad
+    expect(p).not.toMatch(VERNEINUNG)
+  })
+  it('die Tier-Absicherung fuer Ente bleibt (gewollte Ausnahme)', () => {
+    expect(readFileSync(SKRIPT, 'utf8')).toMatch(/clearly a DUCK, not a chicken/)
   })
 })
