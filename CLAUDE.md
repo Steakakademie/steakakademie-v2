@@ -210,6 +210,13 @@
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus
   genau dieser Vertauschung.
+- **Vor jedem Push `npm run verify` (05.10.2026).** Das ist `npm run check` plus
+  `npm test`, rund 15 s, ohne Build. Anlass: PR #310 — ein lokal erzeugtes Rezept
+  ohne neu erzeugte Kochwissen-CSV, erst der Unit-Test in der CI wurde rot (die
+  Pruefung steckt jetzt in `check`: `npm run check:kochwissen`). Eine Arbeitsregel,
+  kein Gate: Pflicht bleiben die vier Kontexte oben. Ein neuer Schutztest wird
+  einmal gegen die abgeschaltete Pruefung probiert und muss dann rot werden — ein
+  Test, der nie fehlschlagen kann, belegt nichts (#313).
 - Die Frage, ob die Gates den Merge-Button sperren oder nur informativ laufen,
   ist mit dem Punkt oben beantwortet: vier Kontexte sperren (seit 24.09.2026,
   vorher drei), alles andere laeuft informativ mit ("Rechtschreibung",
