@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -557,5 +557,50 @@ describe('Retry mit Fehler-Rueckmeldung', () => {
   it('beide Prompts (Metadaten und Artikel) tragen den Block, der System-Prompt nicht', () => {
     expect(quelle.match(/\$\{korrektur\}/g)).toHaveLength(2)
     expect(systemPrompt()).not.toContain('KORREKTUR')
+  })
+})
+
+describe('Zeitfelder — Tage als Stunden (Lauf vom 05.10.2026, montreal-smoked-meat)', () => {
+  // Das Modell schrieb P7DT12H20M (gueltiges ISO 8601, aber die Anzeige liest nur PT…H…M)
+  // und wiederholte es im zweiten Versuch, weil die Meldung nur „kein ISO 8601" sagte.
+  const quelle = readFileSync(new URL('./recipe-agent.mjs', import.meta.url), 'utf8')
+
+  function datensatz(zeiten) {
+    const daten = parseStructuredText(KOPF + SCHRITT_FORMATE['ohne Leerzeichen'])
+    daten.image = '/images/rezepte/yakitori-negima.jpg'
+    daten.kategorie = SEED.kategorie
+    daten.meatType = SEED.meatType
+    daten.cookingMethod = SEED.cookingMethod
+    daten.difficulty = SEED.difficulty
+    Object.assign(daten, zeiten)
+    return daten
+  }
+
+  it('lehnt eine Dauer mit Tagen weiter ab — die Anzeige koennte sie nicht lesen', () => {
+    const fehler = validate(datensatz({ totalTime: 'P7DT12H20M' }), SEED)
+    expect(fehler).toHaveLength(1)
+    expect(fehler[0]).toMatch(/^totalTime muss mit PT beginnen/)
+  })
+  it('nimmt dieselbe Dauer in Stunden an', () => {
+    expect(validate(datensatz({ totalTime: 'PT180H20M' }), SEED)).toEqual([])
+  })
+  it('die Meldung nennt die Loesung, und sie erreicht das Modell ueber korrekturBlock', () => {
+    const fehler = validate(datensatz({ totalTime: 'P7DT12H20M' }), SEED)
+    expect(fehler[0]).toContain('PT168H')
+    expect(korrekturBlock(fehler)).toContain('PT168H')
+    expect(korrekturBlock(fehler)).toContain('P7DT12H20M')
+  })
+  it('gilt fuer alle drei Zeitfelder', () => {
+    for (const feld of ['prepTime', 'cookTime', 'totalTime']) {
+      const fehler = validate(datensatz({ [feld]: 'P1D' }), SEED)
+      expect(fehler.join(' ')).toContain(`${feld} muss mit PT beginnen`)
+    }
+    expect(zeitFehler('cookTime', 'P2D')).toMatch(/^cookTime muss mit PT beginnen .* war: P2D$/)
+  })
+  it('der Anfrage-Prompt verlangt PT…H…M auch bei Tagen', () => {
+    const zeile = quelle.split('\n').find((z) => z.startsWith('TOTAL_TIME:'))
+    expect(zeile).toBeDefined()
+    expect(zeile).toContain('PT168H')
+    expect(zeile).toMatch(/nie P7D/)
   })
 })
