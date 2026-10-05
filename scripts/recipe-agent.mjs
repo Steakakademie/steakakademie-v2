@@ -40,6 +40,10 @@ const NACHSCHUB   = join(ROOT, 'data', 'rezept-seeds.json')
 
 dotenv.config({ path: join(ROOT, '.env.local') })
 
+// seoTitle ohne Markenzusatz: layout.tsx haengt ' | Steakakademie' (16 Zeichen) an, der
+// <title> soll bei hoechstens 60 Zeichen bleiben → 60 − 16 = 44 (05.10.2026).
+const SEO_TITLE_MAX = 44
+
 const DRY_RUN    = process.argv.includes('--dry-run')
 const FORCE      = process.argv.includes('--force')
 const SLUG_ONLY  = process.argv.includes('--slug')
@@ -796,7 +800,7 @@ COOK_TIME: [ISO8601]
 TOTAL_TIME: [ISO8601]
 SERVINGS: [Zahl]
 CALORIES: [Zahl]
-SEO_TITLE: [max. 44 Zeichen, OHNE Markenzusatz — das Seiten-Layout hängt ' | Steakakademie' selbst an]
+SEO_TITLE: [max. ${SEO_TITLE_MAX} Zeichen, OHNE Markenzusatz — das Seiten-Layout hängt ' | Steakakademie' selbst an]
 SEO_DESCRIPTION: [150-160 Zeichen]
 WHISKEY_NAME: [Passender Whisky oder leer lassen]
 WHISKEY_TYPE: [z.B. Bourbon]
@@ -933,6 +937,7 @@ function validate(data, seed) {
   }
   if (!VALID_KATEGORIEN.has(data.kategorie)) errors.push(`Ungültige Kategorie: ${data.kategorie}`)
   if (!VALID_DIFFICULTY.has(data.difficulty)) errors.push(`Ungültige Schwierigkeit: ${data.difficulty}`)
+  if (data.seoTitle && data.seoTitle.length > SEO_TITLE_MAX) errors.push(`seoTitle zu lang: ${data.seoTitle.length} Zeichen (max. ${SEO_TITLE_MAX}, das Layout haengt ' | Steakakademie' an) — "${data.seoTitle}"`)
   if (!Array.isArray(data.ingredients) || data.ingredients.length === 0) errors.push('Keine Zutaten')
   if (!Array.isArray(data.steps) || data.steps.length < 2) errors.push('Zu wenige Schritte')
   if (!/^PT/.test(data.prepTime || '')) errors.push(`prepTime kein ISO 8601: ${data.prepTime}`)
@@ -1157,4 +1162,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
