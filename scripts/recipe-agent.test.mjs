@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -464,5 +464,27 @@ describe('data/rezept-seeds.json — Gaumen-Regel', () => {
 
   it('kein offener Seed haengt an einer schwer erhaeltlichen Zutat im Titel', () => {
     for (const s of offen) expect(schwerErhaeltlich([{ name: `${s.title} ${s.meatType}` }])).toEqual([])
+  })
+})
+
+describe('seoTitle — Markenzusatz', () => {
+  // layout.tsx haengt '| Steakakademie' selbst an; im seoTitle waere es doppelt.
+  it('entfernt „| Steakakademie" am Ende', () => {
+    expect(ohneMarkenzusatz('Flank Steak mit Rote-Bete-Salsa | Steakakademie')).toBe('Flank Steak mit Rote-Bete-Salsa')
+  })
+  it('entfernt auch Gedankenstrich-Varianten und Gross-/Kleinschreibung', () => {
+    expect(ohneMarkenzusatz('Damper-Brot – steakakademie')).toBe('Damper-Brot')
+    expect(ohneMarkenzusatz('Damper-Brot|Steakakademie  ')).toBe('Damper-Brot')
+  })
+  it('laesst innere Trenner und Titel ohne Marke unveraendert', () => {
+    expect(ohneMarkenzusatz('Fraldinha Churrasco | Brasilien-Spiess')).toBe('Fraldinha Churrasco | Brasilien-Spiess')
+    expect(ohneMarkenzusatz('Steakakademie-Klassiker vom Grill')).toBe('Steakakademie-Klassiker vom Grill')
+  })
+  it('der Parser wendet es auf SEO_TITLE an', () => {
+    const daten = parseStructuredText(KOPF + 'SEO_TITLE: Yakitori Negima Rezept | Steakakademie\n')
+    expect(daten.seoTitle).toBe('Yakitori Negima Rezept')
+  })
+  it('der Prompt verlangt keinen Markenzusatz mehr', () => {
+    expect(systemPrompt()).not.toMatch(/SEO_TITLE: \[max\. 60 Zeichen \| Steakakademie\]/)
   })
 })
