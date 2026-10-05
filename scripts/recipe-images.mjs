@@ -182,8 +182,15 @@ function buildPrompt(raw, slug = '', look = 'warm') {
     return head
       + `shown whole and sizzling on a hot cast-iron grill grate, intense orange flames licking the edges from below, thick volumetric white smoke billowing around it, glowing embers visible through the grate, deep dark cross-hatch grill marks seared into the surface, warm golden-hour rim light, dark moody atmospheric background, cinematic lighting, glistening meat texture, sharp focus with a shallow depth of field, close three-quarter perspective, no text, no watermark, no people`
   }
+  // Mit Selbst-Briefing (imagePrompt) beschreibt der Agent Teller und Anrichtung selbst. Die
+  // Standardzusaetze Holzbrett, Glut-Hintergrund und Kraeutergarnitur ueberschrieben ihn:
+  // Rucola und Cherrytomate im Bild, eine Flamme hinter einem gedaempften Gericht, Holzbrett statt
+  // weissem Teller (Rote Bete, Montreal, Nuea Yang — 05.10.2026). Nur ohne Briefing (Fallback,
+  // 31 Bestandsrezepte) bleiben sie als Hausstil.
+  const brett   = brief ? '' : 'plated on a rustic warm wooden board, '
+  const kulisse = brief ? '' : 'a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, '
   return head
-    + `the whole dish in frame, plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
+    + `the whole dish in frame, ${brett}soft warm natural daylight, ${kulisse}clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
     + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
 }
