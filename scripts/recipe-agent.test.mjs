@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -484,7 +484,43 @@ describe('seoTitle — Markenzusatz', () => {
     const daten = parseStructuredText(KOPF + 'SEO_TITLE: Yakitori Negima Rezept | Steakakademie\n')
     expect(daten.seoTitle).toBe('Yakitori Negima Rezept')
   })
-  it('der Prompt verlangt keinen Markenzusatz mehr', () => {
-    expect(systemPrompt()).not.toMatch(/SEO_TITLE: \[max\. 60 Zeichen \| Steakakademie\]/)
+  // Die Zeile SEO_TITLE steht in generateRecipe() (ruft die API auf), nicht im
+  // System-Prompt — deshalb wird der Quelltext gelesen, wie pruefstand.test.mjs es tut.
+  it('der Anfrage-Prompt verlangt keinen Markenzusatz und nennt die Konstante', () => {
+    const quelle = readFileSync(new URL('./recipe-agent.mjs', import.meta.url), 'utf8')
+    const zeile = quelle.split('\n').find((z) => z.startsWith('SEO_TITLE:'))
+    expect(zeile).toBeDefined()
+    expect(zeile).toContain('${SEO_TITLE_MAX}')
+    expect(zeile).toMatch(/OHNE Markenzusatz/)
+    expect(zeile).not.toMatch(/\|\s*Steakakademie\]/)
+  })
+})
+
+describe('validate — seoTitle-Laenge', () => {
+  function datensatz(seoTitle) {
+    const daten = parseStructuredText(KOPF + SCHRITT_FORMATE['ohne Leerzeichen'])
+    daten.image = '/images/rezepte/yakitori-negima.jpg'
+    daten.kategorie = SEED.kategorie
+    daten.meatType = SEED.meatType
+    daten.cookingMethod = SEED.cookingMethod
+    daten.difficulty = SEED.difficulty
+    daten.seoTitle = seoTitle
+    return daten
+  }
+
+  it('die Grenze ist 60 minus Layout-Suffix (16 Zeichen)', () => {
+    expect(SEO_TITLE_MAX).toBe(44)
+  })
+  it('laesst genau SEO_TITLE_MAX Zeichen durch', () => {
+    expect(validate(datensatz('x'.repeat(SEO_TITLE_MAX)), SEED)).toEqual([])
+  })
+  it('meldet einen seoTitle ueber der Grenze', () => {
+    const fehler = validate(datensatz('x'.repeat(SEO_TITLE_MAX + 1)), SEED)
+    expect(fehler).toHaveLength(1)
+    expect(fehler[0]).toMatch(/^seoTitle zu lang: 45 Zeichen \(max\. 44/)
+  })
+  it('ein fehlender seoTitle ist kein Fehler (optionales Feld)', () => {
+    expect(validate(datensatz(undefined), SEED)).toEqual([])
+    expect(validate(datensatz(''), SEED)).toEqual([])
   })
 })
