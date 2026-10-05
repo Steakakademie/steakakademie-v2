@@ -91,6 +91,15 @@ jobs:
             echo "seeds_nachgelegt=$NACHGELEGT"
           } >> "$GITHUB_OUTPUT"
 
+      # Review-Checkliste (05.10.2026): konkrete Hinweise aus festen Mustern — Garzeit
+      # Schritt ↔ Text, unbelegte Fachaussagen, Kerntemperaturen gegen die Referenz —
+      # fuer den PR-Text. Muss VOR dem PR-Schritt laufen (danach ist der Arbeitsbaum
+      # sauber). Blockiert nie: bei einem Fehler bleibt der Text leer, der Lauf geht weiter.
+      - name: Review-Checkliste erstellen
+        id: checkliste
+        continue-on-error: true
+        run: node scripts/recipe-review-checkliste.mjs --github-output
+
       - name: Neue Rezepte + Bilder als PR (Review-Gate)
         id: pr
         uses: ./.github/actions/pr-statt-push
@@ -114,6 +123,8 @@ jobs:
             - [ ] **Herkunft:** Gericht existiert so und stammt aus dem angegebenen Land?
 
             **Lauf-Bilanz:** ${{ steps.bilanz.outputs.neue_rezepte }} neue(s) Rezept(e) · ${{ steps.bilanz.outputs.neue_bilder }} Bilddatei(en) · ${{ steps.bilanz.outputs.seeds_nachgelegt }} Seed(s) nachgelegt. Sind Seeds nachgelegt, enthält der PR auch `data/rezept-seeds.json` — die Gerichtsauswahl dort bitte mit durchsehen, daraus entstehen die nächsten Rezepte.
+
+            ${{ steps.checkliste.outputs.text }}
 
             Merge löst den Deploy aus.
           auto-merge: 'false'
