@@ -813,9 +813,9 @@ IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht 
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
 BESCHAFFUNG: [Wo gibt es ALLE Zutaten? Genau eines von: "Supermarkt" | "Supermarkt + Metzger" | "Supermarkt + Asia-Laden/Online" (nur bei einer einzigen Spezialzutat mit Ersatz in deren Anmerkung)]
 CORE_TEMP: [Ziel-Kerntemperatur des Hauptprodukts in °C als Zahl, gemessen vor dem Ruhen, gemäß Kerntemperatur-Referenz — bei Beilagen, Saucen, Desserts und Getränken: keine]
-PREP_TIME: [ISO8601, z.B. PT20M]
-COOK_TIME: [ISO8601]
-TOTAL_TIME: [ISO8601]
+PREP_TIME: [ISO8601 als PT…H…M, z.B. PT20M]
+COOK_TIME: [ISO8601 als PT…H…M]
+TOTAL_TIME: [ISO8601 als PT…H…M — IMMER mit PT beginnen, auch bei mehreren Tagen (Pökeln, Reifen): Tage in Stunden umrechnen, 7 Tage = PT168H, nie P7D…]
 SERVINGS: [Zahl]
 CALORIES: [Zahl]
 SEO_TITLE: [max. ${SEO_TITLE_MAX} Zeichen, OHNE Markenzusatz — das Seiten-Layout hängt ' | Steakakademie' selbst an]
@@ -948,6 +948,17 @@ const REQUIRED = ['title', 'description', 'author', 'authorSlug', 'image', 'imag
 const VALID_KATEGORIEN = new Set(['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'])
 const VALID_DIFFICULTY = new Set(['Einfach', 'Mittel', 'Fortgeschritten', 'Profi'])
 
+/**
+ * Fehlertext fuer ein Zeitfeld, das nicht mit PT beginnt. Die Anzeige (RecipeTemplate,
+ * card-data.ts) liest nur PT…H…M; „P7DT12H20M" ist gueltiges ISO 8601, wuerde dort aber
+ * nicht dargestellt. Der Text nennt die Loesung, weil er beim Retry ans Modell geht:
+ * „kein ISO 8601" war falsch und liess montreal-smoked-meat zweimal denselben Wert
+ * schreiben (Lauf vom 05.10.2026).
+ */
+function zeitFehler (feld, wert) {
+  return `${feld} muss mit PT beginnen (Tage in Stunden umrechnen, z. B. 7 Tage = PT168H, nie P7D…), war: ${wert}`
+}
+
 function validate(data, seed) {
   const errors = []
   for (const field of REQUIRED) {
@@ -958,9 +969,9 @@ function validate(data, seed) {
   if (data.seoTitle && data.seoTitle.length > SEO_TITLE_MAX) errors.push(`seoTitle zu lang: ${data.seoTitle.length} Zeichen (max. ${SEO_TITLE_MAX}, das Layout haengt ' | Steakakademie' an) — "${data.seoTitle}"`)
   if (!Array.isArray(data.ingredients) || data.ingredients.length === 0) errors.push('Keine Zutaten')
   if (!Array.isArray(data.steps) || data.steps.length < 2) errors.push('Zu wenige Schritte')
-  if (!/^PT/.test(data.prepTime || '')) errors.push(`prepTime kein ISO 8601: ${data.prepTime}`)
-  if (!/^PT/.test(data.cookTime  || '')) errors.push(`cookTime kein ISO 8601: ${data.cookTime}`)
-  if (!/^PT/.test(data.totalTime || '')) errors.push(`totalTime kein ISO 8601: ${data.totalTime}`)
+  if (!/^PT/.test(data.prepTime || '')) errors.push(zeitFehler('prepTime', data.prepTime))
+  if (!/^PT/.test(data.cookTime || '')) errors.push(zeitFehler('cookTime', data.cookTime))
+  if (!/^PT/.test(data.totalTime || '')) errors.push(zeitFehler('totalTime', data.totalTime))
   // Beschaffbarkeit (Regel 11, 29.09.2026). Vertraut-Rezept: keine einzige schwer
   // erhaeltliche Zutat, Bezugsquelle nur Supermarkt/Metzger. International: hoechstens eine.
   const schwer = schwerErhaeltlich(data.ingredients)
@@ -1184,4 +1195,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
