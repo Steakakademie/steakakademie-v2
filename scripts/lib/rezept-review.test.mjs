@@ -5,7 +5,7 @@
 // und einen Geosmin-Satz. Die Fixtures unten bilden genau diese Muster nach.
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
-import { analysiere, checklisteMarkdown, rezeptAbschnitt } from './rezept-review.mjs'
+import { analysiere, checklisteMarkdown, rezeptAbschnitt, rezeptLesbar, dauerLesbar } from './rezept-review.mjs'
 
 function mdx ({ schritt = 'Grillen.', text = 'Kern 54 °C.', fm = '' } = {}) {
   return `---
@@ -280,5 +280,92 @@ describe('Einbau in den Workflow recipe-grow', () => {
   })
   it('reicht den Text in die PR-Beschreibung', () => {
     expect(wf).toContain('steps.checkliste.outputs.text')
+  })
+})
+
+// GitHub zeigt das Frontmatter als Tabelle; ingredients und steps (verschachtelte Listen) werden
+// darin unlesbar breit — Uwe sah am 05.10.2026 „keine Mengen, keine Zubereitung". Der PR-Text
+// gibt beides deshalb als Liste wieder.
+describe('rezeptLesbar — Zutaten und Zubereitung im PR-Text', () => {
+  const fixture = `---
+title: Testrezept
+kategorie: fleisch
+meatType: Flank Steak
+servings: 4
+ingredients:
+  - amount: 2
+    unit: kg
+    name: Rinderbrust
+    note: "vom Metzger"
+  - amount: 35
+    unit: g
+    name: Meersalz
+steps:
+  - title: Pökellauge ansetzen
+    description: "Wasser und Salz aufkochen."
+    duration: PT15M
+    tip: "Profi-Tipp: Kalt abkühlen lassen."
+  - title: Brisket pökeln
+    description: "Mindestens 7 Tage kühlen."
+    duration: PT168H
+---
+
+Text.
+`
+  const ohneListen = `---
+title: Leer
+kategorie: fleisch
+meatType: Flank Steak
+---
+
+Text.
+`
+
+  it('wandelt ISO-Dauern in Lesefassung', () => {
+    expect(dauerLesbar('PT15M')).toBe('15 Min.')
+    expect(dauerLesbar('PT3H')).toBe('3 Std.')
+    expect(dauerLesbar('PT1H30M')).toBe('1 Std. 30 Min.')
+    expect(dauerLesbar('PT168H')).toBe('168 Std.')
+    expect(dauerLesbar(undefined)).toBe('')
+    expect(dauerLesbar('irgendwas')).toBe('irgendwas')
+  })
+
+  it('listet Zutaten mit Menge, Einheit und Hinweis', () => {
+    const t = rezeptLesbar(analysiere(fixture))
+    expect(t).toContain('**Zutaten (Basis 4 Portionen):**')
+    expect(t).toContain('- 2 kg Rinderbrust _(vom Metzger)_')
+    expect(t).toContain('- 35 g Meersalz')
+  })
+
+  it('nummeriert die Schritte mit Dauer, Text und Tipp', () => {
+    const t = rezeptLesbar(analysiere(fixture))
+    expect(t).toContain('1. **Pökellauge ansetzen** (15 Min.) — Wasser und Salz aufkochen.')
+    expect(t).toContain('   - Profi-Tipp: Kalt abkühlen lassen.')
+    expect(t).toContain('2. **Brisket pökeln** (168 Std.) — Mindestens 7 Tage kühlen.')
+  })
+
+  it('warnt sichtbar, wenn Zutaten oder Schritte fehlen (statt still zu schweigen)', () => {
+    const t = rezeptLesbar(analysiere(ohneListen))
+    expect(t).toMatch(/Zutaten:\*\* ⚠️ keine/)
+    expect(t).toMatch(/Zubereitung:\*\* ⚠️ keine/)
+  })
+
+  it('steht im Rezeptabschnitt der Checkliste, nicht nur als Funktion', () => {
+    const t = checklisteMarkdown([{ slug: 'x', analyse: analysiere(fixture) }])
+    expect(t).toContain('<details open>')
+    expect(t).toContain('Rezept lesbar: Zutaten und Zubereitung')
+    expect(t).toContain('- 35 g Meersalz')
+    expect(t).toContain('2. **Brisket pökeln**')
+  })
+
+  it('Echtfall: das Montreal-Rezept aus dem Bestand zeigt alle Zutaten und alle Schritte', () => {
+    const quelle = readFileSync(new URL('../../content/rezepte/montreal-smoked-meat.mdx', import.meta.url), 'utf8')
+    const a = analysiere(quelle)
+    const t = rezeptLesbar(a)
+    expect(a.zutaten.length).toBeGreaterThan(15)
+    expect(a.schritte.length).toBe(7)
+    expect(t).toMatch(/- 2 kg Rinderbrust/)
+    expect(t).toMatch(/Pökelsalz \(Nitritpökelsalz\)/)
+    expect(t).toMatch(/7\. \*\*Ruhen und schneiden\*\*/)
   })
 })
