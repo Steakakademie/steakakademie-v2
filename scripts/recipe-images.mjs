@@ -136,10 +136,10 @@ function styleClause(text) {
   if (PORK_RE.test(text))
     return 'with a dark seared crust and a juicy, just-cooked interior, glistening with natural juices'
   if (STEAK_RE.test(text))
-    return 'cut into clean thick slices, the rosy medium-rare colour visible ONLY on the exposed cut faces, the outer surface an even dark-brown seared crust, fully cooked browned exterior, no raw red patches on the outside and no bloody juices, a few coarse sea salt flakes'
+    return 'cut into clean thick slices, the rosy medium-rare colour visible ONLY on the exposed cut faces, the outer surface an even dark-brown seared crust, fully cooked browned exterior, a few coarse sea salt flakes'
   if (VEG_RE.test(text))
-    return 'with caramelized charred edges, lightly blistered skin, a glossy sheen of oil and clear dark grill marks, vibrant fresh colours (not raw and cold, not burnt black)'
-  return 'glistening with natural juices (not oily), lightly charred where grilled, fresh and appetizing'
+    return 'with caramelized charred edges, lightly blistered skin, a glossy sheen of oil and clear dark grill marks, vibrant fresh colours'
+  return 'glistening with natural juices, lightly charred where grilled, fresh and appetizing'
 }
 
 // Perspektiven-Rotation (deterministisch je Rezept) → Vielfalt statt Einheits-Close-up.
@@ -180,7 +180,7 @@ function buildPrompt(raw, slug = '', look = 'warm') {
   if (dramatic) {
     // Eyecatcher: präzise physikalische Sprache (Flux-stark), Form bleibt diktiert.
     return head
-      + `shown whole and sizzling on a hot cast-iron grill grate, intense orange flames licking the edges from below, thick volumetric white smoke billowing around it, glowing embers visible through the grate, deep dark cross-hatch grill marks seared into the surface, warm golden-hour rim light, dark moody atmospheric background, cinematic lighting, glistening meat texture, sharp focus with a shallow depth of field, close three-quarter perspective, no text, no watermark, no people`
+      + `shown whole and sizzling on a hot cast-iron grill grate, intense orange flames licking the edges from below, thick volumetric white smoke billowing around it, glowing embers visible through the grate, deep dark cross-hatch grill marks seared into the surface, warm golden-hour rim light, dark moody atmospheric background, cinematic lighting, glistening meat texture, sharp focus with a shallow depth of field, close three-quarter perspective`
   }
   // Mit Selbst-Briefing (imagePrompt) beschreibt der Agent Teller und Anrichtung selbst. Die
   // Standardzusaetze Holzbrett, Glut-Hintergrund und Kraeutergarnitur ueberschrieben ihn:
@@ -192,7 +192,7 @@ function buildPrompt(raw, slug = '', look = 'warm') {
   return head
     + `the whole dish in frame, ${brett}soft warm natural daylight, ${kulisse}clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
-    + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
+    + `50mm lens, f/5.6, balanced focus, appetizing`
 }
 
 // Steakakademie-Hausstil-LoRA „Warm & Rustikal" (Trigger sa_foodstyle)
