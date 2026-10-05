@@ -45,6 +45,101 @@ const REFERENZ_VORSCHLAG = [
   [/steak|rind|ribeye|entrec|filet|roastbeef|tomahawk|porterhouse|t-bone|picanha/i, 'beef_mr'],
 ]
 
+// Garphasen, an denen Kerntemperaturen haengen. Erkannt am Schritt-Titel oder im Satz.
+// Reihenfolge = Prioritaet beim ersten Treffer.
+const PHASEN = [
+  // bewusst unter dem Zielwert — wird nicht verglichen. Eng gefasst: „das Fleisch zieht sich
+  // zusammen" ist kein Ziehwert (stand im Montreal-Rezept im Daempf-Satz).
+  ['Ziehwert', /ziehwert|ziehtemperatur|nachzieh|carry|vom (?:grill|feuer|smoker) (?:nehmen|ziehen)|(?:zieh|nimm|nehm)\w*[^.]{0,60}vom (?:grill|feuer|smoker)/i],
+  ['Räuchern', /r(?:ä|ae)uch|raucht|smok/i],
+  ['Dämpfen', /d(?:ä|ae)mpf|dampf|steam/i],
+  ['Wickeln', /wickel|folie|crutch|butcher ?paper/i],
+  ['Anbraten', /sear|anbrat|angrill/i],
+  // „gemessen VOR dem Ruhen" gehoert zur Garphase davor, nicht zum Ruhen
+  ['Ruhen', /(?<!vor dem )\bruh(?:e|en|t)\b|ruhezeit/i],
+  ['Grillen', /grill/i],
+]
+// „Anbraten" steht beim Reverse Sear im selben Satz mit Zieh- UND Endwert (52 | 45 | 58 im
+// Bestand): dort ist Verschiedenheit gewollt, ein Vergleich waere Rauschen (11 % Treffer).
+const NICHT_VERGLEICHEN = new Set(['Ziehwert', 'Anbraten', 'ohne Zuordnung'])
+
+function phaseVon (text) {
+  const treffer = PHASEN.find(([, re]) => re.test(text))
+  return treffer ? treffer[0] : null
+}
+
+/** „52–55" → [52, 55]; „54" → [54, 54]. */
+function spanne (wert) {
+  const [a, b] = String(wert).split('–').map(Number)
+  return [a, Number.isFinite(b) ? b : a]
+}
+
+// Abstand, bis zu dem zwei Werte noch als derselbe Garpunkt gelten (74 vs 75 °C im Bestand).
+const TOLERANZ_C = 2
+
+/** Zwei Bereiche, die mehr als TOLERANZ_C auseinanderliegen. */
+const ueberschneidungsfrei = (x, y) => {
+  const [a, b] = spanne(x)
+  const [c, d] = spanne(y)
+  return b + TOLERANZ_C < c || d + TOLERANZ_C < a
+}
+
+/**
+ * Kerntemperaturen nach Garphase getrennt. Hintergrund: Das Montreal-Smoked-Meat-Rezept
+ * (05.10.2026) nannte als Ende des Raeucherns einmal 75–80 °C (Schritt) und einmal 70–72 °C
+ * (Abschnitt). Eine flache Liste aller Werte zeigt das nicht; erst die Trennung nach Phase.
+ * Nur Saetze mit „Kern" zaehlen — sonst kaemen Holzbrett- und Ofentemperaturen dazu.
+ * Widerspruch = in derselben Phase zwei Werte OHNE Ueberschneidung (93 und 90–93 sind keiner).
+ */
+function kernNachPhase (schritte, content) {
+  const segmente = []
+  for (const s of schritte) {
+    segmente.push({
+      quelle: `Schritt „${s?.title ?? '?'}"`,
+      phase: phaseVon(String(s?.title ?? '')),
+      text: `${s?.description ?? ''} ${s?.tip ?? ''}`,
+    })
+  }
+  // Fliesstext in Abschnitte an den Ueberschriften zerlegen
+  let titel = 'Einleitung'
+  let puffer = []
+  const abschnitte = []
+  for (const zeile of String(content).split('\n')) {
+    const h = zeile.match(/^#{1,6}\s+(.*)$/)
+    if (h) { abschnitte.push({ titel, text: puffer.join('\n') }); titel = h[1].trim(); puffer = [] } else puffer.push(zeile)
+  }
+  abschnitte.push({ titel, text: puffer.join('\n') })
+  for (const a of abschnitte) {
+    // Ueberschrift mit genau einer Phase („Räuchern und Dämpfen" hat zwei → keine Vorgabe)
+    const phasen = PHASEN.filter(([, re]) => re.test(a.titel)).map(([p]) => p)
+    segmente.push({ quelle: `Abschnitt „${a.titel}"`, phase: phasen.length === 1 ? phasen[0] : null, text: a.text })
+  }
+
+  const gruppen = new Map()
+  for (const seg of segmente) {
+    for (const satz of saetze(seg.text)) {
+      if (!/Kern/i.test(satz)) continue
+      const werte = [...satz.matchAll(/(\d{2,3})(?:\s?[–-]\s?(\d{2,3}))?\s?°\s?C/g)]
+        .filter((m) => Number(m[1]) >= 40 && Number(m[1]) <= 99)
+        .map((m) => bereich(m[1], m[2]))
+      if (werte.length === 0) continue
+      const phase = phaseVon(satz) ?? seg.phase ?? 'ohne Zuordnung'
+      if (!gruppen.has(phase)) gruppen.set(phase, [])
+      for (const wert of werte) {
+        const liste = gruppen.get(phase)
+        if (!liste.some((e) => e.wert === wert)) liste.push({ wert, quelle: seg.quelle })
+      }
+    }
+  }
+
+  return [...gruppen.entries()].map(([phase, werte]) => ({
+    phase,
+    werte,
+    konflikt: !NICHT_VERGLEICHEN.has(phase)
+      && werte.some((x, i) => werte.slice(i + 1).some((y) => ueberschneidungsfrei(x.wert, y.wert))),
+  }))
+}
+
 /**
  * Analysiert ein Rezept-MDX und liefert Befunde zum Gegenpruefen.
  * @param {string} mdx  kompletter Dateiinhalt
@@ -74,6 +169,12 @@ export function analysiere (mdx, opt = {}) {
   for (const m of volltext.matchAll(/(\d{2,3})(?:\s?[–-]\s?(\d{2,3}))?\s?°\s?C/g)) {
     const von = Number(m[1])
     if (von >= 40 && von <= 99) kern.add(bereich(m[1], m[2]))
+  }
+
+  // 2b. Kerntemperaturen nach Garphase; gleiche Phase mit ueberschneidungsfreien Werten = Widerspruch
+  const phasen = kernNachPhase(schritte, content)
+  for (const p of phasen.filter((x) => x.konflikt)) {
+    auffaelligkeiten.push(`Kerntemperatur in der Phase „${p.phase}" uneinheitlich: ${p.werte.map((w) => `${w.wert} °C (${w.quelle})`).join(' ↔ ')} — gemeint ist derselbe Garpunkt?`)
   }
 
   // 3. Aussagen, die nach Fachbehauptung klingen
@@ -125,6 +226,7 @@ export function analysiere (mdx, opt = {}) {
       ki: fm.imageAI === true,
     },
     kerntemperaturen: [...kern],
+    kernNachPhase: phasen,
     referenz,
     behauptungen,
     auffaelligkeiten,
@@ -148,7 +250,20 @@ export function rezeptAbschnitt (slug, a) {
     const ref = r
       ? ` — Referenz-Vorschlag \`${r.schluessel}\`${r.range ? `: ${r.range[0]}–${r.range[1]} °C (Ziel ${r.c}, ${r.label})` : ''}, automatisch zugeordnet`
       : ' — keine Referenz zugeordnet, von Hand in `data/kerntemperatur-referenz.yaml` suchen'
-    z.push(`- [ ] Kerntemperaturen im Text: ${a.kerntemperaturen.map((t) => `${t} °C`).join(', ')}${ref}`)
+    const phasen = a.kernNachPhase ?? []
+    if (phasen.length) {
+      z.push(`- Kerntemperaturen nach Phase${ref}:`)
+      for (const p of phasen) {
+        const werte = p.werte.map((w) => `${w.wert} °C`).join(' ↔ ')
+        z.push(`  - [ ] **${p.phase}:** ${werte}${p.konflikt ? ' ⚠️ uneinheitlich' : ''}`)
+      }
+      // °C-Angaben im Kernbereich, die in keinem „Kern"-Satz stehen (Unterlage, Ofen …)
+      const inPhasen = new Set(phasen.flatMap((p) => p.werte.map((w) => w.wert)))
+      const uebrig = a.kerntemperaturen.filter((t) => !inPhasen.has(t))
+      if (uebrig.length) z.push(`  - Weitere Angaben ohne Kern-Bezug: ${uebrig.map((t) => `${t} °C`).join(', ')}`)
+    } else {
+      z.push(`- [ ] Kerntemperaturen im Text: ${a.kerntemperaturen.map((t) => `${t} °C`).join(', ')}${ref}`)
+    }
   } else {
     z.push('- Keine Kerntemperatur im Text gefunden.')
   }
