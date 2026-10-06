@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
-import { ohneVerneinung, zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { ohneVerneinung, zeitFehler, zutatOhneNameFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -632,5 +632,68 @@ describe('imagePrompt — keine Verneinung', () => {
     expect(zeile).not.toMatch(/zwingend "Not:"/)
     expect(zeile).toMatch(/NIE Verneinungen/)
     expect(zeile).toMatch(/kein "Not:"/)
+  })
+})
+
+// ─────────────────────────────────────────────────
+// Zutat ohne Namen (06.10.2026).
+//
+// Anlass: Nuea Yang Nam Tok (Lauf 37422864297) kam mit zwei Zutaten durch, deren Name leer war
+// („1 nach Geschmack", „1 frisch gemahlen" ohne Zutat). validate() kannte keine Namenspruefung;
+// aufgefallen ist es erst im Review-Text des PR. Jetzt lehnt validate() das ab, der Text geht
+// beim Retry ans Modell. Die Rohzeile aus dem Lauf liegt nicht vor; getestet werden die beiden
+// moeglichen Formen (leeres Namensfeld mit und ohne Anmerkung).
+describe('validate — Zutat ohne Namen', () => {
+  function datensatz (zutatenZeilen) {
+    const text = KOPF.replace(/INGREDIENTS:[\s\S]*?\n\nSTEPS:\n/, `INGREDIENTS:\n${zutatenZeilen}\n\nSTEPS:\n`)
+    const daten = parseStructuredText(text + SCHRITT_FORMATE['ohne Leerzeichen'])
+    daten.image = '/images/rezepte/yakitori-negima.jpg'
+    daten.meatType = SEED.meatType
+    daten.cookingMethod = SEED.cookingMethod
+    return daten
+  }
+  const GUT = '- 600 | g | Haehnchenschenkel | gewuerfelt\n- 4 | Stangen | Negi-Lauch\n- 100 | ml | Sojasauce\n- 100 | ml | Mirin\n- 2 | EL | Zucker'
+
+  it('lehnt eine Zeile mit leerem Namensfeld ab und nennt die Nummer', () => {
+    const fehler = validate(datensatz(`${GUT}\n- 1 | nach Geschmack |`), SEED)
+    expect(fehler.some((f) => /^Zutat 6 hat keinen Namen \(Menge\/Einheit: 1 nach Geschmack\)/.test(f))).toBe(true)
+  })
+
+  it('lehnt auch ein leeres Namensfeld mit Anmerkung ab', () => {
+    const fehler = validate(datensatz(`${GUT}\n- 1 | frisch gemahlen | | schwarzer Pfeffer`), SEED)
+    expect(fehler.some((f) => /^Zutat 6 hat keinen Namen/.test(f))).toBe(true)
+  })
+
+  it('lehnt einen Namen aus reinem Leerraum ab', () => {
+    const daten = datensatz(GUT)
+    daten.ingredients[2].name = '   '
+    expect(validate(daten, SEED).some((f) => /^Zutat 3 hat keinen Namen/.test(f))).toBe(true)
+  })
+
+  it('meldet jede betroffene Zeile einzeln', () => {
+    const fehler = validate(datensatz(`${GUT}\n- 1 | nach Geschmack |\n- 1 | frisch gemahlen |`), SEED)
+    expect(fehler.filter((f) => /hat keinen Namen/.test(f))).toHaveLength(2)
+  })
+
+  it('laesst die vorgesehene Schreibweise fuer Salz ohne Menge durch', () => {
+    const fehler = validate(datensatz(`${GUT}\n- 1 | Prise | Salz | nach Geschmack`), SEED)
+    expect(fehler.filter((f) => /Zutat/.test(f))).toEqual([])
+  })
+
+  it('der Fehlertext nennt die Loesung (er geht beim Retry ans Modell)', () => {
+    expect(zutatOhneNameFehler(2, { amount: 1, unit: 'Prise', name: '' })).toMatch(/1 \| Prise \| Salz \| nach Geschmack/)
+  })
+
+  // Der Prompt steckt in generateRecipe() (ruft die API) und ist nicht einzeln aufrufbar —
+  // deshalb Quelltext-Ebene: Der Hinweis muss im Zutaten-Abschnitt stehen, nicht irgendwo.
+  it('der Prompt nennt im Zutaten-Abschnitt die Schreibweise fuer Zutaten ohne feste Menge', () => {
+    const quelle = readFileSync(new URL('./recipe-agent.mjs', import.meta.url), 'utf8')
+    const von = quelle.indexOf('\nINGREDIENTS:\n- [Menge]')
+    const bis = quelle.indexOf('\nSTEPS:\n1. [Schritt-Titel]')
+    expect(von).toBeGreaterThan(-1)
+    expect(bis).toBeGreaterThan(von)
+    const abschnitt = quelle.slice(von, bis)
+    expect(abschnitt).toContain('Jede Zutat braucht einen Namen')
+    expect(abschnitt).toContain('- 1 | Prise | Salz | nach Geschmack')
   })
 })

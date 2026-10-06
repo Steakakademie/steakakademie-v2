@@ -858,6 +858,7 @@ INGREDIENTS:
 - [Menge] | [Einheit] | [Name] | [Anmerkung optional]
 - [Menge] | [Einheit] | [Name]
 (mind. 5 Zutaten)
+Jede Zutat braucht einen Namen. Gibt es keine feste Menge (Salz, Pfeffer), schreibe: - 1 | Prise | Salz | nach Geschmack
 
 STEPS:
 1. [Schritt-Titel] | [Dauer] | [Ausführliche Beschreibung: WARUM dieser Schritt wichtig ist. Mindestens 2 vollständige Sätze.] | [Profi-Tipp optional]
@@ -974,6 +975,12 @@ function zeitFehler (feld, wert) {
   return `${feld} muss mit PT beginnen (Tage in Stunden umrechnen, z. B. 7 Tage = PT168H, nie P7D…), war: ${wert}`
 }
 
+/** Fehlertext fuer eine Zutat ohne Namen; nennt Zeile und Loesung, weil er beim Retry ans Modell geht. */
+function zutatOhneNameFehler (nr, zutat) {
+  const menge = [zutat?.amount, zutat?.unit].filter((x) => x !== undefined && x !== null && x !== '').join(' ')
+  return `Zutat ${nr} hat keinen Namen${menge ? ` (Menge/Einheit: ${menge})` : ''} — jede Zeile braucht Menge | Einheit | Name; ohne feste Menge: "- 1 | Prise | Salz | nach Geschmack"`
+}
+
 function validate(data, seed) {
   const errors = []
   for (const field of REQUIRED) {
@@ -983,6 +990,14 @@ function validate(data, seed) {
   if (!VALID_DIFFICULTY.has(data.difficulty)) errors.push(`Ungültige Schwierigkeit: ${data.difficulty}`)
   if (data.seoTitle && data.seoTitle.length > SEO_TITLE_MAX) errors.push(`seoTitle zu lang: ${data.seoTitle.length} Zeichen (max. ${SEO_TITLE_MAX}, das Layout haengt ' | Steakakademie' an) — "${data.seoTitle}"`)
   if (!Array.isArray(data.ingredients) || data.ingredients.length === 0) errors.push('Keine Zutaten')
+  // Zutat ohne Namen (06.10.2026): Nuea Yang Nam Tok kam mit zwei Zeilen „1 | nach Geschmack |"
+  // und „1 | frisch gemahlen |" durch — auf der Seite stuenden dann Menge und Einheit ohne
+  // Zutat. Der Text geht beim Retry ans Modell und nennt deshalb das Zeilenmuster.
+  if (Array.isArray(data.ingredients)) {
+    data.ingredients.forEach((z, i) => {
+      if (!String(z?.name ?? '').trim()) errors.push(zutatOhneNameFehler(i + 1, z))
+    })
+  }
   if (!Array.isArray(data.steps) || data.steps.length < 2) errors.push('Zu wenige Schritte')
   if (!/^PT/.test(data.prepTime || '')) errors.push(zeitFehler('prepTime', data.prepTime))
   if (!/^PT/.test(data.cookTime || '')) errors.push(zeitFehler('cookTime', data.cookTime))
@@ -1210,4 +1225,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 // Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
-export { ohneVerneinung, zeitFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
+export { ohneVerneinung, zeitFehler, zutatOhneNameFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock, STILE }
