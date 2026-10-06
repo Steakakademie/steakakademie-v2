@@ -50,13 +50,12 @@ describe('Register (data/angebote.yaml)', () => {
     }
   });
 
-  it('Steak-Beichte: vor dem Verkaufsstart kein Kaufknopf, der Hinweis trägt das Datum', () => {
-    // Uwe, 02.10.2026: bis zur Gewerbeanmeldung keine bezahlten Bestellungen.
-    // Wird der Status auf `live` gestellt, ist dieser Test bewusst anzupassen.
-    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart geplant: 1. November 2026' });
+  it('Steak-Beichte: seit 06.10.2026 live (Kaufknopf, kein Datumshinweis)', () => {
+    // Uwe, 06.10.2026: Verkaufsstart vorgezogen, Preise inkl. MwSt.
+    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: true, hinweis: '' });
     const h = passendeHinweise(angebote(), { typ: 'rezept', slug: 'x', felder: { kategorie: 'fleisch', difficulty: 'Profi' } }, HEUTE)
       .find((x) => x.id === 'steak-beichte');
-    expect(h?.marke).toBe('ab 1. November');
+    expect(h?.marke).not.toBe('ab 1. November');
   });
 
   it('pausierte Angebote sind nie kaufbar', () => {
