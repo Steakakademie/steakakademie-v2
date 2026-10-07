@@ -743,5 +743,12 @@ bilder:
     erworben_am: 2026-10-05
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/nuea-yang-nam-tok.jpg:
-    status: offen
-    hinweis: Stockfoto mit Lizenz laut Uwe Yendell (07.10.2026); Quelle, Urheber, Lizenz und Bildseite stehen in den Metadaten der Originaldatei und werden nachgetragen. Ersetzt das KI-Bild (fal.ai, FLUX.1 dev) vom 06.10.2026. Vor dem Merge auf status lizenz stellen.
+    status: lizenz
+    quelle: Pexels (ID 29101366)
+    urheber: Nano Erdozain
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/elegant-gourmet-dish-with-edible-flowers-29101366/
+    erworben_am: 2026-10-07
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung vom 06.10.2026 (Echtfoto, frei unter Pexels-Lizenz; Bildseite geprueft 07.10.2026, Titel dort "Elegant Gourmet Dish with Edible Flowers"). Von Uwe Yendell geliefert, Dateiname pexels-nano-erdozain-120534369-29101366. Keine Personen, keine Marken im Bild. Zuschnitt 4:3, 1024x768. imageAI im MDX-Frontmatter auf false gesetzt.
