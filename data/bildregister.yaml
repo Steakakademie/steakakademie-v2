@@ -749,3 +749,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-06
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/canadian-back-bacon-grill.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/canadian-back-bacon-grill.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-07
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
