@@ -743,9 +743,12 @@ bilder:
     erworben_am: 2026-10-05
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/nuea-yang-nam-tok.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/nuea-yang-nam-tok.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
+    status: lizenz
+    quelle: Pexels (ID 29101366)
+    urheber: Nano Erdozain
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/elegant-gourmet-dish-with-edible-flowers-29101366/
+    erworben_am: 2026-10-07
     namensnennung: false
-    erworben_am: 2026-10-06
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    hinweis: Ersetzt die fal.ai-KI-Generierung vom 06.10.2026 (Echtfoto, frei unter Pexels-Lizenz; Bildseite geprueft 07.10.2026, Titel dort "Elegant Gourmet Dish with Edible Flowers"). Von Uwe Yendell geliefert, Dateiname pexels-nano-erdozain-120534369-29101366. Keine Personen, keine Marken im Bild. Zuschnitt 4:3, 1024x768. imageAI im MDX-Frontmatter auf false gesetzt.
