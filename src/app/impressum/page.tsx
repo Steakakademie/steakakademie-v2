@@ -83,9 +83,7 @@ export default function ImpressumPage() {
                 Umsatzsteuer
               </h2>
               <p>
-                Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer
-                berechnet und ausgewiesen. Eine Umsatzsteuer-Identifikationsnummer
-                nach § 27 a UStG ist daher nicht erforderlich.
+                Alle Preise enthalten die gesetzliche Umsatzsteuer.
               </p>
             </section>
 

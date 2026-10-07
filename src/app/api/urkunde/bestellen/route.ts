@@ -147,7 +147,7 @@ export async function POST(req: Request) {
   await bestaetigeBestellung(email, {
     stufeName: `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
     nameAufUrkunde: b.nameAufUrkunde,
-    preis: `${urkundePreisText()} (Versand inklusive, ohne Umsatzsteuer nach § 19 UStG)`,
+    preis: `${urkundePreisText()} (Versand inklusive, inkl. gesetzlicher MwSt.)`,
     bestellId: zeile.id,
     adresse: [`${b.vorname} ${b.nachname}`, b.strasse, b.adresszusatz ?? '', `${b.plz} ${b.ort}`, b.land].filter(Boolean).join(', '),
     widerrufHinweis: URKUNDE_WIDERRUF_HINWEIS,
