@@ -291,6 +291,11 @@ async function main() {
     const webPath = `/images/rezepte/${slug}${suffix}.jpg`
 
     if (!FORCE && existsSync(target)) { skipped++; continue }
+    // Echte Fotos nie ueberschreiben, auch nicht mit --force: Wer `imageAI: false` gesetzt hat,
+    // hat das Bild von Hand gewaehlt (Bildregister: eigen oder lizenz). Gilt nur fuer das Standardbild.
+    if (!DRAMATIC && existsSync(target) && /^imageAI:\s*false\s*$/m.test(raw)) {
+      console.log(c.d(`– ${slug}: echtes Foto (imageAI: false), bleibt unveraendert`)); skipped++; continue
+    }
 
     const prompt = buildPrompt(raw, slug, LOOK)
     if (DRY) { console.log(c.y(`◇ ${slug}${suffix}`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }

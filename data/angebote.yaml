@@ -202,13 +202,13 @@ angebote:
     name: Steak-Beichte
     url: /steak-beichte
     art: bezahlt
-    # Verkauf bis zur Gewerbeanmeldung aus (Uwe, 02.10.2026: „Beide auf ‚ab 1.
-    # November'"; Regel vom 27.09.: keine bezahlten Bestellungen vorher).
+    # Verkaufsstart vorgezogen (Uwe, 06.10.2026: „Früher"; Preise inkl. MwSt.,
+    # Regelbesteuerung). Vorher: ab 1. November (Uwe, 02.10.2026). Offene
+    # Frage an die Kanzlei: Verkauf vor Gewerbeanmeldung am 01.11.
     # DIESER STATUS STEUERT AUCH DIE SEITE: /steak-beichte zeigt die Kaufknöpfe
     # nur bei `live` (verkaufsstand() in src/lib/angebote/register.ts).
     # Verkaufsstart = diese Zeile auf `live` setzen, `ab` entfernen.
-    status: ab_datum
-    ab: 2026-11-01
+    status: live
     preis_text: ab 7 €
     knopf: Zur Steak-Beichte
     anlaesse:
