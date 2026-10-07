@@ -743,9 +743,5 @@ bilder:
     erworben_am: 2026-10-05
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/nuea-yang-nam-tok.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/nuea-yang-nam-tok.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
-    namensnennung: false
-    erworben_am: 2026-10-06
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    status: offen
+    hinweis: Stockfoto mit Lizenz laut Uwe Yendell (07.10.2026); Quelle, Urheber, Lizenz und Bildseite stehen in den Metadaten der Originaldatei und werden nachgetragen. Ersetzt das KI-Bild (fal.ai, FLUX.1 dev) vom 06.10.2026. Vor dem Merge auf status lizenz stellen.
