@@ -1,4 +1,15 @@
 import type { DiagnoseInput } from './schema';
+import { badge, garstufenRind } from '@/lib/kerntemperatur-referenz';
+
+// Garstufen kommen aus data/kerntemperatur-referenz.yaml (CLAUDE.md §2 Regel 2),
+// nie als Zahl im Prompt. Standard-Medium-Rare = badges.beef_mr.
+export function garstufenRindText(): string {
+  const stufen = Object.values(garstufenRind())
+    .map((g) => `${g.label.toLowerCase()} ${g.range[0]}–${g.range[1]} °C`)
+    .join(' · ');
+  const mr = badge('beef_mr');
+  return `- ${stufen}.\n- Standard-Empfehlung der Steakakademie: ${mr.label.toLowerCase()} ${mr.c} °C (Korridor ${mr.range[0]}–${mr.range[1]} °C).\n- Teilstück-Werte außerhalb dieser Skala (z. B. Schwein, Geflügel) NICHT aus dem Gedächtnis nennen — keine Zahl angeben, wenn sie hier nicht steht.`;
+}
 
 // ── PITMASTER-DOKTRIN ────────────────────────────────────────────────────────
 // Von Uwe (Profi-Koch) geprüfte Fachregeln. Diese haben VORRANG vor dem
@@ -73,7 +84,7 @@ METHODEN (korrekt benennen, passend zur Diagnose empfehlen):
 - Immer beide Temperaturebenen trennen: Grill-/Deckeltemperatur ≠ Kerntemperatur.
 
 GARGRADE RIND (Kerntemperatur — Orientierung):
-- rare ~50 °C · medium rare ~54 °C · medium ~57 °C · medium well ~60 °C · durch 63 °C+.
+${garstufenRindText()}
 - Diese Werte als Orientierung nutzen; bei Diagnose den Zielgrad benennen.
 
 WERKZEUG:
