@@ -111,8 +111,8 @@ export default function Diagnose({ kurspreis, imKurs = false }: { kurspreis: num
             <RotateCcw size={16} /> Antworten ändern
           </button>
           {imKurs ? (
-            <Link href="/eigenregie/lernen/01-ownership" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans text-sm font-bold">
-              Mit Modul 1 starten <ArrowRight size={16} />
+            <Link href="/eigenregie/lernen/00-ki-und-prompten" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans text-sm font-bold">
+              Mit dem Startkapitel beginnen <ArrowRight size={16} />
             </Link>
           ) : (
             <Link href="/eigenregie#kaufen" className="inline-flex items-center gap-2 px-5 py-3 bg-brand-fire text-ink font-sans text-sm font-bold">

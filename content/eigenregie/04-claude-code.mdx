@@ -2,13 +2,12 @@
 title: "Claude Code als dauerhaftes Werkzeug"
 order: 4
 excerpt: "Du richtest Claude Code so ein, dass es dein Projekt kennt, und arbeitest in einem festen Ablauf: sichern, beauftragen, Plan prüfen, ausführen, in der Vorschau kontrollieren, veröffentlichen. Am Ende hast du drei Änderungen selbst live gebracht."
-dauer: "150 Min"
+dauer: "195 Min"
 lernziel: "Du änderst deine Seite selbst – ohne Programmierkenntnisse und ohne Agentur."
 ergebnis: "Drei selbst durchgeführte Änderungen – ein Text, eine neue Seite, ein getauschtes Bild – sind live und in der Versionsgeschichte nachvollziehbar."
 publishedAt: "2026-09-19"
 status: published
 reviewed: true
-reviewedAt: "2026-09-19"
 ---
 
 <Leitfrage>
@@ -21,6 +20,7 @@ Wenn du morgen einen Satz, eine Öffnungszeit oder ein Foto auf deiner Website �
 
 - Du prüfst die **Einrichtung** von Claude Code aus Modul 2 und meldest dich an.
 - Du schreibst deine **CLAUDE.md** – das Projektgedächtnis, das Claude Code bei jedem Start liest.
+- Du richtest **Skills, Sperren und Hooks** ein, damit wichtige Regeln nicht vergessen werden.
 - Du arbeitest in **acht festen Takten**, von der Sicherung bis zur Live-Prüfung.
 - Vor jeder Änderung steht ein **eigener Branch** und ein sauberer Stand.
 - Du weißt, was du **nie blind freigibst**: Zugangsdaten, Löschbefehle, Rechtstexte.
@@ -130,6 +130,61 @@ Zielgruppe: [z. B. Eigenheimbesitzer, 40–65 Jahre].
 Speichere die Datei und sichere sie gleich mit – sie gehört ins Repository. Halte sie kurz: Die Dokumentation empfiehlt weniger als 200 Zeilen, weil lange Dateien schlechter befolgt werden. Ob Claude Code sie gelesen hat, siehst du in einer Sitzung mit dem Befehl `/context` unter **Memory files**.
 
 Merkst du bei der Arbeit, dass Claude Code etwas immer wieder falsch macht, ergänzt du eine Regel. So wächst die Datei mit deinem Projekt.
+
+## Skills, Sperren und Hooks: Regeln, die nicht vergessen werden
+
+Die `CLAUDE.md` ist eine Bitte: Claude Code liest sie und hält sich meistens daran. Für manche Dinge reicht „meistens“ nicht. Dafür gibt es drei weitere Werkzeuge. Du brauchst sie nicht am ersten Tag, aber spätestens, wenn du die gleiche Anweisung zum dritten Mal tippst oder etwas auf keinen Fall passieren darf.
+
+| Werkzeug | Was es ist | Wann es greift | Beispiel |
+|---|---|---|---|
+| **CLAUDE.md** | Regeln und Wissen über dein Projekt | bei jedem Start, als Text | „Anrede: Sie“ |
+| **Skill** | eine gespeicherte Arbeitsanleitung | wenn du sie mit `/name` aufrufst | `/live-check` nach jeder Veröffentlichung |
+| **Sperre** | ein Verbot in den Einstellungen | immer, Claude Code kann es nicht übergehen | Impressum nicht ändern |
+| **Hook** | eine Automatik bei einem Ereignis | immer, ohne dass jemand daran denkt | zu Beginn jeder Sitzung den Git-Stand zeigen |
+
+Faustregel: **Was du wiederholt tippst, wird ein Skill. Was nie passieren darf, wird eine Sperre. Was immer passieren soll, wird ein Hook.** Alles andere bleibt in der `CLAUDE.md`.
+
+### Skills
+
+Ein Skill ist ein Ordner unter `.claude/skills/` mit einer Datei `SKILL.md`: oben ein kurzer Kopf mit Name und Beschreibung, darunter die Anleitung in normalen Sätzen. Claude Code lädt den Text erst, wenn er gebraucht wird – deine `CLAUDE.md` bleibt kurz. Mit dem Eintrag `disable-model-invocation: true` startet ein Skill nur, wenn du ihn selbst aufrufst. So behältst du die Kontrolle.
+
+### Sperren und Hooks
+
+Sperren und Hooks stehen in der Datei `.claude/settings.json` in deinem Projekt. Eine **Sperre** (`permissions.deny`) verbietet eine Aktion fest – etwa das Ändern deiner Rechtstexte oder `git push --force`. Ein **Hook** führt bei einem Ereignis einen Befehl aus, zum Beispiel vor jedem Shell-Befehl eine Prüfung. Für harte Verbote empfiehlt die Claude-Code-Dokumentation Sperren; Hooks sind Automatik und zweites Netz.
+
+### Das Starterpaket
+
+Zum Kurs gehört die Datei `eigenregie-starterpaket.md`. Sie ist ein fertiger Auftrag an dein Claude Code und richtet ein:
+
+- **fünf Skills:** `/sitzungsstart`, `/sitzungsende`, `/live-check`, `/pruefauftrag`, `/kostencheck`,
+- **Sperren** für deine Rechtstexte und für Löschbefehle,
+- **zwei Hooks:** den Git-Stand zu Sitzungsbeginn und ein zweites Netz gegen Löschbefehle.
+
+Du legst die Datei unter `docs/` ab und sagst Claude Code im Planmodus: „Lies docs/eigenregie-starterpaket.md und richte Teil 1 bis 3 ein. Gleiche die Schreibweise vorher mit der aktuellen Dokumentation ab. Zeig mir zuerst den Plan.“ Danach gehst du den Selbsttest aus Teil 4 der Datei durch.
+
+<Achtung>
+
+Einen fremden Skill oder Hook installieren, ohne ihn gelesen zu haben. Hooks laufen mit deinen Rechten und können jeden Befehl ausführen. Ein Skill mit dem Eintrag `allowed-tools` darf Werkzeuge ohne Rückfrage benutzen, und Zeilen mit `` !` `` führen Befehle aus, bevor Claude Code den Text überhaupt liest. Lies jede fremde `SKILL.md` ganz. Verstehst du etwas nicht, lass dir den Skill von Claude Code erklären – oder lass eine eigene, kürzere Fassung schreiben.
+
+</Achtung>
+
+<Umweg>
+
+**Umweg vermieden.** Hier hätte eine gut gemeinte Automatik Stunden gekostet.
+
+**Was passiert wäre:** Ein Hook sichert bei jedem Schritt selbst oder blockiert Lese- und Suchbefehle. Claude Code dreht sich im Kreis, Sperrdateien von Git bleiben liegen, und du suchst den Fehler im Code statt in der Automatik.
+
+**Was du stattdessen tust:** Hooks nur für Anzeigen und für das Blockieren klar gefährlicher Befehle. Nie Hooks, die committen, pushen oder bauen. Hängt Claude Code, siehst du zuerst mit `/hooks` nach.
+
+**Dein Vorteil:** Die Automatik schützt dich, statt dich auszubremsen.
+
+</Umweg>
+
+<ProTipp>
+
+Abschalten ist so einfach wie Einschalten: Skill-Ordner löschen oder den Eintrag aus `.claude/settings.json` nehmen, sichern, neue Sitzung starten. Probier es einmal bewusst aus – dann weißt du im Ernstfall, wo du hinfassen musst.
+
+</ProTipp>
 
 ## Die Arbeitsweise: acht Takte
 
@@ -295,6 +350,8 @@ Schreib nach jeder Übung einen Satz in deine `CLAUDE.md`, wenn dir etwas aufgef
 - [ ] `claude --version` und `claude doctor` laufen ohne Fehler, du bist angemeldet.
 - [ ] Die `CLAUDE.md` enthält unter `@AGENTS.md` deine eigenen Regeln inklusive Tabu-Liste und liegt im Repository.
 - [ ] Es gibt keine zweite Datei mit Grundregeln für Claude Code.
+- [ ] `/hooks` zeigt beide Hooks aus dem Starterpaket, und `/sitzungsstart` liefert drei Zeilen.
+- [ ] Die Bitte, das Impressum zu ändern, wird mit Hinweis auf die Sperre abgelehnt; `git status` bleibt leer.
 - [ ] Du hast jede Änderung im Planmodus begonnen und den Plan vor der Freigabe gelesen.
 - [ ] Übung 1 ist live: Die Öffnungszeiten stimmen an jeder Stelle der Seite.
 - [ ] Übung 2 ist live: Die neue Seite ist erreichbar, verlinkt und in der Sitemap.

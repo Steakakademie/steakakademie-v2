@@ -80,7 +80,7 @@ function hinweis(m: number, a: Antworten): string | undefined {
 /** Neue laufende Kosten in €/Monat (Stand 09/2026, Preise der Anbieter in US-Dollar, gerundet). */
 export const KOSTEN = {
   claudePro: 20,
-  hostingMin: 0, // Netlify Free (gewerblich erlaubt, Kontingent begrenzt)
+  hostingMin: 0, // Netlify Free (kein Verbot gewerblicher Nutzung gefunden, Kontingent begrenzt)
   hostingMax: 20, // Vercel Pro (Hobby ist nur für private, nicht gewerbliche Nutzung)
 };
 
@@ -131,7 +131,7 @@ export function berechneWeg(a: Antworten, kurspreis: number): Weg {
       { name: 'GitHub', kosten: '0 €', hinweis: 'Code-Ablage in deinem Besitz (Free-Tarif reicht).' },
       { name: 'Node.js + Editor (VS Code)', kosten: '0 €', hinweis: 'Werkzeuge auf deinem Rechner.' },
       { name: 'Claude Pro (für Claude Code)', kosten: `ca. ${KOSTEN.claudePro} €/Monat`, hinweis: 'Pflicht — der Gratis-Tarif enthält Claude Code nicht. Preis in US-Dollar, Stand 09/2026.' },
-      { name: 'Hosting: Netlify Free oder Vercel Pro', kosten: `0–${KOSTEN.hostingMax} €/Monat`, hinweis: 'Vercel Hobby ist nur für private Seiten erlaubt. Netlify Free ist gewerblich nutzbar, aber im Kontingent begrenzt.' },
+      { name: 'Hosting: Netlify Free oder Vercel Pro', kosten: `0–${KOSTEN.hostingMax} €/Monat`, hinweis: 'Vercel Hobby ist nur für private Seiten erlaubt. Netlify Free: kein Verbot gewerblicher Nutzung gefunden, Kontingent begrenzt, Gratis-Projekte können ohne Ankündigung entfernt werden.' },
       { name: 'Cloudflare (DNS)', kosten: '0 €', hinweis: 'Free-Tarif.' },
       { name: 'Bitwarden (Passwörter)', kosten: '0 €', hinweis: 'Free-Tarif.' },
     ],
