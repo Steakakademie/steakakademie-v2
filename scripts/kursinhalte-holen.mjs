@@ -53,7 +53,8 @@ function ausEnvLocal(name) {
   return zeile ? zeile.slice(name.length + 1).trim().replace(/^["']|["']$/g, '') : undefined;
 }
 
-const wert = (name) => process.env[name] || ausEnvLocal(name);
+// trim: ein beim Einfügen mitkopierter Zeilenumbruch im Secret bricht sonst die Git-URL (08.10.2026).
+const wert = (name) => (process.env[name] || ausEnvLocal(name) || "").trim() || undefined;
 const istStreng = () => Boolean(process.env.CI || process.env.VERCEL);
 
 function zaehleDateien(ordner) {
