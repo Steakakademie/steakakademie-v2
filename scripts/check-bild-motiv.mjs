@@ -130,6 +130,10 @@ if (!(await resolveApiKey()) && !DRY) {
 
 const ergebnisse = []
 for (const seite of seiten) {
+  // Geloeschte Seiten (git diff liefert sie bei --geaendert mit): nichts zu
+  // pruefen. Vorher brach der Lauf mit ENOENT ab — PR #355, 25 zusammengelegte
+  // Glossar-Eintraege — und meldete rot, ohne ein einziges Bild gesehen zu haben.
+  if (!existsSync(join(ROOT, seite))) continue
   const { data } = zerlege(readFileSync(join(ROOT, seite), 'utf8'))
   for (const feld of ['image', 'heroImage']) {
     const pfad = data?.[feld]
