@@ -50,7 +50,7 @@ badges:
   # das intramuskuläre Fett ist erst darüber vollständig geschmolzen, und deutsche
   # Gäste nehmen Schwein bei 63–65 nicht an. Untergrenze bleibt >= sicherheit.schwein.
   iberico:      { c: 66, range: [65, 68], label: "durch, saftig" }
-  pork_lowslow: { c: 92, range: [88, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
+  pork_lowslow: { c: 92, range: [90, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
   pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten — Teilstück bis 29.09.2026 nie benannt; passt zu Keule/Schulter, NICHT zu Bauch
   # Schwein nach Teilstück (Uwe, 29.09.2026): „Es gibt nicht die eine Wahrheit bei
   # den Kerntemperaturen, weil immer auch das Teilstück eine Rolle spielt."
@@ -60,7 +60,7 @@ badges:
   pork_schulter: { c: 75, range: [75, 75], label: "saftig, klassisch" }
   pork_bauch:    { c: 80, range: [80, 85], label: "zart" }            # Fett und Bindegewebe schmelzen erst lange; Krustenbraten vom Bauch
   # Schweinenacken (Uwe, 08.10.2026, im Chat): 75 °C durch, 70 °C leicht rosa, verzeiht
-  # dank Fett bis 80 °C. Pulled Pork vom Nacken bleibt bei pork_lowslow (88–95).
+  # dank Fett bis 80 °C. Pulled Pork vom Nacken bleibt bei pork_lowslow (90–95).
   pork_nacken:      { c: 75, range: [75, 80], label: "durch, verzeiht bis 80" }
   pork_nacken_rosa: { c: 70, range: [70, 70], label: "leicht rosa" }
   poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C); Keule/Flügel 74–80
