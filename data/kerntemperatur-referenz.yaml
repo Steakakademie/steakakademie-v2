@@ -59,6 +59,10 @@ badges:
   pork_keule:    { c: 70, range: [70, 70], label: "saftig" }          # mager, trocknet schnell — exakt messen
   pork_schulter: { c: 75, range: [75, 75], label: "saftig, klassisch" }
   pork_bauch:    { c: 80, range: [80, 85], label: "zart" }            # Fett und Bindegewebe schmelzen erst lange; Krustenbraten vom Bauch
+  # Schweinenacken (Uwe, 08.10.2026, im Chat): 75 °C durch, 70 °C leicht rosa, verzeiht
+  # dank Fett bis 80 °C. Pulled Pork vom Nacken bleibt bei pork_lowslow (88–95).
+  pork_nacken:      { c: 75, range: [75, 80], label: "durch, verzeiht bis 80" }
+  pork_nacken_rosa: { c: 70, range: [70, 70], label: "leicht rosa" }
   poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C); Keule/Flügel 74–80
   # Brust getrennt (Uwe, 23.09.2026, Kurspraxis): bei 68 °C vom Grill, zieht in der
   # Ruhe auf 72 nach — darüber trocken. Der Endwert bleibt >= sicherheit.gefluegel;

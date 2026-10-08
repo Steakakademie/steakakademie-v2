@@ -1,5 +1,5 @@
 import type { DiagnoseInput } from './schema';
-import { badge, garstufenRind } from '@/lib/kerntemperatur-referenz';
+import { badge, garstufenRind, spanne } from '@/lib/kerntemperatur-referenz';
 
 // Garstufen kommen aus data/kerntemperatur-referenz.yaml (CLAUDE.md §2 Regel 2),
 // nie als Zahl im Prompt. Standard-Medium-Rare = badges.beef_mr.
@@ -8,7 +8,8 @@ export function garstufenRindText(): string {
     .map((g) => `${g.label.toLowerCase()} ${g.range[0]}–${g.range[1]} °C`)
     .join(' · ');
   const mr = badge('beef_mr');
-  return `- ${stufen}.\n- Standard-Empfehlung der Steakakademie: ${mr.label.toLowerCase()} ${mr.c} °C (Korridor ${mr.range[0]}–${mr.range[1]} °C).\n- Teilstück-Werte außerhalb dieser Skala (z. B. Schwein, Geflügel) NICHT aus dem Gedächtnis nennen — keine Zahl angeben, wenn sie hier nicht steht.`;
+  const nacken = `Schweinenacken: durch ${spanne('pork_nacken')} (Ziel ${badge('pork_nacken').c} °C), leicht rosa ${badge('pork_nacken_rosa').c} °C. Pulled Pork: ${spanne('pork_lowslow')}.`;
+  return `- ${stufen}.\n- Standard-Empfehlung der Steakakademie: ${mr.label.toLowerCase()} ${mr.c} °C (Korridor ${mr.range[0]}–${mr.range[1]} °C).\n- ${nacken}\n- Teilstück-Werte außerhalb dieser Skala (z. B. anderes Schwein-Teilstück, Geflügel) NICHT aus dem Gedächtnis nennen — keine Zahl angeben, wenn sie hier nicht steht.`;
 }
 
 // ── PITMASTER-DOKTRIN ────────────────────────────────────────────────────────
