@@ -116,6 +116,45 @@ glossar_fuellwort_suffixe:
   - pioneer
   - farm
 
+# ─── Glossar: weitergeleitete Slugs → Ziel-URL ──────────────────────────────
+# Eintraege, die es nicht mehr gibt. EINE Liste, drei Abnehmer:
+#   • next.config.mjs baut daraus die 301-Weiterleitungen
+#   • glossarDublette() (Gate + Glossar-Agent) legt so einen Slug nie wieder an
+#   • src/__tests__/glossar-weiterleitungen.test.ts: keine Datei, kein interner
+#     Link, kein Ziel, das selbst weitergeleitet wird
+# Zusammenlegung 09.10.2026 (SEO-Audit 08.10.): Fuellwort-Permutationen und
+# Synonyme nach den Regeln oben, dazu Smoker-/Brisket-/Wagyu-Fuellwoerter ohne
+# eigenen Begriffsinhalt. Bewusst OHNE GSC-Daten (docs/glossar-konsolidierung-
+# kandidaten.md verlangte sie): drei Monate nach dem Plan gibt es weiter keine
+# Search Console, und bei ~9 Google-Sitzungen pro Woche fuer die ganze Seite
+# haetten diese Seiten ohnehin keine messbaren Impressionen.
+glossar_weiterleitungen:
+  kerntemperatur-kontrolle: /glossar/kerntemperatur
+  kerntemperatur-prinzip: /glossar/kerntemperatur
+  kerntemperatur-wissen: /glossar/kerntemperatur
+  kerntemperatur-ziel: /glossar/kerntemperatur
+  wagyu-farm: /glossar/wagyu
+  wagyu-kenner: /glossar/wagyu
+  wagyu-pioneer: /glossar/wagyu
+  wagyu-wissen: /glossar/wagyu
+  wagyu-zubereitungen: /glossar/wagyu
+  wagyu-hotdog: /glossar/wagyu
+  wagyu-burger: /glossar/wagyu
+  smoker-fans: /methoden/smoken-low-and-slow
+  smoker-enthusiasten: /methoden/smoken-low-and-slow
+  smoker-long: /methoden/smoken-low-and-slow
+  smoker-test: /methoden/smoken-low-and-slow
+  smoker-designs: /methoden/smoken-low-and-slow
+  smoker-setup: /methoden/smoken-low-and-slow
+  smoker-aufbau: /methoden/smoken-low-and-slow
+  brisket-evangelium: /cuts/brisket
+  brisket-rezept: /cuts/brisket
+  brisket-smoker: /cuts/brisket
+  wettkampf-grillmeister: /glossar/wettkampf-bbq
+  wettbewerbs-pitmaster: /glossar/wettkampf-pitmaster
+  kollagen-umwandlung: /glossar/kollagen-transformation
+  plateauphase: /glossar/stall
+
 # ─── Wortdopplung: erlaubte Wendungen ────────────────────────────────────────
 # „X und X" ist sonst ein Fehler (Hot-Spots und Hot-Spots). Diese sind Deutsch.
 wortdopplung_erlaubt:

@@ -79,4 +79,8 @@ describe('Glossar-Dubletten', () => {
     expect(glossarDublette('kerntemperatur-geflügel', bestand)).toBe(null)
     expect(glossarDublette('picanha', bestand)).toBe(null)
   })
+  it('weitergeleiteter Slug — auch ohne Hauptbegriff im Bestand und mit Ziel ausserhalb des Glossars', () => {
+    expect(glossarDublette('smoker-fans', new Set())?.kanonisch).toBe('/methoden/smoken-low-and-slow')
+    expect(glossarDublette('wagyu-hotdog', new Set())?.grund).toMatch(/weitergeleitet/)
+  })
 })

@@ -1,5 +1,31 @@
 import { withContentlayer } from 'next-contentlayer2';
 import { withSentryConfig } from '@sentry/nextjs';
+import { readFileSync } from 'node:fs';
+import yaml from 'js-yaml';
+
+/**
+ * Glossar-Weiterleitungen aus data/taxonomie.yaml (09.10.2026)
+ * ------------------------------------------------------------
+ * Zusammengelegte Glossar-Eintraege stehen dort unter `glossar_weiterleitungen`
+ * (Slug → Ziel-URL) — dieselbe Liste, mit der das Content-Gate und der
+ * Glossar-Agent eine Neuanlage verhindern. Hier wird daraus je ein 301.
+ * Fehlt die Datei oder der Schluessel, bricht der Build: eine still fehlende
+ * Weiterleitung waere ein 404 auf einer URL, die Google kennt.
+ * Aeltere Einzel-Weiterleitungen (bark-*, packer-cut, smoker-temp) stehen
+ * weiter von Hand in redirects() — sie wurden vor dieser Liste angelegt.
+ */
+const glossarWeiterleitungen = (() => {
+  const tax = yaml.load(readFileSync(new URL('./data/taxonomie.yaml', import.meta.url), 'utf8'));
+  const karte = tax?.glossar_weiterleitungen;
+  if (!karte || typeof karte !== 'object') {
+    throw new Error('data/taxonomie.yaml: glossar_weiterleitungen fehlt');
+  }
+  return Object.entries(karte).map(([slug, ziel]) => ({
+    source: `/glossar/${slug}`,
+    destination: String(ziel),
+    permanent: true,
+  }));
+})();
 
 /**
  * Content-Security-Policy (KAN-75, Art. 32 DSGVO — 20.08.2026)
@@ -215,6 +241,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Zusammengelegte Glossar-Eintraege — Liste in data/taxonomie.yaml, s. oben.
+      ...glossarWeiterleitungen,
       // tuwasduwillst.de: www auf die nackte Domain; der Platzhalter ist unter
       // steakakademie.de nicht erreichbar (Preview-Adressen bleiben frei).
       {
