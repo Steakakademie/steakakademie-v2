@@ -197,9 +197,17 @@ Mail 1 liefert den Spickzettel-Link (03.10.2026).
 `/prive` und `/usa-expedition` stehen auf „in Vorbereitung" (keine Preise, keine Buchung) ·
 VIP: **eine** Warteliste (`/vip#warteliste`, Loops-Gruppe `vip_warteliste`), Bausteine
 „geplant", kein Startdatum.
+*09.10.2026 (SEO-Audit, `steakakademie-audit/SEO-AUDIT-2026-10-08.md`):* Search Console
+nicht verifiziert (Bing-Import „keine Daten") · 0 Backlinks seit 13 Wochen · nur 3 Cut-Hubs
+(`/cuts/tomahawk`, `/cuts/picanha` 404, obwohl der Cut-Atlas sie verspricht) ·
+Startseite Lighthouse mobil 71 / LCP 5,2 s (JS, kein Quick Win).
 
 **Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
 mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).
+*09.10.2026:* Vier SEO-PRs mergen — #353 Technik (noindex Bezahl-Lektionen, Sitemap-lastmod,
+Titel-Helfer), #354 Ribeye-Pillar (Entrecôte/Rostbraten, bitte fachlich gegenlesen),
+#355 Glossar: 25 Permutationen → 301 aus `taxonomie.yaml`, #356 vier Hub-Dubletten
+(stacked auf #355). Davor **Uwe: Search Console per DNS-TXT anlegen** (5 Min, 0 €).
 *07.09.:* Verteilplan für Reel 1 liegt (`Projects/Steakakademie/Marketing/VERTEILPLAN-Reel-1-2026-09-06.md`,
 0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
