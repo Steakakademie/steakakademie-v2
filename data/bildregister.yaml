@@ -752,3 +752,10 @@ bilder:
     erworben_am: 2026-10-07
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung vom 06.10.2026 (Echtfoto, frei unter Pexels-Lizenz; Bildseite geprueft 07.10.2026, Titel dort "Elegant Gourmet Dish with Edible Flowers"). Von Uwe Yendell geliefert, Dateiname pexels-nano-erdozain-120534369-29101366. Keine Personen, keine Marken im Bild. Zuschnitt 4:3, 1024x768. imageAI im MDX-Frontmatter auf false gesetzt.
+  images/rezepte/canadian-back-bacon-grill.jpg:
+    status: ki
+    quelle: "KI-generiert mit einem Google-KI-Modell (Bildmetadaten: Credit 'Made with Google AI', IPTC-Quelltyp trainedAlgorithmicMedia)"
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-07
+    hinweis: Ersetzt die fal.ai-KI-Generierung vom 07.10.2026 (zeigte Bauchspeck statt Schweinelachs). Von Uwe Yendell am 07.10.2026 geliefert und freigegeben; Prompt-Vorlage in imagePrompt des Rezepts. Auftrag war ein Bild aus Adobe Firefly — ob dort ein Google-Partnermodell lief oder ein Google-Werkzeug direkt, ist nicht belegt. Kommerzielle Nutzung haengt am Tarif des Anbieters und ist von Uwe zu pruefen. Keine Personen, keine Marken im Bild. Zuschnitt 4:3, 1024x768.
