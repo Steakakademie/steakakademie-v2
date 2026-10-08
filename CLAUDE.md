@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 04.10.2026.
+> Letzte Pflege: 08.10.2026.
 
 ---
 
@@ -344,6 +344,27 @@
   `next start` liefert das HTML des alten Builds ohne dessen CSS; axe meldet dann
   Tausende Scheinfehler (334 statt 3 Kontrastfehler am 04.10.2026). `pgrep -x
   next-server` findet den Prozess nicht (er heisst `next-server (v…)`).
+
+**Bezahlte Inhalte liegen im privaten Repo `Steakakademie/kursinhalte` (Uwe, 08.10.2026)**
+- Dieses Repo ist öffentlich. Bis 08.10.2026 lagen Eigenregie, Gründer-Schmiede und
+  Diplom-Stufe 2 hier im Klartext (in der Git-History bleiben diese Stände lesbar).
+  Seitdem: `content/eigenregie`, `content/gruender-schmiede`,
+  `content/diplom-lektionen/stufe-2…9` und `privat/kursdateien` sind gitignored und
+  werden von `scripts/kursinhalte-holen.mjs` geholt (prebuild, predev, verify und je
+  ein Schritt in den CI-Workflows). Quelle: `KURSINHALTE_PFAD` (lokaler Klon) oder
+  `KURSINHALTE_TOKEN` (Fine-grained, nur Lesen, nur dieses Repo — Vercel Production +
+  Preview und GitHub-Actions-Secret). Fehlt beides auf Vercel/CI: Exit 1.
+- **Kurstexte im privaten Repo bearbeiten und dort committen**, nie in den Kopien unter
+  `content/`. Das Skript verweigert das Überschreiben, wenn eine Kopie abweicht.
+- Neue bezahlte Inhalte (Stufe 3–5, neue Kurse, Downloads) gehören von Anfang an dorthin.
+  Nie eine bezahlte Datei in dieses Repo oder nach `public/` legen.
+
+**Produkt-Qualitätscheck (Uwe, 08.10.2026)**
+- Jedes Produktblatt, jedes Produktkonzept, jede Freigabe und jeder (Wieder-)Verkaufsstart
+  läuft mit dem Skill `produkt-qualitaetscheck` (zehn Dimensionen, Marktvergleich per
+  Websuche, getrennter Prüfer vor Verkaufsstart). Anlass: Eigenregie hatte ein Produktblatt,
+  aber nie einen Durchlauf mit einem Lernenden, keinen Marktvergleich und lag öffentlich lesbar
+  im Repo — aufgefallen erst auf Uwes Nachfrage.
 
 **Berichtspflicht**
 - Jede Uebergabe nennt ausdruecklich, **was NICHT geprueft wurde**. „Gates gruen"
