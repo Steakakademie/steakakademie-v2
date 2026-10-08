@@ -2,6 +2,7 @@ import { use } from "react";
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import { ChevronRight, BookOpen, Clock, Tag } from 'lucide-react';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { allPersoenlichkeits } from 'contentlayer/generated';
@@ -27,7 +28,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const person = allPersoenlichkeits.find(p => p.slug === params.slug);
   if (!person) return {};
   return {
-    title: person.seoTitle ?? person.title,
+    title: seoTitel(person.seoTitle ?? person.title),
     description: person.seoDescription ?? person.excerpt,
     openGraph: {
       images: ogImages(person.title),

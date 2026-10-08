@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import { notFound } from 'next/navigation';
 import { allRecipes } from 'contentlayer/generated';
 import Header from '@/components/layout/Header';
@@ -37,7 +38,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const description = recipe.seoDescription ?? recipe.description;
 
   return {
-    title,
+    title: seoTitel(title),
     description,
     keywords: recipe.keywords?.join(', '),
     alternates: { canonical: `https://steakakademie.de${recipe.url}` },
