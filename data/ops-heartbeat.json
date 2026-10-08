@@ -38,6 +38,21 @@
     "hinweis": "Der Workflow selbst hat nicht mehr gestartet. GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft nur ein manueller Start oder ein Commit."
   },
   {
+    "name": "Glossar",
+    "typ": "git",
+    "pfad": "content/glossar",
+    "nurNeueDateien": true,
+    "maxTage": 14,
+    "hinweis": "glossary-grow läuft mittwochs 03:00 UTC und soll neue Begriffe als PR liefern. Gezählt wird nur eine NEU HINZUGEFÜGTE Datei. Keine neue Datei seit 14 Tagen = der Vorrat ist leer (so war es vom 19.09. bis 03.10.2026: täglich grün, 0 neue Begriffe) — Nachschub fehlt, nicht der Zeitplan. Job-Summary des letzten Laufs lesen (»0 neue Begriffe«?), dann Seed-Liste oder Extraktion in scripts/glossary-agent.mjs erweitern. Vorher docs/glossar-konsolidierung-kandidaten.md beachten: mehr dünne Einträge schaden dem SEO."
+  },
+  {
+    "name": "Glossar-Workflow",
+    "typ": "workflow",
+    "datei": "glossary-grow.yml",
+    "maxTage": 10,
+    "hinweis": "Der Workflow glossary-grow hat seit 10 Tagen nicht mehr gestartet (Takt: wöchentlich). GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft ein manueller Start per workflow_dispatch."
+  },
+  {
     "name": "Content-Entwürfe (Scout + Saison)",
     "typ": "supabase",
     "tabelle": "content_drafts",

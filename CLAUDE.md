@@ -791,7 +791,7 @@ Analytics & Data · CRM & Monetization.
   unbemerkt. Jetzt läuft jeder Bot-Commit über `.github/actions/pr-statt-push` — ein
   Ort für die Logik, eigener Branch je Lauf, PR nach main. Reiner Text/Daten (Glossar,
   LoRA-JSON) mergt automatisch nach grünen Pflicht-Checks (der Ideen-Radar ist am
-  03.10.2026 entfernt, der Glossar-Agent seitdem pausiert — nur Handstart); alles mit
+  03.10.2026 entfernt; der Glossar-Agent war bis 08.10.2026 pausiert und läuft seit Uwes Auftrag vom 08.10. wieder wöchentlich, mit Heartbeat-Wächter); alles mit
   **KI-Bildern** (Rezepte, Cut-Fotos, Regenerierung) wartet auf Sichtprüfung — Regel 4/8c.
   **`BOT_PAT` ist Voraussetzung, nicht Komfort** (fine-grained, nur dieses Repo,
   Contents+PRs RW — Anleitung `docs/ci-bot-pat.md`). Ohne PAT scheitert es an zwei
