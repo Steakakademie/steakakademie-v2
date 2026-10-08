@@ -1,7 +1,7 @@
 /**
  * Dateien zum Kurs Eigenregie — nur für Käufer, nie aus /public.
  *
- * Die Dateien liegen im privaten Repo Steakakademie/kursinhalte (Ordner
+ * Die Dateien liegen im privaten Repo Steakakademie/Steakakademie-kursinhalte (Ordner
  * `dateien/`) und werden beim Build von scripts/kursinhalte-holen.mjs nach
  * `privat/kursdateien/` gelegt (gitignored). Ausgeliefert werden sie über
  * src/app/eigenregie/lernen/dateien/[datei]/route.ts hinter dem Kurszugang.

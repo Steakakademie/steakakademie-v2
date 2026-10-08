@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Kursinhalte holen — bezahlte Inhalte liegen im privaten Repo
- * Steakakademie/kursinhalte, nicht in diesem öffentlichen (Uwe, 08.10.2026).
+ * Steakakademie/Steakakademie-kursinhalte, nicht in diesem öffentlichen (Uwe, 08.10.2026).
  *
  * ANLASS: Das Repo steakakademie-v2 ist öffentlich. Bis 08.10.2026 lagen die
  * Eigenregie-Module, die Gründer-Schmiede und Diplom-Stufe 2 hier im Klartext —
@@ -34,7 +34,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const WURZEL = process.cwd();
-const REPO = 'Steakakademie/kursinhalte';
+const REPO = 'Steakakademie/Steakakademie-kursinhalte';
 const KLON = path.join(WURZEL, '.kursinhalte');
 const MARKE = '.aus-kursinhalte';
 

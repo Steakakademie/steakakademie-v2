@@ -345,7 +345,7 @@
   Tausende Scheinfehler (334 statt 3 Kontrastfehler am 04.10.2026). `pgrep -x
   next-server` findet den Prozess nicht (er heisst `next-server (v…)`).
 
-**Bezahlte Inhalte liegen im privaten Repo `Steakakademie/kursinhalte` (Uwe, 08.10.2026)**
+**Bezahlte Inhalte liegen im privaten Repo `Steakakademie/Steakakademie-kursinhalte` (Uwe, 08.10.2026)**
 - Dieses Repo ist öffentlich. Bis 08.10.2026 lagen Eigenregie, Gründer-Schmiede und
   Diplom-Stufe 2 hier im Klartext (in der Git-History bleiben diese Stände lesbar).
   Seitdem: `content/eigenregie`, `content/gruender-schmiede`,
