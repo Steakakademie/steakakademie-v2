@@ -6,7 +6,28 @@ import {
   gutscheinKaufbar,
   istGeschenkSaison,
   kanonischerCode,
+  sichtbareWertgutscheine,
+  WERTGUTSCHEINE,
+  WERTGUTSCHEINE_AKTIV,
 } from '@/lib/gutschein-products';
+
+describe('Wertgutscheine (T10): Schalter vor Checkout', () => {
+  const mitCheckout = WERTGUTSCHEINE.map((w) => ({ ...w, checkoutUrl: `https://checkout/${w.key}` }));
+
+  it('Schalter ist aus, bis T9 steht — dann erscheint nichts, auch mit Checkout', () => {
+    expect(WERTGUTSCHEINE_AKTIV).toBe(false);
+    expect(sichtbareWertgutscheine(false, mitCheckout)).toEqual([]);
+  });
+
+  it('mit Schalter erscheinen nur Werte mit Checkout', () => {
+    const teil = mitCheckout.map((w) => (w.wertEuro === 75 ? { ...w, checkoutUrl: undefined } : w));
+    expect(sichtbareWertgutscheine(true, teil).map((w) => w.wertEuro)).toEqual([25, 50, 100]);
+  });
+
+  it('Sortiment laut Uwe: 25, 50, 75, 100 €', () => {
+    expect(WERTGUTSCHEINE.map((w) => w.wertEuro)).toEqual([25, 50, 75, 100]);
+  });
+});
 
 /** Gutschein-Konzept T2/T5/T8 (09.10.2026): welche Karte erscheint wann. */
 

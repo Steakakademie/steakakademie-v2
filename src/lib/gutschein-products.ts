@@ -25,9 +25,9 @@
 // schlimmste Fall dieser Liste: Der Schenkende zahlt, der Beschenkte kann nichts
 // einlösen.
 //
-// Freie Wertgutscheine (25/50/75/100 €) stehen bewusst NICHT hier: Sie brauchen
-// ein Guthaben-Modell und die Antwort der Kanzlei zur Umsatzsteuer
-// (docs/gutschein-konzept-weihnachten-2026.md, T9).
+// Freie Wertgutscheine (25/50/75/100 €) stehen bewusst NICHT in GIFTABLE_PRODUCTS,
+// sondern unten in WERTGUTSCHEINE: Sie brauchen ein Guthaben-Modell und die
+// Antwort der Kanzlei zur Umsatzsteuer (docs/gutschein-konzept-weihnachten-2026.md, T9).
 
 export interface GiftableProduct {
   /** Eindeutiger Schlüssel der Karte — ein Kurs kann mehrere Gutscheine haben. */
@@ -84,6 +84,37 @@ export const GIFTABLE_PRODUCTS: GiftableProduct[] = [
  */
 export function kanonischerCode(code: string): string {
   return code.trim().replace(/ /g, '').toUpperCase();
+}
+
+// ── Freie Wertgutscheine (Sortiment Uwe, 09.10.2026) ─────────────────────────
+//
+// SCHALTER: bleibt false, bis T9 gebaut ist (Guthaben-Tabelle, Webhook-Zweig,
+// Einlöseseite mit Produktauswahl) UND Kanzlei/Digistore die Umsatzsteuer beim
+// Mehrzweckgutschein beantwortet haben. Grund: Der Webhook kennt heute keinen
+// Wertgutschein. Wäre die Karte mit gesetzter Checkout-Variable sichtbar, würde
+// ein Kauf als „unbekanntes Produkt" enden — der Käufer zahlt, ein Code
+// entsteht nicht. Die Checkout-Variable allein darf das also nicht freischalten.
+export const WERTGUTSCHEINE_AKTIV = false;
+
+export interface Wertgutschein {
+  key: string;
+  wertEuro: number;
+  checkoutUrl?: string;
+}
+
+export const WERTGUTSCHEINE: Wertgutschein[] = [
+  { key: 'wert-25',  wertEuro: 25,  checkoutUrl: process.env.NEXT_PUBLIC_DS_WERTGUTSCHEIN_25 },
+  { key: 'wert-50',  wertEuro: 50,  checkoutUrl: process.env.NEXT_PUBLIC_DS_WERTGUTSCHEIN_50 },
+  { key: 'wert-75',  wertEuro: 75,  checkoutUrl: process.env.NEXT_PUBLIC_DS_WERTGUTSCHEIN_75 },
+  { key: 'wert-100', wertEuro: 100, checkoutUrl: process.env.NEXT_PUBLIC_DS_WERTGUTSCHEIN_100 },
+];
+
+/** Wertgutscheine, die /gutschein zeigt: nur bei aktivem Schalter und gesetztem Checkout. */
+export function sichtbareWertgutscheine(
+  aktiv: boolean = WERTGUTSCHEINE_AKTIV,
+  liste: Wertgutschein[] = WERTGUTSCHEINE,
+): Wertgutschein[] {
+  return aktiv ? liste.filter((w) => Boolean(w.checkoutUrl)) : [];
 }
 
 /** Karten für /gutschein: alles außer Einträgen, die erst mit Checkout erscheinen dürfen. */
