@@ -1,0 +1,75 @@
+<mjml lang="de">
+  <!--
+    Steakakademie · Loops-Vorlage Bestellbestätigung Urkunde
+    (LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID — in Vercel noch NICHT gesetzt;
+    erst mit ihr und GELATO_API_KEY ist die Urkunde bestellbar).
+    Pflicht nach § 312i Abs. 1 Nr. 3 BGB. Gesendet von bestaetigeBestellung().
+    Variablen: stufe_name, name_auf_urkunde, preis, bestell_id, adresse, widerruf_hinweis
+    Betreff in Loops: Deine Urkunde ist bestellt
+    Vorschautext:     Bitte prüf den Namen, er wird genau so gedruckt.
+    Design: docs/loops-mailvorlagen.md · Stand 09.10.2026
+  -->
+  <mj-head>
+    <mj-title>Deine Urkunde ist bestellt</mj-title>
+    <mj-preview>Bitte prüf den Namen, er wird genau so gedruckt.</mj-preview>
+    <mj-font name="Playfair Display" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;display=swap" />
+    <mj-font name="DM Sans" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&amp;display=swap" />
+    <mj-attributes>
+      <mj-all font-family="'DM Sans', Arial, Helvetica, sans-serif" />
+      <mj-text color="#2A1D14" font-size="16px" line-height="1.6" padding="0 0 16px 0" />
+    </mj-attributes>
+    <mj-style>
+      a { color: #A86E1C; }
+      .h1 div { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important; }
+      .kv td { padding: 3px 0; vertical-align: top; }
+    </mj-style>
+    <mj-raw><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"></mj-raw>
+  </mj-head>
+  <mj-body background-color="#EFEAE3" width="600px">
+
+    <mj-section background-color="#17100B" padding="16px 28px">
+      <mj-group>
+        <mj-column width="15%" vertical-align="middle">
+          <mj-image src="img/logo.png" alt="Steakakademie" width="48px" height="48px" align="left" padding="0" href="https://steakakademie.de" />
+        </mj-column>
+        <mj-column width="85%" vertical-align="middle">
+          <mj-text padding="0 0 0 4px" color="#E0A54A" font-family="'Playfair Display', Georgia, serif" font-size="17px" letter-spacing="2px" line-height="1.2">STEAKAKADEMIE<br><span style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:2px;color:#C4A882;">FEUER · WISSEN · GENUSS</span></mj-text>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+
+    <mj-section background-color="#FFFFFF" padding="30px 28px 6px 28px">
+      <mj-column>
+        <mj-text font-size="11.5px" font-weight="700" letter-spacing="2px" color="#A86E1C" padding="0 0 8px 0">BESTELLUNG EINGEGANGEN</mj-text>
+        <mj-text css-class="h1" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="26px" line-height="1.25" font-weight="700" padding="0 0 14px 0">Deine gedruckte Urkunde</mj-text>
+        <mj-text>Danke, deine Bestellung ist bei uns. Bitte prüf die Angaben. Der Name wird genau so gedruckt.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#FFFFFF" padding="0 28px">
+      <mj-column background-color="#FBF6EE" border="1px solid #E7DED2" padding="14px 18px">
+        <mj-table css-class="kv" font-size="14.5px" line-height="1.5" color="#2A1D14" padding="0" cellpadding="0">
+          <tr><td style="color:#6E5B4C;width:120px;">Urkunde</td><td>{DATA_VARIABLE:stufe_name}</td></tr>
+          <tr><td style="color:#6E5B4C;">Name</td><td><strong>{DATA_VARIABLE:name_auf_urkunde}</strong></td></tr>
+          <tr><td style="color:#6E5B4C;">Preis</td><td>{DATA_VARIABLE:preis}</td></tr>
+          <tr><td style="color:#6E5B4C;">Lieferung an</td><td>{DATA_VARIABLE:adresse}</td></tr>
+          <tr><td style="color:#6E5B4C;">Bestell-ID</td><td style="font-family:'Courier New',Courier,monospace;font-size:12.5px;word-break:break-all;">{DATA_VARIABLE:bestell_id}</td></tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#FFFFFF" padding="20px 28px 10px 28px">
+      <mj-column>
+        <mj-text>Wir prüfen die Angaben und geben die Urkunde dann in den Druck. Ist etwas falsch, antworte einfach auf diese Mail.</mj-text>
+        <mj-text font-size="13.5px" color="#6E5B4C">{DATA_VARIABLE:widerruf_hinweis}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#F5F1EB" padding="18px 28px 20px 28px">
+      <mj-column>
+        <mj-text font-size="12.5px" color="#6E5B4C" line-height="1.6" padding="0">Steakakademie · Uwe Yendell · Wuppertal<br>Fragen? <a href="mailto:pitmaster@steakakademie.de" style="color:#6E5B4C;">pitmaster@steakakademie.de</a> · <a href="https://steakakademie.de/impressum" style="color:#6E5B4C;">Impressum</a> · <a href="https://steakakademie.de/agb" style="color:#6E5B4C;">AGB</a></mj-text>
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
