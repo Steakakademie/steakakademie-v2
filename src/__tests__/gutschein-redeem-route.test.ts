@@ -70,17 +70,14 @@ describe('Gutschein einlösen', () => {
     expect(welt.rpc).toHaveLength(0);
   });
 
-  it('Mein Protokoll: Rückfall-Gutschrift mit kanonischem Code als Referenz (wie redeem_voucher)', async () => {
+  it('Mein Protokoll: Gutschrift kommt aus redeem_voucher, die Route schreibt nichts selbst', async () => {
+    // Seit Migration 20261009170338 (angewendet 09.10.2026) in derselben
+    // Transaktion wie die Einlösung — ein zweiter Schreibschritt hier könnte
+    // scheitern, nachdem der Gutschein schon verbraucht ist.
     const res = await POST(anfrage('  sa-abcd-efgh '));
     expect(await res.json()).toMatchObject({ ok: true, redirect: '/mein-protokoll/fragebogen' });
     expect(welt.rpc[0]).toMatchObject({ name: 'redeem_voucher', p_user_id: 'user-1' });
-    expect(welt.upserts).toEqual([
-      {
-        tabelle: 'protokoll_gutschriften',
-        zeile: { user_id: 'user-1', quelle: 'gutschein', referenz: 'SA-ABCD-EFGH', anzahl: 1 },
-        opts: { onConflict: 'quelle,referenz', ignoreDuplicates: true },
-      },
-    ]);
+    expect(welt.upserts).toHaveLength(0);
   });
 
   it('Steak-Beichte: keine Protokoll-Gutschrift, weiter zur Diagnose', async () => {
