@@ -54,6 +54,11 @@ jobs:
       - name: Dependencies installieren
         run: npm ci
 
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       # Bericht nach runner.temp statt ins Repo — kein .gitignore-Eintrag noetig.
       - name: Vitest
         run: npx vitest run --reporter=default --reporter=json --outputFile.json="$RUNNER_TEMP/vitest-results.json"
