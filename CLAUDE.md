@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 08.10.2026.
+> Letzte Pflege: 09.10.2026.
 
 ---
 
@@ -864,13 +864,26 @@ Analytics & Data · CRM & Monetization.
 
 ## 5. Kritische Blocker (Umsatz zuerst) — Director-Fokus
 
-1. **Ribeye Pillar Page `/cuts/ribeye`** (18k Suchen/Monat) — höchster Traffic-Hebel,
-   erster End-to-End-Lauf der neuen Pipeline (SEO→GEO→Content→Compliance).
-2. **Monetarisierung verdrahten:** Digistore24 Danke-/Webhook→Supabase, Diplom Bronze live.
-3. **Community:** Supabase Auth (OAuth + Magic Link) ist **live** — offen ist nur
+**Neu gereiht nach Search-Console-Daten (Uwe, 09.10.2026: „Ja, bau die Hackfleisch-Seite
+und ändere §5").** Grundlage: GSC-Export Websuche, 6 Monate, 43.987 Impressionen / 217 Klicks;
+Auswertung in `steakakademie-audit/SEO-AUDIT-2026-10-08.md`, Abschnitt GSC. Traffic-Prioritäten
+richten sich ab jetzt nach gemessener Nachfrage, nicht nach geschätzten Suchvolumen.
+
+1. **Kerntemperatur-Nachfrage abholen: `/kerntemperatur-hackfleisch` + `/temperatur-guide`.**
+   59 % der ausgewiesenen Impressionen (9.307) kommen aus Hackfleisch-/Frikadellen-Anfragen,
+   Position ~9, sechs Klicks; `/temperatur-guide` trägt 84 % aller Impressionen bei 0,2 % CTR.
+   Erst die Antwortseite, dann CTR-Arbeit am Guide (Titel/Snippet), messen nach 4 Wochen.
+2. **Ribeye Pillar `/cuts/ribeye` — erst Indexierung klären.** Null Impressionen in sechs
+   Monaten (GSC 09.10.2026); die früher hier genannten „18k Suchen/Monat" waren eine
+   Schätzung ohne Messung. Erst URL-Prüfung in der GSC (indexiert ja/nein), dann entscheiden,
+   ob Ranking- oder Indexierungsproblem — vorher keine weitere Arbeit an der Seite.
+3. **Monetarisierung verdrahten:** Digistore24 Danke-/Webhook→Supabase, Diplom Bronze live.
+   (Gemessen: „grillmeister ausbildung" Position 4,4 · `/diplome` 6,9 % CTR — die Geldseite
+   wird gefunden.)
+4. **Community:** Supabase Auth (OAuth + Magic Link) ist **live** — offen ist nur
    noch der Community-Teil.
-4. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
-5. **Wortmarke „Steakakademie":** AZ 3020262290701 — **Gebühr gezahlt** (Uwe, bestätigt 20.09.2026).
+5. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
+6. **Wortmarke „Steakakademie":** AZ 3020262290701 — **Gebühr gezahlt** (Uwe, bestätigt 20.09.2026).
    Damit ist die Frist ~27.08.2026 (KAN-17) erledigt; die Prioritaet vom 27.05.2026 steht.
 
 **Manuelle Restpunkte, übernommen aus den gelöschten `STATUS.md`/`ROADMAP.md`

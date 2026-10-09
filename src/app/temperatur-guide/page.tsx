@@ -368,6 +368,16 @@ export default function TemperaturGuidePage() {
                 Oberfläche) als rare unbedenklich ist, wird beim Hack zur Gesundheitsgefahr. Diese Regel gilt auch
                 für selbst gemischte Burger-Blends mit Dry-Aged-Einlagen.
               </p>
+              {/* SEO 09.10.2026: 59 % der GSC-Impressionen dieser Seite kamen aus
+                  Hackfleisch-/Frikadellen-Anfragen — sie bekommen eine eigene Antwortseite. */}
+              <p className="mt-4">
+                <Link
+                  href="/kerntemperatur-hackfleisch"
+                  className="font-sans text-sm font-semibold text-brand-fire underline underline-offset-2 hover:no-underline"
+                >
+                  Kerntemperatur Hackfleisch: Frikadellen, Buletten, Hackbraten, Burger und Geflügelhack im Detail →
+                </Link>
+              </p>
             </div>
           </section>
 
@@ -1287,6 +1297,7 @@ export default function TemperaturGuidePage() {
                 { label: 'Pulled Pork — Schritt für Schritt', href: '/cuts/pulled-pork' },
                 { label: 'Maillard-Reaktion erklärt', href: '/wissen' },
                 { label: 'Dry-Aging & Reifung', href: '/aging' },
+                { label: 'Kerntemperatur Hackfleisch & Frikadellen', href: '/kerntemperatur-hackfleisch' },
                 { label: 'Ribeye: Marmorierung & IMF', href: '/cuts/ribeye' },
                 { label: 'Sous Vide Grundlagen', href: '/methoden' },
                 { label: 'Diplom Bronze: Grundlagen', href: '/diplome' },

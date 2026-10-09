@@ -197,17 +197,20 @@ Mail 1 liefert den Spickzettel-Link (03.10.2026).
 `/prive` und `/usa-expedition` stehen auf „in Vorbereitung" (keine Preise, keine Buchung) ·
 VIP: **eine** Warteliste (`/vip#warteliste`, Loops-Gruppe `vip_warteliste`), Bausteine
 „geplant", kein Startdatum.
-*09.10.2026 (SEO-Audit, `steakakademie-audit/SEO-AUDIT-2026-10-08.md`):* Search Console
-nicht verifiziert (Bing-Import „keine Daten") · 0 Backlinks seit 13 Wochen · nur 3 Cut-Hubs
-(`/cuts/tomahawk`, `/cuts/picanha` 404, obwohl der Cut-Atlas sie verspricht) ·
-Startseite Lighthouse mobil 71 / LCP 5,2 s (JS, kein Quick Win).
+*09.10.2026 (SEO-Audit, `steakakademie-audit/SEO-AUDIT-2026-10-08.md`):* 0 Backlinks seit
+13 Wochen · nur 3 Cut-Hubs (`/cuts/tomahawk`, `/cuts/picanha` 404, obwohl der Cut-Atlas sie
+verspricht) · Startseite Lighthouse mobil 71 / LCP 5,2 s (JS, kein Quick Win) ·
+Search Console existiert (`sc-domain:steakakademie.de`, Korrektur zum Audit), Leistungsdaten
+werden aber noch nirgends ausgewertet.
 
 **Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
-mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).
-*09.10.2026:* Vier SEO-PRs mergen — #353 Technik (noindex Bezahl-Lektionen, Sitemap-lastmod,
-Titel-Helfer), #354 Ribeye-Pillar (Entrecôte/Rostbraten, bitte fachlich gegenlesen),
-#355 Glossar: 25 Permutationen → 301 aus `taxonomie.yaml`, #356 vier Hub-Dubletten
-(stacked auf #355). Davor **Uwe: Search Console per DNS-TXT anlegen** (5 Min, 0 €).
+mit 0 € Startkosten (CLAUDE.md §5, Blocker 5).
+*09.10.2026:* SEO-PRs #353–#356 sind gemergt und live geprüft (29 Glossar-301, noindex,
+Sitemap 403 URLs mit lastmod); Sitemap in der Search Console neu eingereicht. Jetzt:
+**Uwe: GSC-Leistungsbericht (Suchanfragen + Seiten, 3 Monate) als CSV exportieren** — damit
+werden die offenen Glossar-Cluster und die Reihenfolge der Cut-Hubs auf Zahlen gestellt;
+in 1–2 Wochen unter „Seiten → Nicht indexiert“ die 29 URLs als „Seite mit Weiterleitung“
+gegenprüfen. Ribeye-Nomenklatur (#354) fachlich gegenlesen.
 *07.09.:* Verteilplan für Reel 1 liegt (`Projects/Steakakademie/Marketing/VERTEILPLAN-Reel-1-2026-09-06.md`,
 0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
