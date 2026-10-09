@@ -1,6 +1,7 @@
 # AGB § 5a — Entwurf für freie Wertgutscheine
 
-Stand 09.10.2026. **Entwurf, nicht live.** Gutschein-Konzept T10
+Stand 09.10.2026. **Entwurf, nicht live — Wertgutscheine auf 2027 verschoben
+(Uwe, 09.10.2026).** Der Text bleibt als Vorlage für T9 liegen. Gutschein-Konzept T10
 (`docs/gutschein-konzept-weihnachten-2026.md`). Die Kanzlei prüft den Text,
 bevor er in `src/app/agb/page.tsx` übernommen wird. Übernommen wird er erst
 zusammen mit T9 (Wertgutscheine kaufbar), nicht vorher — eine AGB-Regel für ein

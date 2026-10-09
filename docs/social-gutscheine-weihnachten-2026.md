@@ -18,16 +18,15 @@ Reels zwei kurze Skripte am Ende.
 4. **Ratgeber veröffentlicht?** Post 1 verweist auf
    `/artikel/geschenke-fuer-grillfans` (Entwurf, geplant 02.11.).
 
-## Werbekennzeichnung — bitte entscheiden
+## Werbekennzeichnung — entschieden 09.10.2026
 
-`docs/instagram-erste-posts.md` hält fest: Ist ein Post **werblich**, muss
-„Werbung" oder „Anzeige" schon **im Bild** sichtbar sein, nicht nur in der
-Caption (LG Köln, 12.05.2026). Posts 2 bis 5 bewerben eigene Produkte. Ob das
-bei einem eigenen Unternehmenskonto, dessen kommerzieller Zweck erkennbar ist,
-nötig ist, ist eine Rechtsfrage — **Vorschlag bis zur Klärung: „Werbung" klein
-oben links ins Bild** und als erstes Wort der Caption. Post 1 ist redaktionell
-(Ratgeber), nennt die Gutscheine aber; dort ebenfalls kennzeichnen, solange
-die Frage offen ist. Passt zur Kanzlei-Liste (#107).
+**Alle fünf Posts tragen „Werbung" klein oben links im Bild und als erstes Wort
+der Caption** (Entscheidung Uwe). Hintergrund: `docs/instagram-erste-posts.md`
+hält fest, dass ein werblicher Post „Werbung" oder „Anzeige" schon im Bild
+zeigen muss (LG Köln, 12.05.2026). Beim eigenen Firmenkonto mit eigenen
+Produkten ist der kommerzielle Zweck zwar erkennbar (§ 5a Abs. 4 UWG), die
+Kennzeichnung kostet aber nichts und nimmt das Restrisiko raus — eine
+Kanzlei-Prüfung entfällt damit (Konzept, Abschnitt „Rechtsfragen").
 
 ## Zeitplan
 

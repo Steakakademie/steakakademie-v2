@@ -19,7 +19,7 @@ Mails an die Liste des Wissens-Briefs). **Versand nur durch Uwe** in Loops
    ein Segment über die Kontakt-Eigenschaften, die
    `src/app/api/newsletter/confirm/route.ts` setzt: **`doiConfirmedAt` gesetzt
    UND `consentVersion` = `2026-08-28-v2`**. Kontakte ohne Version oder mit v1 bekommen diese Mails
-   nicht. Ob das so trägt, gehört auf die Kanzlei-Liste (#107).
+   nicht (Einschätzung im Konzept, Abschnitt „Rechtsfragen").
 4. **Fußzeile:** Abmeldelink und Impressum-Angaben kommen aus der
    Loops-Vorlage — einmal in der Vorschau nachsehen.
 5. **Kennzeichnung:** Werbung muss als solche erkennbar sein (§ 6 Abs. 1 DDG).
@@ -80,8 +80,7 @@ Der Code kommt per E-Mail, dazu eine Geschenkseite zum Ausdrucken.
 
 Nächste Woche geht es wieder ums Grillen. Versprochen.
 
-Marco
-*für die Steakakademie*
+Die Steakakademie
 
 ---
 
@@ -112,8 +111,7 @@ jeder Gutschein bis zum 31. Dezember 2029.
 
 Frohe Feiertage — und eine gute Glut im neuen Jahr.
 
-Marco
-*für die Steakakademie*
+Die Steakakademie
 
 ---
 
@@ -121,14 +119,13 @@ Marco
 
 - **Grillmeister-Diplom kaufbar?** Dann in beiden Mails als vierten Gutschein
   aufnehmen, mit dem dann gültigen Preis.
-- **Wertgutscheine (25/50/75/100 €) kaufbar** (T9)? Dann in Mail 2 ergänzen:
-  „Oder ein fester Betrag — die beschenkte Person sucht selbst aus."
+- **Wertgutscheine** sind auf 2027 verschoben (Uwe, 09.10.2026) und kommen in
+  diesen Mails nicht vor.
 - **Gültigkeit:** „bis zum 31. Dezember 2029" stimmt für jeden 2026 gekauften
   Gutschein (Migration `20261009170345`). Für Mails ab 2027 Jahr anpassen.
-- **Absender Marco:** KI-Persona. Ob die Mail-Vorlage den Hinweis
-  „KI-Persona · fachlich verantwortet von Uwe Yendell" trägt wie die
-  Persona-Seiten, bitte in der Loops-Vorlage prüfen (CLAUDE.md §2, Personas).
-  Sonst als Absender „Die Steakakademie" nehmen.
+- **Absender:** „Die Steakakademie", nicht die KI-Persona Marco (Entscheidung
+  Uwe, 09.10.2026). Eine Persona unter einer Werbemail kann Empfänger über den
+  Absender täuschen. Auch den Absendernamen in der Loops-Vorlage so setzen.
 
 ## Messen
 
