@@ -38,6 +38,7 @@ export const dynamic  = 'force-dynamic';
 import { timingSafeEqual } from 'node:crypto';
 import * as Sentry from '@sentry/nextjs';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { gueltigBisText } from '@/lib/gutschein-gueltigkeit';
 import { protokolleFuerBetrag } from '@/lib/mein-protokoll/guthaben';
 import { digistoreSignature } from '@/lib/digistore/signature';
 
@@ -660,8 +661,17 @@ async function handleVoucherProduct(
       });
       if (cErr) throw new Error(`create_voucher failed: ${cErr.message}`);
 
+      // Gültigkeit für die Mail aus der Datenbank (dieselbe Quelle wie die
+      // Geschenkseite). Lesefehler stoppen den Versand nicht: gueltigBisText
+      // rechnet die AGB-Regel dann selbst nach.
+      const { data: voucherRow } = await supabase
+        .from('vouchers')
+        .select('valid_until')
+        .eq('code', code as string)
+        .maybeSingle();
+
       // Käufer bekommt den Gutschein (NICHT den Magic-Link — er soll ihn verschenken)
-      await sendVoucherEmail(email, code as string, courseTitle);
+      await sendVoucherEmail(email, code as string, courseTitle, gueltigBisText(voucherRow?.valid_until ?? null));
 
       await supabase
         .from('digistore_orders')
@@ -707,7 +717,7 @@ async function handleVoucherProduct(
   }
 }
 
-async function sendVoucherEmail(email: string, code: string, courseTitle: string | null) {
+async function sendVoucherEmail(email: string, code: string, courseTitle: string | null, gueltigBis: string) {
   const apiKey     = process.env.LOOPS_API_KEY;
   const templateId = process.env.LOOPS_VOUCHER_TEMPLATE_ID;
   if (!apiKey || !templateId) {
@@ -724,7 +734,9 @@ async function sendVoucherEmail(email: string, code: string, courseTitle: string
       dataVariables: {
         voucher_code:  code,
         voucher_url:   voucherUrl,
-        course_title:  courseTitle ?? 'deinem Geschenk',
+        // Steht in Betreff und Überschrift hinter „Dein Geschenkgutschein:“.
+        course_title:  courseTitle ?? 'Steakakademie',
+        gueltig_bis:   gueltigBis,
       },
     }),
   });
@@ -810,7 +822,8 @@ async function sendMagicLink(
       email,
       dataVariables: {
         magic_link:   magicLink,
-        course_title: courseTitle ?? 'deinem Kurs',
+        // Steht in der Mail hinter „Freigeschaltet:“.
+        course_title: courseTitle ?? 'dein Produkt',
       },
     }),
   });
