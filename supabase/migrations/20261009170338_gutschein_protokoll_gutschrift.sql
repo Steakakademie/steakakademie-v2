@@ -2,11 +2,11 @@
 -- Geschenkgutschein „Mein Protokoll": Gutschrift beim Einlösen und
 -- Gegenbuchung bei Rückgabe — in derselben Transaktion wie der Gutschein.
 --
--- NOCH NICHT ANGEWENDET (Stand 09.10.2026). Anwenden nur mit Freigabe Uwe;
--- danach den Dateinamen auf die Ledger-Version setzen (Regel aus PR #285).
--- Reihenfolge zum Deploy egal: /api/gutschein/redeem schreibt die Gutschrift
--- bis dahin selbst (idempotent über UNIQUE (quelle, referenz), dieselbe
--- Referenz wie hier).
+-- ANGEWENDET am 09.10.2026 (Freigabe Uwe im Chat: „Ja, Migrationen anwenden"),
+-- per Supabase-MCP, Ledger-Version 20261009170338 — der Dateiname entspricht ihr
+-- (Regel aus PR #285; vorher 20261009180000). Nachgeprüft auf der Live-DB:
+-- beide Funktionen enthalten die neuen Zweige, EXECUTE nur für service_role,
+-- vouchers-Bestand 0. Der Rückfall in /api/gutschein/redeem ist damit entfernt.
 --
 -- Anlass (Konzept docs/gutschein-konzept-weihnachten-2026.md, T3 + T4):
 --   T3  Die Route rief erst redeem_voucher (Gutschein → 'redeemed', Zugang)

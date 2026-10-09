@@ -129,8 +129,8 @@ Digistore-Support beantworten. Bis dahin wird nichts gebaut, was Geld annimmt.
 |---|---|---|
 | T1 | ✓ 09.10.: Checkliste auf den Stand gebracht (Datum, IPN statt Token-URL, Sichtbarkeit, Sortiment) | Sonst entsteht ein Produkt, das kassiert und keinen Code liefert |
 | T2 | G2: zweite Steak-Beichte-Karte in `GIFTABLE_PRODUCTS` (eigener Schlüssel statt `courseSlug`) | Die Liste ist heute nach `courseSlug` geschlüsselt |
-| T3 | Mein-Protokoll-Gutschrift beim Einlösen in dieselbe Transaktion wie `redeem_voucher` | Scheitert der Eintrag heute, ist der Gutschein verbraucht und das Guthaben fehlt (nur Log) |
-| T4 | Rückgabe eines eingelösten Mein-Protokoll-Gutscheins bucht auch die Gutschrift zurück | Gleiches Verhalten wie beim Direktkauf |
+| T3 | ✓ 09.10. (PR #362, Migration `20261009170338` angewendet): Mein-Protokoll-Gutschrift beim Einlösen in dieselbe Transaktion wie `redeem_voucher` | Scheitert der Eintrag heute, ist der Gutschein verbraucht und das Guthaben fehlt (nur Log) |
+| T4 | ✓ 09.10. (dieselbe Migration): Rückgabe eines eingelösten Mein-Protokoll-Gutscheins bucht auch die Gutschrift zurück | Gleiches Verhalten wie beim Direktkauf |
 | T5 | G4: Diplom in `GIFTABLE_PRODUCTS` und `NEXT_BY_SLUG` (`/diplome/lernen`), sobald der Direktkauf läuft | Siehe auch Cockpit #111 |
 | T6 | Zuordnungs-Migration vorbereiten (Platzhalter für die Digistore-IDs) | Statt SQL im Editor; gleicher Weg wie alle Migrationen |
 | T7 | Tests für Gutschein-Kauf und -Einlösung | Webhook-Pfad für Gutscheine ist heute nicht eigens getestet |
@@ -163,8 +163,8 @@ Digistore-Support beantworten. Bis dahin wird nichts gebaut, was Geld annimmt.
 4. Gültigkeit: **Am 09.10. angeglichen.** AGB § 5a nannten schon das Jahresende
    (§§ 195, 199 BGB), Webseite und Datenbank rechneten „3 Jahre ab Kauf" — ein
    Gutschein wäre vor dem Ende der AGB-Frist abgelaufen. Jetzt gilt überall
-   „bis 31.12. des dritten Folgejahres" (Migration `20261009200000`, noch nicht
-   angewendet). Frage an die Kanzlei nur noch: Ist die Formulierung so richtig?
+   „bis 31.12. des dritten Folgejahres" (Migration `20261009170345`, angewendet
+   09.10.2026). Frage an die Kanzlei nur noch: Ist die Formulierung so richtig?
    Entwurf: `docs/agb-5a-wertgutscheine-entwurf.md`.
 5. Was gilt, wenn ein Produkt eingestellt wird, auf das noch Gutscheine
    ausgegeben sind (Erstattung, Ersatzprodukt)?

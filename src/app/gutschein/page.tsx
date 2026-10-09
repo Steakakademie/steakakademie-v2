@@ -9,7 +9,7 @@ import { Gift, Mail, Flame, Ticket } from 'lucide-react';
 // Gutschein-Konzept T10 (09.10.2026): Title und Description auf die Suchanfragen
 // der Geschenk-Saison („Geschenk für Griller", „Grill Gutschein"), dazu eine FAQ
 // mit FAQPage-Schema. Gültigkeit seit 09.10.2026 wie AGB § 5a: bis Jahresende
-// des dritten Folgejahres (Migration 20261009200000) — vorher stand hier
+// des dritten Folgejahres (Migration 20261009170345) — vorher stand hier
 // „3 Jahre ab Kauf", die AGB nannten das Jahresende, die Datenbank rechnete ab Kauf.
 export const metadata: Metadata = {
   title: 'Geschenkgutscheine für Grillfans',

@@ -8,7 +8,7 @@ Produkt, das es nicht gibt, verwirrt nur.
 
 Der heutige § 5a regelt nur Produktgutscheine. Der Entwurf teilt ihn in zwei
 Absätze; Absatz 1 ist der heutige Text, nur die Gültigkeit ist an den Code
-angeglichen (Migration `20261009200000`).
+angeglichen (Migration `20261009170345`).
 
 ---
 
