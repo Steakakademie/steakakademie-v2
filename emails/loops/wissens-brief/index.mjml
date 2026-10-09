@@ -1,0 +1,82 @@
+<mjml lang="de">
+  <!--
+    Steakakademie · Loops-Kampagnenvorlage Wissens-Brief
+    Für jede Ausgabe: Texte und Links in den mit ÄNDERN markierten Abschnitten
+    sowie Vorschautext und Ausgabe im Kopf ersetzen, Datei als
+    ZIP neu hochladen (Anleitung docs/loops-mailvorlagen.md). Der Inhalt unten ist
+    ein Beispiel aus dem Artikel vom 09.10.2026; die Ausgabennummer ist ausgedacht.
+    Pflicht in Kampagnen: {unsubscribe_link}. Empfänger nur mit Einwilligung
+    2026-08-28-v2 + doiConfirmedAt (docs/mail-gutscheine-weihnachten-2026.md).
+    Absender: „Die Steakakademie" (Entscheidung Uwe, 09.10.2026).
+    Design: docs/loops-mailvorlagen.md · Stand 09.10.2026
+  -->
+  <mj-head>
+    <mj-title>Wissens-Brief der Steakakademie</mj-title>
+    <!-- ÄNDERN: Vorschautext -->
+    <mj-preview>Was beim Texas Crutch gemessen ist und was nicht.</mj-preview>
+    <mj-font name="Playfair Display" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;display=swap" />
+    <mj-font name="DM Sans" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&amp;display=swap" />
+    <mj-attributes>
+      <mj-all font-family="'DM Sans', Arial, Helvetica, sans-serif" />
+      <mj-text color="#2A1D14" font-size="16px" line-height="1.6" padding="0 0 16px 0" />
+      <mj-button background-color="#C8882A" color="#17100B" font-weight="700" font-size="16px" border-radius="4px" inner-padding="13px 24px" align="left" padding="4px 0 20px 0" />
+    </mj-attributes>
+    <mj-style>
+      a { color: #A86E1C; }
+      .h1 div, .h3 div { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important; }
+    </mj-style>
+    <mj-raw><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"></mj-raw>
+  </mj-head>
+  <mj-body background-color="#EFEAE3" width="600px">
+
+    <!-- ÄNDERN: Ausgabe und Monat im Kopfband -->
+    <mj-section background-color="#17100B" padding="16px 28px">
+      <mj-group>
+        <mj-column width="15%" vertical-align="middle">
+          <mj-image src="img/logo.png" alt="Steakakademie" width="48px" height="48px" align="left" padding="0" href="https://steakakademie.de" />
+        </mj-column>
+        <mj-column width="85%" vertical-align="middle">
+          <mj-text padding="0 0 0 4px" color="#E0A54A" font-family="'Playfair Display', Georgia, serif" font-size="17px" letter-spacing="2px" line-height="1.2">WISSENS-BRIEF<br><span style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:2px;color:#C4A882;">STEAKAKADEMIE · AUSGABE 12 · OKTOBER 2026</span></mj-text>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+
+    <!-- ÄNDERN: Hauptbeitrag (Überschrift, zwei Sätze, Link am Button) -->
+    <mj-section background-color="#FFFFFF" padding="30px 28px 4px 28px">
+      <mj-column>
+        <mj-text font-size="11.5px" font-weight="700" letter-spacing="2px" color="#A86E1C" padding="0 0 8px 0">DIESE WOCHE</mj-text>
+        <mj-text css-class="h1" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="26px" line-height="1.25" font-weight="700" padding="0 0 14px 0">Texas Crutch: Folie, Butcher Paper oder gar nichts?</mj-text>
+        <mj-text>Einwickeln spart Stunden, das ist gemessen. Alles andere, was über Folie und Papier erzählt wird, ist Erfahrung oder Erfindung. Wir haben sortiert, was davon welches ist.</mj-text>
+        <mj-button href="https://steakakademie.de/artikel/texas-crutch-folie-oder-butcher-paper">Weiterlesen</mj-button>
+        <mj-divider border-color="#E7DED2" border-width="1px" padding="0 0 16px 0" />
+      </mj-column>
+    </mj-section>
+
+    <!-- ÄNDERN: zwei kurze Hinweise (Titel, Link, ein Satz) -->
+    <mj-section background-color="#FFFFFF" padding="0 28px">
+      <mj-column>
+        <mj-text css-class="h3" font-family="'Playfair Display', Georgia, serif" font-size="18px" font-weight="700" line-height="1.3" padding="0 0 4px 0"><a href="https://steakakademie.de/artikel/stall-plateauphase-beim-smoken" style="color:#2A1D14;text-decoration:none;">Stall: Warum das Brisket stehen bleibt</a></mj-text>
+        <mj-text font-size="14px" color="#6E5B4C" padding="0 0 14px 0">Verdunstung kühlt das Fleisch, und so überbrückst du die Stunden.</mj-text>
+        <mj-text css-class="h3" font-family="'Playfair Display', Georgia, serif" font-size="18px" font-weight="700" line-height="1.3" padding="0 0 4px 0"><a href="https://steakakademie.de/kerntemperatur-spickzettel" style="color:#2A1D14;text-decoration:none;">Kerntemperatur-Spickzettel</a></mj-text>
+        <mj-text font-size="14px" color="#6E5B4C" padding="0 0 16px 0">Alle Garstufen auf einer Seite, kostenlos zum Ausdrucken.</mj-text>
+        <mj-divider border-color="#E7DED2" border-width="1px" padding="0 0 16px 0" />
+      </mj-column>
+    </mj-section>
+
+    <!-- ÄNDERN: höchstens ein Angebot, als Werbung gekennzeichnet. Ohne Angebot: Abschnitt löschen. -->
+    <mj-section background-color="#FFFFFF" padding="0 28px 12px 28px">
+      <mj-column>
+        <mj-text font-size="10.5px" font-weight="700" letter-spacing="2px" color="#6E5B4C" padding="0 0 6px 0"><span style="border:1px solid #E7DED2;padding:1px 6px;">WERBUNG</span></mj-text>
+        <mj-text css-class="h3" font-family="'Playfair Display', Georgia, serif" font-size="18px" font-weight="700" line-height="1.3" padding="0 0 4px 0"><a href="https://steakakademie.de/mein-protokoll" style="color:#2A1D14;text-decoration:none;">Mein Protokoll: dein Plan für acht Wochen</a></mj-text>
+        <mj-text font-size="14px" color="#6E5B4C" padding="0 0 8px 0">Abgestimmt auf Grill, Erfahrung und Ziel. 19 €.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#F5F1EB" padding="18px 28px 20px 28px">
+      <mj-column>
+        <mj-text font-size="12.5px" color="#6E5B4C" line-height="1.6" padding="0">Du bekommst diese Mail, weil du den Wissens-Brief bestellt hast. <a href="{unsubscribe_link}" style="color:#6E5B4C;">Abmelden</a><br>Steakakademie · Uwe Yendell · Wuppertal · <a href="https://steakakademie.de/impressum" style="color:#6E5B4C;">Impressum</a> · <a href="https://steakakademie.de/datenschutz" style="color:#6E5B4C;">Datenschutz</a></mj-text>
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
