@@ -4,15 +4,20 @@ name: Glossar wachsen lassen
 # Definitionen und legt sie als PR vor (der Build-Lauf erzeugt sie sonst nur
 # ephemer pro Deploy).
 #
-# PAUSIERT seit 03.10.2026 — der tägliche Zeitplan (`schedule`) ist entfernt,
-# der Handstart bleibt. Grund: Vorrat leer; pausiert bis zur Entscheidung über
-# die Glossar-Konsolidierung, docs/glossar-konsolidierung-kandidaten.md.
-# Der Agent lief seit dem 19.09.2026 täglich grün, ohne einen Begriff zu
-# liefern. Der zugehörige Eintrag in data/ops-heartbeat.json ist im selben Zug
-# entfernt — wer den Zeitplan wieder einschaltet, trägt ihn dort wieder ein
-# (CLAUDE.md §2 Regel 10), sonst kann der Agent erneut unbemerkt leer laufen.
+# WIEDER AUTOMATISCH seit 08.10.2026 (Uwe: wichtig fuer SEO) — woechentlich,
+# mittwochs 03:00 UTC. Vorher bis 03.10.2026 taeglich; pausiert wurde der Agent,
+# weil er 14 Tage gruen ohne einen Begriff lief (Vorrat leer, kein Defekt).
+# Diesmal steht die Kontrolle daneben: data/ops-heartbeat.json fuehrt »Glossar«
+# (juengste NEU HINZUGEFUEGTE Datei unter content/glossar, 14 Tage) und
+# »Glossar-Workflow« (Start, 10 Tage) — CLAUDE.md §2 Regel 10. Liefert der Agent
+# weiter nichts, wird der Heartbeat nach 14 Tagen rot: Dann fehlt Nachschub
+# (Seed-Liste oder bessere Extraktion, siehe Kopf von scripts/glossary-agent.mjs),
+# nicht der Zeitplan. Offen vor Nachschub: docs/glossar-konsolidierung-kandidaten.md
+# (182 von 183 Eintraegen unter 150 Woerter) — mehr duenne Eintraege schaden dem SEO.
 on:
-  workflow_dispatch:        # nur noch manuell auslösbar
+  schedule:
+    - cron: '0 3 * * 3'   # mittwochs 03:00 UTC
+  workflow_dispatch:        # + manuell ausloesbar
 
 jobs:
   grow-glossary:
@@ -60,7 +65,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_SUMMARY: '🔴 Glossar-Agent fehlgeschlagen'
-          ALERT_DESCRIPTION: 'Der Glossar-Agent (glossary-grow, Handstart) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_DESCRIPTION: 'Der Glossar-Agent (glossary-grow, woechentlich) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Bug'
           ALERT_DEDUP_LABEL: 'ops-glossary-failed'

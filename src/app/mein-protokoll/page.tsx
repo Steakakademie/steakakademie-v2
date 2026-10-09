@@ -401,7 +401,7 @@ export default function MeinProtokollPage() {
                   Es erlischt, wenn du beim Kauf ausdrücklich zustimmst, dass der Plan vor Ablauf der Frist
                   erstellt wird, und bestätigst, dass du damit dein Widerrufsrecht verlierst. Der Plan wird
                   erst erstellt, wenn du den Fragebogen abschickst.
-                  Endpreis in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                  Endpreis in Euro inklusive gesetzlicher Mehrwertsteuer.
                 </p>
                 <p className="text-xs font-sans text-text-secondary leading-relaxed mt-2">
                   <strong className="text-text-primary">KI-Hinweis:</strong>{' '}

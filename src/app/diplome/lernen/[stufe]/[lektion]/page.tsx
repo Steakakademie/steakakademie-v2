@@ -17,6 +17,7 @@ import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 import { ogImages } from '@/lib/og';
+import { seoTitel } from '@/lib/seo-titel';
 
 type Params = { stufe: string; lektion: string };
 interface Props {
@@ -44,9 +45,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const title = l.seoTitle ?? l.title;
   const description = l.seoDescription ?? l.excerpt;
   return {
-    title,
+    title: seoTitel(title),
     description,
     alternates: { canonical: `https://steakakademie.de${l.url}` },
+    // Bezahlstufen zeigen oeffentlich nur den Anreisser (~200 Woerter). Aus der
+    // Sitemap waren sie schon draussen, im Index aber noch — 28 duenne Seiten
+    // (SEO-Audit 08.10.2026). Noindex, bis es einen echten oeffentlichen Auszug
+    // gibt; Links bleiben verfolgbar, damit /diplome und Stufe 1 nichts verlieren.
+    ...(istBezahlstufe(l.stufe) && { robots: { index: false, follow: true } }),
     openGraph: {
       images: ogImages(l.title),
       title,
@@ -138,6 +144,9 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
     datePublished: lektion.publishedAt,
     inLanguage: 'de',
     isPartOf: { '@id': 'https://steakakademie.de/diplome#course' },
+    // Bezahlschranke maschinenlesbar (schema.org Paywall-Markup): sonst sieht
+    // der Crawler einen Anreisser und wertet die Seite als Thin Content.
+    isAccessibleForFree: !istBezahlstufe(lektion.stufe),
   };
 
   const breadcrumb = breadcrumbSchema([

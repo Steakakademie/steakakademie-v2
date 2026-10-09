@@ -129,6 +129,8 @@ const nextConfig = {
     // Der Generator baut Prompt und Prüfung zur Laufzeit aus der Referenz
     // (src/lib/kerntemperatur-referenz.ts liest die YAML per fs).
     '/api/mein-protokoll/generate': ['./data/kerntemperatur-referenz.yaml'],
+    // Kursdateien kommen beim Build aus dem privaten Repo (scripts/kursinhalte-holen.mjs).
+    '/eigenregie/lernen/dateien/[datei]': ['./privat/kursdateien/**'],
   },
   images: {
     formats: ['image/avif', 'image/webp'],

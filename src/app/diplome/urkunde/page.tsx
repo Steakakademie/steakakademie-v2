@@ -384,7 +384,7 @@ export default function UrkundePage() {
                 Absenden per E-Mail Kontakt zur Zahlung auf ({urkundePreisText()}, Versand inklusive).
                 Deine Adresse wird ausschließlich für Druck und Versand verwendet und dafür an unseren
                 Druckdienstleister Gelato übermittelt.
-                Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
+                Der Preis enthält die gesetzliche Mehrwertsteuer.
               </p>
               <p className="text-text-light/50 text-xs font-body leading-relaxed">
                 <strong>Kein Widerrufsrecht:</strong> {URKUNDE_WIDERRUF_HINWEIS} Du erhältst eine

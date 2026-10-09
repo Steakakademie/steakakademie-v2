@@ -47,6 +47,11 @@ jobs:
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
 
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       # Bewusst als ein Schritt: so ist der Workflow genau das, was auch lokal
       # vor dem Commit laeuft. Welches der Gates rot war, steht im Run-Log.
       - name: npm run check
@@ -91,6 +96,11 @@ jobs:
 
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
+
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
 
       # Der Cache (data/spell-check-cache.json) ist committet, wurde aber bis
       # 23.09.2026 in CI nie zurueckgeschrieben: jeder Lauf begann beim letzten
@@ -196,6 +206,11 @@ jobs:
       # Install-Skript — lokal mit --ignore-scripts verifiziert (21.09.2026).
       - name: Dependencies installieren
         run: npm ci --ignore-scripts
+
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
 
       # Bewusst OHNE --strict: der Schritt berichtet nur, Exit bleibt 0. Ein gruenes
       # Haekchen an diesem Job sagt deshalb nichts ueber das Urteil — es steht im

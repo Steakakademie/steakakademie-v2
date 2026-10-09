@@ -66,10 +66,12 @@ const SAULEN = [
       'Migration in eigene Infrastruktur: Next.js, Vercel, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
     Icon:        Zap,
     href:        '/eigenregie',
-    toolHref:    null as string | null,
-    toolLabel:   null as string | null,
-    // 695900 steht laut Reaktivierungs-Checkliste auf „In Vorbereitung" (kein Kurs/DB-Mapping
-    // → würde kassieren ohne Auslieferung). Checkout AUS bis Substanz + Testkauf verifiziert.
+    // Käufer landen im Kursbereich, nicht auf der Verkaufsseite (die nie auf /eigenregie/lernen verlinkt).
+    toolHref:    '/eigenregie/lernen' as string | null,
+    toolLabel:   'Zum Kursbereich' as string | null,
+    // Kurs + Mapping 695900 → eigenregie bestehen seit 19.09.2026 (Migration
+    // 20260919093457). Checkout bleibt AUS: Verkauf gestoppt seit 23.09.2026
+    // (FernUSG-Umbau), Wiederaufnahme erst nach Kanzlei-Antwort und Testkauf.
     checkoutUrl: null as string | null,
   },
 ] as const;

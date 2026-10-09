@@ -17,6 +17,7 @@
 
 import { readdir, readFile, writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
+import { istHandgewaehlt } from './lib/bild-schutz.mjs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -291,6 +292,11 @@ async function main() {
     const webPath = `/images/rezepte/${slug}${suffix}.jpg`
 
     if (!FORCE && existsSync(target)) { skipped++; continue }
+    // Von Hand gewaehlte Bilder nie ueberschreiben, auch nicht mit --force (scripts/lib/bild-schutz.mjs).
+    // Gilt nur fuer das Standardbild, nicht fuer den Drama-Look (eigene Datei mit -hero).
+    if (!DRAMATIC && existsSync(target) && istHandgewaehlt(raw)) {
+      console.log(c.d(`– ${slug}: von Hand gewaehltes Bild, bleibt unveraendert`)); skipped++; continue
+    }
 
     const prompt = buildPrompt(raw, slug, LOOK)
     if (DRY) { console.log(c.y(`◇ ${slug}${suffix}`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
