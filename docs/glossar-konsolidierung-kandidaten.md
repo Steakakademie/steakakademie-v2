@@ -1,12 +1,22 @@
 # Glossar-Konsolidierung — Kandidatenliste (Plan C2)
 
-**Erstellt:** 18.09.2026 · **Stand:** 183 Eintraege in `content/glossar/`
+**Erstellt:** 18.09.2026 · **Stand:** 183 Eintraege in `content/glossar/` · **Nachtrag 09.10.2026:** 25 Eintraege zusammengelegt, siehe unten
 
 > **Diese Liste loescht nichts.** Sie benennt Kandidaten und die Signale dazu.
 > Die Entscheidung braucht Ranking- und Zugriffsdaten, die es derzeit nicht gibt:
 > Google Analytics ist fuer den MCP-Zugang gesperrt, ein Plausible-API-Schluessel
 > liegt nicht im Repo, und `public.web_vitals` deckt nur 10 Tage mit 92 Zeilen
 > ueber 38 Glossar-Routen ab. **B2 (GSC-Links-Report, Ahrefs, Bing) zuerst.**
+>
+> **Aufgehoben fuer Fuellwort-Permutationen am 09.10.2026** (SEO-Audit 08.10.):
+> Drei Wochen nach dieser Zeile gibt es weiterhin keine Search Console, und bei
+> rund 9 Google-Sitzungen pro Woche fuer die gesamte Seite (monitoring-log KW41)
+> haetten Eintraege wie `smoker-fans` oder `wagyu-kenner` auch mit GSC keine
+> messbaren Impressionen. Die Liste der zusammengelegten Slugs steht in
+> `data/taxonomie.yaml` → `glossar_weiterleitungen` (Quelle fuer 301, Gate und
+> Waechter). Fuer die uebrigen Cluster (`maillard`, `dry`, `infrarot`, `medium`,
+> `oberhitze`, `rub`, Hub-Dubletten wie `reverse-sear`/`sous-vide`) gilt die
+> Sperre weiter.
 
 ## Warum ueberhaupt
 
@@ -28,43 +38,47 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 |---|---|--:|--:|---|
 | `wagyu` | Fleischkunde | 117 | 3 | **Hub** |
 | `wagyu-rinder` | Fleischkunde | 113 | 2 | pruefen |
-| `wagyu-wissen` | Fleischkunde | 124 | 1 | pruefen |
-| `wagyu-burger` | Fleischkunde | 116 | 1 | pruefen |
+| ~~`wagyu-wissen`~~ | Fleischkunde | 124 | 1 | ✅ erledigt 09.10.2026 → `wagyu` |
+| ~~`wagyu-burger`~~ | Fleischkunde | 116 | 1 | ✅ erledigt 09.10.2026 → `wagyu` |
 | `wagyu-zucht` | Fleischkunde | 115 | 1 | pruefen |
-| `wagyu-kenner` | Fleischkunde | 114 | 1 | pruefen |
+| ~~`wagyu-kenner`~~ | Fleischkunde | 114 | 1 | ✅ erledigt 09.10.2026 → `wagyu` |
 | `wagyu-kreuzungen` | Fleischkunde | 114 | 1 | pruefen |
-| `wagyu-zubereitungen` | Fleischkunde | 110 | 1 | pruefen |
+| ~~`wagyu-zubereitungen`~~ | Fleischkunde | 110 | 1 | ✅ erledigt 09.10.2026 → `wagyu` |
 | `wagyu-brisket` | Cuts & Teilstücke | 106 | 1 | pruefen |
-| `wagyu-hotdog` | Cuts & Teilstücke | 106 | 1 | pruefen |
+| ~~`wagyu-hotdog`~~ | Cuts & Teilstücke | 106 | 1 | ✅ erledigt 09.10.2026 → `wagyu` |
 | `wagyu-zertifikat` | Fleischkunde | 106 | 1 | pruefen |
-| `wagyu-farm` | Fleischkunde | 119 | 0 | pruefen |
-| `wagyu-pioneer` | Fleischkunde | 109 | 0 | pruefen |
+| ~~`wagyu-farm`~~ | Fleischkunde | 119 | 0 | ✅ erledigt 09.10.2026 → `wagyu` |
+| ~~`wagyu-pioneer`~~ | Fleischkunde | 109 | 0 | ✅ erledigt 09.10.2026 → `wagyu` |
 
 ### `smoker` — 10 Eintraege
 
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `smoker-temperatur` | Thermodynamik | 249 | 3 | **Hub** |
-| `smoker-long` | Ausrüstung | 108 | 1 | pruefen |
-| `smoker-enthusiasten` | Ausrüstung | 101 | 1 | pruefen |
-| `smoker-test` | Ausrüstung | 100 | 1 | pruefen |
-| `smoker-designs` | Ausrüstung | 98 | 1 | pruefen |
-| `smoker-fans` | Ausrüstung | 98 | 1 | pruefen |
+| ~~`smoker-long`~~ | Ausrüstung | 108 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
+| ~~`smoker-enthusiasten`~~ | Ausrüstung | 101 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
+| ~~`smoker-test`~~ | Ausrüstung | 100 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
+| ~~`smoker-designs`~~ | Ausrüstung | 98 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
+| ~~`smoker-fans`~~ | Ausrüstung | 98 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
 | `smoker-monitoring` | Techniken & Methoden | 97 | 1 | pruefen |
-| `smoker-setup` | Ausrüstung | 86 | 1 | pruefen |
+| ~~`smoker-setup`~~ | Ausrüstung | 86 | 1 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
 | `smoker-finish` | Techniken & Methoden | 112 | 0 | pruefen |
-| `smoker-aufbau` | Ausrüstung | 109 | 0 | pruefen |
+| ~~`smoker-aufbau`~~ | Ausrüstung | 109 | 0 | ✅ erledigt 09.10.2026 → `/methoden/smoken-low-and-slow` |
+
+Ziel ist bewusst die Methodenseite, nicht `smoker-temperatur`: Fans, Setup, Aufbau,
+Test und Designs beschreiben das Geraet und seinen Betrieb — das steht dort, nicht
+in einem Thermodynamik-Begriff.
 
 ### `kerntemperatur` — 6 Eintraege
 
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `kerntemperatur` | Thermodynamik | 108 | 14 | **Hub** |
-| `kerntemperatur-ziel` | Thermodynamik | 96 | 3 | pruefen |
-| `kerntemperatur-referenz` | Thermodynamik | 110 | 2 | pruefen |
-| `kerntemperatur-kontrolle` | Thermodynamik | 109 | 1 | pruefen |
-| `kerntemperatur-prinzip` | Thermodynamik | 122 | 0 | pruefen |
-| `kerntemperatur-wissen` | Thermodynamik | 103 | 0 | pruefen |
+| ~~`kerntemperatur-ziel`~~ | Thermodynamik | 96 | 3 | ✅ erledigt 09.10.2026 → `kerntemperatur` |
+| `kerntemperatur-referenz` | Thermodynamik | 110 | 2 | pruefen (Entwurf, nicht veroeffentlicht) |
+| ~~`kerntemperatur-kontrolle`~~ | Thermodynamik | 109 | 1 | ✅ erledigt 09.10.2026 → `kerntemperatur` |
+| ~~`kerntemperatur-prinzip`~~ | Thermodynamik | 122 | 0 | ✅ erledigt 09.10.2026 → `kerntemperatur` |
+| ~~`kerntemperatur-wissen`~~ | Thermodynamik | 103 | 0 | ✅ erledigt 09.10.2026 → `kerntemperatur` |
 
 ### `maillard` — 6 Eintraege
 
@@ -83,9 +97,9 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 |---|---|--:|--:|---|
 | `brisket-test` | Techniken & Methoden | 119 | 1 | **Hub** |
 | `brisket-buns` | Techniken & Methoden | 113 | 1 | pruefen |
-| `brisket-smoker` | Ausrüstung | 90 | 1 | pruefen |
-| `brisket-rezept` | Techniken & Methoden | 115 | 0 | pruefen |
-| `brisket-evangelium` | Techniken & Methoden | 105 | 0 | pruefen |
+| ~~`brisket-smoker`~~ | Ausrüstung | 90 | 1 | ✅ erledigt 09.10.2026 → `/cuts/brisket` |
+| ~~`brisket-rezept`~~ | Techniken & Methoden | 115 | 0 | ✅ erledigt 09.10.2026 → `/cuts/brisket` |
+| ~~`brisket-evangelium`~~ | Techniken & Methoden | 105 | 0 | ✅ erledigt 09.10.2026 → `/cuts/brisket` |
 
 ### `wettkampf` — 5 Eintraege
 
@@ -93,9 +107,10 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 |---|---|--:|--:|---|
 | `wettkampf-bbq` | Techniken & Methoden | 119 | 1 | **Hub** |
 | `wettkampf-standards` | Techniken & Methoden | 105 | 1 | pruefen |
-| `wettkampf-pitmaster` | Techniken & Methoden | 103 | 1 | pruefen |
+| `wettkampf-pitmaster` | Techniken & Methoden | 103 | 1 | pruefen (Hub fuer `wettbewerbs-pitmaster`, s. u.) |
 | `wettkampf-team` | Techniken & Methoden | 97 | 1 | pruefen |
-| `wettkampf-grillmeister` | Techniken & Methoden | 94 | 0 | pruefen |
+| ~~`wettkampf-grillmeister`~~ | Techniken & Methoden | 94 | 0 | ✅ erledigt 09.10.2026 → `wettkampf-bbq` |
+| ~~`wettbewerbs-pitmaster`~~ | Techniken & Methoden | — | 1 | ✅ erledigt 09.10.2026 → `wettkampf-pitmaster` (Praefix-Clustering hat die Schreibvariante nicht gefunden) |
 
 ### `dry` — 4 Eintraege
 
@@ -111,7 +126,7 @@ Begruendung dort: HCU-Risiko und Kannibalisierung. Messung heute:
 | Slug | Kategorie | Woerter | Links | Vorschlag |
 |---|---|--:|--:|---|
 | `kollagen` | Fleischkunde | 117 | 14 | **Hub** |
-| `kollagen-umwandlung` | Chemie & Physik | 100 | 2 | pruefen → Ziel `kollagen-transformation` |
+| ~~`kollagen-umwandlung`~~ | Chemie & Physik | 100 | 2 | ✅ erledigt 09.10.2026 → `kollagen-transformation` (Begriff steht jetzt in dessen Definition) |
 | `kollagen-anteil` | Fleischkunde | 110 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
 | `kollagen-transformation` | Chemie & Physik | 107 | 1 | Hauptbegriff laut `taxonomie.yaml`, bleibt |
 
@@ -222,7 +237,7 @@ Semantik-Lauf vom 21.09.2026 hat diese Paare gemeldet:
 | Paar | Befund | Vorschlag |
 |---|---|---|
 | ~~`packer-brisket` / `packer-cut`~~ | Beide definierten die komplette Rinderbrust aus Flat und Point mit Fettdeckel. Inhaltlich deckungsgleich, nur andere Formulierung. | ✅ **Erledigt 21.09.2026.** Hub `packer-brisket`, `packer-cut` geloescht, 301 gesetzt. |
-| `stall` / `plateauphase` | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | Hub: `stall` (dazu gibt es bereits den Artikel `artikel/stall-plateauphase-beim-smoken`), 301 von `plateauphase` |
+| ~~`stall` / `plateauphase`~~ | Beide erklaeren dasselbe Phaenomen — Verdunstungskuehlung waehrend des Smokens. `stall` nennt die Ursache praeziser, `plateauphase` fuehrt zusaetzlich den Kollagenabbau an (fachlich zweifelhaft als Ursache des Plateaus). | ✅ **Erledigt 09.10.2026.** Hub `stall` („deutsch auch Plateauphase" steht jetzt in der Definition), `plateauphase` geloescht, 301 ueber `glossar_weiterleitungen`. |
 
 Fuer `stall` / `plateauphase` gilt die Sperre wie oben weiter: **erst
 GSC-Daten (B2), dann zusammenlegen.** `stall` ist ausserdem frisch
@@ -282,3 +297,35 @@ abgeschlossen (siehe unten).
 Ebenfalls aus demselben Lauf, bereits durch die Cluster oben abgedeckt:
 `kerntemperatur-*` (6 Eintraege, Cluster `kerntemperatur`) und `kollagen-*`
 (4 Eintraege, Cluster `kollagen`).
+
+---
+
+## Nachtrag 09.10.2026 — 25 Eintraege zusammengelegt (SEO-Audit 08.10.2026)
+
+Was anders ist als bei `bark` und `packer-cut`: Die Weiterleitungen stehen nicht
+mehr einzeln in `next.config.mjs`, sondern als Liste in `data/taxonomie.yaml`
+(`glossar_weiterleitungen`, Slug → Ziel-URL). Daraus baut `next.config.mjs` die
+301, `glossarDublette()` sperrt die Neuanlage (Gate und Glossar-Agent), und
+`src/__tests__/glossar-weiterleitungen.test.ts` prueft, dass keine Datei und kein
+interner Link mehr auf einen alten Slug zeigt und jedes Ziel existiert.
+
+Zusammengelegt wurden nur Eintraege ohne eigenen Begriffsinhalt: die
+Fuellwort-Permutationen nach `glossar_fuellwort_suffixe` (`kerntemperatur-*`,
+`wagyu-{farm,kenner,pioneer,wissen,zubereitungen}`), die beiden Synonyme aus
+`glossar_synonyme` (`kollagen-umwandlung`, `plateauphase`), dazu `wagyu-hotdog`,
+`wagyu-burger` (Gerichte, keine Begriffe), `smoker-{fans,enthusiasten,long,test,
+designs,setup,aufbau}`, `brisket-{evangelium,rezept,smoker}`,
+`wettkampf-grillmeister` und die Schreibvariante `wettbewerbs-pitmaster`.
+Inhalt wurde nicht uebernommen — die Eintraege bestanden aus der Schablone
+Definition/Hintergrund/Praxistipp ohne Fakten, die dem Ziel fehlen; einzig die
+Suchphrasen „Plateauphase" und „Kollagen-Umwandlung" stehen jetzt in der
+Definition ihres Hubs. 16 interne Links in `content/` zeigen direkt auf die Ziele.
+
+**Offen bleiben** (echte Begriffe oder Hub-Dubletten, die eine Redaktions-
+Entscheidung brauchen): `maillard-*`, `dry-*`, `infrarot-*`, `medium-*`,
+`oberhitze-*`, `rub-*`, `wagyu-{rinder,zucht,kreuzungen,zertifikat,brisket}`,
+`wettkampf-{standards,pitmaster,team}`, `brisket-{test,buns}`,
+`smoker-{monitoring,finish}` — und die Glossar-Dubletten zu Hub-Seiten
+(`reverse-sear`, `sous-vide`, `minion-methode`, `direktes-/indirektes-grillen`,
+`rotisserie`, `plancha`, `low-slow`, `oberhitze-grillen`, `oberhitzegrill-vergleich`,
+`rib-eye`, `pulled-pork`), die je 1–11 eingehende Links tragen.
