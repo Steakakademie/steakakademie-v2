@@ -1,5 +1,6 @@
 import { use } from "react";
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -42,7 +43,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const title = doc.seoTitle ?? doc.title;
   const description = doc.seoDescription ?? doc.excerpt;
   return {
-    title,
+    title: seoTitel(title),
     description,
     alternates: { canonical: `https://steakakademie.de${doc.url}` },
     openGraph: {

@@ -19,7 +19,7 @@ import { verantwortungsangabe } from '@/lib/pruefnachweis';
 // nur mit Prüfdatum (src/lib/pruefnachweis.ts).
 export const metadata: Metadata = {
   title: 'BBQ-Rezepte vom Grill — mit Portionsrechner und Koch-Coach',
-  description: `Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, ${verantwortungsangabe()}.`,
+  description: `Präzise BBQ-Rezepte mit Portionsrechner und Koch-Coach: Sous-Vide, Reverse Sear, Low & Slow — KI-unterstützt erstellt, ${verantwortungsangabe()}.`,
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
   openGraph: {
     images: ogImages('BBQ-Rezepte'),

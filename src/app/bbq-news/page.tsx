@@ -4,7 +4,7 @@ import { ChevronRight, Globe } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BuyingGuideBlock from '@/components/affiliate/BuyingGuideBlock';
-import { getNewsItems, type NewsItem, type NewsRegion } from '@/lib/bbq-news';
+import { getNewsItems, getScoutNews, type NewsItem, type NewsRegion } from '@/lib/bbq-news';
 import { getRecommendedProducts } from '@/lib/products';
 import { verantwortungsangabe } from '@/lib/pruefnachweis';
 import {
@@ -65,7 +65,10 @@ const breadcrumbSchema = {
 const REGION_ORDER: NewsRegion[] = ['USA', 'Deutschland', 'International'];
 
 export default async function BbqNewsPage() {
-  const newsItems = await getNewsItems();
+  const [newsItems, scoutNews] = await Promise.all([getNewsItems(), getScoutNews()]);
+  // Nur die Meldungen, die oben nicht ohnehin stehen — sonst doppelt verlinkt.
+  const imStrom = new Set(newsItems.map((n) => n.href).filter(Boolean));
+  const archiv = scoutNews.filter((n) => n.href && !imStrom.has(n.href));
 
   const featured = newsItems.find((n) => n.featured) ?? newsItems[0];
   const rest = newsItems.filter((n) => n.id !== featured?.id);
@@ -158,6 +161,30 @@ export default async function BbqNewsPage() {
             alt={i % 2 === 1}
           />
         ))}
+
+        {/* ── Archiv: alle Meldungen mit eigener Seite ───────────────────
+            Haelt jede /bbq-news/<slug>-Seite intern verlinkt, auch wenn der
+            Strom oben laengst von neueren Plattform-Inhalten gefuellt ist
+            (SEO-Audit 08.10.2026: vier Meldungen ohne einen einzigen Link). */}
+        {archiv.length > 0 && (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-14" aria-labelledby="bbq-news-archiv">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="w-6 h-[3px] bg-brand-gold" />
+              <h2 id="bbq-news-archiv" className="font-serif text-xl font-bold text-text-light">Alle Meldungen der Redaktion</h2>
+            </div>
+            <div className="section-divider mb-4" />
+            <ul className="divide-y divide-border-subtle">
+              {archiv.map((n) => (
+                <li key={n.id} className="py-3 flex flex-col sm:flex-row sm:items-baseline sm:gap-4">
+                  <span className="font-sans text-xs text-text-muted shrink-0 sm:w-28">{n.date}</span>
+                  <Link href={n.href!} className="font-serif text-base font-semibold text-text-light hover:text-brand-gold transition-colors">
+                    {n.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* ── Hinweis / GEO-Transparenz ──────────────────────────────── */}
         <section className="bg-surface-base py-12" style={{ borderTop: '1px solid rgba(200,136,42,0.15)' }}>

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Clock, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Clock, CheckCircle2, Download } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allEigenregieModuls } from 'contentlayer/generated';
 import { requireCourseAccess } from '@/lib/auth/require-course-access';
 import Diagnose from '@/components/eigenregie/Diagnose';
 import { angebotFuer } from '@/lib/eigenregie/angebot';
+import { KURSDATEIEN } from '@/lib/eigenregie/kursdateien';
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -89,6 +90,27 @@ export default async function EigenregieLernen() {
                 </li>
               ))}
             </ol>
+          </section>
+
+          <section className="mt-16 max-w-content print:hidden" aria-labelledby="dateien">
+            <h2 id="dateien" className="font-serif text-2xl font-bold text-text-primary mb-3">Dateien zum Kurs</h2>
+            <p className="font-body text-text-secondary mb-6">
+              Leg beide Dateien in deinem Projekt unter <code>docs/</code> ab. Wie du sie einsetzt, steht jeweils am Anfang der Datei.
+            </p>
+            <ul className="grid grid-cols-1 gap-4">
+              {(Object.entries(KURSDATEIEN) as [string, { titel: string; beschreibung: string }][]).map(([name, d]) => (
+                <li key={name}>
+                  <a href={`/eigenregie/lernen/dateien/${name}`} download className="flex items-start gap-3 border border-border-subtle bg-surface-card p-5 hover:border-brand-gold transition-colors">
+                    <Download size={18} className="text-brand-gold shrink-0 mt-1" />
+                    <span>
+                      <span className="block font-serif text-lg font-bold text-text-primary">{d.titel}</span>
+                      <span className="block font-body text-sm text-text-secondary">{d.beschreibung}</span>
+                      <span className="block font-sans text-xs text-text-muted mt-1">{name}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </section>
 
           <p className="mt-12 font-body text-xs text-text-muted max-w-content print:hidden">

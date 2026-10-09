@@ -61,6 +61,11 @@ jobs:
       - name: Dependencies installieren
         run: npm ci
 
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       # Eigener Schluessel-Praefix (-e2e-), damit sich dieser Job und
       # build-gate.yml nicht gegenseitig beim Speichern in die Quere kommen.
       - name: Next-Build-Cache

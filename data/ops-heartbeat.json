@@ -38,12 +38,43 @@
     "hinweis": "Der Workflow selbst hat nicht mehr gestartet. GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft nur ein manueller Start oder ein Commit."
   },
   {
+    "name": "Glossar",
+    "typ": "git",
+    "pfad": "content/glossar",
+    "nurNeueDateien": true,
+    "maxTage": 14,
+    "hinweis": "glossary-grow läuft mittwochs 03:00 UTC und soll neue Begriffe als PR liefern. Gezählt wird nur eine NEU HINZUGEFÜGTE Datei. Keine neue Datei seit 14 Tagen = der Vorrat ist leer (so war es vom 19.09. bis 03.10.2026: täglich grün, 0 neue Begriffe) — Nachschub fehlt, nicht der Zeitplan. Job-Summary des letzten Laufs lesen (»0 neue Begriffe«?), dann Seed-Liste oder Extraktion in scripts/glossary-agent.mjs erweitern. Vorher docs/glossar-konsolidierung-kandidaten.md beachten: mehr dünne Einträge schaden dem SEO."
+  },
+  {
+    "name": "Glossar-Workflow",
+    "typ": "workflow",
+    "datei": "glossary-grow.yml",
+    "maxTage": 10,
+    "hinweis": "Der Workflow glossary-grow hat seit 10 Tagen nicht mehr gestartet (Takt: wöchentlich). GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft ein manueller Start per workflow_dispatch."
+  },
+  {
     "name": "Content-Entwürfe (Scout + Saison)",
     "typ": "supabase",
     "tabelle": "content_drafts",
     "spalte": "created_at",
     "maxTage": 10,
     "hinweis": "content-grow (sonntags) und saison-grow (alle 5 Tage) schreiben Entwürfe nach content_drafts. Freigabe in /admin/review."
+  },
+  {
+    "name": "Saison-Berichte (eigene Zahl)",
+    "typ": "supabase",
+    "tabelle": "pipeline_runs",
+    "spalte": "completed_at",
+    "filter": "run_id=like.saison*",
+    "maxTage": 8,
+    "hinweis": "saison-grow läuft an den Monatstagen 1/6/11/16/21/26/31 (04:30 UTC) und schreibt nach jedem erzeugten Entwurf eine Zeile saison_<Datum> in pipeline_runs. Die Zeile fehlt auch, wenn alle Themen der aktiven Fenster schon erzeugt sind (»nichts zu tun«) — dann ist der Themenvorrat leer, nicht der Lauf kaputt. Der Eintrag »Content-Entwürfe« sieht nur das Gemeinsame von content-grow und saison-grow; ohne diesen hier fiele der Ausfall allein von saison-grow nicht auf (Beleg: Am 26.09.2026 fehlt die Zeile, zwischen 21.09. und 01.10. liegen 10 Tage; ob der Lauf scheiterte oder nichts zu tun hatte, ist daraus nicht ersichtlich). Zuerst das Job-Summary des letzten saison-grow-Laufs lesen."
+  },
+  {
+    "name": "Saison-Workflow",
+    "typ": "workflow",
+    "datei": "saison-grow.yml",
+    "maxTage": 7,
+    "hinweis": "Der Workflow selbst hat seit 7 Tagen nicht mehr gestartet (Takt: alle 5 Tage). GitHub schaltet geplante Workflows in ruhigen Repos nach 60 Tagen ohne Aktivität ab — dann hilft ein manueller Start per workflow_dispatch. Scheitert ein Lauf, meldet der Workflow das selbst (Jira-Ticket ops-saison-failed)."
   },
   {
     "name": "Content-Freigaben",

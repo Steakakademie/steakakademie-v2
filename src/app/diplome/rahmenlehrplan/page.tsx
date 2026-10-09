@@ -8,6 +8,8 @@ import { STUFEN, DIPLOM_HINWEIS, QUIZ_FRAGEN_PRO_PRUEFUNG, QUIZ_BESTEHENSQUOTE }
 import { RAHMENLEHRPLAN, DOKTRIN } from '@/lib/diplome/rahmenlehrplan';
 import { FRAGEN } from '@/lib/diplome/fragen';
 import { courseSchema, breadcrumbSchema } from '@/lib/schema';
+import { ogImages } from '@/lib/og';
+import { seoTitel } from '@/lib/seo-titel';
 import ScrollBereich from '@/components/ui/ScrollBereich';
 
 /**
@@ -33,11 +35,13 @@ import ScrollBereich from '@/components/ui/ScrollBereich';
 const LERNZIELE_GESAMT = RAHMENLEHRPLAN.reduce((n, s) => n + s.lernziele.length, 0);
 
 export const metadata: Metadata = {
-  title: 'Rahmenlehrplan Grillmeister-Diplom: Was ein Grillmeister können muss',
+  title: seoTitel('Rahmenlehrplan Grillmeister-Diplom: Was ein Grillmeister können muss'),
   description:
-    `Der Rahmenlehrplan des Grillmeister-Diploms der Steakakademie: fünf Stufen, ${LERNZIELE_GESAMT} Lernziele, Prüfungsordnung und praktische Nachweise — von Grillmeister Bronze bis Grillmeister Meisterklasse.`,
+    `Rahmenlehrplan des Grillmeister-Diploms: fünf Stufen, ${LERNZIELE_GESAMT} Lernziele, Prüfungsordnung und praktische Nachweise — von Bronze bis Meisterklasse.`,
   alternates: { canonical: 'https://steakakademie.de/diplome/rahmenlehrplan' },
   openGraph: {
+    // Einzige Seite ohne og:image im Crawl vom 08.10.2026.
+    images: ogImages('Rahmenlehrplan Grillmeister-Diplom'),
     title: 'Rahmenlehrplan Grillmeister-Diplom',
     description: `Fünf Stufen, ${LERNZIELE_GESAMT} Lernziele, Prüfungsordnung: Was ein Grillmeister können muss — verbindlich aufgeschrieben.`,
     url: 'https://steakakademie.de/diplome/rahmenlehrplan',
