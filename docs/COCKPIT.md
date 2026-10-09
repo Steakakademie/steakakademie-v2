@@ -204,7 +204,7 @@ Search Console existiert (`sc-domain:steakakademie.de`, Korrektur zum Audit), Le
 werden aber noch nirgends ausgewertet.
 
 **Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
-mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).
+mit 0 € Startkosten (CLAUDE.md §5, Blocker 5).
 *09.10.2026:* SEO-PRs #353–#356 sind gemergt und live geprüft (29 Glossar-301, noindex,
 Sitemap 403 URLs mit lastmod); Sitemap in der Search Console neu eingereicht. Jetzt:
 **Uwe: GSC-Leistungsbericht (Suchanfragen + Seiten, 3 Monate) als CSV exportieren** — damit
