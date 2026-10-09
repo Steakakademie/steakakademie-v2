@@ -37,7 +37,7 @@ const TITEL = 'VIP-SteakAkademiker — der Pass für Griller, die es genau wisse
 export const metadata: Metadata = {
   title: 'VIP-SteakAkademiker — Warteliste',
   description:
-    'Aroma-Matcher ohne Limit, Räucherholz-Finder, Profi-Rezepte grammgenau und Grill-Logbuch: Der VIP-Pass der Steakakademie ist in Vorbereitung. Jetzt auf die Warteliste — mit Early-Bird-Vorteil.',
+    'Aroma-Matcher ohne Limit, Räucherholz-Finder, Profi-Rezepte grammgenau und Grill-Logbuch: Der VIP-Pass der Steakakademie ist in Vorbereitung. Jetzt auf die Warteliste.',
   alternates: { canonical: 'https://steakakademie.de/vip' },
   openGraph: {
     images: ogImages('VIP-SteakAkademiker', 'Warteliste — in Vorbereitung'),

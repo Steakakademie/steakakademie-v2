@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, ChevronRight, Globe } from 'lucide-react';
@@ -50,7 +51,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!item) return {};
   const url = `https://steakakademie.de/bbq-news/${item.slug}`;
   return {
-    title: `${item.title} — BBQ-News`,
+    // Ohne „— BBQ-News": mit Rubrik und Markenzusatz waren die Titel 79 bis
+    // 113 Zeichen lang, Google zeigt rund 60 (SEO-Audit 08.10.2026).
+    title: seoTitel(item.title),
     description: item.summary,
     alternates: { canonical: url },
     openGraph: {

@@ -50,6 +50,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     title: `${r.title} — Community-Rezept`,
     description: r.description,
     alternates: { canonical: `https://steakakademie.de/rezepte/community/${r.slug}` },
+    // Nutzerrezepte sind kurz (~200 Woerter) und konkurrieren mit den
+    // redaktionellen Rezept- und Methodenseiten um dieselben Suchanfragen
+    // (SEO-Audit 08.10.2026). Noindex, Links bleiben verfolgbar.
+    robots: { index: false, follow: true },
     openGraph: {
       title: r.title,
       description: r.description,

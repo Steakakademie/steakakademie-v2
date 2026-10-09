@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung',
   description: 'Die interaktive Grillmeister-Ausbildung: 5 Stufen von Bronze bis Meister mit Lektionen, Quiz und Flashcards. Lerne systematisch und schalte deine Diplome frei.',
   alternates: { canonical: 'https://steakakademie.de/diplome/roadmap' },
+  // Interaktive Oberflaeche, ~140 Woerter Text, aus der Sitemap schon
+  // ausgeschlossen — jetzt auch aus dem Index (SEO-Audit 08.10.2026).
+  robots: { index: false, follow: true },
   openGraph: {
     images: ogImages('Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung'),
     title: 'Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung',

@@ -14,6 +14,7 @@ import { hinweiseFuer } from '@/lib/angebote/register';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
 import { ogImages } from '@/lib/og';
+import { seoTitel } from '@/lib/seo-titel';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -35,7 +36,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar`;
   const description = entry.seoDescription ?? entry.shortDefinition;
   return {
-    title,
+    title: seoTitel(title),
     description,
     alternates: { canonical: `https://steakakademie.de${entry.url}` },
     openGraph: {

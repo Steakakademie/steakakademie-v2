@@ -66,9 +66,8 @@ export default function AgbPage() {
             <section>
               <h2 className={h2Class}>§ 3 Preise & Zahlung</h2>
               <p>
-                Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer (sofern
-                anwendbar). Als Kleinunternehmer gemäß § 19 UStG kann keine Umsatzsteuer
-                ausgewiesen werden. Für digitale Produkte werden die verfügbaren
+                Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer. Die
+                Rechnung mit ausgewiesener Umsatzsteuer stellt Digistore24 aus. Für digitale Produkte werden die verfügbaren
                 Zahlungsmethoden (u.&nbsp;a. SEPA-Lastschrift, PayPal, Klarna) beim
                 Bestellvorgang über Digistore24 angezeigt.
               </p>
@@ -148,8 +147,8 @@ export default function AgbPage() {
                 digitalen Inhalts — erlischt das Widerrufsrecht gemäß § 356 Abs. 5 BGB.
               </p>
               <p>
-                Die Zahlungsabwicklung erfolgt über Digistore24 (§ 2). Als Kleinunternehmer gemäß § 19 UStG
-                wird keine Umsatzsteuer gesondert ausgewiesen (§ 3).
+                Die Zahlungsabwicklung erfolgt über Digistore24 (§ 2). Die Preise enthalten die gesetzliche
+                Mehrwertsteuer (§ 3).
               </p>
             </section>
 

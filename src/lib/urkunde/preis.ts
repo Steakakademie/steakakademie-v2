@@ -11,7 +11,7 @@
  *   ------------------------------------
  *   Selbstkosten                   12,21 €
  * Bei 17,99 € bleiben 5,78 € fuer Zahlungsgebuehren, Fehldrucke und Aufwand.
- * Keine Umsatzsteuer: Kleinunternehmerregelung nach § 19 UStG.
+ * Preis inkl. gesetzlicher Mehrwertsteuer (Regelbesteuerung, Uwe 06.10.2026).
  *
  * Reine Daten, keine Server-Abhaengigkeit — auch aus Client-Komponenten
  * importierbar.
