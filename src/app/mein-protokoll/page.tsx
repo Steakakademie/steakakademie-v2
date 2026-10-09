@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import { badge } from '@/lib/kerntemperatur-referenz';
 import { CHECKOUT_URL, VERKAUF_AN, VERKAUFSSTART_TEXT } from '@/lib/mein-protokoll/angebot';
 import { PAKETE } from '@/lib/mein-protokoll/guthaben';
+import GutscheinHinweis from '@/components/gutschein/GutscheinHinweis';
 
 // Kerntemperatur aus der Referenz statt hart kodiert (CLAUDE.md §2 Regel 2).
 const MR = badge('beef_mr').c;
@@ -432,6 +433,8 @@ export default function MeinProtokollPage() {
             </div>
           </div>
         </section>
+
+        <GutscheinHinweis courseSlug="mein-protokoll" titel="Mein Protokoll" />
 
         {/* Navigation */}
         <section className="bg-surface-dark">

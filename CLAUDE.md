@@ -575,6 +575,10 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Quelle. Messung: /api/newsletter hängt für B-Besucher `-vb` an die Loops-source
    (Vergleich in Loops: Anmeldungen mit/ohne Suffix). Test beenden = Middleware-Block
    entfernen + Gewinner-Look fest verdrahten.
+   **GUTSCHEIN-TEASER (09.10.2026, Gutschein-Konzept T8, Uwe im Chat: „Ja, starte mit
+   T2 bis T8"):** neuer Abschnitt direkt unter DIPLOM-TEASER, in der Soll-Liste
+   ergänzt. Sichtbar nur 01.11.–24.12. und nur, wenn ein Gutschein kaufbar ist
+   (`src/components/home/GutscheinTeaser.tsx`); sonst rendert er nichts.
 
 8b. **Lerninhalte: erst planen, dann schreiben (kodifiziert 26.08.2026).** Diese Regel
    wurde seit dem Curriculum-Abgleich zweimal zitiert, war aber nie definiert — hiermit

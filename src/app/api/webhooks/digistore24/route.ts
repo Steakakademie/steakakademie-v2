@@ -112,6 +112,10 @@ const TOOL_REDIRECT: Record<string, string> = {
   'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/eigenregie/lernen',
   'mein-protokoll':        'https://steakakademie.de/auth/callback?next=/mein-protokoll/fragebogen',
   'steak-beichte':         'https://steakakademie.de/auth/callback?next=/steak-beichte/diagnose',
+  // Cockpit #111 (09.10.2026): ohne Eintrag landete ein Diplom-Kaeufer ueber
+  // DEFAULT_REDIRECT im Gruender-Bereich. /diplome/lernen hat keine
+  // Uebersichtsseite; die Roadmap listet die Lektionen aller Stufen.
+  'grillmeister-diplom':   'https://steakakademie.de/auth/callback?next=/diplome/roadmap',
 };
 
 const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-system';

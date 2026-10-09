@@ -9,6 +9,7 @@ import { Search, Menu, X, ChevronDown, Flame, Gift } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import AccountLink from './AccountLink';
+import { istGeschenkSaison, kaufbareGutscheine } from '@/lib/gutschein-products';
 
 type NavSub = { label: string; href: string };
 type NavCategory = { name: string; href: string; sub: NavSub[]; wide?: boolean };
@@ -135,6 +136,18 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
+
+  // Gutschein-Konzept T8 (09.10.2026): vom 01.11. bis 24.12. ein eigener
+  // Menüpunkt — aber nur, wenn ein Gutschein wirklich kaufbar ist. Erst nach
+  // dem Hydrieren gesetzt: Viele Seiten sind statisch gebaut, ein Datum im
+  // ersten Render würde vom vorgerenderten HTML abweichen.
+  const [gutscheinNav, setGutscheinNav] = useState(false);
+  useEffect(() => {
+    setGutscheinNav(istGeschenkSaison() && kaufbareGutscheine().length > 0);
+  }, []);
+  const navCategories: NavCategory[] = gutscheinNav
+    ? [...NAV_CATEGORIES, { name: 'Gutscheine', href: '/gutschein', sub: [] }]
+    : NAV_CATEGORIES;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -303,7 +316,7 @@ export default function Header() {
         <nav className="border-t border-brand-gold/15 hidden md:block" aria-label="Hauptnavigation">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
             <ul className="flex items-center justify-end">
-              {NAV_CATEGORIES.map((cat) => {
+              {navCategories.map((cat) => {
                 const isActive =
                   !cat.href.includes('#') &&
                   (pathname === cat.href || pathname.startsWith(`${cat.href}/`));
@@ -370,7 +383,7 @@ export default function Header() {
                 Kategorien
               </p>
               <ul className="space-y-0">
-                {NAV_CATEGORIES.map((cat) => (
+                {navCategories.map((cat) => (
                   <li key={cat.href}>
                     <Link
                       href={cat.href}
