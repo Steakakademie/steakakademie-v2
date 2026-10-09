@@ -88,6 +88,7 @@ export function kanonischerCode(code: string): string {
 
 // ── Freie Wertgutscheine (Sortiment Uwe, 09.10.2026) ─────────────────────────
 //
+// Verschoben auf 2027 (Uwe, 09.10.2026) — nicht im Weihnachtsgeschäft 2026.
 // SCHALTER: bleibt false, bis T9 gebaut ist (Guthaben-Tabelle, Webhook-Zweig,
 // Einlöseseite mit Produktauswahl) UND Kanzlei/Digistore die Umsatzsteuer beim
 // Mehrzweckgutschein beantwortet haben. Grund: Der Webhook kennt heute keinen

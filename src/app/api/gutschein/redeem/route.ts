@@ -16,7 +16,6 @@ import { z } from 'zod';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { guardRequest } from '@/lib/api/guard';
 import { createClient } from '@supabase/supabase-js';
-import { kanonischerCode } from '@/lib/gutschein-products';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -63,22 +62,10 @@ export async function POST(req: Request) {
   if (status === 'ok') {
     const slug = (data as any).course_slug as string;
 
-    // Mein Protokoll: Der Gutschein öffnet den Zugang; das Guthaben — ein
-    // Protokoll je Gutschein — steht in protokoll_gutschriften. Seit Migration
-    // 20261009180000 schreibt redeem_voucher die Gutschrift in derselben
-    // Transaktion. Dieser Schritt bleibt als Rückfall, bis die Migration auf
-    // der Live-DB liegt: idempotent über UNIQUE (quelle, referenz) mit
-    // derselben kanonischen Referenz, also nach der Migration ein No-op.
-    // Danach entfernen.
-    if (slug === 'mein-protokoll') {
-      const { error: gErr } = await admin
-        .from('protokoll_gutschriften')
-        .upsert(
-          { user_id: user.id, quelle: 'gutschein', referenz: kanonischerCode(code), anzahl: 1 },
-          { onConflict: 'quelle,referenz', ignoreDuplicates: true },
-        );
-      if (gErr) console.error('[gutschein] protokoll_gutschriften insert failed', { userId: user.id, message: gErr.message });
-    }
+    // Mein Protokoll: Die Gutschrift (ein Protokoll je Gutschein) schreibt
+    // redeem_voucher selbst, in derselben Transaktion wie die Einlösung
+    // (Migration 20261009170338, angewendet 09.10.2026). Der frühere zweite
+    // Schritt hier konnte scheitern, nachdem der Gutschein schon verbraucht war.
     return NextResponse.json({
       ok: true,
       course_title: (data as any).course_title ?? 'deinem Produkt',

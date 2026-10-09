@@ -1,8 +1,10 @@
 -- ============================================================
 -- Geschenkgutscheine: Gültigkeit bis Jahresende des dritten Folgejahres
 --
--- NOCH NICHT ANGEWENDET (Stand 09.10.2026). Anwenden nur mit Freigabe Uwe;
--- danach den Dateinamen auf die Ledger-Version setzen (Regel aus PR #285).
+-- ANGEWENDET am 09.10.2026 (Freigabe Uwe im Chat: „Ja, Migrationen anwenden"),
+-- per Supabase-MCP, Ledger-Version 20261009170345 — der Dateiname entspricht ihr
+-- (Regel aus PR #285; vorher 20261009200000). Nachgeprüft: column_default von
+-- vouchers.valid_until ist der make_timestamptz-Ausdruck unten.
 --
 -- Anlass (Gutschein-Konzept T10, 09.10.2026): AGB § 5a versprechen
 -- „3 Jahre ab Ausstellung (… § 195 BGB, beginnend zum Schluss des
