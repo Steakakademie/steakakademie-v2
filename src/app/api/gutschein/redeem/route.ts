@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { guardRequest } from '@/lib/api/guard';
 import { createClient } from '@supabase/supabase-js';
+import { kanonischerCode } from '@/lib/gutschein-products';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,9 @@ const NEXT_BY_SLUG: Record<string, string> = {
   'bbq-grundkurs':  '/diplome',
   'mein-protokoll': '/mein-protokoll/fragebogen',
   'steak-beichte':  '/steak-beichte/diagnose',
+  // Sortiment Uwe, 09.10.2026. /diplome/lernen hat keine Uebersichtsseite —
+  // die Roadmap listet die Lektionen aller Stufen mit Links.
+  'grillmeister-diplom': '/diplome/roadmap',
 };
 
 export async function POST(req: Request) {
@@ -59,16 +63,18 @@ export async function POST(req: Request) {
   if (status === 'ok') {
     const slug = (data as any).course_slug as string;
 
-    // Mein Protokoll: Der Gutschein öffnet den Zugang (redeem_voucher →
-    // grant_course_access); das Guthaben — ein Protokoll je Gutschein — steht in
-    // protokoll_gutschriften. Idempotent über UNIQUE (quelle, referenz). Scheitert
-    // der Eintrag, bleibt der Zugang bestehen, aber der Fragebogen meldet „kein
-    // Guthaben": deshalb laut protokollieren statt still schlucken.
+    // Mein Protokoll: Der Gutschein öffnet den Zugang; das Guthaben — ein
+    // Protokoll je Gutschein — steht in protokoll_gutschriften. Seit Migration
+    // 20261009180000 schreibt redeem_voucher die Gutschrift in derselben
+    // Transaktion. Dieser Schritt bleibt als Rückfall, bis die Migration auf
+    // der Live-DB liegt: idempotent über UNIQUE (quelle, referenz) mit
+    // derselben kanonischen Referenz, also nach der Migration ein No-op.
+    // Danach entfernen.
     if (slug === 'mein-protokoll') {
       const { error: gErr } = await admin
         .from('protokoll_gutschriften')
         .upsert(
-          { user_id: user.id, quelle: 'gutschein', referenz: code.toUpperCase(), anzahl: 1 },
+          { user_id: user.id, quelle: 'gutschein', referenz: kanonischerCode(code), anzahl: 1 },
           { onConflict: 'quelle,referenz', ignoreDuplicates: true },
         );
       if (gErr) console.error('[gutschein] protokoll_gutschriften insert failed', { userId: user.id, message: gErr.message });

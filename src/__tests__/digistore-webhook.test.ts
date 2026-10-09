@@ -113,6 +113,24 @@ async function rpc(name: string, args: Row) {
       db.credits[args.p_user_id] = (db.credits[args.p_user_id] ?? 0) + args.p_amount;
       return { data: true, error: null };
     }
+    case 'create_voucher': {
+      // Nachbildung von create_voucher: idempotent je ds_order_id.
+      const vouchers = (db.tables.vouchers ??= []);
+      const vorhanden = vouchers.find((v) => v.ds_order_id === args.p_ds_order_id);
+      if (vorhanden) return { data: vorhanden.code, error: null };
+      const code = `SA-TEST-${String(vouchers.length + 1).padStart(4, '0')}`;
+      vouchers.push({
+        code, course_id: args.p_course_id, kind: args.p_kind, credit_amount: args.p_credit_amount,
+        ds_order_id: args.p_ds_order_id, purchaser_email: args.p_purchaser_email, status: 'issued',
+      });
+      return { data: code, error: null };
+    }
+    case 'revoke_voucher': {
+      const v = (db.tables.vouchers ?? []).find((x) => x.ds_order_id === args.p_ds_order_id);
+      if (!v) return { data: 'not_found', error: null };
+      v.status = 'revoked';
+      return { data: 'revoked', error: null };
+    }
     default:
       return { data: null, error: { code: 'PGRST202', message: `Could not find the function public.${name}` } };
   }
@@ -184,6 +202,7 @@ beforeEach(() => {
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
   process.env.LOOPS_API_KEY = 'loops-key';
   process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID = 'tpl-magic';
+  process.env.LOOPS_VOUCHER_TEMPLATE_ID = 'tpl-voucher';
   vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })));
   // mockClear: Der Spion bleibt ueber die Tests hinweg derselbe und sammelt
   // sonst die ALARM-Zeilen frueherer Tests — alarme() weiter unten zaehlt sie.
@@ -432,5 +451,81 @@ describe('Digistore24-Webhook: gescheiterte Verarbeitung erreicht Sentry (03.10.
     const res = await POST(delivery({ event: 'payment', order_id: 'ORD-V-4', product_id: '696399', email: 'neu@example.de' }));
     expect(res.status).toBe(200);
     expect(db.sentry).toHaveLength(0);
+  });
+});
+
+describe('Digistore24-Webhook: Geschenkgutscheine (Gutschein-Konzept T7, 09.10.2026)', () => {
+  beforeEach(() => {
+    db.tables.digistore_products.push(
+      // G3 Mein Protokoll — Kurs-Gutschein
+      { ds_product_id: '800001', course_id: 'course-mein-protokoll', is_voucher: true, voucher_credit_amount: null, credit_amount: null,
+        courses: { slug: 'mein-protokoll', title: 'Mein Protokoll', published: false } },
+      // G2 Steak-Beichte 5er — Credit-Gutschein
+      { ds_product_id: '800002', course_id: 'course-steak-beichte', is_voucher: true, voucher_credit_amount: 5, credit_amount: null,
+        courses: { slug: 'steak-beichte', title: 'Steak-Beichte', published: false } },
+    );
+  });
+
+  const kauf = (product: string, order = 'GS-1', event = 'payment') =>
+    delivery({ event, order_id: order, product_id: product, email: 'Schenker@Example.de' });
+  const vouchers = () => db.tables.vouchers ?? [];
+  const mailBodies = () =>
+    (fetch as any).mock.calls.map((c: unknown[]) => JSON.parse(String((c[1] as RequestInit).body)));
+
+  it('Kurs-Gutschein: Code entsteht, Gutschein-Mail geht raus, beim Käufer wird nichts freigeschaltet', async () => {
+    const res = await POST(kauf('800001'));
+
+    expect(res.status).toBe(200);
+    expect(vouchers()).toMatchObject([
+      { course_id: 'course-mein-protokoll', kind: 'course', credit_amount: null, ds_order_id: 'GS-1', purchaser_email: 'schenker@example.de' },
+    ]);
+    expect(db.tables.bookings).toHaveLength(0);
+    expect(db.users).toHaveLength(0);
+    expect(mailBodies()).toEqual([
+      expect.objectContaining({
+        transactionalId: 'tpl-voucher',
+        email: 'schenker@example.de',
+        dataVariables: expect.objectContaining({ voucher_code: 'SA-TEST-0001', course_title: 'Mein Protokoll' }),
+      }),
+    ]);
+    expect(db.tables.digistore_orders[0]).toMatchObject({ processing_status: 'processed', error_message: 'voucher SA-TEST-0001' });
+  });
+
+  it('unveröffentlichter Kurs löst beim Gutschein-Kauf keinen Alarm aus (Mein Protokoll vor dem 01.11.)', async () => {
+    await POST(kauf('800001'));
+    expect(db.sentry).toHaveLength(0);
+  });
+
+  it('5er-Gutschein der Steak-Beichte: Credit-Gutschein über 5 Diagnosen, Käufer bekommt keine Credits', async () => {
+    const res = await POST(kauf('800002'));
+
+    expect(res.status).toBe(200);
+    expect(vouchers()).toMatchObject([{ course_id: 'course-steak-beichte', kind: 'credit', credit_amount: 5 }]);
+    expect(db.credits).toEqual({});
+  });
+
+  it('doppelte Zustellung derselben Bestellung erzeugt keinen zweiten Code', async () => {
+    await POST(kauf('800001'));
+    const zweite = await POST(kauf('800001'));
+    expect(zweite.status).toBe(200);
+    expect(vouchers()).toHaveLength(1);
+  });
+
+  it('scheitert die Gutschein-Mail: 500 + Alarm, die Wiederholung verschickt denselben Code', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('nope', { status: 500 })));
+    expect((await POST(kauf('800001'))).status).toBe(500);
+    expect(db.sentry.map((s) => s.opts.tags.grund)).toEqual(['verarbeitung-gescheitert']);
+
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })));
+    expect((await POST(kauf('800001'))).status).toBe(200);
+    expect(vouchers()).toHaveLength(1);
+    expect(mailBodies()[0].dataVariables.voucher_code).toBe('SA-TEST-0001');
+  });
+
+  it('Rückgabe nimmt den Gutschein zurück', async () => {
+    await POST(kauf('800001'));
+    const res = await POST(kauf('800001', 'GS-1', 'refund'));
+    expect(res.status).toBe(200);
+    expect(vouchers()[0].status).toBe('revoked');
   });
 });

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { GIFTABLE_PRODUCTS } from '@/lib/gutschein-products';
+import { sichtbareGutscheine } from '@/lib/gutschein-products';
 import { Gift, Mail, Flame, Ticket } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -49,11 +49,11 @@ export default function GutscheinLandingPage() {
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <h2 className="font-serif text-2xl font-bold text-text-primary mb-6 text-center">Das kannst du verschenken</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {GIFTABLE_PRODUCTS.map((p) => (
-              <div key={p.courseSlug} className="bg-surface-card border border-border-subtle p-6 flex flex-col">
+            {sichtbareGutscheine().map((p) => (
+              <div key={p.key} className="bg-surface-card border border-border-subtle p-6 flex flex-col">
                 <div className="flex items-baseline justify-between mb-2">
                   <h3 className="font-serif text-xl font-bold text-text-primary">{p.title}</h3>
-                  <span className="font-sans font-bold text-brand-gold">{p.priceLabel}</span>
+                  {p.priceLabel && <span className="font-sans font-bold text-brand-gold">{p.priceLabel}</span>}
                 </div>
                 <p className="font-body text-sm text-text-secondary leading-relaxed mb-5 flex-1">{p.blurb}</p>
                 {p.checkoutUrl ? (

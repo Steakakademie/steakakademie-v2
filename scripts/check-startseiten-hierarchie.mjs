@@ -62,6 +62,10 @@ const SOLL_REIHENFOLGE = [
   'FRISCH & SAISONAL',
   'MANIFESTO',
   'DIPLOM-TEASER',
+  // GEAENDERT (09.10.2026, Gutschein-Konzept T8, freigegeben von Uwe im Chat):
+  // saisonaler Gutschein-Teaser direkt unter dem Diplom-Teaser — Angebot, also
+  // weit unten. Vermerkt in CLAUDE.md Regel 8.
+  'GUTSCHEIN-TEASER',
   'BBQ-NEWS TEASER',
   'KATEGORIE-SEKTIONEN',
   'TOP-PRODUKTE',
@@ -86,8 +90,7 @@ if (RIEGEL.some((m, i) => SOLL_REIHENFOLGE[i] !== m)) {
  * Der Diplom-Teaser darf nie vor den redaktionellen Einstieg rutschen.
  */
 const NICHT_VOR = [
-  { abschnitt: 'DIPLOM-TEASER', darf_nicht_vor: 'KATEGORIE-SEKTIONEN', ausnahme: 'MANIFESTO' },
-];
+  { abschnitt: 'DIPLOM-TEASER', darf_nicht_vor: 'KATEGORIE-SEKTIONEN', ausnahme: 'MANIFESTO' },];
 
 /** Höchstzahl an Links auf /diplome oberhalb des HERO-Abschnitts. */
 const MAX_DIPLOM_LINKS_OBEN = 1;

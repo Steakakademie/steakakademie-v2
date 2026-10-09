@@ -7,6 +7,7 @@ import {
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { verkaufsstand } from '@/lib/angebote/register';
+import GutscheinHinweis from '@/components/gutschein/GutscheinHinweis';
 
 // Kaufbar oder nicht entscheidet data/angebote.yaml (Eintrag steak-beichte).
 // Bis 02.10.2026 standen hier drei Checkout-Links ohne Schalter.
@@ -474,6 +475,8 @@ export default function SteakBeichtePage() {
             </div>
           </div>
         </section>
+
+        <GutscheinHinweis courseSlug="steak-beichte" titel="Die Steak-Beichte" />
 
       </main>
 
