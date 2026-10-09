@@ -276,6 +276,11 @@ zusagen:
         muster: "Du bekommst einen Code per E-Mail"
       - datei: src/components/home/GutscheinTeaser.tsx
         muster: "der Code kommt per E-Mail"
+      # Gutschein-Konzept T10 (09.10.2026): FAQ auf /gutschein, Ratgeber-Entwurf.
+      - datei: src/app/gutschein/page.tsx
+        muster: "Nach dem Kauf bekommst du den Code per E-Mail"
+      - datei: content/artikel/geschenke-fuer-grillfans.mdx
+        muster: "kommt der Code per E-Mail"
     beleg:
       - typ: loops
         art: transactional

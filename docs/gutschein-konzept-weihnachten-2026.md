@@ -136,7 +136,7 @@ Digistore-Support beantworten. Bis dahin wird nichts gebaut, was Geld annimmt.
 | T7 | Tests für Gutschein-Kauf und -Einlösung | Webhook-Pfad für Gutscheine ist heute nicht eigens getestet |
 | T8 | Sichtbarkeit im Code: Hinweis „Auch als Gutschein" auf `/steak-beichte` und `/mein-protokoll`, Teaser auf der Startseite, im November/Dezember Link im Header | Heute nur Footer |
 | T9 | Wertgutscheine: Migration (Tabellen für Guthaben und Buchungen, Funktionen anlegen/einlösen/zurücknehmen), Webhook-Zweig, Einlöseseite mit Produktauswahl, Mail, Tests | Erst nach Antwort auf Kanzlei-Frage 7 |
-| T10 | `/gutschein` um die vier Werte erweitern, AGB § 5a um Wertgutscheine ergänzen (Entwurf, Kanzlei prüft) | Heute regelt § 5a nur Produktgutscheine |
+| T10 | ✓ 09.10.: `/gutschein` um die vier Werte erweitert (hinter dem Schalter `WERTGUTSCHEINE_AKTIV`, bis T9 aus), AGB-Entwurf `docs/agb-5a-wertgutscheine-entwurf.md`, Gültigkeit an AGB angeglichen | Heute regelt § 5a nur Produktgutscheine |
 
 ## Uwe
 
@@ -160,9 +160,12 @@ Digistore-Support beantworten. Bis dahin wird nichts gebaut, was Geld annimmt.
    auf `/gutschein` und in Digistore?
 3. Einzweckgutschein (§ 3 Abs. 14 UStG) bei Regelbesteuerung: Umsatzsteuer beim
    Verkauf — so richtig?
-4. Gültigkeit: Der Code gilt „3 Jahre ab Kauf". Die regelmäßige Verjährung
-   (§§ 195, 199 BGB) läuft bis zum Jahresende. Ist „3 Jahre ab Kauf" zulässig oder
-   besser „bis 31.12. des dritten Folgejahres"?
+4. Gültigkeit: **Am 09.10. angeglichen.** AGB § 5a nannten schon das Jahresende
+   (§§ 195, 199 BGB), Webseite und Datenbank rechneten „3 Jahre ab Kauf" — ein
+   Gutschein wäre vor dem Ende der AGB-Frist abgelaufen. Jetzt gilt überall
+   „bis 31.12. des dritten Folgejahres" (Migration `20261009200000`, noch nicht
+   angewendet). Frage an die Kanzlei nur noch: Ist die Formulierung so richtig?
+   Entwurf: `docs/agb-5a-wertgutscheine-entwurf.md`.
 5. Was gilt, wenn ein Produkt eingestellt wird, auf das noch Gutscheine
    ausgegeben sind (Erstattung, Ersatzprodukt)?
 6. Wertgutscheine: Muss ein Restwert erhalten bleiben, wenn nur ein Teil
@@ -177,11 +180,12 @@ Digistore-Support beantworten. Bis dahin wird nichts gebaut, was Geld annimmt.
 
 - **Suche:** Die Nachfrage nach „Geschenk für Griller", „Grill Gutschein",
   „Geschenkideen Grillfans" steigt ab November. Dafür:
-  - `/gutschein` schärfen: Title und Description auf diese Begriffe, kurze FAQ
-    (Wie lange gültig? Wann kommt der Code? Wie löst man ein?).
-  - Ein Ratgeber „Geschenke für Grillfans" mit den Gutscheinen und passenden
-    Partnerprodukten, **Anfang November** veröffentlicht, damit er vor dem
-    Höhepunkt indexiert ist.
+  - ✓ 09.10. (T10): `/gutschein` geschärft — Title „Geschenkgutscheine für
+    Grillfans", neue Description, FAQ mit FAQPage-Schema.
+  - ✓ 09.10.: Ratgeber-Entwurf `content/artikel/geschenke-fuer-grillfans.mdx`
+    (`status: draft`, geplant 02.11.). Ohne Produktnamen und Preise; verweist
+    auf die Marktübersichten. Veröffentlicht erst nach Uwes Gegenlesen,
+    **Anfang November**, damit er vor dem Höhepunkt indexiert ist.
   - Mit dem heutigen Search-Console-Bericht abgleichen, welche dieser Begriffe
     schon Impressionen haben.
 - **Interne Links:** Produktseiten, Startseite, passende Rezepte und Cuts
