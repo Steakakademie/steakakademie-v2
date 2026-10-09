@@ -52,7 +52,7 @@ export default function DankeGutscheinPage() {
             <div>
               {/* 03.10.2026: „jederzeit … kein Zeitdruck" stand gegen die Frist.
                   09.10.2026: Frist wie AGB § 5a — bis Jahresende des dritten Folgejahres
-                  (Migration 20261009200000); vorher rechnete die Datenbank ab Kauf. */}
+                  (Migration 20261009170345); vorher rechnete die Datenbank ab Kauf. */}
               <p className="text-white text-sm font-medium">Einlösen — mindestens 3 Jahre Zeit</p>
               <p className="text-white/60 text-sm">
                 Die beschenkte Person löst den Code unter{' '}
