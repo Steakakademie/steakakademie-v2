@@ -11,7 +11,7 @@ unter `emails/loops/<vorlage>/index.mjml`, das Logo unter
 | Ordner | Loops-Vorlage | Variable in Vercel | Variablen in der Mail | Betreff | Vorschautext |
 |---|---|---|---|---|---|
 | `zugang` | „LogIn Link" | `LOOPS_MAGIC_LINK_TEMPLATE_ID` | `magic_link`, `course_title` | Dein Zugang zur Steakakademie ist da | Ein Klick, und du bist drin. |
-| `gutschein` | Gutschein | `LOOPS_VOUCHER_TEMPLATE_ID` | `voucher_code`, `voucher_url`, `course_title` | Dein Geschenkgutschein: `{DATA_VARIABLE:course_title}` | Code und Geschenkseite zum Ausdrucken. |
+| `gutschein` | Gutschein | `LOOPS_VOUCHER_TEMPLATE_ID` | `voucher_code`, `voucher_url`, `course_title`, `gueltig_bis` | Dein Geschenkgutschein: `{DATA_VARIABLE:course_title}` | Code und Geschenkseite zum Ausdrucken. |
 | `urkunde-bestaetigung` | **neu anlegen** | `LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID` (fehlt noch) | `stufe_name`, `name_auf_urkunde`, `preis`, `bestell_id`, `adresse`, `widerruf_hinweis` | Deine Urkunde ist bestellt | Bitte prüf den Namen, er wird genau so gedruckt. |
 | `doi` | Double-Opt-in | `LOOPS_DOI_TEMPLATE_ID` | `confirmUrl` | Bitte bestätige deine Anmeldung | Ein Klick, dann kommt der Wissens-Brief. |
 | `wissens-brief` | Kampagne | — | — (Abmeldelink `{unsubscribe_link}`) | je Ausgabe | je Ausgabe |
@@ -56,9 +56,13 @@ neu packen, neu hochladen.
 - **Logo als PNG**, nicht SVG — viele Mailprogramme zeigen SVG nicht an.
 - **„Powered by Loops"** hängt Loops im aktuellen Tarif selbst an (Uwe,
   09.10.2026: vorerst in Ordnung).
-- **Gutschein-Gültigkeit ohne festes Jahr** („bis zum 31. Dezember des dritten
-  Jahres nach dem Kauf"), damit die Vorlage auch 2027 stimmt; das genaue Datum
-  steht auf der Geschenkseite.
+- **Gutschein-Gültigkeit als festes Datum** (seit 09.10.2026, Variable
+  `gueltig_bis`, z. B. „31.12.2029"): Der Webhook liest `vouchers.valid_until`
+  — dieselbe Quelle wie die Geschenkseite — und rechnet bei einem Lesefehler
+  die AGB-Regel (31.12. des dritten Folgejahres) selbst nach
+  (`src/lib/gutschein-gueltigkeit.ts`). **Reihenfolge beim Ausrollen:** erst den
+  Code deployen, dann die Vorlage hochladen — die Vorlage verlangt
+  `gueltig_bis`, ohne die Variable scheitert der Versand.
 - **Double-Opt-in ohne Werbung**, der Satz zur Werbung gibt die Einwilligung
   `2026-08-28-v2` wieder. Dieselbe Vorlage nutzt `/api/niche-validator/lead` —
   dort passt die Überschrift „Wissens-Brief" nicht. Solange der Gründer-Bereich

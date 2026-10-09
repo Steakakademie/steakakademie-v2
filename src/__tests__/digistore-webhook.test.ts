@@ -122,6 +122,8 @@ async function rpc(name: string, args: Row) {
       vouchers.push({
         code, course_id: args.p_course_id, kind: args.p_kind, credit_amount: args.p_credit_amount,
         ds_order_id: args.p_ds_order_id, purchaser_email: args.p_purchaser_email, status: 'issued',
+        // Vorgabewert der Datenbank (31.12. des dritten Folgejahres, 23:59:59 Berlin)
+        valid_until: '2029-12-31T22:59:59+00:00',
       });
       return { data: code, error: null };
     }
@@ -485,7 +487,7 @@ describe('Digistore24-Webhook: Geschenkgutscheine (Gutschein-Konzept T7, 09.10.2
       expect.objectContaining({
         transactionalId: 'tpl-voucher',
         email: 'schenker@example.de',
-        dataVariables: expect.objectContaining({ voucher_code: 'SA-TEST-0001', course_title: 'Mein Protokoll' }),
+        dataVariables: expect.objectContaining({ voucher_code: 'SA-TEST-0001', course_title: 'Mein Protokoll', gueltig_bis: '31.12.2029' }),
       }),
     ]);
     expect(db.tables.digistore_orders[0]).toMatchObject({ processing_status: 'processed', error_message: 'voucher SA-TEST-0001' });
