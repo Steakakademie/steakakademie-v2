@@ -42,10 +42,26 @@ function zielExistiert(ziel: string): boolean {
   return existsSync(join(ROOT, 'src', 'app', ...ziel.split('/').filter(Boolean), 'page.tsx'));
 }
 
+/**
+ * Bezahlte Kursinhalte kommen aus dem privaten Repo (scripts/kursinhalte-holen.mjs,
+ * .gitignore) und liegen in CI unter content/ — gehoeren aber nicht zu diesem Repo
+ * und werden hier nicht geprueft: ein alter Link dort ist im privaten Repo zu
+ * aendern, der 301 faengt ihn bis dahin. Anlass: PR #356, Stufe 2 verlinkte noch
+ * /glossar/low-slow und der Lauf war rot, ohne dass dieses Repo etwas aendern konnte.
+ */
+const PRIVAT = [
+  join(ROOT, 'content', 'eigenregie'),
+  join(ROOT, 'content', 'gruender-schmiede'),
+  /^content[\\/]diplom-lektionen[\\/]stufe-[2-9]$/,
+];
+const istPrivat = (p: string) =>
+  PRIVAT.some((m) => (typeof m === 'string' ? p === m : m.test(p.slice(ROOT.length + 1))));
+
 function dateien(dir: string, out: string[] = []): string[] {
   for (const e of readdirSync(dir)) {
     if (e === '_archiv' || e.startsWith('.')) continue;
     const p = join(dir, e);
+    if (istPrivat(p)) continue;
     if (statSync(p).isDirectory()) dateien(p, out);
     else if (['.mdx', '.md', '.ts', '.tsx'].includes(extname(e)) && !/\.test\.(ts|tsx)$/.test(e)) out.push(p);
   }
