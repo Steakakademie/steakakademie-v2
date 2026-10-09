@@ -154,6 +154,12 @@ glossar_weiterleitungen:
   wettbewerbs-pitmaster: /glossar/wettkampf-pitmaster
   kollagen-umwandlung: /glossar/kollagen-transformation
   plateauphase: /glossar/stall
+  # Glossar-Dubletten zu Hub-Seiten (09.10.2026): dieselbe Suchanfrage, zwei
+  # eigene URLs — die Hub-Seite ist in jedem Fall die bessere Antwort.
+  rib-eye: /cuts/ribeye
+  pulled-pork: /cuts/pulled-pork
+  oberhitzegrill-vergleich: /vergleich/oberhitzegrill-vergleich
+  low-slow: /methoden/smoken-low-and-slow
 
 # ─── Wortdopplung: erlaubte Wendungen ────────────────────────────────────────
 # „X und X" ist sonst ein Fehler (Hot-Spots und Hot-Spots). Diese sind Deutsch.

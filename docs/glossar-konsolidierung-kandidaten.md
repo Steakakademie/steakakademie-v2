@@ -321,11 +321,21 @@ Definition/Hintergrund/Praxistipp ohne Fakten, die dem Ziel fehlen; einzig die
 Suchphrasen „Plateauphase" und „Kollagen-Umwandlung" stehen jetzt in der
 Definition ihres Hubs. 16 interne Links in `content/` zeigen direkt auf die Ziele.
 
+**Hub-Dubletten, zweiter Schritt (09.10.2026):** vier Glossar-Eintraege, die
+dieselbe Suchanfrage bedienen wie eine vollstaendige Hub-Seite, leiten dorthin:
+`rib-eye` → `/cuts/ribeye` (das Traffic-Ziel aus CLAUDE.md §5 hatte einen
+hauseigenen Konkurrenten), `pulled-pork` → `/cuts/pulled-pork`,
+`oberhitzegrill-vergleich` → `/vergleich/oberhitzegrill-vergleich` (ein
+„Vergleich" ist kein Glossarbegriff), `low-slow` → `/methoden/smoken-low-and-slow`
+(11 eingehende Links aus Rezepten, Ankertext „Low & Slow" — zeigen jetzt auf die
+Anleitung statt auf eine Kurzdefinition).
+
 **Offen bleiben** (echte Begriffe oder Hub-Dubletten, die eine Redaktions-
 Entscheidung brauchen): `maillard-*`, `dry-*`, `infrarot-*`, `medium-*`,
 `oberhitze-*`, `rub-*`, `wagyu-{rinder,zucht,kreuzungen,zertifikat,brisket}`,
 `wettkampf-{standards,pitmaster,team}`, `brisket-{test,buns}`,
-`smoker-{monitoring,finish}` — und die Glossar-Dubletten zu Hub-Seiten
-(`reverse-sear`, `sous-vide`, `minion-methode`, `direktes-/indirektes-grillen`,
-`rotisserie`, `plancha`, `low-slow`, `oberhitze-grillen`, `oberhitzegrill-vergleich`,
-`rib-eye`, `pulled-pork`), die je 1–11 eingehende Links tragen.
+`smoker-{monitoring,finish}` — und die Glossar-Definitionen von Methoden, zu
+denen es eine Anleitung gibt (`reverse-sear`, `sous-vide`, `minion-methode`,
+`direktes-/indirektes-grillen`, `rotisserie`, `plancha`, `oberhitze-grillen`):
+dort ist die Kurzdefinition im Glossar vertretbar, die Entscheidung liegt bei
+der Redaktion.
