@@ -3,7 +3,7 @@
     Steakakademie · Loops-Vorlage Geschenkgutschein (LOOPS_VOUCHER_TEMPLATE_ID)
     Geht an den KÄUFER. Gesendet vom Digistore-Webhook (sendVoucherEmail).
     Variablen: {DATA_VARIABLE:voucher_code}, {DATA_VARIABLE:voucher_url}, {DATA_VARIABLE:course_title}
-    Betreff in Loops: Dein Geschenkgutschein für {DATA_VARIABLE:course_title}
+    Betreff in Loops: Dein Geschenkgutschein: {DATA_VARIABLE:course_title}
     Vorschautext:     Code und Geschenkseite zum Ausdrucken.
     Design: docs/loops-mailvorlagen.md · Stand 09.10.2026
   -->
@@ -38,8 +38,8 @@
 
     <mj-section background-color="#FFFFFF" padding="30px 28px 10px 28px">
       <mj-column>
-        <mj-text font-size="11.5px" font-weight="700" letter-spacing="2px" color="#A86E1C" padding="0 0 8px 0">DEIN GESCHENKGUTSCHEIN</mj-text>
-        <mj-text css-class="h1" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="26px" line-height="1.25" font-weight="700" padding="0 0 14px 0">Ein Gutschein für {DATA_VARIABLE:course_title}</mj-text>
+        <mj-text font-size="11.5px" font-weight="700" letter-spacing="2px" color="#A86E1C" padding="0 0 8px 0">ZUM VERSCHENKEN</mj-text>
+        <mj-text css-class="h1" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="26px" line-height="1.25" font-weight="700" padding="0 0 14px 0">Dein Geschenkgutschein: {DATA_VARIABLE:course_title}</mj-text>
         <mj-text>Danke für deinen Kauf. Unten steht der Code. Du kannst ihn weiterleiten oder die Geschenkseite ausdrucken und verschenken.</mj-text>
       </mj-column>
     </mj-section>
