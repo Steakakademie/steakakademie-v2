@@ -11,7 +11,7 @@ unter `emails/loops/<vorlage>/index.mjml`, das Logo unter
 | Ordner | Loops-Vorlage | Variable in Vercel | Variablen in der Mail | Betreff | Vorschautext |
 |---|---|---|---|---|---|
 | `zugang` | „LogIn Link" | `LOOPS_MAGIC_LINK_TEMPLATE_ID` | `magic_link`, `course_title` | Dein Zugang zur Steakakademie ist da | Ein Klick, und du bist drin. |
-| `gutschein` | Gutschein | `LOOPS_VOUCHER_TEMPLATE_ID` | `voucher_code`, `voucher_url`, `course_title` | Dein Geschenkgutschein für `{DATA_VARIABLE:course_title}` | Code und Geschenkseite zum Ausdrucken. |
+| `gutschein` | Gutschein | `LOOPS_VOUCHER_TEMPLATE_ID` | `voucher_code`, `voucher_url`, `course_title` | Dein Geschenkgutschein: `{DATA_VARIABLE:course_title}` | Code und Geschenkseite zum Ausdrucken. |
 | `urkunde-bestaetigung` | **neu anlegen** | `LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID` (fehlt noch) | `stufe_name`, `name_auf_urkunde`, `preis`, `bestell_id`, `adresse`, `widerruf_hinweis` | Deine Urkunde ist bestellt | Bitte prüf den Namen, er wird genau so gedruckt. |
 | `doi` | Double-Opt-in | `LOOPS_DOI_TEMPLATE_ID` | `confirmUrl` | Bitte bestätige deine Anmeldung | Ein Klick, dann kommt der Wissens-Brief. |
 | `wissens-brief` | Kampagne | — | — (Abmeldelink `{unsubscribe_link}`) | je Ausgabe | je Ausgabe |
