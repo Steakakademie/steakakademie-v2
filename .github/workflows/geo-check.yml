@@ -28,6 +28,11 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       - name: GEO-Check ausführen
         run: node scripts/geo-check.mjs
 

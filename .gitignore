@@ -194,3 +194,12 @@ training/cut-review/
 Claude outputs/
 outputs/
 data/bild-motiv-report.json
+
+# Bezahlte Kursinhalte liegen im privaten Repo Steakakademie/Steakakademie-kursinhalte
+# (Uwe, 08.10.2026) und werden von scripts/kursinhalte-holen.mjs geholt.
+# Nie hier einchecken: dieses Repo ist öffentlich.
+/.kursinhalte/
+/privat/
+/content/eigenregie
+/content/gruender-schmiede
+/content/diplom-lektionen/stufe-[2-9]

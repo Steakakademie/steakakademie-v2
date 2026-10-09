@@ -161,6 +161,18 @@ export async function getNewsSlugs(limit = 200): Promise<string[]> {
   }
 }
 
+/**
+ * Alle freigegebenen Scout-News mit eigener Seite, neueste zuerst — fuer das
+ * Archiv auf /bbq-news. Anlass (SEO-Audit 08.10.2026): Der gemischte Strom
+ * (getNewsItems) sortiert nach Datum und schneidet bei `limit` ab. Sobald die
+ * Plattform mehr als zwoelf neuere Inhalte hat, fallen die Scout-News heraus —
+ * die vier /bbq-news/<slug>-Seiten hatten dadurch keinen einzigen internen Link.
+ */
+export async function getScoutNews(limit = 50): Promise<NewsItem[]> {
+  const live = await getLiveNews(limit);
+  return live.filter((n) => n.slug);
+}
+
 /** Freigegebene Scout-News aus Supabase — [] ohne Env, bei Fehler oder ohne Daten. */
 async function getLiveNews(limit: number): Promise<NewsItem[]> {
   const supabase = anonClient();

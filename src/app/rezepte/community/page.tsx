@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   description:
     'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, von einer KI vorgeprüft, von Hand freigegeben. Echte Kreationen zum Nachgrillen.',
   alternates: { canonical: 'https://steakakademie.de/rezepte/community' },
+  // Ein freigegebenes Rezept, ~70 Woerter eigener Text (SEO-Audit 08.10.2026):
+  // noindex, bis die Liste traegt. Wer das aufhebt, nimmt /rezepte/community
+  // auch wieder in next-sitemap.config.js auf (Waechter: sitemap-noindex.test.ts).
+  robots: { index: false, follow: true },
 };
 
 type Card = {

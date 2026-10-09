@@ -84,6 +84,11 @@ jobs:
       - name: Dependencies installieren
         run: npm ci
 
+      - name: Kursinhalte holen (privates Repo)
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       # .next/cache spart den Grossteil der Bauzeit (Webpack-Module, optimierte
       # Bilder). Der Schluessel haengt am Lockfile UND am Quelltext: aendert sich
       # Code, wird ein neuer Eintrag geschrieben, die restore-keys liefern dabei

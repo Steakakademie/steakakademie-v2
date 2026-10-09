@@ -191,7 +191,10 @@ describe('pruefstand — gegen den echten Bestand', () => {
       .filter((e) => e.isDirectory() && !AUSGENOMMEN.includes(e.name))
       .reduce((n, e) => n + zaehle(join(WURZEL, 'content', e.name)), 0)
     expect(dokumente.length).toBe(erwartet)
-    expect(dokumente.length).toBeGreaterThan(400)
+    // Untergrenze gegen einen leer laufenden Scanner — kein Bestandsziel. Stand
+    // 09.10.2026 sind es nach der Glossar-Konsolidierung (29 Permutationen
+    // weniger) genau 400; die alte Grenze „> 400" war daran kalibriert.
+    expect(dokumente.length).toBeGreaterThan(300)
     expect(dokumente.every((d) => !d.pfad.includes('_archiv'))).toBe(true)
   })
 

@@ -1,5 +1,6 @@
 import { use } from "react";
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import BildCredit from '@/components/BildCredit';
@@ -43,7 +44,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const title = vergleich.seoTitle ?? vergleich.title;
   const description = vergleich.seoDescription ?? vergleich.excerpt;
   return {
-    title,
+    title: seoTitel(title),
     description,
     alternates: { canonical: `https://steakakademie.de${vergleich.url}` },
     openGraph: {

@@ -302,6 +302,16 @@ export function glossarTierart (text) {
 export function glossarDublette (slug, bestand) {
   const tax = taxonomie()
   const vorhanden = bestand instanceof Set ? bestand : new Set(bestand)
+  // Weitergeleitete Slugs (09.10.2026): die Datei ist weg, der 301 steht —
+  // ein neuer Eintrag unter diesem Slug wuerde die Weiterleitung ueberdecken.
+  // Unabhaengig vom Bestand, denn das Ziel kann eine Methoden- oder Cut-Seite sein.
+  // `kanonisch` bleibt ein Glossar-Slug, wenn das Ziel im Glossar liegt — sonst die URL.
+  const weiter = tax.glossar_weiterleitungen || {}
+  if (weiter[slug]) {
+    const ziel = String(weiter[slug])
+    const kanonisch = ziel.startsWith('/glossar/') ? ziel.slice('/glossar/'.length) : ziel
+    return { kanonisch, grund: `weitergeleitet nach ${ziel} (data/taxonomie.yaml)` }
+  }
   const syn = tax.glossar_synonyme || {}
   if (syn[slug] && vorhanden.has(syn[slug]) && syn[slug] !== slug) {
     return { kanonisch: syn[slug], grund: `Synonym von „${syn[slug]}" (data/taxonomie.yaml)` }
