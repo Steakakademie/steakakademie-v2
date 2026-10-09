@@ -414,5 +414,55 @@
     "difficulty": "Einfach",
     "concept": "Nem Nướng sind kompakte Hackfleisch-Spieße aus gewürztem Schweinehack, die über Holzkohle gegrillt werden und durch ihren hohen Fettanteil saftig und außen leicht karamellisiert bleiben – vergleichbar mit Köfte, aber mit Knoblauch, Pfeffer und einem Hauch Honig als Hauptaromen. Der kritische Schritt ist das Kneten der Masse bis zur Bindung, damit die Spieße beim Grillen nicht auseinanderfallen. Der Artikel beantwortet, welche Fettanteile im Hack für Stabilität und Saftigkeit sorgen, wie man ohne Spezialzutaten ein authentisches Ergebnis erzielt, und warum dieses Gericht auch für Griller ohne Asien-Affinität sofort funktioniert. Herkunft: Vietnam.",
     "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-turkey-legs-usa",
+    "kategorie": "fleisch",
+    "title": "Smoked Turkey Legs – Geräucherte Hähnchenkeulen nach Jahrmarkt-Art",
+    "meatType": "Putenkeulen",
+    "cookingMethod": "Indirekt, low & slow, Rauch",
+    "difficulty": "Mittel",
+    "concept": "Smoked Turkey Legs sind ein Klassiker amerikanischer State Fairs und Themenparks – ganze Putenkeulen, die nach einer einfachen Salzlake stundenlang bei niedriger Temperatur über Hickory- oder Apfelholzrauch gegart werden, bis die Haut tief mahagonibraun und das Fleisch butterzart ist. Der entscheidende Schritt ist das Brining: Mindestens 12 Stunden in einer Salz-Zucker-Lake sorgen dafür, dass das trockene Putenfleisch saftig bleibt, auch wenn es vier Stunden im Smoker verbringt. Der Artikel erklärt, warum Putenkeulen trotz ihres hohen Bindegewebsanteils eine Kerntemperatur von 82 °C brauchen und wie man auf einem Kugelgrill mit Räucherbox dieselben Ergebnisse erzielt wie auf einem Offset-Smoker. Herkunft: USA.",
+    "stil": "original"
+  },
+  {
+    "slug": "anticucho-de-corazon",
+    "kategorie": "fleisch",
+    "title": "Anticuchos de Corazón – Rinderherz-Spieße vom Holzkohlegrill",
+    "meatType": "Rinderherz",
+    "cookingMethod": "Direkt, starke Glut",
+    "difficulty": "Mittel",
+    "concept": "Anticuchos sind in Peru und Argentinien ein Straßenklassiker, bei dem marinierte Rinderherz-Scheiben auf Holzspieße gesteckt und über glühender Holzkohle scharf gegrillt werden – außen leicht verkohlt, innen noch rosa und saftig. Die Marinade aus Rotweinessig, Knoblauch, Kreuzkümmel und Paprika ist das Herzstück des Gerichts und muss mindestens vier Stunden einwirken, damit das dichte Muskelgewebe des Herzens zart und aromatisch wird. Rinderherz ist beim deutschen Metzger problemlos bestellbar und zählt zu den günstigsten Cuts überhaupt; der Artikel erklärt, wie man die zähen Sehnen und Kammerwände sauber entfernt und warum Herz bei zu hoher Kerntemperatur gummiartig wird. Herkunft: Argentinien.",
+    "stil": "original"
+  },
+  {
+    "slug": "braai-chicken-peri-peri",
+    "kategorie": "fleisch",
+    "title": "Peri-Peri-Hähnchen vom Braai – Südafrikanischer Feuervogel",
+    "meatType": "Hähnchen (Spatchcock)",
+    "cookingMethod": "Direkt und indirekt, Holzkohleglut",
+    "difficulty": "Mittel",
+    "concept": "Peri-Peri-Hähnchen ist in Südafrika und Mosambik ein Nationalklassiker: ein flach aufgeschnittenes Hähnchen wird in einer Marinade aus frischen roten Chilischoten, Knoblauch, Zitronensaft, Paprika und Olivenöl eingelegt und dann über Holzkohle gegrillt, wobei es immer wieder mit der Marinade bestrichen wird. Der kritische Punkt liegt im Wechsel zwischen direkter und indirekter Hitze – zu früh über der Glut verbrennt die zuckerhaltige Marinade, bevor das Fleisch gar ist. Der Artikel beantwortet, wie man die Schärfe der Peri-Peri-Chilis (im deutschen Handel als Vogelaugenchili erhältlich) kalibriert und warum das Spatchcock-Verfahren die Garzeit um ein Drittel verkürzt. Herkunft: Suedafrika.",
+    "stil": "original"
+  },
+  {
+    "slug": "singapore-bbq-chicken-wings-sambal",
+    "kategorie": "fleisch",
+    "title": "Singapurer Sambal-Chicken-Wings vom Holzkohlegrill",
+    "meatType": "Hähnchenflügel",
+    "cookingMethod": "Direkt, mittlere bis starke Glut",
+    "difficulty": "Einfach",
+    "concept": "In Singapurs Hawker-Zentren werden Hähnchenflügel in einer Sambal-Marinade aus roten Chilischoten, Schalotten, Knoblauch, Garnelenpaste und Palmzucker eingelegt und über Holzkohle gegrillt – karamellisiert, leicht rauchig und mit deutlicher Schärfe. Für den deutschen Markt wird die Garnelenpaste durch Worcestershiresauce und eine Prise Fischsauce ersetzt, was die Umami-Tiefe vollständig abbildet; alle übrigen Zutaten sind im Supermarkt erhältlich. Der kritische Schritt ist das Glasieren in den letzten drei Minuten: Die zuckerreiche Sambal-Paste verbrennt bei zu frühem Auftragen, gibt aber bei richtiger Hitze eine lackierte, leicht klebrige Kruste. Der Artikel erklärt, wie man Sambal von Grund auf selbst herstellt und welche Schärfestufe für europäische Gaumen sinnvoll ist. Herkunft: Singapur.",
+    "stil": "original"
+  },
+  {
+    "slug": "kangaroo-nein-lamb-rump-australian",
+    "kategorie": "fleisch",
+    "title": "Lamb Rump Cap – Australischer Lammrücken mit Vegemite-Rub",
+    "meatType": "Lammrumpsteak (Rump Cap)",
+    "cookingMethod": "Direkt, starke Glut, dann indirekt",
+    "difficulty": "Mittel",
+    "concept": "Der Lamb Rump Cap ist in Australien ein unterschätzter Alltagscut vom Grill: das Fettdeckel-Stück über der Lammkeule wird mit einem trockenen Rub aus Vegemite, Knoblauch, Rosmarin und schwarzem Pfeffer eingerieben und zunächst mit der Fettseite nach unten über starker Glut gerendert, bevor es indirekt auf Kerntemperatur gezogen wird. Vegemite – in Deutschland in gut sortierten Supermärkten oder online erhältlich, alternativ durch dunkle Misopaste ersetzbar – liefert eine intensive Umami-Schicht, die mit dem Lammfett eine tiefbraune, aromatische Kruste bildet. Der Artikel erklärt, warum Lammrump mit Fettdeckel anders behandelt werden muss als ein Kotelett und wie das Rendern des Fetts über direkter Hitze den gesamten Geschmack des Stücks verändert. Herkunft: Australien.",
+    "stil": "original"
   }
 ]

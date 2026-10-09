@@ -9,6 +9,7 @@
 ## Kern-Referenzen
 
 - [Kerntemperaturen Fleisch — komplette Tabelle](https://steakakademie.de/temperatur-guide): Referenztabellen für Rind, Schwein, Lamm, Geflügel und Wild inkl. Carryover Cooking und Lebensmittelsicherheit.
+- [Kerntemperatur Hackfleisch](https://steakakademie.de/kerntemperatur-hackfleisch): Frikadellen, Buletten, Hackbraten, Burger und Hackbällchen — mindestens 70 °C, Geflügelhack 72 °C; nach Gericht und Hackart, richtig messen.
 - [Ribeye Guide](https://steakakademie.de/cuts/ribeye): Anatomie (Longissimus/Spinalis), BMS-Marmorierung, Kerntemperaturen und drei Zubereitungsmethoden.
 - [Brisket Guide](https://steakakademie.de/cuts/brisket): Rinderbrust Low & Slow — Point/Flat, Plateauphase, Zieltemperaturen.
 - [Reverse Sear Methode](https://steakakademie.de/methoden/reverse-sear): Schritt-für-Schritt-Anleitung für dicke Cuts — Mindestdicke je nach Cut ab 2,5 bis 3,5 cm.
