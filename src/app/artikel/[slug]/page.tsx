@@ -1,5 +1,6 @@
 import { use } from "react";
 import type { Metadata } from 'next';
+import { seoTitel } from '@/lib/seo-titel';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRight, Clock } from 'lucide-react';
@@ -70,7 +71,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const entwurf = istEntwurf(artikel);
 
   return {
-    title: artikel.seoTitle || artikel.title,
+    title: seoTitel(artikel.seoTitle || artikel.title),
     description: artikel.seoDescription || artikel.excerpt,
     alternates: { canonical: `https://steakakademie.de${artikel.url}` },
     // Doppelter Boden: sollte ein Entwurf je ausgeliefert werden, dann

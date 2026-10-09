@@ -40,6 +40,44 @@ function hatFreigegebeneArtikel() {
 
 const ARTIKEL_FREIGEGEBEN = hatFreigegebeneArtikel();
 
+/**
+ * Letzte Aenderung je Inhaltsseite, aus den Contentlayer-Dokumenten gelesen
+ * (SEO-Audit 08.10.2026: `lastmod` stand nur an 4 von 430 URLs — den
+ * BBQ-News — obwohl jede Inhaltsseite ein Datum traegt). Google nutzt lastmod
+ * zur Crawl-Priorisierung, aber nur, wenn es verlaesslich ist: deshalb KEIN
+ * Build-Zeitstempel (autoLastmod) und nichts aus der Zukunft, sondern das
+ * juengste von updatedAt, reviewedAt und publishedAt — und bei Seiten ohne
+ * Dokument gar nichts.
+ *
+ * Laeuft im postbuild, also nach `contentlayer2 build`: die Indizes liegen dann
+ * unter .contentlayer/generated/<Typ>/_index.json. Fehlen sie, gibt es eben
+ * kein lastmod — die Sitemap bleibt gueltig.
+ */
+function lastmodNachUrl() {
+  const karte = new Map();
+  const basis = path.join(__dirname, '.contentlayer', 'generated');
+  let typen;
+  try { typen = fs.readdirSync(basis); } catch { return karte; }
+  const jetzt = Date.now();
+  for (const typ of typen) {
+    const datei = path.join(basis, typ, '_index.json');
+    let docs;
+    try { docs = JSON.parse(fs.readFileSync(datei, 'utf8')); } catch { continue; }
+    if (!Array.isArray(docs)) continue;
+    for (const d of docs) {
+      if (!d || typeof d.url !== 'string') continue;
+      const zeiten = [d.updatedAt, d.reviewedAt, d.publishedAt]
+        .map((x) => (x ? Date.parse(x) : NaN))
+        .filter((n) => Number.isFinite(n) && n <= jetzt);
+      if (zeiten.length === 0) continue;
+      karte.set(d.url, new Date(Math.max(...zeiten)).toISOString());
+    }
+  }
+  return karte;
+}
+
+const LASTMOD = lastmodNachUrl();
+
 // Hinweis (30.08.2026): Hier stand ein Ausschluss fuer noch nicht erschienene
 // Fleischwissen-Teile. Die Staffelung ist abgeschafft — alle drei Teile gehoeren
 // in die Sitemap. Das Feld `newsletterAt` in den MDX ist rein dokumentarisch und
@@ -71,6 +109,10 @@ module.exports = {
     // nicht im Manifest — der Ausschluss haelt sie auch dann draussen, wenn eine
     // davon wieder statisch wird. Waechter: src/__tests__/sitemap-noindex.test.ts
     '/suche',
+    // SEO-Audit 08.10.2026: ein Rezept, ~70 Woerter eigener Text — noindex in
+    // beiden page.tsx, bis die Liste traegt. Stand bis dahin in ssrPaths.
+    '/rezepte/community',
+    '/rezepte/community/*',
     '/gutschein/*',                    // Einloesen + einzelner Gutschein; /gutschein selbst bleibt drin
     '/eigenregie/lernen',
     '/eigenregie/lernen/*',
@@ -156,7 +198,9 @@ module.exports = {
         const raw = fs.readFileSync(path.join(dir, f), 'utf8');
         const m = raw.match(/^lektionSlug:[ \t]*(.*?)[ \t\r]*$/m);
         const slug = m ? m[1].replace(/^["']|["']$/g, '').trim() : null;
-        return slug ? { loc: `/diplome/lernen/stufe-1/${slug}`, changefreq: 'monthly', priority: 0.7 } : null;
+        if (!slug) return null;
+        const loc = `/diplome/lernen/stufe-1/${slug}`;
+        return { loc, changefreq: 'monthly', priority: 0.7, lastmod: LASTMOD.get(loc) };
       }).filter(Boolean);
     })();
 
@@ -164,8 +208,11 @@ module.exports = {
     // eigenregie, erste-kunden-sprint, seo-sprint) hier entfernt — siehe
     // exclude oben. Sie wurden explizit nachgetragen, weil SSR sie aus dem Manifest
     // haelt; ohne diese Zeile fallen sie von allein weg.
+    // /hoefe (Hofladen-Radar) rendert dynamisch (Umkreissuche) und fehlte
+    // deshalb in der Sitemap, obwohl indexierbar und von jeder Seite verlinkt
+    // (SEO-Audit 08.10.2026). /rezepte/community ist raus: noindex, siehe exclude.
     const ssrPaths = [
-      '/cut-generator', '/steak-beichte', '/mein-protokoll', '/rezepte/community',
+      '/cut-generator', '/steak-beichte', '/mein-protokoll', '/hoefe',
     ];
 
     // 03.09.2026: BBQ-News-Beitraege (/bbq-news/<slug>). Die Detailseiten
@@ -228,7 +275,7 @@ module.exports = {
       },
     ],
   },
-  // Prioritäten nach Content-Typ
+  // Prioritäten nach Content-Typ; lastmod aus den Contentlayer-Daten (s. LASTMOD)
   transform: async (config, path) => {
     // /artikel bleibt draussen, solange kein Artikel freigegeben ist (null = ausschliessen).
     // Die Detailseiten brauchen keine Regel: generateStaticParams erzeugt sie in
@@ -236,22 +283,23 @@ module.exports = {
     if (!ARTIKEL_FREIGEGEBEN && path.startsWith('/artikel')) {
       return null;
     }
+    const lastmod = LASTMOD.get(path);
     // Serie als Pillar-Content: gleiche Prioritaet wie Cuts/Methoden.
     if (path === '/fleischwissen' || path.startsWith('/fleischwissen/')) {
-      return { loc: path, changefreq: 'monthly', priority: 0.9 };
+      return { loc: path, changefreq: 'monthly', priority: 0.9, lastmod };
     }
     // Pillar Pages: höchste Priorität
     if (path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
-      return { loc: path, changefreq: 'monthly', priority: 0.9 };
+      return { loc: path, changefreq: 'monthly', priority: 0.9, lastmod };
     }
     // Artikel
     if (path.startsWith('/artikel/')) {
-      return { loc: path, changefreq: 'monthly', priority: 0.8 };
+      return { loc: path, changefreq: 'monthly', priority: 0.8, lastmod };
     }
     // Homepage
     if (path === '/') {
       return { loc: path, changefreq: 'daily', priority: 1.0 };
     }
-    return { loc: path, changefreq: config.changefreq, priority: config.priority };
+    return { loc: path, changefreq: config.changefreq, priority: config.priority, lastmod };
   },
 };

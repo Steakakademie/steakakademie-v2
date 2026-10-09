@@ -23,7 +23,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition',
   description:
-    'Die vier großen US-BBQ-Stile — Texas, Kansas City, Memphis, Carolinas —, dazu Camp Brisket an der Texas A&M, die KCBS-Juroren-Schulung und Smokehouse-Adressen nach Region. Der Pilgerstätten-Überblick für ernsthafte Grillmeister.',
+    'Die vier großen US-BBQ-Stile — Texas, Kansas City, Memphis, Carolinas —, dazu Camp Brisket an der Texas A&M, die KCBS-Juroren-Schulung und Smokehouse-Adressen nach Region.',
 };
 
 const SACRED_FOUR = [
