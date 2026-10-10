@@ -8,7 +8,11 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import AngebotsRegal from '@/components/angebote/AngebotsRegal';
+import { angebote } from '@/lib/angebote/register';
+import { regal } from '@/lib/angebote/auswahl';
 import { ogImages } from '@/lib/og';
+import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Kerntemperatur-Spickzettel zum Ausdrucken',
@@ -100,6 +104,10 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
 
 export default function SpickzettelPage() {
   const ref = loadReferenz();
+  const breadcrumbSch = breadcrumbSchema([
+    { name: 'Temperatur-Guide', url: '/temperatur-guide' },
+    { name: 'Spickzettel', url: '/kerntemperatur-spickzettel' },
+  ]);
 
   return (
     <>
@@ -114,6 +122,7 @@ export default function SpickzettelPage() {
       `}</style>
 
       <div className="print:hidden"><Header /></div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
 
       <main className="min-h-screen bg-surface-base">
         <div className="mx-auto max-w-editorial px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
@@ -245,6 +254,14 @@ export default function SpickzettelPage() {
               headline="Diesen Spickzettel als Link ins Postfach."
               subline="Nach deiner Bestätigung schicken wir dir den Link zu dieser Druckseite, damit du sie am Grill sofort wiederfindest. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Kostenlos, jederzeit abbestellbar."
               cta="Spickzettel sichern"
+            />
+          </div>
+
+          {/* Eigene Angebote (nicht im Druck). Der Spickzettel verweist nicht auf sich selbst. */}
+          <div className="print:hidden">
+            <AngebotsRegal
+              hinweise={regal(angebote(), { typ: 'antwortseite', slug: 'kerntemperatur-spickzettel' }, { ohne: 'spickzettel' })}
+              seite="antwortseite"
             />
           </div>
         </div>

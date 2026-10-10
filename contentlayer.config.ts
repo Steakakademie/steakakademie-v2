@@ -157,6 +157,9 @@ export const Methode = defineDocumentType(() => ({
     seoDescription: { type: 'string' },
     // Pruefnachweis (03.10.2026): optional, ohne Vorgabewert — wie bei Cut.
     reviewedAt: { type: 'date' },
+    // FAQ als strukturierte Daten (FAQPage). Der sichtbare FAQ-Abschnitt steht weiter
+    // im Text; src/__tests__/methoden-faq.test.ts haelt beide deckungsgleich.
+    faq: { type: 'json' },
   },
   computedFields: {
     slug: {

@@ -6,6 +6,9 @@ import Footer from '@/components/layout/Footer';
 import KeyFacts from '@/components/KeyFacts';
 import AutorHinweis from '@/components/AutorHinweis';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import AngebotsRegal from '@/components/angebote/AngebotsRegal';
+import { angebote } from '@/lib/angebote/register';
+import { regal } from '@/lib/angebote/auswahl';
 import ScrollBereich from '@/components/ui/ScrollBereich';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { mindestwert, spanne, kernReferenz } from '@/lib/kerntemperatur-referenz';
@@ -302,6 +305,12 @@ export default function KerntemperaturHackfleischPage() {
             <NewsletterSignup source="kerntemperatur-hackfleisch" />
           </div>
 
+          {/* ── Eigene Angebote — Anlass: Temperatur-Antwortseite (data/angebote.yaml) ── */}
+          <AngebotsRegal
+            hinweise={regal(angebote(), { typ: 'antwortseite', slug: 'kerntemperatur-hackfleisch' })}
+            seite="antwortseite"
+          />
+
           {/* ── Weiter ─────────────────────────────────────────────── */}
           <div className="pt-10 border-t border-border-subtle">
             <div className="flex items-center gap-3 mb-6">
@@ -311,6 +320,7 @@ export default function KerntemperaturHackfleischPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { label: 'Alle Kerntemperaturen: Rind, Schwein, Geflügel, Wild', href: '/temperatur-guide' },
+                { label: 'Kerntemperatur Steak: Garstufen von Rare bis Well Done', href: '/kerntemperatur-steak' },
                 { label: 'Kerntemperatur-Spickzettel zum Ausdrucken', href: '/kerntemperatur-spickzettel' },
                 { label: 'Fleischthermometer im Vergleich', href: '/vergleich/fleischthermometer' },
                 { label: 'Glossar: Hackfleisch', href: '/glossar/hackfleisch' },

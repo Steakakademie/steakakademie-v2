@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import RettungClient from './RettungClient';
+import Angebotshinweis from '@/components/angebote/Angebotshinweis';
+import { angebote } from '@/lib/angebote/register';
+import { hinweisImText } from '@/lib/angebote/auswahl';
 
 export const metadata: Metadata = {
   title: 'Steak-Rettungs-Bibliothek — 6 Grillfehler',
@@ -33,7 +36,10 @@ export default function RettungPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <RettungClient />
+      {/* Anlass „Dein Fall steht nicht dabei“ → Steak-Beichte (data/angebote.yaml). Server-Baustein als Slot. */}
+      <RettungClient
+        beichte={<Angebotshinweis hinweis={hinweisImText(angebote(), { typ: 'rettung', slug: 'rettung' })} seite="rettung" variante="karte" />}
+      />
     </>
   );
 }
