@@ -24,6 +24,8 @@ const SITEMAP = [
   `${B}/rezepte/fleisch/chateaubriand-filet`,
   `${B}/rezepte/fleisch/wagyu-burger`,
   `${B}/glossar/hackfleisch`,
+  `${B}/glossar/myoglobin`,
+  `${B}/streitfaelle/myoglobin`,
   `${B}/cuts/ribeye`,
   `${B}/diplome/lernen/1/01-feuer-verstehen`,
 ]
@@ -69,6 +71,11 @@ describe('IndexNow — Datei → URL', () => {
       `${B}/kerntemperatur-hackfleisch`,
       `${B}/rezepte/fleisch/wagyu-burger`,
     ])
+  })
+
+  it('gleicher Slug in zwei Bereichen: nur der Bereich der Datei', () => {
+    expect(urlsFuerAenderungen(['content/streitfaelle/myoglobin.mdx'], SITEMAP)).toEqual([`${B}/streitfaelle/myoglobin`])
+    expect(urlsFuerAenderungen(['content/glossar/myoglobin.mdx'], SITEMAP)).toEqual([`${B}/glossar/myoglobin`])
   })
 
   it('zusätzliche URLs nur, wenn sie in der Sitemap stehen', () => {

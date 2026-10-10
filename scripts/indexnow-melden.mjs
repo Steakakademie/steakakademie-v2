@@ -55,6 +55,15 @@ export function slugAusContentDatei(datei) {
   return m ? m[1] : null;
 }
 
+// Inhaltsordner, dessen URL-Abschnitt anders heißt.
+const ABSCHNITT = { usa: 'usa-expedition', 'diplom-lektionen': 'diplome' };
+
+/** content/<ordner>/… → erster URL-Abschnitt, sonst null. */
+export function abschnittAusContentDatei(datei) {
+  const m = datei.match(/^content\/([^/]+)\//);
+  return m ? (ABSCHNITT[m[1]] ?? m[1]) : null;
+}
+
 /**
  * Geänderte Dateien + Sitemap-URLs → zu meldende URLs (sortiert, ohne Doppel).
  * Gemeldet wird nur, was in der Sitemap steht.
@@ -79,7 +88,13 @@ export function urlsFuerAenderungen(dateien, sitemapUrls, zusaetzlich = []) {
       continue;
     }
     const slug = slugAusContentDatei(datei);
-    if (slug) for (const url of nachSlug.get(slug) ?? []) treffer.add(url);
+    if (!slug) continue;
+    // Gleicher Slug in zwei Bereichen (glossar/myoglobin und streitfaelle/myoglobin):
+    // nur den Bereich melden, in dem die Datei liegt — sofern die Sitemap ihn kennt.
+    const abschnitt = abschnittAusContentDatei(datei);
+    const kandidaten = nachSlug.get(slug) ?? [];
+    const imBereich = kandidaten.filter((u) => new URL(u).pathname.split('/')[1] === abschnitt);
+    for (const url of imBereich.length > 0 ? imBereich : kandidaten) treffer.add(url);
   }
   for (const url of zusaetzlich) if (inSitemap.has(url)) treffer.add(url);
 
