@@ -148,3 +148,23 @@ PartnerNet. Der Cockpit-Abgleich nimmt ab November eine Zahl je Woche auf.
 1. Amazon-Links bis zum 01.11. lassen oder herausnehmen? (Jobcenter fragen)
 2. Air Fryer Club und brickzonehub ablehnen — einverstanden?
 3. Burghardt im Wissens-Brief zur Black Week fest einplanen?
+
+## Stand 10.10.2026 — vorbereitet, nichts scharf
+
+Umgesetzt (PR „AWIN-Vorbereitung"); **alle neuen Links sind aus**:
+
+| Schritt aus „Technik — morgen" | Stand |
+|---|---|
+| 1 Programmregister | Santos, BOS FOOD, SharkNinja, Burghardt mit Status `applied` und AWIN-ID eingetragen. Provision und Cookie-Dauer stehen **nicht** drin („im AWIN-Profil nachsehen") — die Sätze haben sich am 06. und 09.10. geändert und sind hier nicht belegt. `/affiliate-disclosure` führt sie unter „in Vorbereitung", nicht als aktiv. Die alten Einträge (360° BBQ, Grill-Experte, Banggood, BURNHARD) sind weiter ungeprüft seit 02.06. |
+| 2 Deeplink-Baustein | `src/lib/awin.ts` (`awinLink`): prüft https und die Domain des Advertisers, `clickref` für die Auswertung. Test: `src/__tests__/awin.test.ts`. |
+| 3 Produktregister | **Nicht gemacht.** Dafür braucht es die konkreten Produktseiten bei Santos und SharkNinja; die ziehe ich nicht aus dem Gedächtnis. Aufgabe: im AWIN-Backend je Gerät die Ziel-URL holen. |
+| 4 Fleisch-Brücke | BOS FOOD ist Primärpartner in `src/lib/cut-affiliate.ts`, Status `planned`; bis zum Start bleibt der Amazon-Fallback. Ziel ist die Shop-Kategorie der Tierart (Rindfleisch/Schweinefleisch), weil der Shop keine Such-URL hat. Otto Gourmet (nie zugelassen) ist als Primärpartner ersetzt. |
+| 5 Ein Schalter | `status` in `cut-affiliate.ts` (PRIMARY) und in `products/affiliate-programs.yaml` — ein PR. |
+| 6 Kennzeichnung | Die Weiterleitungen `/go/…` und `/go-fleisch/…` zählen und kennzeichnen jeden Partnerlink gleich; Test `affiliate-weiterleitung.test.ts` bleibt grün. |
+
+### Start am 01.11.2026 (oder nach Zusage des Jobcenters)
+1. In AWIN je Advertiser Provision und Cookie-Dauer ablesen und in `products/affiliate-programs.yaml` eintragen.
+2. Die vier Einträge dort von `applied` auf `active` stellen.
+3. `PRIMARY.status` in `src/lib/cut-affiliate.ts` auf `'active'` stellen.
+4. Die Platzierungen der Tabelle „Platzierung" setzen (Marktübersichten, Geschenke-Ratgeber, Wissens-Brief) — jeder Link über `awinLink` und die eigene Weiterleitung.
+5. `/affiliate-disclosure` prüfen: die Programme stehen oben statt unter „in Vorbereitung".
