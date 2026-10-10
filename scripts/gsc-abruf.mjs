@@ -164,7 +164,14 @@ export async function holeZeilen({ token, property, von, bis, dimensionen, sucht
       body: JSON.stringify(anfrage({ von, bis, dimensionen, suchtyp, startRow })),
     });
     if (res.status === 403) {
-      throw new Error(`Kein Zugriff auf ${property} (HTTP 403): Dienstkonto in der GSC als Nutzer eingetragen?`);
+      // Google nennt die Ursache selbst (z. B. „API has not been used in project … or it is disabled",
+      // 10.10.2026: genau das war es, nicht der Nutzereintrag). Die Meldung enthält keine Zugangsdaten.
+      const grund = (await res.json().catch(() => ({})))?.error?.message;
+      throw new Error(
+        `Kein Zugriff auf ${property} (HTTP 403)` +
+          (grund ? `: ${String(grund).slice(0, 300)}` : '') +
+          ' — Prüfen: Search Console API im Cloud-Projekt aktiviert? Dienstkonto in der Search Console als Nutzer eingetragen?',
+      );
     }
     if (!res.ok) throw new Error(`Search-Console-Abruf fehlgeschlagen (HTTP ${res.status})`);
     const { rows = [] } = await res.json();
