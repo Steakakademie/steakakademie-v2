@@ -52,12 +52,32 @@ Ausgabe: `privat/gsc/<abrufdatum>/` mit `suchanfragen.csv`, `seiten.csv`,
 (Property, Suchtyp, Zeitraum). Das Ende des Zeitraums liegt drei Tage vor heute, weil
 die jüngsten Tage unvollständig sind.
 
+## Wenn der Abruf mit HTTP 403 endet
+
+Die Meldung nennt Googles eigene Begründung. Zwei Ursachen, beide am 10.10.2026 erlebt:
+
+1. **„Google Search Console API has not been used in project … or it is disabled"** —
+   die API ist im Cloud-Projekt nicht aktiviert (*APIs & Dienste → Bibliothek →
+   „Google Search Console API" → Aktivieren*; danach 1–2 Minuten warten). Ein Schlüssel
+   und ein Nutzereintrag allein genügen nicht.
+2. Keine Begründung oder „User does not have sufficient permission" — das Dienstkonto ist
+   in der Search Console nicht als Nutzer eingetragen, oder die Property heißt anders.
+   Welche Properties das Dienstkonto sieht, zeigt `GET https://www.googleapis.com/webmasters/v3/sites`
+   (mit dem Token aus `holeToken`); erwartet: `sc-domain:steakakademie.de (siteRestrictedUser)`.
+
 ## Abgrenzung zum Handexport
 
-* Die API liefert bis zu 25.000 Zeilen je Auswertung (blätternd). Der Handexport kappt bei
-  1.000 Zeilen — daher fehlten bisher Suchanfragen mit wenigen Impressionen.
-* Anonymisierte Suchanfragen (sehr seltene) liefert auch die API nicht einzeln aus;
-  die Summe in `verlauf.csv` ist daher größer als die Summe in `suchanfragen.csv`.
+* Die API kann bis zu 25.000 Zeilen je Auswertung liefern (blätternd). **Mehr Suchanfragen
+  als der Handexport bringt das bei dieser Property nicht:** der erste echte Abruf
+  (10.10.2026, 90 Tage) lieferte 997 Suchanfragen — praktisch dieselben wie der
+  Handexport mit 1.000 Zeilen. Google weist seltene Anfragen auch über die API nicht einzeln aus.
+* Nur rund 37 % der Impressionen (13.360 von 36.087) stehen als einzelne Suchanfrage in
+  `suchanfragen.csv`, der Rest ist anonymisiert. Die Summe in `verlauf.csv` ist deshalb
+  größer als die Summe in `suchanfragen.csv`; Anfragen-Summen sind eine Untergrenze.
+* Der Vorteil des Abrufs ist Reproduzierbarkeit: frei wählbare Zeiträume, Anfrage × Seite,
+  Länder, Geräte und Verlauf in einem Lauf, ohne Klickstrecke.
+* Jeder Lauf schreibt nach `privat/gsc/<abrufdatum>/`. Ein zweiter Lauf am selben Tag
+  überschreibt den ersten — vorher den Ordner umbenennen.
 * Der Bericht „Generative KI" der Search Console ist in diesem Skript **nicht** enthalten.
   Ob die API ihn überhaupt ausliefert, ist ungeprüft (Annahme: nein) — bis dahin bleibt
   dafür der Export per Hand.

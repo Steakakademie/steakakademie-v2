@@ -110,7 +110,15 @@ describe('API-Abruf', () => {
     const attrappe = async () => ({ ok: false, status: 403, json: async () => ({}) })
     const fehler = await holeZeilen({ token: 'geheim', property: 'p', von: 'a', bis: 'b', dimensionen: ['query'] }, attrappe).catch((e) => e)
     expect(fehler.message).toMatch(/als Nutzer eingetragen/)
+    expect(fehler.message).toMatch(/API im Cloud-Projekt aktiviert/)
     expect(fehler.message).not.toMatch(/geheim/)
+  })
+
+  it('403 reicht Googles eigene Begründung durch (deaktivierte API ≠ fehlender Nutzer)', async () => {
+    const grund = 'Google Search Console API has not been used in project 1 before or it is disabled.'
+    const attrappe = async () => ({ ok: false, status: 403, json: async () => ({ error: { message: grund } }) })
+    const fehler = await holeZeilen({ token: 't', property: 'p', von: 'a', bis: 'b', dimensionen: ['query'] }, attrappe).catch((e) => e)
+    expect(fehler.message).toContain('has not been used in project')
   })
 
   it('Token-Fehler verrät den Schlüssel nicht', async () => {
