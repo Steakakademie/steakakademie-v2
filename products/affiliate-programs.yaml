@@ -141,3 +141,22 @@
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
   note: "AWIN-ID 115505. Zugelassen 06.10.2026. Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
   disclosureNote: "Kaufst du über einen Burghardt-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+# ── Webgains (Konto seit 21.09.2026) ──────────────────────────────────────────
+# Beigetreten laut Webgains-Oberfläche, Stand 10.10.2026 (Screenshot Uwe): als einziges
+# Programm. status `applied` = beigetreten, NICHT live — Start wie bei AWIN frühestens
+# 01.11.2026 (docs/affiliate-strategie-2026.md, „Ein Haken").
+
+- id: vineshop24
+  name: "vineshop24"
+  network: "Webgains"
+  providers: [vineshop24]
+  commission: "5–14 %"
+  cookie: "im Webgains-Profil nachsehen"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://www.vineshop24.de/"
+  focus: "Wein, Spirituosen, Geschenke — Produktfeed vorhanden"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "Beigetreten (Webgains, Stand 10.10.2026); keine PPC-Richtlinie hinterlegt. Vorgesehen: Wein- und Whisky-Empfehlungen in Rezepten (87 Rezepte tragen wineName/wineLink) und Geschenke-Ratgeber. VOR DEM START: Alkohol — Jugendschutz und Altersprüfung klären (Kanzlei), Links nur an Erwachsene gerichtet."
+  disclosureNote: "Kaufst du über einen vineshop24-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."

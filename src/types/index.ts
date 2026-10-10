@@ -24,6 +24,8 @@ export type AffiliateProvider =
   | 'bos-food'
   | 'sharkninja'
   | 'burghardt'
+  // Webgains, beigetreten (Stand 10.10.2026), noch nicht live
+  | 'vineshop24'
   | 'other';
 
 // ── AFFILIATE-PROGRAMME ──────────────────────────────────────────────────────

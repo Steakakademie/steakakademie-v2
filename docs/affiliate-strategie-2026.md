@@ -55,6 +55,12 @@ AWIN, Publisher-ID **3102406** (Konto aktiv seit 22.09.):
 **Webgains:** Konto seit 21.09. aktiv. Zusagen für einzelne Programme sind im
 Postfach **nicht** zu finden. Morgen in Webgains nachsehen, welche
 Advertiser dort sind, und gezielt bewerben (Grill, Fleisch, Messer, Gewürze).
+*Nachtrag 10.10.2026:* In der Webgains-Oberfläche ist Steakakademie genau einem
+Programm beigetreten: **vineshop24 DE** (Wein, Spirituosen, Geschenke; Provision
+5–14 %, Produktfeed ja, keine PPC-Richtlinie). Im Register als `applied`; er passt zu den
+Wein- und Whisky-Empfehlungen der Rezepte und zum Geschenke-Ratgeber, nicht zum
+Fleisch-Kern. Vor dem Start klären: Jugendschutz/Altersprüfung bei Alkohol. Die Tabs
+„Ausstehend" und „Einladungen" sind noch nicht gesichtet.
 
 ## Verabschieden sie sich?
 
