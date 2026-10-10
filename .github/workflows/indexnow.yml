@@ -1,0 +1,59 @@
+name: IndexNow melden
+
+# Meldet nach jedem erfolgreichen Produktions-Deploy die geänderten URLs an
+# IndexNow (Bing, Yandex, Seznam …). Bing speist die ChatGPT-Suche und Copilot —
+# docs/geo-baseline.md: Bing ist der stärkste Suchkanal. Google nimmt nicht teil.
+# Logik und Abbildung Datei → URL: scripts/indexnow-melden.mjs.
+#
+# Hobby-Plan-kompatibel wie vercel-deploy-alert.yml: nutzt die GitHub-
+# Deployment-Status-Events der Vercel-Integration, kein Vercel-Webhook.
+# Kein Secret nötig — der IndexNow-Schlüssel ist per Protokoll öffentlich
+# (public/<schlüssel>.txt).
+
+on:
+  deployment_status: {}
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Zusätzliche URLs (Komma oder Leerzeichen), nur solche aus der Sitemap werden gemeldet'
+        required: false
+        default: ''
+      probelauf:
+        description: 'Nur anzeigen, nichts melden'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  melden:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment_status.environment == 'Production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.deployment.sha || github.sha }}
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+
+      # Vercel meldet "success", kurz bevor die Domain sicher auf das neue
+      # Deployment zeigt. Die Sitemap muss die neue Fassung sein, sonst fehlen
+      # frisch angelegte Seiten in der Meldung.
+      - name: Domain-Umschaltung abwarten
+        if: github.event_name == 'deployment_status'
+        run: sleep 60
+
+      - name: Geänderte URLs melden
+        env:
+          INDEXNOW_SHA: ${{ github.event.deployment.sha || github.sha }}
+          INDEXNOW_URLS: ${{ inputs.urls }}
+          INDEXNOW_PROBELAUF: ${{ inputs.probelauf && '1' || '0' }}
+        run: node scripts/indexnow-melden.mjs

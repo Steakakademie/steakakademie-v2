@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { ogImages } from '@/lib/og';
+import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Kerntemperatur-Spickzettel zum Ausdrucken',
@@ -100,6 +101,10 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
 
 export default function SpickzettelPage() {
   const ref = loadReferenz();
+  const breadcrumbSch = breadcrumbSchema([
+    { name: 'Temperatur-Guide', url: '/temperatur-guide' },
+    { name: 'Spickzettel', url: '/kerntemperatur-spickzettel' },
+  ]);
 
   return (
     <>
@@ -114,6 +119,7 @@ export default function SpickzettelPage() {
       `}</style>
 
       <div className="print:hidden"><Header /></div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
 
       <main className="min-h-screen bg-surface-base">
         <div className="mx-auto max-w-editorial px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
