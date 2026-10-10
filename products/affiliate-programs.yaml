@@ -5,7 +5,7 @@
 # status: planned (geplant) | applied (beworben, Freigabe ausstehend) | active (live)
 # Strategie: hochpreisige Grills über deutsche Fachhändler (hoher €-Betrag/Sale)
 #            + günstige Gadgets optional über Banggood.
-# Letzte Prüfung: 2026-06-02
+# Letzte Prüfung: 2026-06-02 (Amazon, 360° BBQ, Grill-Experte, Banggood, BURNHARD) · AWIN-Einträge ergänzt 2026-10-10
 
 - id: amazon
   name: "Amazon Partnerprogramm"
@@ -76,3 +76,68 @@
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
   note: "Content-Publisher akzeptiert (06.06.2026 geprüft). Ergänzt Premium (SANTOS/Grillfürst) nach unten. Potenzieller Sponsor für 'Rezept des Monats'-Challenge. Kontakt: affiliates@burnhard.com."
   disclosureNote: "Kaufst du über einen BURNHARD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+# ── AWIN (Publisher-ID 3102406, Konto seit 22.09.2026) ────────────────────────
+# Zugelassen laut Postfach, Stand 09.10.2026 (docs/affiliate-strategie-2026.md).
+# status `applied` = zugelassen, NICHT live: Links gehen erst ab 01.11.2026 scharf
+# (Einstiegsgeld, siehe Strategie „Ein Haken"). Start = status auf `active` — ein PR.
+# Provisionssätze und Cookie-Dauer stehen im AWIN-Profil und wurden hier NICHT
+# übernommen (die Sätze haben sich am 06.10. und 09.10. geändert): vor dem Start dort
+# nachsehen und eintragen. Deeplinks baut src/lib/awin.ts. Die AWIN-ID steht in der
+# Notiz, nicht im Netzwerk-Feld: dieses zeigt /affiliate-disclosure öffentlich an.
+
+- id: santos
+  name: "Santos Grills"
+  network: "AWIN"
+  providers: [santosgrills]
+  commission: "im AWIN-Profil nachsehen"
+  cookie: "im AWIN-Profil nachsehen"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://www.santosgrills.de/"
+  focus: "Grills (Gas, Kohle, Oberhitze) — Fachhändler, hoher Warenkorb"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "AWIN-ID 32287. Zugelassen 05.10.2026. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
+  disclosureNote: "Kaufst du über einen Santos-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+- id: bos-food
+  name: "BOS FOOD"
+  network: "AWIN"
+  providers: [bos-food]
+  commission: "im AWIN-Profil nachsehen"
+  cookie: "im AWIN-Profil nachsehen"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://www.bosfood.de/"
+  focus: "Delikatessen, Fleisch (Rind, Schwein, Wagyu, Dry Aged), Burger, Sous-vide"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Primärpartner der Fleisch-Brücke (src/lib/cut-affiliate.ts, status planned) — ersetzt dort ab Start den Amazon-Fallback."
+  disclosureNote: "Kaufst du über einen BOS-FOOD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+- id: sharkninja
+  name: "SharkNinja"
+  network: "AWIN"
+  providers: [sharkninja]
+  commission: "im AWIN-Profil nachsehen"
+  cookie: "im AWIN-Profil nachsehen"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://www.sharkninja.de/"
+  focus: "Ninja-Geräte (Woodfire Outdoor-Grill/Smoker, Küchenmaschinen)"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "AWIN-ID 19810. Zugelassen 09.10.2026. Nur für einzelne Geräte (Ninja Woodfire, Küchenmaschinen-Übersicht)."
+  disclosureNote: "Kaufst du über einen SharkNinja-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+- id: burghardt
+  name: "Burghardt Delicious"
+  network: "AWIN"
+  providers: [burghardt]
+  commission: "im AWIN-Profil nachsehen"
+  cookie: "im AWIN-Profil nachsehen"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://burghardt-delicious.com/"
+  focus: "Feinkost, Probiersets, Geschenke"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "AWIN-ID 115505. Zugelassen 06.10.2026. Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
+  disclosureNote: "Kaufst du über einen Burghardt-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."

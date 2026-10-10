@@ -20,6 +20,10 @@ export type AffiliateProvider =
   | 'grill-experte'
   | 'banggood'
   | 'burnhard'
+  // AWIN, zugelassen Oktober 2026, noch nicht live (products/affiliate-programs.yaml)
+  | 'bos-food'
+  | 'sharkninja'
+  | 'burghardt'
   | 'other';
 
 // ── AFFILIATE-PROGRAMME ──────────────────────────────────────────────────────
