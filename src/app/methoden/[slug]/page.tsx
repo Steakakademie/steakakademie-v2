@@ -128,7 +128,22 @@ export default function MethodePage(props: Props) {
     ],
   };
 
-  const schema = { '@context': 'https://schema.org', '@graph': [articleSchema, breadcrumbSchema] };
+  const faqItems = (Array.isArray(methode.faq) ? methode.faq : []) as Array<{ question: string; answer: string }>;
+  const faqSchema = faqItems.length > 0
+    ? {
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      }
+    : null;
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])],
+  };
 
   return (
     <>
