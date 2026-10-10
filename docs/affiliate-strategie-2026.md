@@ -45,7 +45,7 @@ AWIN, Publisher-ID **3102406** (Konto aktiv seit 22.09.):
 | Advertiser | AWIN-ID | Zugelassen | Passt zu | Einschätzung |
 |---|---|---|---|---|
 | Santos Grills DE | 32287 | 05.10. | Grill-Marktübersicht, Oberhitze, Gasgrill-Artikel | **Kern.** Hoher Warenkorb, genau das Thema. Provisionssätze am 06.10. geändert — im Profil nachsehen. |
-| BOS FOOD DE | 19712 | 02.10. | Cut-Seiten, Cut-Generator (Fleisch-Brücke), Wagyu, Dry Aged | **Kern.** Ersetzt den Amazon-Fallback bei Fleisch. |
+| BOS FOOD DE | 19712 | 02.10. | ~~Cut-Seiten, Cut-Generator (Fleisch-Brücke)~~ — **korrigiert 10.10.2026 (Uwe):** Spezialitäten wie Trüffel, Öle, Kaviar; Rezepte und Zutaten, Geschenke | **Kern für Spezialitäten.** Der Shop führt auch Fleisch, ist aber nicht als Fleischpartner vorgesehen. |
 | SharkNinja DE | 19810 | 09.10. | Ninja Woodfire (Outdoor-Grill/Smoker), Küchenmaschinen-Übersicht | Gut, aber nur für einzelne Geräte. Provisionssätze am 09.10. geändert. |
 | Burghardt Delicious | 115505 | 06.10. | Geschenke-Ratgeber, Wissens-Brief im Advent | Ergänzung. Feinkost, Probiersets, Weihnachtsgeschenke. Bietet höhere Provision für feste Platzierungen. Black Week 23.–30.11. (26 %), Nikolaus 01.–02.12. |
 | Air Fryer Club | 121016 | Einladung 04.10. | — | Nicht annehmen: Heißluftfritteuse ist nicht unser Thema. |
@@ -95,9 +95,9 @@ vorbereitet. Kein Link ohne Bezug, keine Banner im Lesefluss.
 | Ort | Heute | Ab 01.11. |
 |---|---|---|
 | Marktübersichten (`/vergleich/*`) | Amazon-Suchen | Santos als Fachhändler für Grills und Oberhitze; SharkNinja für Ninja Woodfire; Amazon für Kleinteile |
-| Cut-Seiten und Cut-Generator | Amazon-Fallback | BOS FOOD als Primärpartner in `cut-affiliate.ts` |
+| Cut-Seiten und Cut-Generator | Amazon-Fallback | Fleischpartner **offen** (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an); bis dahin Amazon-Fallback |
 | Rezepte | einzelne Amazon-Links | unverändert, nur wo Zubehör wirklich gebraucht wird |
-| Ratgeber „Geschenke für Grillfans" (Entwurf, 02.11.) | — | Santos, BOS FOOD (Geschenk-Fleischpakete), Burghardt (Probiersets) |
+| Ratgeber „Geschenke für Grillfans" (Entwurf, 02.11.) | — | Santos, BOS FOOD (Spezialitäten als Geschenk), Burghardt (Probiersets) |
 | Wissens-Brief | — | höchstens ein Partnerangebot je Ausgabe, als „Werbung" markiert; Black Week und Nikolaus mit Burghardt-Codes |
 | Startseite, Kopfzeile | — | keine Partnerlinks (Startseiten-Hierarchie) |
 
@@ -113,7 +113,7 @@ vorbereitet. Kein Link ohne Bezug, keine Banner im Lesefluss.
    Link einen Gang ins AWIN-Backend.
 3. **Produktregister**: Für die Grills und Geräte, die Santos und SharkNinja
    führen, die Ziel-URL beim Händler ergänzen — vorerst ohne Umschalten.
-4. **Fleisch-Brücke**: BOS FOOD als Partner vorbereiten, `status: 'planned'`.
+4. **Fleisch-Brücke**: ~~BOS FOOD als Partner vorbereiten~~ — **entfällt (Uwe, 10.10.2026)**: Fleischpartner ist noch offen, BOS FOOD ist für Spezialitäten vorgesehen.
 5. **Ein Schalter für den Start**: alles hängt an `status` im Register — am
    01.11. auf `active` stellen, ein PR, fertig.
 6. **Kennzeichnung prüfen**: Jeder Partnerlink wird so ausgezeichnet und
@@ -164,13 +164,13 @@ Umgesetzt (PR „AWIN-Vorbereitung"); **alle neuen Links sind aus**:
 | 1 Programmregister | Santos, BOS FOOD, SharkNinja, Burghardt mit Status `applied` und AWIN-ID eingetragen. Provision und Cookie-Dauer stehen **nicht** drin („im AWIN-Profil nachsehen") — die Sätze haben sich am 06. und 09.10. geändert und sind hier nicht belegt. `/affiliate-disclosure` führt sie unter „in Vorbereitung", nicht als aktiv. Die alten Einträge (360° BBQ, Grill-Experte, Banggood, BURNHARD) sind weiter ungeprüft seit 02.06. |
 | 2 Deeplink-Baustein | `src/lib/awin.ts` (`awinLink`): prüft https und die Domain des Advertisers, `clickref` für die Auswertung. Test: `src/__tests__/awin.test.ts`. |
 | 3 Produktregister | **Nicht gemacht.** Dafür braucht es die konkreten Produktseiten bei Santos und SharkNinja; die ziehe ich nicht aus dem Gedächtnis. Aufgabe: im AWIN-Backend je Gerät die Ziel-URL holen. |
-| 4 Fleisch-Brücke | BOS FOOD ist Primärpartner in `src/lib/cut-affiliate.ts`, Status `planned`; bis zum Start bleibt der Amazon-Fallback. Ziel ist die Shop-Kategorie der Tierart (Rindfleisch/Schweinefleisch), weil der Shop keine Such-URL hat. Otto Gourmet (nie zugelassen) ist als Primärpartner ersetzt. |
-| 5 Ein Schalter | `status` in `cut-affiliate.ts` (PRIMARY) und in `products/affiliate-programs.yaml` — ein PR. |
+| 4 Fleisch-Brücke | **Korrigiert 10.10.2026 (Uwe):** BOS FOOD ist nicht der Fleischpartner, sondern für Spezialitäten vorgesehen. In `src/lib/cut-affiliate.ts` gibt es **keinen** Primärpartner mehr; es bleibt der Amazon-Fallback, bis ein Händler feststeht. |
+| 5 Ein Schalter | `status` in `products/affiliate-programs.yaml` je Programm; die Fleisch-Brücke zusätzlich über `PRIMARY` in `cut-affiliate.ts` (derzeit leer) — ein PR. |
 | 6 Kennzeichnung | Die Weiterleitungen `/go/…` und `/go-fleisch/…` zählen und kennzeichnen jeden Partnerlink gleich; Test `affiliate-weiterleitung.test.ts` bleibt grün. |
 
 ### Start am 01.11.2026 (oder nach Zusage des Jobcenters)
 1. In AWIN je Advertiser Provision und Cookie-Dauer ablesen und in `products/affiliate-programs.yaml` eintragen.
 2. Die vier Einträge dort von `applied` auf `active` stellen.
-3. `PRIMARY.status` in `src/lib/cut-affiliate.ts` auf `'active'` stellen.
+3. Steht bis dahin ein Fleischhändler fest: `PRIMARY` in `src/lib/cut-affiliate.ts` setzen (Händler, Link-Aufbau, Status `'active'`). Ohne Händler bleibt der Amazon-Fallback.
 4. Die Platzierungen der Tabelle „Platzierung" setzen (Marktübersichten, Geschenke-Ratgeber, Wissens-Brief) — jeder Link über `awinLink` und die eigene Weiterleitung.
 5. `/affiliate-disclosure` prüfen: die Programme stehen oben statt unter „in Vorbereitung".

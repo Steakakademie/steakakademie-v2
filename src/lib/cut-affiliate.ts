@@ -1,20 +1,21 @@
 // Fleisch-Affiliate-Brücke für den Cut-Generator.
 //
 // Strategie (config-driven, Burggraben + ROADMAP): Premium-Fleischversand als
-// Primärpartner. Seit 10.10.2026 ist das BOS FOOD (AWIN, zugelassen am 02.10.2026;
-// docs/affiliate-strategie-2026.md) — vorher stand hier Otto Gourmet ohne Zulassung.
-// BOS FOOD führt die Otto-Gourmet-Produkte ohnehin im Sortiment.
-// Solange der Partner nicht live ist, greift ein SAUBERER FALLBACK auf die
-// Amazon-Suche mit aktivem Partner-Tag — exakt das Muster der Grill-/Thermometer-
-// Produkte (registry.yaml).
+// Primärpartner. STAND 10.10.2026: **noch keiner.** Die vorgesehenen Händler Don Carne
+// und Albers haben nicht geantwortet; meatshop.de ruft Uwe am Montag, 12.10.2026, an.
+// BOS FOOD (AWIN, zugelassen) ist ausdrücklich NICHT der Fleischpartner: Uwe sieht ihn
+// für Spezialitäten (Trüffel, Öle, Kaviar …) vor (10.10.2026). Dass der Shop auch Fleisch
+// führt, ändert das nicht.
+// Solange kein Partner feststeht, greift ein SAUBERER FALLBACK auf die Amazon-Suche mit
+// aktivem Partner-Tag — exakt das Muster der Grill-/Thermometer-Produkte (registry.yaml).
 //
-// START: `status: 'active'` in PRIMARY setzen UND in products/affiliate-programs.yaml
-// den Eintrag bos-food auf `active` — ein PR. Vorgesehen ab 01.11.2026 (Einstiegsgeld,
-// siehe docs/affiliate-strategie-2026.md, „Ein Haken"). Der Rest (UI, Tracking-Route)
-// bleibt unverändert.
+// START mit Partner: PRIMARY unten setzen (id, name, buildUrl — AWIN-Link über
+// src/lib/awin.ts oder der Partnerlink des Händlers), status 'active', und den Eintrag
+// in products/affiliate-programs.yaml auf `active`. Nicht vor dem 01.11.2026
+// (Einstiegsgeld, siehe docs/affiliate-strategie-2026.md, „Ein Haken"). Der Rest (UI,
+// Tracking-Route) bleibt unverändert.
 
 import type { Cut } from './cuts-catalog';
-import { awinLink } from './awin';
 
 export const AMAZON_TAG = 'steakakademie-21';
 
@@ -28,28 +29,8 @@ interface MeatPartner {
   buildUrl: (cut: Cut) => string;
 }
 
-// Kategorien im BOS-FOOD-Shop (Seiten am 10.10.2026 aufgerufen, alle 200). Eine Suche
-// gibt es per URL nicht — der Shop leitet `/suche?q=…` auf die Startseite —, deshalb
-// führt der Link auf die Kategorie der Tierart. Cutspezifische Ziele (z. B. Ribeye)
-// setzt, wer im AWIN-Backend die Produktseiten geprüft hat.
-const BOS_FOOD_KATEGORIE: Record<Cut['species'], string> = {
-  rind: 'https://www.bosfood.de/shop-detail/kategorie/schinken-wurst-fleisch/subkategorie/rindfleisch.html',
-  schwein: 'https://www.bosfood.de/shop-detail/kategorie/schinken-wurst-fleisch/subkategorie/schweinefleisch.html',
-};
-
-/** AWIN-Deeplink auf die BOS-FOOD-Kategorie der Tierart, Platz „cut-<id>" für die AWIN-Auswertung. */
-export function bosFoodUrl(cut: Cut): string {
-  const clickref = `cut-${cut.id}`.toLowerCase().replace(/[^a-z0-9_-]/g, '-').slice(0, 50);
-  return awinLink('bos-food', BOS_FOOD_KATEGORIE[cut.species], clickref);
-}
-
-// Primärpartner — hochpreisiger Fleischversand (hoher €-Betrag/Sale).
-const PRIMARY: MeatPartner = {
-  id: 'bos-food',
-  name: 'BOS FOOD',
-  status: 'planned', // ← auf 'active' setzen, sobald die Platzierung live gehen darf (ab 01.11.2026)
-  buildUrl: bosFoodUrl,
-};
+// Primärpartner — hochpreisiger Fleischversand (hoher €-Betrag/Sale). Offen, siehe oben.
+const PRIMARY: MeatPartner | null = null;
 
 // Fallback — Amazon-Suche mit aktivem Partner-Tag (immer verfügbar).
 const FALLBACK: MeatPartner = {
@@ -62,7 +43,7 @@ const FALLBACK: MeatPartner = {
 
 /** Aktiver Partner: Primär falls live, sonst Fallback. */
 export function activeMeatPartner(): MeatPartner {
-  return PRIMARY.status === 'active' ? PRIMARY : FALLBACK;
+  return PRIMARY?.status === 'active' ? PRIMARY : FALLBACK;
 }
 
 /** Externe Ziel-URL (für die Redirect-Route /go-fleisch/[cut]). */
@@ -81,7 +62,7 @@ export interface MeatOffer {
 
 /** UI-Sicht: Button-Daten für „Diesen Cut kaufen". */
 export function getMeatOffer(cut: Cut): MeatOffer {
-  const premiumActive = PRIMARY.status === 'active';
+  const premiumActive = PRIMARY?.status === 'active';
   const partner = activeMeatPartner();
   return {
     href: `/go-fleisch/${cut.id}`,

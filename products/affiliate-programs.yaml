@@ -109,9 +109,9 @@
   avgCartEur: null
   status: applied
   applyUrl: "https://www.bosfood.de/"
-  focus: "Delikatessen, Fleisch (Rind, Schwein, Wagyu, Dry Aged), Burger, Sous-vide"
+  focus: "Delikatessen und Spezialitäten — vorgesehen: Trüffel, Öle, Kaviar u. a."
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Primärpartner der Fleisch-Brücke (src/lib/cut-affiliate.ts, status planned) — ersetzt dort ab Start den Amazon-Fallback."
+  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
   disclosureNote: "Kaufst du über einen BOS-FOOD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: sharkninja

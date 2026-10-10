@@ -6,7 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { AWIN_ADVERTISER, AWIN_PUBLISHER_ID, awinLink } from '@/lib/awin';
 import { ALL_CUTS } from '@/lib/cuts-catalog';
-import { activeMeatPartner, bosFoodUrl, buildMeatTargetUrl, getMeatOffer } from '@/lib/cut-affiliate';
+import { activeMeatPartner, buildMeatTargetUrl, getMeatOffer } from '@/lib/cut-affiliate';
 import { getAffiliatePrograms } from '@/lib/affiliate-programs';
 
 describe('awinLink', () => {
@@ -48,20 +48,19 @@ describe('awinLink', () => {
   });
 });
 
-describe('Fleischbrücke BOS FOOD', () => {
-  it('bis zum Start (planned) bleibt der Amazon-Fallback aktiv — kein Partnerlink vor dem 01.11.', () => {
+describe('Fleischbrücke: noch kein Partner', () => {
+  it('bis ein Händler feststeht, bleibt der Amazon-Fallback aktiv — kein Partnerlink vor dem 01.11.', () => {
     expect(activeMeatPartner().id).toBe('amazon');
     expect(getMeatOffer(ALL_CUTS[0]).premiumActive).toBe(false);
     for (const cut of ALL_CUTS) expect(buildMeatTargetUrl(cut)).toContain('tag=steakakademie-21');
   });
 
-  it('der vorbereitete BOS-FOOD-Link ist ein AWIN-Deeplink auf die Kategorie der Tierart', () => {
-    const rind = ALL_CUTS.find((c) => c.species === 'rind')!;
-    const schwein = ALL_CUTS.find((c) => c.species === 'schwein')!;
-    const u = (c: typeof rind) => new URL(new URL(bosFoodUrl(c)).searchParams.get('ued')!);
-    expect(new URL(bosFoodUrl(rind)).searchParams.get('awinmid')).toBe('19712');
-    expect(u(rind).pathname).toMatch(/subkategorie\/rindfleisch\.html$/);
-    expect(u(schwein).pathname).toMatch(/subkategorie\/schweinefleisch\.html$/);
-    expect(new URL(bosFoodUrl(rind)).searchParams.get('clickref')).toBe(`cut-${rind.id}`.toLowerCase().replace(/[^a-z0-9_-]/g, '-'));
+  it('BOS FOOD ist nicht der Fleischpartner (Uwe, 10.10.2026: Spezialitäten wie Trüffel, Öle, Kaviar)', () => {
+    for (const cut of ALL_CUTS) {
+      expect(buildMeatTargetUrl(cut)).not.toMatch(/awin1.com|bosfood/);
+    }
+    const bos = getAffiliatePrograms().find((p) => p.id === 'bos-food');
+    expect(bos?.focus).toMatch(/Spezialit/);
+    expect(bos?.status).toBe('applied');
   });
 });
