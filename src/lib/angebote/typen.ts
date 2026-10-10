@@ -5,7 +5,8 @@
 
 import { z } from 'zod';
 
-export const SEITENTYPEN = ['rezept', 'glossar', 'temperatur-guide'] as const;
+// antwortseite = Kerntemperatur-Antwortseiten (Hackfleisch, Spickzettel); rettung = /rettung.
+export const SEITENTYPEN = ['rezept', 'glossar', 'temperatur-guide', 'antwortseite', 'rettung'] as const;
 export type Seitentyp = (typeof SEITENTYPEN)[number];
 
 const Wert = z.union([z.string(), z.array(z.string()).min(1)]);

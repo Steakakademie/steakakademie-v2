@@ -58,6 +58,28 @@ describe('Register (data/angebote.yaml)', () => {
     expect(h?.marke).not.toBe('ab 1. November');
   });
 
+  it('Antwortseiten (Hackfleisch, Spickzettel): Regal mit gratis Angeboten und Mein Protokoll, nie pausiertes', () => {
+    const ids = (slug: string, ohne?: string) =>
+      regal(angebote(), { typ: 'antwortseite', slug }, { ohne, max: 10 }, HEUTE).map((h) => h.id);
+    const hack = ids('kerntemperatur-hackfleisch');
+    expect(hack.sort()).toEqual(['diplom', 'mein-protokoll', 'spickzettel', 'steak-rettung']);
+    // Der Spickzettel verweist nicht auf sich selbst.
+    expect(ids('kerntemperatur-spickzettel', 'spickzettel')).not.toContain('spickzettel');
+    // Höchstens drei im Regal.
+    expect(regal(angebote(), { typ: 'antwortseite', slug: 'kerntemperatur-hackfleisch' }, {}, HEUTE).length).toBeLessThanOrEqual(3);
+    for (const id of ['eigenregie', 'gruender-schmiede', 'steuer-matrix', 'fleischpass', 'gutscheine', 'steak-beichte']) {
+      expect(hack).not.toContain(id);
+    }
+  });
+
+  it('/rettung führt zur Steak-Beichte — und zu nichts sonst', () => {
+    const h = passendeHinweise(angebote(), { typ: 'rettung', slug: 'rettung' }, HEUTE);
+    expect(h.map((x) => x.id)).toEqual(['steak-beichte']);
+    expect(h[0].url).toBe('/steak-beichte');
+    // Preis kommt aus dem Register, nicht aus dem Text.
+    expect(h[0].marke).toBe(angebot('steak-beichte').preis_text);
+  });
+
   it('pausierte Angebote sind nie kaufbar', () => {
     expect(verkaufsstand('fleischpass').kaufbar).toBe(false);
     expect(verkaufsstand('gruender-schmiede').kaufbar).toBe(false);
