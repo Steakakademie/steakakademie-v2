@@ -32,7 +32,7 @@
 #               (Standard 1). Die Wahl je Seite ist fest, nicht zufällig: dieselbe
 #               Seite zeigt immer denselben Hinweis.
 #   anlaesse    Wann das Angebot passt:
-#                 typ   rezept | glossar | temperatur-guide
+#                 typ   rezept | glossar | temperatur-guide | antwortseite | rettung
 #                 wenn  Bedingungen auf Frontmatter-Feldern; alle müssen zutreffen,
 #                       eine Liste heißt „eines davon". Ohne `wenn`: immer.
 #                 satz  Der Satz an genau dieser Stelle. Du-Form, eine Aussage.
@@ -65,6 +65,8 @@ angebote:
         satz: "Du willst wissen, warum es so funktioniert? Stufe 1 des Grillmeister-Diploms erklärt die Grundlagen — kostenlos, ohne Konto."
       - typ: temperatur-guide
         satz: "Die Zahlen kennst du jetzt. Was dahintersteckt, erklärt Stufe 1 des Grillmeister-Diploms — kostenlos, ohne Konto."
+      - typ: antwortseite
+        satz: "Die Zahlen kennst du jetzt. Was dahintersteckt, erklärt Stufe 1 des Grillmeister-Diploms — kostenlos, ohne Konto."
 
   - id: spickzettel
     name: Kerntemperatur-Spickzettel
@@ -81,6 +83,9 @@ angebote:
       - typ: glossar
         wenn: { category: ["Thermodynamik", "Techniken & Methoden"] }
         satz: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
+      # Auf der Spickzettel-Seite selbst ausgeblendet (regal(..., { ohne: 'spickzettel' })).
+      - typ: antwortseite
+        satz: "Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation."
 
   - id: steak-rettung
     name: Steak-Rettung
@@ -96,6 +101,8 @@ angebote:
         satz: "Nicht so geworden wie geplant? Sechs Grillfehler — und wie du sie rettest."
       - typ: temperatur-guide
         satz: "Zu durch, zu roh, keine Kruste? Sechs Grillfehler — und wie du sie rettest."
+      - typ: antwortseite
+        satz: "Außen verbrannt, innen roh, zu trocken oder grau? Sechs Grillfehler — und wie du sie rettest."
 
   - id: aroma-matcher
     name: Aroma-Matcher
@@ -185,6 +192,8 @@ angebote:
         satz: "Eine Technik lernst du durch Wiederholung in der richtigen Reihenfolge. Mein Protokoll plant dir acht Wochen."
       - typ: temperatur-guide
         satz: "Temperaturen wissen ist das eine, sie treffen das andere. Mein Protokoll plant dir acht Wochen Übung — auf deinen Grill zugeschnitten."
+      - typ: antwortseite
+        satz: "Temperaturen wissen ist das eine, sie treffen das andere. Mein Protokoll plant dir acht Wochen Übung — auf deinen Grill zugeschnitten."
 
   - id: vip
     name: VIP-SteakAkademiker
@@ -215,6 +224,9 @@ angebote:
       - typ: rezept
         wenn: { kategorie: fleisch }
         satz: "Nicht so geworden wie auf dem Bild? Beschreib, was schiefging — mit Foto, wenn du magst — und erfahre die Ursache."
+      # /rettung beschreibt sechs Standardfälle; wer einen anderen hat, bekommt hier den Weg zur Diagnose.
+      - typ: rettung
+        satz: "Dein Fall steht nicht dabei? Beschreib, was schiefging — mit Foto, wenn du magst — und erfahre die Ursache."
 
   # ─── Zurückgestellt: erscheinen nirgends ─────────────────────────────────────
 
