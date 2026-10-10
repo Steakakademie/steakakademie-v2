@@ -320,6 +320,7 @@ export default function KerntemperaturHackfleischPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
                 { label: 'Alle Kerntemperaturen: Rind, Schwein, Geflügel, Wild', href: '/temperatur-guide' },
+                { label: 'Kerntemperatur Steak: Garstufen von Rare bis Well Done', href: '/kerntemperatur-steak' },
                 { label: 'Kerntemperatur-Spickzettel zum Ausdrucken', href: '/kerntemperatur-spickzettel' },
                 { label: 'Fleischthermometer im Vergleich', href: '/vergleich/fleischthermometer' },
                 { label: 'Glossar: Hackfleisch', href: '/glossar/hackfleisch' },
