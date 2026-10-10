@@ -8,6 +8,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import AngebotsRegal from '@/components/angebote/AngebotsRegal';
+import { angebote } from '@/lib/angebote/register';
+import { regal } from '@/lib/angebote/auswahl';
 import { ogImages } from '@/lib/og';
 import { breadcrumbSchema } from '@/lib/schema';
 
@@ -251,6 +254,14 @@ export default function SpickzettelPage() {
               headline="Diesen Spickzettel als Link ins Postfach."
               subline="Nach deiner Bestätigung schicken wir dir den Link zu dieser Druckseite, damit du sie am Grill sofort wiederfindest. Dazu der Wissens-Brief: BBQ-Wissen, das bleibt — ohne festen Takt, ohne Spam. Kostenlos, jederzeit abbestellbar."
               cta="Spickzettel sichern"
+            />
+          </div>
+
+          {/* Eigene Angebote (nicht im Druck). Der Spickzettel verweist nicht auf sich selbst. */}
+          <div className="print:hidden">
+            <AngebotsRegal
+              hinweise={regal(angebote(), { typ: 'antwortseite', slug: 'kerntemperatur-spickzettel' }, { ohne: 'spickzettel' })}
+              seite="antwortseite"
             />
           </div>
         </div>

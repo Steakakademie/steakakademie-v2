@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronRight, Plus } from 'lucide-react';
@@ -106,7 +106,7 @@ const SCENARIOS: Scenario[] = [
   },
 ];
 
-export default function RettungClient() {
+export default function RettungClient({ beichte = null }: { beichte?: ReactNode }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
@@ -243,6 +243,9 @@ export default function RettungClient() {
             </motion.div>
           ))}
         </section>
+
+        {/* Hinweis auf die Steak-Beichte (Server-Baustein aus page.tsx; leer, wenn kein Anlass) */}
+        {beichte && <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">{beichte}</div>}
 
         {/* Bottom CTA */}
         <section className="border-t border-brand-gold/10 py-20 px-4 text-center">
