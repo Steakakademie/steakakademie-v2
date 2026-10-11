@@ -579,6 +579,11 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    T2 bis T8"):** neuer Abschnitt direkt unter DIPLOM-TEASER, in der Soll-Liste
    ergänzt. Sichtbar nur 01.11.–24.12. und nur, wenn ein Gutschein kaufbar ist
    (`src/components/home/GutscheinTeaser.tsx`); sonst rendert er nichts.
+   **AKTIONS-TEASER (11.10.2026, Uwe im Chat: „bau den Teaser und den Menüpunkt"):** neuer
+   Abschnitt direkt unter GUTSCHEIN-TEASER, in der Soll-Liste ergänzt. Sichtbar nur, solange
+   eine Aktionsseite (`data/aktionen/*.yaml`) in ihrem Saisonfenster ist
+   (`src/components/home/AktionsTeaser.tsx`); sonst rendert er nichts. Dazu im Header ein
+   Menüpunkt je laufender Aktion (`src/lib/aktionen/nav.ts`, Test gegen die YAML).
 
 8b. **Lerninhalte: erst planen, dann schreiben (kodifiziert 26.08.2026).** Diese Regel
    wurde seit dem Curriculum-Abgleich zweimal zitiert, war aber nie definiert — hiermit

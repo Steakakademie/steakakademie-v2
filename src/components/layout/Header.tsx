@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import AccountLink from './AccountLink';
 import { istGeschenkSaison, kaufbareGutscheine } from '@/lib/gutschein-products';
+import { aktiveAktionenNav } from '@/lib/aktionen/nav';
 
 type NavSub = { label: string; href: string };
 type NavCategory = { name: string; href: string; sub: NavSub[]; wide?: boolean };
@@ -142,12 +143,23 @@ export default function Header() {
   // dem Hydrieren gesetzt: Viele Seiten sind statisch gebaut, ein Datum im
   // ersten Render würde vom vorgerenderten HTML abweichen.
   const [gutscheinNav, setGutscheinNav] = useState(false);
+  // 11.10.2026 (Uwe: „bau den Teaser und den Menüpunkt"): je laufender Aktionsseite ein
+  // Menüpunkt (src/lib/aktionen/nav.ts, client-sichere Liste mit Test gegen die YAML).
+  // Ein Punkt bei einer Aktion; ab zwei ein Punkt mit Unterpunkten, benannt nach der ersten.
+  const [aktionenNav, setAktionenNav] = useState<NavCategory[]>([]);
   useEffect(() => {
     setGutscheinNav(istGeschenkSaison() && kaufbareGutscheine().length > 0);
+    const aktiv = aktiveAktionenNav();
+    if (aktiv.length === 1) setAktionenNav([{ name: aktiv[0].label, href: aktiv[0].url, sub: [] }]);
+    else if (aktiv.length > 1) {
+      setAktionenNav([{ name: aktiv[0].label, href: aktiv[0].url, sub: aktiv.map((a) => ({ label: a.label, href: a.url })) }]);
+    }
   }, []);
-  const navCategories: NavCategory[] = gutscheinNav
-    ? [...NAV_CATEGORIES, { name: 'Gutscheine', href: '/gutschein', sub: [] }]
-    : NAV_CATEGORIES;
+  const navCategories: NavCategory[] = [
+    ...NAV_CATEGORIES,
+    ...aktionenNav,
+    ...(gutscheinNav ? [{ name: 'Gutscheine', href: '/gutschein', sub: [] }] : []),
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

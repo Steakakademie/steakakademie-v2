@@ -10,6 +10,7 @@ import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import FrischSaisonal from '@/components/home/FrischSaisonal';
 import GutscheinTeaser from '@/components/home/GutscheinTeaser';
+import AktionsTeaser from '@/components/home/AktionsTeaser';
 import ToolBoxes from '@/components/home/ToolBoxes';
 import { FREE_LIMIT as AROMA_FREE_LIMIT } from '@/lib/aroma-matcher/data';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
@@ -307,6 +308,9 @@ export default async function HomePage() {
 
         {/* ── GUTSCHEIN-TEASER — nur 01.11.–24.12. und nur mit kaufbarem Gutschein ── */}
         <GutscheinTeaser />
+
+        {/* ── AKTIONS-TEASER — nur solange eine Aktionsseite in ihrem Saisonfenster ist ── */}
+        <AktionsTeaser />
 
         {/* ── BBQ-NEWS TEASER ──────────────────────────────────────────────── */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
