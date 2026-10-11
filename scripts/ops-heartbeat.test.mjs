@@ -276,12 +276,15 @@ describe('data/ops-heartbeat.json', () => {
     expect(skript, 'Skript schreibt run_id saison_<Datum>').toMatch(/run_id:\s*`saison_\$\{/)
   })
 
-  // 08.10.2026: Glossar-Agent wieder woechentlich (Uwe: SEO). Zeitplan und Waechter
-  // gehoeren zusammen; die Fristen muessen zum Takt passen (woechentlich < 10/14 Tage).
-  it('Glossar: woechentlicher Zeitplan mit Ergebnis- und Workflow-Eintrag', () => {
-    expect(nach('Glossar')).toMatchObject({ typ: 'git', pfad: 'content/glossar', nurNeueDateien: true, maxTage: 14 })
-    expect(nach('Glossar-Workflow')).toMatchObject({ typ: 'workflow', datei: 'glossary-grow.yml', maxTage: 10 })
+  // 11.10.2026: Glossar-Agent wieder pausiert (Uwe; Google hat 298 von 408 URLs nie
+  // abgerufen, rund 125 davon Glossar). Kein Zeitplan UND kein Waechter-Eintrag — beides nur
+  // gemeinsam (Test oben). Wiedereinschalten: Bedingungen im Kopf von glossary-grow.yml.
+  it('Glossar: pausiert — kein Zeitplan, keine Waechter-Eintraege, Handstart bleibt', () => {
+    expect(nach('Glossar')).toBeUndefined()
+    expect(nach('Glossar-Workflow')).toBeUndefined()
     const workflow = readFileSync(new URL('../.github/workflows/glossary-grow.yml', import.meta.url), 'utf-8')
-    expect(workflow).toMatch(/^\s*-\s*cron:\s*'0 3 \* \* 3'/m)
+    const ohneKommentare = workflow.split('\n').filter((z) => !/^\s*#/.test(z)).join('\n')
+    expect(ohneKommentare).not.toMatch(/^\s*schedule:/m)
+    expect(ohneKommentare).toContain('workflow_dispatch')
   })
 })
