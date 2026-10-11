@@ -90,6 +90,22 @@ Digistore-Support.
 | W75 | Wertgutschein 75 € | 75 € |
 | W100 | Wertgutschein 100 € | 100 € |
 
+**Nachtrag 11.10.2026 (Uwe: „ebenfalls direkt anlegen"):** In Digistore als Kopie von G1
+angelegt, **inaktiv**, ohne Verkaufsstart, ohne Genehmigungsantrag, ohne Zeile in
+`digistore_products`. Der interne Name trägt „NICHT AKTIVIEREN": Bis T9 steht, endet ein Kauf
+im Webhook als unbekanntes Produkt — der Käufer zahlt, ein Code entsteht nicht.
+
+| # | Produkt-ID | Preisplan (Stand 11.10.) |
+|---|---|---|
+| W25 | 746668 | nur Pläne der Vorlage: 7 € aktiv, 25 € inaktiv — umstellen |
+| W50 | 746669 | nur 7 € (aktiv) der Vorlage — 50-€-Plan fehlt |
+| W75 | 746670 | 75 € angelegt und aktiv; 7 € der Vorlage noch aktiv — deaktivieren |
+| W100 | 746671 | nur 7 € (aktiv) der Vorlage — 100-€-Plan fehlt |
+
+Die Preispläne für W50/W100 hat die Rechteprüfung der Sitzung als „Zahlungsvorgang"
+abgelehnt; sie sind von Hand oder nach Freigabe nachzutragen. Einlöseziele und die Frage
+BOS FOOD/Gelato: `docs/gutschein-sichtbarkeit-konzept.md`, Abschnitt 3.
+
 Der Beschenkte kann den Wert auf jedes freigegebene Produkt anrechnen, auch
 in Teilen. Was übrig bleibt, bleibt als Guthaben auf dem Code stehen.
 

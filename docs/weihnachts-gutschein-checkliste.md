@@ -22,7 +22,7 @@
 
 ---
 
-## Stand 11.10.2026 — Schritt 1 erledigt, Schritt 2 vorbereitet, Schritt 3 offen
+## Stand 11.10.2026 — Schritt 1 und 2 erledigt, Schritt 3 offen
 
 **Schritt 1 (Digistore24) ist fertig** — drei Produkte angelegt, alle **inaktiv**, Verkaufsstart
 01.11.2026 00:00, Genehmigung „noch nicht beantragen", Danke-Seite
@@ -55,9 +55,19 @@ auf den Kaufknopf.
 AGB § 5a, Datenbank-Vorgabe seit Migration 20261009170345. Das ist unabhängig von der
 Rückgabefrist (Geld-zurück-Frist) des Digistore-Produkts.
 
-**Offen:** Rückgabefrist der drei Produkte in Digistore (Cowork meldete 60 Tage statt 14 bei der
-Steak-Beichte, nicht bestätigt) und der Genehmigungsantrag bei Digistore (das Original
-Mein Protokoll 696396 ist selbst noch nicht genehmigt).
+**Rückgabefrist (geprüft 11.10.2026 per Digistore-API):** Die Regel „Gesetzlich 14 Tage (laut
+AGB)" gilt für alle Produkte, alle drei Gutscheine sind darin angehakt. Die API meldet trotzdem
+`refund_days: 60` — und zwar für **jedes nicht genehmigte** Produkt (746579–746581 und auch das
+alte Mein Protokoll 696396); nur das genehmigte 696394 meldet 14. Neu speichern der Regel hat
+daran nichts geändert. Vermutung (nicht belegt): Bis zur Genehmigung gilt Digistores
+Standardfrist. **Nach der Genehmigung erneut prüfen** (`getProduct`, Feld `refund_policy`);
+steht dann noch 60, beim Digistore-Support nachfragen.
+
+**Offen:** Genehmigungsantrag bei Digistore (das Original Mein Protokoll 696396 ist selbst noch
+nicht genehmigt).
+
+**Wertgutscheine W25–W100** sind seit 11.10.2026 ebenfalls angelegt (746668–746671, inaktiv) —
+**nicht aktivieren**, Stand und Gründe: `docs/gutschein-konzept-weihnachten-2026.md`.
 
 ## Je Produkt drei Schritte (≈ 10 Min/Produkt)
 
