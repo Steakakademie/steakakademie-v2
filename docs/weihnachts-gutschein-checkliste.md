@@ -67,10 +67,12 @@ steht dann noch 60, beim Digistore-Support nachfragen.
 nicht genehmigt).
 
 **Personalisierung und Wunschtermin (gebaut 11.10.2026)** — vor dem Verkaufsstart:
-1. Migration `supabase/migrations/…_gutschein_personalisierung.sql` anwenden (Uwes Ja), **vor**
-   dem Merge des PR — Geschenkseite und API lesen die neuen Spalten.
-2. `GUTSCHEIN_VERSAND_SECRET`: einen langen Zufallswert als GitHub-Actions-Secret **und** als
-   Vercel-Variable (Production) setzen. Ohne ihn ist der Workflow „Gutschein-Versand" rot.
+1. ✓ 11.10.: Migration `supabase/migrations/20261011091437_gutschein_personalisierung.sql`
+   angewendet (nach dem Merge von #385 — bis dahin fiel die Geschenkseite auf die Grunddaten zurück).
+2. ✓ 11.10.: `GUTSCHEIN_VERSAND_SECRET` als GitHub-Actions-Secret und als Vercel-Variable
+   (Production, sensitive) gesetzt. Greift auf Vercel erst mit dem nächsten Deploy; bis dahin
+   meldet der Workflow „Gutschein-Versand" HTTP 503 und ist rot. Rotieren: neuen Wert an
+   beiden Stellen setzen, dann Redeploy.
 3. Loops: Transaktionsmail „Geschenk für dich" anlegen (Variablen und Textvorschlag:
    `docs/gutschein-sichtbarkeit-konzept.md`, „Loops-Vorlage"), ID als
    `LOOPS_VOUCHER_GIFT_TEMPLATE_ID` in Vercel (Production), Redeploy. Ohne sie gibt es nur
