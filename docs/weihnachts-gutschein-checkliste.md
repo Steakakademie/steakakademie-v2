@@ -38,11 +38,13 @@ nicht zum Gutschein gehört, ist **deaktiviert**, nicht gelöscht:
 Die IPN-Anbindung 352984 („Steakakademie IPN (sha_sign)") gilt für **alle Produkte** und ist aktiv;
 eine Zuordnung je Produkt ist nicht nötig. Die alte Token-Anbindung 325764 ist inaktiv.
 
-**Schritt 2:** Migration `supabase/migrations/20261011100000_gutschein_digistore_zuordnung.sql`
-liegt bereit, ist aber **nicht angewendet**. Sie bricht ab, wenn nicht genau diese drei Zeilen
-entstehen. Test: `src/__tests__/gutschein-digistore-zuordnung.test.ts`. Anwenden vor dem
-Testkauf im Digistore-Testmodus (der braucht die Zuordnung), per Supabase-MCP; danach den
-Dateinamen an die Ledger-Version angleichen.
+**Schritt 2 ist erledigt:** Migration `supabase/migrations/20261011080159_gutschein_digistore_zuordnung.sql`
+am 11.10.2026 per Supabase-MCP angewendet (Freigabe Uwe im Chat: „Ja, Migration ausführen"),
+Ledger-Version 20261011080159. Zurückgelesen: 746579 → steak-beichte, Credit-Gutschein 1;
+746580 → steak-beichte, Credit-Gutschein 5; 746581 → mein-protokoll, Kurs-Gutschein;
+`credit_amount` bei allen NULL; die Originale 696394 und 696396 unverändert. Die Migration bricht
+ab, wenn nicht genau diese drei Zeilen entstehen. Test: `src/__tests__/gutschein-digistore-zuordnung.test.ts`.
+Nächster Schritt: Testkauf im Digistore-Testmodus.
 
 **Schritt 3 (Vercel):** `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE`, `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE_5ER`
 und `NEXT_PUBLIC_DS_VOUCHER_MEIN_PROTOKOLL` auf die Checkout-Adressen oben, dann Redeploy. **Erst

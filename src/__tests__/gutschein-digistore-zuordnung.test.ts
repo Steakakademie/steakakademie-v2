@@ -1,5 +1,5 @@
 /**
- * Geschenkgutscheine: Digistore-Zuordnung (Migration 20261011100000), 11.10.2026.
+ * Geschenkgutscheine: Digistore-Zuordnung (Migration 20261011080159), 11.10.2026.
  *
  * Die Migration ordnet die drei in Digistore24 angelegten Gutschein-Produkte den Kursen zu.
  * Eine falsche Zahl dort heißt: Käufer zahlt, Beschenkter bekommt zu wenig oder gar nichts.
@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { GIFTABLE_PRODUCTS } from '@/lib/gutschein-products';
 
-const SQL = readFileSync('supabase/migrations/20261011100000_gutschein_digistore_zuordnung.sql', 'utf8');
+const SQL = readFileSync('supabase/migrations/20261011080159_gutschein_digistore_zuordnung.sql', 'utf8');
 // Kommentare zählen nicht: dort dürfen die Werte noch einmal stehen.
 const CODE = SQL.split('\n').filter((z) => !/^\s*--/.test(z)).join('\n');
 
