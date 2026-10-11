@@ -97,6 +97,16 @@ describe('.github/workflows — Hygiene', () => {
     }
   })
 
+  // 11.10.2026: Der Ops-Heartbeat zaehlt Kursdateien (Zusagen-Belege vom Typ „zaehlung").
+  // Die liegen seit 08.10. im privaten Repo. Ohne den Hol-Schritt meldete er taeglich drei
+  // gebrochene Belege, obwohl nichts kaputt war (Issue #350).
+  it('Ops-Heartbeat holt die Kursinhalte, bevor er Dateien zaehlt', () => {
+    const hb = dateien.find((d) => d.name.endsWith('ops-heartbeat.yml'))
+    expect(hb, 'ops-heartbeat.yml').toBeTruthy()
+    expect(hb.code).toContain('scripts/kursinhalte-holen.mjs')
+    expect(hb.code.indexOf('kursinhalte-holen.mjs')).toBeLessThan(hb.code.indexOf('scripts/ops-heartbeat.mjs'))
+  })
+
   it('jeder Zeitplan hat genau fuenf Felder', () => {
     for (const d of dateien) {
       for (const [, ausdruck] of d.code.matchAll(/-\s*cron:\s*'([^']+)'/g)) {
