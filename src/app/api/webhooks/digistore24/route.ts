@@ -664,14 +664,24 @@ async function handleVoucherProduct(
       // Gültigkeit für die Mail aus der Datenbank (dieselbe Quelle wie die
       // Geschenkseite). Lesefehler stoppen den Versand nicht: gueltigBisText
       // rechnet die AGB-Regel dann selbst nach.
+      // 11.10.2026: dazu der Schlüssel des Schenkenden — mit ihm öffnet der Link aus
+      // der Käufer-Mail auf der Geschenkseite das Formular „persönlich machen"
+      // (Name, Nachricht, Motiv, Versand zum Wunschtermin). Fehlt er (Lesefehler),
+      // geht die Mail trotzdem raus, nur ohne Formular.
       const { data: voucherRow } = await supabase
         .from('vouchers')
-        .select('valid_until')
+        .select('valid_until, schenker_token')
         .eq('code', code as string)
         .maybeSingle();
 
       // Käufer bekommt den Gutschein (NICHT den Magic-Link — er soll ihn verschenken)
-      await sendVoucherEmail(email, code as string, courseTitle, gueltigBisText(voucherRow?.valid_until ?? null));
+      await sendVoucherEmail(
+        email,
+        code as string,
+        courseTitle,
+        gueltigBisText(voucherRow?.valid_until ?? null),
+        (voucherRow as { schenker_token?: string | null } | null)?.schenker_token ?? null,
+      );
 
       await supabase
         .from('digistore_orders')
@@ -717,13 +727,21 @@ async function handleVoucherProduct(
   }
 }
 
-async function sendVoucherEmail(email: string, code: string, courseTitle: string | null, gueltigBis: string) {
+async function sendVoucherEmail(
+  email: string,
+  code: string,
+  courseTitle: string | null,
+  gueltigBis: string,
+  schenkerToken: string | null,
+) {
   const apiKey     = process.env.LOOPS_API_KEY;
   const templateId = process.env.LOOPS_VOUCHER_TEMPLATE_ID;
   if (!apiKey || !templateId) {
     throw new Error('LOOPS_API_KEY or LOOPS_VOUCHER_TEMPLATE_ID not set');
   }
-  const voucherUrl = `https://steakakademie.de/gutschein/${encodeURIComponent(code)}`;
+  const voucherUrl =
+    `https://steakakademie.de/gutschein/${encodeURIComponent(code)}` +
+    (schenkerToken ? `?k=${encodeURIComponent(schenkerToken)}` : '');
 
   const resp = await fetch('https://app.loops.so/api/v1/transactional', {
     method:  'POST',

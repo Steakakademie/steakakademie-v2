@@ -23,6 +23,13 @@
     "hinweis": "funktionsproben läuft täglich (Cron 05:23 UTC) und prüft die Live-Seite im Browser: Kernseiten, Werkzeuge, Zugangstor — mit Testkonto auch Anmeldung, Aroma-Abfrage und Abstimmung. Kein Start seit 2 Tagen = GitHub hat den Cron abgeschaltet (60 Tage ohne Repo-Aktivität) oder der Workflow wurde entfernt/umbenannt — von Hand per workflow_dispatch starten, dann Ursache suchen. Dieser Eintrag sieht nur, DASS die Proben starten; scheitert eine Probe, meldet der Workflow das selbst (rot + Jira-Ticket ops-funktionsproben)."
   },
   {
+    "name": "Gutschein-Versand",
+    "typ": "workflow",
+    "datei": "gutschein-versand.yml",
+    "maxTage": 1,
+    "hinweis": "gutschein-versand läuft alle 15 Minuten und verschickt Geschenkgutscheine zum Wunschtermin (seit 11.10.2026). Kein Start seit einem Tag = GitHub hat den Zeitplan abgeschaltet oder der Workflow wurde umbenannt — von Hand per workflow_dispatch starten, dann Ursache suchen. Dieser Eintrag sieht nur, DASS der Lauf startet; scheitert ein Versand, wird der Lauf selbst rot."
+  },
+  {
     "name": "Rezept-Produktion",
     "typ": "git",
     "pfad": "content/rezepte",

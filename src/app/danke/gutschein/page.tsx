@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import RechtsZeile from '@/components/layout/RechtsZeile'
+import { mailVersandVerfuegbar } from '@/lib/gutschein-versand'
 
 export const metadata: Metadata = {
   title: 'Bestellung bestätigt — Geschenkgutschein',
@@ -9,6 +10,9 @@ export const metadata: Metadata = {
 }
 
 export default function DankeGutscheinPage() {
+  // Den Mail-Versand an die beschenkte Person nur ankündigen, wenn die Loops-Vorlage
+  // dafür gesetzt ist — sonst bietet die Geschenkseite ihn auch nicht an.
+  const mitMailVersand = mailVersandVerfuegbar()
   return (
     <main className="min-h-screen bg-[#0D0D0D] flex items-center justify-center px-4">
       <div className="max-w-lg w-full text-center">
@@ -35,15 +39,24 @@ export default function DankeGutscheinPage() {
             <span className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-[#F5A623] text-black text-xs font-bold flex items-center justify-center">1</span>
             <div>
               <p className="text-white text-sm font-medium">E-Mail prüfen</p>
-              <p className="text-white/60 text-sm">Du erhältst in wenigen Minuten deinen Gutschein-Code mit einem Link zur druckbaren Geschenkseite.</p>
+              <p className="text-white/60 text-sm">Du erhältst in wenigen Minuten deinen Gutschein-Code mit einem Link zu deiner Geschenkseite.</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
             <span className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-[#F5A623] text-black text-xs font-bold flex items-center justify-center">2</span>
             <div>
-              <p className="text-white text-sm font-medium">Verschenken</p>
-              <p className="text-white/60 text-sm">Code weitergeben oder die Geschenkseite ausdrucken und unter den Baum legen — beides funktioniert.</p>
+              {/* 11.10.2026: Personalisierung und Versand zum Wunschtermin (Formular auf der
+                  Geschenkseite, nur über den Link aus der Käufer-Mail). */}
+              <p className="text-white text-sm font-medium">Persönlich machen und verschenken</p>
+              <p className="text-white/60 text-sm">
+                Über den Link in der Mail trägst du Namen und eine Nachricht ein und wählst ein Motiv. Dann
+                druckst du die Geschenkseite aus{mitMailVersand ? '' : '.'}
+                {mitMailVersand && (
+                  <> — oder wir schicken den Gutschein per E-Mail an die beschenkte Person, sofort oder ab
+                  einer Uhrzeit, die du wählst.</>
+                )}
+              </p>
             </div>
           </div>
 

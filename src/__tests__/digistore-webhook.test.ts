@@ -122,6 +122,8 @@ async function rpc(name: string, args: Row) {
       vouchers.push({
         code, course_id: args.p_course_id, kind: args.p_kind, credit_amount: args.p_credit_amount,
         ds_order_id: args.p_ds_order_id, purchaser_email: args.p_purchaser_email, status: 'issued',
+        // Vorgabewert der Datenbank seit Migration …_gutschein_personalisierung (gen_random_uuid)
+        schenker_token: `tok-${code}`,
         // Vorgabewert der Datenbank (31.12. des dritten Folgejahres, 23:59:59 Berlin)
         valid_until: '2029-12-31T22:59:59+00:00',
       });
@@ -491,6 +493,19 @@ describe('Digistore24-Webhook: Geschenkgutscheine (Gutschein-Konzept T7, 09.10.2
       }),
     ]);
     expect(db.tables.digistore_orders[0]).toMatchObject({ processing_status: 'processed', error_message: 'voucher SA-TEST-0001' });
+  });
+
+  // 11.10.2026: Der Link der Käufer-Mail trägt den Schlüssel des Schenkenden — damit
+  // öffnet die Geschenkseite das Formular „persönlich machen".
+  it('Käufer-Mail: Link zur Geschenkseite trägt den Schlüssel des Schenkenden', async () => {
+    await POST(kauf('800001'));
+    expect(mailBodies()[0].dataVariables.voucher_url).toBe('https://steakakademie.de/gutschein/SA-TEST-0001?k=tok-SA-TEST-0001');
+  });
+
+  it('Käufer-Mail ohne lesbaren Schlüssel: Link ohne k, die Mail geht trotzdem raus', async () => {
+    db.leseFehler.vouchers = { message: 'kaputt' };
+    await POST(kauf('800001'));
+    expect(mailBodies()[0].dataVariables.voucher_url).toBe('https://steakakademie.de/gutschein/SA-TEST-0001');
   });
 
   it('unveröffentlichter Kurs löst beim Gutschein-Kauf keinen Alarm aus (Mein Protokoll vor dem 01.11.)', async () => {

@@ -56,7 +56,79 @@ stimmt (§ 5 UWG; Regel 12: keine Zusage ohne Beleg).
 **Bewusst nicht:** Exit-Intent-Popups und Dauer-Banner über dem Inhalt (widerspricht Regel 8),
 Rabatt-Countdowns, „nur noch 3 verfügbar" bei digitalen Gutscheinen (immer unwahr).
 
-### Technische Skizze M1 + M2 (falls Uwe sie für 2026 will)
+### M1 + M2 gebaut (11.10.2026, Uwe: „bau Personalisierung und Wunschtermin")
+
+So ist es umgesetzt (weicht in Details von der Skizze darunter ab):
+
+- **Zugang:** Der Link in der Käufer-Mail trägt einen Schlüssel (`/gutschein/<code>?k=…`,
+  Spalte `vouchers.schenker_token`). Nur mit Schlüssel zeigt die Geschenkseite das Formular
+  „Gutschein persönlich machen". Der Code allein — den der Beschenkte hat — reicht nicht.
+  Kein Login nötig, keine Änderung an der bestehenden Loops-Vorlage der Käufer-Mail.
+- **Felder:** Für (Name), Von (Name), Nachricht (max. 300 Zeichen), Motiv (Glut · Weihnachten ·
+  Geburtstag · Vatertag · Danke). Die Geschenkseite zeigt Anlass-Zeile, „Für …", Nachricht und
+  „— Von"; die Druckansicht ebenso.
+- **Versand:** „Ich gebe ihn selbst weiter" (Standard) oder „Die Steakakademie schickt ihn per
+  E-Mail" — sofort oder ab einer vollen Stunde zwischen 6 und 22 Uhr deutscher Zeit, frühestens
+  10 Minuten ab jetzt, höchstens 400 Tage voraus und nie nach Ablauf des Gutscheins. Ändern
+  geht, bis der Gutschein verschickt oder eingelöst ist.
+- **Lauf:** `.github/workflows/gutschein-versand.yml` ruft alle 15 Minuten
+  `POST /api/gutschein/versand` (Secret `GUTSCHEIN_VERSAND_SECRET`). Übernahme
+  `geplant → in_arbeit` nur, solange noch geplant (kein Doppelversand); Fehler → zurück auf
+  geplant, nach 3 Versuchen `fehlgeschlagen`. Der Lauf ist rot bei jedem Fehler, offenem
+  Fehlschlag oder hängendem Versand; Heartbeat-Eintrag „Gutschein-Versand".
+- **Datensparsamkeit:** Die Empfänger-Adresse wird nach dem Versand gelöscht, es bleibt
+  `empfaenger_hinweis` (z. B. `p•••@example.de`). Abschnitt 10 der Datenschutzerklärung ergänzt.
+- **Ohne Loops-Vorlage** (`LOOPS_VOUCHER_GIFT_TEMPLATE_ID` fehlt) bieten Formular und
+  Danke-Seite den Mail-Versand nicht an; Personalisierung und Druck funktionieren trotzdem.
+- Code: `src/lib/gutschein-personalisierung.ts` (Regeln, Zeitzone), `src/lib/gutschein-versand.ts`,
+  `src/app/api/gutschein/personalisieren/route.ts`, `src/app/api/gutschein/versand/route.ts`,
+  `src/components/gutschein/GutscheinPersonalisieren.tsx`, Migration
+  `supabase/migrations/…_gutschein_personalisierung.sql`. Tests:
+  `src/__tests__/gutschein-personalisierung.test.ts`, `src/__tests__/gutschein-versand.test.ts`.
+
+#### Loops-Vorlage „Geschenk für dich" (Uwe legt sie an)
+
+Transaktionale Mail in Loops, ID danach als `LOOPS_VOUCHER_GIFT_TEMPLATE_ID` in Vercel
+(Production). Die Datenvariablen müssen **genau so** heißen; der Code schickt immer alle, leere
+als leeren Text:
+
+| Variable | Inhalt | Beispiel |
+|---|---|---|
+| `empfaenger_name` | Für | Papa |
+| `schenker_name` | Von (immer gefüllt beim Mail-Versand) | Anna |
+| `nachricht` | Nachricht, kann leer sein | Für das nächste perfekte Steak |
+| `anlass` | Anlass-Zeile des Motivs, bei „Glut" leer | Frohe Weihnachten! |
+| `course_title` | Produkt | Mein Protokoll |
+| `voucher_code` | Code | SA-ABCD-EFGH |
+| `voucher_url` | Geschenkseite **ohne** Schlüssel | https://steakakademie.de/gutschein/SA-ABCD-EFGH |
+| `gueltig_bis` | Ablaufdatum | 31.12.2029 |
+
+Vorschlag Betreff: `{schenker_name} schenkt dir: {course_title}`
+
+Vorschlag Text (keine Werbung, kein Newsletter-Hinweis — die beschenkte Person hat nichts
+abonniert):
+
+> {anlass}
+>
+> Hallo {empfaenger_name},
+>
+> {schenker_name} hat dir einen Gutschein der Steakakademie geschenkt: **{course_title}**.
+>
+> {nachricht}
+>
+> Dein Code: **{voucher_code}** — gültig bis {gueltig_bis}.
+>
+> [Gutschein ansehen und einlösen]({voucher_url})
+>
+> Zum Einlösen meldest du dich mit deiner E-Mail-Adresse an (kostenlos), dann ist dein Geschenk
+> sofort freigeschaltet.
+>
+> Die Steakakademie
+>
+> *Diese Mail kommt, weil {schenker_name} dir den Gutschein über steakakademie.de geschickt hat.
+> Deine Adresse haben wir nur für diese Mail gespeichert und danach gelöscht.*
+
+### Technische Skizze M1 + M2 (Stand vor dem Bau)
 
 - `/danke/gutschein` bekommt nach dem Kauf ein Formular: Empfänger-Name, Empfänger-Mail
   (optional), Nachricht (max. 300 Zeichen), Motiv, Versandzeitpunkt (sofort oder Datum/Uhrzeit).
@@ -129,7 +201,7 @@ Bau klären") gilt unverändert.
 | Wann | Was | Wer |
 |---|---|---|
 | bis 31.10. | M4, M5, M6 (Ratgeber), M7, M8 — alles klein, hinter dem bestehenden Saisonfenster | Claude per PR, Uwe merged |
-| bis 31.10., falls Uwe will | M1 + M2 + M3 (Personalisierung, Wunschtermin, Klappkarte) | Claude, Migration + PR |
+| ✓ 11.10. | M1 + M2 gebaut (Personalisierung, Wunschtermin); M3 Klappkarte offen | Claude, Migration + PR |
 | 01.11.–24.12. | Messen (Abschnitt 5), wöchentlich nachsteuern | Claude |
 | 2027 | T9 Wertgutscheine + M9; M11 Vatertag; M12 Firmen; Gelato-Merch + M13; M10 Wallet | nach Entscheidung |
 
