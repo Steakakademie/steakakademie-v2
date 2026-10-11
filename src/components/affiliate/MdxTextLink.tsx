@@ -1,9 +1,14 @@
 import type { AnchorHTMLAttributes } from 'react';
-import { REL_PARTNERLINK } from './produkt-anzeige';
+import { hatNetzwerkLink, REL_PARTNERLINK } from './produkt-anzeige';
 
-/** Ein Markdown-Link auf `/go/<id>` ist ein Partnerlink (Tracking-Redirect zum Händler). */
+/**
+ * Ein Markdown-Link auf `/go/<id>` ist ein Partnerlink (Tracking-Redirect zum Händler).
+ * Seit 11.10.2026 ebenso ein direkter Netzwerk-Link (awin1.com, track.webgains.com) —
+ * sonst stünde ein AWIN-Deeplink im Fließtext ohne „Anzeige“.
+ */
 export function istPartnerlink(href?: string | null): boolean {
-  return typeof href === 'string' && href.startsWith('/go/');
+  if (typeof href !== 'string') return false;
+  return href.startsWith('/go/') || hatNetzwerkLink({ affiliateUrl: href });
 }
 
 /**

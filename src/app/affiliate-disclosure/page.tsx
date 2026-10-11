@@ -89,20 +89,31 @@ export default function AffiliateDisclosurePage() {
                 einer möglichen Provision.
               </p>
               <p>
-                Artikel, die Affiliate-Links enthalten, sind am Ende oder direkt neben dem
-                jeweiligen Link als solche kenntlich gemacht.
+                Artikel, die Partnerlinks enthalten, tragen das Wort „Anzeige“ direkt am
+                jeweiligen Link.
               </p>
             </section>
 
             <section>
               <h2 className={h2Class}>Kennzeichnung</h2>
-              <p>
-                Affiliate-Links sind auf dieser Website mit dem Hinweis{' '}
+              {/* 11.10.2026: Das Etikett heißt „Anzeige“ (src/components/affiliate/produkt-anzeige.ts,
+                  MdxTextLink, Cut-Kaufknöpfe). „Affiliate-Link“ allein reicht nach BGH I ZR 2/11
+                  nicht — hier stand es bis dahin als Kennzeichen. */}
+              <p className="mb-3">
+                Partnerlinks sind auf dieser Website direkt am Link mit dem Wort{' '}
                 <span className="font-sans text-xs font-bold tracking-wide uppercase bg-surface-base border border-border-subtle px-2 py-0.5 text-text-muted">
-                  Affiliate-Link
+                  Anzeige
                 </span>{' '}
-                oder einem entsprechenden Hinweis im Artikel-Text kenntlich gemacht, sofern
-                gesetzlich erforderlich.
+                gekennzeichnet und technisch als bezahlte Links ausgezeichnet
+                (<code>rel=&quot;sponsored&quot;</code>). Links ohne dieses Wort sind gewöhnliche
+                Links ohne Vergütung.
+              </p>
+              <p>
+                Beim Klick auf einen Partnerlink wirst du über unsere Weiterleitung und bei
+                AWIN oder Webgains über den Tracking-Server des Netzwerks zum Händler geleitet; dort
+                wird in der Regel ein Cookie gesetzt. Auf steakakademie.de selbst setzen wir dafür
+                nichts. Einzelheiten:{' '}
+                <Link href="/datenschutz#affiliate" className={linkClass}>Datenschutzerklärung, Abschnitt 13</Link>.
               </p>
             </section>
 

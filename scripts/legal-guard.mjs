@@ -66,7 +66,11 @@ const CONTENT_EXTS = ['.md', '.mdx'];
 const srcFiles = walk(join(ROOT, 'src'), CODE_EXTS);
 const publicFiles = walk(join(ROOT, 'public'), WEB_EXTS);
 const contentFiles = walk(join(ROOT, 'content'), CONTENT_EXTS);
-const affiliateFiles = walk(join(ROOT, 'src', 'components', 'affiliate'), ['.tsx']);
+// 11.10.2026: auch die Cut-Komponenten — sie rendern den Fleisch-Kaufknopf (/go-fleisch).
+const affiliateFiles = [
+  ...walk(join(ROOT, 'src', 'components', 'affiliate'), ['.tsx']),
+  ...walk(join(ROOT, 'src', 'components', 'cuts'), ['.tsx']),
+];
 
 const violations = [];
 const add = (rule, file, detail) => violations.push({ rule, file: rel(file), detail });
@@ -99,6 +103,12 @@ const TRACKERS = [
   ['Meta-Pixel', /connect\.facebook\.net|fbevents\.js|\bfbq\s*\(/],
   ['Hotjar', /static\.hotjar\.com/],
   ['Microsoft Clarity', /clarity\.ms/],
+  // 11.10.2026: Netzwerk-Skripte der Partnerprogramme. Reine Textlinks (awin1.com,
+  // track.webgains.com) setzen auf unserer Seite nichts; ein eingebundenes Skript
+  // oder Widget schon — dann braucht es eine Consent-Kategorie.
+  ['AWIN MasterTag', /dwin1\.com/],
+  ['Webgains Script', /webgains\.io|analytics\.webgains/],
+  ['Amazon Widget/OneLink', /amazon-adsystem\.com/],
 ];
 const CONSENT_GATED = /@\/lib\/consent|hasStatisticsConsent|hasMarketingConsent|CONSENT_CHANGE_EVENT/;
 for (const f of [...srcFiles, ...publicFiles]) {
@@ -115,7 +125,7 @@ for (const f of [...srcFiles, ...publicFiles]) {
 // Quelle: werbekennzeichnung-affiliate-uwg (§ 5a Abs. 4 UWG).
 for (const f of affiliateFiles) {
   const txt = readFileSync(f, 'utf8');
-  const isAffiliateLinkComponent = /\/go\/|affiliateHref/.test(txt);
+  const isAffiliateLinkComponent = /\/go\/|affiliateHref|offer\.href|go-fleisch/.test(txt);
 
   // Jeder rel="…" in einer Affiliate-Komponente muss 'sponsored' enthalten.
   for (const m of txt.match(/rel="([^"]*)"/g) || []) {

@@ -14,6 +14,16 @@ import { getProductById } from '@/lib/products';
 /** So lange darf Plausible den Klick hoechstens aufhalten — wie in /go-fleisch/[cut]. */
 const PLAUSIBLE_TIMEOUT_MS = 1_500;
 
+/** URL ohne Query und Fragment — fuer die Herkunftsseite in der Statistik. */
+function ohneQuery(url: string): string {
+  try {
+    const u = new URL(url);
+    return `${u.origin}${u.pathname}`;
+  } catch {
+    return url;
+  }
+}
+
 export async function GET(
   request: NextRequest,
   props0: { params: Promise<{ 'product-slug': string }> }
@@ -28,12 +38,11 @@ export async function GET(
 
   // Server-side Plausible-Event — gleicher Name/Props wie Client-Tag (Dashboard mergt)
   try {
-    const ip =
-      request.headers.get('x-nf-client-connection-ip') ??
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-      '';
+    // 11.10.2026: Netlify-Header entfernt (Deploy nur noch Vercel), Referer ohne
+    // Query — eine Suchanfrage oder ein Schlüssel in der URL gehört nicht in die Statistik.
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '';
     const ua  = request.headers.get('user-agent') ?? '';
-    const ref = request.headers.get('referer') ?? request.url;
+    const ref = ohneQuery(request.headers.get('referer') ?? request.url);
 
     await fetch('https://plausible.io/api/event', {
       method: 'POST',
