@@ -11,6 +11,8 @@ import PlattformPuls from '@/components/home/PlattformPuls';
 import FrischSaisonal from '@/components/home/FrischSaisonal';
 import GutscheinTeaser from '@/components/home/GutscheinTeaser';
 import AktionsTeaser from '@/components/home/AktionsTeaser';
+import SaisonChip from '@/components/home/SaisonChip';
+import { chipEintrag } from '@/lib/aktionen/leiste';
 import ToolBoxes from '@/components/home/ToolBoxes';
 import { FREE_LIMIT as AROMA_FREE_LIMIT } from '@/lib/aroma-matcher/data';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
@@ -109,6 +111,9 @@ export default async function HomePage() {
                   {label} <ChevronRight size={12} />
                 </Link>
               ))}
+              {/* Saison-Chip (Uwe, 11.10.2026): im Fenster ein goldener Knopf zur laufenden
+                  Aktionsseite — Teil dieses Bandes, kein eigener Abschnitt (CLAUDE.md Regel 8). */}
+              <SaisonChip server={chipEintrag()} />
             </div>
           </div>
         </section>

@@ -584,6 +584,16 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    eine Aktionsseite (`data/aktionen/*.yaml`) in ihrem Saisonfenster ist
    (`src/components/home/AktionsTeaser.tsx`); sonst rendert er nichts. Dazu im Header ein
    Menüpunkt je laufender Aktion (`src/lib/aktionen/nav.ts`, Test gegen die YAML).
+   **SAISON-LEISTE und SAISON-CHIP (11.10.2026, Uwe im Chat: „Trotzdem muss die
+   Steakakademie auch Verkaufen. Nur von der Wissensvermittlung kann ich nicht Leben." und
+   „Als Laufleiste, anderen leichten Animationen, die das Auge dahin lenken?"):** Im
+   Saisonfenster wird die Spickzettel-Leiste über der Navigation zur Laufleiste mit den
+   Aktionsseiten (`src/components/layout/SaisonLeiste.tsx`), und im VALUE-PROP-BAND steht
+   neben den Rubriken ein goldener Chip zur ersten laufenden Aktion
+   (`src/components/home/SaisonChip.tsx`). Beides ist Teil bestehender Flächen, kein neuer
+   Abschnitt; die Soll-Liste und der Riegel bleiben unverändert. Ein Slider mit
+   Saison-Slides an Position 1–2 ist NICHT gebaut — Uwe behält ihn sich vor, falls Leiste
+   und Chip nach dem 02.11. nicht reichen; dann hebt er Regel 8 hier mit Wortlaut auf.
 
 8b. **Lerninhalte: erst planen, dann schreiben (kodifiziert 26.08.2026).** Diese Regel
    wurde seit dem Curriculum-Abgleich zweimal zitiert, war aber nie definiert — hiermit

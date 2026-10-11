@@ -229,6 +229,11 @@ ohne Temperaturen, ohne Testurteile (Test `src/__tests__/aktionen.test.ts`). Mes
 **Teaser und Menüpunkt (✓ 11.10., #393):** Startseiten-Teaser „Gerade passend" unter dem
 Gutschein-Teaser (Marker AKTIONS-TEASER, CLAUDE.md Regel 8) und je laufender Aktion ein
 Menüpunkt; Quelle für den Header ist `src/lib/aktionen/nav.ts` (Test gegen die YAML).
+**Saison-Leiste und Saison-Chip (✓ 11.10., Uwe: „Trotzdem muss die Steakakademie auch
+Verkaufen"):** Im Fenster läuft über der Navigation eine Laufleiste mit den Aktionsseiten und
+dem Gutschein (hält bei Hover, still bei „weniger Bewegung"), und im Kopfbereich der
+Startseite steht ein glühender Chip zur ersten laufenden Aktion. Anzeigen und Social-Posts
+führen trotzdem **direkt** auf `/geschenke` bzw. `/aktionen/<slug>`, nie auf `/`.
 **Vorschau vor dem Fenster:** `https://steakakademie.de/?vorschau=1` schaltet Teaser und Menü
 für die Browser-Sitzung ein (alle Aktionsseiten, Links mit `?vorschau=1`), `?vorschau=0` aus
 (`src/lib/aktionen/vorschau.ts`). Das Zusagen-Gate
