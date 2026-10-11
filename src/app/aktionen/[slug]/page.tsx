@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import AktionsSeite from '@/components/aktionen/AktionsSeite';
 import { aktionBySlug, istAktiv } from '@/lib/aktionen';
+import { KURZE_ADRESSE } from '@/lib/aktionen/nav';
 
 /**
  * Aktionsseiten /aktionen/<slug> (11.10.2026) — Daten aus data/aktionen/<slug>.yaml.
@@ -15,8 +16,6 @@ import { aktionBySlug, istAktiv } from '@/lib/aktionen';
  * dorthin weitergeleitet, damit es nur eine URL gibt.
  */
 export const revalidate = 3600;
-
-const KURZE_ADRESSE: Record<string, string> = { geschenke: '/geschenke' };
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 

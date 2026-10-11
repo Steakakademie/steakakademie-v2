@@ -3,6 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { alleAktionen, aktionBySlug, istAktiv } from '@/lib/aktionen';
 import { heuteMMTT, imFenster, tageBisBeginn } from '@/lib/aktionen/typen';
+import { AKTIONEN_NAV, aktionUrl, aktiveAktionenNav } from '@/lib/aktionen/nav';
 import { getProductById } from '@/lib/products';
 import { hatPartnerlink, REL_EXTERN, REL_PARTNERLINK } from '@/components/affiliate/produkt-anzeige';
 import AktionProdukt from '@/components/affiliate/AktionProdukt';
@@ -37,6 +38,30 @@ describe('data/aktionen', () => {
       // „Testurteil" darf im Text stehen, wenn erklaert wird, dass es keines gibt.
       expect(text, a.slug).not.toMatch(/getestet|Testsieger/i);
     }
+  });
+});
+
+describe('Menü und Teaser (nav.ts) passen zu den YAML-Dateien', () => {
+  it('jede Aktionsseite steht in AKTIONEN_NAV mit demselben Fenster und ihrer Adresse', () => {
+    const yaml = alleAktionen();
+    expect(AKTIONEN_NAV.map((a) => a.slug).sort()).toEqual(yaml.map((a) => a.slug).sort());
+    for (const a of yaml) {
+      const nav = AKTIONEN_NAV.find((n) => n.slug === a.slug)!;
+      expect(nav.fenster, a.slug).toEqual(a.fenster);
+      expect(nav.url, a.slug).toBe(aktionUrl(a.slug));
+      expect(nav.label.length, a.slug).toBeGreaterThan(2);
+    }
+    expect(aktionUrl('geschenke')).toBe('/geschenke');
+    expect(aktionUrl('weihnachtsmenue')).toBe('/aktionen/weihnachtsmenue');
+  });
+
+  it('aktiveAktionenNav liefert dieselben Seiten wie der Loader', () => {
+    for (const iso of ['2026-10-11T12:00:00Z', '2026-11-05T12:00:00Z', '2026-11-20T12:00:00Z', '2026-12-26T12:00:00Z']) {
+      const d = new Date(iso);
+      expect(aktiveAktionenNav(d).map((a) => a.slug), iso).toEqual(alleAktionen().filter((a) => istAktiv(a, d)).map((a) => a.slug));
+    }
+    expect(aktiveAktionenNav(new Date('2026-11-20T12:00:00Z')).map((a) => a.label)).toEqual(['Geschenke', 'Weihnachtsmenü']);
+    expect(aktiveAktionenNav(new Date('2026-10-11T12:00:00Z'))).toEqual([]);
   });
 });
 

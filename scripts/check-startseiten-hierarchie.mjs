@@ -66,6 +66,10 @@ const SOLL_REIHENFOLGE = [
   // saisonaler Gutschein-Teaser direkt unter dem Diplom-Teaser — Angebot, also
   // weit unten. Vermerkt in CLAUDE.md Regel 8.
   'GUTSCHEIN-TEASER',
+  // GEAENDERT (11.10.2026, Uwe im Chat: „bau den Teaser und den Menüpunkt"):
+  // saisonaler Aktions-Teaser (data/aktionen) direkt unter dem Gutschein-Teaser —
+  // ebenfalls Angebot, also weit unten. Vermerkt in CLAUDE.md Regel 8.
+  'AKTIONS-TEASER',
   'BBQ-NEWS TEASER',
   'KATEGORIE-SEKTIONEN',
   'TOP-PRODUKTE',
