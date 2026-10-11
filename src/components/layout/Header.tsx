@@ -9,6 +9,7 @@ import { Search, Menu, X, ChevronDown, Flame, Gift } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import AccountLink from './AccountLink';
+import SaisonLeiste from './SaisonLeiste';
 import { istGeschenkSaison, kaufbareGutscheine } from '@/lib/gutschein-products';
 import { AKTIONEN_NAV, aktiveAktionenNav } from '@/lib/aktionen/nav';
 import { liesVorschau, mitVorschau } from '@/lib/aktionen/vorschau';
@@ -192,19 +193,9 @@ export default function Header() {
     <>
       {/* Top-Bar — Leadmagnet statt Produkt (Audit 15.08.2026: der Trichter braucht
           die stärkste Fläche über der Navigation, die Diplome sind site-weit sonst
-          bereits 4× verlinkt). */}
-      <aside
-        aria-label="Kostenloser Kerntemperatur-Spickzettel"
-        className="bg-surface-dark border-b border-brand-gold/20 text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4 text-text-light/60"
-      >
-        Gratis: der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite
-        <Link
-          href="/kerntemperatur-spickzettel"
-          className="ml-3 inline-block py-1.5 text-brand-gold underline underline-offset-2 hover:text-brand-gold transition-colors"
-        >
-          Jetzt sichern →
-        </Link>
-      </aside>
+          bereits 4× verlinkt). Seit 11.10.2026 (Uwe): im Saisonfenster eine Laufleiste
+          mit den Aktionsseiten — SaisonLeiste rendert sonst die Spickzettel-Leiste. */}
+      <SaisonLeiste />
 
       <header
         className={cn(
