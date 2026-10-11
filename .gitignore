@@ -150,6 +150,13 @@ _to_delete/
 # Lokale Claude-Einstellungen dieser Arbeitskopie, kein Projektbestandteil.
 .claude/settings.local.json
 
+# Laufzeitzustand lokaler Agenten-Werkzeuge (claude-flow: Daemon-Status, Logs,
+# Metriken; proven-config: Konfigurationsstand). Maschinenlokal, jede Sitzung
+# schreibt ihn neu — versioniert waere er nur Rauschen im oeffentlichen Repo.
+.claude-flow/
+.claude/proven-config.json
+.claude/.proven-config-version
+
 # Symlinks, die "npx skills add" von .claude/skills/ nach .agents/skills/ legt.
 # Maschinenlokal und auf einem anderen Rechner wertlos; der Inhalt selbst ist
 # unter .agents/skills/ versioniert und "npx skills add" erzeugt die Links neu.
