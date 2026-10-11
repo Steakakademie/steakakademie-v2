@@ -234,6 +234,11 @@ Verkaufen"):** Im Fenster läuft über der Navigation eine Laufleiste mit den Ak
 dem Gutschein (hält bei Hover, still bei „weniger Bewegung"), und im Kopfbereich der
 Startseite steht ein glühender Chip zur ersten laufenden Aktion. Anzeigen und Social-Posts
 führen trotzdem **direkt** auf `/geschenke` bzw. `/aktionen/<slug>`, nie auf `/`.
+**Geschenke-Finder (✓ 11.10., Uwe: „bau den Geschenke-Finder"):** drei Fragen (Für wen? Wie gut
+grillt die Person? Was soll es sein?), Ergebnis = Setup der Stufe aus `geschenke.yaml` (Feld
+`stufe`) + passender Gutschein, teilbar per Link. Ganzjährig unter `/geschenke-finder` (Tools-Menü),
+im Fenster oben auf `/geschenke` (`finder: true`). Keine Budget-Frage, solange keine aktuellen
+Preise vorliegen. Code: `src/lib/geschenke-finder.ts`, `src/components/geschenke/*`.
 **Vorschau vor dem Fenster:** `https://steakakademie.de/?vorschau=1` schaltet Teaser und Menü
 für die Browser-Sitzung ein (alle Aktionsseiten, Links mit `?vorschau=1`), `?vorschau=0` aus
 (`src/lib/aktionen/vorschau.ts`). Das Zusagen-Gate
