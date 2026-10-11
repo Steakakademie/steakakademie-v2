@@ -70,9 +70,28 @@ export function einzelpreis(product: Pick<Product, 'price' | 'priceMin' | 'price
 //     rel="noopener noreferrer", OHNE „Anzeige“ und OHNE Provisions-Satz.
 // Kommt ein weiteres Programm dazu, wird es HIER eingetragen. Massgeblich ist
 // die URL, nicht `provider` (siehe hatAmazonLink).
+//
+// 11.10.2026 (Compliance-PR vor dem Affiliate-Start am 01.11.): Die Regel kannte
+// nur Amazon. Ein AWIN-Link (awin1.com, src/lib/awin.ts) oder ein Webgains-Link
+// (track.webgains.com) waere ohne „Anzeige“ und ohne rel="sponsored" direkt zum
+// Haendler gelaufen — kein Test haette es gemeldet. Jetzt gilt: Jeder Link ueber
+// einen Netzwerk-Tracker ist ein Partnerlink.
 
-/** Traegt der Haendler-Link des Produkts einen Partner-Parameter? */
+/** Tracking-Hosts der Partnernetzwerke (AWIN, Webgains) — jeder Link dorthin ist bezahlt. */
+const NETZWERK_HOST = /(^|\.)(awin1\.com|track\.webgains\.com)$/;
+
+/** Fuehrt der Link ueber einen Netzwerk-Tracker (AWIN, Webgains)? */
+export function hatNetzwerkLink(product: Pick<Product, 'affiliateUrl'>): boolean {
+  try {
+    return NETZWERK_HOST.test(new URL(product.affiliateUrl).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
+/** Traegt der Haendler-Link des Produkts einen Partner-Parameter oder laeuft er ueber ein Netzwerk? */
 export function hatPartnerlink(product: Pick<Product, 'affiliateUrl'>): boolean {
+  if (hatNetzwerkLink(product)) return true;
   if (!hatAmazonLink(product)) return false;
   try {
     const tag = new URL(product.affiliateUrl).searchParams.get('tag');
