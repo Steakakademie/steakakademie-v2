@@ -226,9 +226,12 @@ Erste Seiten: `geschenke` (02.11.–24.12.) und `weihnachtsmenue` (15.11.–24.1
 ohne Temperaturen, ohne Testurteile (Test `src/__tests__/aktionen.test.ts`). Messung: Plausible
 `Affiliate-Klick` mit `zone=aktion`.
 
-**Noch offen:** Startseiten-Teaser und Menüpunkt im Fenster — beides greift in die
-Startseiten-Hierarchie bzw. den Header ein und braucht den Vermerk in CLAUDE.md §2 Regel 8
-(Entscheidung Uwe). Bis dahin ist `/geschenke` nur von `/gutschein` aus verlinkt. Das Zusagen-Gate
+**Teaser und Menüpunkt (✓ 11.10., #393):** Startseiten-Teaser „Gerade passend" unter dem
+Gutschein-Teaser (Marker AKTIONS-TEASER, CLAUDE.md Regel 8) und je laufender Aktion ein
+Menüpunkt; Quelle für den Header ist `src/lib/aktionen/nav.ts` (Test gegen die YAML).
+**Vorschau vor dem Fenster:** `https://steakakademie.de/?vorschau=1` schaltet Teaser und Menü
+für die Browser-Sitzung ein (alle Aktionsseiten, Links mit `?vorschau=1`), `?vorschau=0` aus
+(`src/lib/aktionen/vorschau.ts`). Das Zusagen-Gate
 liest `data/aktionen/*.yaml` nicht — die Texte dort bleiben deshalb ohne Versand-, Frist- und
 Testaussagen (Kopfkommentar der YAML).
 

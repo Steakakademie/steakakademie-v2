@@ -50,6 +50,9 @@ describe('Menü und Teaser (nav.ts) passen zu den YAML-Dateien', () => {
       expect(nav.fenster, a.slug).toEqual(a.fenster);
       expect(nav.url, a.slug).toBe(aktionUrl(a.slug));
       expect(nav.label.length, a.slug).toBeGreaterThan(2);
+      // Vorschau des Teasers zeigt denselben Text wie die echte Seite.
+      expect(nav.titel, a.slug).toBe(a.titel);
+      expect(nav.untertitel, a.slug).toBe(a.untertitel);
     }
     expect(aktionUrl('geschenke')).toBe('/geschenke');
     expect(aktionUrl('weihnachtsmenue')).toBe('/aktionen/weihnachtsmenue');

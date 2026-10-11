@@ -16,6 +16,9 @@ export interface AktionNav {
   url: string;
   /** Menüname, kurz. */
   label: string;
+  /** Titel und Untertitel wie in der YAML — für die Vorschau des Teasers (Test prüft Gleichheit). */
+  titel: string;
+  untertitel: string;
   fenster: Fenster;
 }
 
@@ -27,8 +30,16 @@ export function aktionUrl(slug: string): string {
 }
 
 export const AKTIONEN_NAV: readonly AktionNav[] = [
-  { slug: 'geschenke', url: aktionUrl('geschenke'), label: 'Geschenke', fenster: { von: '11-02', bis: '12-24' } },
-  { slug: 'weihnachtsmenue', url: aktionUrl('weihnachtsmenue'), label: 'Weihnachtsmenü', fenster: { von: '11-15', bis: '12-24' } },
+  {
+    slug: 'geschenke', url: aktionUrl('geschenke'), label: 'Geschenke', fenster: { von: '11-02', bis: '12-24' },
+    titel: 'Geschenke für Grillfans',
+    untertitel: 'Nach Können sortiert, nicht nach Preis: Was Einsteigern hilft, was Fortgeschrittene weiterbringt und was die bekommen, die schon alles haben.',
+  },
+  {
+    slug: 'weihnachtsmenue', url: aktionUrl('weihnachtsmenue'), label: 'Weihnachtsmenü', fenster: { von: '11-15', bis: '12-24' },
+    titel: 'Weihnachtsmenü vom Grill',
+    untertitel: 'Rinderfilet, Roastbeef oder Schweinebraten — am Grill gelingen die Festtagsstücke, wenn Thermometer, Messer und Zeitplan stimmen. Hier ist die Ausstattung dafür.',
+  },
 ];
 
 /** Aktionsseiten, deren Fenster gerade läuft — in der Reihenfolge der Liste. */
