@@ -1,10 +1,10 @@
 -- ============================================================
 -- Geschenkgutscheine: Personalisierung und Versand zum Wunschtermin
 --
--- NICHT ANGEWENDET (Stand 11.10.2026). Anwenden erst auf ausdrückliches Ja von Uwe,
--- per Supabase-MCP, und VOR dem Merge des PR: Die Geschenkseite und die API lesen
--- die neuen Spalten. Danach den Dateinamen an die Ledger-Version angleichen
--- (Regel aus PR #285).
+-- ANGEWENDET am 11.10.2026 (Uwe im Chat: „Ja zu beiden, Migration anwenden und Secret
+-- eintragen"), per Supabase-MCP, Ledger-Version 20261011091437. Vorher gelesen: die
+-- Tabelle hatte 13 Spalten, keine der neuen. Hinweis: #385 war zu dem Zeitpunkt schon
+-- gemergt; bis zur Anwendung fiel die Geschenkseite auf die Grunddaten zurück.
 --
 -- Auftrag Uwe, 11.10.2026: „bau Personalisierung und Wunschtermin"
 -- (docs/gutschein-sichtbarkeit-konzept.md, Muster M1 und M2).
