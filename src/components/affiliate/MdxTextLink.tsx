@@ -1,5 +1,6 @@
 import type { AnchorHTMLAttributes } from 'react';
-import { hatNetzwerkLink, REL_PARTNERLINK } from './produkt-anzeige';
+import { getProductById } from '@/lib/products';
+import { hatAmazonLink, hatNetzwerkLink, hatPartnerlink, REL_PARTNERLINK } from './produkt-anzeige';
 
 /**
  * Ein Markdown-Link auf `/go/<id>` ist ein Partnerlink (Tracking-Redirect zum Händler).
@@ -9,6 +10,18 @@ import { hatNetzwerkLink, REL_PARTNERLINK } from './produkt-anzeige';
 export function istPartnerlink(href?: string | null): boolean {
   if (typeof href !== 'string') return false;
   return href.startsWith('/go/') || hatNetzwerkLink({ affiliateUrl: href });
+}
+
+/**
+ * Ziel eines `/go/<id>`-Links im Fließtext (11.10.2026): Amazon-Produkte direkt zu
+ * Amazon (siehe produktLink), alles andere — Netzwerk-Produkte, unbekannte IDs —
+ * bleibt bei `/go/`.
+ */
+export function zielHref(href?: string | null): string | undefined {
+  if (typeof href !== 'string' || !href.startsWith('/go/')) return href ?? undefined;
+  const product = getProductById(href.slice('/go/'.length));
+  if (product && hatAmazonLink(product) && hatPartnerlink(product)) return product.affiliateUrl;
+  return href;
 }
 
 /**
@@ -24,11 +37,14 @@ export function istPartnerlink(href?: string | null): boolean {
  */
 export default function MdxTextLink({ href, children, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) {
   const partnerlink = istPartnerlink(href);
+  const ziel = zielHref(href);
+  const extern = typeof ziel === 'string' && /^https?:\/\//.test(ziel);
   return (
     <>
       <a
-        href={href}
+        href={ziel}
         rel={partnerlink ? REL_PARTNERLINK : undefined}
+        target={partnerlink && extern ? '_blank' : undefined}
         className="text-brand-fire font-medium hover:text-brand-gold transition-colors"
         {...props}
       >
