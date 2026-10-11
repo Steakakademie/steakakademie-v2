@@ -238,8 +238,8 @@ komponenten:
     pruefung: "IP-Anonymisierung + Widerspruch bei Marketing/Affiliate (Google Ads, AWIN); Programme benannt"
     rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
     status: ok
-    befund: "Affiliate-Programme in DSE §12 + /affiliate-disclosure (Amazon aktiv; 360°BBQ/Grill-Experte/Banggood geplant)."
-    monitor: "Beim Aktivschalten der Affiliate-/Marketing-Cookies: Consent-Pflicht."
+    befund: "11.10.2026: Affiliate-Programme in DSE Abschnitt 13 (Amazon aktiv; AWIN: Santos, BOS FOOD, SharkNinja, Burghardt; Webgains: vineshop24 — beworben) + /affiliate-disclosure. Kennzeichnung „Anzeige“ am Link; keine Netzwerk-Skripte eingebunden; AWIN-Datenschutzerklärung verlinkt (DSGVO-Annex 2.5.4)."
+    monitor: "Beim Einbinden eines Netzwerk-Skripts/Widgets (AWIN MasterTag, Webgains, Amazon-Widgets): Consent-Kategorie Pflicht — legal-guard meldet die Hosts."
 
   - id: google-fonts-selfhosted
     titel: "Google Fonts — kein externes Nachladen"

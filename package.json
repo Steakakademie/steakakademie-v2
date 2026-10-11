@@ -13,7 +13,7 @@
     "prebuild": "node scripts/kursinhalte-holen.mjs && node scripts/check-mdx-komponenten.mjs && node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs",
     "build": "next build --webpack",
     "postinstall": "patch-package --error-on-fail",
-    "check": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs && node scripts/check-mdx-komponenten.mjs && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs && node scripts/check-content-qualitaet.mjs && node scripts/check-taxonomy.mjs && node scripts/foodpairing-build.mjs --check && node scripts/check-zusagen.mjs && node scripts/rezepte-to-kochwissen.mjs --check",
+    "check": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs && node scripts/check-mdx-komponenten.mjs && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs && node scripts/check-content-qualitaet.mjs && node scripts/check-taxonomy.mjs && node scripts/foodpairing-build.mjs --check && node scripts/check-zusagen.mjs && node scripts/rezepte-to-kochwissen.mjs --check && node scripts/check-affiliate-tags.mjs",
     "foodpairing:build": "node scripts/foodpairing-build.mjs",
     "foodpairing:zitate": "node scripts/foodpairing-zitate-pruefen.mjs",
     "check:kochwissen": "node scripts/rezepte-to-kochwissen.mjs --check",

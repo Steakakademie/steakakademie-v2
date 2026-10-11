@@ -75,6 +75,17 @@ describe('hatPartnerlink', () => {
     expect(hatPartnerlink({ affiliateUrl: 'https://www.amazon.de/s?k=x&tag=steakakademie-21' })).toBe(true);
   });
 
+  // 11.10.2026: AWIN- und Webgains-Links sind Partnerlinks — die Regel kannte nur Amazon.
+  it('erkennt Netzwerk-Links von AWIN und Webgains', () => {
+    for (const url of [
+      'https://www.awin1.com/cread.php?awinmid=32287&awinaffid=3102406&ued=https%3A%2F%2Fsantosgrills.de%2F',
+      'https://track.webgains.com/click.html?wgcampaignid=1&wgprogramid=2&wgtarget=https%3A%2F%2Fvineshop24.de',
+    ]) {
+      expect(hatPartnerlink({ affiliateUrl: url }), url).toBe(true);
+      expect(produktLink({ id: 'netz', affiliateUrl: url })).toEqual({ href: '/go/netz', rel: REL_PARTNERLINK, partner: true });
+    }
+  });
+
   it('lehnt Links ohne Partner-Parameter ab — auch zu Amazon', () => {
     for (const url of [
       'https://www.amazon.de/dp/B000TEST/',
@@ -83,6 +94,8 @@ describe('hatPartnerlink', () => {
       'https://www.dry-ager.com/shop/x/',
       'https://www.otto.de/p/x/',
       'https://www.otto-gourmet.de/',
+      // Haendlerseite direkt, ohne Netzwerk — kein Partnerlink, auch wenn der Haendler bei AWIN ist.
+      'https://santosgrills.de/produkt/x',
       'kein-link',
       '',
     ]) {

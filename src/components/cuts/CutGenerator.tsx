@@ -192,8 +192,10 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
           </div>
         </div>
 
-        {/* CTAs */}
+        {/* CTAs — „Anzeige“ steht VOR dem Klick am Kaufknopf (CLAUDE.md §2 Regel 1, 11.10.2026);
+            der Hinweissatz darunter allein reichte nicht. */}
         <div className="px-6 sm:px-8 pb-6 sm:pb-8 space-y-3">
+          <span className="inline-block text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-light/65">Anzeige</span>
           <div className="flex flex-col sm:flex-row gap-3">
             <a
               href={offer.href}

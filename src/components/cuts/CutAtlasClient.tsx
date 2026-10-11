@@ -510,8 +510,9 @@ function CutDetail({ cut, primal, recipes }: { cut: Cut; primal?: Primal; recipe
           </div>
         )}
 
-        {/* CTAs */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-3">
+        {/* CTAs — „Anzeige“ vor dem Klick am Kaufknopf (CLAUDE.md §2 Regel 1, 11.10.2026). */}
+        <div className="mt-8"><span className="inline-block text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-light/65">Anzeige</span></div>
+        <div className="mt-1 flex flex-col sm:flex-row gap-3">
           <a
             href={offer.href}
             target="_blank"

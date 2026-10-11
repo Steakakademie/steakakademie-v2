@@ -68,8 +68,9 @@ export function getMeatOffer(cut: Cut): MeatOffer {
     href: `/go-fleisch/${cut.id}`,
     partnerName: partner.name,
     label: premiumActive ? `${cut.nameDE} bei ${partner.name} kaufen` : `${cut.nameDE} kaufen`,
+    // „Anzeige“ steht als Etikett am Knopf (CutGenerator, CutAtlasClient); dieser Satz erklaert es.
     disclosure:
-      'Affiliate-Link: Kaufst du über diesen Link, erhalten wir eine Provision — ohne Mehrkosten für dich.',
+      'Anzeige · Partnerlink: Kaufst du über diesen Link, erhalten wir eine Provision — ohne Mehrkosten für dich.',
     premiumActive,
   };
 }

@@ -1132,36 +1132,6 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>13. Externe Links &amp; Affiliate-Links</h2>
-              <p className="mb-3">
-                Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte
-                wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets
-                der jeweilige Anbieter oder Betreiber verantwortlich.
-              </p>
-              <p className="mb-3">
-                Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit * oder
-                dem Hinweis „Affiliate-Link&quot;). Bei einem Kauf über solche Links erhalten wir
-                eine Provision ohne Mehrkosten für dich.
-              </p>
-              <p className="mb-3">
-                Wir nehmen am <strong>Amazon Partnerprogramm</strong> teil. In Vorbereitung
-                befinden sich die Programme <strong>360° BBQ</strong> und{' '}
-                <strong>Grill-Experte.de</strong> (vermittelt über die Affiliate-Netzwerke
-                AWIN bzw. TradeTracker) sowie <strong>Banggood</strong>. Beim Klick auf einen
-                Affiliate-Link kann der jeweilige Anbieter bzw. das Netzwerk ein Cookie setzen,
-                über das ein späterer Kauf der Vermittlung zugeordnet wird (Affiliate-Tracking).
-              </p>
-              <p>
-                <strong className="text-text-primary">Derzeit werden keine Affiliate-Tracking-Cookies
-                gesetzt.</strong> Sobald ein Affiliate- oder Marketing-Tracking aktiviert wird, das
-                einwilligungspflichtige Cookies erfordert (§ 25 TDDDG), richten wir vorab einen
-                Einwilligungs-Mechanismus mit gleichwertiger Ablehnen-Option ein. Eine vollständige
-                Übersicht aller Partnerprogramme findest du in unserer{' '}
-                <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.
-              </p>
-            </section>
-
-            <section>
               <h2 className={h2Class}>12a. Google Web Fonts — selbst gehostet</h2>
               <p className="mb-3">
                 Diese Website verwendet Schriftarten des Dienstes{' '}
@@ -1215,6 +1185,87 @@ export default function DatenschutzPage() {
                 <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   vercel.com/legal/privacy-policy
                 </a>.
+              </p>
+            </section>
+
+            {/* 11.10.2026 (Compliance-PR vor dem Affiliate-Start am 01.11.): Abschnitt neu
+                geschrieben und hinter 12b verschoben (stand bis dahin zwischen 12 und 12a).
+                Vorher: Kennzeichnung „*“ bzw. „Affiliate-Link“ (tatsächlich: „Anzeige“,
+                produkt-anzeige.ts), tote Programme (360° BBQ, Grill-Experte, Banggood), AWIN nur
+                als Vermittler, Webgains fehlte. Technik-Stand, gegen den der Text geprüft ist:
+                /go/ und /go-fleisch/ setzen keine Cookies und speichern nichts (nur Plausible,
+                Abschnitt 5); kein AWIN-MasterTag, kein Amazon-Widget, kein Webgains-Skript
+                eingebunden (scripts/legal-guard.mjs meldet die Hosts). AWINs DSGVO-Annex 2.5.4
+                verlangt den Link auf die AWIN-Datenschutzerklärung. Programme und Status:
+                products/affiliate-programs.yaml. */}
+            <section id="affiliate">
+              <h2 className={h2Class}>13. Externe Links &amp; Partnerlinks (Affiliate)</h2>
+              <p className="mb-3">
+                Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte wir
+                keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der
+                jeweilige Anbieter oder Betreiber verantwortlich.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Kennzeichnung:</strong> Produktempfehlungen
+                können Partnerlinks enthalten. Sie sind direkt am Link mit dem Wort{' '}
+                <strong className="text-text-primary">„Anzeige“</strong> gekennzeichnet und
+                technisch als bezahlte Links ausgezeichnet (<code>rel=&quot;sponsored&quot;</code>).
+                Kaufst du über einen solchen Link, erhalten wir eine Provision; der Preis für dich
+                ändert sich dadurch nicht. Links ohne „Anzeige“ sind gewöhnliche Links ohne
+                Vergütung.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Programme und Netzwerke:</strong> Wir nehmen
+                am <strong>Amazon-Partnerprogramm</strong> teil (Amazon Europe Core S.à r.l.,
+                38 avenue John F. Kennedy, L-1855 Luxemburg). Als Amazon-Partner verdienen wir an
+                qualifizierten Verkäufen. Beworben, aber noch nicht freigeschaltet, sind
+                Partnerprogramme über das Netzwerk <strong>AWIN</strong> (AWIN AG, Berlin — für
+                Santos Grills, BOS FOOD, SharkNinja und Burghardt Delicious) und über das Netzwerk{' '}
+                <strong>Webgains</strong> (Webgains GmbH, Nürnberg — für vineshop24). Welche
+                Programme gerade aktiv sind, steht aktuell in unserer{' '}
+                <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Was beim Klick passiert:</strong> Ein
+                Partnerlink führt dich zunächst über eine Weiterleitung auf unserer Seite
+                (<code>/go/…</code>). Dabei setzen wir kein Cookie und speichern keine Daten über
+                dich; wir zählen den Klick anonym über Plausible (Abschnitt 5). Anschließend
+                leiten wir dich zum Händler oder, bei AWIN und Webgains, zunächst über den
+                Tracking-Server des Netzwerks (awin1.com bzw. track.webgains.com). Dort erhält der
+                Händler bzw. das Netzwerk deine IP-Adresse und Browserdaten und setzt in der Regel
+                ein Cookie auf <strong className="text-text-primary">seiner eigenen Domain</strong>,
+                mit dem ein späterer Kauf unserer Empfehlung zugeordnet wird (meist 24 Stunden bei
+                Amazon, 30 bis 60 Tage bei AWIN und Webgains). Diese Verarbeitung findet beim
+                jeweiligen Anbieter statt; auf steakakademie.de selbst wird dafür nichts gesetzt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Verantwortlichkeit und Rechtsgrundlage:</strong>{' '}
+                Für die Zuordnung der Käufe zu unserer Empfehlung sind wir und das jeweilige
+                Netzwerk gemeinsam verantwortlich (Art. 26 DSGVO); für alles Weitere auf seinen
+                Seiten ist der Anbieter allein verantwortlich. Rechtsgrundlage auf unserer Seite ist
+                Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Vergütung unserer
+                Empfehlungen). Du kannst jeden Partnerlink erkennen und stattdessen den Anbieter
+                direkt aufrufen.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Keine Netzwerk-Skripte:</strong> Wir binden
+                derzeit keine Tracking-Skripte, Banner-Widgets oder Produkt-Widgets der Netzwerke
+                ein. Sollte sich das ändern, holen wir vorher eine Einwilligung mit gleichwertiger
+                Ablehnen-Option ein (§ 25 TDDDG).
+              </p>
+              <p>
+                Datenschutzhinweise der Anbieter:{' '}
+                <a href="https://www.amazon.de/gp/help/customer/display.html?nodeId=201909010" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  Amazon
+                </a>
+                {' · '}
+                <a href="https://www.awin.com/de/datenschutzerklarung" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  AWIN
+                </a>
+                {' · '}
+                <a href="https://www.webgains.com/public/de/datenschutz/" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  Webgains
+                </a>
               </p>
             </section>
 
