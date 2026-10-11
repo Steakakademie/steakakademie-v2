@@ -1,9 +1,10 @@
 -- ============================================================
 -- Geschenkgutscheine: Digistore24-Produkte den Gutschein-Kursen zuordnen
 --
--- NICHT ANGEWENDET (Stand 11.10.2026). Anwenden erst auf ausdrückliches Ja von Uwe,
--- per Supabase-MCP; danach den Dateinamen an die Ledger-Version angleichen
--- (Regel aus PR #285, Beispiel: 20261009170345_gutschein_gueltigkeit_jahresende.sql).
+-- ANGEWENDET am 11.10.2026 (Freigabe Uwe im Chat: „Ja, Migration ausführen"), per
+-- Supabase-MCP auf Projekt bbgdrzhlellxzggbbqcm, Ledger-Version 20261011080159 — der
+-- Dateiname entspricht ihr (Regel aus PR #285; vorher 20261011100000). Zurückgelesen:
+-- 746579 / 746580 / 746581 stehen mit den Werten unten, credit_amount überall NULL.
 --
 -- Anlass: Uwe hat am 11.10.2026 die drei Produktgutscheine des Sortiments vom 09.10.
 -- in Digistore24 angelegt (inaktiv, Verkaufsstart 01.11.2026, IPN-Anbindung 352984
