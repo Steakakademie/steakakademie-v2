@@ -70,6 +70,8 @@ const NAV_CATEGORIES: NavCategory[] = [
       // Fleischpass am 02.10.2026 herausgenommen: Das Logbuch gibt es noch nicht,
       // die Seite steht auf „in Vorbereitung" (Zugang nur über /vip).
       { label: 'Menü-Planer', href: '/menue' },
+      // 11.10.2026 (Uwe): Geschenke-Finder — ganzjährig, drei Fragen, ein Vorschlag.
+      { label: 'Geschenke-Finder', href: '/geschenke-finder' },
       { label: 'Suche', href: '/suche' },
     ],
   },

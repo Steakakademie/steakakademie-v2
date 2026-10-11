@@ -29,6 +29,8 @@ export const SetupSchema = z.object({
   titel: z.string().min(3).max(80),
   /** Für wen das Setup ist, in einem oder zwei Sätzen. */
   fuer: z.string().min(10).max(300),
+  /** Könnensstufe für den Geschenke-Finder (src/lib/geschenke-finder.ts); ohne = nicht im Finder. */
+  stufe: z.enum(['einsteiger', 'fortgeschritten', 'alles']).optional(),
   produkte: z.array(SetupProduktSchema).min(2).max(6),
 }).strict();
 
@@ -63,6 +65,8 @@ export const AktionSchema = z.object({
    * Kennzeichnungsblock (Partnerlinks, Amazon-Satz) steht immer, unabhängig davon.
    */
   hinweis: z.string().max(300).optional(),
+  /** Geschenke-Finder oberhalb der Setups einbetten (nur sinnvoll für die Seite „geschenke"). */
+  finder: z.boolean().default(false),
 }).strict();
 
 export type Aktion = z.infer<typeof AktionSchema>;

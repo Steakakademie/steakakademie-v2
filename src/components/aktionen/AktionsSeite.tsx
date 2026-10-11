@@ -3,6 +3,7 @@ import { ChevronRight, Flame } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AktionProdukt from '@/components/affiliate/AktionProdukt';
+import GeschenkeFinderServer from '@/components/geschenke/GeschenkeFinderServer';
 import { faqSchema } from '@/lib/schema';
 import type { Aktion } from '@/lib/aktionen/typen';
 
@@ -48,6 +49,12 @@ export default function AktionsSeite({ aktion, vorschau = false }: { aktion: Akt
             ))}
           </div>
         </section>
+
+        {aktion.finder && (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <GeschenkeFinderServer basisUrl="/geschenke-finder" />
+          </section>
+        )}
 
         {aktion.setups.map((setup) => (
           <section key={setup.titel} className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8" aria-label={setup.titel}>

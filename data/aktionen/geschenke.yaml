@@ -14,11 +14,13 @@ seoDescription: "Geschenkideen für Griller nach Können sortiert: was Einsteige
 fenster:
   von: "11-02"
   bis: "12-24"
+finder: true
 einleitung:
   - "Die meisten Grillgeschenke landen im Schrank. Was bleibt, ist das, was beim nächsten Grillen den Unterschied macht: ein Thermometer, dem man vertraut, ein Messer, das sauber schneidet, ein Gewürz, das man nicht selbst mischen würde."
   - "Deshalb sortieren wir hier nicht nach Preis, sondern danach, wo die beschenkte Person gerade steht. Jede Zusammenstellung ist eine Empfehlung mit Begründung — kein Paket, jedes Teil führt in seinen eigenen Shop."
 setups:
   - titel: "Für Einsteiger: der Grundstock"
+    stufe: einsteiger
     fuer: "Für alle, die seit einer Saison grillen und noch nach Gefühl arbeiten. Das Thermometer ist das Geschenk, das am meisten verändert."
     produkte:
       - id: inkbird-ibt-4xs
@@ -28,6 +30,7 @@ setups:
       - id: ankerkraut-magic-dust
         warum: "Der Klassiker unter den Rubs: passt auf Schwein, Geflügel und Gemüse. Ein Geschenk, das beim nächsten Grillen sofort benutzt wird."
   - titel: "Für Fortgeschrittene: Präzision"
+    stufe: fortgeschritten
     fuer: "Für alle, die Reverse Sear und Ruhezeit kennen und jetzt die letzten Grad herausholen wollen."
     produkte:
       - id: meater-plus
@@ -39,6 +42,7 @@ setups:
       - id: anova-precision-cooker-3
         warum: "Sous-vide als Rückversicherung für Festtage: das Fleisch ist auf den Punkt, bevor es für die Kruste auf den Grill geht."
   - titel: "Für die, die schon alles haben"
+    stufe: alles
     fuer: "Für Grillfans mit vollem Schrank bleibt nur eins: eine neue Technik. Oberhitze, Reifeschrank oder Keramik eröffnen jeweils ein eigenes Kapitel."
     produkte:
       - id: caso-steakchef-1500
