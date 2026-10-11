@@ -155,6 +155,37 @@ test.describe('Werkzeuge antworten', () => {
   });
 });
 
+test.describe('Geschenke-Finder', () => {
+  // 11.10.2026: Der Finder ist ein Verkaufswerkzeug fürs Weihnachtsgeschäft. Die Probe klickt
+  // die drei Fragen durch (reine Oberfläche, kein Formular, kein Partnerlink) und prüft, dass
+  // ein Vorschlag mit gekennzeichneten Produktlinks und Gutschein-Karte erscheint.
+  test('drei Fragen führen zu einem Vorschlag mit gekennzeichneten Produkten', async ({ page }) => {
+    await oeffne(page, '/geschenke-finder');
+    await erwarteH1(page, /Grillgeschenk/i);
+    const finder = page.getByRole('region', { name: 'Geschenke-Finder' });
+    await expect(finder).toBeVisible();
+
+    await finder.getByRole('button', { name: 'Papa' }).click();
+    await finder.getByRole('button', { name: /Grillt richtig gut/ }).click();
+    await finder.getByRole('button', { name: /^Beides/ }).click();
+
+    const vorschlag = finder.getByRole('region', { name: 'Dein Geschenk-Vorschlag' });
+    await expect(vorschlag).toBeVisible();
+    await expect(vorschlag.getByRole('heading', { level: 3 })).toContainText(/Papa/);
+
+    const produktLinks = vorschlag.locator('li a[target="_blank"]');
+    expect(await produktLinks.count(), 'Produktlinks im Vorschlag').toBeGreaterThan(0);
+    for (const a of await produktLinks.all()) {
+      await expect(a).toHaveAttribute('rel', /sponsored|noopener/);
+    }
+    // Partnerlinks tragen „Anzeige" vor dem Klick; die Gutschein-Karte führt zu /gutschein.
+    await expect(vorschlag.getByText('Anzeige').first()).toBeVisible();
+    await expect(vorschlag.locator('a[href="/gutschein"]')).toBeVisible();
+    // Kein Preis auf der Seite — Preise gibt es erst mit einem Händler-Feed.
+    expect(await vorschlag.innerText()).not.toMatch(/\d\s?€/);
+  });
+});
+
 test.describe('Anmeldung und Zugangstor', () => {
   test('Login-Seite: Formular mit E-Mail, Passwort-Weg erreichbar', async ({ page }, testInfo) => {
     await oeffne(page, '/auth/login');
