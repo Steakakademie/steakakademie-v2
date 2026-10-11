@@ -163,8 +163,9 @@ dann im Browser per Plausible-Klasse zählen (die Klassen gibt es schon).
    Hinweis „Affiliate-Link" steht erst unter dem Knopf — reicht nicht.
 4. **`scripts/check-affiliate-tags.mjs` in `npm run check`** aufnehmen (läuft heute nirgends);
    legal-guard auf `src/components/cuts` ausweiten und awin1/webgains in die Tracker-Liste.
-5. **Amazon aus `/go/` herausnehmen** (Abschnitt 3): direkter Link mit Kennzeichnung, Zählung per
-   Plausible-Klasse im Browser.
+5. ✓ 11.10. (Uwe: „nimm Amazon aus /go/ raus"): Amazon-Partnerlinks gehen direkt zu Amazon
+   (`produktLink`, `MdxTextLink`, Fleisch-Kaufknopf), Zählung per Plausible-Klasse im Browser;
+   `/go/` bleibt für Netzwerk-Links (AWIN, Webgains) und alte URLs.
 6. **Netlify-Rest** in `go/.../route.ts` (Header `x-nf-client-connection-ip`) entfernen; Referer
    ohne Query an Plausible melden.
 7. `compliance/website-rechtscheck.yaml` Z. 241 aktualisieren.

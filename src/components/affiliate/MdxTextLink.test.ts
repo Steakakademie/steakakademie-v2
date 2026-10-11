@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import MdxTextLink, { istPartnerlink } from './MdxTextLink';
+import MdxTextLink, { istPartnerlink, zielHref } from './MdxTextLink';
+import { getProductById } from '@/lib/products';
 
 /**
  * Waechter (03.10.2026): Ein Markdown-Link auf /go/<id> im Fliesstext ist ein
@@ -23,12 +24,23 @@ describe('istPartnerlink', () => {
 });
 
 describe('MdxTextLink', () => {
-  it('setzt bei /go/-Links rel=sponsored und das lesbare Etikett', () => {
+  // 11.10.2026: Ein /go/-Link auf ein Amazon-Produkt fuehrt direkt zu Amazon.
+  it('löst /go/<amazon-produkt> zum direkten Amazon-Link auf — mit rel=sponsored und Etikett', () => {
+    const meater = getProductById('meater-plus')!;
+    expect(zielHref('/go/meater-plus')).toBe(meater.affiliateUrl);
     const markup = html('/go/meater-plus', 'MEATER Plus auf Amazon');
-    expect(markup).toMatch(/<a [^>]*href="\/go\/meater-plus"[^>]*rel="sponsored nofollow noopener"/);
+    expect(markup).toMatch(/<a [^>]*href="https:\/\/(www\.)?amazon\.de\/[^"]*"[^>]*rel="sponsored nofollow noopener"[^>]*target="_blank"/);
+    expect(markup).not.toContain('/go/');
     // Das Wort steht als Text neben dem Link — nicht nur in title/aria-label.
     expect(markup.replace(/<[^>]+>/g, '|')).toContain('|Anzeige|');
     expect(markup).not.toMatch(/(title|aria-label)="Anzeige"/);
+  });
+
+  it('lässt /go/ für unbekannte und Nicht-Amazon-Produkte stehen', () => {
+    expect(zielHref('/go/gibt-es-nicht')).toBe('/go/gibt-es-nicht');
+    const markup = html('/go/gibt-es-nicht', 'Irgendwas');
+    expect(markup).toMatch(/href="\/go\/gibt-es-nicht"[^>]*rel="sponsored nofollow noopener"/);
+    expect(markup.replace(/<[^>]+>/g, '|')).toContain('|Anzeige|');
   });
 
   it('kennzeichnet einen direkten AWIN-Link genauso', () => {

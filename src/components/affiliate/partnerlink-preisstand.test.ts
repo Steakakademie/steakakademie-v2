@@ -83,6 +83,7 @@ describe('hatPartnerlink', () => {
     ]) {
       expect(hatPartnerlink({ affiliateUrl: url }), url).toBe(true);
       expect(produktLink({ id: 'netz', affiliateUrl: url })).toEqual({ href: '/go/netz', rel: REL_PARTNERLINK, partner: true });
+      expect(klickKlassen({ id: 'netz', affiliateUrl: url, provider: 'other' })).toContain('Affiliate-Klick');
     }
   });
 
@@ -105,10 +106,16 @@ describe('hatPartnerlink', () => {
 });
 
 describe('produktLink', () => {
-  it('führt den Partnerlink über /go/ und zeichnet ihn als bezahlt aus', () => {
-    expect(produktLink(AMAZON)).toEqual({ href: '/go/amazon-produkt', rel: REL_PARTNERLINK, partner: true });
+  // 11.10.2026: Amazon direkt (Programmrichtlinien), Netzwerke ueber /go/.
+  it('verlinkt den Amazon-Partnerlink direkt und zeichnet ihn als bezahlt aus', () => {
+    expect(produktLink(AMAZON)).toEqual({ href: AMAZON.affiliateUrl, rel: REL_PARTNERLINK, partner: true });
     expect(REL_PARTNERLINK).toMatch(/\bsponsored\b/);
     expect(REL_PARTNERLINK).toMatch(/\bnofollow\b/);
+  });
+
+  it('führt Netzwerk-Partnerlinks (AWIN, Webgains) über /go/', () => {
+    const awin = { id: 'santos-x', affiliateUrl: 'https://www.awin1.com/cread.php?awinmid=32287&awinaffid=3102406' };
+    expect(produktLink(awin)).toEqual({ href: '/go/santos-x', rel: REL_PARTNERLINK, partner: true });
   });
 
   it('verlinkt alles andere direkt und ohne sponsored', () => {
@@ -128,13 +135,16 @@ describe('produktLink', () => {
 });
 
 describe('Karten: Partnerlink', () => {
-  it.each(Object.entries(karten(AMAZON)))('%s trägt „Anzeige“, /go/ und rel=sponsored', (_name, markup) => {
+  it.each(Object.entries(karten(AMAZON)))('%s trägt „Anzeige“, den direkten Amazon-Link und rel=sponsored', (_name, markup) => {
     expect(sichtbar(markup)).toMatch(/\bAnzeige\b/);
     const a = links(markup);
     expect(a.length).toBeGreaterThan(0);
     for (const tag of a) {
-      expect(tag).toContain('href="/go/amazon-produkt"');
+      expect(tag).toContain(`href="${AMAZON.affiliateUrl}"`);
+      expect(tag).not.toContain('/go/');
       expect(tag).toContain(`rel="${REL_PARTNERLINK}"`);
+      // Zaehlung im Browser, weil die serverseitige Zaehlung in /go/ entfaellt.
+      expect(tag).toContain('plausible-event-name=Affiliate-Klick');
     }
   });
 });
@@ -203,9 +213,12 @@ describe('Registry: Produkte mit Partnerlink', () => {
     };
     for (const [name, markup] of Object.entries(alle)) {
       expect(sichtbar(markup), name).toMatch(/\bAnzeige\b/);
-      const produktLinks = links(markup).filter((tag) => tag.includes('/go/'));
+      const produktLinks = links(markup).filter((tag) => tag.includes(`rel="${REL_PARTNERLINK}"`));
       expect(produktLinks.length, name).toBeGreaterThan(0);
-      for (const tag of produktLinks) expect(tag, name).toContain(`rel="${REL_PARTNERLINK}"`);
+      for (const tag of produktLinks) {
+        expect(tag, name).toMatch(/href="https:\/\/(www\.)?amazon\.de\//);
+        expect(tag, name).not.toContain('/go/');
+      }
     }
   });
 

@@ -1226,11 +1226,11 @@ export default function DatenschutzPage() {
                 <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.
               </p>
               <p className="mb-3">
-                <strong className="text-text-primary">Was beim Klick passiert:</strong> Ein
-                Partnerlink führt dich zunächst über eine Weiterleitung auf unserer Seite
-                (<code>/go/…</code>). Dabei setzen wir kein Cookie und speichern keine Daten über
-                dich; wir zählen den Klick anonym über Plausible (Abschnitt 5). Anschließend
-                leiten wir dich zum Händler oder, bei AWIN und Webgains, zunächst über den
+                <strong className="text-text-primary">Was beim Klick passiert:</strong>{' '}
+                Amazon-Partnerlinks führen direkt zu Amazon; den Klick zählen wir anonym und ohne
+                Cookie über Plausible (Abschnitt 5). Partnerlinks der Netzwerke führen zunächst
+                über eine Weiterleitung auf unserer Seite (<code>/go/…</code>), die ebenfalls
+                kein Cookie setzt und keine Daten über dich speichert, und dann über den
                 Tracking-Server des Netzwerks (awin1.com bzw. track.webgains.com). Dort erhält der
                 Händler bzw. das Netzwerk deine IP-Adresse und Browserdaten und setzt in der Regel
                 ein Cookie auf <strong className="text-text-primary">seiner eigenen Domain</strong>,
