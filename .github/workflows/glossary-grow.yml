@@ -4,20 +4,24 @@ name: Glossar wachsen lassen
 # Definitionen und legt sie als PR vor (der Build-Lauf erzeugt sie sonst nur
 # ephemer pro Deploy).
 #
-# WIEDER AUTOMATISCH seit 08.10.2026 (Uwe: wichtig fuer SEO) — woechentlich,
-# mittwochs 03:00 UTC. Vorher bis 03.10.2026 taeglich; pausiert wurde der Agent,
-# weil er 14 Tage gruen ohne einen Begriff lief (Vorrat leer, kein Defekt).
-# Diesmal steht die Kontrolle daneben: data/ops-heartbeat.json fuehrt »Glossar«
-# (juengste NEU HINZUGEFUEGTE Datei unter content/glossar, 14 Tage) und
-# »Glossar-Workflow« (Start, 10 Tage) — CLAUDE.md §2 Regel 10. Liefert der Agent
-# weiter nichts, wird der Heartbeat nach 14 Tagen rot: Dann fehlt Nachschub
-# (Seed-Liste oder bessere Extraktion, siehe Kopf von scripts/glossary-agent.mjs),
-# nicht der Zeitplan. Offen vor Nachschub: docs/glossar-konsolidierung-kandidaten.md
-# (182 von 183 Eintraegen unter 150 Woerter) — mehr duenne Eintraege schaden dem SEO.
+# PAUSIERT seit 11.10.2026 (Uwe: „Ja, Glossar-Agent pausieren"). Kein Zeitplan, nur
+# manueller Start (workflow_dispatch). Grund: Die Search Console zeigt 298 von 408
+# URLs als „Gefunden – zurzeit nicht indexiert", davon rund 125 Glossar-Seiten, die
+# Google noch nie abgerufen hat. Neue Eintraege verlaengern nur die Warteschlange;
+# ausserdem sind 182 von 183 Eintraegen unter 150 Woerter
+# (docs/glossar-konsolidierung-kandidaten.md). Der Waechter-Eintrag in
+# data/ops-heartbeat.json ist mit dem Zeitplan entfernt (Test: „Zeitplan und
+# Waechter-Eintrag gibt es nur gemeinsam"); ein Eintrag ohne Zeitplan wuerde nach
+# 14 Tagen jeden Tag Stillstand melden, den niemand beheben soll.
+# WIEDER EINSCHALTEN, wenn (1) Google den Grossteil der vorhandenen Glossar-Seiten
+# gecrawlt hat (Search Console → Seiten: „Gefunden – nicht indexiert" fuer /glossar
+# deutlich unter 50) und (2) die duennen Eintraege konsolidiert oder ausgebaut sind:
+# dann `schedule` unten wieder eintragen UND die zwei Eintraege »Glossar« und
+# »Glossar-Workflow« in data/ops-heartbeat.json zurueck (Vorlage: Git-Verlauf, PR #347).
+# Vorher: wochentlich mittwochs 03:00 UTC (08.10.–11.10.2026), davor taeglich bis 03.10.
 on:
-  schedule:
-    - cron: '0 3 * * 3'   # mittwochs 03:00 UTC
-  workflow_dispatch:        # + manuell ausloesbar
+  workflow_dispatch:        # nur manuell ausloesbar
+
 
 jobs:
   grow-glossary:
