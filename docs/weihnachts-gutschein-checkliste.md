@@ -22,6 +22,41 @@
 
 ---
 
+## Stand 11.10.2026 — Schritt 1 erledigt, Schritt 2 vorbereitet, Schritt 3 offen
+
+**Schritt 1 (Digistore24) ist fertig** — drei Produkte angelegt, alle **inaktiv**, Verkaufsstart
+01.11.2026 00:00, Genehmigung „noch nicht beantragen", Danke-Seite
+`https://steakakademie.de/danke/gutschein`, Produkttyp Downloads. Der Preisplan der Vorlage, der
+nicht zum Gutschein gehört, ist **deaktiviert**, nicht gelöscht:
+
+| | Produkt-ID | Preis | Checkout |
+|---|---|---|---|
+| G1 Geschenkgutschein: Steak-Beichte | 746579 | 7 € | https://www.checkout-ds24.com/product/746579 |
+| G2 Geschenkgutschein: Steak-Beichte 5er | 746580 | 25 € | https://www.checkout-ds24.com/product/746580 |
+| G3 Geschenkgutschein: Mein Protokoll | 746581 | 19 € | https://www.checkout-ds24.com/product/746581 |
+
+Die IPN-Anbindung 352984 („Steakakademie IPN (sha_sign)") gilt für **alle Produkte** und ist aktiv;
+eine Zuordnung je Produkt ist nicht nötig. Die alte Token-Anbindung 325764 ist inaktiv.
+
+**Schritt 2:** Migration `supabase/migrations/20261011100000_gutschein_digistore_zuordnung.sql`
+liegt bereit, ist aber **nicht angewendet**. Sie bricht ab, wenn nicht genau diese drei Zeilen
+entstehen. Test: `src/__tests__/gutschein-digistore-zuordnung.test.ts`. Anwenden vor dem
+Testkauf im Digistore-Testmodus (der braucht die Zuordnung), per Supabase-MCP; danach den
+Dateinamen an die Ledger-Version angleichen.
+
+**Schritt 3 (Vercel):** `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE`, `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE_5ER`
+und `NEXT_PUBLIC_DS_VOUCHER_MEIN_PROTOKOLL` auf die Checkout-Adressen oben, dann Redeploy. **Erst
+kurz vor dem 01.11.** — mit der Variablen wechselt die Karte auf `/gutschein` von „In Vorbereitung"
+auf den Kaufknopf.
+
+**Gültigkeit der Gutscheine:** bis 31.12. des dritten Folgejahres (Kauf 2026 → 31.12.2029),
+AGB § 5a, Datenbank-Vorgabe seit Migration 20261009170345. Das ist unabhängig von der
+Rückgabefrist (Geld-zurück-Frist) des Digistore-Produkts.
+
+**Offen:** Rückgabefrist der drei Produkte in Digistore (Cowork meldete 60 Tage statt 14 bei der
+Steak-Beichte, nicht bestätigt) und der Genehmigungsantrag bei Digistore (das Original
+Mein Protokoll 696396 ist selbst noch nicht genehmigt).
+
 ## Je Produkt drei Schritte (≈ 10 Min/Produkt)
 
 ### 1) Digistore24: Gutschein-Produktvariante anlegen
