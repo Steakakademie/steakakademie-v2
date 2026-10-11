@@ -44,6 +44,18 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      # Die Zusagen-Belege vom Typ „zaehlung" zählen Dateien unter content/. Bezahlte Kurse
+      # liegen seit 08.10.2026 im privaten Repo; ohne diesen Schritt melden
+      # diplom-lektionen-gesamt (32 statt 39), eigenregie-sechs-module und
+      # gruender-schmiede-sechs-module (0 statt 6) jeden Tag „gebrochen" — ein Alarm ohne
+      # Defekt (Issue #350, 08.–11.10.2026). Darf scheitern: Fehlt das Token, zeigt die
+      # Zählung ehrlich 0, und der Lauf meldet trotzdem noch Issue und Jira.
+      - name: Kursinhalte holen (privates Repo)
+        continue-on-error: true
+        run: node scripts/kursinhalte-holen.mjs
+        env:
+          KURSINHALTE_TOKEN: ${{ secrets.KURSINHALTE_TOKEN }}
+
       # Nur für die Zusagen-Belege (js-yaml). Darf scheitern — siehe Kopf.
       - name: Abhängigkeiten für die Zusagen-Belege
         continue-on-error: true
