@@ -1,0 +1,73 @@
+# Aktionsseite /geschenke (kurze Adresse) — Form: src/lib/aktionen/typen.ts
+# Konzept: docs/affiliate-aktionen-bundles-konzept-2026.md, Abschnitt 8.
+#
+# Regeln für diese Datei: keine Preise (Registry-Preise sind vom Mai 2026), keine
+# Temperaturen (Regel 8c — dafür /temperatur-guide verlinken), keine Testbehauptung
+# („getestet", „Testsieger"), keine Zusagen über Versand oder Fristen (die Gutschein-
+# Zusagen stehen auf /gutschein und im Zusagen-Register). Produkt-IDs aus
+# products/registry.yaml; der Test src/__tests__/aktionen.test.ts prüft, dass sie existieren.
+slug: geschenke
+titel: "Geschenke für Grillfans"
+untertitel: "Nach Können sortiert, nicht nach Preis: Was Einsteigern hilft, was Fortgeschrittene weiterbringt und was die bekommen, die schon alles haben."
+seoTitle: "Geschenke für Grillfans: Ideen nach Können sortiert"
+seoDescription: "Geschenkideen für Griller nach Können sortiert: was Einsteigern hilft, was Fortgeschrittene weiterbringt, was die bekommen, die alles haben."
+fenster:
+  von: "11-02"
+  bis: "12-24"
+einleitung:
+  - "Die meisten Grillgeschenke landen im Schrank. Was bleibt, ist das, was beim nächsten Grillen den Unterschied macht: ein Thermometer, dem man vertraut, ein Messer, das sauber schneidet, ein Gewürz, das man nicht selbst mischen würde."
+  - "Deshalb sortieren wir hier nicht nach Preis, sondern danach, wo die beschenkte Person gerade steht. Jede Zusammenstellung ist eine Empfehlung mit Begründung — kein Paket, jedes Teil führt in seinen eigenen Shop."
+setups:
+  - titel: "Für Einsteiger: der Grundstock"
+    fuer: "Für alle, die seit einer Saison grillen und noch nach Gefühl arbeiten. Das Thermometer ist das Geschenk, das am meisten verändert."
+    produkte:
+      - id: inkbird-ibt-4xs
+        warum: "Vier Fühler, Bluetooth, günstig — damit wird aus Raten Messen. Wer einmal die Kerntemperatur gesehen hat, grillt nie wieder nach Zeit."
+      - id: victorinox-fibrox-20
+        warum: "Ein scharfes, pflegeleichtes Kochmesser ohne Schnörkel. Es muss nicht das letzte Messer sein, aber das erste, das wirklich schneidet."
+      - id: ankerkraut-magic-dust
+        warum: "Der Klassiker unter den Rubs: passt auf Schwein, Geflügel und Gemüse. Ein Geschenk, das beim nächsten Grillen sofort benutzt wird."
+  - titel: "Für Fortgeschrittene: Präzision"
+    fuer: "Für alle, die Reverse Sear und Ruhezeit kennen und jetzt die letzten Grad herausholen wollen."
+    produkte:
+      - id: meater-plus
+        warum: "Kabellos im Fleisch, Verlauf und Restzeit in der App — ideal für große Stücke, bei denen man nicht ständig am Grill stehen will."
+      - id: thermapen-one
+        warum: "Das schnelle Einstich-Thermometer für den Moment, in dem es zählt: Steak vom Rost, einmal messen, fertig."
+      - id: wuesthof-classic-tranchiermesser-23
+        warum: "Lange, schmale Klinge für saubere Scheiben vom Braten oder Brisket — das Messer, das in den meisten Küchen fehlt."
+      - id: anova-precision-cooker-3
+        warum: "Sous-vide als Rückversicherung für Festtage: das Fleisch ist auf den Punkt, bevor es für die Kruste auf den Grill geht."
+  - titel: "Für die, die schon alles haben"
+    fuer: "Für Grillfans mit vollem Schrank bleibt nur eins: eine neue Technik. Oberhitze, Reifeschrank oder Keramik eröffnen jeweils ein eigenes Kapitel."
+    produkte:
+      - id: caso-steakchef-1500
+        warum: "Oberhitze für den Einstieg: Kruste in Sekunden, ohne gleich in die Profiklasse zu gehen."
+      - id: beefer-pro-ii
+        warum: "Der Oberhitzegrill, an dem sich alle anderen messen — für alle, die Steakhouse-Kruste zu Hause wollen."
+      - id: dry-ager-dx500
+        warum: "Eigenes Dry Aging zu Hause: ein Geschenk für Geduldige, das jedes Steak danach anders schmecken lässt."
+      - id: kamado-joe-classic-iii
+        warum: "Keramikgrill für alles von Pizza bis Pulled Pork — wer ihn hat, grillt das ganze Jahr."
+eigener_teil:
+  - titel: "Gutschein der Steakakademie"
+    text: "Wenn das richtige Teil unklar ist: Steak-Beichte oder Mein Protokoll verschenken — digital, mit persönlicher Nachricht und Motiv, zum Ausdrucken oder Weitergeben."
+    url: /gutschein
+    knopf: "Zu den Gutscheinen"
+  - titel: "Kerntemperatur-Spickzettel"
+    text: "Kostenlos und sofort nützlich: alle Garstufen auf einer Seite, zum Ausdrucken für die Grillhütte."
+    url: /kerntemperatur-spickzettel
+    knopf: "Spickzettel ansehen"
+  - titel: "Temperatur-Guide"
+    text: "Die Referenz hinter jedem Thermometer-Geschenk: Kerntemperaturen nach Teilstück und Garstufe."
+    url: /temperatur-guide
+    knopf: "Zum Guide"
+faq:
+  - frage: "Was schenke ich jemandem, der schon ein Thermometer hat?"
+    antwort: "Ein Tranchiermesser oder ein Sous-vide-Stab verändern mehr als ein zweites Thermometer. Wer beides hat, freut sich über eine neue Technik — Oberhitze oder ein Keramikgrill — oder über einen Gutschein, mit dem die beschenkte Person selbst wählt."
+  - frage: "Sind das Sets, die ich zusammen kaufen kann?"
+    antwort: "Nein. Jede Zusammenstellung ist eine Empfehlung; jedes Teil führt in seinen eigenen Shop, es gibt keinen Paketpreis. Welche Teile zusammen sinnvoll sind, steht bei jedem Produkt."
+  - frage: "Warum stehen hier keine Preise?"
+    antwort: "Preise ändern sich gerade in der Geschenksaison täglich. Den aktuellen Preis und die Verfügbarkeit siehst du beim Anbieter; wir nennen lieber keinen Preis als einen falschen."
+  - frage: "Warum gibt es keine Testurteile?"
+    antwort: "Unsere Empfehlungen beruhen auf Herstellerangaben, öffentlich zugänglichen Daten und unserer Grillpraxis, nicht auf eigenen Gerätetests. Deshalb begründen wir jede Empfehlung, statt Sterne zu vergeben."

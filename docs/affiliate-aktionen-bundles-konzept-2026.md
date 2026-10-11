@@ -217,10 +217,20 @@ je Link → eigener Teil (Gutschein, Guide, Kurs) → FAQ (FAQPage-Schema) → K
 Amazon-Satz. Kein Countdown, keine Knappheit. Seitentyp `aktionsseite` in `src/lib/angebote/typen.ts`
 für das Angebotsregal.
 
-**Technik (ein PR nach dem Compliance-PR):** Inhaltsmodell `data/aktionen/*.yaml` (Seite, Fenster,
-Setups mit Produkt-IDs aus der Registry), Route `/aktionen/[slug]`, Sichtbarkeit nur im Fenster
-(sonst 404 + aus der Sitemap), Teaser unter dem Diplom-Teaser im Fenster. Messung: Plausible-Event
-`Affiliate-Klick` mit `props.seite`.
+**Technik — gebaut 11.10.2026:** Inhaltsmodell `data/aktionen/*.yaml` (Form `src/lib/aktionen/typen.ts`,
+Loader `src/lib/aktionen/index.ts`), Route `/aktionen/[slug]` und kurze Adresse `/geschenke`,
+Seite `src/components/aktionen/AktionsSeite.tsx`, Produktzeile ohne Preis
+`src/components/affiliate/AktionProdukt.tsx`. Sichtbar nur im Fenster (sonst 404), `?vorschau=1`
+zum Gegenlesen (noindex). Sitemap nimmt sie nur im laufenden Fenster auf (`next-sitemap.config.js`).
+Erste Seiten: `geschenke` (02.11.–24.12.) und `weihnachtsmenue` (15.11.–24.12.), ohne Preise,
+ohne Temperaturen, ohne Testurteile (Test `src/__tests__/aktionen.test.ts`). Messung: Plausible
+`Affiliate-Klick` mit `zone=aktion`.
+
+**Noch offen:** Startseiten-Teaser und Menüpunkt im Fenster — beides greift in die
+Startseiten-Hierarchie bzw. den Header ein und braucht den Vermerk in CLAUDE.md §2 Regel 8
+(Entscheidung Uwe). Bis dahin ist `/geschenke` nur von `/gutschein` aus verlinkt. Das Zusagen-Gate
+liest `data/aktionen/*.yaml` nicht — die Texte dort bleiben deshalb ohne Versand-, Frist- und
+Testaussagen (Kopfkommentar der YAML).
 
 ---
 
@@ -230,6 +240,6 @@ Setups mit Produkt-IDs aus der Registry), Route `/aktionen/[slug]`, Sichtbarkeit
 |---|---|---|
 | jetzt | Compliance-PR (Abschnitt 6, Punkte 1–7) | Claude, Regel 6 |
 | nach Freischaltung | Terms je Programm lesen, ins Register; Logo-Freigaben anfragen (BOS FOOD) | Uwe liest, Claude trägt ein |
-| bis 31.10. | `/aktionen/[slug]` + `/geschenke` fertig, ohne Preise; Black-Week-Fenster im Kalender | Claude |
+| ✓ 11.10. | `/aktionen/[slug]` + `/geschenke` gebaut, ohne Preise (PR). Black-Week-Fenster im Kalender offen | Claude |
 | 01.11. | Programme `active`, erste Setups live | Uwe schaltet |
 | ab Dezember | Feed-Anbindung prüfen (BOS FOOD, SharkNinja haben Feeds) → dann Preise mit Stand | Entscheidung |
