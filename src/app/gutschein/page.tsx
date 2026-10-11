@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { sichtbareGutscheine, sichtbareWertgutscheine } from '@/lib/gutschein-products';
 import { faqSchema } from '@/lib/schema';
+import { aktionBySlug, istAktiv } from '@/lib/aktionen';
 import { Gift, Mail, Flame, Ticket } from 'lucide-react';
 
 // Gutschein-Konzept T10 (09.10.2026): Title und Description auf die Suchanfragen
@@ -44,8 +45,14 @@ const FAQ = [
   },
 ];
 
+// 11.10.2026: Link auf die Aktionsseite /geschenke nur in deren Fenster (02.11.–24.12.) —
+// stuendlich neu gerendert, damit der Link ohne Deploy erscheint und wieder verschwindet.
+export const revalidate = 3600;
+
 export default function GutscheinLandingPage() {
   const wertgutscheine = sichtbareWertgutscheine();
+  const geschenke = aktionBySlug('geschenke');
+  const geschenkeAktiv = Boolean(geschenke && istAktiv(geschenke));
 
   return (
     <>
@@ -129,6 +136,17 @@ export default function GutscheinLandingPage() {
                 </a>
               ))}
             </div>
+          </section>
+        )}
+
+        {geschenkeAktiv && (
+          <section className="max-w-content mx-auto px-4 sm:px-6 py-6 text-center">
+            <p className="font-body text-text-secondary">
+              Lieber etwas zum Auspacken?{' '}
+              <Link href="/geschenke" className="font-sans font-bold text-brand-gold hover:text-text-primary transition-colors">
+                Geschenke für Grillfans — nach Können sortiert
+              </Link>
+            </p>
           </section>
         )}
 

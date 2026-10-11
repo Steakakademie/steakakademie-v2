@@ -1,0 +1,66 @@
+# Aktionsseite /aktionen/weihnachtsmenue — Form: src/lib/aktionen/typen.ts
+# Konzept: docs/affiliate-aktionen-bundles-konzept-2026.md, Abschnitt 8.
+# Regeln wie in geschenke.yaml: keine Preise, keine Temperaturen (Regel 8c), keine
+# Testbehauptung, keine Zusagen. Fleischpartner und BOS FOOD/vineshop24 kommen dazu, sobald
+# die Programme freigeschaltet sind (products/affiliate-programs.yaml, status active).
+slug: weihnachtsmenue
+titel: "Weihnachtsmenü vom Grill"
+untertitel: "Rinderfilet, Roastbeef oder Schweinebraten — am Grill gelingen die Festtagsstücke, wenn Thermometer, Messer und Zeitplan stimmen. Hier ist die Ausstattung dafür."
+seoTitle: "Weihnachtsmenü vom Grill: Ausstattung für Festtagsstücke"
+seoDescription: "Festtagsbraten am Grill: Thermometer, Messer und Rückversicherung für Rinderfilet, Roastbeef und Schweinebraten — mit Kerntemperatur-Guide."
+fenster:
+  von: "11-15"
+  bis: "12-24"
+einleitung:
+  - "Ein Festtagsstück verzeiht wenig: zu lang, und das Filet ist grau; zu kurz, und der Braten ist innen kalt. Am Grill hast du gegenüber dem Backofen einen Vorteil — Hitze von unten für die Kruste, indirekte Zone für die Geduld — aber nur mit einem Thermometer, dem du vertraust."
+  - "Die Zusammenstellungen unten sind kein Paket: jedes Teil führt in seinen Shop. Die Kerntemperaturen für jedes Teilstück stehen im Temperatur-Guide, nicht hier — damit sie überall dieselben sind."
+setups:
+  - titel: "Thermometer fürs Festtagsstück"
+    fuer: "Ein großes Stück braucht ein Thermometer, das drinbleibt, und eines für den schnellen Blick am Ende."
+    produkte:
+      - id: meater-2-plus
+        warum: "Bleibt im Braten, meldet Verlauf und Restzeit aufs Telefon — du kannst in der Küche sein, während das Filet in der indirekten Zone zieht."
+      - id: thermapen-one
+        warum: "Für die Kontrolle am Ende: an mehreren Stellen stechen, bevor das Stück vom Rost kommt."
+  - titel: "Messer zum Tranchieren"
+    fuer: "Der Moment am Tisch: gleichmäßige Scheiben statt zerrissener Fasern."
+    produkte:
+      - id: wuesthof-classic-tranchiermesser-23
+        warum: "Lange, schmale Klinge für saubere Scheiben in einem Zug — besonders beim Roastbeef."
+      - id: guede-alpha-olive-steakmesser-set
+        warum: "Damit am Tisch nicht gesägt wird: scharfe Steakmesser, die auch zum Rest des Jahres passen."
+  - titel: "Rückversicherung für den Festtag"
+    fuer: "Wenn zwölf Leute warten, hilft ein Plan B: das Fleisch im Wasserbad auf den Punkt bringen und nur noch die Kruste am Grill holen."
+    produkte:
+      - id: anova-precision-cooker-3
+        warum: "Sous-vide nimmt dem Festtagsbraten den Zeitdruck — Kerntemperatur erreicht, bevor die Gäste da sind."
+      - id: caso-steakchef-1500
+        warum: "Oberhitze fürs Finish: in Sekunden Kruste auf dem fertig gegarten Stück, ohne den Grill noch einmal hochzufahren."
+  - titel: "Das Fleisch"
+    fuer: "Gute Festtagsstücke kommen vom Metzger deines Vertrauens oder aus dem Versand — rechtzeitig bestellen."
+    produkte:
+      - id: otto-gourmet-wagyu-box
+        warum: "Für den Abend, an dem es etwas Besonderes sein darf. Wagyu braucht wenig: Salz, Hitze, Ruhe."
+      - id: weber-master-touch-57
+        warum: "Falls der Grill selbst das Geschenk ist: der Kugelgrill, auf dem Festtagsbraten und Pizza gleichermaßen gelingen."
+eigener_teil:
+  - titel: "Temperatur-Guide"
+    text: "Kerntemperaturen nach Teilstück und Garstufe — die Referenz für jedes Festtagsstück."
+    url: /temperatur-guide
+    knopf: "Zum Guide"
+  - titel: "Mein Protokoll"
+    text: "Acht Wochen gezielt besser grillen, mit Korrektur — auch als Geschenk für die Zeit nach den Feiertagen."
+    url: /mein-protokoll
+    knopf: "Mehr erfahren"
+  - titel: "Steak-Rettung"
+    text: "Wenn am Festtag doch etwas schiefgeht: die Soforthilfe für Steak und Braten."
+    url: /rettung
+    knopf: "Zur Rettung"
+faq:
+  - frage: "Welche Kerntemperatur braucht das Rinderfilet?"
+    antwort: "Die Werte stehen nach Teilstück und Garstufe im Temperatur-Guide der Steakakademie. Wir nennen sie bewusst nur dort, damit überall dieselbe Referenz gilt."
+  - frage: "Wie lange vorher muss ich Fleisch bestellen?"
+    antwort: "Das hängt vom Händler ab — Lieferzeiten stehen beim Anbieter. In der Woche vor Weihnachten sind viele Versender ausgebucht, also lieber früh planen."
+  - frage: "Kann ich das Menü komplett vorbereiten?"
+    antwort: "Mit Sous-vide ja: Das Fleisch ist vorab auf den Punkt, am Tag selbst bleibt nur die Kruste. Ohne Sous-vide hilft ein Zeitplan rückwärts vom Essen — Ruhezeit nicht vergessen."
+hinweis: "Zusammenstellungen ohne Wein und Spirituosen; Empfehlungen zu alkoholischen Getränken richten sich an Erwachsene und folgen, sobald das Partnerprogramm freigeschaltet ist."

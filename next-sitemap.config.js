@@ -78,6 +78,35 @@ function lastmodNachUrl() {
 
 const LASTMOD = lastmodNachUrl();
 
+/** Aktionsseiten aus data/aktionen/*.yaml — nur slug und fenster, ohne Validierung (die macht der Test). */
+function ladeAktionen() {
+  const dir = path.join(__dirname, 'data', 'aktionen');
+  let dateien;
+  try { dateien = fs.readdirSync(dir).filter((f) => /\.ya?ml$/.test(f)); } catch { return []; }
+  const yaml = require('js-yaml');
+  return dateien.map((f) => {
+    try {
+      const d = yaml.load(fs.readFileSync(path.join(dir, f), 'utf8'));
+      return d && d.slug && d.fenster ? { slug: String(d.slug), fenster: d.fenster } : null;
+    } catch { return null; }
+  }).filter(Boolean);
+}
+const AKTIONEN = ladeAktionen();
+
+/** Heute als MM-TT in deutscher Zeit. */
+function heuteMMTT(jetzt = new Date()) {
+  const teile = new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', month: '2-digit', day: '2-digit' }).formatToParts(jetzt);
+  return `${teile.find((t) => t.type === 'month').value}-${teile.find((t) => t.type === 'day').value}`;
+}
+function imFenster(fenster, mmtt) {
+  if (fenster.von <= fenster.bis) return mmtt >= fenster.von && mmtt <= fenster.bis;
+  return mmtt >= fenster.von || mmtt <= fenster.bis;
+}
+/** Laeuft das Fenster der Aktion gerade (deutsche Zeit)? */
+function aktionAktiv(a, jetzt = new Date()) {
+  return imFenster(a.fenster, heuteMMTT(jetzt));
+}
+
 // Hinweis (30.08.2026): Hier stand ein Ausschluss fuer noch nicht erschienene
 // Fleischwissen-Teile. Die Staffelung ist abgeschafft — alle drei Teile gehoeren
 // in die Sitemap. Das Feld `newsletterAt` in den MDX ist rein dokumentarisch und
@@ -259,10 +288,23 @@ module.exports = {
       } catch { return []; }
     })();
 
+    // 11.10.2026: Aktionsseiten (data/aktionen/*.yaml) rendern dynamisch und sind nur in
+    // ihrem Saisonfenster erreichbar (sonst 404). In die Sitemap kommen sie nur, wenn das
+    // Fenster beim Build laeuft — eine URL, die noch 404 liefert, gehoert nicht hinein.
+    // Deploys gibt es fast taeglich (Rezept-Bot), der erste Build im Fenster traegt sie
+    // nach; die Seite selbst ist dank revalidate ab dem ersten Tag erreichbar. /geschenke
+    // ist die kurze Adresse der Aktion „geschenke" (eigene Route) und wird in transform()
+    // nach derselben Regel behandelt. Fensterlogik wie src/lib/aktionen/typen.ts.
+    const aktionen = AKTIONEN
+      .filter((a) => a.slug !== 'geschenke')
+      .filter((a) => aktionAktiv(a))
+      .map((a) => ({ loc: `/aktionen/${a.slug}`, changefreq: 'weekly', priority: 0.8 }));
+
     return [
       ...ssrPaths.map((loc) => ({ loc, changefreq: 'weekly', priority: 0.8 })),
       ...stufe1,
       ...bbqNews,
+      ...aktionen,
     ];
   },
   robotsTxtOptions: {
@@ -282,6 +324,12 @@ module.exports = {
     // Produktion gar nicht erst, sie stehen also ohnehin nicht im Manifest.
     if (!ARTIKEL_FREIGEGEBEN && path.startsWith('/artikel')) {
       return null;
+    }
+    // /geschenke: nur im Fenster der Aktion „geschenke" — sonst liefert die Seite 404.
+    if (path === '/geschenke') {
+      const a = AKTIONEN.find((x) => x.slug === 'geschenke');
+      if (!a || !aktionAktiv(a)) return null;
+      return { loc: path, changefreq: 'weekly', priority: 0.8 };
     }
     const lastmod = LASTMOD.get(path);
     // Serie als Pillar-Content: gleiche Prioritaet wie Cuts/Methoden.
