@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { Sparkles, ChevronRight } from 'lucide-react';
 import { aktiveAktionen } from '@/lib/aktionen';
 import { aktionUrl } from '@/lib/aktionen/nav';
+import AktionsTeaserKarten from './AktionsTeaserKarten';
+import AktionsTeaserVorschau from './AktionsTeaserVorschau';
 
 /**
  * Aktions-Teaser der Startseite (Uwe, 11.10.2026: „bau den Teaser und den Menüpunkt").
@@ -11,34 +11,16 @@ import { aktionUrl } from '@/lib/aktionen/nav';
  * eine Aktionsseite in ihrem Saisonfenster ist (data/aktionen/*.yaml). Die Startseite
  * wird stündlich neu gerendert (revalidate 3600), das Fenster greift also ohne Deploy.
  * Keine Preise, kein Countdown — nur Thema und Weg dorthin.
+ *
+ * Außerhalb des Fensters rendert der Server nichts; stattdessen sitzt hier die
+ * Client-Vorschau, die nur mit dem Schalter `?vorschau=1` etwas zeigt.
  */
 export default function AktionsTeaser() {
   const aktionen = aktiveAktionen();
-  if (aktionen.length === 0) return null;
-
+  if (aktionen.length === 0) return <AktionsTeaserVorschau />;
   return (
-    <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12" aria-label="Aktuelle Themen">
-      <div className="flex items-center gap-3 mb-5">
-        <Sparkles size={22} className="text-brand-gold" aria-hidden="true" />
-        <h2 className="font-serif text-2xl font-bold text-text-primary">Gerade passend</h2>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {aktionen.map((a) => (
-          <Link
-            key={a.slug}
-            href={aktionUrl(a.slug)}
-            className="group border border-border-subtle bg-surface-card p-6 hover:border-brand-gold/50 transition-colors"
-          >
-            <h3 className="font-serif text-xl font-bold text-text-primary mb-2 group-hover:text-brand-gold transition-colors">
-              {a.titel}
-            </h3>
-            <p className="font-body text-sm text-text-secondary leading-relaxed mb-4">{a.untertitel}</p>
-            <span className="inline-flex items-center gap-1 font-sans text-sm font-bold text-brand-gold">
-              Ansehen <ChevronRight size={14} aria-hidden="true" />
-            </span>
-          </Link>
-        ))}
-      </div>
-    </section>
+    <AktionsTeaserKarten
+      eintraege={aktionen.map((a) => ({ slug: a.slug, href: aktionUrl(a.slug), titel: a.titel, untertitel: a.untertitel }))}
+    />
   );
 }

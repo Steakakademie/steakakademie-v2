@@ -10,7 +10,8 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import AccountLink from './AccountLink';
 import { istGeschenkSaison, kaufbareGutscheine } from '@/lib/gutschein-products';
-import { aktiveAktionenNav } from '@/lib/aktionen/nav';
+import { AKTIONEN_NAV, aktiveAktionenNav } from '@/lib/aktionen/nav';
+import { liesVorschau, mitVorschau } from '@/lib/aktionen/vorschau';
 
 type NavSub = { label: string; href: string };
 type NavCategory = { name: string; href: string; sub: NavSub[]; wide?: boolean };
@@ -149,7 +150,11 @@ export default function Header() {
   const [aktionenNav, setAktionenNav] = useState<NavCategory[]>([]);
   useEffect(() => {
     setGutscheinNav(istGeschenkSaison() && kaufbareGutscheine().length > 0);
-    const aktiv = aktiveAktionenNav();
+    // Vorschau-Schalter (?vorschau=1, src/lib/aktionen/vorschau.ts): alle Aktionsseiten
+    // zeigen, Links mit ?vorschau=1, damit die Seiten vor dem Fenster öffnen.
+    const vorschau = liesVorschau(window.location.search);
+    const aktiv = (vorschau ? [...AKTIONEN_NAV] : aktiveAktionenNav())
+      .map((a) => ({ ...a, url: vorschau ? mitVorschau(a.url) : a.url }));
     if (aktiv.length === 1) setAktionenNav([{ name: aktiv[0].label, href: aktiv[0].url, sub: [] }]);
     else if (aktiv.length > 1) {
       setAktionenNav([{ name: aktiv[0].label, href: aktiv[0].url, sub: aktiv.map((a) => ({ label: a.label, href: a.url })) }]);
