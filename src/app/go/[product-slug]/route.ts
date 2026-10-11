@@ -9,6 +9,11 @@ import { getProductById } from '@/lib/products';
  * 1. Produkt im Registry nachschlagen
  * 2. Plausible-Event feuern (server-side, cookieless — kein GA4, kein Consent nötig)
  * 3. 302 Redirect zur Affiliate-URL
+ *
+ * 11.10.2026: Die Oberflaeche verlinkt Amazon-Produkte nicht mehr ueber /go/
+ * (produktLink in produkt-anzeige.ts — Amazons Programmrichtlinien). Die Route
+ * bleibt fuer alte Links (geteilte URLs, Suchmaschinen) und fuer Netzwerk-Produkte
+ * (AWIN, Webgains) bestehen.
  */
 
 /** So lange darf Plausible den Klick hoechstens aufhalten — wie in /go-fleisch/[cut]. */

@@ -52,7 +52,10 @@ export function buildMeatTargetUrl(cut: Cut): string {
 }
 
 export interface MeatOffer {
-  href: string; // interner Redirect (getrackt)
+  /** Amazon-Fallback: direkter Amazon-Link (11.10.2026). Premium-Partner: interner Redirect /go-fleisch. */
+  href: string;
+  /** Plausible-Klassen fuer den Kaufknopf — zaehlt den Klick im Browser (Amazon laeuft nicht mehr ueber /go-fleisch). */
+  klickKlassen: string;
   partnerName: string;
   label: string;
   disclosure: string;
@@ -65,7 +68,17 @@ export function getMeatOffer(cut: Cut): MeatOffer {
   const premiumActive = PRIMARY?.status === 'active';
   const partner = activeMeatPartner();
   return {
-    href: `/go-fleisch/${cut.id}`,
+    // Amazon direkt (Programmrichtlinien: keine Zwischenseiten-Weiterleitung, siehe
+    // produktLink in src/components/affiliate/produkt-anzeige.ts); ein Premium-Partner
+    // laeuft ueber /go-fleisch mit serverseitiger Zaehlung.
+    href: partner.id === 'amazon' ? partner.buildUrl(cut) : `/go-fleisch/${cut.id}`,
+    klickKlassen: [
+      'plausible-event-name=Affiliate-Klick',
+      'plausible-event-zone=cut',
+      `plausible-event-provider=${partner.id}`,
+      `plausible-event-produkt=${cut.id}`,
+      'plausible-event-typ=fleisch',
+    ].join(' '),
     partnerName: partner.name,
     label: premiumActive ? `${cut.nameDE} bei ${partner.name} kaufen` : `${cut.nameDE} kaufen`,
     // „Anzeige“ steht als Etikett am Knopf (CutGenerator, CutAtlasClient); dieser Satz erklaert es.

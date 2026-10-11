@@ -19,14 +19,24 @@ function referenz(href: string, text: string) {
 }
 
 describe('ProseLink', () => {
-  it('ein /go/-Link trägt rel und das lesbare Etikett', () => {
+  // 11.10.2026: Ein /go/-Link auf ein Amazon-Produkt fuehrt direkt zu Amazon (MdxTextLink.zielHref);
+  // rel und Etikett bleiben. Unbekannte und Netzwerk-IDs bleiben bei /go/.
+  it('ein /go/-Link auf ein Amazon-Produkt trägt rel, das lesbare Etikett und das direkte Ziel', () => {
     const markup = html('/go/meater-plus', 'MEATER Plus auf Amazon');
-    expect(markup).toMatch(/<a [^>]*href="\/go\/meater-plus"/);
+    expect(markup).toMatch(/<a [^>]*href="https:\/\/(www\.)?amazon\.de\//);
+    expect(markup).not.toContain('/go/');
     expect(markup).toMatch(/<a [^>]*rel="[^"]*sponsored[^"]*"/);
     expect(markup).toMatch(/<a [^>]*rel="[^"]*nofollow[^"]*"/);
     // Das Wort steht als Text neben dem Link — nicht nur in title/aria-label.
     expect(markup.replace(/<[^>]+>/g, '|')).toContain('|Anzeige|');
     expect(markup).not.toMatch(/(title|aria-label)="Anzeige"/);
+  });
+
+  it('ein /go/-Link auf eine unbekannte ID bleibt bei /go/ — mit rel und Etikett', () => {
+    const markup = html('/go/gibt-es-nicht', 'Irgendwas');
+    expect(markup).toMatch(/<a [^>]*href="\/go\/gibt-es-nicht"/);
+    expect(markup).toMatch(/<a [^>]*rel="[^"]*sponsored[^"]*"/);
+    expect(markup.replace(/<[^>]+>/g, '|')).toContain('|Anzeige|');
   });
 
   it('rel und Etikett sind die des gemeinsamen Bausteins, nicht eine zweite Fassung', () => {

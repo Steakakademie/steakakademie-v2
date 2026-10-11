@@ -105,17 +105,29 @@ export const REL_PARTNERLINK = 'sponsored nofollow noopener';
 export const REL_EXTERN = 'noopener noreferrer';
 
 export interface ProduktLink {
-  /** Ziel des Buttons: /go/<id> beim Partnerlink, sonst die Anbieter-URL. */
+  /**
+   * Ziel des Buttons: /go/<id> beim Netzwerk-Partnerlink (AWIN, Webgains), die
+   * Amazon-URL direkt beim Amazon-Partnerlink, sonst die Anbieter-URL.
+   */
   href: string;
   rel: string;
   /** true → „Anzeige“ und Provisions-Hinweis; false → keines von beiden. */
   partner: boolean;
 }
 
+// 11.10.2026 (Uwe: „nimm Amazon aus /go/ raus"): Amazons Programmrichtlinien
+// untersagen, Special Links zu verschleiern (Teilnahmevoraussetzungen 6(v)/(w)) und
+// vergueten Zwischenseiten-Weiterleitungen ohne Nutzeraktion nicht (Verguetungs-
+// katalog 2(e)). Unser 302 nach bewusstem Klick lag in einer Grauzone — ein Konto-
+// und Verguetungsrisiko. Amazon-Partnerlinks gehen deshalb direkt zu Amazon;
+// gezaehlt wird im Browser ueber die Plausible-Klassen (klickKlassen), nicht mehr
+// serverseitig in /go/. Netzwerk-Links (AWIN, Webgains) laufen weiter ueber /go/:
+// deren Code of Conduct verlangt nur einen echten Referrer und einen bewussten Klick.
+// Die Route /go/<id> bleibt fuer alte Links bestehen.
 export function produktLink(product: Pick<Product, 'id' | 'affiliateUrl'>): ProduktLink {
-  return hatPartnerlink(product)
-    ? { href: `/go/${product.id}`, rel: REL_PARTNERLINK, partner: true }
-    : { href: product.affiliateUrl, rel: REL_EXTERN, partner: false };
+  if (hatNetzwerkLink(product)) return { href: `/go/${product.id}`, rel: REL_PARTNERLINK, partner: true };
+  if (hatPartnerlink(product)) return { href: product.affiliateUrl, rel: REL_PARTNERLINK, partner: true };
+  return { href: product.affiliateUrl, rel: REL_EXTERN, partner: false };
 }
 
 /** Tracking-Klassen fuer den Button — nur beim Partnerlink ein Affiliate-Klick. */
