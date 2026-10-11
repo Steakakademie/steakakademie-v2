@@ -66,6 +66,19 @@ steht dann noch 60, beim Digistore-Support nachfragen.
 **Offen:** Genehmigungsantrag bei Digistore (das Original Mein Protokoll 696396 ist selbst noch
 nicht genehmigt).
 
+**Personalisierung und Wunschtermin (gebaut 11.10.2026)** — vor dem Verkaufsstart:
+1. Migration `supabase/migrations/…_gutschein_personalisierung.sql` anwenden (Uwes Ja), **vor**
+   dem Merge des PR — Geschenkseite und API lesen die neuen Spalten.
+2. `GUTSCHEIN_VERSAND_SECRET`: einen langen Zufallswert als GitHub-Actions-Secret **und** als
+   Vercel-Variable (Production) setzen. Ohne ihn ist der Workflow „Gutschein-Versand" rot.
+3. Loops: Transaktionsmail „Geschenk für dich" anlegen (Variablen und Textvorschlag:
+   `docs/gutschein-sichtbarkeit-konzept.md`, „Loops-Vorlage"), ID als
+   `LOOPS_VOUCHER_GIFT_TEMPLATE_ID` in Vercel (Production), Redeploy. Ohne sie gibt es nur
+   „selbst weitergeben".
+4. Beim Testkauf zusätzlich: Link aus der Käufer-Mail öffnen → Formular sichtbar; Namen,
+   Nachricht, Motiv speichern; einmal „Sofort" an eine eigene Zweitadresse, einmal ein Termin
+   in der nächsten Stunde → kommt die Mail, steht auf der Geschenkseite „Verschickt an …"?
+
 **Wertgutscheine W25–W100** sind seit 11.10.2026 ebenfalls angelegt (746668–746671, inaktiv) —
 **nicht aktivieren**, Stand und Gründe: `docs/gutschein-konzept-weihnachten-2026.md`.
 

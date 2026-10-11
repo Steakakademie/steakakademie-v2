@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: 03.10.2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: 11.10.2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -708,6 +708,25 @@ export default function DatenschutzPage() {
                 freigeschalteten Produkt zuordnen, meldet unser Server Bestell- und Produktnummer
                 (ohne E-Mail-Adresse) an unsere Fehlerüberwachung (Abschnitt 13a), damit wir uns
                 darum kümmern können.
+              </p>
+              {/* 11.10.2026: Personalisierung + Versand zum Wunschtermin
+                  (src/app/api/gutschein/personalisieren, src/lib/gutschein-versand.ts,
+                  Migration …_gutschein_personalisierung). Die Empfänger-Adresse wird nach
+                  erfolgreichem Versand auf NULL gesetzt; empfaenger_hinweis bleibt maskiert. */}
+              <p className="mb-3">
+                <strong className="text-text-primary">Gutschein persönlich machen und verschicken
+                lassen:</strong> Über den Link in deiner Gutschein-Mail kannst du den Namen der
+                beschenkten Person, deinen Namen, eine Nachricht und ein Motiv eintragen; das
+                speichern wir beim Gutschein und zeigen es auf der Geschenkseite. Wählst du den
+                Versand per E-Mail, speichern wir zusätzlich die E-Mail-Adresse der beschenkten
+                Person und den gewünschten Zeitpunkt und schicken den Gutschein dann über Loops
+                (Abschnitt 7) an diese Adresse. Wir nutzen die Adresse ausschließlich für diese eine
+                Mail – keine Werbung, kein Newsletter – und löschen sie nach dem erfolgreichen
+                Versand; danach bleibt nur ein gekürzter Hinweis (z.&nbsp;B. „a•••@example.de“),
+                damit du siehst, wohin der Gutschein ging. Bitte trag nur Adressen von Personen ein,
+                die mit einer solchen Geschenk-Mail rechnen dürfen. Rechtsgrundlage: Art. 6 Abs. 1
+                lit. b DSGVO (Erfüllung deines Auftrags) sowie für die beschenkte Person lit. f
+                (berechtigtes Interesse, ein Geschenk zuzustellen).
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Rechnungs- und

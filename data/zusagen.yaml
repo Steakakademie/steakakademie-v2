@@ -870,6 +870,31 @@ zusagen:
 # Ausweg für Fehltreffer in NEUEM Text; der Altbestand steht in der Baseline.
 # ══════════════════════════════════════════════════════════════════════════════
 
+  # 11.10.2026: Personalisierung + Versand zum Wunschtermin (Uwe: „bau Personalisierung
+  # und Wunschtermin"). Die Oberfläche bietet den Mail-Versand nur an, wenn die
+  # Loops-Vorlage gesetzt ist (mailVersandVerfuegbar) — dieselbe Bedingung wie im Code-Beleg.
+  - id: gutschein-versand-an-beschenkte
+    zusage: Der Schenkende kann den Gutschein per E-Mail an die beschenkte Person schicken lassen, sofort oder ab einer gewählten Stunde.
+    wo:
+      - datei: src/app/danke/gutschein/page.tsx
+        muster: "oder wir schicken den Gutschein per E-Mail an die beschenkte Person, sofort oder ab einer Uhrzeit, die du wählst."
+      - datei: src/components/gutschein/GutscheinPersonalisieren.tsx
+        muster: "Die Steakakademie schickt ihn per E-Mail an die beschenkte Person"
+      - datei: src/app/datenschutz/page.tsx
+        muster: "Wählst du den Versand per E-Mail, speichern wir zusätzlich die E-Mail-Adresse der beschenkten Person"
+    beleg:
+      typ: code
+      alle:
+        - datei: src/lib/gutschein-versand.ts
+          regex: "LOOPS_VOUCHER_GIFT_TEMPLATE_ID"
+        - datei: src/app/api/gutschein/personalisieren/route.ts
+          regex: "versendeGutschein\\(admin"
+        - datei: .github/workflows/gutschein-versand.yml
+          regex: "cron: '7,22,37,52 \\* \\* \\* \\*'"
+    bei_bruch: Die Sätze herausnehmen, bis Versandlauf und Formular wieder stehen. Sobald die Loops-Vorlage angelegt ist, zusätzlich einen Beleg typ loops (art transactional, id = LOOPS_VOUCHER_GIFT_TEMPLATE_ID) ergänzen.
+    abteilung: Systems & Ops
+    seit: "2026-10-11"
+
 keine_zusage:
 
   - datei: src/app/mein-protokoll/page.tsx

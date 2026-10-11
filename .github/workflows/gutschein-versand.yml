@@ -1,0 +1,67 @@
+name: Gutschein-Versand
+
+# Verschickt Geschenkgutscheine zum Wunschtermin — Abteilung Systems & Ops.
+#
+# WARUM (Uwe, 11.10.2026: „bau Personalisierung und Wunschtermin"): Der Schenkende
+# kann auf der Geschenkseite einen Termin wählen („24.12., ab 8 Uhr"). Dieser
+# Workflow ruft alle 15 Minuten /api/gutschein/versand auf; die Route schickt jeden
+# fälligen Gutschein über Loops an die beschenkte Person.
+#
+# Warum GitHub Actions und nicht Vercel Cron: Ob der Vercel-Tarif Crons öfter als
+# einmal am Tag erlaubt, ist aus dem Repo nicht belegbar — ein unzulässiger Cron in
+# vercel.json würde den Produktions-Deploy brechen. GitHub startet geplante Läufe
+# manchmal verspätet; deshalb alle 15 Minuten und auf der Seite „ab … Uhr", nie
+# eine Minutenzusage.
+#
+# ROT, wenn: das Secret fehlt (GitHub oder Vercel), die Route nicht 200 liefert,
+# ein Versand scheitert, ein Gutschein „fehlgeschlagen" steht oder ein Versand seit
+# über einer Stunde hängt. Ein Lauf ohne fällige Gutscheine ist grün — das ist kein
+# Stillstand, sondern der Normalfall. Dass der Workflow überhaupt startet, prüft
+# der Ops-Heartbeat (data/ops-heartbeat.json, Eintrag „Gutschein-Versand").
+#
+# Secret: GUTSCHEIN_VERSAND_SECRET — gleicher Wert als GitHub-Actions-Secret und als
+# Vercel-Variable (Production).
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: gutschein-versand
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  versand:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fällige Gutscheine verschicken
+        env:
+          SECRET: ${{ secrets.GUTSCHEIN_VERSAND_SECRET }}
+        run: |
+          if [ -z "$SECRET" ]; then
+            echo "## Gutschein-Versand: NICHT geprüft" >> "$GITHUB_STEP_SUMMARY"
+            echo "Das GitHub-Secret GUTSCHEIN_VERSAND_SECRET fehlt." >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::GUTSCHEIN_VERSAND_SECRET fehlt — Versand nicht geprüft"
+            exit 1
+          fi
+          code=$(curl -sS -o antwort.json -w '%{http_code}' --max-time 60 \
+            -X POST -H "Authorization: Bearer $SECRET" \
+            https://steakakademie.de/api/gutschein/versand || echo 000)
+          {
+            echo "## Gutschein-Versand"
+            echo ""
+            echo "HTTP $code"
+            echo ""
+            echo '```json'
+            cat antwort.json 2>/dev/null || echo '{}'
+            echo ""
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" != "200" ]; then
+            echo "::error::Gutschein-Versand meldet HTTP $code — siehe Summary"
+            exit 1
+          fi
