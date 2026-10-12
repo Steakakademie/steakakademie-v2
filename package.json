@@ -22,6 +22,7 @@
     "check:qualitaet:baseline": "node scripts/check-content-qualitaet.mjs --update-baseline",
     "check:bild-motiv": "node scripts/check-bild-motiv.mjs",
     "check:zusagen": "node scripts/check-zusagen.mjs",
+    "check:snippets": "node scripts/check-snippet-antworten.mjs",
     "check:zusagen:baseline": "node scripts/check-zusagen.mjs --update-baseline",
     "zusagen:belege": "node scripts/zusagen-belege.mjs --nur-bericht",
     "build:with-agents": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next build --webpack",

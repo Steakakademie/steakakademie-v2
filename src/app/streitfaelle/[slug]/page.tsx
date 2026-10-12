@@ -299,14 +299,14 @@ export default function StreitfallPage(props: Props) {
                 >
                   Häufige Fragen
                 </h2>
-                <dl className="space-y-5">
+                <div className="space-y-5">
                   {faqItems.map((item) => (
                     <div key={item.question} className="pb-5" style={{ borderBottom: '1px solid rgba(200,136,42,0.1)' }}>
-                      <dt className="font-sans font-bold text-text-light mb-2">{item.question}</dt>
-                      <dd className="font-body text-text-light/70 leading-relaxed">{item.answer}</dd>
+                      <h3 className="font-sans font-bold text-text-light mb-2">{item.question}</h3>
+                      <p className="font-body text-text-light/70 leading-relaxed">{item.answer}</p>
                     </div>
                   ))}
-                </dl>
+                </div>
               </section>
             )}
 
