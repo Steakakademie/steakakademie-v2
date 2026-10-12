@@ -36,36 +36,36 @@
   name: "Santos Grills"
   network: "AWIN"
   providers: [santosgrills]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % Santos-Eigenmarke, 5 % übrige Marken (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 60 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.santosgrills.de/"
   focus: "Grills (Gas, Kohle, Oberhitze) — Fachhändler, hoher Warenkorb"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 32287. Zugelassen 05.10.2026. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
+  note: "AWIN-ID 32287. Zugelassen 05.10.2026. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
   disclosureNote: "Kaufst du über einen Santos-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: bos-food
   name: "BOS FOOD"
   network: "AWIN"
   providers: [bos-food]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % Endkunden (B2C), 3 % B2B (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 60 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.bosfood.de/"
   focus: "Delikatessen und Spezialitäten — vorgesehen: Trüffel, Öle, Kaviar u. a."
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
+  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Commission Manager: Default 3 % (B2B), B2C 10 % — ob Käufe als B2C gewertet werden, zeigt erst der erste Sale. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
   disclosureNote: "Kaufst du über einen BOS-FOOD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: sharkninja
   name: "SharkNinja"
   network: "AWIN"
   providers: [sharkninja]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "5 %; Newsletter-Code 1 %, Zubehör/Ersatzteile/Refurbished 0 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.sharkninja.de/"
@@ -78,8 +78,8 @@
   name: "Burghardt Delicious"
   network: "AWIN"
   providers: [burghardt]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 63 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://burghardt-delicious.com/"
