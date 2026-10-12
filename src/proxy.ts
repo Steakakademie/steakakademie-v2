@@ -18,6 +18,19 @@ const IS_CRAWLER =
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Scanner-Schutz (12.10.2026, Sentry JAVASCRIPT-NEXTJS-7): Die App hat KEINE
+  // Server Actions. Ein Request mit `Next-Action`-Header kann also nur eine
+  // Sonde sein (React2Shell-artige Scans). Auf `<seite>.rsc` loeste so ein
+  // POST in Next 16.3.5 den InvariantError „Expected RSC response" samt 500
+  // aus. Hier frueh mit 404 beenden, bevor Next rendert. Wer Server Actions
+  // einfuehrt, muss diesen Block entfernen.
+  if (request.headers.has('next-action')) {
+    return new NextResponse('Not found', {
+      status: 404,
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    });
+  }
+
   // A/B-Test Startseite: 50/50-Zuteilung per Cookie, Variante B wird intern
   // auf /home-b (Editorial Ember) rewritet — die URL bleibt "/". Zuteilung
   // ist sticky (90 Tage), damit Besucher konsistent EINE Variante sehen.
@@ -100,6 +113,8 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    // Alle Pfade, aber nur mit Next-Action-Header (siehe Scanner-Schutz oben)
+    { source: '/:path*', has: [{ type: 'header', key: 'next-action' }] },
     '/',
     '/admin/:path*',
     '/api/admin/:path*',
