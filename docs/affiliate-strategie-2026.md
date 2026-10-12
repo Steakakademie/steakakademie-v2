@@ -178,4 +178,4 @@ Umgesetzt (PR „AWIN-Vorbereitung"); **alle neuen Links sind aus**:
 ## Stand 12.10.2026 — Register bereinigt, Bremer Gewürzhandel ergänzt
 
 - **Entfernt:** 360° BBQ, Grill-Experte, Banggood, BURNHARD (seit 02.06. ungeprüft, keine Zusage; BURNHARD von Uwe am 25.09. bewusst nicht aufgenommen). Grund: `/affiliate-disclosure` zeigte sie öffentlich als „in Vorbereitung“. Ein Test hält das Register jetzt frei von `planned`-Einträgen.
-- **Neu:** Bremer Gewürzhandel (AWIN-ID 128963, `bremer-gewuerzhandel.de`), Status `applied`. Zusage laut Uwe, im AWIN-Konto noch nicht gegengeprüft. Bei der Anmeldung zeigte AWIN 10 %, im Konto steht keine Zahl: Satz, Cookie und Terms vor dem Start im Programmprofil klären.
+- **Neu:** Bremer Gewürzhandel (AWIN-ID 128963, `bremer-gewuerzhandel.de`), Status `applied`. Im AWIN-Konto belegt (12.10.2026): zugelassen seit 12.10., Provision 10 %, Cookie 30 Tage, Autobestätigung 30 Tage, Vertrieb nur Deutschland, Produktfeed und 23 Werbemittel vorhanden. Die Programm-AGB zeigen im Konto keinen eigenen Text.

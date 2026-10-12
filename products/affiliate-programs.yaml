@@ -92,14 +92,14 @@
   name: "Bremer Gewürzhandel"
   network: "AWIN"
   providers: [bremer-gewuerzhandel]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 30 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.bremer-gewuerzhandel.de/"
   focus: "Gewürze und Kräuter, Öle, Essige, Senf, Honig, Tee, Geschenke"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 128963. Zugelassen laut Uwe (12.10.2026); die Zusage im AWIN-Konto ist noch nicht gegengeprüft. Bei der Anmeldung zeigte AWIN 10 %, im Konto steht keine Zahl: Satz, Cookie-Dauer und Terms vor dem Start im Programmprofil klären. Gutscheincodes laut öffentlicher Programmangabe nur über AWIN (nicht im Konto belegt). Vorschlag, noch nicht entschieden: Gewürze und Rubs in Rezepten, Geschenke-Ratgeber."
+  note: "AWIN-ID 128963. Zugelassen seit 12.10.2026 (im AWIN-Konto belegt). Provision 10,00 %, Cookie 30 Tage, Autobestätigung 30 Tage, Vertrieb nur Deutschland, Produktfeed mit rund 2.500 Produkten, 23 Werbemittel (22 Banner, 1 Text-Link). Programm-AGB: im Konto steht kein eigener Text. Gutscheincodes laut öffentlicher Programmangabe nur über AWIN. Vorschlag, noch nicht entschieden: Gewürze und Rubs in Rezepten, Geschenke-Ratgeber."
   disclosureNote: "Kaufst du über einen Link zum Bremer Gewürzhandel, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 # ── Webgains (Konto seit 21.09.2026) ──────────────────────────────────────────
