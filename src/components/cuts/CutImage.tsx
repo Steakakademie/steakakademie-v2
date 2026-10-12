@@ -29,7 +29,8 @@ interface CutImageProps {
  * überlagert es den Platzhalter automatisch.
  */
 export default function CutImage({ src, alt, label, className = '', accent = '#C8882A', fit = 'contain', ai = false }: CutImageProps) {
-  const [failed, setFailed] = useState(false);
+  // Leerer src = bewusst kein Foto: Platzhalter schon im Server-HTML, kein <img> mit 404.
+  const [failed, setFailed] = useState(!src);
   /** Seitenverhaeltnis des geladenen Fotos (Breite/Hoehe), erst nach onLoad bekannt. */
   const [ratio, setRatio] = useState<number | null>(null);
 

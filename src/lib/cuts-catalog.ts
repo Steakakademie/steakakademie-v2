@@ -70,7 +70,8 @@ export interface Cut {
   price: number; // Preisniveau 1 (günstig) – 5 (Premium)
   occasions: Occasion[]; // wofür eignet sich der Cut
   meatTypeMatch: string[]; // Substrings → Mapping auf Rezept-`meatType` (lowercase)
-  image: string; // /images/cuts/<slug>.jpg
+  /** /images/cuts/<slug>.jpg — '' = es gibt kein Foto, die UI zeigt den Platzhalter (kein <img>, kein 404). */
+  image: string;
   visualBrief: string; // EN-Briefing für die FLUX-Bildgenerierung
   hasGuide?: boolean; // true = es gibt eine ausführliche /cuts/<slug>-Seite
   /**
@@ -538,7 +539,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['grill-indirekt', 'smoker', 'grill-direkt'],
     level: 3, price: 3, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['tri-tip', 'tri tip', 'bürgermeisterstück'],
-    image: '/images/cuts/tri-tip.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (tri-tip.jpg im Juli 2026 entfernt)
     visualBrief: 'a whole triangular tri-tip roast, a boomerang-shaped lean red muscle with a thin fat layer, raw',
     hasGuide: false,
   },
@@ -601,7 +602,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['schmoren', 'ofen'],
     level: 2, price: 1, occasions: ['familie', 'meal-prep'],
     meatTypeMatch: ['unterschale', 'sauerbraten', 'silverside'],
-    image: '/images/cuts/unterschale.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (unterschale.jpg im Juli 2026 entfernt)
     visualBrief: 'a large lean silverside / bottom round beef roast with a silvery membrane on the outside, raw',
   },
   {
@@ -807,7 +808,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['grill-direkt', 'pfanne'],
     level: 3, price: 3, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['bavette', 'flap'],
-    image: '/images/cuts/bavette.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (bavette.jpg im Juli 2026 entfernt)
     visualBrief: 'a bavette / flap steak, a loose coarse-grained flat beef muscle with open fibers, raw',
   },
   {
@@ -847,7 +848,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['grill-direkt', 'pfanne'],
     level: 3, price: 3, occasions: ['familie'],
     meatTypeMatch: ['inside skirt', 'kronfleisch'],
-    image: '/images/cuts/inside-skirt.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (inside-skirt.jpg im Juli 2026 entfernt)
     visualBrief: 'an inside skirt steak, a thin long flat beef muscle with visible grain, raw',
   },
   {
@@ -972,7 +973,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['smoker'],
     level: 5, price: 3, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['brisket point', 'burnt ends'],
-    image: '/images/cuts/brisket-point.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (brisket-point.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw beef brisket point, a thick fatty marbled muscle with heavy intramuscular fat, raw',
   },
 
@@ -1014,7 +1015,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['schmoren'],
     level: 2, price: 2, occasions: ['familie', 'gaeste'],
     meatTypeMatch: ['ochsenschwanz', 'oxtail'],
-    image: '/images/cuts/ochsenschwanz.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (ochsenschwanz.jpg im Juli 2026 entfernt)
     visualBrief: 'raw oxtail segments, round cross-cut tail pieces with a bone in the center surrounded by marbled meat, on a board',
   },
   {
@@ -1034,7 +1035,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['schmoren', 'sous-vide'],
     level: 3, price: 2, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['ochsenbacke', 'rinderbacke', 'beef cheek', 'carrillera'],
-    image: '/images/cuts/ochsenbacke.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (ochsenbacke.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw beef cheek, a round marbled muscle with heavy connective tissue and a silverskin, raw',
   },
   {
@@ -1054,7 +1055,7 @@ export const BEEF_CUTS: Cut[] = [
     methods: ['ofen', 'grill-direkt'],
     level: 1, price: 1, occasions: ['gaeste', 'solo'],
     meatTypeMatch: ['markknochen', 'marrow', 'beinmark'],
-    image: '/images/cuts/markknochen.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (markknochen.jpg im Juli 2026 entfernt)
     visualBrief: 'raw beef marrow bones cut lengthwise exposing the soft white marrow inside the bone, on a board',
   },
 ];
@@ -1276,7 +1277,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['pfanne', 'grill-direkt', 'sous-vide'],
     level: 2, price: 3, occasions: ['date', 'solo', 'familie'],
     meatTypeMatch: ['schweinefilet', 'lungenbraten', 'schweinelende', 'pork tenderloin'],
-    image: '/images/cuts/schweinefilet.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (schweinefilet.jpg im Juli 2026 entfernt)
     visualBrief: 'a whole raw pork tenderloin, a long slender very lean pale-pink muscle, raw',
   },
   {
@@ -1317,7 +1318,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['ofen', 'pfanne', 'grill-indirekt'],
     level: 1, price: 2, occasions: ['familie', 'meal-prep'],
     meatTypeMatch: ['kasseler', 'kassler'],
-    image: '/images/cuts/kasseler.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (kasseler.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw cured smoked pork loin (kasseler), pink-cured loin meat with a fat edge, raw',
   },
 
@@ -1443,7 +1444,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['smoker', 'grill-indirekt'],
     level: 3, price: 3, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['baby back', 'loin ribs', 'kotelettrippchen', 'schälrippchen'],
-    image: '/images/cuts/baby-back-ribs.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (baby-back-ribs.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw rack of baby back pork ribs, short curved bones with pink meat, raw',
   },
   {
@@ -1545,7 +1546,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['pfanne'],
     level: 1, price: 1, occasions: ['familie', 'solo'],
     meatTypeMatch: ['schnitzel'],
-    image: '/images/cuts/schweineschnitzel.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (schweineschnitzel.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw thin flattened pork schnitzel cutlet, a pale-pink lean slice, raw',
   },
   {
@@ -1587,7 +1588,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['ofen', 'grill-indirekt', 'schmoren'],
     level: 3, price: 1, occasions: ['gaeste', 'familie'],
     meatTypeMatch: ['haxe', 'stelze', 'pork knuckle'],
-    image: '/images/cuts/haxe.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (haxe.jpg im Juli 2026 entfernt)
     visualBrief: 'a whole raw pork knuckle (hock) with scored skin on the bone, pink meat, raw',
   },
   {
@@ -1607,7 +1608,7 @@ export const PORK_CUTS: Cut[] = [
     methods: ['schmoren'],
     level: 2, price: 1, occasions: ['familie'],
     meatTypeMatch: ['eisbein'],
-    image: '/images/cuts/eisbein.jpg',
+    image: '', // kein Foto: Platzhalter statt 404 (eisbein.jpg im Juli 2026 entfernt)
     visualBrief: 'a raw cured pork hock (eisbein), pink-cured meat on the bone with skin, raw',
   },
 
