@@ -313,14 +313,14 @@ export default function ArtikelDetailPage(props: Props) {
                 <h2 className="font-serif text-2xl font-bold text-text-primary mb-6 pb-3 border-b border-border-subtle">
                   Häufige Fragen
                 </h2>
-                <dl className="space-y-5">
+                <div className="space-y-5">
                   {faqItems.map((item) => (
                     <div key={item.question} className="pb-5 border-b border-border-subtle/60">
-                      <dt className="font-sans font-bold text-text-primary mb-2">{item.question}</dt>
-                      <dd className="font-body text-text-secondary leading-relaxed">{item.answer}</dd>
+                      <h3 className="font-sans font-bold text-text-primary mb-2">{item.question}</h3>
+                      <p className="font-body text-text-secondary leading-relaxed">{item.answer}</p>
                     </div>
                   ))}
-                </dl>
+                </div>
               </section>
             )}
 
