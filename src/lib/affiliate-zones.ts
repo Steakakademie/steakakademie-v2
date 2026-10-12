@@ -21,9 +21,9 @@ export interface MethodAffiliateZones {
   footer?: { title?: string; productIds: string[] };
 }
 
-// Hinweis: 360°-BBQ-Programm noch „planned" → Hero nutzt vorerst Amazon-Grills
-// (provider amazon, aktiv). Sobald 360° BBQ live ist, Hero-productId auf das
-// entsprechende 360°-Produkt umstellen (höhere Marge, MD-Strategie).
+// Hinweis: Hero nutzt vorerst Amazon-Grills (provider amazon, aktiv). Sobald Santos
+// Grills (AWIN) live ist, Hero-productId auf das passende Santos-Produkt umstellen
+// (höhere Marge) — Ziel-URLs je Gerät kommen aus dem AWIN-Backend.
 export const METHOD_ZONES: Record<string, MethodAffiliateZones> = {
   'reverse-sear': {
     hero: {

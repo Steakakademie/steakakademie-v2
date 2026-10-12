@@ -238,7 +238,7 @@ komponenten:
     pruefung: "IP-Anonymisierung + Widerspruch bei Marketing/Affiliate (Google Ads, AWIN); Programme benannt"
     rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
     status: ok
-    befund: "11.10.2026: Affiliate-Programme in DSE Abschnitt 13 (Amazon aktiv; AWIN: Santos, BOS FOOD, SharkNinja, Burghardt; Webgains: vineshop24 — beworben) + /affiliate-disclosure. Kennzeichnung „Anzeige“ am Link; keine Netzwerk-Skripte eingebunden; AWIN-Datenschutzerklärung verlinkt (DSGVO-Annex 2.5.4)."
+    befund: "11.10.2026: Affiliate-Programme in DSE Abschnitt 13 (Amazon aktiv; AWIN: Santos, BOS FOOD, SharkNinja, Burghardt, Bremer Gewürzhandel; Webgains: vineshop24 — beworben) + /affiliate-disclosure. Kennzeichnung „Anzeige“ am Link; keine Netzwerk-Skripte eingebunden; AWIN-Datenschutzerklärung verlinkt (DSGVO-Annex 2.5.4)."
     monitor: "Beim Einbinden eines Netzwerk-Skripts/Widgets (AWIN MasterTag, Webgains, Amazon-Widgets): Consent-Kategorie Pflicht — legal-guard meldet die Hosts."
 
   - id: google-fonts-selfhosted

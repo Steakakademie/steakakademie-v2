@@ -16,14 +16,11 @@ export type AffiliateProvider =
   | 'ankerkraut'
   | 'albers'
   | 'meater-direct'
-  | 'dreisechzig-bbq'
-  | 'grill-experte'
-  | 'banggood'
-  | 'burnhard'
   // AWIN, zugelassen Oktober 2026, noch nicht live (products/affiliate-programs.yaml)
   | 'bos-food'
   | 'sharkninja'
   | 'burghardt'
+  | 'bremer-gewuerzhandel'
   // Webgains, beigetreten (Stand 10.10.2026), noch nicht live
   | 'vineshop24'
   | 'other';
