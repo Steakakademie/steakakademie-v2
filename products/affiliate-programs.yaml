@@ -43,7 +43,7 @@
   applyUrl: "https://www.santosgrills.de/"
   focus: "Grills (Gas, Kohle, Oberhitze) — Fachhändler, hoher Warenkorb"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 32287. Zugelassen 05.10.2026. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
+  note: "AWIN-ID 32287. Zugelassen 05.10.2026. AGB gelesen 12.10.2026: Santos-Produktbilder, Logos und Texte nur mit vorheriger schriftlicher Zustimmung von Santos; nur freigegebene Gutscheincodes; Links unverändert wie bereitgestellt, Referrer nicht verschleiern; alle werbenden Seiten gegenüber Santos offenlegen; keine Paid-Search-Werbung; Cross-Sales nicht vergütet. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
   disclosureNote: "Kaufst du über einen Santos-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: bos-food
@@ -57,7 +57,7 @@
   applyUrl: "https://www.bosfood.de/"
   focus: "Delikatessen und Spezialitäten — vorgesehen: Trüffel, Öle, Kaviar u. a."
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Commission Manager: Default 3 % (B2B), B2C 10 % — ob Käufe als B2C gewertet werden, zeigt erst der erste Sale. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
+  note: "AWIN-ID 19712. Zugelassen 02.10.2026. AGB gelesen 12.10.2026: nur Werbemittel von AWIN (Logo und weitere Grafiken vorab absprechen); Produktdaten nur auf der in AWIN hinterlegten Website, nicht weitergeben; nur zugeordnete Gutscheincodes; Name im redaktionellen Text erlaubt; einige Produkte nur für Gastro/Großhandel (im Shop gekennzeichnet). Commission Manager: Default 3 % (B2B), B2C 10 % — ob Käufe als B2C gewertet werden, zeigt erst der erste Sale. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
   disclosureNote: "Kaufst du über einen BOS-FOOD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: sharkninja
@@ -71,7 +71,7 @@
   applyUrl: "https://www.sharkninja.de/"
   focus: "Ninja-Geräte (Woodfire Outdoor-Grill/Smoker, Küchenmaschinen)"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19810. Zugelassen 09.10.2026. Nur für einzelne Geräte (Ninja Woodfire, Küchenmaschinen-Übersicht)."
+  note: "AWIN-ID 19810. Zugelassen 09.10.2026. AGB gelesen 12.10.2026: keine bezahlte Suche, kein Google Shopping; nur Rabattcodes aus AWIN (Meine Aktionen); Gegenprüfung per Last-Click in Google Analytics, Käufe mit fremdem Code oder anderem Kanal werden storniert. Nur für einzelne Geräte (Ninja Woodfire, Küchenmaschinen-Übersicht)."
   disclosureNote: "Kaufst du über einen SharkNinja-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: burghardt
@@ -85,7 +85,7 @@
   applyUrl: "https://burghardt-delicious.com/"
   focus: "Feinkost, Probiersets, Geschenke"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 115505. Zugelassen 06.10.2026. Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
+  note: "AWIN-ID 115505. Zugelassen 06.10.2026. AGB gelesen 12.10.2026: KEINE Werbung für Produkte mit Altersfreigabe (Wein im Sortiment, deshalb keine Wein-/Alkohol-Links); nur offiziell bereitgestelltes Bildmaterial; Social-Beiträge als Werbung kennzeichnen; E-Mail-Werbung ggf. nur mit schriftlicher Freigabe (Satz im Konto abgeschnitten, bei Burghardt klären). Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
   disclosureNote: "Kaufst du über einen Burghardt-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: bremer-gewuerzhandel
