@@ -12,9 +12,6 @@ const PROVIDER_LABELS: Record<string, string> = {
   ankerkraut: 'Ankerkraut',
   albers: 'Albers Food',
   'meater-direct': 'MEATER Shop',
-  'dreisechzig-bbq': '360° BBQ',
-  'grill-experte': 'Grill-Experte',
-  banggood: 'Banggood',
   other: 'Anbieter',
 };
 

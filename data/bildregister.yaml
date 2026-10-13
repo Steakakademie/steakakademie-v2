@@ -797,3 +797,10 @@ bilder:
     erworben_am: 2026-10-13
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung (PR #404) durch eine Echtfoto-Collage, nur Zuschnitt und Kompression, keine generative Bearbeitung. Links Rinderschulter auf dem Kugelgrill (Tricia Timney), rechts laut Unsplash-Seite aufgeschnittenes Brisket (Israel Albornoz, La Grange Smokehouse), dient als Vergleichsbild. Keine Gesichter und keine Logos im Bild erkennbar (nur Arm und Handschuhe der Person rechts). imageAI im MDX-Frontmatter auf false gesetzt, imagePrompt entfernt.
+  images/rezepte/ciger-sis-tuerkisch.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/ciger-sis-tuerkisch.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-12
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
