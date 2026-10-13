@@ -787,6 +787,16 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-11
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/smoked-chuck-roast.jpg:
+    status: lizenz
+    quelle: "Unsplash-Collage aus 2 Fotos (IDs Cz6ys4_25W0 + VnpJ5_m-2mQ)"
+    urheber: "Tricia Timney (@triciamchone) ; Israel Albornoz (@israelalbornoz)"
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: "https://unsplash.com/photos/a-piece-of-meat-on-a-grill-Cz6ys4_25W0 ; https://unsplash.com/photos/person-holding-raw-meat-during-daytime-VnpJ5_m-2mQ"
+    erworben_am: 2026-10-13
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung (PR #404) durch eine Echtfoto-Collage, nur Zuschnitt und Kompression, keine generative Bearbeitung. Links Rinderschulter auf dem Kugelgrill (Tricia Timney), rechts laut Unsplash-Seite aufgeschnittenes Brisket (Israel Albornoz, La Grange Smokehouse), dient als Vergleichsbild. Keine Gesichter und keine Logos im Bild erkennbar (nur Arm und Handschuhe der Person rechts). imageAI im MDX-Frontmatter auf false gesetzt, imagePrompt entfernt.
   images/rezepte/ciger-sis-tuerkisch.jpg:
     status: ki
     quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/ciger-sis-tuerkisch.mdx, scripts/recipe-images.mjs
