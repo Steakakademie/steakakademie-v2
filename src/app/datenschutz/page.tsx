@@ -1220,7 +1220,7 @@ export default function DatenschutzPage() {
                 38 avenue John F. Kennedy, L-1855 Luxemburg). Als Amazon-Partner verdienen wir an
                 qualifizierten Verkäufen. Beworben, aber noch nicht freigeschaltet, sind
                 Partnerprogramme über das Netzwerk <strong>AWIN</strong> (AWIN AG, Berlin — für
-                Santos Grills, BOS FOOD, SharkNinja und Burghardt Delicious) und über das Netzwerk{' '}
+                Santos Grills, BOS FOOD, SharkNinja, Burghardt Delicious und Bremer Gewürzhandel) und über das Netzwerk{' '}
                 <strong>Webgains</strong> (Webgains GmbH, Nürnberg — für vineshop24). Welche
                 Programme gerade aktiv sind, steht aktuell in unserer{' '}
                 <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.

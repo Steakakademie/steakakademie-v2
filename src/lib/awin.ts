@@ -23,6 +23,7 @@ export const AWIN_ADVERTISER = {
   'bos-food': { id: 19712, name: 'BOS FOOD DE', domain: 'bosfood.de' },
   sharkninja: { id: 19810, name: 'SharkNinja DE', domain: 'sharkninja.de' },
   burghardt: { id: 115505, name: 'Burghardt Delicious', domain: 'burghardt-delicious.com' },
+  'bremer-gewuerzhandel': { id: 128963, name: 'Bremer Gewürzhandel', domain: 'bremer-gewuerzhandel.de' },
 } as const;
 
 export type AwinAdvertiser = keyof typeof AWIN_ADVERTISER;
