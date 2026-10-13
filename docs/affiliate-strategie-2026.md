@@ -174,3 +174,8 @@ Umgesetzt (PR „AWIN-Vorbereitung"); **alle neuen Links sind aus**:
 3. Steht bis dahin ein Fleischhändler fest: `PRIMARY` in `src/lib/cut-affiliate.ts` setzen (Händler, Link-Aufbau, Status `'active'`). Ohne Händler bleibt der Amazon-Fallback.
 4. Die Platzierungen der Tabelle „Platzierung" setzen (Marktübersichten, Geschenke-Ratgeber, Wissens-Brief) — jeder Link über `awinLink` und die eigene Weiterleitung.
 5. `/affiliate-disclosure` prüfen: die Programme stehen oben statt unter „in Vorbereitung".
+
+## Stand 12.10.2026 — Register bereinigt, Bremer Gewürzhandel ergänzt
+
+- **Entfernt:** 360° BBQ, Grill-Experte, Banggood, BURNHARD (seit 02.06. ungeprüft, keine Zusage; BURNHARD von Uwe am 25.09. bewusst nicht aufgenommen). Grund: `/affiliate-disclosure` zeigte sie öffentlich als „in Vorbereitung“. Ein Test hält das Register jetzt frei von `planned`-Einträgen.
+- **Neu:** Bremer Gewürzhandel (AWIN-ID 128963, `bremer-gewuerzhandel.de`), Status `applied`. Im AWIN-Konto belegt (12.10.2026): zugelassen seit 12.10., Provision 10 %, Cookie 30 Tage, Autobestätigung 30 Tage, Vertrieb nur Deutschland, Produktfeed und 23 Werbemittel vorhanden. Die Programm-AGB zeigen im Konto keinen eigenen Text.

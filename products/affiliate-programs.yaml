@@ -5,7 +5,10 @@
 # status: planned (geplant) | applied (beworben, Freigabe ausstehend) | active (live)
 # Strategie: hochpreisige Grills über deutsche Fachhändler (hoher €-Betrag/Sale)
 #            + günstige Gadgets optional über Banggood.
-# Letzte Prüfung: 2026-06-02 (Amazon, 360° BBQ, Grill-Experte, Banggood, BURNHARD) · AWIN-Einträge ergänzt 2026-10-10
+# Bereinigt 2026-10-12: 360° BBQ, Grill-Experte, Banggood und BURNHARD entfernt (seit 02.06.2026 ungeprüft, keine Zusage;
+#   BURNHARD von Uwe am 25.09.2026 bewusst nicht aufgenommen). /affiliate-disclosure zeigt jedes Programm, das nicht `active`
+#   ist, öffentlich als „in Vorbereitung“ — hier steht deshalb nur, wofür eine Zusage oder Bewerbung vorliegt.
+# AWIN-Einträge ergänzt 2026-10-10, Bremer Gewürzhandel 2026-10-12
 
 - id: amazon
   name: "Amazon Partnerprogramm"
@@ -20,63 +23,6 @@
   channels: { blog: true, socialOrganic: true, paidAds: false }
   disclosureNote: "Als Amazon-Partner verdiene ich an qualifizierten Verkäufen."
 
-- id: dreisechzig-bbq
-  name: "360° BBQ"
-  # TradeTracker-Konto am 08.06.2026 nur AKTIVIERT (E-Mail bestätigt) — TT-Freischaltung steht noch aus.
-  # Erst nach Freischaltung: Kampagne 360° BBQ bewerben → bei Annahme Deeplink holen → status: active + Links.
-  network: "AWIN / TradeTracker (TT-Konto aktiviert 08.06.2026, Freischaltung ausstehend)"
-  providers: [dreisechzig-bbq]
-  commission: "bis 8 %"
-  cookie: "30 Tage"
-  avgCartEur: 780
-  status: planned
-  applyUrl: "https://www.360grad-bbq.de/"
-  focus: "Premium-Vollsortiment: Weber, Napoleon, Broil King, Big Green Egg"
-  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "Priorität — 8 % von ~780 € Warenkorb = ~62 €/Sale, geringe Stornoquote."
-  disclosureNote: "Kaufst du über einen 360°-BBQ-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
-
-- id: grill-experte
-  name: "Grill-Experte.de"
-  network: "TradeTracker"
-  providers: [grill-experte]
-  commission: "bis 8 %"
-  cookie: "im Netzwerk prüfen"
-  avgCartEur: null
-  status: planned
-  applyUrl: "https://www.grill-experte.de/"
-  focus: "Räuchern, Dutch Oven, große Gewürz- und Saucenauswahl"
-  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  disclosureNote: "Kaufst du über einen Grill-Experte-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
-
-- id: banggood
-  name: "Banggood"
-  network: "Banggood (eigenes Programm)"
-  providers: [banggood]
-  commission: "~4–6 % Basis, bis 25 % (kategorieabhängig)"
-  cookie: "30 Tage"
-  avgCartEur: null
-  status: planned
-  applyUrl: "https://www.banggood.com/affiliate/"
-  focus: "Günstige Gadgets: Funk-Thermometer, Sous-vide-Stick, BBQ-Flambierbrenner"
-  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "Optionales Zusatzprogramm. Keine Mindestauszahlung, monatlich. Retoure zieht Provision ab."
-  disclosureNote: "Kaufst du über einen Banggood-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
-
-- id: burnhard
-  name: "BURNHARD"
-  network: "retailAds"
-  providers: [burnhard]
-  commission: "6 % Basis, +2 % erste 2 Monate, Tiers bis 8 % (Silver/Gold/Platinum)"
-  cookie: "im Netzwerk prüfen (nicht öffentlich ausgewiesen)"
-  avgCartEur: null
-  status: planned
-  applyUrl: "https://www.burnhard.com/de/affiliate-programm"
-  focus: "Eigene BBQ-Marke — Gasgrills Mittelklasse (~300–1.500 €), Kohlegrills, Zubehör"
-  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "Content-Publisher akzeptiert (06.06.2026 geprüft). Ergänzt Premium (SANTOS/Grillfürst) nach unten. Potenzieller Sponsor für 'Rezept des Monats'-Challenge. Kontakt: affiliates@burnhard.com."
-  disclosureNote: "Kaufst du über einen BURNHARD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
-
 # ── AWIN (Publisher-ID 3102406, Konto seit 22.09.2026) ────────────────────────
 # Zugelassen laut Postfach, Stand 09.10.2026 (docs/affiliate-strategie-2026.md).
 # status `applied` = zugelassen, NICHT live: Links gehen erst ab 01.11.2026 scharf
@@ -90,57 +36,71 @@
   name: "Santos Grills"
   network: "AWIN"
   providers: [santosgrills]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % Santos-Eigenmarke, 5 % übrige Marken (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 60 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.santosgrills.de/"
   focus: "Grills (Gas, Kohle, Oberhitze) — Fachhändler, hoher Warenkorb"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 32287. Zugelassen 05.10.2026. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
+  note: "AWIN-ID 32287. Zugelassen 05.10.2026. AGB gelesen 12.10.2026: Santos-Produktbilder, Logos und Texte nur mit vorheriger schriftlicher Zustimmung von Santos; nur freigegebene Gutscheincodes; Links unverändert wie bereitgestellt, Referrer nicht verschleiern; alle werbenden Seiten gegenüber Santos offenlegen; keine Paid-Search-Werbung; Cross-Sales nicht vergütet. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
   disclosureNote: "Kaufst du über einen Santos-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: bos-food
   name: "BOS FOOD"
   network: "AWIN"
   providers: [bos-food]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % Endkunden (B2C), 3 % B2B (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 60 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.bosfood.de/"
   focus: "Delikatessen und Spezialitäten — vorgesehen: Trüffel, Öle, Kaviar u. a."
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19712. Zugelassen 02.10.2026. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
+  note: "AWIN-ID 19712. Zugelassen 02.10.2026. AGB gelesen 12.10.2026: nur Werbemittel von AWIN (Logo und weitere Grafiken vorab absprechen); Produktdaten nur auf der in AWIN hinterlegten Website, nicht weitergeben; nur zugeordnete Gutscheincodes; Name im redaktionellen Text erlaubt; einige Produkte nur für Gastro/Großhandel (im Shop gekennzeichnet). Commission Manager: Default 3 % (B2B), B2C 10 % — ob Käufe als B2C gewertet werden, zeigt erst der erste Sale. Vorgesehen für Spezialitäten (Uwe, 10.10.2026), NICHT als Fleischpartner: Der Shop führt auch Fleisch, die Fleisch-Brücke (src/lib/cut-affiliate.ts) bleibt offen, bis ein Händler feststeht (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an)."
   disclosureNote: "Kaufst du über einen BOS-FOOD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: sharkninja
   name: "SharkNinja"
   network: "AWIN"
   providers: [sharkninja]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "5 %; Newsletter-Code 1 %, Zubehör/Ersatzteile/Refurbished 0 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage"
   avgCartEur: null
   status: applied
   applyUrl: "https://www.sharkninja.de/"
   focus: "Ninja-Geräte (Woodfire Outdoor-Grill/Smoker, Küchenmaschinen)"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 19810. Zugelassen 09.10.2026. Nur für einzelne Geräte (Ninja Woodfire, Küchenmaschinen-Übersicht)."
+  note: "AWIN-ID 19810. Zugelassen 09.10.2026. AGB gelesen 12.10.2026: keine bezahlte Suche, kein Google Shopping; nur Rabattcodes aus AWIN (Meine Aktionen); Gegenprüfung per Last-Click in Google Analytics, Käufe mit fremdem Code oder anderem Kanal werden storniert. Nur für einzelne Geräte (Ninja Woodfire, Küchenmaschinen-Übersicht)."
   disclosureNote: "Kaufst du über einen SharkNinja-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: burghardt
   name: "Burghardt Delicious"
   network: "AWIN"
   providers: [burghardt]
-  commission: "im AWIN-Profil nachsehen"
-  cookie: "im AWIN-Profil nachsehen"
+  commission: "10 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 63 Tage)"
   avgCartEur: null
   status: applied
   applyUrl: "https://burghardt-delicious.com/"
   focus: "Feinkost, Probiersets, Geschenke"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 115505. Zugelassen 06.10.2026. Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
+  note: "AWIN-ID 115505. Zugelassen 06.10.2026. AGB gelesen 12.10.2026: KEINE Werbung für Produkte mit Altersfreigabe (Wein im Sortiment, deshalb keine Wein-/Alkohol-Links); nur offiziell bereitgestelltes Bildmaterial; Social-Beiträge als Werbung kennzeichnen; E-Mail-Werbung ggf. nur mit schriftlicher Freigabe (Satz im Konto abgeschnitten, bei Burghardt klären). Geschenke-Ratgeber und Wissens-Brief im Advent; höhere Provision für feste Platzierungen laut Advertiser (Black Week 23.–30.11., Nikolaus 01.–02.12.)."
   disclosureNote: "Kaufst du über einen Burghardt-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+- id: bremer-gewuerzhandel
+  name: "Bremer Gewürzhandel"
+  network: "AWIN"
+  providers: [bremer-gewuerzhandel]
+  commission: "10 % (Commission Manager, 12.10.2026)"
+  cookie: "30 Tage (Autobestätigung 30 Tage)"
+  avgCartEur: null
+  status: applied
+  applyUrl: "https://www.bremer-gewuerzhandel.de/"
+  focus: "Gewürze und Kräuter, Öle, Essige, Senf, Honig, Tee, Geschenke"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "AWIN-ID 128963. Zugelassen seit 12.10.2026 (im AWIN-Konto belegt). Provision 10,00 %, Cookie 30 Tage, Autobestätigung 30 Tage, Vertrieb nur Deutschland, Produktfeed mit rund 2.500 Produkten, 23 Werbemittel (22 Banner, 1 Text-Link). Programm-AGB: im Konto steht kein eigener Text. Gutscheincodes laut öffentlicher Programmangabe nur über AWIN. Vorschlag, noch nicht entschieden: Gewürze und Rubs in Rezepten, Geschenke-Ratgeber."
+  disclosureNote: "Kaufst du über einen Link zum Bremer Gewürzhandel, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 # ── Webgains (Konto seit 21.09.2026) ──────────────────────────────────────────
 # Beigetreten laut Webgains-Oberfläche, Stand 10.10.2026 (Screenshot Uwe): als einziges

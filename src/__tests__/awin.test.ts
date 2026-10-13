@@ -64,3 +64,29 @@ describe('Fleischbrücke: noch kein Partner', () => {
     expect(bos?.status).toBe('applied');
   });
 });
+
+describe('Programmregister: nur belegte Programme (12.10.2026)', () => {
+  it('kein Eintrag mit Status „planned“ — /affiliate-disclosure zeigt alles, was nicht aktiv ist, öffentlich als „in Vorbereitung“', () => {
+    for (const p of getAffiliatePrograms()) expect(p.status, p.id).not.toBe('planned');
+  });
+
+  it('360° BBQ, Grill-Experte, Banggood und BURNHARD sind raus (ungeprüft seit 02.06.2026, BURNHARD von Uwe abgelehnt)', () => {
+    const namen = getAffiliatePrograms().map((p) => `${p.id} ${p.name}`).join(' ');
+    expect(namen).not.toMatch(/dreisechzig|360|grill-experte|banggood|burnhard/i);
+  });
+});
+
+describe('Bremer Gewürzhandel (AWIN 128963)', () => {
+  it('Deeplink trägt Advertiser-ID und Publisher-ID, Ziel nur auf der Shop-Domain', () => {
+    const l = new URL(awinLink('bremer-gewuerzhandel', 'https://www.bremer-gewuerzhandel.de/', 'rezept-rub'));
+    expect(l.searchParams.get('awinmid')).toBe('128963');
+    expect(l.searchParams.get('awinaffid')).toBe(AWIN_PUBLISHER_ID);
+    expect(() => awinLink('bremer-gewuerzhandel', 'https://www.bosfood.de/')).toThrow(/gehört nicht/);
+  });
+
+  it('steht im Register als „applied“ — nicht live, bis Uwe auf „active“ stellt', () => {
+    const p = getAffiliatePrograms().find((x) => x.id === 'bremer-gewuerzhandel');
+    expect(p?.status).toBe('applied');
+    expect(p?.network).toBe('AWIN');
+  });
+});
