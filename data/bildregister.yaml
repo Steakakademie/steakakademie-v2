@@ -804,3 +804,13 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-12
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/patlican-kebab.jpg:
+    status: lizenz
+    quelle: "Pexels-Collage aus 2 Fotos (IDs 5191846 + 5191850)"
+    urheber: Shameel Mukkath
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: "https://www.pexels.com/photo/kebab-in-close-up-photography-5191846/ ; https://www.pexels.com/photo/kebab-on-flatbread-5191850/"
+    erworben_am: 2026-10-14
+    namensnennung: false
+    hinweis: Ersetzt die fal.ai-KI-Generierung (PR #405, Bild-Motiv-Check meldete "unpassend", keine Aubergine im Bild) durch eine Echtfoto-Collage (2 Pexels-Aufnahmen desselben Fotografen, Koefte im Wechsel mit Auberginenstuecken am Spiess, keine Personen, keine Marken). Nur Skalierung und Kompression, keine generative Bearbeitung. imageAI im MDX-Frontmatter auf false gesetzt, imagePrompt entfernt.
