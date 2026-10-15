@@ -34,7 +34,7 @@ import { existsSync, appendFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
-import { schwerImText } from './lib/beschaffbarkeit.mjs'
+import { schwerImText, SELBST_IM_TITEL } from './lib/beschaffbarkeit.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
@@ -137,9 +137,11 @@ function pruefe(seed, belegt) {
   const fehler = []
   if (!STILE.includes(seed.stil)) fehler.push(`Stil ungueltig: ${seed.stil}`)
   // Beschaffbarkeit (Regel 11): schon im Seed abfangen, bevor ein Rezept daraus entsteht.
-  const schwer = schwerImText(`${seed.title} ${seed.meatType} ${seed.concept}`)
+  // Selbstmach-Seeds (Titel sagt „selbst wursten" o. ä.) duerfen eine sonst nicht kaufbare
+  // Regionalwurst zum Thema haben (Uwe, 15.10.2026, #406).
+  const schwer = SELBST_IM_TITEL.test(seed.title ?? '') ? [] : schwerImText(`${seed.title} ${seed.meatType} ${seed.concept}`)
   if (seed.stil === 'vertraut' && schwer.length) fehler.push(`schwer erhaeltlich fuer den deutschen Geschmack: ${schwer.join(', ')}`)
-  if (seed.stil === 'original' && schwerImText(`${seed.title} ${seed.meatType}`).length) fehler.push(`Hauptprodukt schwer erhaeltlich: ${schwerImText(`${seed.title} ${seed.meatType}`).join(', ')}`)
+  if (seed.stil === 'original' && !SELBST_IM_TITEL.test(seed.title ?? '') && schwerImText(`${seed.title} ${seed.meatType}`).length) fehler.push(`Hauptprodukt schwer erhaeltlich: ${schwerImText(`${seed.title} ${seed.meatType}`).join(', ')}`)
   for (const f of PFLICHT) if (!seed[f]) fehler.push(`${f} fehlt`)
   if (seed.kategorie && !KATEGORIEN.has(seed.kategorie)) fehler.push(`Kategorie ungueltig: ${seed.kategorie}`)
   if (seed.difficulty && !SCHWIERIGKEIT.has(seed.difficulty)) fehler.push(`Schwierigkeit ungueltig: ${seed.difficulty}`)

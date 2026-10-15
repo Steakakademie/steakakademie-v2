@@ -9,6 +9,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
 import { ohneVerneinung, zeitFehler, zutatOhneNameFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
+import { SELBST_IM_TITEL } from './lib/beschaffbarkeit.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -403,6 +404,10 @@ describe('Beschaffbarkeit', () => {
     ['Betelblatt', ['betelblatt']],
     ['Rochenflügel', ['rochenflügel']],
     ['Binchotan-Kohle', ['binchotan']],
+    ['Texas Hot Links', ['hot links']],
+    ['Boerewors (Rinderwurst, frisch)', ['boerewors']],
+    ['Argentinische Chorizo', ['argentinische chorizo']],
+    ['Andouille', ['andouille']],
   ])('erkennt %s als schwer erhältlich', (name, erwartet) => {
     expect(schwerErhaeltlich([{ name }])).toEqual(erwartet)
   })
@@ -444,6 +449,35 @@ describe('Beschaffbarkeit', () => {
     expect(validate(zwei, SEED).join(' ')).toMatch(/Zu viele schwer erhältliche Zutaten/)
   })
 
+  it('lehnt eine gekaufte Regionalwurst als Hauptprodukt ab (PR #406)', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    d.title = 'Texas Hot Links vom Grill'
+    expect(validate(d, SEED_V).join(' ')).toMatch(/Hauptprodukt in Deutschland nicht zu kaufen: hot links/)
+  })
+
+  it('erlaubt die Regionalwurst als Selbstmach-Rezept mit Hinweis im Titel', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    d.title = 'Texas Hot Links selbst wursten — scharfe Grobwurst aus dem Smoker'
+    d.equipment = ['Fleischwolf', 'Wurstfüller', 'Smoker']
+    d.ingredients = zutaten('Schweinefleisch', 'Rindfleisch', 'Naturdarm', 'Salz', 'Cayenne')
+    expect(validate(d, SEED_V)).toEqual([])
+  })
+
+  it('verlangt bei jedem Selbstmach-Rezept den Hinweis im Titel (#406 hiess nur „Würstchen")', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    d.title = 'Hot Links Texas – Geräucherte Schweine-Rind-Würstchen'
+    d.ingredients = zutaten('Schweinefleisch', 'Rindfleisch', 'Naturdarm', 'Salz', 'Cayenne')
+    expect(validate(d, SEED_V).join(' ')).toMatch(/Hauptprodukt in Deutschland nicht zu kaufen/)
+    d.title = 'Grobe Bratwurst aus dem Smoker'
+    expect(validate(d, SEED_V).join(' ')).toMatch(/Selbstmach-Rezept .* ohne Hinweis im Titel/)
+    d.title = 'Grobe Bratwurst selbst gemacht'
+    expect(validate(d, SEED_V)).toEqual([])
+  })
+
+  it('laesst Bratwurst, Krakauer und Merguez durch', () => {
+    expect(schwerErhaeltlich([{ name: 'Rindsbratwurst' }, { name: 'Krakauer' }, { name: 'Merguez' }, { name: 'Chorizo' }])).toEqual([])
+  })
+
   it('der Gaumen-Block unterscheidet die Stile', () => {
     expect(gaumenBlock(SEED_V)).toMatch(/DEUTSCHER GESCHMACK/)
     expect(gaumenBlock(SEED)).toMatch(/NAH AM ORIGINAL/)
@@ -462,8 +496,8 @@ describe('data/rezept-seeds.json — Gaumen-Regel', () => {
     for (const s of seeds.filter(x => x.pausiert)) expect(String(s.pausiert).length).toBeGreaterThan(10)
   })
 
-  it('kein offener Seed haengt an einer schwer erhaeltlichen Zutat im Titel', () => {
-    for (const s of offen) expect(schwerErhaeltlich([{ name: `${s.title} ${s.meatType}` }])).toEqual([])
+  it('kein offener Seed haengt an einer schwer erhaeltlichen Zutat im Titel (ausser Selbstmach-Seeds)', () => {
+    for (const s of offen.filter(x => !SELBST_IM_TITEL.test(x.title))) expect(schwerErhaeltlich([{ name: `${s.title} ${s.meatType}` }])).toEqual([])
   })
 })
 
