@@ -403,6 +403,10 @@ describe('Beschaffbarkeit', () => {
     ['Betelblatt', ['betelblatt']],
     ['Rochenflügel', ['rochenflügel']],
     ['Binchotan-Kohle', ['binchotan']],
+    ['Texas Hot Links', ['hot links']],
+    ['Boerewors (Rinderwurst, frisch)', ['boerewors']],
+    ['Argentinische Chorizo', ['argentinische chorizo']],
+    ['Andouille', ['andouille']],
   ])('erkennt %s als schwer erhältlich', (name, erwartet) => {
     expect(schwerErhaeltlich([{ name }])).toEqual(erwartet)
   })
@@ -442,6 +446,17 @@ describe('Beschaffbarkeit', () => {
     expect(validate(eine, SEED)).toEqual([])
     const zwei = datensatz(KOPF, SEED); zwei.ingredients = zutaten('Hähnchen', 'Bananenblätter', 'Pandan', 'Salz', 'Öl')
     expect(validate(zwei, SEED).join(' ')).toMatch(/Zu viele schwer erhältliche Zutaten/)
+  })
+
+  it('lehnt ein Hauptprodukt ab, das es in Deutschland nicht zu kaufen gibt (PR #406)', () => {
+    // Zutaten sind Schwein, Rind, Naturdarm — erst der Titel verraet die Texas-Wurst.
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    d.title = 'Texas Hot Links — Scharfe Grobwurst aus dem Smoker'
+    expect(validate(d, SEED_V).join(' ')).toMatch(/Hauptprodukt in Deutschland nicht zu kaufen: hot links/)
+  })
+
+  it('laesst Bratwurst, Krakauer und Merguez durch', () => {
+    expect(schwerErhaeltlich([{ name: 'Rindsbratwurst' }, { name: 'Krakauer' }, { name: 'Merguez' }, { name: 'Chorizo' }])).toEqual([])
   })
 
   it('der Gaumen-Block unterscheidet die Stile', () => {

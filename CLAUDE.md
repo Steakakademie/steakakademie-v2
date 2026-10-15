@@ -689,6 +689,12 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
      Bezugsquelle „Supermarkt (+ Metzger)". `original`: höchstens eine Spezialzutat,
      mit Ersatz in der Anmerkung. Die Liste der schwer erhältlichen Zutaten steht in
      `scripts/lib/beschaffbarkeit.mjs` — Neues dort eintragen, nicht in Prompts.
+   - **Das Hauptprodukt muss zu kaufen sein (Uwe, 15.10.2026):** „Rezepte wie dieses
+     müssen ausgeschlossen werden, texanische Würstchen sind in Deutschland nicht zu
+     bekommen." Anlass PR #406 (Texas Hot Links, ungemergt geschlossen). Regionale Würste
+     ohne deutschen Handel (Hot Links, Boerewors, Andouille, argentinische Chorizo …) sind
+     kein Rezeptthema — auch nicht als „selbst wursten". Geprüft wird der Titel, nicht nur
+     die Zutatenliste: Seeds damit werden übersprungen, `validate()` lehnt den Titel ab.
    - **Durchgesetzt in Code, nicht nur im Prompt:** `validate()` lehnt ein Rezept mit
      schwer erhältlicher Zutat ab (Versuchsschleife erzeugt neu); `recipe-seeds.mjs`
      verwirft solche Seeds schon beim Nachlegen und füllt beide Stile getrennt auf.

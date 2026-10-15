@@ -15,6 +15,12 @@ export const SCHWER_ERHAELTLICH = [
   /(?:schweine|lamm|kalbs)netz|netzfett/i, /garnelenpaste|shrimp ?paste|belacan|terasi/i,
   /achiote|annatto/i, /aji amarillo|ají amarillo/i, /dend(?:ê|e)|palm(?:ö|oe)l/i,
   /fermentierte? (?:reis)?wurst/i,
+  // Regionale Würste, die es in Deutschland nicht zu kaufen gibt (Uwe, 15.10.2026, Anlass
+  // PR #406 „Texas Hot Links"). Selbst wursten ist kein Ersatz: Fleischwolf und Wurstfüller
+  // hat kaum ein Griller. Steht so eine Wurst im Titel, ist das Gericht kein Rezeptthema.
+  /\bhot[- ]?links?\b/i, /texas[- ]?(?:wurst|w(?:ü|ue)rst|sausage)|texanische[nrs]? w(?:ü|ue)rst/i,
+  /andouille/i, /\bboudin/i, /boerewors/i, /lingui(?:ç|c)a/i, /\bsai ua\b/i, /lap ?cheong/i,
+  /(?:argentinische|chorizo) (?:chorizo|criollo|parrillero)|chorizo argentino/i,
 ]
 
 /** Schwer erhältliche Begriffe in einem Text (eindeutig, kleingeschrieben). */

@@ -27,7 +27,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 import yaml from 'js-yaml'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
-import { schwerErhaeltlich } from './lib/beschaffbarkeit.mjs'
+import { schwerErhaeltlich, schwerImText } from './lib/beschaffbarkeit.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
@@ -1005,6 +1005,10 @@ function validate(data, seed) {
   // Beschaffbarkeit (Regel 11, 29.09.2026). Vertraut-Rezept: keine einzige schwer
   // erhaeltliche Zutat, Bezugsquelle nur Supermarkt/Metzger. International: hoechstens eine.
   const schwer = schwerErhaeltlich(data.ingredients)
+  // Das Hauptprodukt selbst muss zu kaufen sein — die Zutatenliste allein reicht nicht:
+  // Hot Links aus Schweinefleisch und Naturdarm bestehen jede Zutatenpruefung (PR #406).
+  const schwerTitel = schwerImText(data.title)
+  if (schwerTitel.length) errors.push(`Hauptprodukt in Deutschland nicht zu kaufen: ${schwerTitel.join(', ')}`)
   if (seedStil(seed) === 'vertraut') {
     if (schwer.length > 0) errors.push(`Schwer erhältliche Zutat(en) in einem Rezept für den deutschen Geschmack: ${schwer.join(', ')}`)
     if (!data.beschaffung) errors.push('Pflichtfeld fehlt: BESCHAFFUNG (Rezept für den deutschen Geschmack)')
@@ -1083,6 +1087,9 @@ async function main() {
         // Text im Seed) parkt ein Gericht, ohne es zu loeschen — z. B. wegen schwer
         // erhaeltlicher Zutaten. `--slug` und `--force` umgehen das bewusst.
         if (s.pausiert && !SLUG_ONLY) return false
+        // Hauptprodukt in DE nicht zu kaufen (z. B. Texas Hot Links, PR #406, 15.10.2026):
+        // gar nicht erst erzeugen — jeder Versuch wuerde an validate() scheitern.
+        if (!SLUG_ONLY && schwerImText(`${s.title} ${s.meatType}`).length) return false
         return !istErledigt(s)
       })
   // Gaumen-Rotation (Regel 11): jedes zweite Rezept trifft den deutschen Geschmack. Nur im echten
