@@ -15,6 +15,12 @@ export const SCHWER_ERHAELTLICH = [
   /(?:schweine|lamm|kalbs)netz|netzfett/i, /garnelenpaste|shrimp ?paste|belacan|terasi/i,
   /achiote|annatto/i, /aji amarillo|ají amarillo/i, /dend(?:ê|e)|palm(?:ö|oe)l/i,
   /fermentierte? (?:reis)?wurst/i,
+  // Regionale Würste, die es in Deutschland nicht zu kaufen gibt (Uwe, 15.10.2026, Anlass
+  // PR #406 „Texas Hot Links"). Als gekaufte Zutat oder Hauptprodukt gesperrt — erlaubt nur
+  // als Selbstmach-Rezept, und dann steht das im Titel (siehe hauptproduktFehler unten).
+  /\bhot[- ]?links?\b/i, /texas[- ]?(?:wurst|w(?:ü|ue)rst|sausage)|texanische[nrs]? w(?:ü|ue)rst/i,
+  /andouille/i, /\bboudin/i, /boerewors/i, /lingui(?:ç|c)a/i, /\bsai ua\b/i, /lap ?cheong/i,
+  /(?:argentinische|chorizo) (?:chorizo|criollo|parrillero)|chorizo argentino/i,
 ]
 
 /** Schwer erhältliche Begriffe in einem Text (eindeutig, kleingeschrieben). */
@@ -34,4 +40,33 @@ export function schwerErhaeltlich (zutaten = []) {
     for (const t of schwerImText(`${z?.name ?? ''} ${z?.note ?? ''}`)) treffer.add(t)
   }
   return [...treffer]
+}
+
+// Selbstmach-Rezepte (Uwe, 15.10.2026): Wurst, Bacon, Pastrami, Schinken entstehen erst in
+// der Küche. Das muss der Titel sagen — sonst sucht der Leser die Wurst im Laden (Anlass:
+// #406 hiess „Hot Links Texas – Geräucherte Schweine-Rind-Würstchen" und war ein Wurst-Rezept).
+export const SELBST_IM_TITEL = /selbst ?(?:gemacht|wursten|machen|r(?:ä|ae)uchern|p(?:ö|oe)keln|beizen)|selber ?machen|hausgemacht/i
+
+const SELBSTMACH_ZEICHEN = [
+  /fleischwolf/i, /wurstf(?:ü|ue)ller|wurstspritze/i,
+  /(?:natur|kunst|kollagen|saitling|schweine|rinder|schafs?)darm/i, /nitritp(?:ö|oe)kelsalz|p(?:ö|oe)kelsalz|curing salt|prague powder/i,
+]
+
+/** Ist das ein Rezept, dessen Hauptprodukt selbst hergestellt wird (Wurst, Gepökeltes)? */
+export function istSelbstmachRezept ({ equipment = [], ingredients = [] } = {}) {
+  const text = [...equipment, ...ingredients.map(z => `${z?.name ?? ''}`)].join(' ')
+  return SELBSTMACH_ZEICHEN.some(m => m.test(text))
+}
+
+/**
+ * Fehler zum Hauptprodukt eines Rezepts (Titel). Gesperrte Regionalwurst ist nur als
+ * Selbstmach-Rezept erlaubt; jedes Selbstmach-Rezept sagt das im Titel.
+ */
+export function hauptproduktFehler ({ title = '', equipment = [], ingredients = [] } = {}) {
+  const fehler = []
+  const selbstTitel = SELBST_IM_TITEL.test(title)
+  const schwer = schwerImText(title)
+  if (schwer.length && !selbstTitel) fehler.push(`Hauptprodukt in Deutschland nicht zu kaufen: ${schwer.join(', ')} — nur als Selbstmach-Rezept mit „selbst wursten/selbst gemacht" im Titel`)
+  else if (!selbstTitel && istSelbstmachRezept({ equipment, ingredients })) fehler.push('Selbstmach-Rezept (Fleischwolf, Darm oder Pökelsalz) ohne Hinweis im Titel — „selbst wursten", „selbst gemacht" o. ä. gehört in TITLE')
+  return fehler
 }
