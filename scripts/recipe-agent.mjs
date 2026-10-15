@@ -27,7 +27,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 import yaml from 'js-yaml'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
-import { schwerErhaeltlich, schwerImText } from './lib/beschaffbarkeit.mjs'
+import { schwerErhaeltlich, schwerImText, SELBST_IM_TITEL, hauptproduktFehler } from './lib/beschaffbarkeit.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
@@ -821,7 +821,7 @@ async function generateRecipe(seed, fehler = []) {
   const metaPrompt = `Generiere strukturierte Rezept-Metadaten für steakakademie.de.
 Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 
-TITLE: [Titel max. 70 Zeichen]
+TITLE: [Titel max. 70 Zeichen. Wird das Hauptprodukt selbst hergestellt (Wurst wolfen und füllen, Bacon/Pastrami/Schinken pökeln), sagt der Titel das: „… selbst wursten“, „… selbst gemacht“]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
 IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Nur beschreiben, was ZU SEHEN IST — auch die Menge ("a single tortilla", "only sliced beef"). NIE Verneinungen: kein "Not:", kein "no …", kein "without …". Der Bildgenerator kennt keine Verneinung und zeichnet das Genannte gerade ein. Konkret, keine Stimmung.]
@@ -1005,10 +1005,9 @@ function validate(data, seed) {
   // Beschaffbarkeit (Regel 11, 29.09.2026). Vertraut-Rezept: keine einzige schwer
   // erhaeltliche Zutat, Bezugsquelle nur Supermarkt/Metzger. International: hoechstens eine.
   const schwer = schwerErhaeltlich(data.ingredients)
-  // Das Hauptprodukt selbst muss zu kaufen sein — die Zutatenliste allein reicht nicht:
-  // Hot Links aus Schweinefleisch und Naturdarm bestehen jede Zutatenpruefung (PR #406).
-  const schwerTitel = schwerImText(data.title)
-  if (schwerTitel.length) errors.push(`Hauptprodukt in Deutschland nicht zu kaufen: ${schwerTitel.join(', ')}`)
+  // Hauptprodukt (Uwe, 15.10.2026, PR #406): nicht kaufbare Regionalwurst nur als
+  // Selbstmach-Rezept; jedes Selbstmach-Rezept sagt das im Titel.
+  errors.push(...hauptproduktFehler(data))
   if (seedStil(seed) === 'vertraut') {
     if (schwer.length > 0) errors.push(`Schwer erhältliche Zutat(en) in einem Rezept für den deutschen Geschmack: ${schwer.join(', ')}`)
     if (!data.beschaffung) errors.push('Pflichtfeld fehlt: BESCHAFFUNG (Rezept für den deutschen Geschmack)')
@@ -1087,9 +1086,9 @@ async function main() {
         // Text im Seed) parkt ein Gericht, ohne es zu loeschen — z. B. wegen schwer
         // erhaeltlicher Zutaten. `--slug` und `--force` umgehen das bewusst.
         if (s.pausiert && !SLUG_ONLY) return false
-        // Hauptprodukt in DE nicht zu kaufen (z. B. Texas Hot Links, PR #406, 15.10.2026):
-        // gar nicht erst erzeugen — jeder Versuch wuerde an validate() scheitern.
-        if (!SLUG_ONLY && schwerImText(`${s.title} ${s.meatType}`).length) return false
+        // Hauptprodukt in DE nicht zu kaufen (z. B. Texas Hot Links, PR #406, 15.10.2026) und
+        // kein Selbstmach-Seed: gar nicht erst erzeugen — jeder Versuch scheitert an validate().
+        if (!SLUG_ONLY && schwerImText(`${s.title} ${s.meatType}`).length && !SELBST_IM_TITEL.test(s.title)) return false
         return !istErledigt(s)
       })
   // Gaumen-Rotation (Regel 11): jedes zweite Rezept trifft den deutschen Geschmack. Nur im echten
