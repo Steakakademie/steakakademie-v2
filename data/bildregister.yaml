@@ -814,3 +814,10 @@ bilder:
     erworben_am: 2026-10-14
     namensnennung: false
     hinweis: Ersetzt die fal.ai-KI-Generierung (PR #405, Bild-Motiv-Check meldete "unpassend", keine Aubergine im Bild) durch eine Echtfoto-Collage (2 Pexels-Aufnahmen desselben Fotografen, Koefte im Wechsel mit Auberginenstuecken am Spiess, keine Personen, keine Marken). Nur Skalierung und Kompression, keine generative Bearbeitung. imageAI im MDX-Frontmatter auf false gesetzt, imagePrompt entfernt.
+  images/rezepte/hot-links-texas.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/hot-links-texas.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-15
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
