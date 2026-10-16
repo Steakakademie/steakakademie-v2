@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 09.10.2026.
+> Letzte Pflege: 16.10.2026.
 
 ---
 
@@ -217,6 +217,24 @@
   kein Gate: Pflicht bleiben die vier Kontexte oben. Ein neuer Schutztest wird
   einmal gegen die abgeschaltete Pruefung probiert und muss dann rot werden — ein
   Test, der nie fehlschlagen kann, belegt nichts (#313).
+- **`node_modules` folgt dem Lockfile — `npm install <paket>@latest` nur mit
+  `package-lock.json` im selben Commit (16.10.2026, belegt).** Am 14.10. wurde lokal
+  vitest 4.1.7 → 4.1.11 gezogen (mit vite 8.3.4 und rolldown 1.2.14), das Lockfile
+  blieb auf dem Stand vom 28.09. Folge: rolldown 1.2.14 lag neben seinem nativen
+  Binding 1.0.2, und Vitest startete gar nicht mehr — Startfehler
+  „Cannot convert undefined or null to object" aus rolldowns eigener
+  Fehler-Formatierung, nicht aus einem Test. Zwei Tage lang war damit
+  `npm run verify` auf diesem Rechner unausfuehrbar, ohne dass eine CI rot wurde
+  (die CI installiert per `npm ci` aus dem Lockfile und war gruen). Diagnose in
+  einem Befehl: `npm ls` meldet `invalid`; Heilung: `npm ci` in PowerShell
+  (loescht und ersetzt `node_modules`, rund 3 min). Wer eine Abhaengigkeit
+  bewusst anhebt, committet `package.json` UND `package-lock.json` zusammen —
+  sonst laufen Rechner und CI still auseinander.
+- **Windows-Eigenheit in Tests (16.10.2026):** `fs.symlinkSync(..., 'dir')` endet ohne
+  Entwicklermodus oder Adminrechte mit EPERM; `'junction'` braucht keine Rechte,
+  `lstat` meldet sie als Symlink, und auf Linux/macOS ignoriert Node den Typ.
+  Ein Test, der lokal rot und in der CI gruen ist, lehrt Rot zu ignorieren — deshalb
+  in Tests Junctions anlegen (#413).
 - Die Frage, ob die Gates den Merge-Button sperren oder nur informativ laufen,
   ist mit dem Punkt oben beantwortet: vier Kontexte sperren (seit 24.09.2026,
   vorher drei), alles andere laeuft informativ mit ("Rechtschreibung",
@@ -837,6 +855,18 @@ Analytics & Data · CRM & Monetization.
   und §2 Regel 8 ausdrücklich als *Build*-Gate versteht. `npm run check` darf zusätzlich
   existieren, ersetzt `prebuild` aber nicht: **Vercel führt `check` nie aus.**
 
+- **Rezeptbild-Provenienz: jedes Echtfoto steht in `public/images/rezepte/CREDITS.md`
+  (Uwe, 16.10.2026: „die Sammeldatei je Bild soll gepflegt werden").** Ein Rezeptbild
+  mit `imageAI: false` oder einer Stockfoto-Quelle im `imageSource` (Pexels, Unsplash,
+  Pixabay, Foodiesfeed, Collage daraus, KI-bearbeitetes Echtfoto, Eigenfoto) braucht
+  dort eine Zeile: Slug, Quelle, Fotograf, Foto-ID, Bearbeitung, imageAI, Abnahme.
+  Abnahme ist das Datum des Merge-Commits auf main (Regel 4). Rein generative Bilder
+  (FLUX, Nano Banana ohne Vorlage, Firefly) stehen pauschal unter „Uebriger Bestand".
+  Das Frontmatter allein ist kein Nachweis — zehn Agenten-Rezepte vom 22.09. bis
+  14.10.2026 trugen die Quelle nur dort (#414). Waechter:
+  `src/__tests__/rezeptbild-credits.test.ts`, sperrt ueber `Unit-Tests pruefen`.
+  Rohmaterial (Original-Downloads, Zwischenschnitte) gehoert nach
+  `bild-austausch/` (gitignored), nie nach `public/images/`.
 - **Bots pushen nie auf main — sie öffnen PRs (04.09.2026).** Seit Branch Protection
   (01.09.) waren alle sechs Agenten-Workflows stumm: letzter Bot-Commit 27.08., vier Tage
   unbemerkt. Jetzt läuft jeder Bot-Commit über `.github/actions/pr-statt-push` — ein
