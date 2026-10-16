@@ -376,6 +376,23 @@
   `content/`. Das Skript verweigert das Überschreiben, wenn eine Kopie abweicht.
 - Neue bezahlte Inhalte (Stufe 3–5, neue Kurse, Downloads) gehören von Anfang an dorthin.
   Nie eine bezahlte Datei in dieses Repo oder nach `public/` legen.
+- **Lokaler Build überspringt die bezahlten Inhalte, wenn der private Klon CRLF
+  auscheckt (16.10.2026, belegt).** Contentlayer meldete beim lokalen `npm run build`
+  17 Dokumente als `YAMLParseError: Unexpected scalar at node end` — alle aus
+  `content/gruender-schmiede`, `content/eigenregie` und `content/diplom-lektionen/stufe-2`,
+  also genau die Kopien aus dem privaten Repo. Der Build endete trotzdem mit Exit 0, die
+  Seiten dieser Kurse fehlten nur still (bzw. kamen aus veralteten `.contentlayer`-Resten).
+  Ursache: Der Klon unter `KURSINHALTE_PFAD` hat `core.autocrlf = true` und keine
+  `.gitattributes` — Index LF, Arbeitsbaum CRLF (`git ls-files --eol` zeigt `i/lf w/crlf`).
+  `kursinhalte-holen.mjs` kopiert byteweise, also wandert das `\r` mit; der YAML-Parser
+  stolpert hinter dem schließenden Anführungszeichen der Frontmatter-Zeile. Die CI holt per
+  `KURSINHALTE_TOKEN` mit LF und ist nicht betroffen — ein grüner `Build pruefen` sagt
+  darüber also nichts, und ein lokaler Build dieser Seiten ist auf einem Windows-Rechner
+  erst aussagekräftig, wenn der private Klon LF liefert. Heilung im privaten Klon:
+  `git config core.autocrlf false` und `git checkout -- .` (Arbeitsbaum muss sauber sein);
+  dauerhaft gehört eine `.gitattributes` mit `*.mdx text eol=lf` ins private Repo, wie sie
+  dieses Repo hat. Woran man es erkennt, ohne zu suchen: `YAMLParseError` nur in den drei
+  Kopie-Ordnern, nie in `content/rezepte` oder `content/cuts`.
 
 **Produkt-Qualitätscheck (Uwe, 08.10.2026)**
 - Jedes Produktblatt, jedes Produktkonzept, jede Freigabe und jeder (Wieder-)Verkaufsstart
