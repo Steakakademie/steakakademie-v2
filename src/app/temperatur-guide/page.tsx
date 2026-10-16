@@ -171,6 +171,14 @@ export default function TemperaturGuidePage() {
                 Während Farbe, Festigkeit und Zeit als Hilfsmittel dienen können, ist nur das Thermometer präzise.
               </p>
 
+              <p className="font-body text-base text-text-light/75 leading-relaxed mb-6">
+                Nur die Steak-Frage? Die direkte Antwort auf{' '}
+                <Link href="/kerntemperatur-steak" className="text-brand-gold hover:underline">
+                  die richtige Kerntemperatur für ein Steak (Rare bis Well Done)
+                </Link>{' '}
+                steht auf einer eigenen Seite.
+              </p>
+
               {/* Kurz & knapp (Plan C3) — alle Werte aus data/kerntemperatur-referenz.yaml:
                   badges.beef_mr, sicherheit.*, meta.ruhen, meta.carryover, meta.messen.
                   Keine Zahl hier ohne Entsprechung dort (Regel 8c). */}
