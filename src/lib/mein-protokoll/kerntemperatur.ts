@@ -26,7 +26,7 @@
 
 import { garstufenRind, kernReferenz, mindestwert } from '@/lib/kerntemperatur-referenz';
 
-export type Klasse = 'rind' | 'lamm' | 'schwein' | 'gefluegel' | 'hackfleisch' | 'wildschwein' | 'fisch';
+export type Klasse = 'rind' | 'lamm' | 'schwein' | 'gefluegel' | 'hackfleisch' | 'wildschwein' | 'fisch' | 'innerei';
 
 export interface KernRef {
   key: string;
@@ -54,6 +54,7 @@ export function klasseVonBadge(key: string): Klasse | null {
   if (key.startsWith('pork_') || key === 'iberico') return 'schwein';
   if (key.startsWith('poultry') || key.startsWith('duck_') || key.startsWith('goose_')) return 'gefluegel';
   if (FISCH_BADGES.includes(key)) return 'fisch';
+  if (key === 'liver') return 'innerei';   // Leber (rosa, unter_sicherheit) — nie automatisch wählbar, s. kernRefs()
   return null;
 }
 
