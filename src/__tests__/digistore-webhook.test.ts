@@ -241,6 +241,47 @@ describe('Digistore24-Webhook: Bestandskunden jenseits der ersten 200 Nutzer', (
   });
 });
 
+describe('Digistore24-Webhook: Grillmeister-Diplom (Kaufweg vorbereitet 16.10.2026)', () => {
+  const DIPLOM_PRODUKT = '777001';
+  const DIPLOM_COURSE = 'course-grillmeister-diplom';
+  function mitDiplomMapping(published: boolean) {
+    db.tables.digistore_products.push({
+      ds_product_id: DIPLOM_PRODUKT, course_id: DIPLOM_COURSE, is_voucher: false, voucher_credit_amount: null, credit_amount: null,
+      courses: { slug: 'grillmeister-diplom', title: 'Grillmeister-Diplom', published },
+    });
+  }
+  const mailBodies = () => (fetch as any).mock.calls.map((c: unknown[]) => JSON.parse(String((c[1] as RequestInit).body)));
+
+  it('Kauf legt die Buchung an und schickt den Login-Link zur Roadmap, nicht in den Gruender-Bereich', async () => {
+    mitDiplomMapping(true);
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-DIP-1', product_id: DIPLOM_PRODUKT, email: 'neu@example.de' }));
+    expect(res.status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(1);
+    expect(db.tables.bookings[0]).toMatchObject({ course_id: DIPLOM_COURSE, revoked_at: null });
+    const mail = mailBodies()[0];
+    expect(mail.transactionalId).toBe('tpl-magic');
+    expect(mail.dataVariables.course_title).toBe('Grillmeister-Diplom');
+    expect(mail.dataVariables.magic_link).toContain('next=' + encodeURIComponent('/diplome/roadmap'));
+    expect(db.sentry).toHaveLength(0);
+  });
+
+  it('solange der Kurs unveroeffentlicht ist, kommt die Buchung trotzdem — und ein Alarm „kurs-unpublished"', async () => {
+    mitDiplomMapping(false);
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-DIP-2', product_id: DIPLOM_PRODUKT, email: 'neu@example.de' }));
+    expect(res.status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(1);
+    expect(db.sentry).toHaveLength(1);
+    expect(db.sentry[0].opts.tags).toMatchObject({ grund: 'kurs-unpublished', ds_product_id: DIPLOM_PRODUKT });
+  });
+
+  it('ohne Mapping-Zeile wird kassiert ohne Auslieferung — Alarm „kein-mapping", keine Buchung', async () => {
+    const res = await POST(delivery({ event: 'payment', order_id: 'ORD-DIP-3', product_id: DIPLOM_PRODUKT, email: 'neu@example.de' }));
+    expect(res.status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(0);
+    expect(db.sentry[0].opts.tags).toMatchObject({ grund: 'kein-mapping', ds_product_id: DIPLOM_PRODUKT });
+  });
+});
+
 describe('Digistore24-Webhook: Credit-Produkt bei Wiederholung', () => {
   it('schreibt Credits nur einmal gut, wenn die Mail beim ersten Versuch scheitert und Digistore erneut zustellt', async () => {
     seedUsers(1);

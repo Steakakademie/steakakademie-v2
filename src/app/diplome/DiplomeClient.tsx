@@ -11,6 +11,7 @@ import Medal from '@/components/diplome/Medal';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import type { PulsData } from '@/lib/plattform-puls';
 import { LEVELS as LEVEL_QUELLE, ERSTE_BEZAHLSTUFE, tierForLevel } from '@/lib/diplome/stufen';
+import { diplomAngebot } from '@/lib/diplome/angebot';
 
 // Taxonomie aus der einen Quelle (src/lib/diplome/stufen.ts). `locked` ist
 // abgeleitet, nicht mehr von Hand gepflegt: Level 1–2 = Stufe 1 = frei.
@@ -31,6 +32,7 @@ export default function DiplomeClient({
   puls?: PulsData;
   stufe1?: readonly LektionLink[];
 }) {
+  const angebot = diplomAngebot();
   // Level 1 und 2 bilden zusammen Stufe 1 (Bronze) und sind frei zugaenglich.
   // Fuer die Level-Karten je Level die erste Lektion als Einsprung.
   const ersteLektionJeLevel = new Map<number, LektionLink>();
@@ -241,6 +243,27 @@ export default function DiplomeClient({
 
           {/* CTA */}
           <div className="text-center mt-12 space-y-5 max-w-xl mx-auto">
+            {/* Kaufweg (16.10.2026): erscheint erst, wenn Produkt-ID und Preis gesetzt
+                sind — src/lib/diplome/angebot.ts. Vorher gibt es hier bewusst keinen
+                Preis und kein Datum. */}
+            {angebot.kaufbar && (
+              <div className="border border-brand-gold/40 bg-brand-gold/5 p-6">
+                <p className="font-serif text-xl font-bold text-text-light mb-1">
+                  Stufe 2 bis 5 freischalten
+                </p>
+                <p className="font-body text-text-secondary text-sm mb-4">
+                  Alle Lektionen und Prüfungen bis zur Meisterklasse — einmalig {angebot.preisLabel}.
+                </p>
+                <a
+                  href={angebot.checkoutUrl}
+                  rel="nofollow"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  Diplom freischalten &rarr;
+                </a>
+                <p className="font-sans text-[11px] text-text-muted mt-3">Die Abbuchung erfolgt durch Digistore24.com</p>
+              </div>
+            )}
             <Link
               href="/diplome/roadmap"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
