@@ -1,39 +1,386 @@
 {
+  "env": {
+    "RUVECTOR_INTELLIGENCE_ENABLED": "true",
+    "RUVECTOR_LEARNING_RATE": "0.1",
+    "RUVECTOR_MEMORY_BACKEND": "rvlite",
+    "INTELLIGENCE_MODE": "treatment",
+    "RUVECTOR_AST_ENABLED": "true",
+    "RUVECTOR_DIFF_EMBEDDINGS": "true",
+    "RUVECTOR_COVERAGE_ROUTING": "true",
+    "RUVECTOR_GRAPH_ALGORITHMS": "true",
+    "RUVECTOR_SECURITY_SCAN": "true",
+    "RUVECTOR_MULTI_ALGORITHM": "true",
+    "RUVECTOR_DEFAULT_ALGORITHM": "double-q",
+    "RUVECTOR_TENSOR_COMPRESS": "true",
+    "RUVECTOR_AUTO_COMPRESS": "true"
+  },
+  "workers": {
+    "enabled": true,
+    "parallel": true,
+    "maxConcurrent": 10,
+    "native": {
+      "enabled": true,
+      "types": [
+        "security",
+        "analysis",
+        "learning"
+      ],
+      "defaultTimeout": 120000
+    },
+    "triggers": {
+      "ultralearn": {
+        "priority": "high",
+        "agents": [
+          "researcher",
+          "coder"
+        ]
+      },
+      "optimize": {
+        "priority": "high",
+        "agents": [
+          "performance-analyzer"
+        ]
+      },
+      "audit": {
+        "priority": "critical",
+        "agents": [
+          "security-analyst",
+          "tester"
+        ]
+      },
+      "map": {
+        "priority": "medium",
+        "agents": [
+          "architect"
+        ]
+      },
+      "security": {
+        "priority": "critical",
+        "agents": [
+          "security-analyst"
+        ]
+      },
+      "benchmark": {
+        "priority": "low",
+        "agents": [
+          "performance-analyzer"
+        ]
+      },
+      "document": {
+        "priority": "medium",
+        "agents": [
+          "documenter"
+        ]
+      },
+      "refactor": {
+        "priority": "medium",
+        "agents": [
+          "coder",
+          "reviewer"
+        ]
+      },
+      "testgaps": {
+        "priority": "high",
+        "agents": [
+          "tester"
+        ]
+      },
+      "deepdive": {
+        "priority": "low",
+        "agents": [
+          "researcher"
+        ]
+      },
+      "predict": {
+        "priority": "medium",
+        "agents": [
+          "analyst"
+        ]
+      },
+      "consolidate": {
+        "priority": "low",
+        "agents": [
+          "architect"
+        ]
+      }
+    }
+  },
+  "performance": {
+    "modelCache": {
+      "enabled": true,
+      "maxSizeMB": 512,
+      "ttlMinutes": 60
+    },
+    "benchmarkThresholds": {
+      "triggerDetection": {
+        "p95": 5
+      },
+      "workerRegistry": {
+        "p95": 10
+      },
+      "agentSelection": {
+        "p95": 1
+      },
+      "memoryKeyGen": {
+        "p95": 0.1
+      },
+      "concurrent10": {
+        "p95": 1000
+      },
+      "singleEmbedding": {
+        "p95": 500
+      },
+      "batchEmbedding16": {
+        "p95": 8000
+      }
+    },
+    "optimizations": {
+      "parallelDispatch": true,
+      "batchEmbeddings": true,
+      "cacheEmbeddings": true,
+      "simd": true
+    }
+  },
+  "agents": {
+    "presets": {
+      "quick-scan": {
+        "phases": [
+          "file-discovery",
+          "summarization"
+        ],
+        "timeout": 30000
+      },
+      "deep-analysis": {
+        "phases": [
+          "file-discovery",
+          "pattern-extraction",
+          "embedding-generation",
+          "complexity-analysis",
+          "summarization"
+        ],
+        "timeout": 120000,
+        "capabilities": {
+          "onnxEmbeddings": true,
+          "vectorDb": true
+        }
+      },
+      "security-scan": {
+        "phases": [
+          "file-discovery",
+          "security-scan",
+          "summarization"
+        ],
+        "timeout": 60000
+      },
+      "learning": {
+        "phases": [
+          "file-discovery",
+          "pattern-extraction",
+          "embedding-generation",
+          "vector-storage",
+          "summarization"
+        ],
+        "timeout": 180000,
+        "capabilities": {
+          "onnxEmbeddings": true,
+          "vectorDb": true,
+          "intelligenceMemory": true
+        }
+      }
+    },
+    "capabilities": {
+      "onnxEmbeddings": true,
+      "vectorDb": true,
+      "intelligenceMemory": true,
+      "parallelProcessing": true
+    }
+  },
   "permissions": {
     "allow": [
-      "Bash(npx tsc --noEmit)",
-      "Bash(npx tsc --noEmit *)",
-      "PowerShell(Set-Location *)",
-      "PowerShell(Get-ChildItem *)",
-      "mcp__Claude_in_Chrome__tabs_context_mcp",
-      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__search_threads",
-      "mcp__Claude_in_Chrome__get_page_text",
-      "mcp__plugin_claude-mem_mcp-search__search",
-      "mcp__Claude_in_Chrome__read_page",
-      "PowerShell(Select-String *)",
-      "PowerShell(Test-Path *)",
-      "mcp__Claude_in_Chrome__find",
-      "PowerShell(Get-Content *)",
-      "PowerShell(npx tsc --noEmit)",
-      "PowerShell(npx tsc --noEmit *)",
-      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__list_labels",
-      "mcp__bb573ec8-7cf6-4022-9009-383d32442f78__netlify-project-services-reader",
-      "mcp__e77bfedf-bcd2-47f8-909d-53ae8ac85061__searchJiraIssuesUsingJql",
-      "mcp__Claude_in_Chrome__read_network_requests",
-      "mcp__eb2e1f19-ab16-4090-b000-9f9a70871495__get_thread",
-      "mcp__07efb22d-715d-48d1-ac3e-edbc8b60a254__balance",
-      "Bash(gh run watch *)",
-      "mcp__ce9756a3-17c7-44d4-93f8-1ddb07f3d326__notion-fetch",
-      "mcp__plugin_claude-mem_mcp-search__get_observations"
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(ls:*)",
+      "Bash(pwd)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(which:*)",
+      "Bash(npm run build)",
+      "Bash(npm run check)",
+      "Bash(npm run verify)",
+      "Bash(npm run lint)",
+      "Bash(npm run pruefstand)",
+      "Bash(npm test)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo rm:*)",
+      "Bash(chmod 777:*)",
+      "Bash(mkfs:*)",
+      "Bash(dd if=/dev/zero:*)"
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks pre-edit \"$TOOL_INPUT_file_path\" 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks coedit-suggest --file \"$TOOL_INPUT_file_path\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks pre-command \"$TOOL_INPUT_command\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks remember \"Reading: $TOOL_INPUT_file_path\" -t file_access 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks remember \"Search: $TOOL_INPUT_pattern\" -t search_pattern 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks remember \"Agent: $TOOL_INPUT_subagent_type\" -t agent_spawn 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks post-edit \"$TOOL_INPUT_file_path\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks post-command \"$TOOL_INPUT_command\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh"
+          },
+          {
+            "type": "command",
+            "timeout": 5000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks session-start 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks trajectory-begin -c \"claude-session\" -a \"claude\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks trajectory-end --success --quality 0.8 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks session-end 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks suggest-context 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 5000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks pre-compact --auto 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "manual",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 5000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks pre-compact 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2000,
+            "command": "node \"$CLAUDE_PROJECT_DIR/node_modules/ruvector/bin/cli.js\" hooks track-notification 2>/dev/null || true"
           }
         ]
       }
