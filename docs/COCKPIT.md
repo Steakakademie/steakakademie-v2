@@ -215,9 +215,19 @@ gegenprüfen. Ribeye-Nomenklatur (#354) fachlich gegenlesen.
 0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
 **Offen, nur Uwe:** Digistore-Produkt fürs Diplom anlegen und in `digistore_products` auf
-`grillmeister-diplom` mappen. **Nebenbefund:**
-Digistore-Produkt 695900 (Agentur-Killer-Sprint, aktiv, approved) hat keine Zeile in `digistore_products`
-und keinen Kurs — ein Kauf dort würde derzeit nichts freischalten.
+`grillmeister-diplom` mappen (Kurs existiert in der DB, `published = false`, kein Produkt zeigt
+darauf — Stand 16.10.2026, live abgefragt).
+*Kassieren ohne Auslieferung (16.10.2026, Nebenbefund vom 09.10. korrigiert):* Der alte Satz
+„695900 hat keine Zeile und keinen Kurs" stammte aus dem DB-Audit vom 07.09. und ist seit
+19.09.2026 überholt — 695900 ist Eigenregie, Zeile + veröffentlichter Kurs in der DB, in
+Digistore mit Verkaufsstopp (laut Code-Kommentar vom 02.10., heute nicht gegen die Digistore-API
+geprüft). Der Webhook (`src/app/api/webhooks/digistore24/route.ts`) meldet seit 02./03.10.
+jeden Kauf ohne Mapping, mit unveröffentlichtem Kurs, mit unlesbarem Mapping oder gescheiterter
+Verarbeitung als Sentry-Issue (Fingerprint je Produkt); Tests in `digistore-webhook.test.ts`.
+Live-Stand `digistore_orders`: 3 Zeilen `failed`, alle Digistore-Testkäufe
+(`@test-ds24.com`, Mai/Juni 2026) — kein echter Käufer ohne Zugang. Unveröffentlicht, aber
+gewollt: Steak-Beichte (696394, 12 Bestellungen, liefert über Credits) und Mein Protokoll
+(696396, 0 Bestellungen); BBQ-Grundkurs (696399) eingestellt.
 
 ---
 
