@@ -8,6 +8,7 @@ import { AWIN_ADVERTISER, AWIN_PUBLISHER_ID, awinLink } from '@/lib/awin';
 import { ALL_CUTS } from '@/lib/cuts-catalog';
 import { activeMeatPartner, buildMeatTargetUrl, getMeatOffer } from '@/lib/cut-affiliate';
 import { getAffiliatePrograms } from '@/lib/affiliate-programs';
+import { getAllProducts } from '@/lib/products';
 
 describe('awinLink', () => {
   it('baut den Trackinglink mit Advertiser, Publisher, Platz und kodiertem Ziel', () => {
@@ -88,5 +89,48 @@ describe('Bremer Gewürzhandel (AWIN 128963)', () => {
     const p = getAffiliatePrograms().find((x) => x.id === 'bremer-gewuerzhandel');
     expect(p?.status).toBe('applied');
     expect(p?.network).toBe('AWIN');
+  });
+});
+
+describe('Partnerziele im Produktregister (14.10.2026)', () => {
+  const mitZiel = getAllProducts().filter((p) => p.partnerZiele?.length);
+
+  it('jedes Ziel ergibt einen gültigen AWIN-Link und gehört zu einem eingetragenen Programm', () => {
+    expect(mitZiel.length).toBeGreaterThan(0);
+    const providers = new Set(getAffiliatePrograms().flatMap((p) => p.providers));
+    for (const p of mitZiel) {
+      for (const z of p.partnerZiele!) {
+        expect(() => awinLink(z.advertiser, z.url, p.id), p.id).not.toThrow();
+        expect(providers.has(z.advertiser), `${p.id}: ${z.advertiser}`).toBe(true);
+        expect(z.geprueft, p.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      }
+    }
+  });
+
+  it('schaltet nichts um: affiliateUrl zeigt nicht auf AWIN, solange das Programm nicht active ist', () => {
+    for (const p of mitZiel) expect(p.affiliateUrl, p.id).not.toContain('awin1.com');
+  });
+
+  it('SharkNinja (14.10.2026): Ninja Woodfire und die Küchenmaschine zeigen auf Produktseiten bei sharkninja.de', () => {
+    const ninja = mitZiel.filter((p) => p.partnerZiele!.some((z) => z.advertiser === 'sharkninja'));
+    expect(ninja.map((p) => p.id).sort()).toEqual([
+      'ninja-precisionpro-bz651',
+      'ninja-woodfire-og701',
+      'ninja-woodfire-pro-connect-xl-og901',
+    ]);
+    expect(ninja.filter((p) => p.category === 'grill').map((p) => p.name)).toEqual(
+      expect.arrayContaining([expect.stringContaining('Woodfire'), expect.stringContaining('Woodfire')]),
+    );
+    expect(ninja.find((p) => p.category === 'kuechenmaschine')?.name).toContain('Küchenmaschine');
+    for (const p of ninja) {
+      const z = p.partnerZiele![0];
+      // Produktseite, keine Kategorie- oder Startseite: Pfad endet auf <SKU>.html
+      expect(z.url, p.id).toMatch(/^https:\/\/www\.sharkninja\.de\/[a-z0-9-]+\/[A-Z0-9-]+\.html$/);
+      expect(new URL(awinLink('sharkninja', z.url, p.id)).searchParams.get('awinmid')).toBe('19810');
+      // Noch nicht live: kein Partnerlink zum Händler, keine fremden Sterne ohne Amazon-Prüfung
+      expect(p.affiliateUrl, p.id).toContain('tag=steakakademie-21');
+      expect(p.rating, p.id).toBeUndefined();
+      expect(p.recommended, p.id).toBe(false);
+    }
   });
 });

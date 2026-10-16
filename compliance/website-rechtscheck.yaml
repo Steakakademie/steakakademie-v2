@@ -238,7 +238,7 @@ komponenten:
     pruefung: "IP-Anonymisierung + Widerspruch bei Marketing/Affiliate (Google Ads, AWIN); Programme benannt"
     rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
     status: ok
-    befund: "11.10.2026: Affiliate-Programme in DSE Abschnitt 13 (Amazon aktiv; AWIN: Santos, BOS FOOD, SharkNinja, Burghardt, Bremer Gewürzhandel; Webgains: vineshop24 — beworben) + /affiliate-disclosure. Kennzeichnung „Anzeige“ am Link; keine Netzwerk-Skripte eingebunden; AWIN-Datenschutzerklärung verlinkt (DSGVO-Annex 2.5.4)."
+    befund: "13.10.2026: Affiliate-Programme in DSE Abschnitt 13 (Amazon aktiv; AWIN: Santos, BOS FOOD, SharkNinja, Burghardt, Bremer Gewürzhandel; Webgains: vineshop24 — beworben) + /affiliate-disclosure. Kennzeichnung „Anzeige“ am Link; keine Netzwerk-Skripte eingebunden; AWIN-Datenschutzerklärung verlinkt (DSGVO-Annex 2.5.4). Amazon-Partnerlinks führen direkt zu Amazon (seit 11.10., #390); /go/ und /go-fleisch/ nur noch für Netzwerk-Links und alte URLs: Weiterleitung setzt kein Cookie, speichert nichts, meldet den Klick serverseitig cookielos an Plausible (IP/User-Agent nur durchgereicht, Referer ohne Query); Netlify-Header x-nf-client-connection-ip entfernt (#388), Deploy nur Vercel (DSE § 3)."
     monitor: "Beim Einbinden eines Netzwerk-Skripts/Widgets (AWIN MasterTag, Webgains, Amazon-Widgets): Consent-Kategorie Pflicht — legal-guard meldet die Hosts."
 
   - id: google-fonts-selfhosted

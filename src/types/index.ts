@@ -1,3 +1,5 @@
+import type { AwinAdvertiser } from '@/lib/awin';
+
 // ── NAVIGATION ───────────────────────────────────────────────────────────────
 
 export interface NavCategory {
@@ -99,6 +101,19 @@ export interface Product {
   segment?: string;
   lastChecked: string; // ISO date
   recommended?: boolean;
+  /**
+   * Produktseite beim AWIN-Partnerhändler (docs/affiliate-strategie-2026.md, „Technik",
+   * Schritt 3). Nur vorgemerkt: `affiliateUrl` bleibt, bis das Programm `active` ist —
+   * der Start baut daraus mit `awinLink` den Trackinglink.
+   */
+  partnerZiele?: PartnerZiel[];
+}
+
+export interface PartnerZiel {
+  advertiser: AwinAdvertiser;
+  url: string;
+  /** Datum, an dem die Seite beim Händler erreichbar war (ISO). */
+  geprueft: string;
 }
 
 // ── AUTHORS ──────────────────────────────────────────────────────────────────

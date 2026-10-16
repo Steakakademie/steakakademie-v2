@@ -166,9 +166,10 @@ dann im Browser per Plausible-Klasse zählen (die Klassen gibt es schon).
 5. ✓ 11.10. (Uwe: „nimm Amazon aus /go/ raus"): Amazon-Partnerlinks gehen direkt zu Amazon
    (`produktLink`, `MdxTextLink`, Fleisch-Kaufknopf), Zählung per Plausible-Klasse im Browser;
    `/go/` bleibt für Netzwerk-Links (AWIN, Webgains) und alte URLs.
-6. **Netlify-Rest** in `go/.../route.ts` (Header `x-nf-client-connection-ip`) entfernen; Referer
-   ohne Query an Plausible melden.
-7. `compliance/website-rechtscheck.yaml` Z. 241 aktualisieren.
+6. ✓ 11.10. (#388): **Netlify-Rest** in `go/.../route.ts` und `go-fleisch/.../route.ts` (Header
+   `x-nf-client-connection-ip`) entfernt; Referer geht ohne Query an Plausible.
+7. ✓ 13.10.: `compliance/website-rechtscheck.yaml` Z. 241 (`dse-marketing-affiliate-tools`)
+   aktualisiert — Amazon direkt, /go/ nur Netzwerk-Links, Netlify-Header weg.
 
 ### Offene Einschätzung: Einwilligung für Awin-Cookies
 

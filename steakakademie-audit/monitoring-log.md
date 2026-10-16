@@ -8,6 +8,104 @@
 > einer US-basierten WebSearch und liefern eine Trefferliste, keine deutsche
 > SERP-Position.** Vergleiche über diese Grenze hinweg sind nicht 1:1 belastbar.
 
+## KW42 — 12.10.2026
+
+> **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach KW41 (05.10.2026). Neue Kalenderwoche → Zähler „Wochen ohne Backlink" hochgezählt. Clarity-Fenster beider Abfragen identisch: 05.10.–12.10.2026 (Clarity-gewählt).
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ Vorwoche (05.10.) | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz ~27** (Seite 3, Pos. 9) | `steakakademie.de/kerntemperatur-steak` (**neue URL**) | 🟢 Seite 4 → **Seite 3** (30 → 27 Indikator; Seitenwechsel ist belastbar, andere URL als Vorwoche) | ⚪ nicht vergleichbar (Methodenwechsel KW39) |
+| dto., zweite eigene URL | **Platz ~31** (Seite 4, Pos. 4) | `steakakademie.de/temperatur-guide` | ⚪ Seite 4 gehalten (30 → 31 = Zählrauschen) | ⚪ nicht vergleichbar |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 8** organischen Treffern (nur Seite 1 geprüft) | — | = | = |
+| Brand-Query „Steakakademie" | **Platz 1** | `steakakademie.de/` (weitere: `/autoren` Pos. 5, `/diplome` Pos. 7) | = | = (Baseline: Platz 1) |
+
+**Zählweise Leit-Query:** Seite 1: 8 · Seite 2: 10 · Seite 3: 9 (eigene URL Pos. 9) → 8+10+9 = **27**; Seite 4: Pos. 4 (`/temperatur-guide`) → 8+10+9+4 = **31**. Toleranz ±3, Trend nur über die Seite. Seite 5 nicht geladen (beide URLs vorher gefunden). Seite 1 unverändert: Grillfürst, block-house, AMA-Grillclub, little-london, Trautmann, Weber, Oberpfalz-Beef, Moselmetzger.
+
+**Befund:** Zwei eigene URLs ranken auf dieselbe Query (Seite 3 und 4) — Kannibalisierungs-Indiz. `/kerntemperatur-steak` kam mit Commit #377 (10.10.2026) und ist 2 Tage später bereits auf Seite 3. Ursächlichkeit nicht belegt (Zeitnähe, keine Kontrolle).
+
+### Google AI Overview
+
+Leit-Query: „Übersicht mit KI" vorhanden. `document.body.innerText` auf Seite 1: **kein „steakakademie"** → wir werden nicht zitiert. Kopf-Keyword: AIO ebenfalls vorhanden, kein „steakakademie" im Text (Regex nur auf Vorhandensein geprüft; Quellenliste dieser Woche nicht einzeln ausgezählt, „Alle anzeigen" nicht aufgeklappt). Δ Vorwoche: keine Bewegung zu uns.
+
+### Traffic (Microsoft Clarity, Non-Bot, 05.–12.10.)
+
+| Quelle | Sessions | Δ KW41 (28.09.–05.10.) |
+|---|---|---|
+| Direct | 33 | +15 (18) |
+| **google** | **26** | **+17 (9)** |
+| steakakademie.de (Eigenverweis) | 6 | −7 (13) |
+| github.com (eigene Property) | 6 | neu |
+| yahoo | 3 | +1 (2) |
+| checkout-ds24.com | 2 | −2 (4) |
+| duckduckgo.com | 2 | −2 (4) |
+| **bing** | **2** | **−5 (7)** |
+| chatgpt.com | 1 | neu |
+| copilot.com | 1 | neu |
+
+Gesamt ≈ 82 Sessions (KW41 ≈ 58; Summe der Top-10-Quellen, weitere Quellen nicht abgefragt). **Bing:Google = 2:26 — Umkehr gegenüber KW39 (12:3).** Einstellige/kleine Zahlen und Uwes eigene Aufrufe (Direct, github, Eigenverweis, evtl. Ahrefs/Audit-Crawls) enthalten: Größenordnung, kein Trend, keine Attribution möglich. Erstmals KI-Referrer sichtbar (chatgpt.com 1, copilot.com 1) — Einzelfälle.
+
+**Top-Seiten:** `/` 21 · `/persoenlichkeiten` 10 · `/cuts` 5 · `/diplome` 5 · `/rezepte/fleisch/ribeye-sous-vide` 5 · `/temperatur-guide` **3** (KW41: 9) · `/persoenlichkeiten/tuffy-stone` 3 · `/ki-disclaimer` 3 · `/danke/steak-beichte` 2 · `/rezepte` 2. `/kerntemperatur-steak` nicht in den Top 10. Hinweis: Das Seitenprofil (Persönlichkeiten, Cuts, ki-disclaimer) sieht nach Site-Erkundung/Eigentests aus — nicht entscheidbar.
+
+### Off-Page-Delta
+
+WebSearch `"steakakademie.de" -site:steakakademie.de`: **0 echte Backlinks — unverändert.** Treffer sind themenfremd (Weber-Grillkurs, Steakhouse-Seiten, Buchkatalog usw.), keiner verlinkt oder nennt die Domain nachweisbar. Neue Kalenderwoche → **14 Wochen in Folge ohne Backlink** (Vorwert 13). Keine nofollow-Prüfung (kein Link). WebSearch ist US-basiert und nur Umfeldrecherche; die Suchbefehle `-site:` werden dort unzuverlässig ausgewertet — Aussage heißt „keinen gefunden", nicht „nachweislich keinen". `github.com` (6 Sessions) ist eigene Property, zählt nicht.
+
+### Technik-Status
+
+| Check | Ergebnis | Status |
+|---|---|---|
+| www → non-www, Wurzel | 308, `location: https://steakakademie.de/` | 🟢 |
+| www → non-www, `/temperatur-guide` | 308, `location: https://steakakademie.de/temperatur-guide` | 🟢 |
+| Apex | 200 | 🟢 |
+| `/llms.txt` | 200 `text/plain; charset=utf-8`, **2.249 Byte** (Vorwert 1.809) | 🟢 — Änderung erklärbar: letzter Commit an der Datei #377 vom 10.10. |
+| `/robots.txt` letzte Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` | 🟢 |
+| `/kerntemperatur-steak` | 200 | 🟢 |
+
+Per curl auf Uwes Rechner (Statuscode/Header), nicht per `web_fetch` (Methodik §3).
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig:** `docs/geo-baseline.md` → nächste Fälligkeit **29.10.2026** (Task `geo-recheck-baseline`).
+- **Search Console:** Property existiert (`sc-domain:steakakademie.de`, `docs/COCKPIT.md`), Export vom 09.10. wurde bereits ausgewertet (Commit #360). Die KW41-Annahme „Existenz unbelegt" ist damit **widerlegt**; die Empfehlung „Property prüfen" ist gestrichen. Offen bleibt nur eine automatische API-Anbindung (Aufwand/Nutzen ungeprüft).
+- **Bing-Kennzahlen/Bing-DE-Position** weiter nicht erhoben.
+- `/hoefe`-Einbruch: nicht mehr in den Top 10, weiter ungeklärt.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Leit-Query erstmals Seite 3 (Platz ~27, Vorwoche Seite 4/~30); zugleich zweite eigene URL auf Seite 4. Kopf-Keyword nicht in den ersten 8. Brand Platz 1. |
+| AI Overview / GEO | 🔴 | Beide AIOs vorhanden, „steakakademie" in keinem Text (Leit-Query, Kopf-Keyword). |
+| Traffic | 🟡 | ≈82 Sessions (Vorwoche ≈58), google 26 (Vorwoche 9), bing 2 (Vorwoche 7); sehr kleine Fallzahlen, hoher Eigenanteil. |
+| Off-Page | 🔴 | 0 Backlinks, 14 Wochen in Folge. |
+| Technik | 🟢 | Alle sechs Checks per Statuscode grün (308/308/200/200/Sitemap-Zeile/200). |
+
+### Handlungsempfehlung (max. 1)
+
+**Kannibalisierung `/temperatur-guide` ↔ `/kerntemperatur-steak` für die Leit-Query klären (Aufwand ~30 Min, 0 €):** Klar festlegen, welche URL die Frage „Kerntemperatur Steak medium" beantwortet; die andere verweist per Textlink darauf (und trägt kein konkurrierendes H1/Title-Thema). Erst nach 2–3 Wochen Messung entscheiden, ob zusammengeführt wird (301). Annahme „Kannibalisierung" ist ein Indiz aus zwei SERP-Plätzen, nicht bewiesen — GSC-Seiten-Report der Query dazu gegenprüfen, bevor etwas umgebaut wird.
+
+*Nachrichtlich, nicht gezählt:* (1) Echte Backlinks bleiben der größte Hebel für Platz/AIO, haben aber keinen spamfreien 15-Minuten-Weg (Regel 5). (2) Google/Bing-Umkehr: einstellig, nicht handlungsrelevant.
+
+*Autonom umgesetzt (12.10., Auftrag Uwe „SEO-Fixes autonom umsetzen"):* Textlink von `/temperatur-guide` (Intro) auf `/kerntemperatur-steak` ergänzt — vorher verlinkte der Guide nicht auf die Antwortseite (die umgekehrte Richtung bestand). Nur Linkkontext, kein Eingriff in Title/Canonical. `tsc --noEmit` ohne Fehler; Wirkung erst nach Deploy/Recrawl messbar, **nicht committet** (Uwe committet). Kein 301/Zusammenlegen — erst nach 2–3 Wochen Messung.
+
+### Trend in einem Satz
+
+Erste Bewegung nach oben auf Google DE (Leit-Query Seite 4 → 3 mit neuer Antwortseite), aber weiter ohne AIO-Zitat und ohne Backlinks.
+
+### Was NICHT geprüft wurde
+
+- Kopf-Keyword „Kerntemperatur Steak": nur Seite 1 (8 organische Treffer); Leit-Query Seite 5 nicht geladen, Brand-Query nur Seite 1.
+- AIO: Quellenlisten nicht ausgezählt, „Alle anzeigen" nicht aufgeklappt; nur Textsuche nach „steakakademie".
+- Bing-DE-Position, Perplexity, ChatGPT (GEO-Re-Check, fällig 29.10.).
+- Impressionen/CTR/Durchschnittsposition: kein GSC-API-Zugriff in dieser Session (Export vom 09.10. existiert, hier nicht neu gezogen).
+- Clarity: nur Top-10-Quellen; Attribution Eigenaufrufe vs. Besucher nicht möglich.
+- Off-Page nur per US-WebSearch; keine Backlink-Tools (Ahrefs/Bing WMT) abgefragt.
+- Es wurde **nicht committet** (Uwe committet selbst).
+
+---
+
 ## KW41 — 05.10.2026
 
 > **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach KW40 (28.09.2026). Neue Kalenderwoche → Zähler „Wochen ohne Backlink" wird hochgezählt. **Clarity-Fenster:** Die Quellen-Abfrage lief 28.09.–05.10., die Top-Seiten-Abfrage 29.09.–05.10. (Clarity hat die Fenster selbst gewählt, 1 Tag Versatz) — Quellen- und Seitenzahlen sind nicht exakt deckungsgleich.
