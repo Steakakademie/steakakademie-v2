@@ -82,6 +82,10 @@ badges:
   whitefish:    { c: 58, range: [55, 62], label: "durch" }            # Dorade/Kabeljau/Rotbarbe/Mahi/Schwertfisch
   oily_whole:   { c: 63, range: [60, 65], label: "durch" }            # ganze Makrele/Sardine
   burger:       { c: 70, range: [70, 72], label: "durchgegart" }      # Hack: durch Wolfen Keime innen → ≥70 °C
+  # Leber rosa (Uwe, 16.10.2026): „In Deutschland die Kerntemperatur für Leber auf
+  # 58–60 °C setzen." Innerei, rosa gegart — unter_sicherheit + Pflicht-hinweis für
+  # Risikogruppen. Automatisch erzeugte Texte (Rezept-Agent) garen höher durch.
+  liver:        { c: 59, range: [58, 60], label: "rosa", unter_sicherheit: true, hinweis: "Rosa gegart. Leber kann Campylobacter tragen — für Schwangere, Kinder, ältere und immungeschwächte Menschen immer auf mindestens 70 °C durchgaren." }
   # Wildschwein nach Teilstück (Uwe, 29.09.2026, zweimal bestätigt: „sollte auf
   # Dauer innerhalb des Systems integriert werden"). Rücken und Filet rosa liegen
   # UNTER sicherheit.wildschwein — deshalb unter_sicherheit + Pflicht-hinweis.
