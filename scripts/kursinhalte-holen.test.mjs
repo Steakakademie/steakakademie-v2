@@ -15,7 +15,10 @@ describe('kursinhalte-holen', () => {
     fs.writeFileSync(path.join(kopie, '.aus-kursinhalte'), '');
     expect(zielErsetzbar(kopie)).toBe(true);
     const link = path.join(tmp, 'link');
-    fs.symlinkSync(kopie, link, 'dir');
+    // 'junction' statt 'dir': Unter Windows braucht ein dir-Symlink Entwicklermodus oder
+    // Adminrechte (EPERM), eine Junction nicht — und lstat meldet beide als Symlink.
+    // Auf Linux/macOS ignoriert Node den Typ. (Befund 16.10.2026, lokaler Vitest-Lauf.)
+    fs.symlinkSync(kopie, link, 'junction');
     expect(zielErsetzbar(link)).toBe(true);
   });
 
