@@ -75,8 +75,30 @@ EXIF-Daten bleiben erhalten und sind der Herkunftsnachweis.
   entsprechend keine Zedernplanke. Beschaffung eines passenden Motivs per
   Stock-Einzelkauf oder Eigenfoto: KAN-78.
 
+## Rezept-Agent und Einzelfälle (seit 17.08.2026)
+
+Bilder, die mit einem Rezept-PR kamen und ein echtes Foto enthalten. Abnahme ist
+das Datum des Merge-Commits auf main — der Merge durch Uwe ist die Freigabe
+(CLAUDE.md §2 Regel 4). Collagen montieren zwei Aufnahmen desselben Fotografen oder
+zweier Fotografen ohne generative Bearbeitung; `imageAI` steht dann auf `false`.
+Nachgetragen am 16.10.2026, Wächter seitdem: `src/__tests__/rezeptbild-credits.test.ts`.
+
+| Slug | Quelle | Fotograf | Foto-ID | Bearbeitung | imageAI | Abnahme |
+|------|--------|----------|---------|-------------|---------|---------|
+| rinder-tacos-guenstiger-cut | Foodiesfeed | — (Datei `delicious-beef-tacos-with-fresh-toppings`) | — | Zuschnitt/Kompression | true | 17.08.2026 |
+| vacio-asado-argentino | Pexels | Andres Idda Bianchi | 36948100 | Web-Zuschnitt/-Kompression | false | 22.09.2026 |
+| fraldinha-churrasco | Unsplash | Rodrigo Rodrigues, WOLF Λ R T | 8fUbsnvyTWU + qcSPyVordpg | Collage nebeneinander | false | 26.09.2026 |
+| coracao-de-frango | Pexels | Caio Niceas | 37183926 + 37183924 | Collage übereinander | false | 28.09.2026 |
+| snoek-braai-appelkoos | Foodiesfeed | Jakub Kapusnak (links, CC0); rechts KI-Bild von Foodiesfeed | — | Collage nebeneinander, rechte Hälfte KI | true | 28.09.2026 |
+| haehnchenschenkel-bier-senf-glasur | Unsplash | Carla Limatola | rZyClxoeu2E | KI-bearbeitet (Google Gemini: Honigglas, Knoblauch ergänzt; Kräuter entfernt), Zuschnitt 4:3 | true | 30.09.2026 |
+| skilpadjies-braai | Unsplash | Janet Ganbold | xlf1tNGcBH0 | Web-Zuschnitt 4:3/-Kompression | false | 30.09.2026 |
+| nuea-yang-nam-tok | Pexels | Nano Erdozain | 29101366 | Web-Zuschnitt 4:3/-Kompression | false | 07.10.2026 |
+| smoked-chuck-roast | Unsplash | Tricia Timney (links), Israel Albornoz (rechts) | Cz6ys4_25W0 + VnpJ5_m-2mQ | Collage nebeneinander | false | 13.10.2026 |
+| patlican-kebab | Pexels | Shameel Mukkath | 5191846 + 5191850 | Collage nebeneinander | false | 14.10.2026 |
+
 ## Übriger Bestand
 
-Alle anderen Dateien in diesem Ordner stammen aus der rein generativen
-fal.ai/FLUX-Pipeline und sind in docs/bild-audit-rezepte-2026-08-18.md als
-KI-Bilder ausgewiesen.
+Alle anderen Dateien in diesem Ordner sind rein generativ — überwiegend aus der
+fal.ai/FLUX-Pipeline (docs/bild-audit-rezepte-2026-08-18.md), einzelne aus
+Nano Banana ohne Fotovorlage oder Adobe Firefly (`kuerbis-kartoffel-salat-grill`).
+Sie tragen `imageAI: true` und brauchen hier keine Zeile.
