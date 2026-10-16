@@ -15,6 +15,7 @@ import Glutbett from '@/components/diplome/Glutbett';
 import Pruefvermerk from '@/components/Pruefvermerk';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
+import { diplomAngebot } from '@/lib/diplome/angebot';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 import { ogImages } from '@/lib/og';
 import { seoTitel } from '@/lib/seo-titel';
@@ -120,6 +121,7 @@ export default async function DiplomLektionPage(props: Props) {
 
 function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)[number]; locked: boolean }) {
   const stufe = stufeByNr(lektion.stufe) ?? STUFEN[0];
+  const angebot = diplomAngebot();
   const meta = { cert: stufe.metall, title: stufe.title, color: stufe.color };
   const MDXContent = useMDXComponent(lektion.body.code);
 
@@ -232,10 +234,18 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                     {/* 03.10.2026: Hier stand „Verkaufsstart 01.10.2026 — 99 € für die
                         ersten 100, danach 149 €". Das Datum ist vorbei, einen Kaufweg
                         und einen Zaehler gibt es nicht. Kein Datum, kein Preis, bis
-                        beides steht. */}
-                    <p className="font-sans text-xs text-text-muted mb-3">
-                      Die Stufen 2 bis 5 sind derzeit noch nicht buchbar.
-                    </p>
+                        beides steht. 16.10.2026: Der Kaufweg ist vorbereitet —
+                        src/lib/diplome/angebot.ts liefert Preis und Checkout, sobald
+                        das Digistore-Produkt existiert; vorher bleibt der Satz unten. */}
+                    {angebot.kaufbar ? (
+                      <p className="font-sans text-sm text-text-light mb-3">
+                        Stufe 2 bis 5 freischalten: <strong>{angebot.preisLabel}</strong>, einmalig.
+                      </p>
+                    ) : (
+                      <p className="font-sans text-xs text-text-muted mb-3">
+                        Die Stufen 2 bis 5 sind derzeit noch nicht buchbar.
+                      </p>
+                    )}
                     <p className="font-sans text-xs text-text-muted mb-6">
                       Nach bestandener Prüfung optional dazu bestellbar: die{' '}
                       <Link href="/diplome/urkunde" className="underline decoration-dotted hover:opacity-80" style={{ color: meta.color }}>
@@ -244,6 +254,15 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                       auf Papier für {urkundePreisMitVersand()}.
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-3">
+                      {angebot.kaufbar && (
+                        <a
+                          href={angebot.checkoutUrl}
+                          rel="nofollow"
+                          className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest text-ink bg-brand-gold hover:opacity-90 transition-opacity"
+                        >
+                          Diplom freischalten · {angebot.preisLabel}
+                        </a>
+                      )}
                       <Link
                         href="/diplome"
                         className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest text-ink bg-brand-fire hover:opacity-90 transition-opacity"

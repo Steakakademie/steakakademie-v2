@@ -212,6 +212,8 @@ zusagen:
         muster: "Du bekommst in wenigen Minuten zwei E-Mails: von der Steakakademie deinen persönlichen Login-Link zum Diagnose-Formular"
       - datei: src/app/danke/ds24bestellung/page.tsx
         muster: "Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und von uns eine E-Mail mit deinem Login-Link."
+      - datei: src/app/danke/diplom/page.tsx
+        muster: "Du erhältst in wenigen Minuten eine Bestätigung von Digistore24 und von uns eine E-Mail mit deinem Login-Link."
     beleg:
       - typ: loops
         art: transactional
