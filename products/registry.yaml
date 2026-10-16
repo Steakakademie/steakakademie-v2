@@ -28,6 +28,12 @@
   badge: "Unsere Auswahl"
   lastChecked: "2026-05-22"
   recommended: true
+  # Vorgemerkt für den AWIN-Start (01.11.2026) — affiliateUrl bleibt bis dahin Amazon.
+  # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/32287
+  partnerZiele:
+    - advertiser: santosgrills
+      url: "https://www.santosgrills.de/meater-plus"
+      geprueft: "2026-10-14"
 
 - id: thermapen-one
   name: "Thermapen ONE"
@@ -188,6 +194,70 @@
   badge: "Premium-Wahl"
   lastChecked: "2026-05-22"
   recommended: false
+  # Vorgemerkt für den AWIN-Start (01.11.2026). Santos führt Stand-Alone (ohne Wagen)
+  # und eine Variante mit Rollwagen; der Eintrag hier ist die Grundversion.
+  # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/32287
+  partnerZiele:
+    - advertiser: santosgrills
+      url: "https://www.santosgrills.de/kamado-joe-classic-iii-stand-alone"
+      geprueft: "2026-10-14"
+
+# ── NINJA WOODFIRE (SharkNinja DE, AWIN-ID 19810) ────────────────────────────
+# AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/19810
+# Eingetragen 14.10.2026 (docs/affiliate-strategie-2026.md, „Technik", Schritt 3):
+# Elektro-Pelletgrills für Balkon und Terrasse — SharkNinja führt drei Modelle
+# (OG701EU, OG850EU Pro XL, OG901EU Pro Connect XL); hier Einstieg und Topmodell.
+# Preise, Namen und Ausstattung von sharkninja.de am 14.10.2026 (Herstellerangaben).
+# Keine Amazon-Sterne eingetragen (nicht geprüft) — die Karte zeigt dann keine.
+# affiliateUrl bleibt bis zum AWIN-Start (01.11.2026) die Amazon-Suche.
+
+- id: ninja-woodfire-og701
+  name: "Ninja Woodfire Elektrischer Outdoor Grill & Smoker (OG701EU)"
+  brand: "Ninja"
+  category: grill
+  price: 280 # 279,99 € bei sharkninja.de, 14.10.2026
+  affiliateUrl: "https://www.amazon.de/s?k=Ninja+Woodfire+OG701EU&tag=steakakademie-21"
+  provider: amazon
+  description: "Elektrischer Outdoor-Grill, Smoker und Heißluftfritteuse mit Pellet-Rauch — ohne Holzkohle und Gas"
+  pros:
+    - "Woodfire-Technologie: Holzpellets liefern das Raucharoma, die Hitze kommt elektrisch"
+    - "Grillen, Smoken und Heißluftfrittieren in einem Gerät — Rost für 8 Burger laut Hersteller"
+    - "Laut Hersteller gesmokt in der Zeit, die ein Holzkohlegrill zum Vorheizen braucht"
+  cons:
+    - "Braucht eine Steckdose im Freien"
+    - "Kein Thermometer integriert — das gibt es erst ab Pro XL"
+  badge: "Elektro-Einstieg"
+  lastChecked: "2026-10-14"
+  recommended: false
+  partnerZiele:
+    - advertiser: sharkninja
+      url: "https://www.sharkninja.de/ninja-woodfire-elektrischer-outdoor-grill-smoker/OG701EU.html"
+      geprueft: "2026-10-14"
+
+- id: ninja-woodfire-pro-connect-xl-og901
+  name: "Ninja Woodfire Pro Connect XL Elektrischer Outdoor Grill & Smoker (OG901EU)"
+  brand: "Ninja"
+  category: grill
+  price: 410 # 409,99 € bei sharkninja.de, 14.10.2026 (Grundversion ohne Abdeckung)
+  affiliateUrl: "https://www.amazon.de/s?k=Ninja+Woodfire+Pro+Connect+XL+OG901EU&tag=steakakademie-21"
+  provider: amazon
+  description: "Das XL-Topmodell der Woodfire-Reihe: Pellet-Rauch, integriertes digitales Thermometer und Garpunkt-Steuerung per App"
+  pros:
+    - "Integriertes digitales Thermometer — Garstufe von rare bis well done über die Ninja Pro Connect App"
+    - "XL-Grillfläche: laut Hersteller bis zu 10 Burger, 40 Hotdogs oder 2 Portionen Rippchen"
+    - "Woodfire-Technologie: Holzfeueraroma ohne Holzkohle oder Gas"
+  cons:
+    - "Braucht eine Steckdose im Freien"
+    - "Volle Funktion nur mit App — ohne Smartphone bleibt es ein Elektrogrill mit Thermometer"
+  badge: "Mit App & Thermometer"
+  lastChecked: "2026-10-14"
+  recommended: false
+  # SharkNinja führt die Seite als Master mit Farbvarianten (Schwarz/Blau/Grün & Gold, je mit
+  # Abdeckung); der Eintrag hier ist die Grundversion.
+  partnerZiele:
+    - advertiser: sharkninja
+      url: "https://www.sharkninja.de/ninja-woodfire-pro-connect-xl-elektrischer-outdoor-grill-smoker/OG901EU.html"
+      geprueft: "2026-10-14"
 
 # ── KÜCHENMASCHINEN ───────────────────────────────────────────────────────────
 
@@ -752,3 +822,32 @@
   badge: null
   lastChecked: "2026-05-22"
   recommended: false
+
+# Ninja (SharkNinja DE, AWIN-ID 19810) — eingetragen 14.10.2026 für die Küchenmaschinen-
+# Übersicht (docs/affiliate-strategie-2026.md, „Technik", Schritt 3). Angaben von
+# sharkninja.de am 14.10.2026; dort an dem Tag als „ausverkauft" geführt, Seite erreichbar.
+# affiliateUrl bleibt bis zum AWIN-Start (01.11.2026) die Amazon-Suche; keine Sterne eingetragen.
+# AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/19810
+
+- id: ninja-precisionpro-bz651
+  name: "Ninja PrecisionPro Küchenmaschine (BZ651EU)"
+  brand: "Ninja"
+  category: kuechenmaschine
+  price: 100 # 99,99 € bei sharkninja.de, 14.10.2026
+  affiliateUrl: "https://www.amazon.de/s?k=Ninja+PrecisionPro+BZ651EU&tag=steakakademie-21"
+  provider: amazon
+  description: "Kompakte Food-Processor-Küchenmaschine — 850 W, 2,1-l-Schüssel, vier Programme für Hacken, Schneiden, Teig und Pürieren"
+  pros:
+    - "Vier Auto-iQ-Programme: Hacken, Scheiben/Raspeln, Teig kneten, Pürieren"
+    - "850-Watt-Motor knetet laut Hersteller auch Pizza- und Brotteig"
+    - "Kleiner Stellplatz — rund 20 × 20 × 40 cm"
+  cons:
+    - "2,1-l-Schüssel (nutzbar 1,9 l) — keine großen Teig- oder Marinadenmengen"
+    - "Kein Fleischwolf-Aufsatz — anders als die KitchenAid Artisan"
+  badge: null
+  lastChecked: "2026-10-14"
+  recommended: false
+  partnerZiele:
+    - advertiser: sharkninja
+      url: "https://www.sharkninja.de/ninja-precisionpro-kuechenmaschine/BZ651EU.html"
+      geprueft: "2026-10-14"

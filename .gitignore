@@ -210,3 +210,7 @@ data/bild-motiv-report.json
 /content/eigenregie
 /content/gruender-schmiede
 /content/diplom-lektionen/stufe-[2-9]
+
+# RuVector intelligence data
+.ruvector/
+.claude/statusline.sh
