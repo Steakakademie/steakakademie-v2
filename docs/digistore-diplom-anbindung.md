@@ -1,8 +1,9 @@
 # Grillmeister-Diplom an Digistore anbinden — Runbook
 
 > Stand 17.10.2026, nach Merge #424 und erfolgreichem Testkauf. Abteilung: Wachstum
-> (Monetarisierung), CLAUDE.md §5 Blocker 3. Der Kaufweg ist in der Produktion live;
-> was noch fehlt, steht in Abschnitt 0 unter „Noch offen" und ist Handarbeit von Uwe.
+> (Monetarisierung), CLAUDE.md §5 Blocker 3. Der Kaufweg ist technisch fertig und getestet,
+> **aber gesperrt: Verkauf erst nach der Gewerbeanmeldung** (Abschnitt 0a). Was noch fehlt,
+> steht in Abschnitt 0 unter „Noch offen" und ist Handarbeit von Uwe.
 
 ## 0. Stand 17.10.2026 — Digistore-Produkt angelegt (Cowork, über die Digistore-API)
 
@@ -16,12 +17,33 @@
 | Affiliate | 10 %, Auto-Accept (wie die übrigen Produkte) |
 | Aktiv / Freigabe DS-de | aktiv / **„Neu" — noch nicht zur Prüfung eingereicht** |
 
+### 0a. Verkaufssperre bis zur Gewerbeanmeldung (Uwe, 17.10.2026)
+
+Uwe, nach dem Merge von #425: „das Produkt darf noch nicht verkauft werden, erst nachdem ich
+das Gewerbe angemeldet habe." Geplant ist die Gewerbeanmeldung zum **01.11.2026** (Uwe, 17.10.2026).
+Zwei Riegel, beide müssen beim Verkaufsstart wieder fallen:
+
+| Riegel | Stand | Wer öffnet ihn |
+|---|---|---|
+| Kauf-Button auf der Seite | `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID` am 17.10.2026 auf **nur Preview** gesetzt (Wert 750228 bleibt). Ohne die Variable rendert `src/lib/diplome/angebot.ts` `kaufbar: false`: kein Button, Lektionen sagen „derzeit noch nicht buchbar". Production neu gebaut. | Claude oder Uwe: Variable wieder auf Production + Preview, Redeploy. |
+| Digistore-Produkt 750228 | Status „aktiv", DS-de-Freigabe nicht eingereicht. Der Checkout-Link ist öffentlich — wer ihn kennt, kommt ohne unseren Button an die Kasse. | **Uwe:** im Digistore-Backend Verkaufsstopp setzen, bis das Gewerbe angemeldet ist. Per API nicht möglich (Token nicht in dieser Umgebung). |
+
+Was der Testkauf hinterlassen hat, bleibt: Buchung 4YY6TULF auf Uwes Konto (Test-Erstattung
+offen). Der Webhook bleibt scharf — eine echte Bestellung würde trotzdem ausgeliefert, deshalb
+ist der Verkaufsstopp in Digistore der eigentliche Riegel, der Button nur die Sichtbarkeit.
+
+**Verkaufsstart nach Gewerbeanmeldung (geplant 01.11.2026), in dieser Reihenfolge:** (1) Verkaufsstopp in Digistore
+aufheben, Leistungszeitraum auf unbefristet; (2) Variable zurück auf Production + Preview,
+Redeploy, Button auf `/diplome` sichtbar; (3) Produkt bei DS-de zur Prüfung einreichen;
+(4) Impressum/AGB auf die Gewerbedaten prüfen (Kanzlei).
+
 **Noch offen, in dieser Reihenfolge** (Reihenfolge ist Pflicht — Variablen vor Mapping = Kauf ohne Zugang):
 
 1. ✓ 17.10.2026: Mapping `750228 → grillmeister-diplom`, `published = true`, `price = 99.00` —
    Migration `20261017083813_diplom_digistore_mapping.sql` (Ledger-Version), live abgefragt.
 2. ✓ 17.10.2026: Vercel (2.3) `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99`
    (Production + Preview, Typ plain). Wirksam auf Production mit dem nächsten Build — der Merge dieses PRs.
+   **Seit 17.10.2026 nachmittags ist die Produkt-ID nur noch auf Preview** (Abschnitt 0a).
 3. Digistore-Backend, per API nicht setzbar:
    - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps). Das Feld ist nur eine
      Angabe auf der Rechnung, es sperrt nichts. Entscheidung Uwe 17.10.2026: Zugang **unbefristet** → auf
