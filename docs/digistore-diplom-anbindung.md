@@ -26,7 +26,7 @@ Zwei Riegel, beide müssen beim Verkaufsstart wieder fallen:
 | Riegel | Stand | Wer öffnet ihn |
 |---|---|---|
 | Kauf-Button auf der Seite | `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID` am 17.10.2026 auf **nur Preview** gesetzt (Wert 750228 bleibt). Ohne die Variable rendert `src/lib/diplome/angebot.ts` `kaufbar: false`: kein Button, Lektionen sagen „derzeit noch nicht buchbar". Production neu gebaut. | Claude oder Uwe: Variable wieder auf Production + Preview, Redeploy. |
-| Digistore-Produkt 750228 | Status „aktiv", DS-de-Freigabe nicht eingereicht. Der Checkout-Link ist öffentlich — wer ihn kennt, kommt ohne unseren Button an die Kasse. | **Uwe:** im Digistore-Backend Verkaufsstopp setzen, bis das Gewerbe angemeldet ist. Per API nicht möglich (Token nicht in dieser Umgebung). |
+| Digistore-Produkt 750228 | ✓ **Verkaufsstopp gesetzt** (Uwe, 17.10.2026, nach Merge #426). DS-de-Freigabe nicht eingereicht. Vorher war der Checkout-Link öffentlich erreichbar — wer ihn kannte, kam ohne unseren Button an die Kasse. | Uwe hebt den Verkaufsstopp zum Verkaufsstart wieder auf (Schritt 1 unten). Per API nicht möglich (Token nicht in dieser Umgebung). |
 
 Was der Testkauf hinterlassen hat, bleibt: Buchung 4YY6TULF auf Uwes Konto (Test-Erstattung
 offen). Der Webhook bleibt scharf — eine echte Bestellung würde trotzdem ausgeliefert, deshalb

@@ -219,7 +219,7 @@ Mapping + `published = true` + Preis in der DB und beide Vercel-Variablen gesetz
 sperrt den Zugang (Webhook). **Seit #424 (17.10., nachmittags) technisch fertig:** Testkauf
 4YY6TULF ist durch (Buchung aktiv, Login-Mail, Roadmap). **Verkauf gesperrt bis zur
 Gewerbeanmeldung (Uwe, 17.10.):** Produkt-ID nur noch auf Preview, kein Kauf-Button in der
-Produktion; Verkaufsstopp in Digistore setzt Uwe selbst. **Offen, nur Uwe:** Gewerbe anmelden (geplant 01.11.2026) →
+Produktion; Verkaufsstopp in Digistore gesetzt (Uwe, 17.10.). **Offen, nur Uwe:** Gewerbe anmelden (geplant 01.11.2026) →
 Verkaufsstart nach `docs/digistore-diplom-anbindung.md` Abschnitt 0a; daneben Test-Erstattung
 (Entzugspfad), Login-Mail-Design in Loops, Vercel-Variable `Gelato` → `GELATO_API_KEY`.
 *Kassieren ohne Auslieferung (16.10.2026, Nebenbefund vom 09.10. korrigiert):* Der alte Satz
