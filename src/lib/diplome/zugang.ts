@@ -3,14 +3,21 @@ import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { ADMIN_COOKIE, istAdminCookie } from '@/lib/admin-auth';
 import { DIPLOM_COURSE_SLUG, ERSTE_BEZAHLSTUFE } from './stufen';
+import { pruefeGeraet } from '@/lib/auth/geraete-limit';
 
 export type DiplomZugang = {
   /** Eingeloggter Nutzer, sonst null */
   userId: string | null;
   /** Admin-Cookie (Uwe) */
   admin: boolean;
-  /** Darf Stufe 2–5 sehen: Admin ODER aktive Buchung des Diplom-Kurses */
+  /** Darf Stufe 2–5 sehen: Admin ODER (aktive Buchung des Diplom-Kurses UND zugelassenes Gerät) */
   zugang: boolean;
+  /**
+   * Gekauft, aber dieses Gerät gehört nicht zu den zwei zuletzt angemeldeten
+   * (src/lib/auth/geraete-limit.ts, 17.10.2026). Aufrufer leiten dann auf
+   * /auth/geraete weiter, statt den Kauf-Kasten zu zeigen.
+   */
+  geraeteLimit: boolean;
 };
 
 /**
@@ -32,21 +39,21 @@ export async function diplomZugang(): Promise<DiplomZugang> {
   // Buchungspruefung — dann zaehlt nur der Admin-Cookie. Nie werfen: die
   // Lektionsseite soll auch dann rendern, nur eben gesperrt.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return { userId: null, admin, zugang: admin };
+    return { userId: null, admin, zugang: admin, geraeteLimit: false };
   }
 
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { userId: null, admin, zugang: admin };
-    if (admin) return { userId: user.id, admin, zugang: true };
+    if (!user) return { userId: null, admin, zugang: admin, geraeteLimit: false };
+    if (admin) return { userId: user.id, admin, zugang: true, geraeteLimit: false };
 
     const { data: course } = await supabase
       .from('courses')
       .select('id')
       .eq('slug', DIPLOM_COURSE_SLUG)
       .maybeSingle();
-    if (!course) return { userId: user.id, admin, zugang: false };
+    if (!course) return { userId: user.id, admin, zugang: false, geraeteLimit: false };
 
     const { data: booking } = await supabase
       .from('bookings')
@@ -59,9 +66,13 @@ export async function diplomZugang(): Promise<DiplomZugang> {
     // 20.09.2026: Käufe landeten live als 'pending' (grant_course_access ohne Status).
     // 'pending' kann nur der Webhook (service_role) anlegen — authenticated hat kein INSERT.
     const aktiv = booking?.status === 'active' || booking?.status === 'confirmed' || booking?.status === 'pending';
-    return { userId: user.id, admin, zugang: aktiv };
+    if (!aktiv) return { userId: user.id, admin, zugang: false, geraeteLimit: false };
+
+    // Ein Kauf = eine Person: Kursinhalte nur auf den zwei zuletzt angemeldeten Geräten.
+    const geraet = await pruefeGeraet(supabase, user.id);
+    return { userId: user.id, admin, zugang: geraet.zugelassen, geraeteLimit: !geraet.zugelassen };
   } catch {
-    return { userId: null, admin, zugang: admin };
+    return { userId: null, admin, zugang: admin, geraeteLimit: false };
   }
 }
 

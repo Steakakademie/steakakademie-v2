@@ -1513,7 +1513,9 @@ function Quiz({
         setFehlerText(
           err === 'diplom_erforderlich'
             ? 'Diese Prüfung gehört zum Grillmeister-Diplom.'
-            : err || 'Die Prüfung konnte nicht ausgewertet werden. Bitte später erneut versuchen.',
+            : err === 'geraete_limit'
+              ? 'Dein Konto ist schon auf zwei anderen Geräten angemeldet. Unter „Meine Geräte“ (/auth/geraete) kannst du sie abmelden und hier weitermachen.'
+              : err || 'Die Prüfung konnte nicht ausgewertet werden. Bitte später erneut versuchen.',
         );
         setEinreichen('fehler');
         return;

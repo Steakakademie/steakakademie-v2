@@ -36,7 +36,7 @@ import {
  */
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
-type Konto = { userId: string; email: string; bestandeneStufen: Set<number> } | null | 'laedt';
+type Konto = { userId: string; email: string; bestandeneStufen: Set<number>; festerName: string | null } | null | 'laedt';
 
 export default function UrkundePage() {
   const [form, setForm] = useState({
@@ -75,14 +75,16 @@ export default function UrkundePage() {
         const supabase = createClient();
         const { data: { user } } = await supabase.auth.getUser();
         if (!user || cancelled) { if (!cancelled) setKonto(null); return; }
-        const { data } = await supabase
-          .from('course_progress')
-          .select('stufe, status')
-          .eq('user_id', user.id);
+        const [{ data }, { data: nameZeile }] = await Promise.all([
+          supabase.from('course_progress').select('stufe, status').eq('user_id', user.id),
+          // Ein Name pro Konto (17.10.2026) — steht er fest, wird er nur angezeigt.
+          supabase.from('urkunden_namen').select('name').eq('user_id', user.id).maybeSingle(),
+        ]);
         const bestanden = new Set<number>(
           (data ?? []).filter((r) => r.status === 'bestanden' && typeof r.stufe === 'number').map((r) => r.stufe as number),
         );
-        if (!cancelled) setKonto({ userId: user.id, email: user.email ?? '', bestandeneStufen: bestanden });
+        const festerName = (nameZeile as { name?: string } | null)?.name ?? null;
+        if (!cancelled) setKonto({ userId: user.id, email: user.email ?? '', bestandeneStufen: bestanden, festerName });
       } catch {
         if (!cancelled) setKonto(null);
       }
@@ -113,7 +115,7 @@ export default function UrkundePage() {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           levelId: selected.id,
-          nameAufUrkunde: form.nameAufUrkunde.trim(),
+          nameAufUrkunde: konto.festerName ? undefined : form.nameAufUrkunde.trim(),
           vorname: form.vorname.trim(),
           nachname: form.nachname.trim(),
           strasse: form.strasse.trim(),
@@ -296,8 +298,27 @@ export default function UrkundePage() {
 
               <div>
                 <label className={labelClass} htmlFor="nameAufUrkunde">Name, wie er auf der Urkunde stehen soll</label>
-                <input id="nameAufUrkunde" name="nameAufUrkunde" value={form.nameAufUrkunde} onChange={handleChange} required
-                  maxLength={60} placeholder="z. B. Max Mustermann" className={inputClass} />
+                {konto.festerName ? (
+                  <>
+                    <input id="nameAufUrkunde" value={konto.festerName} readOnly aria-readonly className={`${inputClass} opacity-80`} />
+                    <p className="mt-1.5 text-[11px] font-sans text-text-light/55">
+                      Ein Name pro Konto — er steht auf all deinen Urkunden. Änderung nur über den Support.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <input id="nameAufUrkunde" name="nameAufUrkunde" value={form.nameAufUrkunde} onChange={handleChange} required
+                      maxLength={60} placeholder="z. B. Max Mustermann" className={inputClass} />
+                    <p className="mt-1.5 text-[11px] font-sans text-text-light/55">
+                      Achtung: Mit der ersten Urkunde wird dieser Name fest an dein Konto gebunden und gilt für alle
+                      weiteren — ändern lässt er sich danach nur über den Support.
+                    </p>
+                  </>
+                )}
+                <p className="mt-1.5 text-[11px] font-sans text-text-light/55">
+                  Jede Urkunde trägt eine Nummer mit Prüfcode. Wer sie kennt, kann unter steakakademie.de/urkunde
+                  Name, Grad und Ausstellungsdatum prüfen.
+                </p>
               </div>
 
               <div>

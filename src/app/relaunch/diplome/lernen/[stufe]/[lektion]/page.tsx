@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
+import { geraeteZiel } from '@/lib/auth/geraete-limit';
 import { allDiplomLektions } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { STUFEN } from '@/components/relaunch/Siegel';
@@ -54,7 +55,9 @@ export default async function LektionSeite(props: Props) {
   const params = await props.params;
   const l = finde(params);
   if (!l) notFound();
-  const gesperrt = istBezahlstufe(l.stufe) ? !(await diplomZugang()).zugang : false;
+  const zugang = istBezahlstufe(l.stufe) ? await diplomZugang() : null;
+  if (zugang?.geraeteLimit) redirect(geraeteZiel(url(l)));
+  const gesperrt = zugang ? !zugang.zugang : false;
   return <LektionInhalt l={l} gesperrt={gesperrt} />;
 }
 

@@ -23,8 +23,9 @@
 2. ✓ 17.10.2026: Vercel (2.3) `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99`
    (Production + Preview, Typ plain). Wirksam auf Production mit dem nächsten Build — der Merge dieses PRs.
 3. Digistore-Backend, per API nicht setzbar:
-   - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps) — der Zugang ist
-     unbefristet (`src/lib/diplome/zugang.ts`), also auf „lebenslang/unbefristet" stellen.
+   - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps). Das Feld ist nur eine
+     Angabe auf der Rechnung, es sperrt nichts. Entscheidung Uwe 17.10.2026: Zugang **unbefristet** → auf
+     „lebenslang/unbefristet" stellen. Gegen Weitergabe schützen Geräte-Limit und Namensbindung (Abschnitt 0b).
    - IPN: prüfen, dass die Anbindung „alle Produkte" umfasst oder 750228 aufnehmen.
    - Erst wenn `/diplome` Preis und Button zeigt: Produkt für DS-de **zur Prüfung einreichen**.
 4. Testkauf (2.4) über den Testpay-Link aus dem Produkt (Digistore → Produkt 750228 → Vorschau).
@@ -35,6 +36,20 @@ wieder (mit Mail); reguläre Folgeraten kommen ohne Mail. Damit Rate 2/3 nicht a
 trägt der Idempotenz-Schlüssel ab Rate 2 die Nummer (`payment#2`, `payment_missed#2`) — siehe `route.ts`,
 Abschnitt „Raten". Der Entzug setzt `bookings.status = 'refunded'` (einziger Entzugsstatus der DB-Funktion);
 der Grund steht in `digistore_orders`.
+
+## 0b. Schutz gegen Weitergabe des Kontos (17.10.2026, Entscheidung Uwe)
+
+| Baustein | Wo | Wirkung |
+|---|---|---|
+| Geräte-Limit 2 | `src/lib/auth/geraete-limit.ts`, DB `sitzung_zugelassen()` | Bezahlte Inhalte nur auf den zwei zuletzt angemeldeten Sitzungen (gezählt werden nur Sitzungen, die in den letzten 3 Tagen benutzt wurden — verwaiste aus gelöschten Cookies sperren niemanden); ältere landen auf `/auth/geraete` („Andere Geräte abmelden und hier weiterlernen"). Gilt für Diplom, Eigenregie, Mein Protokoll, Steuer-Matrix (alle über `requireCourseAccess` bzw. `diplomZugang`) und die Diplom-Prüfung. |
+| Hinweis bei Auffälligkeit | Sentry, Issue „Geräte-Limit: auffällig viele neue Anmeldungen" | ab 6 neuen Anmeldungen in 7 Tagen, ein Issue pro Konto (nur Konto-ID). |
+| Ein Name pro Konto | DB `urkunden_namen` | beim ersten Ausstellen bzw. der ersten Druckbestellung festgelegt; Änderung nur per SQL/Support. |
+| Urkunde mit Prüfcode | DB `urkunden`, `/api/urkunde/ausstellen`, `/api/urkunde/bild` | digitale Urkunde kostenlos im Profil; Kennung `SA-2026-0001-K7Q2XM` steht auf der Urkunde; Druck nutzt dieselbe Kennung. |
+| Öffentliche Prüfseite | `/urkunde`, `/urkunde/<kennung>` (noindex, nicht in der Sitemap) | zeigt Name, Grad, Datum — nur mit Prüfcode, Nummern hochzählen verrät nichts. |
+
+Migrationen: `20261017094922_urkunden_schutz_geraete_limit.sql` + `20261017101203_urkunden_schutz_nachbesserung.sql` (angewendet und per SQL geprüft).
+Support-Fall „Name falsch": `update urkunden_namen set name = '…' where user_id = '…';` und betroffene
+`urkunden.name` gleich mitziehen. Admin-Cookie (Uwe) ist vom Geräte-Limit nur beim Diplom ausgenommen.
 
 ## 1. Was schon da ist (belegt am 16.10.2026)
 

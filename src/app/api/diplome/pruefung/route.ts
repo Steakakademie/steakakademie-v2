@@ -4,6 +4,8 @@ export const dynamic = 'force-dynamic';
 import { z } from 'zod';
 import { createClient as createAdminClient, type SupabaseClient } from '@supabase/supabase-js';
 import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/lib/api/guard';
+import { createClient } from '@/lib/supabase/server';
+import { pruefeGeraet } from '@/lib/auth/geraete-limit';
 import { bewerte } from '@/lib/diplome/fragen';
 import { pruefeZiehung, tokenSecret } from '@/lib/diplome/pruefung-token';
 import {
@@ -80,6 +82,15 @@ export async function POST(req: Request) {
     if (!adminDb) return jsonError(503, 'Prüfung derzeit nicht verfügbar.');
     const zugang = await hatDiplomBuchung(adminDb, userId);
     if (!zugang) return jsonError(403, 'diplom_erforderlich');
+    // Geräte-Limit (17.10.2026): Prüfen nur auf den zwei zuletzt angemeldeten
+    // Geräten — sonst liefe die Weitergabe des Kontos über die Prüfung weiter.
+    let geraetZugelassen = true;
+    try {
+      geraetZugelassen = (await pruefeGeraet(await createClient(), userId)).zugelassen;
+    } catch {
+      // Ohne Nutzer-Client (kein Request-Kontext) entscheidet die Buchung allein.
+    }
+    if (!geraetZugelassen) return jsonError(403, 'geraete_limit');
   }
 
   const ergebnis = bewerte(modul, ziehung.ids, antworten);

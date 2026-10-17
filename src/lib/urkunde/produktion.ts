@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { rendereUrkunde, urkundenDatum } from './render';
+import { kennungAus, urkundenZeile } from './kennung';
 import { sendeAuftrag, GelatoFehler } from './gelato';
 
 /**
@@ -94,24 +95,60 @@ export async function produziere(
   try {
     // ── Nummer: bei einem erneuten Anlauf die bereits vergebene weiterbenutzen,
     // sonst reisst jeder Fehlversuch eine Luecke in die Nummernfolge.
+    //
+    // Seit 17.10.2026: Bestellungen eines Kontos drucken DIE Urkunde aus
+    // public.urkunden (gleiche Nummer + Prüfcode wie die digitale, Name aus
+    // urkunden_namen, Datum der Ausstellung). urkunde_ausstellen_fuer ist
+    // idempotent je Konto und Stufe — ein Nachdruck trägt dieselbe Kennung.
+    // Nur Bestellungen ohne Konto (Admin) laufen noch über den alten Zähler.
     let urkundeNr = bestellung.urkunde_nr;
-    if (!urkundeNr) {
+    let druckName = bestellung.name_auf_urkunde;
+    let druckZeile = urkundeNr ? `Urkunden-Nr. ${urkundeNr}` : '';
+    let druckDatum = urkundenDatum(jetzt);
+    // Admin-Testbestellung für ein Konto ohne bestandene Stufe: keine öffentlich
+    // prüfbare Urkunde anlegen, sondern wie früher über den Zähler (unten).
+    const kontoUrkunde = bestellung.user_id
+      ? await db.rpc('urkunde_ausstellen_fuer', {
+          p_user_id: bestellung.user_id,
+          p_stufe: bestellung.stufe,
+          p_name: bestellung.name_auf_urkunde,
+        })
+      : null;
+    const nichtBestanden = Boolean(kontoUrkunde?.error?.message.includes('nicht_bestanden'));
+    if (kontoUrkunde && !nichtBestanden) {
+      const { data, error } = kontoUrkunde;
+      const u = (Array.isArray(data) ? data[0] : data) as
+        | { nr: string; pruefcode: string; name: string; ausgestellt_am: string }
+        | null;
+      if (error || !u) throw new Error(`Urkunde konnte nicht ausgestellt werden: ${error?.message ?? 'leere Antwort'}`);
+      urkundeNr = kennungAus(u.nr, u.pruefcode);
+      druckName = u.name;
+      druckZeile = urkundenZeile(u.nr, u.pruefcode);
+      druckDatum = urkundenDatum(new Date(u.ausgestellt_am));
+      if (bestellung.urkunde_nr !== urkundeNr) {
+        // Seit Migration 20261017101203 nicht mehr UNIQUE: ein Nachdruck trägt dieselbe Kennung.
+        await db.from('urkunden_bestellungen').update({ urkunde_nr: urkundeNr }).eq('id', bestellung.id);
+      }
+    } else if (!urkundeNr) {
       const { data, error } = await db.rpc('naechste_urkundennummer', { p_jahr: jetzt.getFullYear() });
       if (error || typeof data !== 'string') throw new Error(`Nummernvergabe fehlgeschlagen: ${error?.message ?? 'leere Antwort'}`);
       urkundeNr = data;
+      druckZeile = `Urkunden-Nr. ${urkundeNr}`;
       await db.from('urkunden_bestellungen').update({ urkunde_nr: urkundeNr }).eq('id', bestellung.id);
     }
+    if (!urkundeNr) throw new Error('Keine Urkunden-Nummer.');
 
     // ── Rendern
     const { png } = await rendereUrkunde({
       stufe: bestellung.stufe,
-      name: bestellung.name_auf_urkunde,
-      datum: urkundenDatum(jetzt),
-      nr: `Urkunden-Nr. ${urkundeNr}`,
+      name: druckName,
+      datum: druckDatum,
+      nr: druckZeile,
     });
 
     // ── Ablegen und signieren
-    const pfad = `druck/${jetzt.getFullYear()}/${urkundeNr}.png`;
+    // Bestell-ID im Namen: Ein Nachdruck derselben Urkunde überschreibt nicht die Datei der ersten Bestellung.
+    const pfad = `druck/${jetzt.getFullYear()}/${urkundeNr}-${bestellung.id.slice(0, 8)}.png`;
     const { error: uploadFehler } = await db.storage
       .from(BUCKET)
       .upload(pfad, png, { contentType: 'image/png', upsert: true });

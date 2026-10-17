@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/client';
 import MeineEinreichungen from './MeineEinreichungen';
 import KontoLoeschen from './KontoLoeschen';
 import MeineMedaillen from './MeineMedaillen';
+import MeineUrkunden from './MeineUrkunden';
 
 type State = 'loading' | 'anon' | 'ready' | 'saving';
 
@@ -187,6 +188,9 @@ export default function ProfilClient() {
 
           {/* Die Seite versprach „eine eigene Profil-Seite mit deinen Medaillen" und zeigte keine (Audit). */}
           {state === 'ready' && <MeineMedaillen />}
+
+          {/* Digitale Urkunde + Prüfseite (17.10.2026): ein Name pro Konto. */}
+          {state === 'ready' && <MeineUrkunden />}
 
           {state === 'ready' && <MeineEinreichungen />}
 

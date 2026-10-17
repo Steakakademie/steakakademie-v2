@@ -1,6 +1,7 @@
 import 'server-only';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { pruefeGeraet, geraeteZiel } from '@/lib/auth/geraete-limit';
 
 export type CourseAccess = {
   user:    { id: string; email: string };
@@ -13,7 +14,8 @@ export type CourseAccess = {
  *
  *  1. Kein Login                       → /auth/login?redirectTo=<this>
  *  2. Login, keine aktive Booking      → /<slug>?locked=1
- *  3. Login + active/pending           → { user, course, booking }
+ *  3. Login + active/pending, aber drittes Gerät → /auth/geraete (17.10.2026)
+ *  4. Login + active/pending           → { user, course, booking }
  *
  * RLS (Migrations 006/008) übernimmt die Sicherheitsfilterung — diese
  * Funktion stellt nur die Redirects + Typsicherheit für die Server Components.
@@ -54,6 +56,12 @@ export async function requireCourseAccess(
 
   if (!booking) {
     redirect(`/${courseSlug}?locked=1`);
+  }
+
+  // Ein Kauf = eine Person: nur die zwei zuletzt angemeldeten Geräte (src/lib/auth/geraete-limit.ts).
+  const geraet = await pruefeGeraet(supabase, user.id);
+  if (!geraet.zugelassen) {
+    redirect(geraeteZiel(routePath));
   }
 
   return {

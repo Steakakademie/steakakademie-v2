@@ -28,7 +28,9 @@ import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_WIDERRUF_HINWEIS, URK
 
 const Body = z.object({
   levelId: z.number().int().min(1).max(10),
-  nameAufUrkunde: z.string().trim().min(2).max(60),
+  // Seit 17.10.2026 nur noch Vorschlag für den ERSTEN Namen eines Kontos — steht
+  // schon einer fest (urkunden_namen), wird er genommen, egal was hier steht.
+  nameAufUrkunde: z.string().trim().min(2).max(60).optional(),
   vorname: z.string().trim().min(1).max(25),
   nachname: z.string().trim().min(1).max(25),
   strasse: z.string().trim().min(1).max(35),
@@ -95,6 +97,17 @@ export async function POST(req: Request) {
   }
   if (!email) return jsonError(400, 'Zu deinem Konto ist keine E-Mail-Adresse hinterlegt.');
 
+  // Ein Name pro Konto (17.10.2026): Vorher war der Name je Bestellung frei —
+  // ein Konto konnte Urkunden für beliebig viele Personen drucken lassen.
+  // Steht noch keiner fest, legt diese Bestellung ihn fest.
+  let nameAufUrkunde = b.nameAufUrkunde ?? '';
+  if (userId) {
+    const fest = await festerName(db, userId, b.nameAufUrkunde);
+    if (!fest) return jsonError(400, 'Bitte gib den Namen an, der auf deinen Urkunden stehen soll.');
+    nameAufUrkunde = fest;
+  }
+  if (nameAufUrkunde.length < 2) return jsonError(400, 'Bitte gib den Namen für die Urkunde an.');
+
   const jetzt = new Date().toISOString();
   const { data: zeile, error } = await db
     .from('urkunden_bestellungen')
@@ -103,7 +116,7 @@ export async function POST(req: Request) {
       email,
       stufe: stufe.nr,
       level_id: level.id,
-      name_auf_urkunde: b.nameAufUrkunde,
+      name_auf_urkunde: nameAufUrkunde,
       vorname: b.vorname,
       nachname: b.nachname,
       strasse: b.strasse,
@@ -129,7 +142,7 @@ export async function POST(req: Request) {
     [
       `Neue Bestellung einer gedruckten Urkunde (${urkundePreisText()})`,
       '',
-      `Name auf der Urkunde: ${b.nameAufUrkunde}`,
+      `Name auf der Urkunde: ${nameAufUrkunde}`,
       `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
       '',
       'Versandadresse:',
@@ -146,7 +159,7 @@ export async function POST(req: Request) {
 
   await bestaetigeBestellung(email, {
     stufeName: `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
-    nameAufUrkunde: b.nameAufUrkunde,
+    nameAufUrkunde,
     preis: `${urkundePreisText()} (Versand inklusive, inkl. gesetzlicher MwSt.)`,
     bestellId: zeile.id,
     adresse: [`${b.vorname} ${b.nachname}`, b.strasse, b.adresszusatz ?? '', `${b.plz} ${b.ort}`, b.land].filter(Boolean).join(', '),
@@ -154,4 +167,21 @@ export async function POST(req: Request) {
   });
 
   return Response.json({ ok: true, id: zeile.id });
+}
+
+type Dienst = NonNullable<ReturnType<typeof dienstClient>>;
+
+/** Festgelegter Name des Kontos; legt `vorschlag` fest, wenn noch keiner existiert. */
+async function festerName(db: Dienst, userId: string, vorschlag: string | undefined): Promise<string | null> {
+  const lesen = async () => {
+    const { data } = await db.from('urkunden_namen').select('name').eq('user_id', userId).maybeSingle();
+    return (data as { name?: string } | null)?.name ?? null;
+  };
+  const vorhanden = await lesen();
+  if (vorhanden) return vorhanden;
+  const neu = (vorschlag ?? '').trim().replace(/\s+/g, ' ');
+  if (neu.length < 2) return null;
+  // ON CONFLICT DO NOTHING: Zwei gleichzeitige Anfragen — der erste Name gewinnt.
+  await db.from('urkunden_namen').upsert({ user_id: userId, name: neu }, { onConflict: 'user_id', ignoreDuplicates: true });
+  return lesen();
 }

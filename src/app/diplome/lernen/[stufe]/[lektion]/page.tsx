@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { allDiplomLektions } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
@@ -15,6 +15,7 @@ import Glutbett from '@/components/diplome/Glutbett';
 import Pruefvermerk from '@/components/Pruefvermerk';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
+import { geraeteZiel } from '@/lib/auth/geraete-limit';
 import { diplomAngebot } from '@/lib/diplome/angebot';
 import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 import { ogImages } from '@/lib/og';
@@ -114,7 +115,10 @@ export default async function DiplomLektionPage(props: Props) {
   // bleiben — sonst fallen sie aus dem Manifest, aus dem next-sitemap seine
   // URLs liest (ist schon einmal passiert).
   const isPaidTier = istBezahlstufe(lektion.stufe);
-  const locked = isPaidTier ? !(await diplomZugang()).zugang : false;
+  const zugang = isPaidTier ? await diplomZugang() : null;
+  // Gekauft, aber drittes Gerät (17.10.2026): Erklärseite statt Kauf-Kasten.
+  if (zugang?.geraeteLimit) redirect(geraeteZiel(lektion.url));
+  const locked = zugang ? !zugang.zugang : false;
 
   return <LektionSeite lektion={lektion} locked={locked} />;
 }
