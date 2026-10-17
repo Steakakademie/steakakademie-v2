@@ -1000,8 +1000,13 @@ einen Fehlbefund gestützt haben — Statusquelle ist ausschließlich diese Date
 - **Git/GitHub** ist das Langzeitgedächtnis: früh & oft committen.
 - **Was NICHT in Git lebt** (Supabase-DB, Account-Zugänge), muss separat gesichert werden
   (2FA + Recovery-Codes offline, lokale Repo-Kopie). **Supabase läuft im Free-Tarif
-  ohne automatische Backups (Stand 03.10.2026)** — ein Sicherungsziel ist noch nicht
-  entschieden; bis dahin gibt es von der Datenbank keine Kopie.
+  ohne automatische Backups.** Seit 17.10.2026 (Uwe: „bau den täglichen Export") sichert
+  `.github/workflows/db-backup.yml` täglich 02:40 UTC Schemas `public`, `auth`, `storage`
+  als AES-256-verschlüsseltes GitHub-Artefakt (90 Tage) und probt die Wiederherstellung im
+  selben Lauf — `docs/supabase-backup.md`. Voraussetzung sind die Secrets `SUPABASE_DB_URL`
+  und `BACKUP_PASSPHRASE`; **die Passphrase liegt nur im GitHub-Secret und offline bei den
+  Recovery-Codes, nie im Repo, nie in `.env.local`, nie im Chat** — ohne sie sind alle
+  Backups wertlos. Nicht im Backup: Sitzungen, Bucket-Dateien.
 - Confluence-Spiegel `docs/confluence/` für die menschliche Übersicht aktuell halten.
 
 ### Drei Orte für Wissen (Uwe, 04.09.2026 — ersetzt „Zwei-Dateien-Gedächtnis" vom 25.06.2026)

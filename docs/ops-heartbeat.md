@@ -113,6 +113,7 @@ Hinweis, was bei einem Anschlag zu tun ist.
 | Social-Entwürfe | `artefakt` | 9 | Artefakt `social-drafts` mit mindestens 300 Bytes |
 | Wissensindex-Workflow | `workflow` | 2 | `index-knowledge.yml` startet noch |
 | Wissensindex (RAG-Embeddings) | `supabase` | 7 | neuester `indexed_at` in `knowledge_embeddings` |
+| Supabase-Sicherung (seit 17.10.2026) | `artefakt` | 2 | Artefakt `supabase-sicherung` mit mindestens 1 MB aus `db-backup.yml` (täglich 02:40 UTC) — `docs/supabase-backup.md` |
 
 Neu am 03.10.2026:
 
