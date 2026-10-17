@@ -282,6 +282,73 @@ describe('Digistore24-Webhook: Grillmeister-Diplom (Kaufweg vorbereitet 16.10.20
   });
 });
 
+describe('Digistore24-Webhook: Ratenzahlung — geplatzte Rate sperrt (Entscheidung Uwe 17.10.2026)', () => {
+  const PRODUKT = '750228';
+  const KURS = 'course-grillmeister-diplom';
+  const KAEUFER = 'rate@example.de';
+  beforeEach(() => {
+    db.tables.digistore_products.push({
+      ds_product_id: PRODUKT, course_id: KURS, is_voucher: false, voucher_credit_amount: null, credit_amount: null,
+      courses: { slug: 'grillmeister-diplom', title: 'Grillmeister-Diplom', published: true },
+    });
+  });
+  const rate = (event: string, nr: number) =>
+    POST(delivery({ event, order_id: 'ORD-RATE-1', product_id: PRODUKT, email: KAEUFER, pay_sequence_no: String(nr) }));
+  const mails = () => (fetch as any).mock.calls.length;
+  const buchung = () => db.tables.bookings.find((b) => b.course_id === KURS);
+
+  it('Rate 1 öffnet den Zugang mit Login-Mail, Rate 2 und 3 werden verarbeitet — ohne weitere Mail', async () => {
+    expect((await rate('payment', 1)).status).toBe(200);
+    expect(buchung()).toMatchObject({ revoked_at: null });
+    expect(mails()).toBe(1);
+
+    expect(await (await rate('payment', 2)).text()).toBe('OK');
+    expect(await (await rate('payment', 3)).text()).toBe('OK');
+    expect(mails()).toBe(1);
+    expect(db.tables.digistore_orders.map((o) => o.ds_event)).toEqual(['payment', 'payment#2', 'payment#3']);
+  });
+
+  it('geplatzte Rate entzieht den Zugang sofort', async () => {
+    await rate('payment', 1);
+    const res = await rate('on_payment_missed', 2);
+    expect(res.status).toBe(200);
+    expect(buchung()!.revoked_at).not.toBeNull();
+    const zeile = db.tables.digistore_orders.find((o) => o.ds_event === 'payment_missed#2');
+    expect(zeile).toMatchObject({ processing_status: 'processed' });
+  });
+
+  it('Nachzahlung nach geplatzter Rate öffnet den Zugang wieder — mit Login-Mail', async () => {
+    await rate('payment', 1);
+    await rate('payment_missed', 2);
+    const vorher = mails();
+    expect((await rate('payment', 2)).status).toBe(200);
+    expect(buchung()!.revoked_at).toBeNull();
+    expect(mails()).toBe(vorher + 1);
+  });
+
+  it('doppelte Zustellung derselben geplatzten Rate wirkt nur einmal; eine spätere Rate sperrt erneut', async () => {
+    await rate('payment', 1);
+    await rate('payment_missed', 2);
+    expect(await (await rate('payment_missed', 2)).text()).toBe('OK (duplicate)');
+    await rate('payment', 2);
+    expect(buchung()!.revoked_at).toBeNull();
+    await rate('payment_missed', 3);
+    expect(buchung()!.revoked_at).not.toBeNull();
+  });
+
+  it('Einmalzahlung ohne pay_sequence_no bleibt beim alten Schlüssel „payment"', async () => {
+    await POST(delivery({ event: 'payment', order_id: 'ORD-EINMAL', product_id: PRODUKT, email: KAEUFER }));
+    expect(db.tables.digistore_orders[0].ds_event).toBe('payment');
+  });
+
+  it('geplatzte Rate für ein unbekanntes Konto: 200, nichts entzogen, kein Alarm', async () => {
+    const res = await rate('payment_missed', 2);
+    expect(res.status).toBe(200);
+    expect(db.tables.bookings).toHaveLength(0);
+    expect(db.sentry).toHaveLength(0);
+  });
+});
+
 describe('Digistore24-Webhook: Credit-Produkt bei Wiederholung', () => {
   it('schreibt Credits nur einmal gut, wenn die Mail beim ersten Versuch scheitert und Digistore erneut zustellt', async () => {
     seedUsers(1);

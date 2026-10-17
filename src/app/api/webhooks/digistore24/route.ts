@@ -59,6 +59,8 @@ import { digistoreSignature } from '@/lib/digistore/signature';
  *     seit 19.09.2026, Verkaufsstopp in Digistore seit 23.09.2026. Die frueher
  *     hier genannten 37/497 EUR und „keine Zeile" galten fuer den Vorgaenger
  *     „Agentur-Killer-Sprint".
+ *   - 750228 (Grillmeister-Diplom, 99 EUR / 3 x 35 EUR): angelegt 17.10.2026,
+ *     Mapping auf grillmeister-diplom folgt (docs/digistore-diplom-anbindung.md).
  * Die Digistore-API ist seit 18.09.2026 schreibbar; der fruehere Satz
  * „Abschalten ist blockiert" gilt nicht mehr.
  *
@@ -257,6 +259,33 @@ function authenticate(req: Request, params: Record<string, string>): AuthResult 
 
 const STALE_PENDING_MS = 10 * 60_000;
 
+/**
+ * Raten (17.10.2026, Entscheidung Uwe: geplatzte Rate = Zugang weg)
+ * =================================================================
+ * Bei Ratenzahlung (Diplom 750228: 3 x 35 EUR) schickt Digistore pro Rate ein
+ * `payment` mit derselben order_id und steigender `pay_sequence_no`, bei einer
+ * fehlgeschlagenen Abbuchung `payment_missed`. Die Idempotenz lief bis hierher
+ * ueber (order_id, event) — Rate 2 und 3 waren damit „Duplikate", und ein
+ * nachgezahlter Betrag haette einen entzogenen Zugang nie wieder geoeffnet.
+ * Deshalb: ab Rate 2 traegt der Schluessel die Rate (`payment#2`), geplatzte
+ * Raten ebenso (`payment_missed#2`). Rate 1 bleibt `payment` — bestehende
+ * Zeilen und Einmalzahlungen aendern sich nicht.
+ */
+function rateAus(params: Record<string, string>): number | null {
+  const n = Number.parseInt(params.pay_sequence_no ?? '', 10);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function idempotenzEvent(event: string, params: Record<string, string>): string {
+  const rate = rateAus(params);
+  if (event === 'payment_missed') {
+    if (rate) return `payment_missed#${rate}`;
+    return params.transaction_id ? `payment_missed#${params.transaction_id}` : event;
+  }
+  if ((event === 'payment' || event === 'rebill') && rate && rate >= 2) return `${event}#${rate}`;
+  return event;
+}
+
 type OrderInsert = {
   ds_order_id: string; ds_product_id: string; ds_email: string; ds_event: string;
   course_id: string | null; raw_payload: Record<string, string>; raw_body: string;
@@ -407,7 +436,7 @@ export async function POST(req: Request) {
     ds_order_id:        orderId,
     ds_product_id:      productId,
     ds_email:           email,
-    ds_event:           event,
+    ds_event:           idempotenzEvent(event, params),
     course_id:          courseId,
     raw_payload:        params,
     raw_body:           rawBody,
@@ -445,6 +474,21 @@ export async function POST(req: Request) {
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
       const userId      = await ensureUser(supabase, email, courseSlug);
 
+      // Folgerate (pay_sequence_no >= 2): Zugang besteht schon — keine neue
+      // Login-Mail pro Monat. Ausnahme: der Zugang war wegen einer geplatzten
+      // Rate entzogen; dann oeffnet die Nachzahlung ihn wieder, mit Mail.
+      const folgeRate = (rateAus(params) ?? 1) >= 2;
+      let mailSchicken = true;
+      if (folgeRate) {
+        const { data: vorher } = await supabase
+          .from('bookings')
+          .select('revoked_at')
+          .eq('user_id', userId)
+          .eq('course_id', courseId)
+          .maybeSingle();
+        mailSchicken = !vorher || Boolean((vorher as { revoked_at: string | null }).revoked_at);
+      }
+
       const { data: bookingId, error: grantErr } = await supabase.rpc('grant_course_access', {
         p_user_id:   userId,
         p_course_id: courseId,
@@ -458,7 +502,7 @@ export async function POST(req: Request) {
         await schreibeProtokollGutschrift(supabase, userId, orderId, protokolleFuerBetrag(params.amount_brutto));
       }
 
-      await sendMagicLink(supabase, email, courseSlug, courseTitle);
+      if (mailSchicken) await sendMagicLink(supabase, email, courseSlug, courseTitle);
 
       await supabase
         .from('digistore_orders')
@@ -506,7 +550,37 @@ export async function POST(req: Request) {
       return new Response('OK', { status: 200 });
     }
 
-    // Andere Events nur loggen (z.B. on_payment_missed)
+    // Geplatzte Rate (17.10.2026): Zugang sofort entziehen. Digistore mahnt
+    // weiter; zahlt der Kaeufer nach, oeffnet das naechste `payment` (eigener
+    // Schluessel je Rate, siehe idempotenzEvent) den Zugang wieder.
+    // revoke_course_access setzt bookings.status = 'refunded' — die Funktion
+    // kennt nur diesen einen Entzugsstatus; der Grund steht in digistore_orders.
+    if (event === 'payment_missed') {
+      const userId = await findUserId(supabase, email);
+      let entzogen = 0;
+      if (userId) {
+        const { data: count, error: revokeErr } = await supabase.rpc('revoke_course_access', {
+          p_user_id:   userId,
+          p_course_id: courseId,
+        });
+        if (revokeErr) throw new Error(`revoke_course_access failed: ${revokeErr.message}`);
+        entzogen = (count as number | null) ?? 0;
+      }
+      console.info('[ds-webhook] payment_missed → Zugang entzogen', { orderId, rate: rateAus(params), entzogen });
+
+      await supabase
+        .from('digistore_orders')
+        .update({
+          processing_status: 'processed',
+          processed_at:      new Date().toISOString(),
+          error_message:     userId ? null : 'payment_missed fuer unbekanntes Konto — nichts zu entziehen',
+        })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    // Andere Events nur loggen (z.B. rebill_cancelled)
     await supabase
       .from('digistore_orders')
       .update({
