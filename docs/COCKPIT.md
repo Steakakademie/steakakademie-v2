@@ -50,7 +50,12 @@ ist offen ·
 `PROBE_PASSWORD`), sonst steht „nicht eingerichtet" im Job-Summary; ob die Anmeldung im
 Automatisierungs-Browser durchgeht, ist offen (`docs/bot-schutz-2026-10.md`) ·
 Zusagen-Baseline: 168 Altbestand-Treffer ohne Beleg (`data/zusagen-baseline.json`) —
-beheben, nie von Hand eintragen.
+beheben, nie von Hand eintragen ·
+*17.10.2026:* Supabase im Free-Tarif ohne Backup — seit heute liegen dort Urkunden-Nummern und
+Prüfcodes, bei Verlust nicht wiederherstellbar; Sicherungsziel weiter unentschieden ·
+PM-Agent-Briefing unter `/admin/pm-agent` ist vom 13.08.2026, seitdem kein Lauf ·
+Admin-Passwort lokal (`.env.local`) und auf Vercel waren auseinandergelaufen, am 17.10. von Uwe
+auf den lokalen Wert gesetzt; „Passwort vergessen" gibt es nicht, Zurücksetzen = Variable + Redeploy.
 
 **Nächster Schritt (07.09.):** Relaunch (#62) und Diplom-Audit (#63) sind auf `main` und live;
 Suche (#65), Autorenstimmen (#66), Migrations-Härtung + YAML (#67) liegen als grüne PRs zum Merge.
@@ -203,7 +208,10 @@ verspricht) · Startseite Lighthouse mobil 71 / LCP 5,2 s (JS, kein Quick Win) �
 Search Console existiert (`sc-domain:steakakademie.de`, Korrektur zum Audit), Leistungsdaten
 werden aber noch nirgends ausgewertet.
 
-**Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
+**Nächster Schritt:** *17.10.2026:* **Gewerbe anmelden (01.11.), dann Verkaufsstart nach
+`docs/digistore-diplom-anbindung.md` Abschnitt 0a** — Claudes Teil: Produkt-ID zurück auf
+Production, Redeploy, Impressum/AGB gegen die Gewerbedaten; alles andere wartet darauf.
+Daneben Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
 mit 0 € Startkosten (CLAUDE.md §5, Blocker 5).
 *09.10.2026:* SEO-PRs #353–#356 sind gemergt und live geprüft (29 Glossar-301, noindex,
 Sitemap 403 URLs mit lastmod); Sitemap in der Search Console neu eingereicht. Jetzt:
@@ -214,17 +222,16 @@ gegenprüfen. Ribeye-Nomenklatur (#354) fachlich gegenlesen.
 *07.09.:* Verteilplan für Reel 1 liegt (`Projects/Steakakademie/Marketing/VERTEILPLAN-Reel-1-2026-09-06.md`,
 0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
-*17.10.:* Digistore-Produkt fürs Diplom angelegt: **750228**, 99 € einmalig oder 3 × 35 €.
-Mapping + `published = true` + Preis in der DB und beide Vercel-Variablen gesetzt; geplatzte Rate
-sperrt den Zugang (Webhook). **Seit #424 (17.10., nachmittags) technisch fertig:** Testkauf
-4YY6TULF ist durch und wieder erstattet (Buchung, Login-Mail, Roadmap, Entzug per `refund`-IPN). **Verkauf gesperrt bis zur
-Gewerbeanmeldung (Uwe, 17.10.):** Produkt-ID nur noch auf Preview, kein Kauf-Button in der
-Produktion; Verkaufsstopp in Digistore gesetzt (Uwe, 17.10.). **Offen, nur Uwe:** Gewerbe anmelden (geplant 01.11.2026) →
-Verkaufsstart nach `docs/digistore-diplom-anbindung.md` Abschnitt 0a; daneben Login-Mail-Design
-in Loops. Gedruckte Urkunde seit 17.10. (17:24) bestellbar: `GELATO_API_KEY` gesetzt,
-Produktion meldet `bestellbar: true`; Gelato-Probe am 17.10. (20:20) gefahren: Nummer, Druckdatei
-und Gelato-Entwurf da, Schlüssel gültig (`docs/urkunden-druck-automatisierung.md`, „Erste Probe").
-Testbestellung `ffe6f8aa` stornieren und Test-Stufe auf Uwes Konto löschen stehen noch aus.
+*17.10.2026, Tagesstand (15 PRs #420–#434):* **Diplom 750228 (99 € oder 3 × 35 €) technisch
+fertig und belegt** — Kaufweg live (#424), Testkauf 4YY6TULF samt Erstattung und Entzug durch,
+Digistore im Testmodus, kein Geldfluss. **Verkauf gesperrt bis zur Gewerbeanmeldung (Uwe, geplant
+01.11.2026):** Produkt-ID nur auf Preview, Verkaufsstopp in Digistore. **Gedruckte Urkunde
+(17,99 €, Selbstkosten 11,85 €) live bestellbar und belegt:** `GELATO_API_KEY` gültig, zwei
+Gelato-Proben als kostenloser Entwurf, Vorschau zeigt das Druckbild, Urkunde je Stufe ohne
+Level-Auswahl, Pflichtzeile und Grad mit Träger auf allen fünf Vorlagen, beide Bestell-Mails
+zugestellt (`docs/urkunden-druck-automatisierung.md`, „Erste Probe"). Nicht belegt: echter Druck
+und Zustellung. Testdaten aufgeräumt; zwei stornierte Testbestellungen bleiben als Beleg.
+Offen, nur Uwe: Login-Mail-Design in Loops.
 *Kassieren ohne Auslieferung (16.10.2026, Nebenbefund vom 09.10. korrigiert):* Der alte Satz
 „695900 hat keine Zeile und keinen Kurs" stammte aus dem DB-Audit vom 07.09. und ist seit
 19.09.2026 überholt — 695900 ist Eigenregie, Zeile + veröffentlichter Kurs in der DB, in
@@ -251,7 +258,9 @@ Berufsgenossenschaft/Unfallversicherung
 erst nach Gewerbeanmeldung klärbar.
 
 **Nächster Schritt (real, nur Uwe):** Gewerbe **erst nach** ESG-Antragseingang anmelden,
-Aufnahmedatum 01.09.2026 im Antragsgespräch bestätigen.
+Aufnahmedatum 01.09.2026 im Antragsgespräch bestätigen. *17.10.2026:* Gewerbeanmeldung geplant
+zum **01.11.2026**; bis dahin bleibt der Diplom-Verkauf gesperrt (Wachstum). Vor dem ersten echten
+Urkunden-Druck: Pflichtzeile und Grad mit Träger stehen seit #432 auf allen Druckvorlagen.
 
 ---
 
