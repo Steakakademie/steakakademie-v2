@@ -68,9 +68,13 @@ Redeploy, Button auf `/diplome` sichtbar; (3) Produkt bei DS-de zur Prüfung ein
    `GELATO_API_KEY` umbenannt (Uwe), Production danach neu gebaut (dpl_GcpTpQoVgQ2xTtbERciTSAjVzTVH).
    Beleg: `GET /api/urkunde/bestellen` auf der Produktion antwortet `{"bestellbar":true}`
    — vorher 503, weil `src/lib/urkunde/bestellbar.ts` den exakten Namen sucht. Betrifft nicht
-   das Diplom, sondern die gedruckte Urkunde. Nicht geprüft: ob der Schlüssel bei Gelato gültig
-   ist — das zeigt erst „Probe (Gelato-Entwurf)" unter `/admin/urkunden`
-   (`docs/urkunden-druck-automatisierung.md`), kostenlos, legt nur einen Entwurf an.
+   das Diplom, sondern die gedruckte Urkunde. **Schlüssel bei Gelato gültig — belegt 17.10.2026,
+   20:20 Uhr:** Uwe hat (mit einer dafür eingetragenen Stufe-1-Zeile in `course_progress`) auf
+   `/diplome/urkunde` bestellt und unter `/admin/urkunden` „Probe (Gelato-Entwurf)" geklickt.
+   Ergebnis: Urkunden-Nr. SA-2026-0001-NP6SPP, Druckdatei 3581×2553 px / 300 dpi im Bucket
+   `urkunden`, Gelato-Entwurf `44ab63cd-a17b-4b31-a68a-0638888e5049` (`orderType: draft`,
+   3,51 € Druck + 8,34 € UPS = 11,85 €), Status der Bestellung danach wieder `neu`, kein Sentry-Alarm.
+   Details: `docs/urkunden-druck-automatisierung.md`, Abschnitt „Erste Probe".
 
 **Raten (Entscheidung Uwe 17.10.2026: geplatzte Rate sperrt):** Rate 1 (`payment`) öffnet den Zugang mit
 Login-Mail. `payment_missed` entzieht ihn sofort. Zahlt der Käufer nach, öffnet das nächste `payment` ihn

@@ -90,8 +90,8 @@ berechnet.
 | Position | Betrag |
 |---|---|
 | `cards_pf_a4_pt_250-gsm-coated-silk_cl_4-0_hor` — A4 quer, 250 g/m² seidenmatt, 4/0 | 3,51 € |
-| Versand `ups_standard_tariff` (nachverfolgbar, 4–5 Werktage) | 8,70 € |
-| **Selbstkosten** | **12,21 €** |
+| Versand `ups_standard_tariff` (nachverfolgbar, 3–4 Werktage laut Gelato-Entwurf) | 8,34 € (Probe 17.10.2026; Planung war 8,70 €) |
+| **Selbstkosten** | **11,85 €** (Planung 12,21 €) |
 | Verkaufspreis | 17,99 € |
 
 Bewusst nicht DHL Warenpost (6,49 €): unversichert und nicht nachverfolgbar.
@@ -100,6 +100,43 @@ Nachweis noch Ersatz.
 
 Keine Umsatzsteuer (§ 19 UStG, Kleinunternehmerregelung). Der Preis steht an
 einer Stelle: `src/lib/urkunde/preis.ts`.
+
+## Erste Probe (17.10.2026)
+
+Erster vollständiger Durchlauf gegen die echte Gelato-API, ausgelöst von Uwe über
+„Probe (Gelato-Entwurf)" unter `/admin/urkunden`, Bestellung `ffe6f8aa-446f-4381-94ba-ab1a56ba8554`
+(Stufe 1, Level 1, Name „Uwe Yendell", Testdaten: die bestandene Stufe war dafür von Hand in
+`course_progress` eingetragen).
+
+| Spur | Befund |
+|---|---|
+| `urkunden_zaehler` | `2026 / 1` — erste Nummer des Jahres |
+| `urkunden_bestellungen.urkunde_nr` | `SA-2026-0001-NP6SPP` |
+| Bucket `urkunden` | `druck/2026/SA-2026-0001-NP6SPP-ffe6f8aa.png`, 1,33 MB, 3581×2553 px, 300 dpi — Name, Datum „17. Oktober 2026" und Nummer sitzen an den vermessenen Stellen (Datei heruntergeladen und angesehen) |
+| Gelato | Entwurf `44ab63cd-a17b-4b31-a68a-0638888e5049`, `orderType: draft`, `fulfillmentStatus: draft`, Referenz `ffe6f8aa-…-probe`; Produkt `cards_pf_a4_pt_250-gsm-coated-silk_cl_4-0_hor` 3,51 €, UPS Standard 8,34 €, Summe 11,85 €, Lieferfenster 20.–21.10. |
+| Status danach | wieder `neu` (Probe setzt zurück), `fehler_text` leer |
+| Sentry | kein neues Issue |
+| Signierte Datei-URL in `gelato_antwort` | gültig 180 Tage (`exp` im Token) |
+
+Damit ist der `GELATO_API_KEY` belegt gültig und der Weg Rendern → Bucket → Gelato
+funktioniert in der Produktion. **Nicht geprüft:** ein echter Druck (Freigabe), die
+Zustellung und die Bestätigungsmails aus Loops (Besteller und pitmaster@) — die Mails
+hat niemand nachgesehen.
+
+Zwei Dinge, die bei der Probe aufgefallen sind, ohne hier behoben zu sein:
+
+1. **Die Vorlage je Stufe trägt fest den Ehrentitel des ersten Levels** („GLUT-LEHRLING"
+   bei Stufe 1). Wer Level 2 derselben Stufe bestellt, bekommt eine Urkunde mit dem
+   Titel von Level 1. Entscheidung Uwe: Urkunde je Stufe (Level-Auswahl aus dem Formular
+   nehmen) oder Vorlage ohne Ehrentitel.
+2. **Die Pflichtzeile aus Rahmenlehrplan §1** („Diplom der Steakakademie · keine staatlich
+   anerkannte Ausbildung", `DIPLOM_HINWEIS`) steht auf keiner der fünf Druckvorlagen, nur
+   auf der Webseite. Vor dem ersten echten Druck klären (Kanzlei).
+
+Aufräumen nach der Probe: Bestellung `ffe6f8aa` unter `/admin/urkunden` stornieren, den
+Gelato-Entwurf im Gelato-Dashboard löschen (Entwürfe kosten nichts, liegen aber dort),
+und die Test-Zeile `6866da91-ad0f-4f53-a2d3-433bc03b6388` aus `course_progress` löschen.
+Die vergebene Nummer SA-2026-0001 bleibt verbraucht — der Zähler zählt nicht zurück.
 
 ## Urkunden-Nummer
 
