@@ -4,6 +4,38 @@
 > Code-Seite ist vorbereitet (PR vom 16.10.2026). Was fehlt, steht in Abschnitt 2 und
 > kann nur Uwe im Digistore-Backend und im Vercel-Projekt erledigen.
 
+## 0. Stand 17.10.2026 — Digistore-Produkt angelegt (Cowork, über die Digistore-API)
+
+| Punkt | Wert |
+|---|---|
+| Produkt-ID | **750228** — „Grillmeister-Diplom — Stufe 2 bis 5", intern „Grillmeister-Diplom" |
+| Produkttyp | Mitgliederbereich und Video-Kurse (38) — bringt die Widerrufs-Checkbox nach § 356 Abs. 5 BGB mit |
+| Zahlplan 1 | 1533112 — einmalig **99 €** (Preis-Entscheidung Uwe, 17.10.2026) |
+| Zahlplan 2 | 1533113 — **3 × 35 €** monatlich (gesamt 105 €), Raten nicht vorzeitig kündbar |
+| Dankeseite / Verkaufsseite | `https://steakakademie.de/danke/diplom` / `https://steakakademie.de/diplome` |
+| Affiliate | 10 %, Auto-Accept (wie die übrigen Produkte) |
+| Aktiv / Freigabe DS-de | aktiv / **„Neu" — noch nicht zur Prüfung eingereicht** |
+
+**Noch offen, in dieser Reihenfolge** (Reihenfolge ist Pflicht — Variablen vor Mapping = Kauf ohne Zugang):
+
+1. ✓ 17.10.2026: Mapping `750228 → grillmeister-diplom`, `published = true`, `price = 99.00` —
+   Migration `20261017083813_diplom_digistore_mapping.sql` (Ledger-Version), live abgefragt.
+2. ✓ 17.10.2026: Vercel (2.3) `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99`
+   (Production + Preview, Typ plain). Wirksam auf Production mit dem nächsten Build — der Merge dieses PRs.
+3. Digistore-Backend, per API nicht setzbar:
+   - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps) — der Zugang ist
+     unbefristet (`src/lib/diplome/zugang.ts`), also auf „lebenslang/unbefristet" stellen.
+   - IPN: prüfen, dass die Anbindung „alle Produkte" umfasst oder 750228 aufnehmen.
+   - Erst wenn `/diplome` Preis und Button zeigt: Produkt für DS-de **zur Prüfung einreichen**.
+4. Testkauf (2.4) über den Testpay-Link aus dem Produkt (Digistore → Produkt 750228 → Vorschau).
+
+**Raten (Entscheidung Uwe 17.10.2026: geplatzte Rate sperrt):** Rate 1 (`payment`) öffnet den Zugang mit
+Login-Mail. `payment_missed` entzieht ihn sofort. Zahlt der Käufer nach, öffnet das nächste `payment` ihn
+wieder (mit Mail); reguläre Folgeraten kommen ohne Mail. Damit Rate 2/3 nicht als Duplikat verschluckt werden,
+trägt der Idempotenz-Schlüssel ab Rate 2 die Nummer (`payment#2`, `payment_missed#2`) — siehe `route.ts`,
+Abschnitt „Raten". Der Entzug setzt `bookings.status = 'refunded'` (einziger Entzugsstatus der DB-Funktion);
+der Grund steht in `digistore_orders`.
+
 ## 1. Was schon da ist (belegt am 16.10.2026)
 
 | Baustein | Wo | Stand |
