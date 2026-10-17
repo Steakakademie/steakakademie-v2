@@ -216,8 +216,11 @@ gegenprüfen. Ribeye-Nomenklatur (#354) fachlich gegenlesen.
 >80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
 *17.10.:* Digistore-Produkt fürs Diplom angelegt: **750228**, 99 € einmalig oder 3 × 35 €.
 Mapping + `published = true` + Preis in der DB und beide Vercel-Variablen gesetzt; geplatzte Rate
-sperrt den Zugang (Webhook). **Offen:** PR-Merge (= Production-Build), Leistungszeitraum + IPN im
-Digistore-Backend, DS-de-Freigabe einreichen, Testkauf — `docs/digistore-diplom-anbindung.md`, Abschnitt 0.
+sperrt den Zugang (Webhook). **Seit #424 (17.10., nachmittags) live:** `/diplome` und gesperrte
+Lektionen zeigen den Kauf-Button; Testkauf 4YY6TULF ist durch (Buchung aktiv, Login-Mail, Roadmap).
+**Offen, nur Uwe:** Leistungszeitraum im Digistore-Backend auf unbefristet, Produkt bei DS-de zur
+Prüfung einreichen, Test-Erstattung (Entzugspfad), Login-Mail-Design in Loops, Vercel-Variable
+`Gelato` → `GELATO_API_KEY` — `docs/digistore-diplom-anbindung.md`, Abschnitt 0.
 *Kassieren ohne Auslieferung (16.10.2026, Nebenbefund vom 09.10. korrigiert):* Der alte Satz
 „695900 hat keine Zeile und keinen Kurs" stammte aus dem DB-Audit vom 07.09. und ist seit
 19.09.2026 überholt — 695900 ist Eigenregie, Zeile + veröffentlichter Kurs in der DB, in

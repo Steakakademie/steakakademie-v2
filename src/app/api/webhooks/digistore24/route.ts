@@ -60,7 +60,9 @@ import { digistoreSignature } from '@/lib/digistore/signature';
  *     hier genannten 37/497 EUR und „keine Zeile" galten fuer den Vorgaenger
  *     „Agentur-Killer-Sprint".
  *   - 750228 (Grillmeister-Diplom, 99 EUR / 3 x 35 EUR): angelegt 17.10.2026,
- *     Mapping auf grillmeister-diplom folgt (docs/digistore-diplom-anbindung.md).
+ *     Mapping auf grillmeister-diplom und Kurs veroeffentlicht seit demselben Tag
+ *     (Migration 20261017083813); Testkauf 4YY6TULF am 17.10.2026 fehlerfrei
+ *     verarbeitet (docs/digistore-diplom-anbindung.md).
  * Die Digistore-API ist seit 18.09.2026 schreibbar; der fruehere Satz
  * „Abschalten ist blockiert" gilt nicht mehr.
  *

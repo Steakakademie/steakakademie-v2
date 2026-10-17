@@ -1,8 +1,8 @@
 # Grillmeister-Diplom an Digistore anbinden — Runbook
 
-> Stand 16.10.2026. Abteilung: Wachstum (Monetarisierung), CLAUDE.md §5 Blocker 3.
-> Code-Seite ist vorbereitet (PR vom 16.10.2026). Was fehlt, steht in Abschnitt 2 und
-> kann nur Uwe im Digistore-Backend und im Vercel-Projekt erledigen.
+> Stand 17.10.2026, nach Merge #424 und erfolgreichem Testkauf. Abteilung: Wachstum
+> (Monetarisierung), CLAUDE.md §5 Blocker 3. Der Kaufweg ist in der Produktion live;
+> was noch fehlt, steht in Abschnitt 0 unter „Noch offen" und ist Handarbeit von Uwe.
 
 ## 0. Stand 17.10.2026 — Digistore-Produkt angelegt (Cowork, über die Digistore-API)
 
@@ -26,9 +26,22 @@
    - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps). Das Feld ist nur eine
      Angabe auf der Rechnung, es sperrt nichts. Entscheidung Uwe 17.10.2026: Zugang **unbefristet** → auf
      „lebenslang/unbefristet" stellen. Gegen Weitergabe schützen Geräte-Limit und Namensbindung (Abschnitt 0b).
-   - IPN: prüfen, dass die Anbindung „alle Produkte" umfasst oder 750228 aufnehmen.
+   - ✓ 17.10.2026: IPN-Anbindung 352984 umfasst alle Produkte — belegt durch den Testkauf
+     (`ipn_config_product_ids = all` im Payload).
    - Erst wenn `/diplome` Preis und Button zeigt: Produkt für DS-de **zur Prüfung einreichen**.
-4. Testkauf (2.4) über den Testpay-Link aus dem Produkt (Digistore → Produkt 750228 → Vorschau).
+4. ✓ 17.10.2026, 14:18 Uhr: Testkauf **4YY6TULF** (Zahlplan 1533112, Testmodus, 99,00) — Webhook
+   nach 35 s: `digistore_orders.processing_status = processed`, Buchung auf `grillmeister-diplom`
+   aktiv, Recovery-Token für den Login-Link erzeugt, kein Sentry-Alarm. Uwe bestätigt: Mail
+   angekommen, Link landet auf `/diplome/roadmap`, Stufe 2 nach Abschluss von Modul 1 offen.
+5. Test-Erstattung auslösen (2.4, Punkt 5) — prüft den Entzugspfad (`bookings.revoked_at`).
+6. Login-Mail „LogIn Link" in Loops an das Design der übrigen Vorlagen angleichen (Uwe,
+   17.10.2026). Nur im Loops-Editor möglich: die Vorlagen sind MJML, und die Loops-API
+   antwortet auf Lesen wie Schreiben mit „MJML format is not supported via API". Vorbild:
+   „Urkunde — Bestellbestätigung" (09.10.2026). Die Variablen `magic_link` und `course_title`
+   müssen erhalten bleiben — der Webhook füllt genau diese beiden.
+7. Vercel-Variable `Gelato` (Production, 09.10.2026) in `GELATO_API_KEY` umbenennen —
+   betrifft nicht das Diplom, aber die gedruckte Urkunde: `src/lib/urkunde/bestellbar.ts`
+   sucht den exakten Namen, bis dahin antwortet die Bestellung mit 503.
 
 **Raten (Entscheidung Uwe 17.10.2026: geplatzte Rate sperrt):** Rate 1 (`payment`) öffnet den Zugang mit
 Login-Mail. `payment_missed` entzieht ihn sofort. Zahlt der Käufer nach, öffnet das nächste `payment` ihn
@@ -121,17 +134,16 @@ gesperrte Lektion ab Stufe 2 (Button „Diplom freischalten · <Preis>").
 Digistore bietet Testkäufe mit `@test-ds24.com`-Adressen an (so kamen die drei
 `failed`-Zeilen vom Mai/Juni 2026 zustande). Danach prüfen:
 
-1. `digistore_orders`: Zeile mit `processing_status = 'processed'`, Produkt-ID stimmt.
-2. `bookings`: Buchung auf `grillmeister-diplom` für den Test-Nutzer.
-3. Sentry: **kein** neues Issue „kassiert ohne Auslieferung".
-4. Login-Link aus der Mail führt nach `/diplome/roadmap`, Stufe-2-Lektion ist offen.
-5. Rückerstattung des Testkaufs auslösen → `bookings.revoked_at` gesetzt, Lektion wieder zu.
+1. ✓ 17.10.2026: `digistore_orders` 4YY6TULF, `processing_status = 'processed'`, Produkt 750228.
+2. ✓ 17.10.2026: `bookings` auf `grillmeister-diplom`, Status `active`.
+3. ✓ 17.10.2026: Sentry ohne neues Issue, Vercel-Log ohne Warnung des Webhooks.
+4. ✓ 17.10.2026: Login-Link führt nach `/diplome/roadmap`, Stufe 2 nach Modul 1 offen (Uwe).
+5. Rückerstattung des Testkaufs auslösen → `bookings.revoked_at` gesetzt, Lektion wieder zu. **Offen.**
 
 ### 2.5 Nacharbeiten
 
-- `docs/COCKPIT.md`, Wachstum: „Offen, nur Uwe: Digistore-Produkt fürs Diplom" streichen.
-- `src/app/api/webhooks/digistore24/route.ts`, Kopfkommentar: Produkt in die Liste der
-  geprüften Produkte aufnehmen.
+- ✓ `docs/COCKPIT.md`, Wachstum: Stand 17.10.2026 eingetragen.
+- ✓ `src/app/api/webhooks/digistore24/route.ts`, Kopfkommentar: 750228 mit Mapping und Testkauf.
 - Gutschein fürs Diplom (G4) braucht ein **eigenes** Voucher-Produkt — getrennt entscheiden
   (`docs/gutschein-konzept-weihnachten-2026.md`).
 
