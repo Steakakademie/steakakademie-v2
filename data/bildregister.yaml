@@ -830,11 +830,11 @@ bilder:
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/smoked-chuck-roast-poor-mans-brisket.jpg:
     status: lizenz
-    quelle: Pexels (ID 9397270)
-    urheber: Hayden Walker (@haydenplus1)
-    lizenz: Pexels-Lizenz
-    lizenz_url: https://www.pexels.com/license/
-    quell_url: https://www.pexels.com/photo/9397270/
+    quelle: Unsplash (ID s4jdYaQOAqM)
+    urheber: Archer Allstars (@archerallstars)
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/s4jdYaQOAqM
     erworben_am: 2026-10-17
     namensnennung: false
-    hinweis: Ersetzt die fal.ai-KI-Generierung durch ein Echtfoto (Pexels, Titel "A Person Slicing Barbecue Beef Brisket"; zeigt Brisket, nicht Chuck Roast). Web-Zuschnitt 1920px/Kompression. imageAI im MDX-Frontmatter auf false gesetzt.
+    hinweis: Ersetzt die fal.ai-KI-Generierung durch ein Echtfoto (Unsplash, Titel "A large roast is smoking on the grill"). Web-Zuschnitt 1920px/Kompression. imageAI im MDX-Frontmatter auf false gesetzt.
