@@ -28,9 +28,10 @@ Zwei Riegel, beide müssen beim Verkaufsstart wieder fallen:
 | Kauf-Button auf der Seite | `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID` am 17.10.2026 auf **nur Preview** gesetzt (Wert 750228 bleibt). Ohne die Variable rendert `src/lib/diplome/angebot.ts` `kaufbar: false`: kein Button, Lektionen sagen „derzeit noch nicht buchbar". Production neu gebaut. | Claude oder Uwe: Variable wieder auf Production + Preview, Redeploy. |
 | Digistore-Produkt 750228 | ✓ **Verkaufsstopp gesetzt** (Uwe, 17.10.2026, nach Merge #426). DS-de-Freigabe nicht eingereicht. Vorher war der Checkout-Link öffentlich erreichbar — wer ihn kannte, kam ohne unseren Button an die Kasse. | Uwe hebt den Verkaufsstopp zum Verkaufsstart wieder auf (Schritt 1 unten). Per API nicht möglich (Token nicht in dieser Umgebung). |
 
-Was der Testkauf hinterlassen hat, bleibt: Buchung 4YY6TULF auf Uwes Konto (Test-Erstattung
-offen). Der Webhook bleibt scharf — eine echte Bestellung würde trotzdem ausgeliefert, deshalb
-ist der Verkaufsstopp in Digistore der eigentliche Riegel, der Button nur die Sichtbarkeit.
+Der Testkauf ist seit 17.10.2026, 15:58 Uhr erstattet (Abschnitt 2.4, Punkt 5): Buchung 4YY6TULF
+steht auf `refunded` mit `revoked_at`, Uwes Konto hat keinen Diplom-Zugang mehr. Der Webhook
+bleibt scharf — eine echte Bestellung würde trotzdem ausgeliefert, deshalb ist der Verkaufsstopp
+in Digistore der eigentliche Riegel, der Button nur die Sichtbarkeit.
 
 **Verkaufsstart nach Gewerbeanmeldung (geplant 01.11.2026), in dieser Reihenfolge:** (1) Verkaufsstopp in Digistore
 aufheben, Leistungszeitraum auf unbefristet; (2) Variable zurück auf Production + Preview,
@@ -55,7 +56,9 @@ Redeploy, Button auf `/diplome` sichtbar; (3) Produkt bei DS-de zur Prüfung ein
    nach 35 s: `digistore_orders.processing_status = processed`, Buchung auf `grillmeister-diplom`
    aktiv, Recovery-Token für den Login-Link erzeugt, kein Sentry-Alarm. Uwe bestätigt: Mail
    angekommen, Link landet auf `/diplome/roadmap`, Stufe 2 nach Abschluss von Modul 1 offen.
-5. Test-Erstattung auslösen (2.4, Punkt 5) — prüft den Entzugspfad (`bookings.revoked_at`).
+5. ✓ 17.10.2026, 15:58 Uhr: Test-Erstattung aus dem Digistore-Backend (Transaktionsbericht →
+   Bestellung 4YY6TULF). IPN „refund" kam nach rund einer Minute, `processing_status = processed`,
+   Buchung `refunded` + `revoked_at`, die übrigen Buchungen des Kontos unberührt, kein Sentry-Alarm.
 6. Login-Mail „LogIn Link" in Loops an das Design der übrigen Vorlagen angleichen (Uwe,
    17.10.2026). Nur im Loops-Editor möglich: die Vorlagen sind MJML, und die Loops-API
    antwortet auf Lesen wie Schreiben mit „MJML format is not supported via API". Vorbild:
@@ -160,7 +163,10 @@ Digistore bietet Testkäufe mit `@test-ds24.com`-Adressen an (so kamen die drei
 2. ✓ 17.10.2026: `bookings` auf `grillmeister-diplom`, Status `active`.
 3. ✓ 17.10.2026: Sentry ohne neues Issue, Vercel-Log ohne Warnung des Webhooks.
 4. ✓ 17.10.2026: Login-Link führt nach `/diplome/roadmap`, Stufe 2 nach Modul 1 offen (Uwe).
-5. Rückerstattung des Testkaufs auslösen → `bookings.revoked_at` gesetzt, Lektion wieder zu. **Offen.**
+5. ✓ 17.10.2026: Rückerstattung des Testkaufs → zweite Zeile `refund` in `digistore_orders`,
+   `bookings.status = refunded`, `revoked_at` gesetzt. Entzugspfad damit gegen Digistore belegt,
+   nicht nur per Unit-Test. (Dass die Lektion im Browser wieder zu ist, folgt aus `diplomZugang`,
+   das nur aktive Buchungen zählt — nicht gesondert angesehen.)
 
 ### 2.5 Nacharbeiten
 
