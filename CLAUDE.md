@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 16.10.2026.
+> Letzte Pflege: 17.10.2026.
 
 ---
 
@@ -388,11 +388,24 @@
   stolpert hinter dem schließenden Anführungszeichen der Frontmatter-Zeile. Die CI holt per
   `KURSINHALTE_TOKEN` mit LF und ist nicht betroffen — ein grüner `Build pruefen` sagt
   darüber also nichts, und ein lokaler Build dieser Seiten ist auf einem Windows-Rechner
-  erst aussagekräftig, wenn der private Klon LF liefert. Heilung im privaten Klon:
-  `git config core.autocrlf false` und `git checkout -- .` (Arbeitsbaum muss sauber sein);
-  dauerhaft gehört eine `.gitattributes` mit `*.mdx text eol=lf` ins private Repo, wie sie
-  dieses Repo hat. Woran man es erkennt, ohne zu suchen: `YAMLParseError` nur in den drei
-  Kopie-Ordnern, nie in `content/rezepte` oder `content/cuts`.
+  erst aussagekräftig, wenn der private Klon LF liefert. **Heilung, so wie sie am
+  17.10.2026 tatsächlich funktioniert hat** (Arbeitsbaum des Klons muss sauber sein):
+  (1) im privaten Klon `git config core.autocrlf false`, dann `git rm --cached -r -q .` und
+  `git reset --hard` — ein `git checkout -- .` oder `checkout-index -a -f` schreibt NICHTS
+  neu, weil Git die CRLF-Dateien weiter als unverändert führt (`ls-files --eol` zeigt
+  dann weiter `w/crlf`, und die Dateizeit bleibt alt). (2) Danach verweigert
+  `kursinhalte-holen.mjs` das Erneuern („enthält Änderungen, die im privaten Repo fehlen"),
+  weil die alten CRLF-Kopien byteweise von der LF-Quelle abweichen — das ist die
+  Schutzfunktion gegen Edits in der Kopie, kein Fehler. Erst mit einem Vergleich belegen,
+  dass sich die Kopien NUR im Zeilenende unterscheiden, dann die vier Kopie-Ordner
+  löschen (sie tragen die Marke `.aus-kursinhalte`) und das Skript erneut laufen lassen.
+  (3) Beleg: `npx contentlayer2 build` meldet „Generated 412 documents" ohne „problems"
+  — vorher 392 mit 20. Dauerhaft gehört eine `.gitattributes` mit `*.mdx text eol=lf` ins
+  private Repo, wie sie dieses Repo hat — angelegt am 17.10.2026 (Commit 85d68a3 dort, mdx/md/txt/json/yaml LF, pdf/Bilder binary; `git check-attr eol` meldet `lf` fuer alle 20 Dateien). Woran man es
+  erkennt, ohne zu suchen: `YAMLParseError` nur in den drei Kopie-Ordnern, nie in
+  `content/rezepte` oder `content/cuts`. CR-Bytes zählt man verlässlich mit Node
+  (`readFileSync(f).filter(x => x === 13).length`) — `grep -c` auf ein CR-Zeichen lieferte
+  in Git Bash auf einem absoluten Windows-Pfad 0 bei einer Datei mit 34 CR.
 
 **Produkt-Qualitätscheck (Uwe, 08.10.2026)**
 - Jedes Produktblatt, jedes Produktkonzept, jede Freigabe und jeder (Wieder-)Verkaufsstart
