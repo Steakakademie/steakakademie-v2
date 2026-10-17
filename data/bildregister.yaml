@@ -448,6 +448,36 @@ bilder:
   images/streitfaelle/temperieren-oder-kalt.jpg: { status: offen }
   images/streitfaelle/wenden.jpg: { status: offen }
   images/tomahawk-hero.jpg: { status: offen }
+  images/urkunde/vorschau-stufe-1.webp:
+    status: eigen
+    quelle: scripts/urkunden-vorschau.mjs — Verkleinerung von src/lib/urkunde/vorlagen/stufe-1-1z.png (eigenes Urkunden-Design aus design/urkunden/, Playwright-Render)
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Vorschau der gedruckten Urkunde auf /diplome/urkunde (seit 17.10.2026)
+  images/urkunde/vorschau-stufe-2.webp:
+    status: eigen
+    quelle: scripts/urkunden-vorschau.mjs — Verkleinerung von src/lib/urkunde/vorlagen/stufe-2-1z.png (eigenes Urkunden-Design aus design/urkunden/, Playwright-Render)
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Vorschau der gedruckten Urkunde auf /diplome/urkunde (seit 17.10.2026)
+  images/urkunde/vorschau-stufe-3.webp:
+    status: eigen
+    quelle: scripts/urkunden-vorschau.mjs — Verkleinerung von src/lib/urkunde/vorlagen/stufe-3-1z.png (eigenes Urkunden-Design aus design/urkunden/, Playwright-Render)
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Vorschau der gedruckten Urkunde auf /diplome/urkunde (seit 17.10.2026)
+  images/urkunde/vorschau-stufe-4.webp:
+    status: eigen
+    quelle: scripts/urkunden-vorschau.mjs — Verkleinerung von src/lib/urkunde/vorlagen/stufe-4-1z.png (eigenes Urkunden-Design aus design/urkunden/, Playwright-Render)
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Vorschau der gedruckten Urkunde auf /diplome/urkunde (seit 17.10.2026)
+  images/urkunde/vorschau-stufe-5.webp:
+    status: eigen
+    quelle: scripts/urkunden-vorschau.mjs — Verkleinerung von src/lib/urkunde/vorlagen/stufe-5-1z.png (eigenes Urkunden-Design aus design/urkunden/, Playwright-Render)
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Vorschau der gedruckten Urkunde auf /diplome/urkunde (seit 17.10.2026)
   images/usa/carolinas.jpg:
     status: lizenz
     quelle: Pexels (ID 6430736)
