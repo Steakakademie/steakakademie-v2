@@ -142,6 +142,7 @@ module.exports = {
     // beiden page.tsx, bis die Liste traegt. Stand bis dahin in ssrPaths.
     '/rezepte/community',
     '/rezepte/community/*',
+    '/urkunde/*',                      // Pruefseite einer Urkunde (Klarname, noindex); /urkunde selbst bleibt drin
     '/gutschein/*',                    // Einloesen + einzelner Gutschein; /gutschein selbst bleibt drin
     '/eigenregie/lernen',
     '/eigenregie/lernen/*',
