@@ -5,7 +5,8 @@ Freitext-Mail an `pitmaster@` war und von Hand gedruckt und kuvertiert wurde.
 
 ## Der Weg einer Bestellung
 
-1. **Besteller** wählt unter `/diplome/urkunde` ein bestandenes Level, trägt
+1. **Besteller** wählt unter `/diplome/urkunde` eine bestandene Stufe (seit 17.10.2026;
+   vorher ein Level, das nie auf der Urkunde stand), trägt
    Name und Versandadresse ein → `POST /api/urkunde/bestellen`.
 2. Die Route prüft serverseitig gegen `course_progress`, ob die Stufe wirklich
    bestanden ist, und legt eine Zeile in `urkunden_bestellungen` an
@@ -98,8 +99,9 @@ Bewusst nicht DHL Warenpost (6,49 €): unversichert und nicht nachverfolgbar.
 Auf der Urkunde steht eine fortlaufende Nummer — bei Verlust gäbe es weder
 Nachweis noch Ersatz.
 
-Keine Umsatzsteuer (§ 19 UStG, Kleinunternehmerregelung). Der Preis steht an
-einer Stelle: `src/lib/urkunde/preis.ts`.
+Der Preis enthält die gesetzliche Umsatzsteuer (Regelbesteuerung — Uwe, 17.10.2026:
+„Preis enthält MwSt."; bis dahin stand hier § 19 UStG, die Bestellseite sagte seit #343
+schon „inkl. MwSt."). Der Preis steht an einer Stelle: `src/lib/urkunde/preis.ts`.
 
 ## Erste Probe (17.10.2026)
 
@@ -125,13 +127,22 @@ hat niemand nachgesehen.
 
 Zwei Dinge, die bei der Probe aufgefallen sind, ohne hier behoben zu sein:
 
-1. **Die Vorlage je Stufe trägt fest den Ehrentitel des ersten Levels** („GLUT-LEHRLING"
-   bei Stufe 1). Wer Level 2 derselben Stufe bestellt, bekommt eine Urkunde mit dem
-   Titel von Level 1. Entscheidung Uwe: Urkunde je Stufe (Level-Auswahl aus dem Formular
-   nehmen) oder Vorlage ohne Ehrentitel.
-2. **Die Pflichtzeile aus Rahmenlehrplan §1** („Diplom der Steakakademie · keine staatlich
-   anerkannte Ausbildung", `DIPLOM_HINWEIS`) steht auf keiner der fünf Druckvorlagen, nur
-   auf der Webseite. Vor dem ersten echten Druck klären (Kanzlei).
+1. **Das Formular ließ ein Level wählen, die Urkunde ist aber je Stufe gesetzt.** Die
+   Unterzeile der Vorlage ist das Stufen-Badge aus `STUFEN` („Glut-Lehrling", „Fleischkenner" …),
+   kein Level-Titel — der erste Befund („Ehrentitel des ersten Levels") war insofern ein
+   Lesefehler; für Stufe 1 fallen Badge und Level-1-Name nur zusammen. **Entschieden (Uwe,
+   17.10.2026): „Urkunde je Stufe ohne Level-Auswahl."** Formular und `POST /api/urkunde/bestellen`
+   nehmen seitdem `stufe` (1–5), `level_id` bleibt nur für Altbestellungen in der Tabelle.
+2. **Die Pflichtzeile aus Rahmenlehrplan §1** (`DIPLOM_HINWEIS`) fehlte auf allen fünf
+   Druckvorlagen. **Entschieden (Uwe, 17.10.2026): „muss sein, klein und am unteren Ende."**
+   Seitdem steht sie in `design/urkunden/*.dc.html` unter der Nummer-Zeile (6,5 pt, Versalien),
+   Vorlagen und Web-Vorschau neu erzeugt; Wächter in `src/__tests__/urkunde-vorschau.test.ts`.
+3. **Die Vorlage nannte den Grad „Bronze-Zertifikat · Stufe 1"**, `STUFEN[].cert` heißt seit
+   08.09.2026 „Grillmeister Bronze" und steht laut Rahmenlehrplan §1 nie ohne Träger.
+   **Entschieden (Uwe, 17.10.2026): „Grillmeister Bronze · Steakakademie auf die Urkunde."**
+   Die Grad-Zeile aller fünf Vorlagen ist seitdem `gradMitTraeger(stufe)` („Grillmeister Bronze ·
+   Steakakademie" … „Grillmeister Meisterklasse · Steakakademie"); die Stufennummer steht weiter
+   im Siegel (I–V). Wächter: `src/__tests__/urkunde-vorschau.test.ts`.
 
 Aufräumen nach der Probe: Bestellung `ffe6f8aa` unter `/admin/urkunden` stornieren, den
 Gelato-Entwurf im Gelato-Dashboard löschen (Entwürfe kosten nichts, liegen aber dort),
@@ -177,6 +188,10 @@ text (`URKUNDE_CONSENT_TEXT`), und der Wortlaut wird je Bestellung mitgespeicher
 
 1. `design/urkunden/*.dc.html` anpassen.
 2. `node scripts/urkunden-vorlagen.mjs` — erzeugt Vorlagen und `boxen.json` neu.
+   Seit 17.10.2026 bedient das Skript die Designs über einen lokalen HTTP-Server statt
+   `file://`: Chromium (Playwright 1.60) lehnt `fetch()` auf `file://` ab, die Design-Laufzeit
+   lädt Siegel und Seitenskript aber genau so — die Seite blieb unsichtbar, der Screenshot
+   lief in den Timeout.
    Danach `node scripts/urkunden-vorschau.mjs`, sonst zeigt die Bestellseite das alte Bild.
 3. Das Skript meldet, wenn eines der drei Felder nicht mehr gefunden wird oder
    der Name unerwartet umbricht. Solche Meldungen nicht übergehen: Die Vorlage

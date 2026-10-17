@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
 import UrkundeVorschau from '@/components/diplome/UrkundeVorschau';
-import { LEVELS, STUFEN, stufeByNr, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
+import { STUFEN, stufeByNr, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
 import {
   URKUNDE_CONSENT_TEXT,
   URKUNDE_WIDERRUF_HINWEIS,
@@ -42,7 +42,7 @@ type Konto = { userId: string; email: string; bestandeneStufen: Set<number>; fes
 export default function UrkundePage() {
   const [form, setForm] = useState({
     nameAufUrkunde: '',
-    level: '',
+    stufe: '',
     vorname: '',
     nachname: '',
     strasse: '',
@@ -93,11 +93,12 @@ export default function UrkundePage() {
     return () => { cancelled = true; };
   }, []);
 
-  const waehlbareLevel = konto && konto !== 'laedt'
-    ? LEVELS.filter((l) => konto.bestandeneStufen.has(l.stufe))
+  // Seit 17.10.2026 wird die Stufe bestellt, nicht ein Level (Uwe: „Urkunde je
+  // Stufe ohne Level-Auswahl") — die Druckvorlage ist je Stufe gesetzt.
+  const waehlbareStufen = konto && konto !== 'laedt'
+    ? STUFEN.filter((s) => konto.bestandeneStufen.has(s.nr))
     : [];
-  const selected = LEVELS.find((d) => d.id === Number(form.level));
-  const selectedStufe = selected ? stufeByNr(selected.stufe) : undefined;
+  const selectedStufe = form.stufe ? stufeByNr(Number(form.stufe)) : undefined;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -106,7 +107,7 @@ export default function UrkundePage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!konto || konto === 'laedt') return;
-    if (!selected) { setFehler('Bitte ein Level wählen.'); setState('error'); return; }
+    if (!selectedStufe) { setFehler('Bitte eine Stufe wählen.'); setState('error'); return; }
 
     setState('submitting');
     setFehler('');
@@ -115,7 +116,7 @@ export default function UrkundePage() {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          levelId: selected.id,
+          stufe: selectedStufe.nr,
           nameAufUrkunde: konto.festerName ? undefined : form.nameAufUrkunde.trim(),
           vorname: form.vorname.trim(),
           nachname: form.nachname.trim(),
@@ -189,7 +190,7 @@ export default function UrkundePage() {
             />
           </motion.div>
           <p className="mt-4 text-center text-xs font-sans text-text-light/55 leading-relaxed">
-            So geht die Urkunde in den Druck — {selectedStufe ? `${selectedStufe.cert} (Stufe ${selectedStufe.nr})` : 'hier für Stufe 1, das Bild wechselt mit dem gewählten Level'}.
+            So geht die Urkunde in den Druck — {selectedStufe ? `${selectedStufe.cert} (Stufe ${selectedStufe.nr})` : 'hier für Stufe 1, das Bild wechselt mit der gewählten Stufe'}.
             Urkunden-Nummer und Prüfcode entstehen erst bei der Ausstellung; sehr lange Namen setzt der Druck zweizeilig.
           </p>
           {/* Pflichtzeile (Rahmenlehrplan §1): haelt den Grad von der Kammer-Qualifikation
@@ -223,7 +224,7 @@ export default function UrkundePage() {
             </div>
           )}
 
-          {konto && konto !== 'laedt' && waehlbareLevel.length === 0 && state !== 'success' && (
+          {konto && konto !== 'laedt' && waehlbareStufen.length === 0 && state !== 'success' && (
             <div className="text-center border border-brand-gold/20 bg-surface-elevated p-10">
               <h2 className="font-serif text-2xl font-bold text-text-light mb-3">Noch keine bestandene Stufe</h2>
               <p className="font-body text-text-light/60 leading-relaxed mb-6 max-w-md mx-auto">
@@ -251,7 +252,7 @@ export default function UrkundePage() {
             </motion.div>
           )}
 
-          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && bestellbar === false && (
+          {konto && konto !== 'laedt' && waehlbareStufen.length > 0 && state !== 'success' && bestellbar === false && (
             <div className="text-center border border-brand-gold/20 bg-surface-elevated p-10">
               <h2 className="font-serif text-2xl font-bold text-text-light mb-3">Gedruckte Urkunde: gerade nicht bestellbar</h2>
               <p className="font-body text-text-light/60 leading-relaxed max-w-md mx-auto">
@@ -261,7 +262,7 @@ export default function UrkundePage() {
             </div>
           )}
 
-          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && bestellbar === true && (
+          {konto && konto !== 'laedt' && waehlbareStufen.length > 0 && state !== 'success' && bestellbar === true && (
             <motion.form
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -299,17 +300,18 @@ export default function UrkundePage() {
               </div>
 
               <div>
-                <label className={labelClass} htmlFor="level">Bestandenes Level</label>
-                <select id="level" name="level" value={form.level} onChange={handleChange} required className={inputClass}>
-                  <option value="">Level wählen…</option>
-                  {waehlbareLevel.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      Level {d.id} — {d.emoji} {d.name} (Stufe {d.stufe}, {STUFEN[d.stufe - 1]?.cert})
+                <label className={labelClass} htmlFor="stufe">Bestandene Stufe</label>
+                <select id="stufe" name="stufe" value={form.stufe} onChange={handleChange} required className={inputClass}>
+                  <option value="">Stufe wählen…</option>
+                  {waehlbareStufen.map((s) => (
+                    <option key={s.nr} value={s.nr}>
+                      Stufe {s.nr} — {s.emoji} {s.cert} ({s.badge})
                     </option>
                   ))}
                 </select>
                 <p className="mt-1.5 text-[11px] font-sans text-text-light/55">
-                  Angezeigt werden nur Level aus Stufen, die in deinem Konto als bestanden stehen.
+                  Angezeigt werden nur Stufen, die in deinem Konto als bestanden stehen. Die Urkunde gilt
+                  für die ganze Stufe mit beiden Leveln.
                 </p>
               </div>
 

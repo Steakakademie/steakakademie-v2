@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 
 import { z } from 'zod';
 import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/lib/api/guard';
-import { stufeOfLevel, LEVELS } from '@/lib/diplome/stufen';
+import { stufeByNr } from '@/lib/diplome/stufen';
 import { dienstClient } from '@/lib/urkunde/produktion';
 import { meldeBestellung, bestaetigeBestellung } from '@/lib/urkunde/benachrichtigung';
 import { urkundeBestellbar, urkundeFehlendeKonfiguration } from '@/lib/urkunde/bestellbar';
@@ -21,13 +21,16 @@ import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_WIDERRUF_HINWEIS, URK
  *
  * Bestellbar ist nur eine Stufe, die im Konto als bestanden steht — geprueft
  * wird serverseitig gegen course_progress, nicht gegen das, was der Browser
- * mitschickt. Adressfelder sind auf die Laengen der Gelato-Order-API
+ * mitschickt. Seit 17.10.2026 wird die STUFE bestellt, nicht ein Level (Uwe:
+ * „Urkunde je Stufe ohne Level-Auswahl"): Die Druckvorlage ist je Stufe gesetzt
+ * (Grad + Stufen-Badge), ein Level stand nie auf der Urkunde. `level_id` bleibt
+ * fuer Altbestellungen in der Tabelle, neue Zeilen tragen null. Adressfelder sind auf die Laengen der Gelato-Order-API
  * begrenzt; laenger anzunehmen hiesse, die Bestellung erst beim Druckdienst
  * scheitern zu lassen.
  */
 
 const Body = z.object({
-  levelId: z.number().int().min(1).max(10),
+  stufe: z.number().int().min(1).max(5),
   // Seit 17.10.2026 nur noch Vorschlag für den ERSTEN Namen eines Kontos — steht
   // schon einer fest (urkunden_namen), wird er genommen, egal was hier steht.
   nameAufUrkunde: z.string().trim().min(2).max(60).optional(),
@@ -68,9 +71,8 @@ export async function POST(req: Request) {
   if (!guard.ok) return guard.response;
 
   const b = guard.body;
-  const level = LEVELS.find((l) => l.id === b.levelId);
-  const stufe = stufeOfLevel(b.levelId);
-  if (!level || !stufe) return jsonError(400, 'Unbekanntes Level.');
+  const stufe = stufeByNr(b.stufe);
+  if (!stufe) return jsonError(400, 'Unbekannte Stufe.');
 
   const userId = await userIdFromRequest(req);
   const admin = await isAdminRequest(req);
@@ -115,7 +117,7 @@ export async function POST(req: Request) {
       user_id: userId,
       email,
       stufe: stufe.nr,
-      level_id: level.id,
+      level_id: null,
       name_auf_urkunde: nameAufUrkunde,
       vorname: b.vorname,
       nachname: b.nachname,
@@ -143,7 +145,7 @@ export async function POST(req: Request) {
       `Neue Bestellung einer gedruckten Urkunde (${urkundePreisText()})`,
       '',
       `Name auf der Urkunde: ${nameAufUrkunde}`,
-      `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
+      `Stufe ${stufe.nr} — ${stufe.cert} (${stufe.badge})`,
       '',
       'Versandadresse:',
       `${b.vorname} ${b.nachname}`,
@@ -158,7 +160,7 @@ export async function POST(req: Request) {
   );
 
   await bestaetigeBestellung(email, {
-    stufeName: `Level ${level.id} — ${level.name} (Stufe ${stufe.nr}, ${stufe.cert})`,
+    stufeName: `Stufe ${stufe.nr} — ${stufe.cert} (${stufe.badge})`,
     nameAufUrkunde,
     preis: `${urkundePreisText()} (Versand inklusive, inkl. gesetzlicher MwSt.)`,
     bestellId: zeile.id,

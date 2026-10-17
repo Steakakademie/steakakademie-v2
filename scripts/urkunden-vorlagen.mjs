@@ -29,6 +29,7 @@
 import { chromium } from 'playwright';
 import path from 'node:path';
 import fs from 'node:fs';
+import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 
 const WURZEL = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -70,6 +71,28 @@ function schriftCss() {
   }).join('\n');
 }
 
+/**
+ * Die Designs kommen ueber HTTP, nicht ueber file:// (17.10.2026). Die
+ * Claude-Design-Laufzeit (support.js) holt doc-page.js und das Siegel per
+ * fetch(); Chromium (Playwright 1.60) lehnt fetch auf file:// ab — "URL scheme
+ * 'file' is not supported", auch mit --allow-file-access-from-files. Die Seite
+ * blieb dann auf visibility:hidden und der Screenshot lief in den Timeout.
+ * Am 11.09.2026 lief es noch ueber file://; seitdem ist Chromium gewechselt.
+ */
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.css': 'text/css', '.svg': 'image/svg+xml' };
+function designServer() {
+  const server = http.createServer((req, res) => {
+    const rel = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+    const datei = path.join(DESIGN, rel);
+    if (!datei.startsWith(DESIGN) || !fs.existsSync(datei) || fs.statSync(datei).isDirectory()) {
+      res.writeHead(404); res.end(); return;
+    }
+    res.writeHead(200, { 'content-type': MIME[path.extname(datei)] ?? 'application/octet-stream' });
+    fs.createReadStream(datei).pipe(res);
+  });
+  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve({ server, url: `http://127.0.0.1:${server.address().port}` })));
+}
+
 const CDN = {
   react: 'https://unpkg.com/react@18.3.1/umd/react.production.min.js',
   reactDom: 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js',
@@ -84,7 +107,8 @@ async function main() {
   fs.mkdirSync(ZIEL, { recursive: true });
 
   const css = schriftCss();
-  const browser = await chromium.launch({ args: ['--allow-file-access-from-files', '--font-render-hinting=none'] });
+  const { server, url: basis } = await designServer();
+  const browser = await chromium.launch({ args: ['--font-render-hinting=none'] });
   const boxen = {};
 
   for (const { stufe, datei } of DATEIEN) {
@@ -107,7 +131,7 @@ async function main() {
         return route.continue();
       });
 
-      await page.goto('file://' + path.join(DESIGN, datei).replace(/\\/g, '/'), {
+      await page.goto(`${basis}/${encodeURIComponent(datei)}`, {
         waitUntil: 'networkidle', timeout: 60000,
       });
       await page.evaluate(() => document.fonts.ready);
@@ -219,6 +243,7 @@ async function main() {
   }
 
   await browser.close();
+  server.close();
   fs.writeFileSync(
     path.join(ZIEL, 'boxen.json'),
     JSON.stringify({ dpi: DPI, skalierung: SKALIERUNG, stufen: boxen }, null, 2),
