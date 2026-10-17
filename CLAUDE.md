@@ -401,7 +401,7 @@
   löschen (sie tragen die Marke `.aus-kursinhalte`) und das Skript erneut laufen lassen.
   (3) Beleg: `npx contentlayer2 build` meldet „Generated 412 documents" ohne „problems"
   — vorher 392 mit 20. Dauerhaft gehört eine `.gitattributes` mit `*.mdx text eol=lf` ins
-  private Repo, wie sie dieses Repo hat (Stand 17.10.2026 noch nicht angelegt). Woran man es
+  private Repo, wie sie dieses Repo hat — angelegt am 17.10.2026 (Commit 85d68a3 dort, mdx/md/txt/json/yaml LF, pdf/Bilder binary; `git check-attr eol` meldet `lf` fuer alle 20 Dateien). Woran man es
   erkennt, ohne zu suchen: `YAMLParseError` nur in den drei Kopie-Ordnern, nie in
   `content/rezepte` oder `content/cuts`. CR-Bytes zählt man verlässlich mit Node
   (`readFileSync(f).filter(x => x === 13).length`) — `grep -c` auf ein CR-Zeichen lieferte
