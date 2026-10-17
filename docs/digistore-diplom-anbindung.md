@@ -18,8 +18,8 @@
 
 **Noch offen, in dieser Reihenfolge** (Reihenfolge ist Pflicht — Variablen vor Mapping = Kauf ohne Zugang):
 
-1. Mapping + Veröffentlichung in der DB (2.2) mit `<PRODUKT_ID>` = `750228`; zusätzlich
-   `courses.price = 99.00`. Danach die Migrationsdatei mit der **Ledger-Version** als Namen ablegen.
+1. ✓ 17.10.2026: Mapping `750228 → grillmeister-diplom`, `published = true`, `price = 99.00` —
+   Migration `20261017083813_diplom_digistore_mapping.sql` (Ledger-Version), live abgefragt.
 2. Vercel (2.3): `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99` → Redeploy.
 3. Digistore-Backend, per API nicht setzbar:
    - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps) — der Zugang ist
@@ -28,10 +28,12 @@
    - Erst wenn `/diplome` Preis und Button zeigt: Produkt für DS-de **zur Prüfung einreichen**.
 4. Testkauf (2.4) über den Testpay-Link aus dem Produkt (Digistore → Produkt 750228 → Vorschau).
 
-**Raten — bewusste Lücke, Entscheidung offen:** Die erste Rate löst `payment` aus und öffnet den Zugang.
-`payment_missed` wird im Webhook nur protokolliert (route.ts, Zweig „Andere Events nur loggen") — wer nach
-der ersten Rate nicht weiterzahlt, behält den Zugang, Digistore mahnt. Entzug bei geplatzter Rate wäre ein
-eigener Webhook-Zweig.
+**Raten (Entscheidung Uwe 17.10.2026: geplatzte Rate sperrt):** Rate 1 (`payment`) öffnet den Zugang mit
+Login-Mail. `payment_missed` entzieht ihn sofort. Zahlt der Käufer nach, öffnet das nächste `payment` ihn
+wieder (mit Mail); reguläre Folgeraten kommen ohne Mail. Damit Rate 2/3 nicht als Duplikat verschluckt werden,
+trägt der Idempotenz-Schlüssel ab Rate 2 die Nummer (`payment#2`, `payment_missed#2`) — siehe `route.ts`,
+Abschnitt „Raten". Der Entzug setzt `bookings.status = 'refunded'` (einziger Entzugsstatus der DB-Funktion);
+der Grund steht in `digistore_orders`.
 
 ## 1. Was schon da ist (belegt am 16.10.2026)
 
