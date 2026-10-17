@@ -119,5 +119,13 @@
     "spalte": "indexed_at",
     "maxTage": 7,
     "hinweis": "Der Index ist inkrementell: unveränderte Dateien werden übersprungen, indexed_at rückt nur bei geändertem Content vor — deshalb 7 Tage Frist, nicht 2. Kein Write seit 7 Tagen heißt: entweder scheitert index-knowledge (Jira-Ticket ops-index-knowledge-failed, Secrets VOYAGE_API_KEY / Supabase prüfen) oder die Content-Produktion steht — dann meldet die Rezept-Produktion gleichzeitig. Manuell: npm run index:knowledge."
+  },
+  {
+    "name": "Supabase-Sicherung",
+    "typ": "artefakt",
+    "artefakt": "supabase-sicherung",
+    "minBytes": 1000000,
+    "maxTage": 2,
+    "hinweis": "db-backup läuft täglich 02:40 UTC: verschlüsselter pg_dump als GitHub-Artefakt »supabase-sicherung« (90 Tage) mit Wiederherstellungsprobe im selben Lauf (docs/supabase-backup.md). Kein Artefakt mit mindestens 1 MB seit 2 Tagen = der Lauf startet nicht mehr (GitHub schaltet Zeitpläne nach 60 Tagen Ruhe ab — per workflow_dispatch starten) oder er scheitert vor dem Hochladen (Secrets SUPABASE_DB_URL / BACKUP_PASSPHRASE prüfen, Job-Summary lesen; ein gescheiterter Lauf meldet selbst nach Jira, ops-db-backup-failed). Bis zur Behebung gibt es kein frisches Backup."
   }
 ]
