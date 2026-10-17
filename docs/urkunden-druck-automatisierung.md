@@ -121,9 +121,10 @@ Erster vollständiger Durchlauf gegen die echte Gelato-API, ausgelöst von Uwe �
 | Signierte Datei-URL in `gelato_antwort` | gültig 180 Tage (`exp` im Token) |
 
 Damit ist der `GELATO_API_KEY` belegt gültig und der Weg Rendern → Bucket → Gelato
-funktioniert in der Produktion. **Nicht geprüft:** ein echter Druck (Freigabe), die
-Zustellung und die Bestätigungsmails aus Loops (Besteller und pitmaster@) — die Mails
-hat niemand nachgesehen.
+funktioniert in der Produktion. **Beide Mails belegt (17.10.2026, zweite Probe):** die
+Bestellbestätigung an den Besteller (Loops-Vorlage „Urkunde — Bestellbestätigung", 2 gesendet /
+2 zugestellt, erste Nutzung überhaupt) und die Meldung an pitmaster@ (Kontakt-Vorlage, bei Uwe
+um 22:17 Uhr angekommen). **Nicht geprüft:** ein echter Druck (Freigabe) und die Zustellung.
 
 Zwei Dinge, die bei der Probe aufgefallen sind, ohne hier behoben zu sein:
 
