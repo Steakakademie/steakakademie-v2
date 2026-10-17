@@ -51,8 +51,9 @@ ist offen ·
 Automatisierungs-Browser durchgeht, ist offen (`docs/bot-schutz-2026-10.md`) ·
 Zusagen-Baseline: 168 Altbestand-Treffer ohne Beleg (`data/zusagen-baseline.json`) —
 beheben, nie von Hand eintragen ·
-*17.10.2026:* Supabase im Free-Tarif ohne Backup — seit heute liegen dort Urkunden-Nummern und
-Prüfcodes, bei Verlust nicht wiederherstellbar; Sicherungsziel weiter unentschieden ·
+*17.10.2026:* Supabase-Sicherung gebaut (`db-backup.yml`, täglich 02:40 UTC, verschlüsseltes
+Artefakt 90 Tage, Wiederherstellungsprobe im Lauf, `docs/supabase-backup.md`) — **läuft erst,
+wenn Uwe die Secrets `SUPABASE_DB_URL` und `BACKUP_PASSPHRASE` setzt**; bis dahin kein Backup ·
 PM-Agent-Briefing unter `/admin/pm-agent` ist vom 13.08.2026, seitdem kein Lauf ·
 Admin-Passwort lokal (`.env.local`) und auf Vercel waren auseinandergelaufen, am 17.10. von Uwe
 auf den lokalen Wert gesetzt; „Passwort vergessen" gibt es nicht, Zurücksetzen = Variable + Redeploy.

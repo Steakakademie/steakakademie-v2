@@ -107,6 +107,24 @@ describe('.github/workflows — Hygiene', () => {
     expect(hb.code.indexOf('kursinhalte-holen.mjs')).toBeLessThan(hb.code.indexOf('scripts/ops-heartbeat.mjs'))
   })
 
+  // 17.10.2026: Die Supabase-Sicherung landet als Artefakt im OEFFENTLICHEN Repo.
+  // Unverschluesselt waere das die ganze Datenbank samt Konten fuer jeden GitHub-Nutzer.
+  it('die Supabase-Sicherung verschluesselt vor dem Hochladen und loescht den Klartext', () => {
+    const wf = dateien.find((d) => d.name.endsWith('db-backup.yml'))
+    expect(wf, 'db-backup.yml').toBeTruthy()
+    const enc = wf.code.indexOf('openssl enc -aes-256-cbc')
+    const upload = wf.code.indexOf('actions/upload-artifact')
+    expect(enc, 'openssl enc fehlt').toBeGreaterThan(-1)
+    expect(upload, 'upload-artifact fehlt').toBeGreaterThan(enc)
+    expect(wf.code).toMatch(/rm -f sicherung\/\*\.dump/)
+    // Hochgeladen wird nur Verschluesseltes, Pruefsumme und Inventar — nie *.dump.
+    const pfade = wf.code.slice(upload).match(/path: \|\n((?:\s+sicherung\/.*\n)+)/)
+    expect(pfade, 'Artefakt-Pfade').toBeTruthy()
+    for (const zeile of pfade[1].trim().split('\n')) expect(zeile.trim()).not.toMatch(/\.dump$/)
+    expect(wf.code).toMatch(/retention-days: 90/)
+    expect(wf.code).toMatch(/name: supabase-sicherung\s*$/m)
+  })
+
   it('jeder Zeitplan hat genau fuenf Felder', () => {
     for (const d of dateien) {
       for (const [, ausdruck] of d.code.matchAll(/-\s*cron:\s*'([^']+)'/g)) {

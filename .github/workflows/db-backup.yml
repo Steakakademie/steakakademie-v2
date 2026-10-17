@@ -1,0 +1,265 @@
+name: Supabase-Sicherung (täglicher Export)
+
+# Taeglicher, verschluesselter Export der Supabase-Datenbank als GitHub-Artefakt,
+# mit Wiederherstellungsprobe in einem frischen Postgres im selben Lauf.
+#
+# Warum (CLAUDE.md §6, 17.10.2026 von Uwe entschieden: „bau den täglichen Export"):
+# Supabase laeuft im Free-Tarif ohne automatische Backups. Seit dem 17.10.2026
+# liegen dort Urkunden-Nummern und Pruefcodes, Buchungen und Konten — bei Verlust
+# nicht wiederherstellbar.
+#
+# Was gesichert wird: Schemas public, auth und storage (Metadaten) per pg_dump 17,
+# Custom-Format, komprimiert. Nicht enthalten: Sitzungen und Refresh-Tokens (bewusst,
+# ein Backup soll keine Anmeldungen wiederbeleben), die Dateien im Storage-Bucket
+# (Urkunden-Druckdateien lassen sich aus der DB neu rendern) und Supabase-interne
+# Schemas (realtime, vault, graphql).
+#
+# Ziel: Artefakt dieses Repos, 90 Tage (GitHub-Maximum). Das Repo ist oeffentlich,
+# Artefakte kann jeder angemeldete GitHub-Nutzer laden — deshalb ist die Datei mit
+# AES-256 (openssl, PBKDF2) verschluesselt. Ohne BACKUP_PASSPHRASE ist sie wertlos,
+# MIT ihr auch ohne GitHub: Entschluesseln und pg_restore, siehe docs/supabase-backup.md.
+#
+# Gruen ist kein Ergebnis (CLAUDE.md §2 Regel 10): Der Lauf spielt den Dump in ein
+# Test-Postgres (pgvector/pg17) ein und vergleicht je public-Tabelle die Zeilenzahl
+# mit der Quelle. Weicht eine ab, ist der Lauf rot — mit Zahl im Summary.
+#
+# Benoetigte GitHub-Secrets (Uwe, einmalig):
+#   SUPABASE_DB_URL     Session-Pooler-URI mit DB-Passwort, IPv4-faehig:
+#                       postgresql://postgres.<ref>:<PASSWORT>@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
+#                       (der direkte Host db.<ref>.supabase.co ist nur per IPv6 erreichbar,
+#                       GitHub-Runner haben kein IPv6)
+#   BACKUP_PASSPHRASE   mind. 32 Zeichen, zufaellig; Kopie OFFLINE bei den Recovery-Codes.
+#                       Geht sie verloren, sind alle Artefakte unbrauchbar.
+# Fehlt eines, endet der Lauf rot mit klarer Meldung — „nicht gesichert" ist nie gruen.
+#
+# Ob der Lauf STARTET, prueft der Ops-Heartbeat (data/ops-heartbeat.json, Eintrag
+# „Supabase-Sicherung", Frist 2 Tage). Scheitert er, kommt ein Jira-Ticket (KAN).
+on:
+  schedule:
+    - cron: '40 2 * * *'   # taeglich 02:40 UTC — nach dem naechtlichen Rezept-Lauf, vor dem Heartbeat (09:00)
+  workflow_dispatch:
+    inputs:
+      restore_probe:
+        description: 'Wiederherstellung in Test-Postgres proben? (Standard: ja)'
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  sichern:
+    name: Exportieren, verschluesseln, Wiederherstellung proben
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      probe:
+        # Dasselbe Major wie die Produktion (17) MIT pgvector — die Tabelle
+        # knowledge_embeddings braucht den Typ vector, sonst scheitert der Restore.
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_PASSWORD: probe
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+      PROBE_URL: postgresql://postgres:probe@localhost:5432/postgres
+      # Tabellen, in die rund um die Uhr geschrieben wird (Telemetrie): dort darf die
+      # Quelle beim Vergleich MEHR Zeilen haben als der Dump, nie weniger.
+      TOLERANZ: 'web_vitals js_errors'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Secrets pruefen
+        run: |
+          set -euo pipefail
+          fehlt=""
+          [ -n "${SUPABASE_DB_URL:-}" ]   || fehlt="$fehlt SUPABASE_DB_URL"
+          [ -n "${BACKUP_PASSPHRASE:-}" ] || fehlt="$fehlt BACKUP_PASSPHRASE"
+          if [ -n "$fehlt" ]; then
+            echo "::error::Sicherung nicht moeglich — GitHub-Secret fehlt:$fehlt (Anleitung: docs/supabase-backup.md)"
+            exit 1
+          fi
+          if [ "${#BACKUP_PASSPHRASE}" -lt 32 ]; then
+            echo "::error::BACKUP_PASSPHRASE ist kuerzer als 32 Zeichen — zu schwach fuer ein oeffentlich ladbares Artefakt."
+            exit 1
+          fi
+
+      - name: PostgreSQL-Client 17 installieren (passend zum Server)
+        run: |
+          set -euo pipefail
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail -sS -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17 > /dev/null
+          pg_dump --version
+
+      - name: Exportieren (pg_dump, Custom-Format)
+        id: dump
+        run: |
+          set -euo pipefail
+          STAMP="$(date -u +%Y-%m-%d_%H%M)"
+          echo "stamp=$STAMP" >> "$GITHUB_OUTPUT"
+          mkdir -p sicherung
+          pg_dump "$SUPABASE_DB_URL" \
+            --format=custom --compress=6 --no-owner --no-privileges \
+            --schema=public --schema=auth --schema=storage \
+            --exclude-table-data='auth.refresh_tokens' \
+            --exclude-table-data='auth.sessions' \
+            --exclude-table-data='auth.mfa_amr_claims' \
+            --exclude-table-data='auth.one_time_tokens' \
+            --exclude-table-data='auth.flow_state' \
+            --exclude-table-data='auth.audit_log_entries' \
+            --file "sicherung/supabase-$STAMP.dump"
+          ls -l "sicherung/supabase-$STAMP.dump"
+          # Inventar: welche Tabellen stecken im Dump, wie viele Zeilen hat die Quelle?
+          pg_restore --list "sicherung/supabase-$STAMP.dump" | grep -c 'TABLE DATA' | sed 's/^/tabellen_mit_daten=/' | tee -a "$GITHUB_OUTPUT"
+          psql "$SUPABASE_DB_URL" -Atc "select tablename from pg_tables where schemaname='public' order by 1" > sicherung/tabellen.txt
+          : > sicherung/inventar-quelle.txt
+          while read -r t; do
+            n=$(psql "$SUPABASE_DB_URL" -Atc "select count(*) from public.\"$t\"" < /dev/null)
+            echo "$t $n" >> sicherung/inventar-quelle.txt
+          done < sicherung/tabellen.txt
+          echo "zeilen_quelle=$(awk '{s+=$2} END {print s}' sicherung/inventar-quelle.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Verschluesseln (AES-256, PBKDF2) und Pruefsumme
+        run: |
+          set -euo pipefail
+          cd sicherung
+          D="supabase-${{ steps.dump.outputs.stamp }}.dump"
+          openssl enc -aes-256-cbc -md sha256 -pbkdf2 -iter 600000 -salt \
+            -in "$D" -out "$D.enc" -pass env:BACKUP_PASSPHRASE
+          sha256sum "$D.enc" > "$D.enc.sha256"
+          # Rueckweg einmal durchspielen: Entschluesseln muss byteidentisch sein.
+          openssl enc -d -aes-256-cbc -md sha256 -pbkdf2 -iter 600000 \
+            -in "$D.enc" -out "$D.zurueck" -pass env:BACKUP_PASSPHRASE
+          cmp "$D" "$D.zurueck" && rm "$D.zurueck"
+          ls -l "$D.enc"
+
+      - name: Wiederherstellung proben (Test-Postgres)
+        if: ${{ inputs.restore_probe != false }}
+        env:
+          PGPASSWORD: probe
+        run: |
+          set -euo pipefail
+          D="sicherung/supabase-${{ steps.dump.outputs.stamp }}.dump"
+          # Supabase-Rollen und -Erweiterungen, auf die Policies, Defaults und
+          # Funktionen im Dump verweisen. Ohne sie bricht der Restore an
+          # „role does not exist" bzw. „type vector does not exist" ab.
+          psql "$PROBE_URL" -v ON_ERROR_STOP=1 -q <<'SQL'
+            create role anon nologin; create role authenticated nologin; create role service_role nologin;
+            create role supabase_admin nologin; create role supabase_auth_admin nologin; create role supabase_storage_admin nologin;
+            create schema if not exists extensions;
+            create extension if not exists pgcrypto schema extensions;
+            create extension if not exists "uuid-ossp" schema extensions;
+            create extension if not exists vector;
+          SQL
+          # Nicht --exit-on-error: Supabase-Eigenheiten (Grants, Kommentare) duerfen
+          # scheitern. Was zaehlt, ist der Zeilenvergleich darunter.
+          pg_restore --no-owner --no-privileges -d "$PROBE_URL" "$D" 2> sicherung/restore.err || true
+          FEHLER=$(grep -c 'pg_restore: error' sicherung/restore.err || true)
+          echo "restore_fehler=$FEHLER" >> "$GITHUB_ENV"
+          : > sicherung/inventar-probe.txt
+          while read -r t; do
+            n=$(psql "$PROBE_URL" -Atc "select count(*) from public.\"$t\"" < /dev/null 2>/dev/null || echo "FEHLT")
+            echo "$t $n" >> sicherung/inventar-probe.txt
+          done < sicherung/tabellen.txt
+          # Vergleich je Tabelle: exakt, ausser bei Telemetrie (Quelle darf mehr haben).
+          ABWEICHUNG=0
+          paste -d' ' sicherung/inventar-quelle.txt sicherung/inventar-probe.txt | while read -r t q t2 p; do
+            if [ "$q" = "$p" ]; then continue; fi
+            case " $TOLERANZ " in
+              *" $t "*) if [ "$p" != "FEHLT" ] && [ "$p" -le "$q" ]; then continue; fi ;;
+            esac
+            echo "::error::Tabelle public.$t — Quelle $q Zeilen, wiederhergestellt $p"
+            echo "$t" >> sicherung/abweichungen.txt
+          done
+          if [ -s sicherung/abweichungen.txt ]; then
+            echo "::error::Wiederherstellungsprobe gescheitert: $(wc -l < sicherung/abweichungen.txt) Tabelle(n) weichen ab (siehe oben)."
+            exit 1
+          fi
+          echo "Probe bestanden: $(wc -l < sicherung/tabellen.txt) Tabellen, $(awk '{s+=$2} END {print s}' sicherung/inventar-probe.txt) Zeilen wiederhergestellt, $FEHLER unkritische Restore-Meldungen."
+
+      - name: Klartext entfernen
+        if: always()
+        run: rm -f sicherung/*.dump sicherung/*.zurueck
+
+      # Fester Artefakt-Name (das Datum steckt in den Dateinamen): So kann der
+      # Ops-Heartbeat per Typ „artefakt" pruefen, DASS taeglich eine Sicherung mit
+      # Mindestgroesse ankommt — nicht nur, dass der Lauf startet.
+      - name: Artefakt hochladen (90 Tage)
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-sicherung
+          path: |
+            sicherung/*.dump.enc
+            sicherung/*.sha256
+            sicherung/inventar-quelle.txt
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
+
+      - name: Bilanz ins Job-Summary
+        if: always()
+        run: |
+          {
+            echo "## 🗄️ Supabase-Sicherung ${{ steps.dump.outputs.stamp }}"
+            echo ""
+            echo "- Tabellen mit Daten im Dump: **${{ steps.dump.outputs.tabellen_mit_daten }}** · Zeilen in public (Quelle): **${{ steps.dump.outputs.zeilen_quelle }}**"
+            if [ -s sicherung/inventar-probe.txt ]; then
+              echo "- Wiederherstellungsprobe: **$(awk '{s+=$2} END {print s}' sicherung/inventar-probe.txt) Zeilen** in $(wc -l < sicherung/inventar-probe.txt) Tabellen, ${restore_fehler:-?} unkritische Restore-Meldungen"
+            else
+              echo "- Wiederherstellungsprobe: nicht gelaufen"
+            fi
+            if [ -s sicherung/abweichungen.txt ]; then
+              echo "- ❌ Abweichungen: $(tr '\n' ' ' < sicherung/abweichungen.txt)"
+            fi
+            echo ""
+            echo "Entschluesseln (Passphrase offline): \`openssl enc -d -aes-256-cbc -md sha256 -pbkdf2 -iter 600000 -in <datei>.dump.enc -out <datei>.dump\` — Wiederherstellung: docs/supabase-backup.md"
+            if [ -s sicherung/restore.err ]; then
+              echo ""
+              echo "<details><summary>Restore-Meldungen (erste 20)</summary>"
+              echo ""
+              echo '```'
+              grep 'pg_restore: error' sicherung/restore.err | head -20 || true
+              echo '```'
+              echo "</details>"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Node.js einrichten (nur fuer den Jira-Alarm)
+        if: failure()
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Supabase-Sicherung fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der taegliche DB-Export (db-backup) ist abgebrochen oder die Wiederherstellungsprobe weicht ab. Bis zur Behebung gibt es kein frisches Backup. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-db-backup-failed'
+        # Das Skript hat keine Abhaengigkeiten ausserhalb von Node — kein npm ci noetig.
+        run: node scripts/ops-alert-to-jira.mjs
