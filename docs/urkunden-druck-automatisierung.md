@@ -119,7 +119,8 @@ text (`URKUNDE_CONSENT_TEXT`), und der Wortlaut wird je Bestellung mitgespeicher
 
 | Variable | Wofür | Fehlt sie … |
 |---|---|---|
-| `GELATO_API_KEY` | Druckauftrag | … lassen sich Bestellungen annehmen, aber nicht freigeben |
+| `GELATO_API_KEY` | Druckauftrag | … gibt es kein Bestellformular, `POST /api/urkunde/bestellen` antwortet 503 (seit 02.10.2026, `src/lib/urkunde/bestellbar.ts`). Bis 17.10.2026 hieß die Variable auf Vercel `Gelato` und wurde deshalb nicht gefunden. |
+| `LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID` | Bestellbestätigung an den Besteller (§ 312i BGB) | … dasselbe: kein Formular, 503 |
 | `SUPABASE_SERVICE_ROLE_KEY` | Bestellungen, Bucket | … geht gar nichts |
 | `ADMIN_PASSWORD` | `/admin/urkunden` | … ist niemand Admin (siehe `lib/admin-auth.ts`) |
 | `LOOPS_API_KEY`, `LOOPS_KONTAKT_TEMPLATE_ID` | Benachrichtigung | … wird nur gespeichert, keine Mail |

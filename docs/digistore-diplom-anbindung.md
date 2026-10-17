@@ -64,9 +64,13 @@ Redeploy, Button auf `/diplome` sichtbar; (3) Produkt bei DS-de zur Prüfung ein
    antwortet auf Lesen wie Schreiben mit „MJML format is not supported via API". Vorbild:
    „Urkunde — Bestellbestätigung" (09.10.2026). Die Variablen `magic_link` und `course_title`
    müssen erhalten bleiben — der Webhook füllt genau diese beiden.
-7. Vercel-Variable `Gelato` (Production, 09.10.2026) in `GELATO_API_KEY` umbenennen —
-   betrifft nicht das Diplom, aber die gedruckte Urkunde: `src/lib/urkunde/bestellbar.ts`
-   sucht den exakten Namen, bis dahin antwortet die Bestellung mit 503.
+7. ✓ 17.10.2026, 17:24 Uhr: Vercel-Variable `Gelato` (Production, 09.10.2026) in
+   `GELATO_API_KEY` umbenannt (Uwe), Production danach neu gebaut (dpl_GcpTpQoVgQ2xTtbERciTSAjVzTVH).
+   Beleg: `GET /api/urkunde/bestellen` auf der Produktion antwortet `{"bestellbar":true}`
+   — vorher 503, weil `src/lib/urkunde/bestellbar.ts` den exakten Namen sucht. Betrifft nicht
+   das Diplom, sondern die gedruckte Urkunde. Nicht geprüft: ob der Schlüssel bei Gelato gültig
+   ist — das zeigt erst „Probe (Gelato-Entwurf)" unter `/admin/urkunden`
+   (`docs/urkunden-druck-automatisierung.md`), kostenlos, legt nur einen Entwurf an.
 
 **Raten (Entscheidung Uwe 17.10.2026: geplatzte Rate sperrt):** Rate 1 (`payment`) öffnet den Zugang mit
 Login-Mail. `payment_missed` entzieht ihn sofort. Zahlt der Käufer nach, öffnet das nächste `payment` ihn

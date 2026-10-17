@@ -221,7 +221,8 @@ sperrt den Zugang (Webhook). **Seit #424 (17.10., nachmittags) technisch fertig:
 Gewerbeanmeldung (Uwe, 17.10.):** Produkt-ID nur noch auf Preview, kein Kauf-Button in der
 Produktion; Verkaufsstopp in Digistore gesetzt (Uwe, 17.10.). **Offen, nur Uwe:** Gewerbe anmelden (geplant 01.11.2026) →
 Verkaufsstart nach `docs/digistore-diplom-anbindung.md` Abschnitt 0a; daneben Login-Mail-Design
-in Loops, Vercel-Variable `Gelato` → `GELATO_API_KEY`.
+in Loops. Gedruckte Urkunde seit 17.10. (17:24) bestellbar: `GELATO_API_KEY` gesetzt,
+Produktion meldet `bestellbar: true`; Gelato-Probe unter `/admin/urkunden` noch nicht gefahren.
 *Kassieren ohne Auslieferung (16.10.2026, Nebenbefund vom 09.10. korrigiert):* Der alte Satz
 „695900 hat keine Zeile und keinen Kurs" stammte aus dem DB-Audit vom 07.09. und ist seit
 19.09.2026 überholt — 695900 ist Eigenregie, Zeile + veröffentlichter Kurs in der DB, in
