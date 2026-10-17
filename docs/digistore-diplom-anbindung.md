@@ -20,7 +20,8 @@
 
 1. ✓ 17.10.2026: Mapping `750228 → grillmeister-diplom`, `published = true`, `price = 99.00` —
    Migration `20261017083813_diplom_digistore_mapping.sql` (Ledger-Version), live abgefragt.
-2. Vercel (2.3): `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99` → Redeploy.
+2. ✓ 17.10.2026: Vercel (2.3) `NEXT_PUBLIC_DS_DIPLOM_PRODUCT_ID=750228`, `NEXT_PUBLIC_DS_DIPLOM_PREIS=99`
+   (Production + Preview, Typ plain). Wirksam auf Production mit dem nächsten Build — der Merge dieses PRs.
 3. Digistore-Backend, per API nicht setzbar:
    - Leistungszeitraum Einmalzahlung steht auf **„3 Monate"** (Default des Produkttyps) — der Zugang ist
      unbefristet (`src/lib/diplome/zugang.ts`), also auf „lebenslang/unbefristet" stellen.
