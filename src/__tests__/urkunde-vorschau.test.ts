@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { statSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { vorschauBild, vorschauLayout, VORSCHAU_STUFEN } from '@/lib/urkunde/vorschau-layout';
+import { DIPLOM_HINWEIS, STUFEN } from '@/lib/diplome/stufen';
 
 /**
  * Waechter fuer die Web-Vorschau der gedruckten Urkunde (17.10.2026).
@@ -27,10 +28,11 @@ describe('Urkunden-Vorschau', () => {
 
   it('setzt den Namen in die rechte Textspalte, zentriert, in Playfair-Groesse', () => {
     const { name } = vorschauLayout(1);
-    // Kasten 503,9–1076,5 px von 1145,2 px Breite (boxen.json, Stufe 1, 1z)
+    // Kasten 503,9–1076,5 px von 1145,2 px Breite (boxen.json, Stufe 1, 1z);
+    // Grundlinie 334,2 px von 816,4 px Hoehe — seit der Pflichtzeile (17.10.2026), vorher 342,6 px.
     expect(name.left).toBeCloseTo(0.44, 2);
     expect(name.width).toBeCloseTo(0.5, 2);
-    expect(name.baseline).toBeCloseTo(0.42, 2);
+    expect(name.baseline).toBeCloseTo(0.41, 2);
     expect(name.fontSize).toBeCloseTo(0.0512, 3);
     expect(name.align).toBe('center');
   });
@@ -38,6 +40,17 @@ describe('Urkunden-Vorschau', () => {
   it('kennt keine Stufe ausserhalb der Vorlagen', () => {
     expect(() => vorschauLayout(0)).toThrow(/Stufe 0/);
     expect(() => vorschauLayout(6)).toThrow(/Stufe 6/);
+  });
+
+  it('jede Druckvorlage traegt die Pflichtzeile aus Rahmenlehrplan §1 und das Stufen-Badge', () => {
+    // Uwe, 17.10.2026: „muss sein, klein und am unteren Ende" — die Zeile ist dieselbe wie
+    // auf der Webseite (DIPLOM_HINWEIS). Bis dahin fehlte sie auf allen fuenf Vorlagen.
+    const namen = ['1 Bronze', '2 Silber', '3 Gold', '4 Platin', '5 Meister'];
+    namen.forEach((n, i) => {
+      const html = readFileSync(path.join(process.cwd(), 'design', 'urkunden', `Urkunde ${n}.dc.html`), 'utf8');
+      expect(html, `Urkunde ${n}`).toContain(DIPLOM_HINWEIS);
+      expect(html, `Urkunde ${n}`).toContain(`>${STUFEN[i].badge}<`);
+    });
   });
 
   it('hat fuer jede Stufe ein Vorschaubild unter public/, klein genug fuer das Web', () => {

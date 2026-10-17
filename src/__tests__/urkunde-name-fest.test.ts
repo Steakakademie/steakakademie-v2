@@ -53,7 +53,7 @@ import { POST } from '@/app/api/urkunde/bestellen/route';
 
 const adresse = { vorname: 'Max', nachname: 'Muster', strasse: 'Weg 1', plz: '42279', ort: 'Wuppertal', land: 'DE', consent: true };
 const bestellen = (extra: Record<string, any>) => {
-  db.body = { levelId: 3, ...adresse, ...extra };
+  db.body = { stufe: 2, ...adresse, ...extra };
   return POST(new Request('https://steakakademie.de/api/urkunde/bestellen', { method: 'POST' }));
 };
 
