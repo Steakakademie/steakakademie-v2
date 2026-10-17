@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { vorschauBild, vorschauLayout, VORSCHAU_STUFEN } from '@/lib/urkunde/vorschau-layout';
-import { DIPLOM_HINWEIS, STUFEN } from '@/lib/diplome/stufen';
+import { DIPLOM_HINWEIS, STUFEN, gradMitTraeger } from '@/lib/diplome/stufen';
 
 /**
  * Waechter fuer die Web-Vorschau der gedruckten Urkunde (17.10.2026).
@@ -42,14 +42,18 @@ describe('Urkunden-Vorschau', () => {
     expect(() => vorschauLayout(6)).toThrow(/Stufe 6/);
   });
 
-  it('jede Druckvorlage traegt die Pflichtzeile aus Rahmenlehrplan §1 und das Stufen-Badge', () => {
-    // Uwe, 17.10.2026: „muss sein, klein und am unteren Ende" — die Zeile ist dieselbe wie
-    // auf der Webseite (DIPLOM_HINWEIS). Bis dahin fehlte sie auf allen fuenf Vorlagen.
+  it('jede Druckvorlage traegt Grad mit Traeger, Stufen-Badge und die Pflichtzeile aus Rahmenlehrplan §1', () => {
+    // Uwe, 17.10.2026: Pflichtzeile „muss sein, klein und am unteren Ende" (dieselbe wie auf der
+    // Webseite, DIPLOM_HINWEIS — bis dahin fehlte sie auf allen fuenf Vorlagen) und der Grad
+    // „Grillmeister Bronze · Steakakademie" statt „Bronze-Zertifikat · Stufe 1" (Rahmenlehrplan §1:
+    // Grad nie ohne Traeger). Die Vorlagen sind HTML, deshalb laesst sich beides hier lesen.
     const namen = ['1 Bronze', '2 Silber', '3 Gold', '4 Platin', '5 Meister'];
     namen.forEach((n, i) => {
       const html = readFileSync(path.join(process.cwd(), 'design', 'urkunden', `Urkunde ${n}.dc.html`), 'utf8');
       expect(html, `Urkunde ${n}`).toContain(DIPLOM_HINWEIS);
+      expect(html, `Urkunde ${n}`).toContain(`>${gradMitTraeger(STUFEN[i])}<`);
       expect(html, `Urkunde ${n}`).toContain(`>${STUFEN[i].badge}<`);
+      expect(html, `Urkunde ${n}`).not.toMatch(/Zertifikat · Stufe|Diplom · Stufe/);
     });
   });
 

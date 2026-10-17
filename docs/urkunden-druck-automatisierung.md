@@ -137,10 +137,12 @@ Zwei Dinge, die bei der Probe aufgefallen sind, ohne hier behoben zu sein:
    Druckvorlagen. **Entschieden (Uwe, 17.10.2026): „muss sein, klein und am unteren Ende."**
    Seitdem steht sie in `design/urkunden/*.dc.html` unter der Nummer-Zeile (6,5 pt, Versalien),
    Vorlagen und Web-Vorschau neu erzeugt; Wächter in `src/__tests__/urkunde-vorschau.test.ts`.
-3. **Noch offen:** Die Vorlage nennt den Grad „Bronze-Zertifikat · Stufe 1", `STUFEN[].cert`
-   heißt seit 08.09.2026 „Grillmeister Bronze" und soll laut Rahmenlehrplan §1 mit Träger
-   stehen („Grillmeister Bronze · Steakakademie", `gradMitTraeger`). Bestellseite und Mails
-   sagen „Grillmeister Bronze", der Druck sagt „Bronze-Zertifikat". Entscheidung Uwe.
+3. **Die Vorlage nannte den Grad „Bronze-Zertifikat · Stufe 1"**, `STUFEN[].cert` heißt seit
+   08.09.2026 „Grillmeister Bronze" und steht laut Rahmenlehrplan §1 nie ohne Träger.
+   **Entschieden (Uwe, 17.10.2026): „Grillmeister Bronze · Steakakademie auf die Urkunde."**
+   Die Grad-Zeile aller fünf Vorlagen ist seitdem `gradMitTraeger(stufe)` („Grillmeister Bronze ·
+   Steakakademie" … „Grillmeister Meisterklasse · Steakakademie"); die Stufennummer steht weiter
+   im Siegel (I–V). Wächter: `src/__tests__/urkunde-vorschau.test.ts`.
 
 Aufräumen nach der Probe: Bestellung `ffe6f8aa` unter `/admin/urkunden` stornieren, den
 Gelato-Entwurf im Gelato-Dashboard löschen (Entwürfe kosten nichts, liegen aber dort),
