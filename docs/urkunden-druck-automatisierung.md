@@ -144,10 +144,30 @@ Zwei Dinge, die bei der Probe aufgefallen sind, ohne hier behoben zu sein:
    Steakakademie" … „Grillmeister Meisterklasse · Steakakademie"); die Stufennummer steht weiter
    im Siegel (I–V). Wächter: `src/__tests__/urkunde-vorschau.test.ts`.
 
-Aufräumen nach der Probe: Bestellung `ffe6f8aa` unter `/admin/urkunden` stornieren, den
-Gelato-Entwurf im Gelato-Dashboard löschen (Entwürfe kosten nichts, liegen aber dort),
-und die Test-Zeile `6866da91-ad0f-4f53-a2d3-433bc03b6388` aus `course_progress` löschen.
-Die vergebene Nummer SA-2026-0001 bleibt verbraucht — der Zähler zählt nicht zurück.
+Aufräumen nach der ersten Probe (erledigt 17.10.2026): Bestellung `ffe6f8aa` storniert, Gelato-Entwurf
+gelöscht, Test-Zeile aus `course_progress` entfernt. Die vergebene Nummer SA-2026-0001 bleibt
+verbraucht — der Zähler zählt nicht zurück.
+
+### Zweite Probe (17.10.2026, 22:24 Uhr, nach #432)
+
+Gleicher Weg, neue Vorlagen: Bestellung `9371e419-563d-49f6-8546-371a44516d29` über das
+Stufen-Formular (`stufe: 1`, `level_id: null`), Probe unter `/admin/urkunden`. Ergebnis:
+Gelato-Entwurf `28aace73-b614-4130-b4ef-7aafb7afdfea` (`draft`, 11,85 €), Druckdatei
+`druck/2026/SA-2026-0001-NP6SPP-9371e419.png` (1,34 MB, 300 dpi), angesehen: Grad-Zeile
+„Grillmeister Bronze · Steakakademie", Badge „Glut-Lehrling", Pflichtzeile klein unter der
+Nummer — alles aus #432 ist im Druck angekommen.
+
+**Zweiter Befund, gewollt:** Die zweite Bestellung trägt dieselbe Kennung SA-2026-0001-NP6SPP
+wie die erste, der Zähler steht weiter auf 1. Das ist das Nachdruck-Verhalten aus
+`urkunde_ausstellen_fuer` (idempotent je Konto und Stufe, `public.urkunden`): Wer seine Urkunde
+zweimal bestellt, bekommt zweimal dieselbe Urkunde, nicht zwei Urkunden mit zwei Nummern. Der
+Prüfcode bleibt damit eindeutig pro Person und Stufe.
+
+Aufräumen nach der zweiten Probe: Bestellung `9371e419` stornieren, Gelato-Entwurf `28aace73`
+löschen, und — wichtiger als beim ersten Mal — die Zeile `SA-2026-0001` aus `public.urkunden`
+sowie die Test-Stufe (`course_progress` `3dd5feff-32b1-4462-890f-edacbc2ae319`) löschen: Solange
+die `urkunden`-Zeile steht, bestätigt `/urkunde/SA-2026-0001-NP6SPP` öffentlich eine Prüfung,
+die nie abgelegt wurde.
 
 ## Urkunden-Nummer
 
