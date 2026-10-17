@@ -240,8 +240,5 @@ export async function rendereUrkunde({ stufe, name, datum, nr }: UrkundenDaten):
   return { png, layout, breite, hoehe };
 }
 
-/** „10. September 2026" — so steht das Datum auf der Urkunde. */
-export function urkundenDatum(d: Date = new Date()): string {
-  const monate = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-  return `${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}`;
-}
+// Seit 17.10.2026 in ./datum.ts (ohne 'server-only'), weil die Web-Vorschau dasselbe Format braucht.
+export { urkundenDatum } from './datum';

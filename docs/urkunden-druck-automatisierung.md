@@ -46,6 +46,17 @@ vermisst dabei die drei variablen Textfelder (Name, Datum, Nummer). Die Felder
 stehen im Bild auf `visibility:hidden` — sie belegen ihren Platz, erscheinen
 aber nicht. Ergebnis: `src/lib/urkunde/vorlagen/`.
 
+**Web-Vorschau aus derselben Vorlage** (`node scripts/urkunden-vorschau.mjs`, seit
+17.10.2026): verkleinert `stufe-N-1z.png` auf 1600 px WebP (~55 KB) nach
+`public/images/urkunde/`. `/diplome/urkunde` zeigt dieses Bild als Vorschau und legt
+Name und Datum per CSS an die Stellen aus `boxen.json`
+(`src/lib/urkunde/vorschau-layout.ts`, `src/components/diplome/UrkundeVorschau.tsx`).
+Vorher stand dort eine CSS-Attrappe mit Eckrahmen und Emoji, die mit dem Druck nichts
+gemein hatte (Uwe, 17.10.2026: „grafisch eine andere als die, die der User bekommt").
+Was die Vorschau nicht zeigt: die zweizeilige Variante bei langen Namen und die
+Urkunden-Nummer. Wächter: `src/__tests__/urkunde-vorschau.test.ts` (Geometrie, Bilder
+vorhanden und unter 250 KB).
+
 **Pro Bestellung, auf dem Server** (`src/lib/urkunde/render.ts`):
 opentype.js setzt die drei Texte als SVG-Pfade an die vermessenen Stellen,
 sharp rastert und legt sie auf die Vorlage. Keine Schriftinstallation, kein
@@ -129,6 +140,7 @@ text (`URKUNDE_CONSENT_TEXT`), und der Wortlaut wird je Bestellung mitgespeicher
 
 1. `design/urkunden/*.dc.html` anpassen.
 2. `node scripts/urkunden-vorlagen.mjs` — erzeugt Vorlagen und `boxen.json` neu.
+   Danach `node scripts/urkunden-vorschau.mjs`, sonst zeigt die Bestellseite das alte Bild.
 3. Das Skript meldet, wenn eines der drei Felder nicht mehr gefunden wird oder
    der Name unerwartet umbricht. Solche Meldungen nicht übergehen: Die Vorlage
    wäre dann falsch vermessen und die Texte stünden schief.

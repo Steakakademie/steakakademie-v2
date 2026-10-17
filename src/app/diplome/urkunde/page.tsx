@@ -7,7 +7,8 @@ import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
-import { LEVELS, STUFEN, stufeByNr, gradMitTraeger, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
+import UrkundeVorschau from '@/components/diplome/UrkundeVorschau';
+import { LEVELS, STUFEN, stufeByNr, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
 import {
   URKUNDE_CONSENT_TEXT,
   URKUNDE_WIDERRUF_HINWEIS,
@@ -173,53 +174,29 @@ export default function UrkundePage() {
           </div>
         </section>
 
-        {/* Preview */}
+        {/* Vorschau — seit 17.10.2026 das echte Vorlagenbild der Stufe (vorher eine
+            CSS-Attrappe, die mit dem Druck nichts gemein hatte). Ohne gewaehltes Level
+            zeigt sie Stufe 1; Name und Datum liegen an den vermessenen Stellen. */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative border-2 border-brand-gold/30 bg-gradient-to-br from-brand-gold/5 to-transparent p-10 md:p-16 text-center overflow-hidden"
           >
-            <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-brand-gold/30" />
-            <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-brand-gold/30" />
-            <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-brand-gold/30" />
-            <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-brand-gold/30" />
-
-            <p className="text-brand-gold text-xs uppercase tracking-[0.3em] font-sans mb-6">
-              Steakakademie · Deutschland · MMXXVI
-            </p>
-            <p className="text-text-light/55 text-sm font-body mb-4">Diese Urkunde bestätigt, dass</p>
-            <p className="text-3xl md:text-5xl font-serif font-bold text-text-light mb-4 min-h-[1.4em]">
-              {form.nameAufUrkunde || <span className="text-text-light/55 italic">Dein Name</span>}
-            </p>
-            <p className="text-text-light/55 text-sm font-body mb-2">die Prüfung zum</p>
-            <p className="text-2xl font-serif font-bold text-brand-gold mb-6 min-h-[1.4em]">
-              {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/55 italic">Level wählen</span>}
-            </p>
-            <p className="text-text-light/55 text-sm font-body mb-2">
-              erfolgreich abgelegt hat und den Grad
-            </p>
-            <p className="text-lg font-serif font-bold text-text-light/80 mb-8 min-h-[1.4em]">
-              {selectedStufe ? gradMitTraeger(selectedStufe) : <span className="text-text-light/55 italic">Grillmeister — · Steakakademie</span>}
-            </p>
-            <div className="flex items-center justify-center gap-8 text-text-light/55 text-xs font-sans">
-              <div className="text-center">
-                <div className="w-16 border-t border-text-light/15 mb-1 mx-auto" />
-                <span>Datum</span>
-              </div>
-              <div className="text-4xl">🥩</div>
-              <div className="text-center">
-                <div className="w-16 border-t border-text-light/15 mb-1 mx-auto" />
-                <span>Steakakademie</span>
-              </div>
-            </div>
-            {/* Pflichtzeile (Rahmenlehrplan §1): haelt den Grad von der Kammer-Qualifikation
-                „Zertifizierter Grillmeister" auseinander — auf jeder Urkunde, auch der digitalen. */}
-            <p className="mt-8 text-[10px] font-sans tracking-[0.14em] uppercase text-text-light/55">
-              {DIPLOM_HINWEIS}
-            </p>
+            <UrkundeVorschau
+              stufe={selectedStufe?.nr ?? 1}
+              name={konto && konto !== 'laedt' && konto.festerName ? konto.festerName : form.nameAufUrkunde}
+            />
           </motion.div>
+          <p className="mt-4 text-center text-xs font-sans text-text-light/55 leading-relaxed">
+            So geht die Urkunde in den Druck — {selectedStufe ? `${selectedStufe.cert} (Stufe ${selectedStufe.nr})` : 'hier für Stufe 1, das Bild wechselt mit dem gewählten Level'}.
+            Urkunden-Nummer und Prüfcode entstehen erst bei der Ausstellung; sehr lange Namen setzt der Druck zweizeilig.
+          </p>
+          {/* Pflichtzeile (Rahmenlehrplan §1): haelt den Grad von der Kammer-Qualifikation
+              „Zertifizierter Grillmeister" auseinander — auf jeder Urkunde, auch der digitalen. */}
+          <p className="mt-3 text-center text-[10px] font-sans tracking-[0.14em] uppercase text-text-light/55">
+            {DIPLOM_HINWEIS}
+          </p>
         </section>
 
         {/* Bestellung */}
