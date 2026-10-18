@@ -214,3 +214,7 @@ data/bild-motiv-report.json
 # RuVector intelligence data
 .ruvector/
 .claude/statusline.sh
+
+# Lokale Werkzeug-Reste (18.10.2026): RuFlo-Plugin-Daten und Statusline-Skript
+.ruflo/
+.claude/statusline-command.sh
