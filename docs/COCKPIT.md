@@ -31,8 +31,12 @@
 **Läuft:** Vercel-Produktion (`steakakademie.de`), Supabase-Auth (Magic Link), Branch
 Protection auf `main` mit vier Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
 prüfen`, `Build pruefen`, `Unit-Tests pruefen` — alle aus GitHub Actions), dazu
-`E2E pruefen` (Playwright, noch nicht Pflicht), 24 GitHub-Actions-Workflows (Stand 03.10.2026),
-Sentry-Monitoring, Ops-Alert → Jira (KAN), **Ops-Heartbeat** (täglich 09:00 UTC,
+`E2E pruefen` (Playwright, noch nicht Pflicht), 27 GitHub-Actions-Workflows (Stand 18.10.2026),
+Sentry-Monitoring, Ops-Alert → Jira (KAN), **Supabase-Sicherung** (seit 18.10.2026 scharf:
+`db-backup.yml`, täglich 02:40 UTC, pg_dump 17 → AES-256-Artefakt `supabase-sicherung` 90 Tage,
+Wiederherstellungsprobe im selben Lauf; erster grüner Lauf 39123343310 — 62 Tabellen, 30,8 MB,
+Probe 33 public-Tabellen / 21.792 Zeilen; Secrets gesetzt, Passphrase offline bei den
+Recovery-Codes; `docs/supabase-backup.md`), **Ops-Heartbeat** (täglich 09:00 UTC,
 `docs/ops-heartbeat.md`) — prüft Ergebnisse statt Läufe und schlägt an, wenn eine
 Automation aufhört zu liefern, auch wenn sie grün bleibt; „nicht geprüft" ist dort rot ·
 **Funktionsproben** (seit 03.10.2026, täglich 05:23 UTC, `npm run proben`, `tests/proben/`):
@@ -51,14 +55,21 @@ ist offen ·
 Automatisierungs-Browser durchgeht, ist offen (`docs/bot-schutz-2026-10.md`) ·
 Zusagen-Baseline: 168 Altbestand-Treffer ohne Beleg (`data/zusagen-baseline.json`) —
 beheben, nie von Hand eintragen ·
-*17.10.2026:* Supabase-Sicherung gebaut (`db-backup.yml`, täglich 02:40 UTC, verschlüsseltes
-Artefakt 90 Tage, Wiederherstellungsprobe im Lauf, `docs/supabase-backup.md`) — **läuft erst,
-wenn Uwe die Secrets `SUPABASE_DB_URL` und `BACKUP_PASSPHRASE` setzt**; bis dahin kein Backup ·
+*18.10.2026:* Supabase-Sicherung im **Regelbetrieb noch nicht belegt** — grün ist bisher nur der
+Handlauf vom Fix-Branch; der erste Zeitplan-Lauf (19.10., 02:40 UTC) muss ein Artefakt liefern,
+der Heartbeat um 09:00 UTC prüft das. Vier rote Läufe am 18.10. (KAN-94, geschlossen): zweimal
+falsches DB-Passwort im Secret, einmal 16er-`pg_dump`-Wrapper des Runners trotz Client 17 (#438),
+einmal Quoting-Fehler im Fix. Lehre: Der Pooler meldet bei falschem Passwort immer
+`user "postgres"`, die Zeile sagt nichts über den Nutzernamen ·
 PM-Agent-Briefing unter `/admin/pm-agent` ist vom 13.08.2026, seitdem kein Lauf ·
 Admin-Passwort lokal (`.env.local`) und auf Vercel waren auseinandergelaufen, am 17.10. von Uwe
 auf den lokalen Wert gesetzt; „Passwort vergessen" gibt es nicht, Zurücksetzen = Variable + Redeploy.
 
-**Nächster Schritt (07.09.):** Relaunch (#62) und Diplom-Audit (#63) sind auf `main` und live;
+**Nächster Schritt (18.10.2026):** Am 19.10. nach 09:00 UTC nachsehen, ob der Zeitplan-Lauf der
+Sicherung ein Artefakt geliefert hat und der Heartbeat still blieb — erst dann gilt das Backup als
+laufend. Ab 19.10. läuft `ubuntu-latest` auf Ubuntu 26 (GitHub-Ankündigung); der pgdg-Eintrag in
+`db-backup.yml` liest den Codenamen dynamisch, ob das Repo ihn schon bedient, zeigt der erste Lauf.
+*Stand 07.09.:* Relaunch (#62) und Diplom-Audit (#63) sind auf `main` und live;
 Suche (#65), Autorenstimmen (#66), Migrations-Härtung + YAML (#67) liegen als grüne PRs zum Merge.
 Danach: Supabase-CLI auf Uwes Rechner installieren + `supabase link` — bis dahin laufen
 Migrationen nur über den claude.ai-Connector (07.09. so angewendet: 20260902160000 und
