@@ -870,8 +870,8 @@ bilder:
     hinweis: Ersetzt die fal.ai-KI-Generierung durch ein Echtfoto (Unsplash, Titel "A large roast is smoking on the grill"). Web-Zuschnitt 1920px/Kompression. imageAI im MDX-Frontmatter auf false gesetzt.
   images/rezepte/smoked-turkey-legs-usa.jpg:
     status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/smoked-turkey-legs-usa.mdx, scripts/recipe-images.mjs
+    quelle: Adobe Firefly (Prompt aus imagePrompt in content/rezepte/smoked-turkey-legs-usa.mdx), von Uwe Yendell erzeugt, ersetzt das FLUX-Bild aus dem Bot-Lauf vom 18.10.2026
     urheber: Steakakademie (Uwe Yendell)
     namensnennung: false
     erworben_am: 2026-10-18
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; Format 16:9, 1376x768, nicht auf 4:3 zugeschnitten (sonst werden Keulen und Sauce abgeschnitten); keine Personen, keine erkennbaren Marken im Bild
