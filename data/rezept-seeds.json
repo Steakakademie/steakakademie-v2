@@ -464,5 +464,35 @@
     "difficulty": "Mittel",
     "concept": "Der Lamb Rump Cap ist in Australien ein unterschätzter Alltagscut vom Grill: das Fettdeckel-Stück über der Lammkeule wird mit einem trockenen Rub aus Vegemite, Knoblauch, Rosmarin und schwarzem Pfeffer eingerieben und zunächst mit der Fettseite nach unten über starker Glut gerendert, bevor es indirekt auf Kerntemperatur gezogen wird. Vegemite – in Deutschland in gut sortierten Supermärkten oder online erhältlich, alternativ durch dunkle Misopaste ersetzbar – liefert eine intensive Umami-Schicht, die mit dem Lammfett eine tiefbraune, aromatische Kruste bildet. Der Artikel erklärt, warum Lammrump mit Fettdeckel anders behandelt werden muss als ein Kotelett und wie das Rendern des Fetts über direkter Hitze den gesamten Geschmack des Stücks verändert. Herkunft: Australien.",
     "stil": "original"
+  },
+  {
+    "slug": "picanha-style-schweinenacken-am-spiess",
+    "kategorie": "fleisch",
+    "title": "Schweinenacken am Schwertspieß – Churrasco-Stil mit Salzkruste",
+    "meatType": "Schweinenacken",
+    "cookingMethod": "Direkt, starke Glut, Rotisserie oder Schwertspieß",
+    "difficulty": "Mittel",
+    "concept": "Nach brasilianischem Churrasco-Vorbild wird der Schweinenacken in dicken Scheiben auf den Spieß gesteckt, mit grobem Meersalz eingerieben und über offener Glut gedreht, bis die Außenseite karamellisiert und der Kern noch saftig ist. Der kritische Moment ist das rechtzeitige Abschaben der Salzkruste und das Abschneiden der äußeren, fertig gegarten Scheiben, während der Rest weitergrillt – die klassische Rodízio-Technik. Der Artikel beantwortet, warum Schweinenacken mit seinem hohen intramuskulären Fettanteil für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Brasilien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "yakitori-kawa-haehnchenhaut-spiesse",
+    "kategorie": "fleisch",
+    "title": "Yakitori Kawa – Knusprige Hähnchenhaut-Spieße vom Grill",
+    "meatType": "Hähnchenhaut",
+    "cookingMethod": "Direkt, mittlere Glut",
+    "difficulty": "Mittel",
+    "concept": "Yakitori Kawa ist eine der beliebtesten Yakitori-Varianten in Japan: Hähnchenhaut wird mehrfach auf Bambusspieße gefaltet und über Holzkohle gegrillt, bis sie vollständig ausgelassen, goldbraun und knusprig ist – ein Gericht, das deutschen Grillern sofort einleuchtet, weil Röstaroma und Knusprigkeit im Vordergrund stehen. Der kritische Schritt ist das geduldige Grillen bei mittlerer Hitze mit regelmäßigem Wenden, damit das Fett langsam ausläuft, ohne zu verbrennen. Der Artikel beantwortet, wie man Hähnchenhaut beim Metzger bestellt, wie man sie sauber aufspießt und warum niedrigere Temperatur hier mehr Knusprigkeit erzeugt als hohe Hitze. Herkunft: Japan.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "kofte-izgara-mit-kraeuter-joghurt",
+    "kategorie": "fleisch",
+    "title": "Izgara Köfte – Türkische Rinderhack-Spieße mit Kräuter-Joghurt",
+    "meatType": "Rinderhackfleisch",
+    "cookingMethod": "Direkt, starke Glut, Mangal oder Grill",
+    "difficulty": "Einfach",
+    "concept": "Izgara Köfte sind flache, längliche Hackfleischspieße aus Rind oder Rind-Lamm-Mix, gewürzt mit Zwiebel, Kreuzkümmel, Paprika und Petersilie, die über starker Glut gegrillt werden, bis sie außen eine dunkle Kruste und innen einen saftigen Kern haben. Alle Zutaten sind im deutschen Supermarkt erhältlich, und das Gericht trifft mit seinem klaren Fleisch-Rauch-Gewürz-Profil den deutschen Grillgeschmack ohne Umwege. Der kritische Schritt ist die Bindung der Masse: Zu wenig Kneten führt zu Spießen, die beim Grillen auseinanderfallen, zu viel macht sie gummiartig. Der Artikel erklärt den Unterschied zwischen Izgara Köfte und Adana Kebab und warum die Wahl des Fettgehalts im Hackfleisch über Saftigkeit oder Trockenheit entscheidet. Herkunft: Türkei.",
+    "stil": "vertraut"
   }
 ]
