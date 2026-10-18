@@ -21,7 +21,7 @@
 | 1 | **Systems & Ops** | Entwicklung + IT-Betrieb | `src/` · `scripts/` · `supabase/` · `.github/workflows/` |
 | 2 | **Studio** | Video-/Bildproduktion | `video/` · `training/` · `bild-austausch/` |
 | 3 | **Redaktion** | Content-Team + Fachredaktion | `content/` · `data/` |
-| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` · `steakakademie-audit/` |
+| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` · `steakakademie-audit/` · `wachstum/` · `docs/wachstum/` |
 | 5 | **Kanzlei** | Recht · Steuern · Behörden | `compliance/` · `Existenzgruendung-Jobcenter/` |
 
 ---
@@ -202,7 +202,10 @@ Audit-Rest R15 (Elemente ab Stufe 2, 0 Bilder in 35 Lektionen) braucht ein Regel
 
 ## 4 · Wachstum
 
-**Läuft:** Affiliate-Link-Checker (Mo 08:00 UTC), Social-Post-Entwürfe als Artifact
+**Läuft:** *18.10.2026:* **Marketing-OS vorgebaut** (`docs/wachstum/MARKETING-OS.md`) — fünf Agenten +
+fünf Befehle (`/marketing-wochenplan`, `/marketing-tagesbrief`, `/social-paket`, `/themen-radar`,
+`/marketing-ereignis`), Freigabe-Warteschlange `wachstum/warteschlange/` (Merge = Freigabe);
+Kauf-CTAs und Umsatzdaten bis zur Gewerbeanmeldung aus · Affiliate-Link-Checker (Mo 08:00 UTC), Social-Post-Entwürfe als Artifact
 (human-gated, kein Auto-Posting), GEO-Check, Content-Wachstum (So 04:00 UTC),
 `products/registry.yaml` mit 32 Einträgen · Loops-Willkommensstrecke (4 Mails) sendet,
 Mail 1 liefert den Spickzettel-Link (03.10.2026).

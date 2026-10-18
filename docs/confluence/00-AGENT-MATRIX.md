@@ -22,6 +22,19 @@
 | **Newsletter-Workflow** | `newsletter-weekly.yml`, `scripts/newsletter-weekly.mjs` | nie eine Ausgabe versendet; es gibt keinen automatischen Wochenversand |
 | **Ideen-Radar** | `ideen-radar.yml`, `scripts/ideen-radar.mjs`, `data/ideen-backlog.json`, `data/rezept-quellen.yaml` | sammelte, ohne dass etwas die Einträge verarbeitete — Vermerk und Quellen-Ausschlüsse in `docs/ideen-radar.md` |
 
+## Marketing-OS — Claude-Code-Agenten (seit 18.10.2026, Abteilung 4)
+
+Aufruf über Befehle in Claude Code, kein Zeitplan; human-gated über `wachstum/warteschlange/` (Merge = Freigabe).
+Doku: `docs/wachstum/MARKETING-OS.md`.
+
+| Agent | Team | Befehl | Schreibt nach |
+|-------|------|--------|---------------|
+| `marketing-direktor` | Leitung | `/marketing-wochenplan`, `/marketing-tagesbrief`, `/marketing-ereignis` | `wachstum/warteschlange/` |
+| `themen-scout` | Recherche | `/themen-radar` | `wachstum/themen-backlog.md` |
+| `content-studio` | Content-Studio | `/social-paket` | `wachstum/warteschlange/` |
+| `marken-pruefer` | Gate (quer) | wird gerufen | nichts — liefert Befund |
+| `wachstums-analyst` | Messung | `/marketing-tagesbrief woche` | `wachstum/berichte/` |
+
 ## Geplant, noch nicht gebaut
 
 | # | Agent | Benötigt | Jira |
