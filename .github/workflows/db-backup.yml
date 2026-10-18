@@ -107,7 +107,14 @@ jobs:
             | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
           sudo apt-get update -qq
           sudo apt-get install -y -qq postgresql-client-17 > /dev/null
-          pg_dump --version
+          # /usr/bin/pg_dump ist der Wrapper von postgresql-common und waehlt die Version
+          # des vorinstallierten 16er-Clusters des Runners — nicht den neuesten Client.
+          # Belegt am 18.10.2026 (Run 39122920223): „server version: 17.6; pg_dump
+          # version: 16.15" trotz installiertem Client 17. Deshalb die 17er-Binaries
+          # explizit vor alles andere in den PATH der folgenden Schritte.
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+          /usr/lib/postgresql/17/bin/pg_dump --version | tee /dev/stderr | grep -q '(PostgreSQL) 17\.' \
+            || { echo "::error::pg_dump 17 nicht gefunden — Server ist 17, ein aelterer Client bricht mit „server version mismatch" ab."; exit 1; }
 
       - name: Exportieren (pg_dump, Custom-Format)
         id: dump
