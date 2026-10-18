@@ -787,7 +787,7 @@ Uwe anheftet, und der Einstieg in alles Weitere.
 | 1 | **Systems & Ops** | Entwicklung + IT-Betrieb | `src/` `scripts/` `supabase/` `tests/` `tools/` `.github/` |
 | 2 | **Studio** | Video-/Bildproduktion | `video/` `training/` `bild-austausch/` |
 | 3 | **Redaktion** | Content-Team + Fachredaktion | `content/` `data/` |
-| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` `steakakademie-audit/` |
+| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` `steakakademie-audit/` `wachstum/` `docs/wachstum/` |
 | 5 | **Kanzlei** | Recht · Steuern · Behörden | `compliance/` `Existenzgruendung-Jobcenter/` |
 
 **Nicht verhandelbar: Es bleibt bei fünf.** Grund: Fünf ist die Grenze dessen, was ohne
@@ -815,6 +815,11 @@ Brand & UX Designer. **Enabler (P2):** Tech & Automation · Legal & Compliance �
 Analytics & Data · CRM & Monetization.
 
 **Prioritäts-Logik bei Konflikt:** Recht → Fakten → Marke → ROI → Reichweite → Tempo.
+
+**Marketing-OS (18.10.2026):** Die Fach-Rollen der Abteilung 4 arbeiten als Claude-Code-Agenten
+(`.claude/agents/`: marketing-direktor, themen-scout, content-studio, marken-pruefer,
+wachstums-analyst) mit Befehlen in `.claude/commands/`. Aufbau, Schalter und Grenzen:
+`docs/wachstum/MARKETING-OS.md`. Keine neue Abteilung — vier Teams innerhalb von Wachstum.
 
 ---
 
