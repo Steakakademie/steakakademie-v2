@@ -4,7 +4,7 @@
 > persistente Gedächtnis und die Single Source of Truth fürs Projekt. Hier stehen:
 > Rolle, harte Realität, nicht-verhandelbare Regeln, Struktur, offene Blocker.
 > **Wenn etwas wichtig ist und überleben soll → hierher, nicht in den Chat.**
-> Letzte Pflege: 17.10.2026.
+> Letzte Pflege: 18.10.2026.
 
 ---
 
@@ -1061,12 +1061,35 @@ nicht Loop-Gefahr.
 **Semantische Ebene.** `graphify update .` macht per Definition nur AST ohne LLM,
 Doku-, Paper- und Bilddateien bleiben dabei außen vor — das ist kein Defekt. Der
 Lauf, der `semantic_hash` füllt, ist `graphify extract . --backend gemini
---max-concurrency 1`. Vorher immer `graphify check-update .` fragen: keine
-Ausgabe = keine Re-Extraktion fällig (08.09.2026 der Fall), dann den teuren Lauf
-sparen. Gegenprobe danach: `graphify query "DatenschutzPage"` muss den Code liefern
-(`DatenschutzPage()` mit Zeilennummer). Das Wort „datenschutz" allein trifft
-zuerst den Abschnitt „Datenschutz" in `docs/urkunden-druck-automatisierung.md` —
-das ist kein Fehler, sondern Namensgleichheit (05.10.2026).
+--max-concurrency 1`. Gegenprobe danach: `graphify query "DatenschutzPage"` muss
+den Code liefern (`DatenschutzPage()` mit Zeilennummer). Das Wort „datenschutz"
+allein trifft zuerst den Abschnitt „Datenschutz" in
+`docs/urkunden-druck-automatisierung.md` — das ist kein Fehler, sondern
+Namensgleichheit (05.10.2026).
+**`graphify check-update .` ist hier wirkungslos (18.10.2026, aus dem Quelltext
+belegt).** Der Befehl prüft nur, ob die Marke `graphify-out/needs_update`
+existiert — und die schreibt allein `graphify watch`, das in diesem Repo nicht
+betrieben wird. Keine Ausgabe heisst also nichts; die frueher hier notierte Regel
+„keine Ausgabe = keine Re-Extraktion faellig" war ein Fehlschluss. Ob eine
+Re-Extraktion faellig ist, steht im Manifest: `graphify-out/manifest.json` je
+Datei lesen, Nicht-Code-Eintraege mit leerem `semantic_hash` zaehlen und bei
+gefuellten den Hash gegen die MD5 der Datei halten. Stand 18.10.2026: 710 Dokumente
+aktuell, 0 seit der Extraktion geaendert, 224 nie semantisch extrahiert.
+**Der Gemini-Lauf kann am Schrumpf-Riegel scheitern, obwohl er fehlerfrei
+durchlaeuft (18.10.2026, belegt).** `graphify extract . --backend gemini` lief
+mit 13 von 13 Chunks ohne API-Fehler durch und endete trotzdem mit Exit 1:
+66 von 247 Dateien kamen ohne Knoten zurueck, viele weitere nur mit dem
+Dateiknoten, wo der Bestand reiche Strukturen aus einer frueheren Extraktion hat
+(`steakakademie-audit/monitoring-log.md` 97 Knoten gegen 2, `docs/COCKPIT.md` 24
+gegen 2). Der neue Graph waere mit 9.776 Knoten kleiner als die 10.098 im Bestand
+gewesen, graphify hat das Schreiben verweigert — Exit 1 ist hier die
+Schutzfunktion. Zwei Folgen: (1) Die duennen Antworten liegen danach als frische
+Eintraege in `graphify-out/cache/semantic/` und wuerden bei einem Neustart aus dem
+Cache abgespielt — vor einem zweiten Versuch (z. B. mit staerkerem Modell ueber
+`GRAPHIFY_GEMINI_MODEL`) muessen diese Eintraege raus. (2) `--allow-partial` ist
+tabu, es wuerde die reichen Altknoten wegwerfen. Nach jedem Lauf, gruen oder rot,
+`attrib +r graphify-out\graph.json` setzen; waehrend ein Lauf noch schreibt, bleibt
+der Schutz aus, sonst scheitert der Schreibvorgang am Ende.
 
 **Die Auto-Hooks sind entfernt.** `post-commit` und `post-checkout` stießen bei
 jedem Commit bzw. Branch-Wechsel einen vollen Rebuild an. Weil ein Label-Lauf
