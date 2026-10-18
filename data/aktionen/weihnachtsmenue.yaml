@@ -39,7 +39,7 @@ setups:
   - titel: "Das Fleisch"
     fuer: "Gute Festtagsstücke kommen vom Metzger deines Vertrauens oder aus dem Versand — rechtzeitig bestellen."
     produkte:
-      - id: otto-gourmet-wagyu-box
+      - id: otto-gourmet-australian-f1-wagyu-ribeye
         warum: "Für den Abend, an dem es etwas Besonderes sein darf. Wagyu braucht wenig: Salz, Hitze, Ruhe."
       - id: weber-master-touch-57
         warum: "Falls der Grill selbst das Geschenk ist: der Kugelgrill, auf dem Festtagsbraten und Pizza gleichermaßen gelingen."

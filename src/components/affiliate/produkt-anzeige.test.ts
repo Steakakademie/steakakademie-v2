@@ -80,7 +80,7 @@ describe('Registry: Produkte ohne Amazon-Link', () => {
   it('enthaelt die bekannten Faelle (sonst prueft dieser Test nichts)', () => {
     const ids = ohneAmazon.map((p) => p.id);
     expect(ids).toEqual(
-      expect.arrayContaining(['beefer-pro-ii', 'beefer-xl-ii', 'dry-ager-dx500', 'dry-ager-dx1000', 'otto-gourmet-wagyu-box']),
+      expect.arrayContaining(['beefer-pro-ii', 'beefer-xl-ii', 'dry-ager-dx500', 'dry-ager-dx1000', 'otto-gourmet-australian-f1-wagyu-ribeye']),
     );
   });
 
