@@ -585,27 +585,29 @@
 
 # ── FLEISCH ───────────────────────────────────────────────────────────────────
 
-- id: otto-gourmet-wagyu-box
-  name: "Wagyu Steak Box — 4× 200g"
+# 18.10.2026: Der fruehere Eintrag „Wagyu Steak Box — 4× 200g, BMS 6–8, 89 €" (Stand
+# 22.05.2026, Bewertung 4,8/340) existiert bei Otto Gourmet nicht und liess sich dort auch
+# nicht als eingestelltes Produkt finden. Ersetzt durch das naechstliegende echte Produkt,
+# Angaben von der Produktseite abgeschrieben. Preis dort 71,60 € (ca.-Angabe, ganzzahlig
+# wie alle Eintraege). Bewertungen zeigt die Seite keine — deshalb keine hier.
+- id: otto-gourmet-australian-f1-wagyu-ribeye
+  name: "Australian F1 Wagyu Ribeye (ca. 400 g)"
   brand: "Otto Gourmet"
   category: fleisch
-  price: 89
+  price: 72
   # TODO: Nach Otto-Gourmet-Affiliate-Anmeldung mit echtem Partner-Code ersetzen
-  # Direktlink auf Produkt einmalig auf otto-gourmet.de suchen + hier eintragen
-  affiliateUrl: "https://www.otto-gourmet.de/"
+  affiliateUrl: "https://www.otto-gourmet.de/australian-f1-wagyu-ribeye.html"
   provider: otto-gourmet
-  rating: 4.8
-  ratingCount: 340
-  description: "Premium Wagyu aus australischer Zucht, BMS 6–8"
+  description: "F1-Wagyu-Kreuzung aus New South Wales, familiengefuehrter Zuchtbetrieb — ein Ribeye fuer zwei"
   pros:
-    - "Zertifiziertes Wagyu BMS 6–8"
-    - "Vakuumverpackt, Versand mit Trockeneis"
-    - "Transparente Herkunft"
+    - "Rasse und Herkunftsregion stehen am Produkt (F1 Wagyu, Australien / New South Wales)"
+    - "Ca. 400 g — ein Steak, das sich fuer zwei teilen laesst"
+    - "Gekuehlter Versand mit Trockeneis, Kuehlkette laut Anbieter mindestens 48 Stunden"
   cons:
-    - "Mindestbestellwert 49€"
-    - "Lieferzeit 2–3 Werktage"
-  badge: "Premium-Pick"
-  lastChecked: "2026-05-22"
+    - "Kein BMS-Wert angegeben — die Marmorierung ist nur beschrieben"
+    - "Versand bis 169 € Bestellwert kostenpflichtig (DHL 12,90 €, Stand 18.10.2026)"
+  badge: "Unsere Auswahl"
+  lastChecked: "2026-10-18"
   recommended: true
 
 # ── OBERHITZEGRILLS ───────────────────────────────────────────────────────────
