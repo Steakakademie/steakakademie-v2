@@ -114,7 +114,7 @@ jobs:
           # explizit vor alles andere in den PATH der folgenden Schritte.
           echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
           /usr/lib/postgresql/17/bin/pg_dump --version | tee /dev/stderr | grep -q '(PostgreSQL) 17\.' \
-            || { echo "::error::pg_dump 17 nicht gefunden — Server ist 17, ein aelterer Client bricht mit „server version mismatch" ab."; exit 1; }
+            || { echo '::error::pg_dump 17 nicht gefunden - Server ist 17, ein aelterer Client bricht mit server version mismatch ab.'; exit 1; }
 
       - name: Exportieren (pg_dump, Custom-Format)
         id: dump
