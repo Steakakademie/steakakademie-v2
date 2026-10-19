@@ -383,6 +383,12 @@ export default function Header() {
           <motion.div
             key="mobile-menu"
             className="fixed inset-0 z-40 bg-surface-dark overflow-y-auto md:hidden pt-16"
+            // 19.10.2026: Jeder Link-Tipp schliesst das Menue. Vorher schloss es nur bei einem
+            // Wechsel des Pfads — „Tools" (/#werkzeuge) auf der Startseite aendert nur den
+            // Anker, das Overlay blieb liegen und verdeckte den Sprung („es passiert nichts").
+            onClick={(e) => {
+              if ((e.target as HTMLElement).closest('a')) setMobileOpen(false);
+            }}
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8, transition: { duration: 0.15, ease: [0.23, 1, 0.32, 1] } }}
