@@ -23,10 +23,14 @@ davon viele reine Doku-Commits (`docs(...)`, `chore(gitignore)`).
 **1. Ignored Build Step** (Projekt-Einstellung, nicht in `vercel.json`):
 
 ```sh
-[ -n "$VERCEL_GIT_PREVIOUS_SHA" ] && git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- . ':!docs' ':!plans' ':!compliance' ':!steakakademie-audit' ':!handoff' ':!wachstum' ':!.claude' ':!.agents' ':!.github' ':!.gitignore' ':(exclude,glob)*.md'
+P=$VERCEL_GIT_PREVIOUS_SHA;[ "$P" ]&&[ $P != $VERCEL_GIT_COMMIT_SHA ]&&git diff --quiet $P HEAD -- ':!docs' ':!plans' ':!compliance' ':!steakakademie-audit' ':!handoff' ':!wachstum' ':!.claude' ':!.agents' ':!.github' ':!.gitignore' ':(exclude,glob)*.md'
 ```
 
 - Exit 0 = Build überspringen, alles andere = bauen.
+- **Redeploy desselben Commits baut immer** (`$P != $VERCEL_GIT_COMMIT_SHA`). Korrektur
+  19.10.2026, 22:50: Die erste Fassung (ohne diese Bedingung) hat Redeploys nach einer
+  geänderten Umgebungsvariable übersprungen — Uwe änderte `ADMIN_PASSWORD`, zwei Redeploys
+  endeten `CANCELED`, das neue Passwort griff nicht. Env-Änderungen brauchen einen Build.
 - `VERCEL_GIT_PREVIOUS_SHA` ist der letzte **erfolgreiche** Deploy dieses Branches.
   Verglichen wird also alles seit dem letzten Build, nicht nur der letzte Commit.
 - Sicher nach oben: Fehlt die Variable (erster Push eines neuen Branches) oder liegt
@@ -39,7 +43,7 @@ davon viele reine Doku-Commits (`docs(...)`, `chore(gitignore)`).
   Änderungen unter `content/`, `data/` oder `design/`.
 - **Wer einen neuen Ordner anlegt, den der Build liest, darf ihn nicht in diese
   Liste aufnehmen.** Wer einen neuen reinen Doku-Ordner anlegt, kann ihn ergänzen
-  (Feld max. 256 Zeichen, aktuell 246).
+  (Feld max. 256 Zeichen, aktuell 254).
 - PRs blockiert das nicht: Vercel ist seit 05.09.2026 kein Pflicht-Check (CLAUDE.md §A).
 
 **2. Build-Maschine:** fest **Standard** (4 vCPU, 8 GB) statt Elastic. Elastic lief
