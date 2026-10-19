@@ -1,6 +1,7 @@
 {
   "framework": "nextjs",
   "buildCommand": "npm run build",
+  "regions": ["fra1"],
   "redirects": [
     {
       "source": "/",
