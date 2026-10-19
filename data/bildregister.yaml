@@ -876,9 +876,12 @@ bilder:
     erworben_am: 2026-10-18
     hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; Format 16:9, 1376x768, nicht auf 4:3 zugeschnitten (sonst werden Keulen und Sauce abgeschnitten); keine Personen, keine erkennbaren Marken im Bild
   images/rezepte/memphis-dry-ribs-spareribs-nur-rub.jpg:
-    status: offen
-    quelle: Von Uwe Yendell am 19.10.2026 geliefert, ersetzt das FLUX-Bild aus dem Bot-Lauf (PR 444). Werkzeug oder Bildquelle nicht angegeben
-    urheber: offen
-    namensnennung: false
+    status: lizenz
+    quelle: Unsplash (ID QtLYiB6P-KM)
+    urheber: Brian Wegman (@trytoscareme)
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/QtLYiB6P-KM
     erworben_am: 2026-10-19
-    hinweis: Optik spricht fuer KI-Erzeugung, belegt ist das nicht; deshalb imageAI true im Rezept. Herkunft und Lizenz/Tarif von Uwe nachtragen, dann status auf ki oder lizenz setzen. Original 2576x1940 (4:3), Web-Version 1600x1200. Glaenzende Glasur auf der Kruste passt nur bedingt zu Dry Ribs ohne Sauce
+    namensnennung: false
+    hinweis: Ersetzt das FLUX-Bild aus dem Bot-Lauf (PR 444) durch ein Echtfoto (Unsplash, Titel "a rack of ribs cooking on a grill", veroeffentlicht 25.03.2023, Kamera Sony ILCE-7C laut Unsplash-Seite). Web-Zuschnitt 1600x1200 (4:3)/Kompression. imageAI im MDX-Frontmatter auf false gesetzt. Motiv zeigt glaenzende Glasur, Rezept ist Dry Rub ohne Sauce - Passung Uwe vor Merge pruefen
