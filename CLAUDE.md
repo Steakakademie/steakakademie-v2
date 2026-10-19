@@ -293,6 +293,11 @@
   `state: READY|ERROR` je Commit. Von den Env-Variablen liefert sie die **Namen** und
   den Scope (Production/Preview) — am 02. und 03.10.2026 genutzt —, die Werte nie
   entschluesseln, ausser Uwe verlangt es ausdruecklich.
+- **Seit 19.10.2026 steht im Vercel-Projekt ein Ignored Build Step** (reine
+  Doku-Commits werden nicht gebaut), Build-Maschine fest Standard, kurze
+  Deployment-Aufbewahrung. Befehl, Ausnahmeliste und Begruendung (Rechnung 80,80 $):
+  `docs/vercel-kosten.md`. Ein uebersprungenes Deployment ist dort Absicht, kein Fehler.
+  Neuer Ordner, den der Build liest → nie in die Ausnahmeliste.
 
 **Netlify ist abgebaut (13.09.2026) — es gibt genau einen Deploy-Weg: Vercel**
 - Im Repo liegt **keine** Netlify-Konfiguration mehr: kein `netlify.toml`, keine
