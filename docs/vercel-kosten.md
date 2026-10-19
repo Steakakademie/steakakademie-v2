@@ -51,6 +51,11 @@ nicht gewählt, erst nach Messung der nächsten Rechnung entscheiden.
 Vorschau 1 Woche · Produktion 30 Tage (vorher 30 / 90 / 180 Tage / 1 Jahr).
 Rollback ist damit nur 30 Tage zurück möglich.
 
+## Belegt am 19.10.2026 (Branch `chore/vercel-kosten-senken`)
+
+- Erster Push (`038eec7`, neuer Branch): gebaut wie vorgesehen, auf Standard in
+  112 s READY (letzter Elastic-Build auf main: 103 s).
+
 ## Nicht geändert
 
 - **On-Demand Concurrent Builds** steht auf „Run all builds immediately". Ob das
