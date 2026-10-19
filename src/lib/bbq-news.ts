@@ -17,6 +17,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { ROUTE_CATEGORIES, type ContentCategory } from '@/lib/content-routing';
 import { getRedaktionelleNeuzugaenge, type Neuzugang } from '@/lib/startseiten-artikel';
+import { deckeleRezepte } from '@/lib/news-mix';
 
 export type NewsRegion = 'USA' | 'Deutschland' | 'International';
 
@@ -226,7 +227,9 @@ export async function getNewsItems(optionen: NewsOptionen = {}): Promise<NewsIte
   const raus = new Set(optionen.ausschliessen?.filter(Boolean) as string[] | undefined);
 
   const live = await getLiveNews(limit);
-  const neu = getRedaktionelleNeuzugaenge(limit + raus.size)
+  // Rezepte gedeckelt (news-mix.ts) — dafür mehr Kandidaten holen, damit nach dem
+  // Deckel trotzdem genug Artikel, Cuts und Methoden zum Auffüllen da sind.
+  const neu = deckeleRezepte(getRedaktionelleNeuzugaenge((limit + raus.size) * 4))
     .map(neuzugangToNewsItem)
     .filter((n) => !n.href || !raus.has(n.href));
 
