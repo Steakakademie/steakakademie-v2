@@ -63,7 +63,11 @@ Rollback ist damit nur 30 Tage zurück möglich.
 - **On-Demand Concurrent Builds** steht auf „Run all builds immediately". Ob das
   zusätzlich kostet oder nur die Warteschlange überspringt, ist aus der Doku nicht
   eindeutig — erst an der nächsten Rechnung prüfen.
-- **Spend Management** (Warnschwellen) — nur im Team-Billing-Dashboard, Uwe.
+- **Spend Management** — von Uwe am 19.10.2026 gesetzt: Team-Budget **5 $**, Pause **aus**,
+  Webhook aus. Vercel warnt fest bei 50 / 75 / 100 % (also 2,50 / 3,75 / 5 $); eigene
+  Schwellen gibt es nicht. Das Budget gilt für On-Demand-Kosten **nach** dem im Pro-Plan
+  enthaltenen Guthaben und ist **keine Kostenbremse** — ohne Pause laufen Kosten weiter,
+  es kommen nur Warnungen. Pause bleibt bewusst aus: sie würde steakakademie.de abschalten.
 
 ## Prüfen bei der nächsten Rechnung (~17.11.2026)
 
