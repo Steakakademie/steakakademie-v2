@@ -26,7 +26,7 @@
 
 import { garstufenRind, kernReferenz, mindestwert } from '@/lib/kerntemperatur-referenz';
 
-export type Klasse = 'rind' | 'lamm' | 'schwein' | 'gefluegel' | 'hackfleisch' | 'wildschwein' | 'fisch' | 'innerei';
+export type Klasse = 'rind' | 'kalb' | 'lamm' | 'schwein' | 'gefluegel' | 'hackfleisch' | 'wildschwein' | 'wild' | 'fisch' | 'innerei';
 
 export interface KernRef {
   key: string;
@@ -51,6 +51,8 @@ export function klasseVonBadge(key: string): Klasse | null {
   if (key.startsWith('boar_')) return 'wildschwein';
   if (key.startsWith('beef_') || key === 'wagyu') return 'rind';
   if (key.startsWith('lamb_')) return 'lamm';
+  if (key.startsWith('veal_')) return 'kalb';
+  if (key.startsWith('reh_') || key.startsWith('hirsch_')) return 'wild';
   if (key.startsWith('pork_') || key === 'iberico') return 'schwein';
   if (key.startsWith('poultry') || key.startsWith('duck_') || key.startsWith('goose_')) return 'gefluegel';
   if (FISCH_BADGES.includes(key)) return 'fisch';
@@ -203,7 +205,7 @@ export function kernAnzeige(s: { kernRef: string; kernTempC: number | null }): s
 /** Referenztabelle für den Systemprompt. */
 export function referenzTabelle(): string {
   const zeilen = kernRefs().map((r) => {
-    const korridor = r.range[0] === r.range[1] ? `${r.range[0]} °C` : `${r.range[0]}–${r.range[1]} °C`;
+    const korridor = r.range[1] >= 99 ? `ab ${r.range[0]} °C` : r.range[0] === r.range[1] ? `${r.range[0]} °C` : `${r.range[0]}–${r.range[1]} °C`;
     const empf = r.empfehlung !== undefined ? `, Empfehlung ${r.empfehlung} °C` : '';
     return `  ${r.key} — ${r.label}: ${korridor}${empf} [${r.klasse}]`;
   });

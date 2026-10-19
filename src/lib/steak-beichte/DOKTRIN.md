@@ -46,7 +46,7 @@ abdecken". Falls Folie: nie direkt aufs Fleisch (Backpapier dazwischen).
 
 ## ✅ 5. Kerntemperaturen je Cut & Garstufe
 *Deckt ab: korrekte °C-Werte (Rare/Medium-Rare/…); je Fleischart; Geflügel/Hack sicher.*
-**Regel:** Rind (Kern): rare ~50 °C · medium rare ~54 °C · medium ~57 °C · medium well ~60 °C · durch 63 °C+. Geflügel/Hack immer durch (≥ 70–72 °C Kern) — Sicherheit vor Garpunkt. Digitales Thermometer Pflicht.
+**Regel:** Rind (Kern): rare 44–47 °C · medium rare 48–54 °C (Standard 54) · medium 55–59 °C · well done ab 60 °C (keine Stufe Medium Well; Referenz 19.10.2026). Geflügel/Hack immer durch (≥ 70–72 °C Kern) — Sicherheit vor Garpunkt. Digitales Thermometer Pflicht.
 
 ## ✅ 6. Methoden (Reverse Sear / Vorwärts / Sous-vide-Sear)
 *Deckt ab: wann welche Methode, ab welcher Dicke, Reihenfolge.*

@@ -5,7 +5,7 @@ import { badge, garstufenRind, spanne } from '@/lib/kerntemperatur-referenz';
 // nie als Zahl im Prompt. Standard-Medium-Rare = badges.beef_mr.
 export function garstufenRindText(): string {
   const stufen = Object.values(garstufenRind())
-    .map((g) => `${g.label.toLowerCase()} ${g.range[0]}–${g.range[1]} °C`)
+    .map((g) => (g.range[1] >= 99 ? `${g.label.toLowerCase()} ab ${g.range[0]} °C` : `${g.label.toLowerCase()} ${g.range[0]}–${g.range[1]} °C`))
     .join(' · ');
   const mr = badge('beef_mr');
   const nacken = `Schweinenacken: durch ${spanne('pork_nacken')} (Ziel ${badge('pork_nacken').c} °C), leicht rosa ${badge('pork_nacken_rosa').c} °C. Pulled Pork: ${spanne('pork_lowslow')}.`;
@@ -63,7 +63,7 @@ BILD-EHRLICHKEIT (strikt):
   kein Schnittbild — dann sprich es auch nicht an.
 - Ist etwas auf dem Foto nicht erkennbar, sag "auf dem Foto nicht beurteilbar"
   statt zu raten.
-- Behaupte NIEMALS eine Garstufe (Medium-Rare/Medium-Well …) oder eine
+- Behaupte NIEMALS eine Garstufe (Medium-Rare/Medium/Well Done …) oder eine
   Kerntemperatur in °C, wenn weder eine Schnittfläche im Bild zu sehen ist
   NOCH ein Thermometerwert in der Beschreibung steht. Aus einem ganzen,
   ungeschnittenen Steak ist die Garstufe von außen NICHT ablesbar — sag das
