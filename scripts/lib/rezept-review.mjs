@@ -46,9 +46,14 @@ const REFERENZ_VORSCHLAG = [
   [/h(?:ä|ae)hnchen|chicken|pute|truthahn|gefl(?:ü|ue)gel/i, 'poultry'],
   // Muster wie SICHERHEITS_MUSTER.hackfleisch in scripts/recipe-agent.mjs, plus „snag"
   [/hack|burger|w(?:u|ü|ue)rst|sausage|snag|\blinks\b|[cć]evap|kofta|k(?:ö|oe)fte|frikadell|tsukune/i, 'burger'],
-  [/flank/i, 'beef_flank'],
+  [/flank|flat ?iron|h(?:ü|ue)ftsteak|spider/i, 'beef_flank'],
   [/lamm/i, 'lamb_mr'],
   [/wagyu/i, 'wagyu'],
+  // Steak-Tabelle 19.10.2026: Schweinesteak/-kotelett → durch 65 °C (automatische Texte bleiben ueber dem Minimum)
+  [/schweinesteak|schweinekotelett|pork ?chop/i, 'pork_steak_durch'],
+  [/kalb|veal/i, 'veal_steak'],
+  [/(?:^|[^a-z])reh/i, 'reh_steak'],
+  [/hirsch/i, 'hirsch_steak'],
   [/schwein|pork|spareribs/i, 'pork_juicy'],
   [/brisket|short ?ribs/i, 'beef_lowslow'],
   [/steak|rind|ribeye|entrec|filet|roastbeef|tomahawk|porterhouse|t-bone|picanha/i, 'beef_mr'],
@@ -310,7 +315,7 @@ export function rezeptAbschnitt (slug, a) {
   if (a.kerntemperaturen.length) {
     const r = a.referenz
     const ref = r
-      ? ` — Referenz-Vorschlag \`${r.schluessel}\`${r.range ? `: ${r.range[0]}–${r.range[1]} °C (Ziel ${r.c}, ${r.label})` : ''}, automatisch zugeordnet`
+      ? ` — Referenz-Vorschlag \`${r.schluessel}\`${r.range ? `: ${r.range[1] >= 99 ? `ab ${r.range[0]}` : `${r.range[0]}–${r.range[1]}`} °C (Ziel ${r.c}, ${r.label})` : ''}, automatisch zugeordnet`
       : ' — keine Referenz zugeordnet, von Hand in `data/kerntemperatur-referenz.yaml` suchen'
     const phasen = a.kernNachPhase ?? []
     if (phasen.length) {

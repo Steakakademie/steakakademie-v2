@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
  * nur als REAKTION auf Nutzerhandlung:
  *
  *  - Der Farbton wandert mit der Scrolltiefe entlang des Gargrad-Spektrums
- *    (Rare → Medium Rare → Medium → Medium Well → Well Done). Der Verlauf ist
+ *    (Rare → Medium Rare → Medium → Well Done). Der Verlauf ist
  *    damit bedeutungstragend: die Seite "gart" beim Lesen. Stufen-Namen =
  *    Kanon der Plattform; die Farbwerte sind gestalterische Interpretation,
  *    abgestimmt auf die Marken-DNA (Gold #C8882A / Fire #E85018 / Ink).
@@ -40,7 +40,6 @@ export const GARGRAD_STOPS: { label: string; hex: string }[] = [
   { label: 'Rare',        hex: '#8C2F39' }, // dunkles Blutrot
   { label: 'Medium Rare', hex: '#C0442E' }, // die Steakakademie-Empfehlung — nah an Brand-Fire
   { label: 'Medium',      hex: '#C97E52' }, // Rosé-Braun
-  { label: 'Medium Well', hex: '#A9713D' }, // Karamell — nah an Brand-Gold
   { label: 'Well Done',   hex: '#6E4B2E' }, // Röstbraun
 ];
 

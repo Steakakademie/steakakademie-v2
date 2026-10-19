@@ -211,7 +211,7 @@ export default function VergleichIndexPage() {
               <div className="font-body text-text-secondary leading-relaxed space-y-5 text-[1.0625rem]">
                 <p>
                   Die Kerntemperatur ist die einzige objektive Größe beim Grillen. Ob ein Ribeye bei
-                  54 °C (medium rare) oder 62 °C (medium well) von der Hitze genommen wird, entscheidet
+                  54 °C (medium rare) oder 60 °C (well done) von der Hitze genommen wird, entscheidet
                   nicht der Grillmeister per Augenmaß, sondern die Messgenauigkeit seines
                   Fleischthermometers. Deshalb vergleichen wir bei Funk-Sonden und Sofortlesegeräten
                   zuerst die Genauigkeit, die der Hersteller angibt, dann Sondenzahl, Hitzegrenze und

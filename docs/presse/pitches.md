@@ -74,7 +74,7 @@ Hallo [Name],
 
 Sie schreiben über Grillen — vielleicht ist das hier nützlich.
 
-Wir stellen unter steakakademie.de/kerntemperatur-spickzettel eine druckfertige Übersicht aller Garstufen bereit, kostenlos und ohne Anmeldung. Die Werte sind in einer festgeschriebenen Referenz hinterlegt, gegen die alle Inhalte der Seite geprüft werden: Rind Medium Rare 52–55 °C (Standard 54 °C), Schwein mindestens 63 °C, Geflügel mindestens 72 °C, Hackfleisch mindestens 70 °C. Dazu: Nachziehen +2–5 °C, Ruhen 5–7 Minuten auf vorgewärmter Unterlage.
+Wir stellen unter steakakademie.de/kerntemperatur-spickzettel eine druckfertige Übersicht aller Garstufen bereit, kostenlos und ohne Anmeldung. Die Werte sind in einer festgeschriebenen Referenz hinterlegt, gegen die alle Inhalte der Seite geprüft werden: Rind Medium Rare 48–54 °C (Standard 54 °C), Schwein mindestens 63 °C, Geflügel mindestens 72 °C, Hackfleisch mindestens 70 °C. Dazu: Nachziehen +2–5 °C, Ruhen 5–7 Minuten auf vorgewärmter Unterlage.
 
 Die Übersicht darf frei verlinkt und zitiert werden; wir bitten nur um Nennung der Quelle.
 

@@ -530,6 +530,15 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    nicht. Details: `marketing_agent.txt` → Sektion WERBEKENNZEICHNUNG.
 2. **Fakten-Genauigkeit (Regel 8c).** Temperaturen/Cuts/Reifung NIE raten — kanonische
    Referenz `data/kerntemperatur-referenz.yaml`. Genauigkeit = stärkster Burggraben.
+   **Steak-Tabelle verbindlich (Uwe, 19.10.2026):** „gleiche wirklich ALLES an diese hier
+   geposteten an, so dass es dazu nie mehr Diskussionen geben kann." Rind: Rare 44–47 ·
+   Medium Rare 48–54 (Standard 54) · Medium 55–59 · Well Done ab 60 °C — **keine Stufe
+   Medium Well**. Teilstücke (Flank/Flat Iron/Hüfte/Spider, Kalb, Schwein, Lamm, Reh, Hirsch,
+   Wildschwein) in `steak_tabelle`. Die Werte stehen wörtlich in
+   `src/__tests__/kerntemperatur-steak-tabelle.test.ts` — ändern nur auf ausdrückliche
+   Anweisung von Uwe, mit Datum. Keine Diskussion, keine „Verbesserung" aus anderen Quellen.
+   Bewusste Ausnahmen (Braten/Keule, Schweinefilet Sous-Vide vor dem Grillen) stehen in der
+   Referenz unter „Bewusste Ausnahmen" — nicht als Abweichung melden.
    **Immer nach Teilstück (Uwe, 29.09.2026):** „Es gibt nicht die eine Wahrheit bei den
    Kerntemperaturen, weil immer auch das Teilstück eine Rolle spielt." Ein Wert ohne
    Teilstück (früher `pork_kruste`) ist unvollständig. Seiten holen Werte über

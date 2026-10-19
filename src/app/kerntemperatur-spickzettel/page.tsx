@@ -46,7 +46,8 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
   {
     titel: 'Rind',
     rows: [
-      { key: 'beef_mr', was: 'Premium-Steaks — Ribeye, Filet, T-Bone, Porterhouse' },
+      { key: 'beef_mr', was: 'Steaks Medium Rare — Ribeye, Entrecote, Rumpsteak, T-Bone, Porterhouse, Tomahawk' },
+      { key: 'beef_flank', was: 'Flank, Flat Iron, Hüfte, Spider — Medium Rare' },
       { key: 'wagyu', was: 'Wagyu — das Fett schmilzt früher' },
       { key: 'beef_lowslow', was: 'Brisket & Short Ribs — Kollagen wird Gelatine' },
     ],
@@ -54,7 +55,9 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
   {
     titel: 'Schwein',
     rows: [
-      { key: 'pork_juicy', was: 'Kotelett, Filet, Steaks' },
+      { key: 'pork_steak_rosa', was: 'Schweinesteak & -kotelett rosa — nicht für Risikogruppen' },
+      { key: 'pork_steak_durch', was: 'Schweinesteak & -kotelett durch' },
+      { key: 'pork_juicy', was: 'Filet' },
       { key: 'pork_keule', was: 'Keule (Krustenbraten) — mager, exakt messen' },
       { key: 'pork_schulter', was: 'Schulter (Krustenbraten) — der Klassiker' },
       { key: 'pork_bauch', was: 'Bauch (Krustenbraten) — Fett und Bindegewebe schmelzen lange' },
@@ -64,7 +67,9 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
   {
     titel: 'Lamm',
     rows: [
-      { key: 'lamb_mr', was: 'Karree, Koteletts' },
+      { key: 'lamb_mr', was: 'Lammsteak, Kotelett, Karree — Medium Rare' },
+      { key: 'lamb_steak_medium', was: 'Lammsteak & Kotelett — Medium' },
+      { key: 'lamb_steak_done', was: 'Lammsteak & Kotelett — durch' },
       { key: 'lamb_rosa', was: 'Lammkeule rosa' },
       { key: 'lamb_done', was: 'Keule' },
     ],
@@ -85,10 +90,23 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
   {
     titel: 'Wildschwein',
     rows: [
-      { key: 'boar_ruecken', was: 'Rücken & Steaks — rosa nur trichinenuntersucht, nicht für Risikogruppen' },
+      { key: 'boar_steak', was: 'Wildschweinsteak rosa — nur trichinenuntersucht, nicht für Risikogruppen' },
+      { key: 'boar_steak_done', was: 'Wildschweinsteak durch — liegt unter dem Sicherheitswert, nicht für Risikogruppen' },
+      { key: 'boar_ruecken', was: 'Rücken am Stück — rosa nur trichinenuntersucht, nicht für Risikogruppen' },
       { key: 'boar_filet', was: 'Filet & Medaillons — rosa nur trichinenuntersucht, nicht für Risikogruppen' },
       { key: 'boar_braten', was: 'Braten & Nacken — Low & Slow' },
       { key: 'boar_keule', was: 'Keule & Schulter — Schmoren, Smoken' },
+    ],
+  },
+  {
+    titel: 'Kalb & Wild',
+    rows: [
+      { key: 'veal_steak', was: 'Kalbssteak & -kotelett — rosa' },
+      { key: 'veal_steak_done', was: 'Kalbssteak & -kotelett — durch' },
+      { key: 'reh_steak', was: 'Rehsteak — rosa' },
+      { key: 'reh_steak_done', was: 'Rehsteak — durch' },
+      { key: 'hirsch_steak', was: 'Hirschsteak — rosa' },
+      { key: 'hirsch_steak_done', was: 'Hirschsteak — durch' },
     ],
   },
   {
@@ -195,7 +213,7 @@ export default function SpickzettelPage() {
                           <tr key={key} className="border-b border-border-subtle/60 align-top">
                             <td className="py-1.5 pr-2 text-text-secondary">{was}</td>
                             <td className="whitespace-nowrap py-1.5 pr-2 text-right font-sans font-bold text-text-primary">
-                              {b.range[0] === b.range[1] ? `${b.c} °C` : `${b.range[0]}–${b.range[1]} °C`}
+                              {b.range[1] >= 99 ? `ab ${b.range[0]} °C` : b.range[0] === b.range[1] ? `${b.c} °C` : `${b.range[0]}–${b.range[1]} °C`}
                             </td>
                             <td className="whitespace-nowrap py-1.5 font-sans text-[0.78rem] text-text-muted">{b.label}</td>
                           </tr>
