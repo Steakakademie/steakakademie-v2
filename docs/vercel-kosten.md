@@ -55,6 +55,8 @@ Rollback ist damit nur 30 Tage zurück möglich.
 
 - Erster Push (`038eec7`, neuer Branch): gebaut wie vorgesehen, auf Standard in
   112 s READY (letzter Elastic-Build auf main: 103 s).
+- Zweiter Push (`6e1a9f3`, nur diese Datei): Deployment `CANCELED`, GitHub-Status
+  `Vercel` = **success** mit „Canceled by Ignored Build Step" — blockiert also keinen PR.
 
 ## Nicht geändert
 
