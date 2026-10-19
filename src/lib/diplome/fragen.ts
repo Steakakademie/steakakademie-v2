@@ -93,7 +93,7 @@ export const FRAGEN: Record<StufeKey, readonly QuizFrage[]> = {
     { id: 's-5', q: 'Optimale Fleisch-Lagertemperatur?', options: ['−2 bis 0 °C', '0 bis 2 °C', '2 bis 4 °C', '4 bis 6 °C'], correct: 1, explain: '0–2 °C maximiert Haltbarkeit ohne Gewebeschaden.', lektionSlug: 'fleisch-lagern' },
   ],
   thermometer: [
-    { id: 'g-1', q: 'Kerntemperatur medium rare beim Rind (serviert)?', options: ['45–49 °C', '52–55 °C', '60–64 °C', '66–70 °C'], correct: 1, explain: '52–55 °C serviert: rosa Kern, warm, saftig — Steakakademie-Standard 54 °C, oberer Rand. Bei 50–51 °C vom Grill nehmen — das Nachziehen macht den Rest.', lektionSlug: 'kerntemperaturen' },
+    { id: 'g-1', q: 'Kerntemperatur medium rare beim Rind (serviert)?', options: ['44–47 °C', '48–54 °C', '60–64 °C', '66–70 °C'], correct: 1, explain: '48–54 °C serviert: rosa Kern, warm, saftig — Steakakademie-Standard 54 °C, oberer Rand. Bei 50–51 °C vom Grill nehmen — das Nachziehen macht den Rest.', lektionSlug: 'kerntemperaturen' },
     { id: 'g-2', q: 'Hähnchenbrust sichere Endtemperatur?', options: ['62 °C', '68 °C', '72–75 °C', '85 °C'], correct: 2, explain: 'Ab 72 °C ist Geflügel sicher — und bei 72–75 °C noch saftig.', lektionSlug: 'kerntemperaturen' },
     { id: 'g-3', q: 'Schweinefilet saftig und sicher?', options: ['54 °C', '63–65 °C', '70 °C', '78 °C'], correct: 1, explain: '63 °C ist das Sicherheits-Minimum für Schwein — darüber bleibt das Filet saftig, darunter geht es nicht.', lektionSlug: 'kerntemperaturen' },
     { id: 'g-4', q: 'Was passiert ab 140 °C an der Fleischoberfläche?', options: ['Saftverlust', 'Maillard-Reaktion', 'Kollagenabbau', 'Verkohlung'], correct: 1, explain: 'Maillard = die Bräunungs-Reaktion, Aromen-Explosion.', lektionSlug: 'maillard-kruste' },

@@ -13,11 +13,13 @@ import { badge, garstufenRind, kernReferenz, spanne } from '@/lib/kerntemperatur
 const seite = readFileSync('src/app/kerntemperatur-steak/page.tsx', 'utf8');
 
 describe('/kerntemperatur-steak ↔ Kerntemperatur-Referenz', () => {
-  it('die fünf Garstufen der Seite gibt es in der Referenz', () => {
+  it('die vier Garstufen der Seite gibt es in der Referenz — Medium Well nicht mehr (19.10.2026)', () => {
     const stufen = garstufenRind();
-    for (const k of ['rare', 'medium_rare', 'medium', 'medium_well', 'well_done']) {
+    for (const k of ['rare', 'medium_rare', 'medium', 'well_done']) {
       expect(stufen[k], k).toBeTruthy();
     }
+    expect(stufen.medium_well).toBeUndefined();
+    expect(seite).not.toContain("'medium_well'");
   });
 
   it('Medium Rare folgt dem Standard-Badge und dessen Korridor', () => {

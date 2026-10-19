@@ -33,6 +33,22 @@ export interface KernReferenz {
   garstufen_rind: Record<string, Garstufe | boolean>;
   badges: Record<string, Badge>;
   sicherheit: Record<string, number>;
+  /** Steak-Tabelle nach Teilstück (verbindlich seit 19.10.2026). */
+  steak_tabelle: SteakZeile[];
+}
+
+export type SteakStufe = 'rare' | 'medium_rare' | 'medium' | 'well_done';
+export const STEAK_STUFEN: SteakStufe[] = ['rare', 'medium_rare', 'medium', 'well_done'];
+
+export interface SteakZeile {
+  cut: string;
+  tier: string;
+  rare?: [number, number];
+  medium_rare?: [number, number];
+  medium?: [number, number];
+  well_done?: [number, number];
+  /** Badge mit Pflichthinweis, wenn Werte unter dem Sicherheitsminimum liegen. */
+  badge?: string;
 }
 
 let cache: KernReferenz | null = null;
@@ -53,7 +69,12 @@ export function badge(key: string): Badge {
 
 /** „75–79 °C" bzw. „70 °C" — der Korridor eines Badges. */
 export function spanne(key: string): string {
-  const [von, bis] = badge(key).range;
+  return bereichText(badge(key).range);
+}
+
+/** „44–47 °C", „60 °C" oder — bei offener Obergrenze (99) — „ab 60 °C". */
+export function bereichText([von, bis]: [number, number]): string {
+  if (bis >= 99) return `ab ${von} °C`;
   return von === bis ? `${von} °C` : `${von}–${bis} °C`;
 }
 
@@ -61,6 +82,19 @@ export function mindestwert(klasse: string): number {
   const m = kernReferenz().sicherheit[klasse];
   if (typeof m !== 'number') throw new Error(`Sicherheitswert „${klasse}" fehlt in data/kerntemperatur-referenz.yaml`);
   return m;
+}
+
+/** Steak-Tabelle nach Teilstück, in der Reihenfolge der Referenz. */
+export function steakTabelle(): SteakZeile[] {
+  const t = kernReferenz().steak_tabelle;
+  if (!Array.isArray(t) || t.length === 0) throw new Error('steak_tabelle fehlt in data/kerntemperatur-referenz.yaml');
+  return t;
+}
+
+/** „44–47 °C" bzw. „60 °C" für eine Zelle der Steak-Tabelle, „—" wenn leer. */
+export function steakZelle(r?: [number, number]): string {
+  if (!r) return '—';
+  return bereichText(r);
 }
 
 /** Garstufen-Skala Rind (rare … well_done) in der Reihenfolge der Referenz. */

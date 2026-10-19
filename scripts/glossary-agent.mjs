@@ -181,7 +181,7 @@ const SEED_TERMS = [
   'Pulled Pork', 'Spare Ribs', 'Baby Back Ribs', 'Burnt Ends', 'Pastrami',
   'Beef Jerky', 'Secreto', 'Presa', 'Pluma', 'Wagyu', 'Angus-Rind', 'Ibérico',
   // Garstufen
-  'Garstufe', 'Rare', 'Medium Rare', 'Medium', 'Medium Well', 'Well Done', 'Blue Rare',
+  'Garstufe', 'Rare', 'Medium Rare', 'Medium', 'Well Done', 'Blue Rare',
   // Methoden & Technik
   'Direktes Grillen', 'Indirektes Grillen', 'Zwei-Zonen-Grillen', 'Minion-Methode',
   'Snake-Methode', '3-2-1-Methode', 'Vorwärtsgaren', 'Niedrigtemperaturgaren',

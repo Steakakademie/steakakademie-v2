@@ -182,7 +182,9 @@ function classifyBadge(fm, slug) {
   if (has('carrillera')) return 'pork_lowslow';
   if (has('krustenbraten')) return 'pork_kruste';
   if (has('pulled pork', 'boston butt', 'spareribs', 'sparerib', 'schälrippchen')) return 'pork_lowslow';
-  if (has('iberico', 'pluma', 'presa', 'secreto', 'schweinefilet', 'schweinelende', 'schweinekotelett', 'schweinenacken')) return lowslow ? 'pork_lowslow' : 'pork_juicy';
+  if (has('iberico', 'pluma', 'presa', 'secreto', 'schweinefilet', 'schweinelende', 'schweinenacken')) return lowslow ? 'pork_lowslow' : 'pork_juicy';
+  // Steak-Tabelle 19.10.2026: Schweinesteak/-kotelett durch 65 °C
+  if (has('schweinekotelett', 'schweinesteak', 'pork chop')) return 'pork_steak_durch';
 
   // Lamm. Keule bewusst NICHT hier: Beide Keulen-Rezepte zielen auf 70 °C (lamb_done)
   // und nennen rosa (lamb_rosa, 60–65 °C) nur als Variante — der Text-Fallback in
@@ -196,6 +198,9 @@ function classifyBadge(fm, slug) {
 
   // Wagyu (außer dünn am Tischgrill/Yakiniku)
   if (has('wagyu') && !has('yakiniku', 'tischgrill')) return 'wagyu';
+
+  // Flank, Flat Iron, Hüftsteak, Spider — eigener MR-Korridor 48–55 (Steak-Tabelle 19.10.2026)
+  if (has('flank', 'flat iron', 'hüftsteak', 'hueftsteak', 'spider')) return 'beef_flank';
 
   // Rind Steak (Premium → Medium Rare)
   if (has('ribeye', 'rib-eye', 'entrecote', 'entrecôte', 'roastbeef', 'filet', 'chateaubriand', 'tomahawk',

@@ -11,7 +11,7 @@ import { angebote } from '@/lib/angebote/register';
 import { regal } from '@/lib/angebote/auswahl';
 import ScrollBereich from '@/components/ui/ScrollBereich';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
-import { badge, garstufenRind, kernReferenz, spanne } from '@/lib/kerntemperatur-referenz';
+import { badge, garstufenRind, kernReferenz, spanne, steakTabelle, steakZelle, STEAK_STUFEN } from '@/lib/kerntemperatur-referenz';
 import { seoTitel } from '@/lib/seo-titel';
 import { ogImages } from '@/lib/og';
 
@@ -52,7 +52,6 @@ const KERN: Record<string, string> = {
   rare: 'Kern rot, kaum gewärmt',
   medium_rare: 'Kern rot bis rosa, saftig',
   medium: 'Kern rosa',
-  medium_well: 'Kern nur noch leicht rosa',
   well_done: 'durchgegart, grau-braun',
 };
 
@@ -64,14 +63,24 @@ const bereich = (key: string) => {
 
 const BESCHREIBUNG = `Kerntemperatur Steak: Medium Rare ${MR_SPANNE} (Standard ${MR.c} °C), Medium ${bereich('medium')}, Well Done ${bereich('well_done')} — Tabelle, Nachziehen, richtig messen.`;
 
-const STUFEN = ['rare', 'medium_rare', 'medium', 'medium_well', 'well_done'] as const;
+const STUFEN = ['rare', 'medium_rare', 'medium', 'well_done'] as const;
 const GLOSSAR: Record<string, string> = {
   rare: '/glossar/rare',
   medium_rare: '/glossar/medium-rare',
   medium: '/glossar/medium',
-  medium_well: '/glossar/medium-well',
   well_done: '/glossar/well-done',
 };
+
+const STEAKS = steakTabelle();
+const TIER_TITEL: Record<string, string> = { rind: 'Rind', kalb: 'Kalb', schwein: 'Schwein', lamm: 'Lamm', wild: 'Wild', wildschwein: 'Wild' };
+const STEAK_GRUPPEN = STEAKS.reduce<{ titel: string; zeilen: typeof STEAKS }[]>((acc, z) => {
+  const titel = TIER_TITEL[z.tier] ?? z.tier;
+  const letzte = acc[acc.length - 1];
+  if (letzte && letzte.titel === titel) letzte.zeilen.push(z);
+  else acc.push({ titel, zeilen: [z] });
+  return acc;
+}, []);
+const STUFEN_LABEL: Record<string, string> = { rare: 'Rare (blutig)', medium_rare: 'Medium Rare (englisch)', medium: 'Medium (rosa)', well_done: 'Well Done (durch)' };
 
 const TEILSTUECKE: { name: string; wert: string; hinweis: string; href: string }[] = [
   { name: 'Ribeye / Entrecôte', wert: MR_SPANNE, hinweis: `Standard ${MR.c} °C — viel Marmorierung, verzeiht mehr.`, href: '/cuts/ribeye' },
@@ -87,7 +96,7 @@ const FAQ = [
   },
   {
     question: 'Bei wie viel Grad ist ein Steak medium?',
-    answer: `Medium liegt bei ${bereich('medium')} Kerntemperatur. Darunter beginnt der Bereich von Medium Rare (${bereich('medium_rare')}), darüber Medium Well (${bereich('medium_well')}).`,
+    answer: `Medium liegt bei ${bereich('medium')} Kerntemperatur. Darunter beginnt der Bereich von Medium Rare (${bereich('medium_rare')}), darüber Well Done (${bereich('well_done')}). Eine eigene Stufe Medium Well führt die Steakakademie nicht.`,
   },
   {
     question: 'Welche Kerntemperatur hat ein Ribeye-Steak?',
@@ -182,7 +191,6 @@ export default function KerntemperaturSteakPage() {
                   { label: 'Rare', value: bereich('rare') },
                   { label: 'Medium Rare', value: `${MR_SPANNE} — Standard ${MR.c} °C` },
                   { label: 'Medium', value: bereich('medium') },
-                  { label: 'Medium Well', value: bereich('medium_well') },
                   { label: 'Well Done', value: bereich('well_done') },
                   { label: 'Nachziehen', value: REF.meta.carryover },
                   { label: 'Richtig messen', value: REF.meta.messen.replace('NICHT', 'nicht') },
@@ -225,9 +233,6 @@ export default function KerntemperaturSteakPage() {
                 </tbody>
               </table>
             </ScrollBereich>
-            <p className="mt-3 font-sans text-xs text-text-muted">
-              Zwischen Rare und Medium Rare liegen {GARSTUFEN.rare.range[1] + 1}–{GARSTUFEN.medium_rare.range[0] - 1} °C: dieser Bereich hat in unserer Skala keine eigene Stufe.
-            </p>
           </section>
 
           {/* ── Vom Grill nehmen ─────────────────────────────────────── */}
@@ -266,35 +271,53 @@ export default function KerntemperaturSteakPage() {
             </ul>
           </section>
 
-          {/* ── Teilstuecke ─────────────────────────────────────────── */}
+          {/* ── Teilstuecke — steak_tabelle der Referenz (verbindlich seit 19.10.2026) ── */}
           <section id="teilstuecke" className="mb-14 scroll-mt-24">
-            <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">Nach Teilstück: Medium Rare</h2>
+            <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">Kerntemperatur nach Teilstück — Tabelle</h2>
             <p className="font-body text-text-secondary leading-relaxed mb-6 max-w-2xl">
-              Die Skala gilt für alle Rindersteaks aus einem Stück. Abweichungen gibt es nur dort, wo das Teilstück es
-              verlangt.
+              Jedes Steak hat seinen eigenen Korridor. Ein Rindersteak liegt niedriger als ein Schweine- oder Lammsteak.
+              Felder mit „—“ sind für dieses Teilstück keine empfohlene Garstufe.
             </p>
-            <ScrollBereich label="Medium Rare nach Teilstück">
+            <ScrollBereich label="Kerntemperatur Steak nach Teilstück">
               <table className="w-full text-sm font-sans border border-border-subtle">
                 <thead>
                   <tr className="bg-surface-card text-left">
                     <th className="py-3 px-4 font-bold text-text-primary">Teilstück</th>
-                    <th className="py-3 px-4 font-bold text-text-primary">Medium Rare</th>
-                    <th className="py-3 px-4 font-bold text-text-primary hidden sm:table-cell">Hinweis</th>
+                    {STEAK_STUFEN.map((k) => (
+                      <th key={k} className="py-3 px-4 font-bold text-text-primary">{STUFEN_LABEL[k]}</th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody>
-                  {TEILSTUECKE.map((t) => (
-                    <tr key={t.name} className="border-t border-border-subtle">
+                {STEAK_GRUPPEN.map((g) => (
+                <tbody key={g.titel}>
+                  <tr className="bg-surface-card border-t border-border-subtle">
+                    <th colSpan={STEAK_STUFEN.length + 1} scope="rowgroup" className="py-2 px-4 text-left font-bold text-text-primary">{g.titel}</th>
+                  </tr>
+                  {g.zeilen.map((z) => (
+                    <tr key={z.cut} className="border-t border-border-subtle">
                       <td className="py-3.5 px-4 font-semibold text-text-primary">
-                        <Link href={t.href} className="hover:text-brand-fire transition-colors">{t.name}</Link>
+                        Kerntemperatur {z.cut}
+                        {z.badge && badge(z.badge).hinweis ? (
+                          <span className="block mt-1 font-normal text-xs text-text-muted">{badge(z.badge).hinweis}</span>
+                        ) : null}
                       </td>
-                      <td className="py-3.5 px-4"><span className="font-mono font-bold text-text-primary">{t.wert}</span></td>
-                      <td className="py-3.5 px-4 text-text-secondary hidden sm:table-cell">{t.hinweis}</td>
+                      {STEAK_STUFEN.map((k) => (
+                        <td key={k} className="py-3.5 px-4"><span className="font-mono font-bold text-text-primary">{steakZelle(z[k])}</span></td>
+                      ))}
                     </tr>
                   ))}
                 </tbody>
+                ))}
               </table>
             </ScrollBereich>
+            <ul className="mt-5 space-y-2 font-body text-sm text-text-secondary list-disc pl-5">
+              {TEILSTUECKE.map((t) => (
+                <li key={t.name}>
+                  <Link href={t.href} className="font-semibold text-text-primary hover:text-brand-fire transition-colors">{t.name}</Link>{' '}
+                  (Medium Rare {t.wert}): {t.hinweis}
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* ── Abgrenzung ──────────────────────────────────────────── */}

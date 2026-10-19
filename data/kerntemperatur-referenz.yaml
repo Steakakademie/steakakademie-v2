@@ -14,34 +14,80 @@ meta:
   # Unterlage getrennt (Uwe, 30.09.2026): Stein 75 °C, weil er die Hitze laenger haelt und staerker weitergibt; Holzbrett 85 °C.
   ruhen: "Steaks 5–7 Min., große Braten 10–20 Min. — auf vorgewärmter Unterlage (Holzbrett rund 85 °C, Stein rund 75 °C), nie auf dem kalten Teller (Uwe, 30.09.2026)"
   messen: "Einstich in den dicksten Punkt, NICHT am Knochen"
-  ziehtemperatur: "Bei Reverse Sear liegt die ZIEHtemperatur unter dem Badge-Wert. Kurzes, sehr heisses Searing hebt den Kern noch einmal um 2-3 °C (Uwe, 27.08.2026); dazu kommt das Nachziehen. Medium Rare: bei 50-51 °C ziehen, serviert 52-55 °C (Steakakademie-Standard: 54 °C, oberer Rand). Ein Ziehwert unterhalb des Badges ist deshalb KEIN Widerspruch zu dieser Referenz."
+  ziehtemperatur: "Bei Reverse Sear liegt die ZIEHtemperatur unter dem Badge-Wert. Kurzes, sehr heisses Searing hebt den Kern noch einmal um 2-3 °C (Uwe, 27.08.2026); dazu kommt das Nachziehen. Medium Rare: bei 50-51 °C ziehen, serviert 48-54 °C (Steakakademie-Standard: 54 °C, oberer Rand). Ein Ziehwert unterhalb des Badges ist deshalb KEIN Widerspruch zu dieser Referenz."
   spannen: "Die range-Werte sind Korridore, keine Punktwerte — sie decken die Garbereiche von Rare bis Well Done ab. Der c-Wert ist die Anzeige-Empfehlung innerhalb des Korridors."
 
-# Garstufen-Skala Rind (bestaetigt, Uwe 07.09.2026 — abgeglichen mit externer
-# Referenztabelle). Ersetzt die vorherige, nie formal bestaetigte Skala
-# (rare 50-54/medium 58-63/well_done 68+). beef_mr unten folgt dieser Skala:
-# 54 °C bleibt der Steakakademie-Standard, jetzt am oberen statt am unteren
-# Rand des MR-Korridors.
+# Garstufen-Skala Rind — VERBINDLICH seit 19.10.2026 (Uwe, im Chat: „gleiche wirklich
+# ALLES an diese hier geposteten an, so dass es dazu nie mehr Diskussionen geben kann").
+# Ersetzt die Skala vom 07.09.2026 (rare 45-49 / MR 52-55 / medium 55-60 / medium_well
+# 60-65 / well_done 70+). Die Stufe Medium Well gibt es seitdem NICHT mehr: ab 60 °C ist
+# ein Rindersteak Well Done. 54 °C bleibt Steakakademie-Standard (oberer Rand Medium Rare).
+# Wächter: src/__tests__/kerntemperatur-steak-tabelle.test.ts
 garstufen_rind:
   bestaetigt: true
-  rare:        { range: [45, 49], label: "Rare" }
-  medium_rare: { range: [52, 55], label: "Medium Rare" }   # Standard 54 °C, siehe badges.beef_mr
-  medium:      { range: [55, 60], label: "Medium" }
-  medium_well: { range: [60, 65], label: "Medium Well" }
-  well_done:   { range: [70, 99], label: "Well Done" }
+  rare:        { range: [44, 47], label: "Rare" }
+  medium_rare: { range: [48, 54], label: "Medium Rare" }   # Standard 54 °C, siehe badges.beef_mr
+  medium:      { range: [55, 59], label: "Medium" }
+  well_done:   { range: [60, 99], label: "Well Done" }        # „60 °C" = ab 60 °C
+
+# Steak-Tabelle nach Teilstück — VERBINDLICH seit 19.10.2026 (Uwe, Tabelle im Chat).
+# Werte 1:1 übernommen; Uwes Grafik 19.10.2026 bestätigt die Spalten: Well done = „ab X °C" (range [X, 99]). Spalten-Zuordnung bei Zeilen mit weniger als vier Werten
+# (Claude, offengelegt): 3 Werte = medium_rare/medium/well_done, 2 Werte = medium/well_done.
+# Nackensteak steht in Uwes Tabelle und Grafik im Rindblock → Rinder-Nackensteak.
+# Schweinenacken bleibt bei badges.pork_nacken.
+# Werte unter dem Sicherheitsminimum (Schwein 63, Wildschwein 70) zeigen die Seiten
+# nur mit dem Pflichthinweis des zugehörigen Badges (pork_steak_rosa, boar_steak*).
+steak_tabelle:
+  - { cut: "Rindersteak",          tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Rumpsteak",            tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Entrecote",            tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Rib Eye Steak",        tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Tomahawk Steak",       tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Rinderkotelett",       tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "T-Bone Steak",         tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Porterhouse Steak",    tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Nackensteak",          tier: rind,  rare: [44, 47], medium_rare: [48, 54], medium: [56, 59], well_done: [60, 99] }
+  - { cut: "Flat Iron Steak",      tier: rind,  rare: [44, 47], medium_rare: [48, 55], medium: [56, 59], well_done: [60, 99] }
+  - { cut: "Hüftsteak",            tier: rind,  rare: [44, 47], medium_rare: [48, 55], medium: [56, 59], well_done: [60, 99] }
+  - { cut: "Spider Steak",         tier: rind,  rare: [44, 47], medium_rare: [48, 55], medium: [56, 59], well_done: [60, 99] }
+  - { cut: "Flank Steak",          tier: rind,  rare: [44, 47], medium_rare: [48, 55], medium: [56, 59], well_done: [60, 99] }
+  - { cut: "Kalbssteak",           tier: kalb,  medium: [55, 57], well_done: [60, 99] }
+  - { cut: "Kalbskotelett",        tier: kalb,  medium: [55, 57], well_done: [60, 99] }
+  - { cut: "Schweinesteak",        tier: schwein, medium: [58, 62], well_done: [65, 99], badge: pork_steak_rosa }
+  - { cut: "Schweinekotelett",     tier: schwein, medium: [58, 62], well_done: [65, 99], badge: pork_steak_rosa }
+  - { cut: "Lammsteak",            tier: lamm,  medium_rare: [58, 60], medium: [61, 64], well_done: [65, 99] }
+  - { cut: "Lammkotelett",         tier: lamm,  medium_rare: [58, 60], medium: [61, 64], well_done: [65, 99] }
+  - { cut: "Rehsteak",             tier: wild,  medium: [55, 59], well_done: [60, 99] }
+  - { cut: "Hirschsteak",          tier: wild,  medium: [60, 64], well_done: [65, 99] }
+  - { cut: "Wildschweinsteak",     tier: wildschwein, medium: [64, 66], well_done: [67, 99], badge: boar_steak }
+
+# Bewusste Ausnahmen — KEIN Widerspruch zur steak_tabelle (Uwe, 19.10.2026, bestätigt):
+#   - Rinderhüfte am Stück (rinderhuefte-gasgrill-smoke): 60–61 °C „zartrosa" — ganzer Braten, kein Steak.
+#   - Schweinefilet Sous-Vide (Temperatur-Guide): 60 °C im Wasserbad — danach auf den Grill für Röstaromen.
+#   - Reh- und Hirschkeule (Temperatur-Guide): eigene Werte — Keule, kein Steak.
+# Audits und Agenten melden diese Stellen NICHT als Abweichung.
 
 # Badge-Werte für Promos/Content. `c` = empfohlene Serviertemperatur (ein Wert
 # für die Anzeige), `range` = Korridor, `label` = Garstufe/Hinweis.
 badges:
-  beef_mr:      { c: 54, range: [52, 55], label: "Medium Rare" }      # Premium-Steaks (Steakakademie-Empfehlung, oberer Rand des MR-Korridors)
+  beef_mr:      { c: 54, range: [48, 54], label: "Medium Rare" }      # Premium-Steaks (Steakakademie-Empfehlung, oberer Rand des MR-Korridors)
   beef_lowslow: { c: 93, range: [90, 96], label: "Low & Slow" }       # Brisket/Short Ribs — Kollagen → Gelatine
   wagyu:        { c: 52, range: [50, 54], label: "Medium Rare" }      # Fett schmilzt früh
   # Flank Steak (Teilstück-Eintrag, 05.10.2026): Werte = beef_mr und = Angabe im
   # veröffentlichten Rezept flank-steak-grillen (52–55 °C). Von Uwe bestätigt
   # (05.10.2026). Herkunft bleibt: abgeleitet, KEINE eigene Messreihe für dieses
   # Teilstück.
-  beef_flank:   { c: 54, range: [52, 55], label: "Medium Rare" }
-  lamb_mr:      { c: 56, range: [54, 57], label: "Medium Rare" }
+  beef_flank:   { c: 54, range: [48, 55], label: "Medium Rare" }   # 19.10.2026: = steak_tabelle Flank Steak
+  lamb_mr:      { c: 59, range: [58, 60], label: "Medium Rare" }      # Lammsteak/-kotelett/-karree — 19.10.2026 = steak_tabelle (vorher 54-57)
+  lamb_steak_medium: { c: 62, range: [61, 64], label: "Medium" }     # 19.10.2026, steak_tabelle Lammsteak/-kotelett
+  lamb_steak_done:   { c: 65, range: [65, 99], label: "Well Done (durch)" }
+  # Kalb und Wild (Steaks) — 19.10.2026, steak_tabelle
+  veal_steak:      { c: 56, range: [55, 57], label: "Medium (rosa)" }
+  veal_steak_done: { c: 60, range: [60, 99], label: "Well Done (durch)" }
+  reh_steak:       { c: 57, range: [55, 59], label: "Medium (rosa)" }
+  reh_steak_done:  { c: 60, range: [60, 99], label: "Well Done (durch)" }
+  hirsch_steak:      { c: 62, range: [60, 64], label: "Medium (rosa)" }
+  hirsch_steak_done: { c: 65, range: [65, 99], label: "Well Done (durch)" }
   lamb_done:    { c: 70, range: [70, 75], label: "durch" }            # Keule durch
   lamb_rosa:    { c: 62, range: [60, 65], label: "rosa" }             # Keule rosa (Uwe, 15.09.2026) — zwischen lamb_mr und lamb_done; Rezepte lammkeule-drehspiess, aussie-lamb-leg-butterflied (#109)
   pork_juicy:   { c: 63, range: [63, 65], label: "saftig" }           # Untergrenze = sicherheit.schwein (63); vorher [60,65] und damit im Widerspruch zur eigenen Sicherheitsangabe — Audit 06.09.2026
@@ -50,6 +96,11 @@ badges:
   # das intramuskuläre Fett ist erst darüber vollständig geschmolzen, und deutsche
   # Gäste nehmen Schwein bei 63–65 nicht an. Untergrenze bleibt >= sicherheit.schwein.
   iberico:      { c: 66, range: [65, 68], label: "durch, saftig" }
+  # Schweinesteak/-kotelett (Uwe, 19.10.2026, steak_tabelle): 58-62 rosa, 65 durch.
+  # Rosa liegt UNTER sicherheit.schwein (63) → unter_sicherheit + Pflicht-hinweis.
+  # Automatisch erzeugte Texte (Rezept-Agent) nehmen pork_steak_durch.
+  pork_steak_rosa:  { c: 60, range: [58, 62], label: "Medium (rosa)", unter_sicherheit: true, hinweis: "Rosa gegartes Schwein liegt unter dem empfohlenen Mindestwert von 63 °C. Für Schwangere, Kinder, ältere und immungeschwächte Menschen immer durchgaren (mindestens 65 °C)." }
+  pork_steak_durch: { c: 65, range: [65, 99], label: "Well Done (durch)" }
   pork_lowslow: { c: 92, range: [90, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
   pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten — Teilstück bis 29.09.2026 nie benannt; passt zu Keule/Schulter, NICHT zu Bauch
   # Schwein nach Teilstück (Uwe, 29.09.2026): „Es gibt nicht die eine Wahrheit bei
@@ -93,6 +144,10 @@ badges:
   # erzeugte Texte (Rezept-Agent, Content-Gate) bleiben bei sicherheit.wildschwein.
   boar_ruecken: { c: 63, range: [60, 66], label: "leicht rosa", unter_sicherheit: true, hinweis: "Rosa nur bei amtlich auf Trichinen untersuchtem Fleisch. Wildschwein kann Hepatitis-E-Viren tragen — für Schwangere, Kinder, ältere und immungeschwächte Menschen immer auf mindestens 70 °C durchgaren." }
   boar_filet:   { c: 62, range: [60, 64], label: "zartrosa", unter_sicherheit: true, hinweis: "Rosa nur bei amtlich auf Trichinen untersuchtem Fleisch. Wildschwein kann Hepatitis-E-Viren tragen — für Schwangere, Kinder, ältere und immungeschwächte Menschen immer auf mindestens 70 °C durchgaren." }
+  # Wildschweinsteak (Uwe, 19.10.2026, steak_tabelle): 64-66 rosa, 67 durch — beides
+  # unter sicherheit.wildschwein (70) → unter_sicherheit + Pflicht-hinweis.
+  boar_steak:      { c: 65, range: [64, 66], label: "Medium (rosa)", unter_sicherheit: true, hinweis: "Rosa nur bei amtlich auf Trichinen untersuchtem Fleisch. Wildschwein kann Hepatitis-E-Viren tragen — für Schwangere, Kinder, ältere und immungeschwächte Menschen immer auf mindestens 70 °C durchgaren." }
+  boar_steak_done: { c: 67, range: [67, 99], label: "Well Done (durch)", unter_sicherheit: true, hinweis: "67 °C liegt unter dem Sicherheitswert für Wildschwein (70 °C). Für Schwangere, Kinder, ältere und immungeschwächte Menschen immer auf mindestens 70 °C durchgaren." }
   boar_braten:  { c: 78, range: [75, 80], label: "voll gar, saftig" }  # Braten, Nacken — Low & Slow
   boar_keule:   { c: 78, range: [75, 82], label: "durchgegart, weich" } # Keule, Schulter — Schmoren, Smoken
 

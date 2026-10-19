@@ -11,7 +11,12 @@ import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getProductsByCategory } from '@/lib/products';
 import KeyFacts from '@/components/KeyFacts';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
-import { badge, spanne, mindestwert } from '@/lib/kerntemperatur-referenz';
+import { badge, spanne, mindestwert, garstufenRind } from '@/lib/kerntemperatur-referenz';
+
+// Garstufen Rind und Steak-Werte aus der Referenz (verbindliche Tabelle, Uwe 19.10.2026).
+const G = garstufenRind();
+const gs = (k: string) => `${G[k].range[0]}–${G[k].range[1]} °C`;
+const WELL = `ab ${G.well_done.range[0]} °C`;
 import ScrollBereich from '@/components/ui/ScrollBereich';
 
 // Werte für Schwein nach Teilstück, Geflügel und Wildschwein kommen aus
@@ -44,7 +49,7 @@ const FAQ_ITEMS = [
   {
     question: 'Was ist die ideale Kerntemperatur für ein medium-rare Steak?',
     answer:
-      '52–55 °C Kerntemperatur ergibt ein perfektes medium-rare Steak — die Steakakademie empfiehlt 54 °C, den oberen Rand dieses Korridors. Bei dieser Temperatur sind die Muskelfasern noch zart und saftig, während das Fleisch innen warm und gleichmäßig rosa ist.',
+      `${spanne('beef_mr')} Kerntemperatur ergibt ein perfektes medium-rare Steak — die Steakakademie empfiehlt ${badge('beef_mr').c} °C, den oberen Rand dieses Korridors. Bei dieser Temperatur sind die Muskelfasern noch zart und saftig, während das Fleisch innen warm und gleichmäßig rosa ist.`,
   },
   {
     question: 'Wie messe ich die Kerntemperatur richtig?',
@@ -186,7 +191,7 @@ export default function TemperaturGuidePage() {
                 variant="dark"
                 quelle="Werte aus der kanonischen Kerntemperatur-Referenz der Steakakademie — gemessen im dicksten Punkt, vor dem Ruhen."
                 facts={[
-                  { label: 'Rind, Medium Rare', value: '52–55 °C · Steakakademie-Standard 54 °C' },
+                  { label: 'Rind, Medium Rare', value: `${spanne('beef_mr')} · Steakakademie-Standard ${badge('beef_mr').c} °C` },
                   { label: 'Schwein, Mindestwert', value: '63 °C — Lebensmittelhygiene' },
                   { label: 'Geflügel, Mindestwert', value: '72 °C — Salmonellen, immer durchgaren' },
                   { label: 'Hackfleisch, Mindestwert', value: '70 °C — durch das Wolfen sind Keime innen' },
@@ -294,37 +299,30 @@ export default function TemperaturGuidePage() {
                   {[
                     {
                       grade: 'Rare / Blutig',
-                      temp: '45–49 °C',
+                      temp: gs('rare'),
                       color: 'Außen grau, innen tiefrot, kühl im Kern, sehr saftig',
                       rec: 'Tatar-Temperatur, Carpaccio, Beef Tataki — nur bei geprüftem Fleisch',
                       highlight: false,
                     },
                     {
                       grade: 'Medium Rare',
-                      temp: '52–55 °C',
+                      temp: gs('medium_rare'),
                       color: 'Außen gebräunt, innen durchgehend warm rosa, saftig',
-                      rec: 'Ribeye, Entrecôte, T-Bone — Steakakademie-Standard 54 °C, oberer Rand',
+                      rec: `Ribeye, Entrecôte, T-Bone — Steakakademie-Standard ${badge('beef_mr').c} °C, oberer Rand`,
                       highlight: true,
                     },
                     {
                       grade: 'Medium',
-                      temp: '55–60 °C',
+                      temp: gs('medium'),
                       color: 'Rosa Mitte, leichter Fleischsaftverlust, vollständig warm',
                       rec: 'Rumpsteak, Hüfte, Hanger Steak — guter Kompromiss',
                       highlight: false,
                     },
                     {
-                      grade: 'Medium Well',
-                      temp: '60–65 °C',
-                      color: 'Leicht rosa Kern, kaum Fleischsaft, deutlich fester',
-                      rec: 'Brisket-Vorstufe, Braten, Tafelspitz',
-                      highlight: false,
-                    },
-                    {
                       grade: 'Well Done',
-                      temp: '70+ °C',
-                      color: 'Grau-braun durchgehend, trocken, Textur fest',
-                      rec: 'Nur für Burger-Patties aus Hackfleisch (Pflicht: 70 °C+)',
+                      temp: WELL,
+                      color: 'Durchgegart, kein Rosa mehr, Textur fest',
+                      rec: `Wer es durch mag. Burger-Patties aus Hackfleisch: Pflicht ${mindestwert('hackfleisch')} °C+`,
                       highlight: false,
                     },
                     {
@@ -445,17 +443,24 @@ export default function TemperaturGuidePage() {
                       highlight: true,
                     },
                     {
-                      cut: 'Kotelett / Nacken',
-                      temp: '68–70 °C',
-                      result: 'Leicht rosa bis weiß, saftig wenn nicht übergrillt',
-                      note: 'Gängiger Zielwert beim Grillen',
+                      cut: 'Schweinesteak / Schweinekotelett (rosa)',
+                      temp: spanne('pork_steak_rosa'),
+                      result: 'Medium, rosa, sehr saftig',
+                      note: badge('pork_steak_rosa').hinweis ?? '',
                       highlight: false,
                     },
                     {
-                      cut: 'Schnitzel / Minutensteak',
-                      temp: '70 °C',
-                      result: 'Durchgegart, goldbraun',
-                      note: 'Dünne Stücke — Kerntemperatur schnell erreicht',
+                      cut: 'Schweinesteak / Schweinekotelett (durch)',
+                      temp: spanne('pork_steak_durch'),
+                      result: 'Well Done, durchgegart, noch saftig',
+                      note: 'Gängiger Zielwert beim Grillen — auch für dünne Minutensteaks',
+                      highlight: false,
+                    },
+                    {
+                      cut: 'Schweinenacken (Steak/Braten)',
+                      temp: spanne('pork_nacken'),
+                      result: badge('pork_nacken').label,
+                      note: `Leicht rosa: ${spanne('pork_nacken_rosa')}`,
                       highlight: false,
                     },
                     {
@@ -566,29 +571,36 @@ export default function TemperaturGuidePage() {
                 <tbody>
                   {[
                     {
-                      grade: 'Rare',
-                      temp: '52–54 °C',
-                      desc: 'Tiefrot, sehr saftig — nur für frisches Qualitätslamm',
-                      cuts: 'Lammfilet, kurze Stücke',
-                      highlight: false,
-                    },
-                    {
                       grade: 'Medium Rare',
-                      temp: '55–57 °C',
+                      temp: spanne('lamb_mr'),
                       desc: 'Rosa Kern, warm, volles Aroma, perfekte Textur',
-                      cuts: 'Lammkarree, Lammkotelett, Lammrücken',
+                      cuts: 'Lammsteak, Lammkotelett, Lammkarree, Lammrücken',
                       highlight: true,
                     },
                     {
                       grade: 'Medium',
-                      temp: '60–65 °C',
+                      temp: spanne('lamb_steak_medium'),
                       desc: 'Durchgehend rosa-grau, aromatisch, noch saftig',
-                      cuts: 'Lammkeule, Lammschulter (kurzgebraten)',
+                      cuts: 'Lammsteak, Lammkotelett',
                       highlight: false,
                     },
                     {
                       grade: 'Well Done',
-                      temp: '70–75 °C',
+                      temp: spanne('lamb_steak_done'),
+                      desc: 'Durchgegart, kein Rosa mehr',
+                      cuts: 'Lammsteak, Lammkotelett',
+                      highlight: false,
+                    },
+                    {
+                      grade: 'Keule rosa',
+                      temp: spanne('lamb_rosa'),
+                      desc: 'Großes Stück, rosa, aromatisch',
+                      cuts: 'Lammkeule, Lammschulter (kurzgebraten)',
+                      highlight: false,
+                    },
+                    {
+                      grade: 'Keule durch',
+                      temp: spanne('lamb_done'),
                       desc: 'Vollständig gegart, intensiver Aroma-Verlust',
                       cuts: 'Lammhaxe (Schmoren), Lammschulter (geschmort)',
                       highlight: false,
@@ -793,7 +805,21 @@ export default function TemperaturGuidePage() {
                 <tbody>
                   {[
                     {
-                      animal: 'Wildschwein (Rücken/Steaks)',
+                      animal: 'Wildschweinsteak (rosa)',
+                      temp: spanne('boar_steak'),
+                      grade: badge('boar_steak').label,
+                      note: badge('boar_steak').hinweis ?? '',
+                      warn: true,
+                    },
+                    {
+                      animal: 'Wildschweinsteak (durch)',
+                      temp: spanne('boar_steak_done'),
+                      grade: badge('boar_steak_done').label,
+                      note: badge('boar_steak_done').hinweis ?? '',
+                      warn: true,
+                    },
+                    {
+                      animal: 'Wildschwein (Rücken am Stück)',
                       temp: spanne('boar_ruecken'),
                       grade: badge('boar_ruecken').label,
                       note: badge('boar_ruecken').hinweis ?? '',
@@ -821,30 +847,44 @@ export default function TemperaturGuidePage() {
                       warn: false,
                     },
                     {
-                      animal: 'Reh (Rücken/Filet)',
-                      temp: '55–58 °C',
-                      grade: 'Medium Rare',
+                      animal: 'Rehsteak (Rücken/Filet)',
+                      temp: spanne('reh_steak'),
+                      grade: badge('reh_steak').label,
                       note: 'Sehr zart, kein Bindegewebe — gart schnell, Thermometer kritisch',
+                      warn: false,
+                    },
+                    {
+                      animal: 'Rehsteak (durch)',
+                      temp: spanne('reh_steak_done'),
+                      grade: badge('reh_steak_done').label,
+                      note: 'Ab hier kein Rosa mehr',
                       warn: false,
                     },
                     {
                       animal: 'Reh (Keule/Braten)',
                       temp: '60–65 °C',
-                      grade: 'Medium',
+                      grade: 'durchgegart, saftig',
                       note: 'Ruhephase 10 Minuten — aromatische Tiefe',
                       warn: false,
                     },
                     {
-                      animal: 'Hirsch (Rücken)',
-                      temp: '55–60 °C',
-                      grade: 'Medium Rare bis Medium',
+                      animal: 'Hirschsteak (Rücken)',
+                      temp: spanne('hirsch_steak'),
+                      grade: badge('hirsch_steak').label,
                       note: 'Edelstes Wild — wie Rinderfilet behandeln',
+                      warn: false,
+                    },
+                    {
+                      animal: 'Hirschsteak (durch)',
+                      temp: spanne('hirsch_steak_done'),
+                      grade: badge('hirsch_steak_done').label,
+                      note: 'Ab hier kein Rosa mehr',
                       warn: false,
                     },
                     {
                       animal: 'Hirsch (Keule)',
                       temp: '63–68 °C',
-                      grade: 'Medium bis Medium Well',
+                      grade: 'rosa bis durch',
                       note: 'Niedrigtemperatur-Garen ideal: 80 °C Ofentemperatur, 4–6 Stunden',
                       warn: false,
                     },
@@ -1013,9 +1053,9 @@ export default function TemperaturGuidePage() {
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {[
-                  { label: 'Ziel: Medium Rare', pull: '50–51 °C', final: '52–55 °C' },
-                  { label: 'Ziel: Medium', pull: '53–55 °C', final: '55–60 °C' },
-                  { label: 'Ziel: Medium Well', pull: '57–60 °C', final: '60–65 °C' },
+                  { label: 'Ziel: Medium Rare', pull: '50–51 °C', final: gs('medium_rare') },
+                  { label: 'Ziel: Medium', pull: `${G.medium.range[0] - 3}–${G.medium.range[1] - 3} °C`, final: gs('medium') },
+                  { label: 'Ziel: Well Done', pull: `${G.well_done.range[0] - 3} °C`, final: WELL },
                 ].map((item) => (
                   <div key={item.label} className="text-center p-4 bg-surface-base border border-border-subtle">
                     <p className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted mb-2">{item.label}</p>
@@ -1137,7 +1177,7 @@ export default function TemperaturGuidePage() {
                       { meat: 'Ribeye Steak 3 cm', temp: '54 °C', time: '1,5–2 Stunden', result: 'Medium Rare perfekt' },
                       { meat: 'Hähnchenbrust', temp: '65 °C', time: '1,5 Stunden', result: 'Sicher + saftig (Pasteurisierung bei 65°/1,5h)' },
                       { meat: 'Schweinefilet', temp: '60 °C', time: '1–1,5 Stunden', result: 'Rosa, EFSA-konform' },
-                      { meat: 'Lammkarree', temp: '55 °C', time: '1–1,5 Stunden', result: 'Medium Rare, perfekt rosa' },
+                      { meat: 'Lammkarree', temp: `${badge('lamb_mr').c} °C`, time: '1–1,5 Stunden', result: 'Medium Rare, perfekt rosa' },
                       { meat: 'Pulled Pork', temp: '74 °C', time: '24 Stunden', result: 'Zart, aber kein Smoke Ring' },
                     ].map((row) => (
                       <tr key={row.meat} className="border-b border-border-subtle">

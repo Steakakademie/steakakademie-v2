@@ -8,6 +8,100 @@
 > einer US-basierten WebSearch und liefern eine Trefferliste, keine deutsche
 > SERP-Position.** Vergleiche über diese Grenze hinweg sind nicht 1:1 belastbar.
 
+## KW43 — 19.10.2026
+
+> **Hinweis:** Regulärer Wochenlauf, 7 Tage nach KW42 (12.10.2026). Neue Kalenderwoche → Zähler „Wochen ohne Backlink" hochgezählt. Clarity-Fenster: 13.–19.10.2026 (Clarity-gewählt, beide Abfragen identisch). Messung per In-App-Browser (DE), Technik per curl auf Uwes Rechner.
+
+### Rankings (Leitmessung: In-App-Browser, google.de, hl=de&gl=de, Seiten 1–5)
+
+| Keyword | Position | URL | Δ Vorwoche (12.10.) | Δ Baseline 07.07. |
+|---|---|---|---|---|
+| Leit-Query „Was ist die richtige Kerntemperatur für ein Steak medium" | **Platz ~27** (Seite 3, Pos. 10) | `steakakademie.de/kerntemperatur-steak` | ⚪ Seite 3 gehalten (27 → 27) | ⚪ nicht vergleichbar (Methodenwechsel KW39) |
+| dto., zweite eigene URL | **Platz ~46** (Seite 5, Pos. 10) | `steakakademie.de/temperatur-guide` | 🔴 Seite 4 → **Seite 5** (31 → 46) | ⚪ nicht vergleichbar |
+| Kopf-Keyword „Kerntemperatur Steak" | **nicht in den ersten 8** organischen Treffern (nur Seite 1 geprüft) | — | = | = |
+| Brand-Query „Steakakademie" | **Platz 1** | `steakakademie.de/` (weitere: `/diplome` Pos. 6) | = | = |
+
+**Zählweise Leit-Query:** Seite 1: 7 · Seite 2: 10 · Seite 3: 10 (eigene URL Pos. 10) → 7+10+10 = **27**; Seite 4: 9 · Seite 5: 10 (`/temperatur-guide` Pos. 10) → 27+9+10 = **46**. Toleranz ±3, Trend nur über die Seite. Seite 1 wie Vorwoche (Grillfürst, block-house, AMA, little-london, Weber, Trautmann, Moselmetzger).
+
+**Befund:** `/kerntemperatur-steak` hält Seite 3. `/temperatur-guide` ist von Seite 4 auf Seite 5 gefallen. Mögliche Lesart: Google bündelt nach dem internen Link (#411) auf die Antwortseite — Ursächlichkeit nicht belegt (eine Messung, keine Kontrolle).
+
+### Google AI Overview
+
+Leit-Query und Kopf-Keyword: „Übersicht mit KI" vorhanden (per `document.body.innerText`). „steakakademie" im Seitentext **nicht** enthalten → wir werden nicht zitiert. „Alle anzeigen" nicht aufgeklappt (Quellenliste nicht einzeln ausgezählt).
+
+### Traffic (Microsoft Clarity, Non-Bot, 13.–19.10.)
+
+| Quelle | Sessions | Δ KW42 (05.–12.10.) |
+|---|---|---|
+| Direct | 20 | −13 (33) |
+| **bing** | **17** | **+15 (2)** |
+| yahoo | 9 | +6 (3) |
+| **google** | **5** | **−21 (26)** |
+| checkout-ds24.com | 3 | +1 (2) |
+| chatgpt.com | 1 | = (1) |
+| ecosia.org | 1 | neu |
+
+Gesamt ≈ 56 Sessions (KW42 ≈ 82). **Bing:Google = 17:5** (KW42: 2:26; KW39: 12:3). Bing + Yahoo (Bing-Index) = 26 Sessions = Hauptkanal. Das Pendeln zwischen Bing und Google von Woche zu Woche bei einstelligen/kleinen Zahlen ist **kein Trend**, sondern Rauschen plus Eigenanteil (Direct, ggf. Uwes Tests, ggf. Crawler) — nur als Größenordnung berichten. Der Google-Einbruch 26 → 5 ist ohne Search Console nicht erklärbar.
+
+**Top-Seiten:** `/` 6 · `/diplome` 4 · `/impressum` 4 · `/hoefe` 4 · `/rezepte` 3 · `/temperatur-guide` 3 · `/artikel/texas-crutch-folie-oder-butcher-paper` 3 · `/rezepte/desserts` 3 · `/rezepte/desserts/baked-alaska-grill` 2 · `/methoden` 2. `/kerntemperatur-steak` nicht in den Top 10. Nicht attribuierbar, ob Uwe/Bot/echt.
+
+### Off-Page-Delta
+
+WebSearch `"steakakademie.de" -site:steakakademie.de`: **0 echte Backlinks — unverändert.** Treffer themenfremd (Weber-Grillkurs, Steakhouses, Buchkatalog, Eventim usw.), keiner verlinkt die Domain nachweisbar. Neue Kalenderwoche → **15 Wochen in Folge ohne Backlink** (Vorwert 14). Keine nofollow-Prüfung (kein Link). WebSearch ist US-basiert und wertet `-site:` unzuverlässig: Aussage = „keinen gefunden", nicht „nachweislich keinen". Namensvettern in der Brand-SERP (GrillKonzept, Lotter, Facebook-Seite) zählen nicht.
+
+### Technik-Status
+
+| Check | Ergebnis | Status |
+|---|---|---|
+| www → non-www, Wurzel | 308 → `https://steakakademie.de/` | 🟢 |
+| www → non-www, `/temperatur-guide` | 308 → `https://steakakademie.de/temperatur-guide` | 🟢 |
+| Apex | 200 | 🟢 |
+| `/llms.txt` | 200 `text/plain; charset=utf-8`, 2.249 Byte (= KW42) | 🟢 |
+| `/robots.txt` letzte Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` | 🟢 |
+| `/kerntemperatur-steak` | 200 | 🟢 |
+
+Per curl (Statuscode/Header), nicht per `web_fetch` (Methodik §3).
+
+### Offene Punkte
+
+- **GEO-Re-Check nicht fällig:** `docs/geo-baseline.md` → nächste Fälligkeit **29.10.2026** (Task `geo-recheck-baseline`).
+- **Bing Webmaster Tools:** laut `docs/gsc-abruf.md` Z. 96 noch nicht angebunden („folgt, sobald API-Schlüssel").
+- **Search Console API:** Property existiert, Export-Weg in `docs/gsc-abruf.md`; automatische Anbindung offen.
+- `/hoefe` taucht mit 4 Sessions wieder in den Top 10 auf (KW42: raus) — Ursache ungeklärt.
+
+### Ampeln
+
+| Bereich | Ampel | Begründung |
+|---|---|---|
+| Rankings | 🟡 | Hauptseite `/kerntemperatur-steak` Seite 3 (~27, = Vorwoche); `/temperatur-guide` Seite 4 → 5 (~46). Kopf-Keyword nicht in den ersten 8. Brand Platz 1. |
+| AI Overview / GEO | 🔴 | AIO bei Leit-Query und Kopf-Keyword vorhanden, „steakakademie" in keinem Text. |
+| Traffic | 🟡 | ≈56 Sessions (Vorwoche ≈82); Bing 17 / Google 5 (Vorwoche 2 / 26). Kleine Fallzahlen, hoher Eigenanteil, Kanalmix schwankt stark. |
+| Off-Page | 🔴 | 0 Backlinks, 15 Wochen in Folge. |
+| Technik | 🟢 | Alle sechs Checks per Statuscode grün (308/308/200/200/Sitemap-Zeile/200). |
+
+### Handlungsempfehlung (max. 1)
+
+**Bing Webmaster Tools anbinden (Uwe, ~10 Min, 0 €):** Bing + Yahoo lieferten diese Woche 26 von ≈56 Sessions, Google 5 — und das Verhältnis Bing:Google kippt von Woche zu Woche (KW39 12:3, KW41 7:9, KW42 2:26, KW43 17:5) — ohne Webmaster-Daten bleibt unklar, welcher Kanal real trägt. Bing Webmaster Tools liefert echte Impressionen, Klicks und Positionen (Import der Search-Console-Property möglich). Die Vorgänger-Empfehlung „Kannibalisierung klären" ist erledigt (interner Link #411 committet, Wirkung siehe Rankings) und entfällt.
+
+*Nachrichtlich, nicht gezählt:* (1) Google-Sessions 26 → 5 ohne Search Console nicht erklärbar. (2) Echte Backlinks bleiben der größte Hebel für Platz/AIO, haben aber keinen spamfreien 15-Minuten-Weg (Regel 5).
+
+### Trend in einem Satz
+
+Google DE unverändert (Hauptseite Seite 3, zweite URL Seite 5, kein AIO-Zitat, 0 Backlinks); Traffic-Kanalmix schwankt bei kleinen Zahlen stark Richtung Bing.
+
+### Was NICHT geprüft wurde
+
+- Kopf-Keyword „Kerntemperatur Steak": nur Seite 1 (Top 8), nicht Seite 2–5.
+- Brand-Query: nur Seite 1.
+- AIO-Quellenliste („Alle anzeigen") nicht aufgeklappt; keine Screenshots.
+- Bing-/Perplexity-/ChatGPT-Positionen: nicht erhoben (GEO-Re-Check 29.10.).
+- Impressionen, CTR, Durchschnittsposition: nicht messbar (Search Console/Bing WMT nicht angebunden).
+- Off-Page nur per US-WebSearch (unzuverlässig), kein Backlink-Tool.
+- Ob `/temperatur-guide`-Rückgang Ursache im Linkumbau hat: nicht belegt.
+- Nichts committet — Uwe committet selbst.
+
+---
+
 ## KW42 — 12.10.2026
 
 > **Kalendarischer Hinweis:** Regulärer Wochenlauf, 7 Tage nach KW41 (05.10.2026). Neue Kalenderwoche → Zähler „Wochen ohne Backlink" hochgezählt. Clarity-Fenster beider Abfragen identisch: 05.10.–12.10.2026 (Clarity-gewählt).
