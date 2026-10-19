@@ -875,3 +875,13 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-18
     hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; Format 16:9, 1376x768, nicht auf 4:3 zugeschnitten (sonst werden Keulen und Sauce abgeschnitten); keine Personen, keine erkennbaren Marken im Bild
+  images/rezepte/memphis-dry-ribs-spareribs-nur-rub.jpg:
+    status: lizenz
+    quelle: Unsplash (ID QtLYiB6P-KM)
+    urheber: Brian Wegman (@trytoscareme)
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/QtLYiB6P-KM
+    erworben_am: 2026-10-19
+    namensnennung: false
+    hinweis: Ersetzt das FLUX-Bild aus dem Bot-Lauf (PR 444) durch ein Echtfoto (Unsplash, Titel "a rack of ribs cooking on a grill", veroeffentlicht 25.03.2023, Kamera Sony ILCE-7C laut Unsplash-Seite). Web-Zuschnitt 1600x1200 (4:3)/Kompression. imageAI im MDX-Frontmatter auf false gesetzt. Motiv zeigt glaenzende Glasur, Rezept ist Dry Rub ohne Sauce - Passung Uwe vor Merge pruefen

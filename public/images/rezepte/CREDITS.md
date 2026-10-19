@@ -96,6 +96,7 @@ Nachgetragen am 16.10.2026, Wächter seitdem: `src/__tests__/rezeptbild-credits.
 | smoked-chuck-roast | Unsplash | Tricia Timney (links), Israel Albornoz (rechts) | Cz6ys4_25W0 + VnpJ5_m-2mQ | Collage nebeneinander | false | 13.10.2026 |
 | patlican-kebab | Pexels | Shameel Mukkath | 5191846 + 5191850 | Collage nebeneinander | false | 14.10.2026 |
 | smoked-chuck-roast-poor-mans-brisket | Unsplash | Archer Allstars (@archerallstars) | s4jdYaQOAqM | Web-Zuschnitt 4:3/-Kompression | false | 17.10.2026 |
+| memphis-dry-ribs-spareribs-nur-rub | Unsplash | Brian Wegman (@trytoscareme) | QtLYiB6P-KM | Web-Zuschnitt 1600x1200 (4:3)/-Kompression | false | offen (PR 444, Merge durch Uwe) |
 
 ## Übriger Bestand
 

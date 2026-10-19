@@ -494,5 +494,65 @@
     "difficulty": "Einfach",
     "concept": "Izgara Köfte sind flache, längliche Hackfleischspieße aus Rind oder Rind-Lamm-Mix, gewürzt mit Zwiebel, Kreuzkümmel, Paprika und Petersilie, die über starker Glut gegrillt werden, bis sie außen eine dunkle Kruste und innen einen saftigen Kern haben. Alle Zutaten sind im deutschen Supermarkt erhältlich, und das Gericht trifft mit seinem klaren Fleisch-Rauch-Gewürz-Profil den deutschen Grillgeschmack ohne Umwege. Der kritische Schritt ist die Bindung der Masse: Zu wenig Kneten führt zu Spießen, die beim Grillen auseinanderfallen, zu viel macht sie gummiartig. Der Artikel erklärt den Unterschied zwischen Izgara Köfte und Adana Kebab und warum die Wahl des Fettgehalts im Hackfleisch über Saftigkeit oder Trockenheit entscheidet. Herkunft: Türkei.",
     "stil": "vertraut"
+  },
+  {
+    "slug": "shish-taouk-libanesisch-tuerkisch",
+    "kategorie": "fleisch",
+    "title": "Shish Taouk – Mariniertes Hähnchen vom Mangal",
+    "meatType": "Hähnchenbrustfilet",
+    "cookingMethod": "Direkt, mittlere bis starke Glut",
+    "difficulty": "Einfach",
+    "concept": "Shish Taouk ist ein im gesamten Nahen Osten und in der Türkei verbreiteter Hähnchen-Spieß, dessen Besonderheit in einer langen Joghurt-Zitronen-Marinade mit Knoblauch, Paprika und Kreuzkümmel liegt. Der Joghurt macht das Fleisch zart und sorgt gleichzeitig für eine charakteristische, leicht gebräunte Kruste auf dem Mangal. Entscheidend ist die Marinierzeit von mindestens vier Stunden sowie das Garen bei mittlerer Hitze, damit das Hähnchen durchgart, ohne auszutrocknen. Der Artikel erklärt, warum Milchsäure im Joghurt Proteine anders aufschließt als Säuremarinaden auf Essig- oder Zitrusbasis. Herkunft: Türkei.",
+    "stil": "original"
+  },
+  {
+    "slug": "picanha-argentina-al-asador",
+    "kategorie": "fleisch",
+    "title": "Tapa de Cuadril – Argentinische Picanha von der Parrilla",
+    "meatType": "Tafelspitzdeckel (Picanha)",
+    "cookingMethod": "Direkt, starke Glut, Parrilla-Stil",
+    "difficulty": "Mittel",
+    "concept": "In Argentinien wird die Tapa de Cuadril – der fettgedeckte Tafelspitzdeckel – mit der Fettseite zuerst über die Glut gelegt, damit das ausschmelzende Fett das Fleisch von oben begießt und eine goldbraune Kruste entsteht. Anders als beim brasilianischen Churrasco-Stil am Schwertspieß bleibt das Stück flach auf dem Rost und wird nur einmal gewendet. Der kritische Schritt ist das Anschneiden gegen die Faser nach einer Ruhezeit von fünf Minuten, da der Muskel bei falscher Schnittrichtung zäh wirkt. Der Artikel beantwortet, wie sich Tapa de Cuadril und Picanha trotz desselben Cuts in Zubereitung und Ergebnis unterscheiden. Herkunft: Argentinien.",
+    "stil": "original"
+  },
+  {
+    "slug": "cig-kofte-izgara-tuerkei",
+    "kategorie": "fleisch",
+    "title": "Izgara Tavuk Kanat – Türkische Hähnchenflügel vom Mangal",
+    "meatType": "Hähnchenflügel",
+    "cookingMethod": "Direkt, starke Holzkohleglut",
+    "difficulty": "Einfach",
+    "concept": "Türkische Tavuk Kanat werden in einer Marinade aus Olivenöl, Tomatenmark, Paprikapaste, Knoblauch und Oregano eingelegt und dann direkt über Holzkohle gegrillt, bis die Haut blasig und leicht verkohlt ist – ein bewusst angestrebtes Röstaroma, das in der türkischen Grillküche als Qualitätsmerkmal gilt. Die Paprikapaste ist die einzige Spezialzutat; sie ist im deutschen Handel als Biber Salçası erhältlich, alternativ funktioniert eine Mischung aus Tomatenmark und geräuchertem Paprikapulver. Entscheidend ist das Grillen auf einem Rost nahe der Glut, damit die Haut knackt, bevor das Fleisch übergart. Der Artikel erklärt den Unterschied zwischen türkischer Paprikapaste und westlichem Tomatenmark und warum dieser die Marinade grundlegend verändert. Herkunft: Türkei.",
+    "stil": "original"
+  },
+  {
+    "slug": "yaki-onigiri-japanisch",
+    "kategorie": "beilagen",
+    "title": "Yaki Onigiri – Gegrillte Reisbällchen mit Sojaglasur",
+    "meatType": "Japanischer Rundkornreis",
+    "cookingMethod": "Direkt, mittlere Glut oder Grillplatte",
+    "difficulty": "Mittel",
+    "concept": "Yaki Onigiri sind gepresste Reisdreiecke, die ohne Öl direkt auf den Rost oder eine heiße Grillplatte gelegt werden, bis eine feste, leicht gebräunte Kruste entsteht, bevor sie mit Sojasoße gepinselt und nochmals kurz gegrillt werden – die Sojasoße karamellisiert und bildet eine glänzende, salzige Schicht. Der entscheidende Schritt ist das geduldige Warten: Wer die Bällchen zu früh bewegt, bricht die Kruste auf und das Reis klebt am Rost. Rundkornreis und Sojasoße sind in jedem deutschen Supermarkt erhältlich; optional verleiht ein Teelöffel Miso-Paste der Glasur Tiefe. Der Artikel beantwortet, warum die Stärkestruktur von Rundkornreis das Grillen ohne Bindemittel erst möglich macht. Herkunft: Japan.",
+    "stil": "original"
+  },
+  {
+    "slug": "braai-lamb-chops-sosatie-marinade",
+    "kategorie": "fleisch",
+    "title": "Braai Chops mit Aprikosen-Curry-Marinade – Südafrikanisch",
+    "meatType": "Lammkoteletts",
+    "cookingMethod": "Direkt, starke Holzkohleglut",
+    "difficulty": "Einfach",
+    "concept": "Diese südafrikanischen Braai Chops verbinden Lammkoteletts mit einer Marinade aus Aprikosenmarmelade, Currypulver, Essig und Zwiebeln – eine Geschmackskombination, die auf die kapmalaiische Küche zurückgeht und sich von den reinen Salz-Pfeffer-Koteletts der europäischen Grillküche deutlich unterscheidet. Alle Zutaten sind im deutschen Supermarkt erhältlich; die Marinade ist in zehn Minuten angerührt und braucht mindestens zwei Stunden Einwirkzeit. Kritisch ist die Hitzeführung: Die Zuckerstoffe der Marmelade verbrennen schnell, weshalb die Koteletts bei starker Glut nur kurz pro Seite liegen dürfen. Der Artikel erklärt, wie Fruchtsäure und Curry-Gewürze gemeinsam auf Lammfleisch wirken und warum diese Kombination in Südafrika zum Braai-Alltag gehört. Herkunft: Südafrika.",
+    "stil": "original"
+  },
+  {
+    "slug": "moo-yang-thai-schweinenacken",
+    "kategorie": "fleisch",
+    "title": "Moo Yang – Thailändischer Grill-Schweinenacken mit Knoblauch",
+    "meatType": "Schweinenacken",
+    "cookingMethod": "Direkt, mittlere Holzkohleglut",
+    "difficulty": "Einfach",
+    "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
+    "stil": "original"
   }
 ]
