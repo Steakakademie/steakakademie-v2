@@ -15,7 +15,7 @@ export default function PreisMitStand({
   standClassName,
   block = false,
 }: {
-  product: Pick<Product, 'price' | 'priceMin' | 'priceMax' | 'lastChecked'>;
+  product: Pick<Product, 'price' | 'priceMin' | 'priceMax' | 'lastChecked'> & Partial<Pick<Product, 'affiliateUrl'>>;
   /** Klassen der Preiszahl. */
   className?: string;
   /** Klassen des Stand-Vermerks. */
