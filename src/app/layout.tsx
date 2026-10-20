@@ -83,11 +83,13 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  // Bing Webmaster Tools Verifizierung (Uwe, 24.09.2026) — kein Next.js-Shorthand
-  // fuer Bing, daher ueber `other`. Property: https://steakakademie.de/
+  // Bing Webmaster Tools Verifizierung (Uwe, 24.09.2026) und Pinterest-Domain-
+  // Verifizierung (Uwe, 20.10.2026, Konto @Steakakademie) — kein Next.js-Shorthand,
+  // daher ueber `other`. Property: https://steakakademie.de/
   verification: {
     other: {
       'msvalidate.01': '839CD50CF0C01FB34C0B1400C8EFA525',
+      'p:domain_verify': 'ed0504863e157789aa119057f819ad58',
     },
   },
 };
