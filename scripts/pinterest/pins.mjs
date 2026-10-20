@@ -72,12 +72,30 @@ export function titelTeile(titel) {
   return [titel.slice(0, i).trim(), rest.charAt(0).toUpperCase() + rest.slice(1)];
 }
 
+/**
+ * Bis die Kerntemperatur-Referenz geklärt ist (docs/youtube-anbindung.md, „Offen“), werden Rezepte
+ * mit bekanntem Widerspruch nicht beworben — und Pin-Texte enthalten keine °C-Angaben.
+ */
+export const GESPERRT = [
+  'lammkoteletts-mediterran', 'lammkarree-grillen', 'lammkeule-drehspiess', 'krustenbraten-grill', 'ente-vom-grill',
+  'iberico-secreto', 'iberico-pluma', 'schwertfisch-steak-grill', 'thunfisch-steak-grill',
+];
+
+/** Sätze mit Temperaturangaben entfernen (Kerntemperaturen gehören nur auf die Rezeptseite). */
+export function ohneTemperaturen(text) {
+  return String(text ?? '')
+    .split(/(?<=[.!?])\s+/)
+    .filter((satz) => !/\d\s*°\s*C/i.test(satz) && !/kerntemperatur/i.test(satz))
+    .join(' ')
+    .trim();
+}
+
 const kuerze = (text, max) => (text.length > max ? text.slice(0, max - 1).trimEnd() + '…' : text);
 
 /** Kompletter Pin für Metricool aus Frontmatter + Slug. */
 export function pin(fm, slug) {
   const brett = pinnwand(fm);
-  if (!brett || !fm.title || !fm.image) return null;
+  if (!brett || !fm.title || !fm.image || GESPERRT.includes(slug)) return null;
   const [kopf, rest] = titelTeile(fm.title);
   const land = String(fm.land ?? '').split('·')[0].trim();
   const meta = [land, fm.difficulty, zeit(fm.totalTime)].filter(Boolean).join(' · ');
@@ -87,7 +105,7 @@ export function pin(fm, slug) {
   if (fm.imageAI) q.set('ki', '1');
   const stichworte = (fm.keywords ?? []).slice(0, 5).join(' · ');
   const beschreibung = kuerze(
-    [fm.description, 'Rezept mit Zutatenliste, Schritt-für-Schritt-Anleitung und Profi-Tipps auf steakakademie.de.', stichworte, fm.imageAI ? 'Bild KI-generiert.' : '']
+    [ohneTemperaturen(fm.description), 'Rezept mit Zutatenliste, Schritt-für-Schritt-Anleitung und Profi-Tipps auf steakakademie.de.', stichworte, fm.imageAI ? 'Bild KI-generiert.' : '']
       .filter(Boolean)
       .join('\n\n'),
     500,
@@ -104,11 +122,26 @@ export function pin(fm, slug) {
   };
 }
 
-/** Reihenfolge: reihum über die Pinnwände, damit jede gleichmäßig wächst; innerhalb neueste zuerst. */
+/**
+ * Klassiker mit hohem Suchvolumen in DACH zuerst (Uwe-Freigabe 20.10.2026) — der erste Eindruck
+ * einer Pinnwand entscheidet, ob Leute folgen. Reihenfolge innerhalb der Liste = Priorität.
+ */
+export const ZUERST = [
+  'picanha-churrasco', 'dry-aged-ribeye', 'tomahawk-reverse-sear', 'smash-burger', 'entrecote-grillen', 'flank-steak-grillen', 'roastbeef-reverse-sear',
+  'pulled-pork-boston-butt', 'spareribs-3-2-1', 'brisket-low-slow', 'burnt-ends', 'beef-short-ribs', 'pulled-chicken',
+  'iberico-secreto', 'krustenbraten-grill', 'iberico-pluma', 'iberico-presa', 'schweinekarree-honig-rosmarin',
+  'spatchcock-haehnchen', 'beer-can-chicken', 'ente-vom-grill', 'haehnchenschenkel-bier-senf-glasur',
+  'lammkarree-grillen', 'lammkoteletts-mediterran', 'lammkeule-drehspiess', 'aussie-lamb-leg-butterflied',
+  'cedar-plank-lachs', 'ganze-dorade-grill', 'thunfisch-steak-grill', 'australische-riesengarnelen-barbie', 'sardinen-vom-grill',
+  'faecherkartoffeln-grill', 'maiskolben-elote', 'texas-dry-rub', 'kansas-city-bbq-sauce', 'provoleta-parrilla', 'gemuese-spiesse-grill', 'chili-kraeuterbutter',
+];
+
+/** Reihenfolge: reihum über die Pinnwände, damit jede gleichmäßig wächst; innerhalb erst ZUERST, dann neueste. */
 export function reihum(pins) {
   const nachBrett = new Map(PINNWAENDE.map((b) => [b, []]));
   for (const p of pins) nachBrett.get(p.pinnwand)?.push(p);
-  for (const liste of nachBrett.values()) liste.sort((a, b) => String(b.datum ?? '').localeCompare(String(a.datum ?? '')));
+  const rang = (slug) => { const i = ZUERST.indexOf(slug); return i < 0 ? Infinity : i; };
+  for (const liste of nachBrett.values()) liste.sort((a, b) => rang(a.slug) - rang(b.slug) || String(b.datum ?? '').localeCompare(String(a.datum ?? '')));
   const aus = [];
   for (let runde = 0; aus.length < pins.length; runde++) {
     for (const liste of nachBrett.values()) if (liste[runde]) aus.push(liste[runde]);

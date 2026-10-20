@@ -2,7 +2,7 @@
  * Pinterest-Pin-Planung — reine Funktionen (20.10.2026).
  */
 import { describe, it, expect } from 'vitest'
-import { frontmatter, pin, pinnwand, reihum, titelTeile, zeit } from './pins.mjs'
+import { frontmatter, ohneTemperaturen, pin, pinnwand, reihum, titelTeile, zeit } from './pins.mjs'
 
 describe('pinnwand', () => {
   it('ordnet nach Kategorie, Garmethode und Fleischart zu', () => {
@@ -68,10 +68,25 @@ Text`)
   })
 })
 
+describe('ohneTemperaturen / Sperre', () => {
+  it('entfernt Sätze mit °C oder Kerntemperatur', () => {
+    expect(ohneTemperaturen('Lammkarree indirekt auf 56°C gegart, dann scharf angebraten. Mediterrane Kräuter.')).toBe('Mediterrane Kräuter.')
+    expect(ohneTemperaturen('Bis 52 °C Kerntemperatur. Saftig!')).toBe('Saftig!')
+    expect(ohneTemperaturen('Kurz und heiß gegrillt.')).toBe('Kurz und heiß gegrillt.')
+  })
+  it('sperrt Rezepte mit offenem Kerntemperatur-Widerspruch', () => {
+    expect(pin({ title: 'Lammkarree', image: '/images/x.jpg', kategorie: 'fleisch', meatType: 'Lammkarree' }, 'lammkarree-grillen')).toBeNull()
+  })
+})
+
 describe('reihum', () => {
   it('wechselt die Pinnwände ab', () => {
     const p = (slug, pinnwand) => ({ slug, pinnwand })
     const aus = reihum([p('r1', 'Rind vom Grill'), p('r2', 'Rind vom Grill'), p('f1', 'Fisch vom Grill')]).map((x) => x.slug)
     expect(aus).toEqual(['r1', 'f1', 'r2'])
+  })
+  it('zieht Klassiker vor', () => {
+    const aus = reihum([{ slug: 'nuea-yang-nam-tok', pinnwand: 'Rind vom Grill', datum: '2026-10-01' }, { slug: 'picanha-churrasco', pinnwand: 'Rind vom Grill', datum: '2026-06-01' }]).map((x) => x.slug)
+    expect(aus).toEqual(['picanha-churrasco', 'nuea-yang-nam-tok'])
   })
 })
