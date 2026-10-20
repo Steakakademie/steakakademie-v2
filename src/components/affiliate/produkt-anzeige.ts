@@ -174,10 +174,19 @@ export interface PreisAnzeige {
   stand: string | null;
 }
 
-/** Preis und Stand einer Karte. Ohne Stand kein Preis. */
+/**
+ * Preis und Stand einer Karte. Ohne Stand kein Preis.
+ *
+ * Amazon-Links (20.10.2026): KEIN Preis. Die Amazon-Programmrichtlinien erlauben
+ * Preise nur, wenn sie über die Creators-/PA-API kommen oder Amazon den Link mit
+ * Preis selbst ausliefert. Unsere Preise sind von Hand gepflegt — mit Stand oder
+ * nicht, das bleibt ein Verstoß und riskiert das Partnerkonto. Die Karte zeigt
+ * dann „Preis beim Anbieter prüfen“. Andere Händler: unverändert mit Stand.
+ */
 export function preisAnzeige(
-  product: Pick<Product, 'price' | 'priceMin' | 'priceMax' | 'lastChecked'>,
+  product: Pick<Product, 'price' | 'priceMin' | 'priceMax' | 'lastChecked'> & Partial<Pick<Product, 'affiliateUrl'>>,
 ): PreisAnzeige {
+  if (product.affiliateUrl && hatAmazonLink({ affiliateUrl: product.affiliateUrl })) return { preis: null, stand: null };
   const stand = preisStand(product);
   if (!stand) return { preis: null, stand: null };
   if (product.priceMin && product.priceMax) {

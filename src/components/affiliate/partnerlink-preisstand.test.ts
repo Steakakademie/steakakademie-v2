@@ -257,6 +257,12 @@ describe('preisStand / preisAnzeige', () => {
     expect(preisAnzeige({ price: 799, lastChecked: '' })).toEqual({ preis: null, stand: null });
     expect(preisAnzeige({ price: 0, lastChecked: '2026-05-22' })).toEqual({ preis: null, stand: null });
   });
+
+  it('zeigt bei Amazon-Links keinen Preis (Amazon-Richtlinie: Preise nur über die API)', () => {
+    expect(preisAnzeige({ price: 129, lastChecked: '2026-05-22', affiliateUrl: 'https://www.amazon.de/dp/B073WT2BLP/?tag=steakakademie-21' })).toEqual({ preis: null, stand: null });
+    expect(preisAnzeige({ price: 129, lastChecked: '2026-05-22', affiliateUrl: 'https://amzn.to/abc' })).toEqual({ preis: null, stand: null });
+    expect(preisAnzeige({ price: 129, lastChecked: '2026-05-22', affiliateUrl: 'https://www.otto-gourmet.de/x.html' })).toEqual({ preis: '129 €', stand: 'Stand Mai 2026' });
+  });
 });
 
 describe('Karten: Preis nie ohne Stand', () => {
