@@ -66,7 +66,7 @@ export function zeit(iso) {
 
 /** „Asado de Tira – Argentinische Rinder-Rippen …“ → ['Asado de Tira', 'Argentinische Rinder-Rippen …'] */
 export function titelTeile(titel) {
-  const i = titel.search(/\s[–—-]\s/);
+  const i = titel.search(/\s[–—|-]\s/);
   if (i <= 0) return [titel.trim(), null];
   const rest = titel.slice(i + 3).trim();
   return [titel.slice(0, i).trim(), rest.charAt(0).toUpperCase() + rest.slice(1)];
@@ -103,7 +103,7 @@ export function pin(fm, slug) {
   if (rest) q.set('sub', rest);
   if (meta) q.set('meta', meta);
   if (fm.imageAI) q.set('ki', '1');
-  const stichworte = (fm.keywords ?? []).slice(0, 5).join(' · ');
+  const stichworte = (fm.keywords ?? []).filter((k) => !/kerntemperatur|°\s*C/i.test(k)).slice(0, 5).join(' · ');
   const beschreibung = kuerze(
     [ohneTemperaturen(fm.description), 'Rezept mit Zutatenliste, Schritt-für-Schritt-Anleitung und Profi-Tipps auf steakakademie.de.', stichworte, fm.imageAI ? 'Bild KI-generiert.' : '']
       .filter(Boolean)

@@ -30,6 +30,7 @@ describe('zeit / titelTeile', () => {
     expect(titelTeile('Asado de Tira – Argentinische Rinder-Rippen')).toEqual(['Asado de Tira', 'Argentinische Rinder-Rippen'])
     expect(titelTeile('Adana Kebab')).toEqual(['Adana Kebab', null])
     expect(titelTeile('Suon Nuong – vietnamesische Rippchen')[1]).toBe('Vietnamesische Rippchen')
+    expect(titelTeile('Pulled Pork aus Boston Butt | Smoker-Klassiker')).toEqual(['Pulled Pork aus Boston Butt', 'Smoker-Klassiker'])
   })
 })
 
@@ -45,7 +46,7 @@ difficulty: Einsteiger
 totalTime: PT60M
 image: "/images/rezepte/picanha.jpg"
 imageAI: true
-keywords: [Picanha, Churrasco]
+keywords: [Picanha, Kerntemperatur Picanha, Churrasco]
 ---
 Text`)
   it('baut Link mit UTM, Grafik-URL und KI-Hinweis', () => {
@@ -59,6 +60,7 @@ Text`)
     expect(bild.searchParams.get('meta')).toBe('Brasilien · Einsteiger · 1 Std.')
     expect(bild.searchParams.get('ki')).toBe('1')
     expect(p.beschreibung).toContain('Bild KI-generiert.')
+    expect(p.beschreibung).not.toMatch(/Kerntemperatur/)
     expect(p.beschreibung.length).toBeLessThanOrEqual(500)
     expect(p.titel.length).toBeLessThanOrEqual(100)
   })
