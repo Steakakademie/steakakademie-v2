@@ -7,6 +7,7 @@ import { baueMetadaten } from './upload.mjs'
 import { offen } from './kommentare.mjs'
 import { diff } from './metadaten.mjs'
 import { zeitraum } from './analytics.mjs'
+import { abgleich } from './playlists.mjs'
 
 describe('sekunden / istShort', () => {
   it('parst ISO-8601-Dauern', () => {
@@ -119,6 +120,16 @@ describe('offen (Kommentare)', () => {
   it('zeigt nur fremde Kommentare ohne Kanal-Antwort', () => {
     const liste = offen([t('fan'), t('fan', ['KANAL']), t('KANAL'), t('fan', ['anderer'])], 'KANAL')
     expect(liste).toHaveLength(2)
+  })
+})
+
+describe('abgleich (Playlists)', () => {
+  it('nutzt vorhandene Playlist gleichen Titels und ergänzt nur Fehlendes', () => {
+    const plan = [{ titel: 'Fisch vom Grill', videos: ['a', 'b'] }, { titel: 'Lamm vom Grill', videos: ['c'] }]
+    const vorhanden = [{ id: 'PL1', snippet: { title: 'Fisch vom Grill' } }]
+    const erg = abgleich(plan, vorhanden, { PL1: ['a'] })
+    expect(erg[0]).toMatchObject({ id: 'PL1', fehlend: ['b'] })
+    expect(erg[1]).toMatchObject({ id: null, fehlend: ['c'] })
   })
 })
 
