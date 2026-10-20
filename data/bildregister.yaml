@@ -885,3 +885,10 @@ bilder:
     erworben_am: 2026-10-19
     namensnennung: false
     hinweis: Ersetzt das FLUX-Bild aus dem Bot-Lauf (PR 444) durch ein Echtfoto (Unsplash, Titel "a rack of ribs cooking on a grill", veroeffentlicht 25.03.2023, Kamera Sony ILCE-7C laut Unsplash-Seite). Web-Zuschnitt 1600x1200 (4:3)/Kompression. imageAI im MDX-Frontmatter auf false gesetzt. Motiv zeigt glaenzende Glasur, Rezept ist Dry Rub ohne Sauce - Passung Uwe vor Merge pruefen
+  images/rezepte/anticucho-de-corazon.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/anticucho-de-corazon.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-20
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
