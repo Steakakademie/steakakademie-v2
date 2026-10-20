@@ -23,4 +23,6 @@ node scripts/pinterest/pins.mjs --erledigt <slug>  # nach dem Einplanen vermerke
 
 Pinnwände: Rind vom Grill · Low & Slow BBQ · Schwein & Iberico · Geflügel vom Grill · Lamm vom Grill · Fisch vom Grill · Beilagen, Saucen & Rubs (+ Fleischkunde & Cuts für Wissensinhalte). Zuordnung in `pinnwand()`: Fisch/Beilagen nach Kategorie, Fleisch zuerst nach Garmethode (Low & Slow), dann nach Fleischart.
 
+Reihenfolge: `ZUERST` (DACH-Klassiker) vor neuesten. `GESPERRT`: Rezepte mit offenem Kerntemperatur-Widerspruch werden nicht beworben; Pin-Texte enthalten nie °C-Angaben (`ohneTemperaturen`).
+
 Regeln: Link immer mit UTM `utm_source=pinterest&utm_medium=social&utm_campaign=rezept-pins`. Erste zwei Wochen nur Entwürfe in Metricool, öffentlich erst nach Uwes Freigabe. Status: `privat/pinterest/status.json`.
