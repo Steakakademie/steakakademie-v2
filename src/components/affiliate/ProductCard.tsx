@@ -158,7 +158,7 @@ function ProductImagePlaceholder({
       )}
       style={{ background: 'radial-gradient(120% 120% at 50% 25%, #C8882A 0%, #5a3c14 45%, #0D0A06 100%)' }}
       role="img"
-      aria-label={`${brand} — Symbolbild (kein Originalfoto verfügbar)`}
+      aria-label={`${brand} — kein Produktfoto, Kategorie-Symbol`}
     >
       {/* dezenter Glanz oben */}
       <span
@@ -167,13 +167,17 @@ function ProductImagePlaceholder({
         aria-hidden="true"
       />
       <CategoryGlyph category={category} className={cn('text-brand-gold/90 drop-shadow-sm', icon)} />
+      {/* Markenname statt „Symbolbild“ (Audit 20.10.2026): Das Feld ist ein Kategorie-Symbol,
+          kein Produktfoto — die Beschriftung „Symbolbild“ wirkte auf jeder Rezeptseite wie ein
+          vergessener Platzhalter. Der Rechtshinweis für echte generische Fotos (SymbolicBadge)
+          bleibt unverändert. */}
       <span
         className={cn(
-          'mt-1 font-sans font-bold uppercase text-zinc-300/80 leading-none',
+          'mt-1 max-w-[90%] truncate font-sans font-bold uppercase text-zinc-300/80 leading-none',
           caption
         )}
       >
-        Symbolbild
+        {brand}
       </span>
     </div>
   );

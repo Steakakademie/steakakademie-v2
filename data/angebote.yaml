@@ -217,7 +217,10 @@ angebote:
     # DIESER STATUS STEUERT AUCH DIE SEITE: /steak-beichte zeigt die Kaufknöpfe
     # nur bei `live` (verkaufsstand() in src/lib/angebote/register.ts).
     # Verkaufsstart = diese Zeile auf `live` setzen, `ab` entfernen.
-    status: live
+    # 20.10.2026 zurück auf ab_datum (Uwe, nach Website-Audit): Gewerbe noch
+    # nicht angemeldet — kein Verkauf, bis es steht.
+    status: ab_datum
+    ab: "2026-11-01"
     preis_text: ab 7 €
     knopf: Zur Steak-Beichte
     anlaesse:

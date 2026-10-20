@@ -58,7 +58,8 @@ export async function POST(req: Request) {
   // Vor allem anderen: Ohne verschickbare Bestaetigung und ohne Druckdienst
   // wird keine verbindliche Bestellung angenommen (src/lib/urkunde/bestellbar.ts).
   if (!urkundeBestellbar()) {
-    console.warn('[urkunde/bestellen] abgelehnt, Konfiguration fehlt:', urkundeFehlendeKonfiguration().join(', '));
+    const fehlt = urkundeFehlendeKonfiguration();
+    console.warn('[urkunde/bestellen] abgelehnt:', fehlt.length ? `Konfiguration fehlt: ${fehlt.join(', ')}` : 'Verkaufsschalter URKUNDE_VERKAUF nicht an');
     return jsonError(503, NICHT_BESTELLBAR);
   }
 
