@@ -29,6 +29,14 @@ export function urkundeFehlendeKonfiguration(): string[] {
   return NOETIG.filter((name) => !process.env[name]);
 }
 
+/**
+ * Verkaufsschalter (20.10.2026, Uwe nach Website-Audit): Die gedruckte Urkunde
+ * ist ein Verkauf — erst nach der Gewerbeanmeldung. Freischalten:
+ * Vercel-Env URKUNDE_VERKAUF=an (Production) + Redeploy. Gleiches Muster wie
+ * NEXT_PUBLIC_MEIN_PROTOKOLL_VERKAUF. Die digitale Urkunde bleibt kostenlos.
+ */
+export const URKUNDE_VERKAUF_AN = () => process.env.URKUNDE_VERKAUF === 'an';
+
 export function urkundeBestellbar(): boolean {
-  return urkundeFehlendeKonfiguration().length === 0;
+  return URKUNDE_VERKAUF_AN() && urkundeFehlendeKonfiguration().length === 0;
 }
