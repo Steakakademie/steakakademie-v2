@@ -61,6 +61,11 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
 
   function suchen(e: React.FormEvent) {
     e.preventDefault();
+    // Leeres Feld: sagen, was fehlt — sonst wirkt der Knopf kaputt (Audit 20.10.2026).
+    if (!zutat.trim()) {
+      setHinweis('Gib zuerst eine Zutat ein.');
+      return;
+    }
     abfragen(zutat);
   }
 
@@ -327,6 +332,11 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
 
   function erstellen(e: React.FormEvent) {
     e.preventDefault();
+    // Leeres Feld: sagen, was fehlt — sonst wirkt der Knopf kaputt (Audit 20.10.2026).
+    if (!auftrag.trim()) {
+      setHinweis('Beschreib zuerst dein Wunschgericht — zum Beispiel „Ribeye mit Kaffee-Kruste“.');
+      return;
+    }
     generate(auftrag);
   }
 
