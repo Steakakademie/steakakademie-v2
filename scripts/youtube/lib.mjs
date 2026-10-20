@@ -50,9 +50,20 @@ export function zugang(basis = wurzel()) {
   return z;
 }
 
-let cache = null;
+/**
+ * Zweite Verbindung für den privaten Kanal von u.yendell@gmail.com (Playlist-Umzug, 20.10.2026).
+ * Gleicher OAuth-Client, eigener Refresh-Token: YOUTUBE_PRIVAT_REFRESH_TOKEN.
+ */
+export function zugangPrivat(basis = wurzel()) {
+  const z = { ...zugang(basis), refreshToken: wert('YOUTUBE_PRIVAT_REFRESH_TOKEN', basis), kanalId: undefined };
+  if (!z.refreshToken) throw new Error('YOUTUBE_PRIVAT_REFRESH_TOKEN fehlt in .env.local (docs/youtube-anbindung.md)');
+  return z;
+}
+
+const caches = new Map();
 /** Frisches Zugriffstoken über den Refresh-Token. Fehlertexte enthalten nie Geheimnisse. */
 export async function token(z = zugang(), f = fetch) {
+  const cache = caches.get(z.refreshToken);
   if (cache && cache.bis > Date.now() + 60_000) return cache.wert;
   const r = await f(TOKEN_URL, {
     method: 'POST',
@@ -71,17 +82,17 @@ export async function token(z = zugang(), f = fetch) {
       : `Token-Abruf fehlgeschlagen (HTTP ${r.status}${j.error ? `, ${j.error}` : ''})`;
     throw new Error(grund);
   }
-  cache = { wert: j.access_token, bis: Date.now() + (j.expires_in ?? 3600) * 1000 };
-  return cache.wert;
+  caches.set(z.refreshToken, { wert: j.access_token, bis: Date.now() + (j.expires_in ?? 3600) * 1000 });
+  return j.access_token;
 }
 
-/** Aufruf der Data API. Bei Fehlern nur Status + API-Grund, nie der Token. */
-export async function api(pfad, { params = {}, method = 'GET', body, f = fetch, basis = DATA_API } = {}) {
+/** Aufruf der Data API. Bei Fehlern nur Status + API-Grund, nie der Token. `z` wählt die Verbindung. */
+export async function api(pfad, { params = {}, method = 'GET', body, f = fetch, basis = DATA_API, z } = {}) {
   const url = new URL(`${basis}/${pfad}`.replace(/\/+$/, ''));
   for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
   const r = await f(url, {
     method,
-    headers: { authorization: `Bearer ${await token(undefined, f)}`, ...(body ? { 'content-type': 'application/json' } : {}) },
+    headers: { authorization: `Bearer ${await token(z, f)}`, ...(body ? { 'content-type': 'application/json' } : {}) },
     body: body ? JSON.stringify(body) : undefined,
   });
   const j = await r.json().catch(() => ({}));
@@ -93,11 +104,11 @@ export async function api(pfad, { params = {}, method = 'GET', body, f = fetch, 
 }
 
 /** Alle Seiten einer list-Methode einsammeln. */
-export async function alle(pfad, params, { max = 5000, f } = {}) {
+export async function alle(pfad, params, { max = 5000, f, z } = {}) {
   const items = [];
   let pageToken;
   do {
-    const j = await api(pfad, { params: { ...params, pageToken }, f });
+    const j = await api(pfad, { params: { ...params, pageToken }, f, z });
     items.push(...(j.items ?? []));
     pageToken = j.nextPageToken;
   } while (pageToken && items.length < max);

@@ -8,6 +8,7 @@ import { offen } from './kommentare.mjs'
 import { diff } from './metadaten.mjs'
 import { zeitraum } from './analytics.mjs'
 import { abgleich } from './playlists.mjs'
+import { nichtKopierbar, offeneVideos } from './playlists-kopieren.mjs'
 
 describe('sekunden / istShort', () => {
   it('parst ISO-8601-Dauern', () => {
@@ -130,6 +131,19 @@ describe('abgleich (Playlists)', () => {
     const erg = abgleich(plan, vorhanden, { PL1: ['a'] })
     expect(erg[0]).toMatchObject({ id: 'PL1', fehlend: ['b'] })
     expect(erg[1]).toMatchObject({ id: null, fehlend: ['c'] })
+  })
+})
+
+describe('Playlist-Umzug', () => {
+  it('lässt erledigte und übersprungene Videos aus, Reihenfolge bleibt', () => {
+    expect(offeneVideos(['a', 'b', 'c', 'd'], { erledigt: ['a'], uebersprungen: ['c'] })).toEqual(['b', 'd'])
+    expect(offeneVideos(['a'], undefined)).toEqual(['a'])
+  })
+  it('überspringt nicht kopierbare Videos statt abzubrechen', () => {
+    expect(nichtKopierbar('POST playlistItems: HTTP 404 videoNotFound')).toBe(true)
+    expect(nichtKopierbar('POST playlistItems: HTTP 403 forbidden')).toBe(true)
+    expect(nichtKopierbar('POST playlistItems: HTTP 403 quotaExceeded')).toBe(false)
+    expect(nichtKopierbar('POST playlistItems: HTTP 500 backendError')).toBe(false)
   })
 })
 

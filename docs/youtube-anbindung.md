@@ -27,6 +27,7 @@ Stand 20.10.2026 · eingerichtet von Claude auf Uwes Freigabe
 | `node scripts/youtube/kanal.mjs --datei <json> [--anwenden]` | Kanalbeschreibung, Keywords, Sprache, Land | 50 |
 | `node scripts/youtube/upload.mjs --datei … --titel … --ki ja\|nein [--veroeffentlichen-am …]` | Upload **immer privat oder geplant**, nie sofort öffentlich; `--ki` ist Pflicht | eigener Upload-Topf |
 | `node scripts/youtube/playlists.mjs --plan <json> [--anwenden]` | Playlists anlegen/befüllen, idempotent (gleicher Titel = gleiche Liste, keine Duplikate) | 50 je Liste/Video |
+| `node scripts/youtube/playlists-kopieren.mjs [--anwenden] [--max-einheiten 8000]` | private Playlists Firmenkanal → Privatkanal, fortsetzbar, löscht nichts | 50 je Liste/Video |
 
 Ausgaben landen unter `privat/youtube/` (gitignored). Läufe außerhalb des Repos: `SA_WURZEL=<repo>` setzen.
 
@@ -37,6 +38,18 @@ Ausgaben landen unter `privat/youtube/` (gitignored). Läufe außerhalb des Repo
 3. **Kommentare** beantwortet nur Uwe oder Claude nach Freigabe (öffentlich, im Namen der Steakakademie).
 4. **Keine Kerntemperaturen in YouTube-Texten**, solange die Referenz (`data/kerntemperatur-referenz.yaml`) und die Rezepte nicht übereinstimmen. Die Rezeptseite ist die einzige Quelle.
 5. **Schreibänderungen** zuerst als Probelauf, dann ein einzelnes Video als Probe, dann alle. YouTube braucht 30–60 s, bis Änderungen lesbar sind.
+
+## Umzug ins Brand-Konto + private Playlists (Entscheidung 20.10.2026)
+
+Uwe hat entschieden: Kanal in ein neues Brand-Konto „Steakakademie“ verschieben, damit Privatkonto und Marke getrennt sind. Reihenfolge:
+
+1. **Uwe:** Studio-Berechtigungen räumen und deaktivieren → leeres Brand-Konto „Steakakademie“ anlegen → Kanal dorthin verschieben (Ziel darf nur das neue, leere Konto sein, der Zielkanal wird ersetzt).
+2. **Claude:** Kanal-ID, Handle, Videos, Playlists prüfen. Den bisherigen Token in `YOUTUBE_PRIVAT_REFRESH_TOKEN` umbenennen (er gehört zu u.yendell@gmail.com und zeigt nach dem Umzug auf dessen neuen Privatkanal), Firmenkanal neu anmelden (Brand-Konto auswählen) → `YOUTUBE_REFRESH_TOKEN`.
+3. **Uwe:** im Konto u.yendell@gmail.com einen neuen Privatkanal anlegen.
+4. **Claude:** `node scripts/youtube/playlists-kopieren.mjs --anwenden` nächtlich (Budget 8.000 Einheiten/Lauf), bis alle Listen kopiert sind.
+5. **Uwe:** Originale im Firmenkanal selbst löschen. Claude führt kein endgültiges Löschen aus.
+
+Plan: `privat/youtube/playlists-privat-plan.json` — 117 Listen / 1.131 Videos „kopieren“, 23 Listen „firma“ (bleiben privat im Firmenkanal), 5 leere „leer-loeschen“. Fortschritt: `privat/youtube/kopie-status.json`.
 
 ## Neu anmelden (wenn `invalid_grant` kommt)
 
