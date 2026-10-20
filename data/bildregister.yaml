@@ -338,8 +338,26 @@ bilder:
   images/rezepte/iberico-carrillera.jpg: { status: offen }
   images/rezepte/iberico-pluma-hero.jpg: { status: offen }
   images/rezepte/iberico-pluma.jpg: { status: offen }
-  images/rezepte/iberico-presa-hero.jpg: { status: offen }
-  images/rezepte/iberico-presa.jpg: { status: offen }
+  images/rezepte/iberico-presa-hero.jpg:
+    status: lizenz
+    quelle: Pexels (ID 18824023)
+    urheber: Boris Ivas
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/18824023/
+    erworben_am: 2026-10-20
+    namensnennung: false
+    hinweis: Zuschnitt aus dem Hochformat-Original; Pexels-Titel "Meat on a Grill" (Rippchen), Schnitt/Tierart nicht belegt; keine Person erkennbar
+  images/rezepte/iberico-presa.jpg:
+    status: lizenz
+    quelle: Pexels (ID 18824023)
+    urheber: Boris Ivas
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/18824023/
+    erworben_am: 2026-10-20
+    namensnennung: false
+    hinweis: Zuschnitt aus dem Hochformat-Original; Pexels-Titel "Meat on a Grill" (Rippchen), Schnitt/Tierart nicht belegt; keine Person erkennbar
   images/rezepte/iberico-secreto-hero.jpg: { status: offen }
   images/rezepte/iberico-secreto.jpg: { status: offen }
   images/rezepte/ikan-bakar-singapur.jpg: { status: offen }

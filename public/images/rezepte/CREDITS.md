@@ -97,6 +97,7 @@ Nachgetragen am 16.10.2026, Wächter seitdem: `src/__tests__/rezeptbild-credits.
 | patlican-kebab | Pexels | Shameel Mukkath | 5191846 + 5191850 | Collage nebeneinander | false | 14.10.2026 |
 | smoked-chuck-roast-poor-mans-brisket | Unsplash | Archer Allstars (@archerallstars) | s4jdYaQOAqM | Web-Zuschnitt 4:3/-Kompression | false | 17.10.2026 |
 | memphis-dry-ribs-spareribs-nur-rub | Unsplash | Brian Wegman (@trytoscareme) | QtLYiB6P-KM | Web-Zuschnitt 1600x1200 (4:3)/-Kompression | false | offen (PR 444, Merge durch Uwe) |
+| iberico-presa | Pexels | Boris Ivas | 18824023 | Web-Zuschnitt 4:3 und 16:9 aus Hochformat-Original/-Kompression; Pexels-Titel „Meat on a Grill“ (Rippchen), Schnitt/Tierart nicht belegt | false | offen (Merge durch Uwe) |
 
 ## Übriger Bestand
 
