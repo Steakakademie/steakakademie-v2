@@ -278,7 +278,13 @@ bilder:
   images/rezepte/alabama-white-sauce.jpg: { status: offen }
   images/rezepte/asado-de-tira-hero.jpg: { status: offen }
   images/rezepte/asado-de-tira.jpg: { status: offen }
-  images/rezepte/aussie-lamb-leg-butterflied.jpg: { status: offen }
+  images/rezepte/aussie-lamb-leg-butterflied.jpg:
+    status: ki
+    quelle: Adobe Firefly (Prompt "whole butterflied leg of lamb lying flat on the grate of a charcoal grill, garlic, rosemary, lemon"), von Uwe Yendell erzeugt, ersetzt das bisherige KI-Bild (zeigte einen Rollbraten statt einer aufgeklappten Keule)
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-21
+    hinweis: Adobe-Tarif auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren PNG zu JPG entfallen; Zuschnitt 4:3 aus 2816x1536; am rechten Rand ist ein Hachsenknochen sichtbar; keine Marke oder Schrift erkennbar
   images/rezepte/australische-riesengarnelen-barbie.jpg: { status: offen }
   images/rezepte/avocado-gremolata-grill.jpg: { status: offen }
   images/rezepte/baked-alaska-grill.jpg: { status: offen }
