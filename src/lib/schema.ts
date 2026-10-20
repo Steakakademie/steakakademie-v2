@@ -47,7 +47,7 @@ export function organizationSchema() {
     sameAs: [
       'https://www.wikidata.org/wiki/Q140455747',
       'https://www.instagram.com/steakakademie',
-      'https://www.youtube.com/@steakakademie',
+      'https://www.youtube.com/@master_of_steak',
       'https://www.tiktok.com/@steakakademie',
       'https://www.facebook.com/steakakademie.de',
     ],
