@@ -8,7 +8,7 @@ import { offen } from './kommentare.mjs'
 import { diff } from './metadaten.mjs'
 import { zeitraum } from './analytics.mjs'
 import { abgleich } from './playlists.mjs'
-import { nichtKopierbar, offeneVideos } from './playlists-kopieren.mjs'
+import { duplikate, kontingentTag, mitWiederholung, nichtKopierbar, offeneVideos } from './playlists-kopieren.mjs'
 
 describe('sekunden / istShort', () => {
   it('parst ISO-8601-Dauern', () => {
@@ -138,6 +138,22 @@ describe('Playlist-Umzug', () => {
   it('lässt erledigte und übersprungene Videos aus, Reihenfolge bleibt', () => {
     expect(offeneVideos(['a', 'b', 'c', 'd'], { erledigt: ['a'], uebersprungen: ['c'] })).toEqual(['b', 'd'])
     expect(offeneVideos(['a'], undefined)).toEqual(['a'])
+  })
+  it('Kontingent-Tag folgt der Zeitzone Kalifornien', () => {
+    expect(kontingentTag(new Date('2026-10-21T06:00:00Z'))).toBe('2026-10-20') // 08:00 Berlin, vor dem Reset
+    expect(kontingentTag(new Date('2026-10-21T07:30:00Z'))).toBe('2026-10-21') // 09:30 Berlin, nach dem Reset
+  })
+  it('findet Duplikate', () => {
+    expect(duplikate(['a', 'b', 'a', 'c', 'b'])).toEqual(['a', 'b'])
+    expect(duplikate(['a', 'b'])).toEqual([])
+  })
+  it('wiederholt bei 409, gibt bei anderen Fehlern sofort auf', async () => {
+    let n = 0
+    const ok = await mitWiederholung(async () => { if (++n < 3) throw new Error('POST playlistItems: HTTP 409 SERVICE_UNAVAILABLE'); return 'ok' }, { pause: 1 })
+    expect([ok, n]).toEqual(['ok', 3])
+    let m = 0
+    await expect(mitWiederholung(async () => { m++; throw new Error('POST playlistItems: HTTP 403 quotaExceeded') }, { pause: 1 })).rejects.toThrow(/quota/)
+    expect(m).toBe(1)
   })
   it('überspringt nicht kopierbare Videos statt abzubrechen', () => {
     expect(nichtKopierbar('POST playlistItems: HTTP 404 videoNotFound')).toBe(true)
