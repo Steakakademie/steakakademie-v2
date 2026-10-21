@@ -310,8 +310,20 @@ bilder:
   images/rezepte/buttermilchbrot-grill.jpg: { status: offen }
   images/rezepte/ca-nuong-bananenblatt.jpg: { status: offen }
   images/rezepte/carolina-mustard-sauce.jpg: { status: offen }
-  images/rezepte/cedar-plank-lachs-hero.jpg: { status: offen }
-  images/rezepte/cedar-plank-lachs.jpg: { status: offen }
+  images/rezepte/cedar-plank-lachs-hero.jpg:
+    status: ki
+    quelle: Adobe Firefly (Modell laut Dateiname "Gemini Flash", Prompt "skin-on salmon fillet on soaked cedar plank, maple-Dijon glaze, dill, lemon"), von Uwe Yendell erzeugt, ersetzt das bisherige Bild (rohes Lachsfilet auf Holzbrett ohne Zedernplanke)
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-21
+    hinweis: Adobe-Tarif und Partnermodell (Gemini Flash) auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren entfallen; Zuschnitt 16:9 aus 2368x1792; keine Marke oder Schrift erkennbar
+  images/rezepte/cedar-plank-lachs.jpg:
+    status: ki
+    quelle: Adobe Firefly (Modell laut Dateiname "Gemini Flash", Prompt "skin-on salmon fillet on soaked cedar plank, maple-Dijon glaze, dill, lemon"), von Uwe Yendell erzeugt, ersetzt das bisherige Bild (rohes Lachsfilet auf Holzbrett ohne Zedernplanke)
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-21
+    hinweis: Adobe-Tarif und Partnermodell (Gemini Flash) auf kommerzielle Nutzung pruefen; C2PA-Marker beim Konvertieren entfallen; Zuschnitt 16:10 aus 2368x1792; keine Marke oder Schrift erkennbar
   images/rezepte/chateaubriand-filet-hero.jpg: { status: offen }
   images/rezepte/chateaubriand-filet.jpg: { status: offen }
   images/rezepte/cheesecake-vom-grill.jpg: { status: offen }

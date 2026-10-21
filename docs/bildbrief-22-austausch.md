@@ -38,7 +38,7 @@
 Frontmatter mit `imageSource`/`imageAI`/neuem `imageAlt`, Provenienz in
 `public/images/rezepte/CREDITS.md`.
 
-**Offen: `cedar-plank-lachs` — drei Anläufe, kein brauchbares Bild.**
+**Erledigt 21.10.2026: `cedar-plank-lachs` — per Adobe Firefly neu erzeugt (Lachs auf Zedernplanke mit Glasur), siehe `data/bildregister.yaml`. Der Rest dieses Abschnitts ist der Verlauf der drei erfolglosen Stock-Anläufe.**
 
 1. `pixabay-4051565` — gegarter Lachs auf verkohlter Planke, aber von der Glut
    rotgetränkt. Abgelehnt: unschön.

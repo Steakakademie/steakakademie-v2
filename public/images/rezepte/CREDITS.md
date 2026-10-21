@@ -15,7 +15,6 @@ keine Pflichtangabe. Einstufung je Quelle: docs/bildquellen-whitelist.md.
 
 | Slug | Quelle | Fotograf | Foto-ID | Abnahme |
 |------|--------|----------|---------|---------|
-| cedar-plank-lachs | Pexels | A D R I A N A | 37245150 | 19.08.2026 |
 | bourbon-brisket-pairing | Pexels | Hayden Walker | 9397270 | 18.08.2026 |
 | braaibroodjies | Unsplash | Erik Mclean | uKVaDWj7n-A | 18.08.2026 |
 | bun-cha-hanoi | Pexels | Markus Winkler | 3858270 | 18.08.2026 |
@@ -65,15 +64,6 @@ EXIF-Daten bleiben erhalten und sind der Herkunftsnachweis.
   (vermutlich beim Grading/Export gestrippt, vgl. `compliance/ai-act-einstufung.md`).
   Frontmatter korrigiert: `imageAI: true` + `imageSource` gesetzt. Damit rendert das
   „KI-Symbolbild"-Badge (RecipeTemplate.tsx) korrekt.
-
-## Offener Befund
-
-- `cedar-plank-lachs` — Bild am 19.08.2026 ersetzt, der Audit-Befund
-  ("keine Zedernplanke") bleibt aber **offen**. Vier Suchläufe über drei
-  Bibliotheken fanden kein Foto von Lachs auf sichtbarer Zedernplanke. Das
-  gewählte Bild zeigt rohen Lachs auf einem Holzbrett; der Alt-Text behauptet
-  entsprechend keine Zedernplanke. Beschaffung eines passenden Motivs per
-  Stock-Einzelkauf oder Eigenfoto: KAN-78.
 
 ## Rezept-Agent und Einzelfälle (seit 17.08.2026)
 
