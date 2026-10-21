@@ -67,7 +67,6 @@ export default async function MutterrezeptSeite(props: Props) {
 
   const url = `/mutterrezepte/${m.slug}`;
   const frei = anzahlFrei(m);
-  const laender = new Set(m.blaetter.map((b) => b.land)).size;
 
   const recipeLd = {
     '@context': 'https://schema.org',
@@ -122,7 +121,7 @@ export default async function MutterrezeptSeite(props: Props) {
             <p className="mt-4 font-body text-[1.08rem] leading-relaxed text-text-secondary">
               Cremig wie Mayonnaise, frisch durch Limette, ohne Ei und ohne Milch. Wie bei den Muttersaucen der
               klassischen Küche steht ein Grundrezept in der Mitte — und daraus werden Dip, Spiegel, Dressing,
-              Marinade oder warme Sauce. Die Ideen stammen aus {laender} Küchen rund um die Welt, jede mit Quelle.
+              Marinade oder warme Sauce. Die Ideen stammen aus Küchen rund um die Welt, von Brasilien bis Japan — jede mit Quelle.
             </p>
             <p className="mt-5 font-sans text-xs text-text-muted">Von Jonas · Saucen &amp; Rubs</p>
             <AutorHinweis authorSlug={m.autorSlug} variante="rezept" dokument={m} />
