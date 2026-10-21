@@ -1,16 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ChevronRight, ChefHat, Clock, Scale } from 'lucide-react';
+import { ChevronRight, ChefHat, Clock, Scale, Sparkles } from 'lucide-react';
 import { allRecipes } from 'contentlayer/generated';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AutorHinweis from '@/components/AutorHinweis';
 import MutterrezeptBaum from '@/components/mutterrezepte/MutterrezeptBaum';
+import GeraeteLink from '@/components/affiliate/GeraeteLink';
+import { ohneGeraete, schrittTeile } from '@/lib/mutterrezepte/schritt-text';
 import { MUTTERREZEPTE, anzahlFrei, mutterrezept, sicht } from '@/lib/mutterrezepte';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
 import { authorSchemaRef, breadcrumbSchema } from '@/lib/schema';
-import { ogImages } from '@/lib/og';
 
 /**
  * /mutterrezepte/[slug] — Mutterrezept mit Pairing-Baum (Konzept vom 21.10.2026,
@@ -48,7 +50,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description: m.beschreibung,
       url,
       type: 'article',
-      images: ogImages(m.titel, `Mutterrezept · ${m.blaetter.length} Einsätze`),
+      images: [{ url: `${BASIS}${m.bild.src}`, width: 1376, height: 768, alt: m.bild.alt }],
     },
   };
 }
@@ -73,7 +75,7 @@ export default async function MutterrezeptSeite(props: Props) {
     '@type': 'Recipe',
     name: m.titel,
     description: m.beschreibung,
-    image: `${BASIS}${ogImages(m.titel, 'Mutterrezept')[0].url}`,
+    image: `${BASIS}${m.bild.src}`,
     author: authorSchemaRef(m.autorSlug),
     datePublished: m.veroeffentlicht,
     prepTime: 'PT20M',
@@ -86,7 +88,7 @@ export default async function MutterrezeptSeite(props: Props) {
       '@type': 'HowToStep',
       position: i + 1,
       name: s.titel,
-      text: s.text,
+      text: ohneGeraete(s.text),
     })),
   };
   const breadcrumbLd = breadcrumbSchema([
@@ -111,7 +113,8 @@ export default async function MutterrezeptSeite(props: Props) {
           </nav>
 
           {/* ── Hero ── */}
-          <header className="max-w-3xl">
+          <header className="grid items-center gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <span className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-brand-fire">
               Mutterrezept · Saucen
             </span>
@@ -125,6 +128,25 @@ export default async function MutterrezeptSeite(props: Props) {
             </p>
             <p className="mt-5 font-sans text-xs text-text-muted">Von Jonas · Saucen &amp; Rubs</p>
             <AutorHinweis authorSlug={m.autorSlug} variante="rezept" dokument={m} />
+            </div>
+            {/* Ein Bild je Mutterrezept (Uwe, 22.10.2026). Kennzeichnung wie RecipeTemplate:
+                Alt-Text und Badge sagen beide „KI-Symbolbild“, Erklärtiefe unter /ki-disclaimer. */}
+            <figure className="relative aspect-video overflow-hidden rounded-2xl border border-border-subtle lg:col-span-5">
+              <Image
+                src={m.bild.src}
+                alt={`${m.bild.alt} — ${m.bild.ki ? 'KI-generiertes Symbolbild' : 'Symbolbild'}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-cover"
+              />
+              <Link
+                href="/ki-disclaimer"
+                className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 border border-white/15 bg-black/65 px-2 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-200 backdrop-blur-sm transition-colors hover:border-white/30 hover:text-white"
+              >
+                <Sparkles size={10} /> {m.bild.ki ? 'KI-Symbolbild' : 'Symbolbild'}
+              </Link>
+            </figure>
           </header>
 
           {/* ── Grundrezept ── */}
@@ -163,7 +185,17 @@ export default async function MutterrezeptSeite(props: Props) {
                     </span>
                     <div>
                       <h3 className="font-sans text-sm font-bold uppercase tracking-wide text-text-light">{s.titel}</h3>
-                      <p className="mt-1 font-body leading-relaxed text-text-primary">{s.text}</p>
+                      <p className="mt-1 font-body leading-relaxed text-text-primary">
+                        {schrittTeile(s.text).map((t, k) =>
+                          t.typ === 'geraet' ? (
+                            <GeraeteLink key={k} id={t.id} platz={`mr-${m.slug}-s${i + 1}`}>
+                              {t.wort}
+                            </GeraeteLink>
+                          ) : (
+                            <span key={k}>{t.text}</span>
+                          ),
+                        )}
+                      </p>
                     </div>
                   </li>
                 ))}

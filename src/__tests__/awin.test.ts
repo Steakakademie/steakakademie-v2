@@ -113,7 +113,10 @@ describe('Partnerziele im Produktregister (14.10.2026)', () => {
 
   it('SharkNinja (14.10.2026): Ninja Woodfire und die Küchenmaschine zeigen auf Produktseiten bei sharkninja.de', () => {
     const ninja = mitZiel.filter((p) => p.partnerZiele!.some((z) => z.advertiser === 'sharkninja'));
+    // 22.10.2026: + Stabmixer-Set CI100EU und Standmixer TB301EU für die Geräte-Links in Rezeptschritten
     expect(ninja.map((p) => p.id).sort()).toEqual([
+      'ninja-detect-power-mixer-pro-tb301',
+      'ninja-foodi-ci100',
       'ninja-precisionpro-bz651',
       'ninja-woodfire-og701',
       'ninja-woodfire-pro-connect-xl-og901',
@@ -121,7 +124,7 @@ describe('Partnerziele im Produktregister (14.10.2026)', () => {
     expect(ninja.filter((p) => p.category === 'grill').map((p) => p.name)).toEqual(
       expect.arrayContaining([expect.stringContaining('Woodfire'), expect.stringContaining('Woodfire')]),
     );
-    expect(ninja.find((p) => p.category === 'kuechenmaschine')?.name).toContain('Küchenmaschine');
+    expect(ninja.find((p) => p.id === 'ninja-precisionpro-bz651')?.name).toContain('Küchenmaschine');
     for (const p of ninja) {
       const z = p.partnerZiele![0];
       // Produktseite, keine Kategorie- oder Startseite: Pfad endet auf <SKU>.html

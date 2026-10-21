@@ -89,6 +89,11 @@ export interface ZutatLoeffel {
 
 export interface Schritt {
   titel: string;
+  /**
+   * Schritttext. Ein Gerät aus dem Produktregister wird als `[[produkt-id|Wort]]`
+   * eingebettet und von der Seite als GeraeteLink gerendert (nur im freien Grundrezept —
+   * der VIP-Bereich bleibt werbefrei, Uwe 21.10.2026).
+   */
   text: string;
 }
 
@@ -102,6 +107,8 @@ export interface Mutterrezept {
   veroeffentlicht: string;
   /** Prüfdatum durch den fachlich Verantwortlichen (wie Frontmatter `reviewedAt`). Fehlt es, gibt es keine Prüf-Aussage. */
   reviewedAt?: string | null;
+  /** Hauptbild unter /public (16:9). Genau EIN Bild je Mutterrezept, die Blätter bleiben unbebildert (Uwe, 22.10.2026). */
+  bild: { src: string; alt: string; ki: boolean; quelle: string };
   ergibt: string;
   zeit: string;
   zutatenGramm: ZutatGramm[];

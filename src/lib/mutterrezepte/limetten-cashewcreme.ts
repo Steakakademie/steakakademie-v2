@@ -57,6 +57,15 @@ export const LIMETTEN_CASHEWCREME: Mutterrezept = {
     'Cremig wie Mayonnaise, frisch durch Limette, ohne Ei und ohne Milch: die Limetten-Cashewcreme als Mutterrezept — mit Einsätzen als Dip, Spiegel, Klecks, Dressing, Marinade und warme Sauce für Gemüse, Fleisch, Fisch und Beilagen vom Grill.',
   autorSlug: 'jonas',
   veroeffentlicht: '2026-10-21',
+  // Entscheidung Uwe 22.10.2026: ein KI-Bild je Mutterrezept (Nano Banana Pro via fal.ai,
+  // Text-zu-Bild — zulässig, weil kein Fleisch im Motiv; Bildstrategie: Fleisch nur ab Echtfoto).
+  // Die 48 Einsätze bleiben unbebildert, bis die Pilotbilder zuverlässig das Richtige zeigen.
+  bild: {
+    src: '/images/mutterrezepte/limetten-cashewcreme.jpg',
+    alt: 'Dunkle Schale mit glatter Limetten-Cashewcreme, darauf ein Faden Olivenöl und grober Pfeffer; daneben eine halbe Limette, rohe Cashewkerne und ein Stück gegrilltes Fladenbrot auf einem Holzbrett',
+    ki: true,
+    quelle: 'KI-generiert (Nano Banana Pro via fal.ai), 22.10.2026',
+  },
   ergibt: 'ca. 300 g, vier Portionen',
   zeit: '5 Min. aktiv, plus 15 Min. Einweichen (empfohlen)',
   zutatenGramm: [
@@ -86,7 +95,7 @@ export const LIMETTEN_CASHEWCREME: Mutterrezept = {
     },
     {
       titel: 'Pürieren',
-      text: 'Stabmixer bis auf den Boden setzen und auf höchster Stufe pürieren, dabei langsam auf und ab ziehen, bis die Masse glatt ist.',
+      text: '[[ninja-foodi-ci100|Stabmixer]] bis auf den Boden setzen und auf höchster Stufe pürieren, dabei langsam auf und ab ziehen, bis die Masse glatt ist. Mit einem [[ninja-detect-power-mixer-pro-tb301|Standmixer]] geht es schneller, und das Einweichen kannst du dir meist sparen.',
     },
     {
       titel: 'Konsistenz einstellen',

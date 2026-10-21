@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProductById } from '@/lib/products';
+import { weiterleitungsZiel } from '@/lib/partnerziel';
 
 /**
  * Affiliate-Redirect Layer
@@ -71,11 +72,14 @@ export async function GET(
     // Tracking-Fehler niemals Redirect blockieren
   }
 
-  // 302 Redirect mit Cache-Buster-Header
-  const response = NextResponse.redirect(product.affiliateUrl, { status: 302 });
+  // 22.10.2026: Ziel ueber den einen Schalter (src/lib/partnerziel.ts) — Netzwerk-
+  // Partner mit `status: active` vor affiliateUrl. `?p=<platz>` wird zum AWIN-clickref,
+  // damit im Bericht steht, welcher Rezeptschritt den Klick gebracht hat.
+  const ziel = weiterleitungsZiel(product, request.nextUrl.searchParams.get('p'));
+  const response = NextResponse.redirect(ziel.url, { status: 302 });
   response.headers.set('Cache-Control', 'no-store, no-cache');
   response.headers.set('X-Product-Id', product.id);
-  response.headers.set('X-Provider', product.provider);
+  response.headers.set('X-Provider', ziel.partner ?? product.provider);
 
   return response;
 }

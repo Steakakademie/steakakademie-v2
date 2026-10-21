@@ -831,6 +831,59 @@
 # affiliateUrl bleibt bis zum AWIN-Start (01.11.2026) die Amazon-Suche; keine Sterne eingetragen.
 # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/19810
 
+# ── NINJA MIXER (SharkNinja DE, AWIN-ID 19810) ───────────────────────────────
+# Eingetragen 22.10.2026 für die Geräte-Links in Rezeptschritten (Konzept
+# claude/konzept_geraete_links_in_rezepten_2026-10-21.md). Namen, Ausstattung und
+# Preise von sharkninja.de am 21./22.10.2026 (Herstellerangaben). SharkNinja hat
+# Uwe die Bewerbung einzelner Geräte innerhalb von Rezepten zugesagt (21.10.2026).
+# affiliateUrl bleibt bis zum AWIN-Start die Amazon-Suche; die Umschaltung auf den
+# Partnerlink läuft über `status: active` im Programmregister (/go/<id>).
+# Keine Sterne eingetragen (nicht geprüft). CI100EU gibt es nur als Set.
+
+- id: ninja-foodi-ci100
+  name: "Ninja Foodi 3-in-1 Hand- & Stabmixer Set (CI100EU)"
+  brand: "Ninja"
+  category: kuechenmaschine
+  price: 120 # 119,99 € bei sharkninja.de, 21.10.2026 (UVP 129,99 €)
+  affiliateUrl: "https://www.amazon.de/s?k=Ninja+Foodi+CI100EU&tag=steakakademie-21"
+  provider: amazon
+  description: "850-Watt-Motorbasis mit Stabmixer-Aufsatz, Handmixer (Rührbesen, Knethaken) und 700-ml-Zerkleinerer — ein Antrieb, drei Geräte"
+  pros:
+    - "Stabmixer für Cremes, Saucen und Suppen direkt im Gefäß"
+    - "700-ml-Zerkleinerer für Kräuter, Nüsse und Chimichurri"
+    - "Laut Hersteller spülmaschinenfeste Aufsätze"
+  cons:
+    - "Nur als Set erhältlich, nicht als einzelner Stabmixer"
+    - "Bestand bei sharkninja.de schwankt (21.10.2026: geringer Lagerbestand)"
+  badge: "Für Saucen"
+  lastChecked: "2026-10-21"
+  recommended: false
+  partnerZiele:
+    - advertiser: sharkninja
+      url: "https://www.sharkninja.de/ninja-foodi-3-in-1-hand-stabmixer-set/CI100EU.html"
+      geprueft: "2026-10-21"
+
+- id: ninja-detect-power-mixer-pro-tb301
+  name: "Ninja Detect Power Mixer Pro für Einzelportionen (TB301EU)"
+  brand: "Ninja"
+  category: kuechenmaschine
+  price: 220 # 219,99 € bei sharkninja.de, 22.10.2026
+  affiliateUrl: "https://www.amazon.de/s?k=Ninja+Detect+Power+Mixer+Pro+TB301EU&tag=steakakademie-21"
+  provider: amazon
+  description: "Standmixer mit 1200-Watt-Motorbasis, 2,1-l-Gefäß (1,9 l nutzbar) und 700-ml-Becher für eine Portion"
+  pros:
+    - "Standmixer: Cashews auch ohne langes Einweichen glatt"
+    - "Großes Gefäß für ganze Grundmengen, Becher für eine Portion"
+  cons:
+    - "Braucht Platz auf der Arbeitsfläche"
+  badge: "Standmixer"
+  lastChecked: "2026-10-22"
+  recommended: false
+  partnerZiele:
+    - advertiser: sharkninja
+      url: "https://www.sharkninja.de/ninja-detect-power-mixer-pro-fuer-einzelportionen/TB301EU.html"
+      geprueft: "2026-10-22"
+
 - id: ninja-precisionpro-bz651
   name: "Ninja PrecisionPro Küchenmaschine (BZ651EU)"
   brand: "Ninja"

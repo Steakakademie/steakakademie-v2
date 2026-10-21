@@ -122,7 +122,7 @@ function CategoryGlyph({ category, className }: { category: string; className?: 
   }
 }
 
-function ProductImagePlaceholder({
+export function ProductImagePlaceholder({
   brand,
   category,
   size = 'md',
