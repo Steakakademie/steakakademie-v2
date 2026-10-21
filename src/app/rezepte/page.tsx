@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Users } from 'lucide-react';
+import { ChevronRight, GitFork, Users } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allRecipes } from 'contentlayer/generated';
@@ -11,6 +11,7 @@ import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
 import { ogImages } from '@/lib/og';
 import { verantwortungsangabe } from '@/lib/pruefnachweis';
+import { MUTTERREZEPTE, anzahlFrei } from '@/lib/mutterrezepte';
 
 // 03.10.2026: Die Testbehauptungen („jedes Rezept mehrfach am Grill getestet") sind
 // raus — ein Grilltest je Rezept ist nicht belegt. Es gilt, was unter jedem Rezept
@@ -89,6 +90,37 @@ export default function RezepteIndexPage() {
 
         {/* ── Vollstaendiges Linkverzeichnis (serverseitig, crawlbar) ────── */}
         <RecipeIndex />
+
+        {/* ── Mutterrezepte — ein Grundrezept, viele Einsätze (21.10.2026) ── */}
+        <section className="border-t border-border-subtle">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
+              <GitFork size={12} /> Mutterrezepte
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-2">
+              Ein Grundrezept, viele Einsätze
+            </h2>
+            <p className="font-body text-text-secondary leading-relaxed max-w-2xl mb-5">
+              Eine Sauce in der Mitte, Äste nach Grillgut: als Dip, Spiegel, Dressing, Marinade oder warme Sauce — jede
+              Idee mit Quelle und Link zum passenden Rezept.
+            </p>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {MUTTERREZEPTE.map((m) => (
+                <li key={m.slug}>
+                  <Link
+                    href={`/mutterrezepte/${m.slug}`}
+                    className="block rounded-xl border border-border-subtle bg-surface-card p-5 transition-colors hover:border-brand-gold"
+                  >
+                    <span className="block font-serif text-xl font-bold text-text-light">{m.titel}</span>
+                    <span className="mt-1 block font-sans text-xs text-text-muted">
+                      {m.blaetter.length} Einsätze · {anzahlFrei(m)} davon gratis
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         {/* ── Community-Band — Austausch + eigenes Rezept einreichen ─────── */}
         <section className="border-t border-b border-border-subtle bg-surface-dark">

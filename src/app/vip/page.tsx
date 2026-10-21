@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { FREE_LIMIT } from '@/lib/aroma-matcher/data';
 import { ogImages } from '@/lib/og';
+import { anzahlFrei } from '@/lib/mutterrezepte';
+import { LIMETTEN_CASHEWCREME } from '@/lib/mutterrezepte/limetten-cashewcreme';
 
 /**
  * /vip — Warteliste fuer den VIP-Pass (Lead-Magnet, Uwe-Plan vom 18.09.2026:
@@ -67,8 +69,11 @@ const BAUSTEINE = [
   {
     icon: Scale,
     titel: 'Profi-Rezepte grammgenau',
-    text: 'Die großen Grillklassiker — Pulled Pork, 3-2-1-Ribs, Brisket, Pastrami, Picanha — mit Rub-Verhältnissen in Gramm, Pökel-Prozenten, Kerntemperaturen nach Dicke und Drink-Pairing. Werbefrei, druckfertig.',
-    status: 'geplant',
+    // Erster Baustein live seit 21.10.2026: Mutterrezept mit Pairing-Baum, ein
+    // Teil der Einsätze gratis. Die Klassiker-Rezepte bleiben geplant.
+    text: `Die großen Grillklassiker — Pulled Pork, 3-2-1-Ribs, Brisket, Pastrami, Picanha — mit Rub-Verhältnissen in Gramm, Pökel-Prozenten, Kerntemperaturen nach Dicke und Drink-Pairing. Werbefrei, druckfertig. Schon da: das Mutterrezept ${LIMETTEN_CASHEWCREME.titel} mit ${LIMETTEN_CASHEWCREME.blaetter.length} Einsätzen, ${anzahlFrei(LIMETTEN_CASHEWCREME)} davon gratis.`,
+    status: 'teils',
+    href: `/mutterrezepte/${LIMETTEN_CASHEWCREME.slug}`,
   },
   {
     icon: NotebookPen,
