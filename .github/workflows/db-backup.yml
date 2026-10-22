@@ -159,7 +159,11 @@ jobs:
           ls -l "$D.enc"
 
       - name: Wiederherstellung proben (Test-Postgres)
-        if: ${{ inputs.restore_probe != false }}
+        # 22.10.2026: `inputs.restore_probe != false` allein hat die Probe bei JEDEM
+        # Zeitplan-Lauf uebersprungen (19.-22.10. viermal „skipped"): bei schedule ist
+        # `inputs` leer, und GitHub vergleicht null mit false als 0 == 0. Nur der
+        # Handknopf darf die Probe abschalten — der Zeitplan probt immer.
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.restore_probe }}
         env:
           PGPASSWORD: probe
         run: |
