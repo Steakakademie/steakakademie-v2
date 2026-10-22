@@ -67,7 +67,7 @@
   commission: "5 %; Newsletter-Code 1 %, Zubehör/Ersatzteile/Refurbished 0 % (Commission Manager, 12.10.2026)"
   cookie: "30 Tage"
   avgCartEur: null
-  status: applied
+  status: active   # Start-PR 01.11.2026 (C11): vorher applied; Zulassung Awin 09.10.2026, Feed live seit 22.10.2026
   applyUrl: "https://www.sharkninja.de/"
   focus: "Ninja-Geräte (Woodfire Outdoor-Grill/Smoker, Küchenmaschinen)"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }

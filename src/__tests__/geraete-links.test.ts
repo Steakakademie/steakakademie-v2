@@ -67,6 +67,8 @@ describe('AWIN-Feed', () => {
     expect(q).not.toMatch(/process\.env/);
     expect(q).not.toMatch(/deepLink|bildUrl/);
     expect(q).toContain('rateLimitRequest');
+    // Feed fehlt/fehler -> 503, damit der Heartbeat (erlaubt 200) anschlaegt
+    expect(q).toMatch(/feed\.status === 'ok' \? 200 : 503/);
   });
 });
 
@@ -85,11 +87,16 @@ describe('Der eine Schalter (Programmstatus)', () => {
     }
   });
 
-  it('solange SharkNinja nicht active ist, zeigt nichts auf awin1.com', () => {
+  // Start-PR 01.11.2026 (C11): der Schalter steht auf active. Bis dahin galt der
+  // umgekehrte Test („zeigt nichts auf awin1.com") — nach dem Merge dieses PR ist
+  // der Amazon-Weg fuer SharkNinja-Geraete Geschichte.
+  it('SharkNinja ist active — /go/ zeigt auf awin1.com, nicht mehr auf Amazon', () => {
     const programm = getAffiliatePrograms().find((p) => p.providers.includes('sharkninja'));
-    expect(programm?.status).not.toBe('active');
-    expect(aktivesPartnerziel(set)).toBeNull();
-    expect(weiterleitungsZiel(set, 'mr-limetten-cashewcreme-s3').url).toBe(set.affiliateUrl);
+    expect(programm?.status).toBe('active');
+    expect(aktivesPartnerziel(set)).toMatchObject({ advertiser: 'sharkninja' });
+    const u = new URL(weiterleitungsZiel(set, 'mr-limetten-cashewcreme-s3').url);
+    expect(u.hostname).toBe('www.awin1.com');
+    expect(u.searchParams.get('awinmid')).toBe('19810');
   });
 
   it('mit active geht /go/ zum AWIN-Link mit clickref = Platz', async () => {
