@@ -60,6 +60,13 @@ describe('AWIN-Feed', () => {
     }
     expect(lies('lib/awin-feed.ts')).toContain('AWIN_FEED_SHARKNINJA');
   });
+
+  it('die Betriebsanzeige /api/partner/feed-status liest die Variable nicht selbst und gibt nur Status aus', () => {
+    const q = lies('app/api/partner/feed-status/route.ts');
+    expect(q).not.toMatch(/process\.env/);
+    expect(q).not.toMatch(/deepLink|bildUrl/);
+    expect(q).toContain('rateLimitRequest');
+  });
 });
 
 describe('Der eine Schalter (Programmstatus)', () => {
