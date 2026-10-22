@@ -48,6 +48,10 @@ export async function GET(req: Request) {
       };
     });
 
+  // 22.10.2026 (C11): `fehlt`/`fehler` antwortet mit 503, damit der Ops-Heartbeat
+  // (typ http, erlaubt 200) rot wird, statt ein gruenes JSON mit schlechtem Inhalt
+  // zu lesen. Besucher sehen diese Route nie — Rezeptseiten fallen bei Feed-Fehler
+  // auf „Lagerstand unbekannt" zurueck, der Link bleibt (GeraeteLink.tsx).
   return Response.json(
     {
       advertiser: adv,
@@ -58,6 +62,6 @@ export async function GET(req: Request) {
       spalten: feed.spalten,
       geraete,
     },
-    { headers: { ...limit.headers, 'Cache-Control': 'no-store' } },
+    { status: feed.status === 'ok' ? 200 : 503, headers: { ...limit.headers, 'Cache-Control': 'no-store' } },
   );
 }

@@ -65,6 +65,16 @@ Klartext-Meldung — „nicht gesichert" ist nie grün (CLAUDE.md §2 Regel 10).
 3. **Zahlen im Summary:** Tabellen mit Daten, Zeilen in Quelle und Kopie, Zahl der
    unkritischen Restore-Meldungen (Grants, Kommentare), erste 20 davon aufgeklappt.
 
+**Vom 19. bis 22.10.2026 lief die Probe in keinem Zeitplan-Lauf (22.10.2026, belegt).** Die
+Bedingung `inputs.restore_probe != false` war nur für den Handknopf gedacht; bei `schedule`
+ist `inputs` leer, GitHub vergleicht `null` mit `false` als `0 == 0`, und der Schritt stand
+viermal auf „skipped" — das Summary sagte jeweils „Wiederherstellungsprobe: nicht gelaufen",
+der Lauf blieb grün. Nur die zwei Handstarts vom 18.10. hatten je eine Probe. Seit dem 22.10.
+lautet die Bedingung `github.event_name != 'workflow_dispatch' || inputs.restore_probe`;
+Wächter: `scripts/workflows.test.mjs`. Beleg nach dem Merge: im nächsten Zeitplan-Lauf muss
+Schritt „Wiederherstellung proben" auf `success` stehen und das Summary Zeilen in der Kopie
+nennen. Lehre: Ein Summary, das „nicht gelaufen" meldet, gehört rot, nicht grün.
+
 Nicht bewiesen: die Wiederherstellung in ein **echtes Supabase-Projekt** (dort existieren
 `auth` und `storage` schon, siehe unten). Das ist bewusst Handarbeit im Ernstfall, einmal
 geübt werden sollte es trotzdem — offen.
