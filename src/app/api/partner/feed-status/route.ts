@@ -54,6 +54,8 @@ export async function GET(req: Request) {
       status: feed.status,
       geladen: feed.geladen,
       anzahlProdukte: feed.produkte.size,
+      /** Kopfzeile des Feeds — zeigt, ob eine erwartete Spalte (z. B. commission_group) in der URL fehlt. */
+      spalten: feed.spalten,
       geraete,
     },
     { headers: { ...limit.headers, 'Cache-Control': 'no-store' } },

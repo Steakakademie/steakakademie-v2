@@ -33,8 +33,8 @@ export interface FeedProdukt {
 }
 
 export type FeedStand =
-  | { status: 'ok'; produkte: Map<string, FeedProdukt>; geladen: string }
-  | { status: 'fehlt' | 'fehler'; produkte: Map<string, FeedProdukt>; geladen: null };
+  | { status: 'ok'; produkte: Map<string, FeedProdukt>; geladen: string; spalten: string[] }
+  | { status: 'fehlt' | 'fehler'; produkte: Map<string, FeedProdukt>; geladen: null; spalten: string[] };
 
 /** Feed-URL je Advertiser aus der Umgebung — weitere Partner hier ergänzen. */
 const ENV: Partial<Record<AwinAdvertiser, string>> = { sharkninja: 'AWIN_FEED_SHARKNINJA' };
@@ -79,6 +79,11 @@ function wahrheit(v: string | undefined): boolean | null {
   return null;
 }
 
+/** Spaltennamen der Kopfzeile — zeigt, welche Spalten die Feed-URL tatsächlich liefert. */
+export function feedSpalten(text: string): string[] {
+  return parseCsv(text.slice(0, 20_000))[0]?.map((h) => h.trim().toLowerCase()) ?? [];
+}
+
 export function feedAusCsv(text: string): Map<string, FeedProdukt> {
   const rows = parseCsv(text);
   const kopf = rows[0]?.map((h) => h.trim().toLowerCase()) ?? [];
@@ -114,17 +119,18 @@ export function feedAusCsv(text: string): Map<string, FeedProdukt> {
 async function ladeRoh(advertiser: FeedAdvertiser): Promise<FeedStand> {
   const name = ENV[advertiser];
   const url = name ? process.env[name] : undefined;
-  if (!url) return { status: 'fehlt', produkte: new Map(), geladen: null };
+  const leer = (status: 'fehlt' | 'fehler'): FeedStand => ({ status, produkte: new Map(), geladen: null, spalten: [] });
+  if (!url) return leer('fehlt');
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(20_000), cache: 'no-store' });
-    if (!res.ok) return { status: 'fehler', produkte: new Map(), geladen: null };
+    if (!res.ok) return leer('fehler');
     const buf = Buffer.from(await res.arrayBuffer());
-    if (buf.byteLength > MAX_BYTES) return { status: 'fehler', produkte: new Map(), geladen: null };
+    if (buf.byteLength > MAX_BYTES) return leer('fehler');
     const istGzip = buf[0] === 0x1f && buf[1] === 0x8b;
     const text = (istGzip ? gunzipSync(buf) : buf).toString('utf8');
-    return { status: 'ok', produkte: feedAusCsv(text), geladen: new Date().toISOString() };
+    return { status: 'ok', produkte: feedAusCsv(text), geladen: new Date().toISOString(), spalten: feedSpalten(text) };
   } catch {
-    return { status: 'fehler', produkte: new Map(), geladen: null };
+    return leer('fehler');
   }
 }
 
@@ -132,9 +138,9 @@ const ladeGecacht = unstable_cache(
   async (advertiser: FeedAdvertiser) => {
     const stand = await ladeRoh(advertiser);
     // Map ist nicht serialisierbar — als Einträge ablegen.
-    return { status: stand.status, geladen: stand.geladen, eintraege: [...stand.produkte.entries()] };
+    return { status: stand.status, geladen: stand.geladen, spalten: stand.spalten, eintraege: [...stand.produkte.entries()] };
   },
-  ['awin-feed-v1'],
+  ['awin-feed-v2'],
   { revalidate: REVALIDATE_SEKUNDEN, tags: ['awin-feed'] },
 );
 
@@ -142,8 +148,8 @@ export async function awinFeed(advertiser: FeedAdvertiser): Promise<FeedStand> {
   const s = await ladeGecacht(advertiser);
   const produkte = new Map<string, FeedProdukt>(s.eintraege);
   return s.status === 'ok'
-    ? { status: 'ok', produkte, geladen: s.geladen as string }
-    : { status: s.status, produkte, geladen: null };
+    ? { status: 'ok', produkte, geladen: s.geladen as string, spalten: s.spalten }
+    : { status: s.status, produkte, geladen: null, spalten: [] };
 }
 
 /** SKU aus einer sharkninja.de-Produkt-URL: …/<slug>/<SKU>.html */

@@ -13,7 +13,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
-import { feedAusCsv, parseCsv, skuAusUrl } from '@/lib/awin-feed';
+import { feedAusCsv, feedSpalten, parseCsv, skuAusUrl } from '@/lib/awin-feed';
 import { aktivesPartnerziel, weiterleitungsZiel } from '@/lib/partnerziel';
 import { getProductById } from '@/lib/products';
 import { getAffiliatePrograms } from '@/lib/affiliate-programs';
@@ -39,6 +39,7 @@ describe('AWIN-Feed', () => {
     expect(feed.get('CI100EU')).toMatchObject({ lieferbar: true, provisionsgruppe: 'DEFAULT', bildUrl: 'https://img/ci100.jpg' });
     expect(feed.get('TB301EU')?.lieferbar).toBe(false);
     expect(feed.get('XY1')?.lieferbar).toBeNull();
+    expect(feedSpalten(csv)).toEqual(['product_name', 'commission_group', 'merchant_product_id', 'in_stock', 'aw_deep_link', 'merchant_image_url']);
   });
 
   it('fällt auf stock_status zurück, wenn in_stock fehlt', () => {
