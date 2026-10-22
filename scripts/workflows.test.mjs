@@ -125,6 +125,21 @@ describe('.github/workflows — Hygiene', () => {
     expect(wf.code).toMatch(/name: supabase-sicherung\s*$/m)
   })
 
+  // 22.10.2026: Vier Zeitplan-Laeufe (19.-22.10.) haben die Wiederherstellungsprobe
+  // uebersprungen. Grund: `if: inputs.restore_probe != false` — bei schedule ist
+  // `inputs` leer, GitHub vergleicht null mit false als 0 == 0, der Schritt faellt aus.
+  // Nur die zwei Handstarts vom 18.10. hatten je eine Probe. Die Probe muss bei
+  // JEDEM Zeitplan-Lauf laufen; der Handknopf darf sie nur ausdruecklich abschalten.
+  it('die Wiederherstellungsprobe haengt nicht allein an einem workflow_dispatch-Input', () => {
+    const wf = dateien.find((d) => d.name.endsWith('db-backup.yml'))
+    expect(wf, 'db-backup.yml').toBeTruthy()
+    const schritt = wf.code.match(/- name: Wiederherstellung proben[^\n]*\n\s+if: (.*)/)
+    expect(schritt, 'Probe-Schritt mit if:').toBeTruthy()
+    const bedingung = schritt[1]
+    expect(bedingung, 'Probe muss bei schedule laufen').toMatch(/github\.event_name/)
+    expect(bedingung).not.toMatch(/^\$\{\{\s*inputs\.restore_probe\s*!=\s*false\s*\}\}$/)
+  })
+
   it('jeder Zeitplan hat genau fuenf Felder', () => {
     for (const d of dateien) {
       for (const [, ausdruck] of d.code.matchAll(/-\s*cron:\s*'([^']+)'/g)) {
