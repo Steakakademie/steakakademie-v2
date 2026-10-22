@@ -46,7 +46,9 @@ describe('/vip: kein Startdatum, nicht Gebautes heißt „geplant“', () => {
   it('kein Baustein steht auf „bald“ oder uneingeschränkt auf „live“', () => {
     expect(vip).not.toMatch(/status: '(bald|live)'/);
     expect(vip).not.toMatch(/>\s*Bald\s*</);
-    expect(vip.match(/status: 'geplant'/g)?.length).toBe(3);
+    // 21.10.2026: „Profi-Rezepte grammgenau“ steht auf „teils“ — das erste
+    // Mutterrezept ist live (/mutterrezepte/limetten-cashewcreme).
+    expect(vip.match(/status: 'geplant'/g)?.length).toBe(2);
   });
 
   it('der Preis ist der des Digistore-Jahresplans, eine Monatszahl steht nicht da', () => {
