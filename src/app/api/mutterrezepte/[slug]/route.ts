@@ -33,8 +33,10 @@ async function hatVollzugriff(req: Request): Promise<boolean> {
     .from('courses').select('id').eq('slug', process.env.VIP_KURS_SLUG ?? 'vip').maybeSingle();
   if (!kurs) return false;
   const { data: buchung } = await supabase
-    .from('bookings').select('id').eq('course_id', kurs.id)
-    .is('revoked_at', null).in('status', ['active', 'confirmed']).maybeSingle();
+    .from('bookings').select('id')
+    // user_id ausdruecklich, nicht nur ueber RLS (Sicherheits-Review 22.10.2026)
+    .eq('user_id', user.id).eq('course_id', kurs.id)
+    .is('revoked_at', null).in('status', ['active', 'confirmed']).limit(1).maybeSingle();
   return Boolean(buchung);
 }
 

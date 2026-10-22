@@ -20,7 +20,7 @@ vi.mock('@/lib/supabase/server', () => ({
     auth: { getUser: async () => ({ data: { user: lage.user } }) },
     from: (tabelle: string) => {
       const kette: Record<string, unknown> = {};
-      for (const m of ['select', 'eq', 'is', 'in']) kette[m] = () => kette;
+      for (const m of ['select', 'eq', 'is', 'in', 'limit']) kette[m] = () => kette;
       kette.maybeSingle = async () => ({ data: tabelle === 'courses' ? lage.kurs : tabelle === 'bookings' ? lage.buchung : null });
       return kette;
     },
