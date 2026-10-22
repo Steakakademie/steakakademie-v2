@@ -170,58 +170,16 @@
       "satz": "Die **KCBS (Kansas City Barbecue Society)** ist die weltgrößte BBQ-Organisation — mit 20.000+ Mitgliedern und über 400 sanktionierten Wettbewerben jährlich weltweit."
     },
     {
-      "id": "b08fa59f66c2ac79",
-      "klasse": "garantie",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Alle Angaben sind nach bestem Wissen erstellt; eine Garantie für Richtigkeit und Vollständigkeit wird nicht übernommen."
-    },
-    {
-      "id": "827c3a8cbf80d64a",
-      "klasse": "pruefung",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Dasselbe gilt für die Produkte „Mein Protokoll\" (persönlicher 8-Wochen-Grillplan) und „Steak-Beichte\" (Diagnose von Grillfehlern): Ihr Ergebnis wird von einem KI-Sprachmodell erstellt und nicht einzel"
-    },
-    {
-      "id": "73df401d4d7e9e28",
-      "klasse": "rhythmus",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Du hast das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von Gründen zu widerrufen."
-    },
-    {
-      "id": "08de334e1edf2a5e",
-      "klasse": "versand",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Alternativ kannst du auch das folgende Muster-Widerrufsformular nutzen und uns per E-Mail oder Post zusenden:"
-    },
-    {
       "id": "211c6bed93bcd9b1",
       "klasse": "versand",
       "datei": "src/app/agb/page.tsx",
       "satz": "Der Vertrag kommt mit unserer Bestätigung per E-Mail zustande."
     },
     {
-      "id": "8d6a40beb5bd1aa6",
-      "klasse": "versand",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Nach Bestätigung erhältst du unverzüglich eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
-    },
-    {
-      "id": "92a85ab62d56a8de",
-      "klasse": "versand",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "Du erhältst eine automatische Eingangsbestätigung per E-Mail."
-    },
-    {
       "id": "bc038b8f45e31702",
       "klasse": "versand",
       "datei": "src/app/agb/page.tsx",
       "satz": "Nach dem Absenden der Bestellung erhältst du eine Eingangsbestätigung per E-Mail; sie ist noch keine Annahme deines Angebots."
-    },
-    {
-      "id": "e183f8edfd118bcf",
-      "klasse": "versand",
-      "datei": "src/app/agb/page.tsx",
-      "satz": "oder per Post (Adresse siehe Impressum)."
     },
     {
       "id": "fa0067f39e4cd292",
@@ -290,124 +248,10 @@
       "satz": "Der Gewinner wird per E-Mail benachrichtigt und um Mitteilung einer Versandadresse innerhalb des Teilnahmegebiets (DE/AT/CH) gebeten."
     },
     {
-      "id": "484a44736b65edb5",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Microsoft ist unter dem EU-US Data Privacy Framework zertifiziert; zusätzlich besteht ein Auftragsverarbeitungsvertrag (Art."
-    },
-    {
-      "id": "6842d466b37b7bf8",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Vercel ist nach dem EU-US Data Privacy Framework zertifiziert; zusätzlich werden EU-Standardvertragsklauseln (Art."
-    },
-    {
-      "id": "87e35655f4f36c0d",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "das EU-US Data Privacy Framework, soweit der Anbieter zertifiziert ist."
-    },
-    {
-      "id": "95975d4ae09c9925",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Data Privacy Framework zertifiziert; für die Übermittlung besteht damit ein Angemessenheitsbeschluss der Europäischen Kommission nach Art."
-    },
-    {
-      "id": "961e2c6fd351320d",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren; Kontodaten wie deine E-Mail-Adresse werden nicht an das KI-Modell übermittelt, und die Chat-Inhalte werden nicht in deinem Konto g"
-    },
-    {
-      "id": "cc5a072d461bf080",
-      "klasse": "pruefung",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "28 DSGVO; USA, EU-Standardvertragsklauseln) auf Qualität und Zulässigkeit geprüft."
-    },
-    {
-      "id": "fe78094ea6046f62",
-      "klasse": "rhythmus",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Konto- und Kursdaten werden für die Dauer des Nutzerkontos gespeichert und nach dessen Löschung innerhalb von 30 Tagen"
-    },
-    {
-      "id": "3ffb2c81f69ed829",
-      "klasse": "versand",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Nach Eingabe deiner E-Mail-Adresse senden wir dir eine Bestätigungsmail."
-    },
-    {
-      "id": "4a49e24cd8f1f6eb",
-      "klasse": "versand",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Hast du eine E-Mail-Adresse angegeben, senden wir dir über Loops (Abschnitt 7) eine Eingangsbestätigung mit Datum und Uhrzeit des Eingangs sowie der angegebenen Bestellnummer und dem Produkt."
-    },
-    {
-      "id": "f0949c3d77c35826",
-      "klasse": "versand",
-      "datei": "src/app/datenschutz/page.tsx",
-      "satz": "Deine Anfrage wird bei Supabase (Abschnitt 9) abgelegt und zusätzlich per E-Mail über unseren Versanddienstleister Loops (Abschnitt 7) an unser Postfach zugestellt."
-    },
-    {
-      "id": "732cf39217bb5f05",
-      "klasse": "pruefung",
-      "datei": "src/app/diplome/DiplomeClient.tsx",
-      "satz": "Zertifiziert."
-    },
-    {
-      "id": "a20975a50053eaac",
-      "klasse": "pruefung",
-      "datei": "src/app/diplome/rahmenlehrplan/page.tsx",
-      "satz": "So wird geprüft"
-    },
-    {
-      "id": "c38d0352f6bbb5da",
-      "klasse": "pruefung",
-      "datei": "src/app/diplome/rahmenlehrplan/page.tsx",
-      "satz": "Geprüft wird er bisher nicht: Die gedruckte Urkunde setzt heute allein die bestandene Prüfung voraus."
-    },
-    {
       "id": "37c0ed3ca6db503f",
       "klasse": "bestandszahl",
       "datei": "src/app/diplome/roadmap/RoadmapClient.tsx",
       "satz": "50 Level"
-    },
-    {
-      "id": "d1c5af71e66381d4",
-      "klasse": "versand",
-      "datei": "src/app/diplome/simulation/SimulationClient.tsx",
-      "satz": "Nach dem Abschluss-Test erreichst du den Grad Grillmeister Bronze — digital zum Teilen kostenlos, auf Wunsch gedruckt per Post ("
-    },
-    {
-      "id": "4f943179edc9458c",
-      "klasse": "versand",
-      "datei": "src/app/diplome/urkunde/layout.tsx",
-      "satz": "Grillmeister-Urkunde — digital kostenlos, gedruckt per Post"
-    },
-    {
-      "id": "7cbbb34f280477bd",
-      "klasse": "versand",
-      "datei": "src/app/diplome/urkunde/layout.tsx",
-      "satz": "Deine Grillmeister-Urkunde: digital kostenlos zum Teilen, auf Wunsch gedruckt und per Post ("
-    },
-    {
-      "id": "99e49ade9c3df35c",
-      "klasse": "versand",
-      "datei": "src/app/diplome/urkunde/layout.tsx",
-      "satz": "Urkunde mit deinem Namen, Grad und Stufe — digital gratis, gedruckt per Post ("
-    },
-    {
-      "id": "662efea7b48a9595",
-      "klasse": "pruefung",
-      "datei": "src/app/diplome/urkunde/page.tsx",
-      "satz": "Konto wird geprüft …"
-    },
-    {
-      "id": "8b671d33360b39ea",
-      "klasse": "versand",
-      "datei": "src/app/diplome/urkunde/page.tsx",
-      "satz": "Du erhältst eine Bestätigung deiner Bestellung per E-Mail."
     },
     {
       "id": "94b2d317c9ea03d9",
@@ -420,12 +264,6 @@
       "klasse": "versand",
       "datei": "src/app/diplome/urkunde/page.tsx",
       "satz": "Für die gedruckte Variante nehmen wir nach dem Absenden per E-Mail Kontakt zur Zahlung auf ("
-    },
-    {
-      "id": "c66145871d628b0e",
-      "klasse": "versand",
-      "datei": "src/app/diplome/urkunde/page.tsx",
-      "satz": "Danach geht die Urkunde in den Druck und per Post zu dir."
     },
     {
       "id": "c840f8cd88fc68d5",
@@ -578,12 +416,6 @@
       "satz": "Wir melden uns innerhalb von 24–48 Stunden bei dir."
     },
     {
-      "id": "827a71be4d5d6aef",
-      "klasse": "pruefung",
-      "datei": "src/app/mein-protokoll/page.tsx",
-      "satz": "Kerntemperaturen aus der Steakakademie-Referenz, maschinell geprüft"
-    },
-    {
       "id": "0c1cc6918818f294",
       "klasse": "bestandszahl",
       "datei": "src/app/mein-system/page.tsx",
@@ -594,18 +426,6 @@
       "klasse": "bestandszahl",
       "datei": "src/app/mein-system/page.tsx",
       "satz": "Interaktiver Netto-Rechner für 23 Länder weltweit."
-    },
-    {
-      "id": "81afa1b7a7b81300",
-      "klasse": "pruefung",
-      "datei": "src/app/nutzungsbedingungen/page.tsx",
-      "satz": "Eingereichte Inhalte werden vor einer Veröffentlichung geprüft: zunächst automatisiert (KI-gestützt), anschließend geben wir sie von Hand frei."
-    },
-    {
-      "id": "81acc4bcf710ac77",
-      "klasse": "bestandszahl",
-      "datei": "src/app/page.tsx",
-      "satz": "In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen, Rezepte, Ausrüstung."
     },
     {
       "id": "e739e55f9c674063",
@@ -930,18 +750,6 @@
       "klasse": "rhythmus",
       "datei": "src/app/usa-expedition/page.tsx",
       "satz": "Jährlich Januar"
-    },
-    {
-      "id": "06403f5033626e58",
-      "klasse": "versand",
-      "datei": "src/app/widerruf/page.tsx",
-      "satz": "Identifikation per E-Mail oder Bestellnummer — kein Login nötig."
-    },
-    {
-      "id": "18022723e7b1c6a5",
-      "klasse": "versand",
-      "datei": "src/app/widerruf/page.tsx",
-      "satz": "Du erhältst eine Eingangsbestätigung per E-Mail."
     },
     {
       "id": "0c3ef3c43800873b",

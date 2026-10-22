@@ -44,6 +44,7 @@
     "node_modules",
     "tools",
     "video",
+    "privat",
     "_wt",
     ".wt-*"
   ]

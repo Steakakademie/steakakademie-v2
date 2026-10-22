@@ -127,5 +127,22 @@
     "minBytes": 1000000,
     "maxTage": 2,
     "hinweis": "db-backup läuft täglich 02:40 UTC: verschlüsselter pg_dump als GitHub-Artefakt »supabase-sicherung« (90 Tage) mit Wiederherstellungsprobe im selben Lauf (docs/supabase-backup.md). Kein Artefakt mit mindestens 1 MB seit 2 Tagen = der Lauf startet nicht mehr (GitHub schaltet Zeitpläne nach 60 Tagen Ruhe ab — per workflow_dispatch starten) oder er scheitert vor dem Hochladen (Secrets SUPABASE_DB_URL / BACKUP_PASSPHRASE prüfen, Job-Summary lesen; ein gescheiterter Lauf meldet selbst nach Jira, ops-db-backup-failed). Bis zur Behebung gibt es kein frisches Backup."
+    },
+  {
+    "name": "Awin-Feed SharkNinja",
+    "typ": "http",
+    "basis": "https://steakakademie.de",
+    "pfade": ["/api/partner/feed-status?advertiser=sharkninja"],
+    "erlaubt": [200],
+    "maxTage": 0,
+    "hinweis": "Die Betriebsanzeige des AWIN-Produktfeeds antwortet nicht mit 200: 503 heißt der Feed fehlt (AWIN_FEED_SHARKNINJA nicht in Vercel/Production) oder ist nicht ladbar (AWIN-Seite, Schlüssel widerrufen, Format geändert). Rezeptseiten zeigen dann »Lagerstand unbekannt«, der Link bleibt — aber die Lieferbarkeits-Sperre (nicht lieferbar = kein Link) greift nicht mehr. Prüfen: Vercel-Variable vorhanden, AWIN → Publisher → Datafeeds, dann Redeploy (Cache 24 h, Tag awin-feed)."
+  },
+  {
+    "name": "Tagesfakten",
+    "typ": "supabase",
+    "tabelle": "tagesfakten",
+    "spalte": "erfasst_at",
+    "maxTage": 2,
+    "hinweis": "tagesfakten.yml schreibt täglich 03:10 UTC eine Zeile je Tag nach public.tagesfakten (scripts/tagesfakten.mjs, docs/tagesfakten.md). Keine Zeile seit 2 Tagen = der Lauf startet nicht mehr oder scheitert (Job-Summary lesen: Tabelle fehlt → Migration 20261022210000_tagesfakten.sql anwenden; Secrets NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY prüfen). NULL-Spalten sind kein Fehler, nur fehlende Zeilen."
   }
 ]
