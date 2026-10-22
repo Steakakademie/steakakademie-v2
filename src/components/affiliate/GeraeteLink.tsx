@@ -38,7 +38,6 @@ export default async function GeraeteLink({
   let lieferbar: boolean | null = null;
   let haendler = 'Amazon';
   let href: string;
-  let rel: string;
   let partner: boolean;
 
   if (ziel) {
@@ -49,12 +48,10 @@ export default async function GeraeteLink({
     if (lieferbar === false) return <>{children}</>;
     haendler = AWIN_ADVERTISER[ziel.advertiser].name.replace(/ DE$/, '');
     href = `/go/${product.id}?p=${encodeURIComponent(platz)}`;
-    rel = 'sponsored nofollow noopener';
     partner = true;
   } else {
     const link = produktLink(product);
     href = link.href;
-    rel = link.rel;
     partner = link.partner;
     const programm = getProgramByProvider(product.provider);
     haendler = programm?.name ?? 'Amazon';
@@ -67,9 +64,10 @@ export default async function GeraeteLink({
     brand: product.brand,
     category: product.category,
     href,
-    rel,
     klassen: klickKlassen(product, 'rezeptschritt'),
     partner,
+    // Sichtbare Werbekennzeichnung am Link und in der Karte (§ 5a Abs. 4 UWG).
+    kennzeichnung: 'Anzeige',
     haendler,
     lieferbar,
   };

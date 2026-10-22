@@ -138,10 +138,14 @@ describe('Geräte-Marker im Mutterrezept', () => {
 
   it('die Karte kennzeichnet den Partnerlink sichtbar und per rel', () => {
     const karte = lies('components/affiliate/GeraeteLinkKarte.tsx');
-    expect(karte).toMatch(/Anzeige/);
+    expect(karte).toContain('daten.kennzeichnung');
     expect(karte).toContain('prefetch={false}');
+    // rel nur aus produkt-anzeige.ts, nie als Literal oder Prop (Legal-Guard Regel 4)
+    expect(karte).toContain('REL_PARTNERLINK');
+    expect(karte).not.toMatch(/sponsored nofollow noopener/);
     const link = lies('components/affiliate/GeraeteLink.tsx');
-    expect(link).toContain("'sponsored nofollow noopener'");
+    expect(link).toContain("kennzeichnung: 'Anzeige'");
+    expect(link).not.toMatch(/rel\s*=\s*'sponsored/);
     expect(link).toMatch(/lieferbar === false\) return <>\{children\}<\/>/);
   });
 });

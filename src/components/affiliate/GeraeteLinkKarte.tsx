@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ExternalLink, X } from 'lucide-react';
 import { ProductImagePlaceholder } from './ProductCard';
+import { REL_EXTERN, REL_PARTNERLINK } from './produkt-anzeige';
 
 /**
  * Geräte-Link im Rezeptschritt (22.10.2026): Textlink mit „Anzeige“, dazu eine
@@ -23,9 +24,11 @@ export interface GeraeteKarteDaten {
   brand: string;
   category: string;
   href: string;
-  rel: string;
   klassen: string;
+  /** Bezahlter Link (Partnernetzwerk oder Amazon mit Tag) → rel="sponsored …" und sichtbare Kennzeichnung. */
   partner: boolean;
+  /** Sichtbare Kennzeichnung des Partnerlinks — vom Server festgelegt (Werbekennzeichnung, § 5a Abs. 4 UWG). */
+  kennzeichnung: string;
   /** Händlername für den Button — „Bei SharkNinja ansehen“. */
   haendler: string;
   /** Lagerstand laut Partner-Feed; `null` = unbekannt. */
@@ -36,6 +39,8 @@ export default function GeraeteLinkKarte({ daten, children }: { daten: GeraeteKa
   const [offen, setOffen] = useState(false);
   const wrap = useRef<HTMLSpanElement>(null);
   const id = useId();
+  // rel nur aus produkt-anzeige.ts — derselbe Maßstab wie produktLink().
+  const rel = daten.partner ? REL_PARTNERLINK : REL_EXTERN;
 
   useEffect(() => {
     if (!offen) return;
@@ -63,7 +68,7 @@ export default function GeraeteLinkKarte({ daten, children }: { daten: GeraeteKa
       <Link
         href={daten.href}
         prefetch={false}
-        rel={daten.rel}
+        rel={rel}
         target="_blank"
         className={`text-brand-fire underline decoration-brand-fire/40 underline-offset-2 transition-colors hover:decoration-brand-fire ${daten.klassen}`}
         aria-describedby={offen ? id : undefined}
@@ -71,7 +76,7 @@ export default function GeraeteLinkKarte({ daten, children }: { daten: GeraeteKa
         {children}
         {daten.partner && (
           <span className="ml-0.5 align-super font-sans text-[9px] font-bold uppercase tracking-wide text-text-muted">
-            Anzeige
+            {daten.kennzeichnung}
           </span>
         )}
       </Link>
@@ -106,7 +111,7 @@ export default function GeraeteLinkKarte({ daten, children }: { daten: GeraeteKa
             <ProductImagePlaceholder brand={daten.brand} category={daten.category} size="sm" />
             <span className="min-w-0 flex-1">
               {daten.partner && (
-                <span className="block font-sans text-[9px] font-bold uppercase tracking-[0.14em] text-text-muted">Anzeige</span>
+                <span className="block font-sans text-[9px] font-bold uppercase tracking-[0.14em] text-text-muted">{daten.kennzeichnung}</span>
               )}
               <span className="block font-serif text-sm font-bold leading-snug text-text-light">{daten.name}</span>
               {daten.beschreibung && (
@@ -130,7 +135,7 @@ export default function GeraeteLinkKarte({ daten, children }: { daten: GeraeteKa
           <Link
             href={daten.href}
             prefetch={false}
-            rel={daten.rel}
+            rel={rel}
             target="_blank"
             className={`mt-3 inline-flex min-h-[40px] items-center gap-1.5 rounded-lg bg-brand-fire px-3 font-sans text-xs font-bold text-surface-dark transition-colors hover:bg-brand-gold ${daten.klassen}`}
           >
