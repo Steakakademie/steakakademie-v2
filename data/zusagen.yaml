@@ -48,6 +48,8 @@ zusagen:
         muster: "Wir haben dir eine Bestätigungs-Mail geschickt (Double-Opt-in)."
       - datei: src/components/relaunch/SpickzettelForm.tsx
         muster: "Bitte bestätige den Link in der E-Mail, die gerade unterwegs ist."
+      - datei: src/app/datenschutz/page.tsx
+        muster: "Nach Eingabe deiner E-Mail-Adresse senden wir dir eine Bestätigungsmail."
     beleg:
       - typ: loops
         art: transactional
@@ -150,6 +152,8 @@ zusagen:
     wo:
       - datei: src/app/kontakt/page.tsx
         muster: "Nachricht gesendet!"
+      - datei: src/app/datenschutz/page.tsx
+        muster: "per E-Mail über unseren Versanddienstleister Loops (Abschnitt 7) an unser Postfach zugestellt"
     beleg:
       - typ: loops
         art: transactional
@@ -179,6 +183,14 @@ zusagen:
         muster: "Nach dem Absenden erhältst du eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
       - datei: src/lib/widerruf-rueckmeldung.ts
         muster: "Eine elektronische Eingangsbestätigung haben wir dir per E-Mail gesendet."
+      - datei: src/app/agb/page.tsx
+        muster: "Du erhältst eine automatische Eingangsbestätigung per E-Mail."
+      - datei: src/app/agb/page.tsx
+        muster: "Nach Bestätigung erhältst du unverzüglich eine elektronische Eingangsbestätigung per E-Mail mit Datum und Uhrzeit deines Widerrufs."
+      - datei: src/app/widerruf/page.tsx
+        muster: "Du erhältst eine Eingangsbestätigung per E-Mail."
+      - datei: src/app/datenschutz/page.tsx
+        muster: "senden wir dir über Loops (Abschnitt 7) eine Eingangsbestätigung mit Datum und Uhrzeit des Eingangs"
     beleg:
       - typ: loops
         art: transactional
@@ -897,6 +909,144 @@ zusagen:
     abteilung: Systems & Ops
     seit: "2026-10-11"
 
+  # ── C20 (22.10.2026): Zusagen im Abgabeumfang (Verkaufsseiten, Rechtstexte, Urkunde) ──
+
+  - id: urkunde-gedruckt-per-post
+    zusage: Die digitale Urkunde ist kostenlos; auf Wunsch wird sie gedruckt und per Post verschickt.
+    wo:
+      - datei: src/app/diplome/urkunde/layout.tsx
+        muster: "Grillmeister-Urkunde — digital kostenlos, gedruckt per Post"
+      - datei: src/app/diplome/urkunde/layout.tsx
+        muster: "digital kostenlos zum Teilen, auf Wunsch gedruckt und per Post"
+      - datei: src/app/diplome/urkunde/layout.tsx
+        muster: "digital gratis, gedruckt per Post"
+      - datei: src/app/diplome/urkunde/page.tsx
+        muster: "Danach geht die Urkunde in den Druck und per Post zu dir."
+      - datei: src/app/diplome/simulation/SimulationClient.tsx
+        muster: "digital zum Teilen kostenlos, auf Wunsch gedruckt per Post"
+    beleg:
+      - typ: code
+        alle:
+          - datei: src/lib/urkunde/gelato.ts
+          - datei: src/lib/urkunde/produktion.ts
+      - typ: supabase
+        tabelle: urkunden_bestellungen
+        min_zeilen: 1
+      - typ: mensch
+        was: "GELATO_API_KEY ist im Hosting (Produktion) gesetzt; zwei Gelato-Proben am 17.10.2026 als Entwurf durch (#431, #433)"
+        geprueft_am: "2026-10-22"
+        gueltig_tage: 90
+        von: Vercel-Variablenliste 22.10.2026 (Namen, keine Werte)
+    bei_bruch: Druck-Option auf der Urkundenseite ausblenden; die digitale Urkunde bleibt.
+    abteilung: Wachstum
+    seit: "2026-10-22"
+
+  - id: urkunde-bestellbestaetigung-mail
+    zusage: Nach einer Urkundenbestellung kommt eine Bestätigung per E-Mail.
+    wo:
+      - datei: src/app/diplome/urkunde/page.tsx
+        muster: "Du erhältst eine Bestätigung deiner Bestellung per E-Mail."
+    beleg:
+      - typ: code
+        datei: src/lib/urkunde/benachrichtigung.ts
+        regex: process\.env\.LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID
+      - typ: mensch
+        was: "LOOPS_URKUNDE_BESTAETIGUNG_TEMPLATE_ID im Hosting (Produktion + Preview) gesetzt; beide Bestellmails am 17.10.2026 zugestellt (#434)"
+        geprueft_am: "2026-10-22"
+        gueltig_tage: 90
+        von: Vercel-Variablenliste 22.10.2026
+    bei_bruch: Satz von der Urkundenseite nehmen, bis die Vorlage wieder sendet.
+    abteilung: Wachstum
+    seit: "2026-10-22"
+
+  - id: mein-protokoll-kerntemperaturen-geprueft
+    zusage: Die Kerntemperaturen im Plan kommen aus der Referenz und werden beim Erzeugen maschinell gegen sie geprüft.
+    wo:
+      - datei: src/app/mein-protokoll/page.tsx
+        muster: "Kerntemperaturen aus der Steakakademie-Referenz, maschinell geprüft"
+    beleg:
+      - typ: code
+        alle:
+          - datei: src/lib/mein-protokoll/kerntemperatur.ts
+          - datei: src/lib/mein-protokoll/generierung.ts
+            regex: pruefeSession
+          - datei: data/kerntemperatur-referenz.yaml
+    bei_bruch: Satz streichen, bis die Prüfung wieder im Erzeugungspfad hängt.
+    abteilung: Systems & Ops
+    seit: "2026-10-22"
+
+  - id: community-rezepte-pruefung
+    zusage: Eingereichte Rezepte werden vor einer Veröffentlichung automatisiert geprüft und dann von Hand freigegeben.
+    wo:
+      - datei: src/app/nutzungsbedingungen/page.tsx
+        muster: "Eingereichte Inhalte werden vor einer Veröffentlichung geprüft"
+      - datei: src/app/datenschutz/page.tsx
+        muster: "auf Qualität und Zulässigkeit geprüft"
+    beleg:
+      - typ: code
+        alle:
+          - datei: src/app/api/rezept-einreichen/route.ts
+            regex: "nie `approved`"
+          - datei: src/app/api/admin/rezepte/route.ts
+    bei_bruch: Einreichung schließen, bis Prüfung und Handfreigabe wieder stehen.
+    abteilung: Systems & Ops
+    seit: "2026-10-22"
+
+  - id: konto-loeschung-30-tage
+    zusage: Nach dem Löschen des Kontos sind Konto- und Kursdaten innerhalb von 30 Tagen entfernt.
+    wo:
+      - datei: src/app/datenschutz/page.tsx
+        muster: "nach dessen Löschung innerhalb von 30 Tagen"
+    beleg:
+      - typ: code
+        datei: src/app/api/konto-loeschen/route.ts
+        regex: deleteUser
+    bei_bruch: Frist in der Datenschutzerklärung an das tatsächliche Verfahren anpassen.
+    abteilung: Kanzlei
+    seit: "2026-10-22"
+
+  - id: marco-chat-kontopruefung
+    zusage: Der Marco-Chat prüft bei jeder Anfrage das Konto; Kontodaten gehen nicht an das KI-Modell.
+    wo:
+      - datei: src/app/datenschutz/page.tsx
+        muster: "Dein Konto wird bei jeder Anfrage geprüft, um den Zugang zu gewähren"
+    beleg:
+      - typ: code
+        datei: src/app/api/marco/route.ts
+        regex: "auth: 'user-or-admin'"
+    bei_bruch: Satz in der Datenschutzerklärung anpassen, sobald der Chat ohne Konto erreichbar ist.
+    abteilung: Kanzlei
+    seit: "2026-10-22"
+
+  - id: widerruf-ohne-login
+    zusage: Der Widerruf braucht kein Login — E-Mail oder Bestellnummer reichen.
+    wo:
+      - datei: src/app/widerruf/page.tsx
+        muster: "Identifikation per E-Mail oder Bestellnummer — kein Login nötig."
+    beleg:
+      - typ: code
+        datei: src/app/api/widerruf/route.ts
+        regex: "key: 'widerruf'"
+    bei_bruch: Satz anpassen, sobald die Route ein Login verlangt.
+    abteilung: Kanzlei
+    seit: "2026-10-22"
+
+  - id: startseite-fuenf-rubriken
+    zusage: Die Startseite führt in fünf Rubriken ein.
+    wo:
+      - datei: src/app/page.tsx
+        muster: "In 5 Rubriken vom Anfänger zum Pitmaster"
+    beleg:
+      typ: zaehlung
+      zahl: 5
+      quelle:
+        datei: src/app/page.tsx
+        regex: "^\\s*\\{ label: '[^']+',\\s*href: '/[a-z/-]+' \\},?$"
+      vergleich: gleich
+    bei_bruch: Zahl im Text an die Rubriken-Liste angleichen.
+    abteilung: Redaktion
+    seit: "2026-10-22"
+
 keine_zusage:
 
   - datei: src/app/mein-protokoll/page.tsx
@@ -948,3 +1098,53 @@ keine_zusage:
   - datei: content/vergleich/oberhitzegrill-vergleich.mdx
     muster: "GS-geprüft für Innenräume, kein Gas, in rund 5 Minuten betriebsbereit."
     grund: Herstellerangabe („laut Hersteller“ im selben Satz) — keine eigene Prüfung.
+
+  # ── C20 (22.10.2026): Treffer im Abgabeumfang, die keine Zusage sind ──
+
+  - datei: src/app/agb/page.tsx
+    muster: "eine Garantie für Richtigkeit und Vollständigkeit wird nicht übernommen"
+    grund: Verneinung — es wird gerade keine Garantie versprochen.
+
+  - datei: src/app/agb/page.tsx
+    muster: "nicht einzeln von einem Menschen geprüft"
+    grund: Verneinung — KI-Hinweis nach Art. 50 KI-VO, keine Prüfzusage.
+
+  - datei: src/app/agb/page.tsx
+    muster: "innerhalb von 14 Tagen ohne Angabe von Gründen zu widerrufen"
+    grund: Gesetzliche Widerrufsfrist (§ 355 BGB), kein Rhythmus der Steakakademie.
+
+  - datei: src/app/agb/page.tsx
+    muster: "Muster-Widerrufsformular nutzen und uns per E-Mail oder Post zusenden"
+    grund: Handlung des Lesers (Kontaktweg), kein Versand durch die Seite.
+
+  - datei: src/app/agb/page.tsx
+    muster: "oder per Post (Adresse siehe Impressum)"
+    grund: Kontaktweg des Lesers, kein Versand durch die Seite.
+
+  - datei: src/app/datenschutz/page.tsx
+    muster: "Microsoft ist unter dem EU-US Data Privacy Framework zertifiziert"
+    grund: Angabe des Anbieters (DPF-Liste), keine Prüfung der Steakakademie.
+
+  - datei: src/app/datenschutz/page.tsx
+    muster: "Vercel ist nach dem EU-US Data Privacy Framework zertifiziert"
+    grund: Angabe des Anbieters (DPF-Liste), keine Prüfung der Steakakademie.
+
+  - datei: src/app/datenschutz/page.tsx
+    muster: "soweit der Anbieter zertifiziert ist"
+    grund: Bedingung in der Rechtsgrundlage, keine Zusage.
+
+  - datei: src/app/datenschutz/page.tsx
+    muster: "Data Privacy Framework zertifiziert; für die Übermittlung besteht damit ein Angemessenheitsbeschluss"
+    grund: Rechtslage und Anbieterangabe, keine eigene Prüfung.
+
+  - datei: src/app/diplome/rahmenlehrplan/page.tsx
+    muster: "So wird geprüft"
+    grund: Überschrift zum Ablauf der Diplomprüfung, kein Prüfnachweis.
+
+  - datei: src/app/diplome/rahmenlehrplan/page.tsx
+    muster: "Geprüft wird er bisher nicht"
+    grund: Verneinung.
+
+  - datei: src/app/diplome/urkunde/page.tsx
+    muster: "Konto wird geprüft …"
+    grund: Ladezustand der Oberfläche, keine Prüfzusage.

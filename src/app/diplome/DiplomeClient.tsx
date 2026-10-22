@@ -308,7 +308,7 @@ export default function DiplomeClient({
               Der Weg nach oben
             </span>
             <h2 className="font-serif text-2xl font-bold text-text-light mb-3">
-              Systematisch. Zertifiziert. Unvergesslich.
+              Systematisch. Mit Urkunde. Unvergesslich.
             </h2>
             <p className="font-body text-text-light/60 text-sm max-w-md mx-auto leading-relaxed mb-10">
               Jedes Level baut auf dem vorherigen auf. Am Ende kennst du das Steak

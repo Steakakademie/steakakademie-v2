@@ -1,0 +1,68 @@
+name: Tagesfakten (Supabase)
+
+# Taeglich eine Zeile nach public.tagesfakten (scripts/tagesfakten.mjs): Kaeufe,
+# Erstattungen, Widerrufe aus Supabase; Besucher und Produkt-Klicks aus Plausible,
+# sobald PLAUSIBLE_API_KEY als Secret liegt (bis dahin NULL mit Grund).
+# Anmeldungen/Bestaetigungen und Provisionen bleiben NULL, bis eine Quelle da ist
+# (docs/tagesfakten.md). Schreibt NUR nach Supabase — keine Dateiaenderung, kein Commit.
+#
+# Benoetigte Secrets: NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
+# Optional: PLAUSIBLE_API_KEY (Plausible → Settings → API keys, Stats API)
+# Voraussetzung: Migration 20261022210000_tagesfakten.sql eingespielt — sonst
+# endet der Lauf rot mit dem Hinweis darauf (Regel 10: nicht geprueft ist rot).
+#
+# Ob die Tabelle LIEFERT, prueft der Ops-Heartbeat (Eintrag „Tagesfakten", Frist 2 Tage).
+on:
+  schedule:
+    - cron: '10 3 * * *'   # taeglich 03:10 UTC — nach der Sicherung (02:40), vor dem Heartbeat (09:00)
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag (YYYY-MM-DD, leer = gestern UTC)'
+        type: string
+        required: false
+      dry_run:
+        description: 'Trockenlauf? (zaehlen, nicht schreiben)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tagesfakten
+  cancel-in-progress: false
+
+jobs:
+  zaehlen:
+    name: Tagesfakten zaehlen und schreiben
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Zaehlen (→ Supabase)
+        env:
+          IN_TAG: ${{ inputs.tag }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PLAUSIBLE_API_KEY: ${{ secrets.PLAUSIBLE_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -n "${IN_TAG:-}" ]; then
+            node scripts/tagesfakten.mjs --tag "$IN_TAG"
+          else
+            node scripts/tagesfakten.mjs
+          fi

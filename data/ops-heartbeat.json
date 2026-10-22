@@ -136,5 +136,13 @@
     "erlaubt": [200],
     "maxTage": 0,
     "hinweis": "Die Betriebsanzeige des AWIN-Produktfeeds antwortet nicht mit 200: 503 heißt der Feed fehlt (AWIN_FEED_SHARKNINJA nicht in Vercel/Production) oder ist nicht ladbar (AWIN-Seite, Schlüssel widerrufen, Format geändert). Rezeptseiten zeigen dann »Lagerstand unbekannt«, der Link bleibt — aber die Lieferbarkeits-Sperre (nicht lieferbar = kein Link) greift nicht mehr. Prüfen: Vercel-Variable vorhanden, AWIN → Publisher → Datafeeds, dann Redeploy (Cache 24 h, Tag awin-feed)."
+  },
+  {
+    "name": "Tagesfakten",
+    "typ": "supabase",
+    "tabelle": "tagesfakten",
+    "spalte": "erfasst_at",
+    "maxTage": 2,
+    "hinweis": "tagesfakten.yml schreibt täglich 03:10 UTC eine Zeile je Tag nach public.tagesfakten (scripts/tagesfakten.mjs, docs/tagesfakten.md). Keine Zeile seit 2 Tagen = der Lauf startet nicht mehr oder scheitert (Job-Summary lesen: Tabelle fehlt → Migration 20261022210000_tagesfakten.sql anwenden; Secrets NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY prüfen). NULL-Spalten sind kein Fehler, nur fehlende Zeilen."
   }
 ]
