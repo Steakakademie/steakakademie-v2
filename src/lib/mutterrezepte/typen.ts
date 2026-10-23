@@ -54,7 +54,7 @@ export interface Blatt {
   quelle?: Quelle;
   /** Herkunft ohne verlinkbare Quelle (z. B. die Ausgangsidee des Mutterrezepts). */
   herkunft?: string;
-  /** Original nutzt gehackte/ganze Cashews o. Ä. — die Übertragung auf die Creme ist eigene Ableitung. */
+  /** Das Original nutzt eine andere Form der Basis oder wurde neu kombiniert — die Übertragung auf das Grundrezept ist eigene Ableitung. */
   ableitung?: boolean;
   /** Öffentlich vollständig sichtbar (Probe für den VIP-Pass). */
   frei?: boolean;
@@ -71,9 +71,24 @@ export interface FormInfo {
   label: string;
   /** Kürzel im Baum-Knoten. */
   kuerzel: string;
-  /** Wasser in Gramm auf 150 g Cashews (VIP). */
-  wasserGramm: number;
+  /** Menge des Konsistenz-Reglers (`Mutterrezept.regler`) in Gramm auf die Grundmenge (VIP). */
+  reglerGramm: number;
   ergebnis: string;
+}
+
+/**
+ * Der Konsistenz-Regler: die eine Zutat, deren Menge aus dem Grundrezept
+ * Dip, Klecks, Dressing oder Marinade macht — Wasser bei der Cashewcreme,
+ * Öl beim Chimichurri. `basis` ist die feste Grundmenge, auf die sich
+ * `FormInfo.reglerGramm` bezieht.
+ */
+export interface Regler {
+  /** z. B. „150 g Cashews“ */
+  basis: string;
+  /** z. B. „Wasser“ */
+  name: string;
+  /** Grundmenge, auf die sich die Abwandlungen der Blätter beziehen, z. B. „ca. 300 g“ */
+  grundmenge: string;
 }
 
 export interface ZutatGramm {
@@ -103,6 +118,14 @@ export interface Mutterrezept {
   /** Name im Baum-Zentrum (mit weichem Trennstrich). */
   zentrum: string;
   beschreibung: string;
+  /** Hero-Absatz der Seite: was die Sauce ist und warum sie als Mutterrezept taugt. */
+  einleitung: string;
+  /** Rubrik hinter dem Autor, z. B. „Saucen & Rubs“. */
+  rubrik: string;
+  /** Keywords für das Recipe-JSON-LD, kommagetrennt. */
+  keywords: string;
+  /** Satz im Kasten „So entsteht der Baum“, der erklärt, wann ein Blatt „Eigene Ableitung“ heißt. */
+  ableitungHinweis: string;
   autorSlug: string;
   veroeffentlicht: string;
   /** Prüfdatum durch den fachlich Verantwortlichen (wie Frontmatter `reviewedAt`). Fehlt es, gibt es keine Prüf-Aussage. */
@@ -117,7 +140,9 @@ export interface Mutterrezept {
   profiTipp: string;
   lagerung: string;
   allergene: string;
-  formen: Record<Einsatzform, FormInfo>;
+  regler: Regler;
+  /** Nur die Einsatzformen, die es für dieses Grundrezept gibt; jedes Blatt braucht eine davon. */
+  formen: Partial<Record<Einsatzform, FormInfo>>;
   aeste: Ast[];
   blaetter: Blatt[];
 }
@@ -138,23 +163,24 @@ export interface BlattOeffentlich {
   quelle?: Quelle;
   herkunft?: string;
   ableitung?: boolean;
-  /** Wasser für die Einsatzform dieses Blatts — nur bei offenen Blättern. */
-  wasserGramm?: number;
+  /** Reglermenge für die Einsatzform dieses Blatts — nur bei offenen Blättern. */
+  reglerGramm?: number;
 }
 
 export interface FormOeffentlich {
   label: string;
   kuerzel: string;
   ergebnis: string;
-  wasserGramm: number | null;
+  reglerGramm: number | null;
 }
 
 export interface MutterrezeptSicht {
   slug: string;
   zentrum: string;
   vollzugriff: boolean;
+  regler: Regler;
   zutatenGramm: ZutatGramm[] | null;
-  formen: Record<Einsatzform, FormOeffentlich>;
+  formen: Partial<Record<Einsatzform, FormOeffentlich>>;
   aeste: Ast[];
   blaetter: BlattOeffentlich[];
 }
