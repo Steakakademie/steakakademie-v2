@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { readFileSync } from 'node:fs'
 import yaml from 'js-yaml'
 import { ohneVerneinung, zeitFehler, zutatOhneNameFehler, korrekturBlock, SEO_TITLE_MAX, ohneMarkenzusatz, parseStructuredText, validate, alleSeeds, sicherheitsKlasse, systemPrompt, slugsInOffenenRezeptPRs, buildMdx, seedStil, ordneNachRotation, schwerErhaeltlich, gaumenBlock } from './recipe-agent.mjs'
-import { SELBST_IM_TITEL } from './lib/beschaffbarkeit.mjs'
+import { SELBST_IM_TITEL, istSelbstmachRezept } from './lib/beschaffbarkeit.mjs'
 import { pruefeDokument } from './lib/content-qualitaet.mjs'
 
 const KOPF = `TITLE: Yakitori Negima
@@ -472,6 +472,22 @@ describe('Beschaffbarkeit', () => {
     expect(validate(d, SEED_V).join(' ')).toMatch(/Selbstmach-Rezept .* ohne Hinweis im Titel/)
     d.title = 'Grobe Bratwurst selbst gemacht'
     expect(validate(d, SEED_V)).toEqual([])
+  })
+
+  it('Hack-Rezept mit Fleischwolf als optionalem Geraet ist kein Selbstmach-Rezept (KAN-95, 21.–23.10.2026)', () => {
+    const d = datensatz(kopfMit('BESCHAFFUNG: Supermarkt + Metzger'), SEED_V)
+    d.title = 'Patlıcan Kebabı – Auberginen-Hackfleisch-Spieß vom Mangal'
+    d.equipment = ['Mangal oder Kugelgrill', 'Breite Flachspieße', 'Fleischwolf (optional, für frisches Hack)']
+    d.ingredients = zutaten('Rinderhackfleisch (20 % Fett)', 'Auberginen', 'Salz', 'Pfeffer', 'Paprika')
+    expect(validate(d, SEED_V)).toEqual([])
+    expect(istSelbstmachRezept(d)).toBe(false)
+  })
+
+  it('Fleischwolf ohne Hack bleibt Selbstmach; Darm oder Poekelsalz sowieso', () => {
+    expect(istSelbstmachRezept({ equipment: ['Fleischwolf'], ingredients: zutaten('Schweineschulter', 'Salz') })).toBe(true)
+    expect(istSelbstmachRezept({ equipment: ['Fleischwolf'], ingredients: zutaten('Schweinehack', 'Naturdarm', 'Salz') })).toBe(true)
+    expect(istSelbstmachRezept({ equipment: ['Smoker'], ingredients: zutaten('Rinderbrust', 'Nitritpökelsalz') })).toBe(true)
+    expect(istSelbstmachRezept({ equipment: ['Grill'], ingredients: zutaten('Rinderhack', 'Salz') })).toBe(false)
   })
 
   it('laesst Bratwurst, Krakauer und Merguez durch', () => {
