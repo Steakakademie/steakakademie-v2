@@ -52,10 +52,23 @@ const SELBSTMACH_ZEICHEN = [
   /(?:natur|kunst|kollagen|saitling|schweine|rinder|schafs?)darm/i, /nitritp(?:ö|oe)kelsalz|p(?:ö|oe)kelsalz|curing salt|prague powder/i,
 ]
 
+// Hackfleisch gibt es an jeder Fleischtheke. Nennt ein Hack-Rezept den Fleischwolf
+// (meist „optional, fuer frisches Hack"), entsteht dadurch kein Hauptprodukt, das der
+// Leser nicht kaufen koennte. Anlass: recipe-grow haengte vom 21. bis 23.10.2026 drei
+// Tage an „Patlıcan Kebabı – Auberginen-Hackfleisch-Spieß" — der Titel ist im Seed fest,
+// das Modell konnte „selbst gemacht" also nie nachtragen, und jeder Lauf endete mit
+// 0 Rezepten (KAN-95).
+const HACK = /hack|gehackt|faschiert|mett\b/i
+
 /** Ist das ein Rezept, dessen Hauptprodukt selbst hergestellt wird (Wurst, Gepökeltes)? */
 export function istSelbstmachRezept ({ equipment = [], ingredients = [] } = {}) {
-  const text = [...equipment, ...ingredients.map(z => `${z?.name ?? ''}`)].join(' ')
-  return SELBSTMACH_ZEICHEN.some(m => m.test(text))
+  const zutaten = ingredients.map(z => `${z?.name ?? ''}`).join(' ')
+  const text = [...equipment, zutaten].join(' ')
+  const zeichen = SELBSTMACH_ZEICHEN.filter(m => m.test(text))
+  if (zeichen.length === 0) return false
+  // Nur der Fleischwolf hat angeschlagen, und das Fleisch kommt als Hack: kein Selbstmach-Rezept.
+  const nurWolf = zeichen.length === 1 && zeichen[0] === SELBSTMACH_ZEICHEN[0]
+  return !(nurWolf && HACK.test(zutaten))
 }
 
 /**
