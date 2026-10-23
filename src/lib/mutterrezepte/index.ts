@@ -18,21 +18,22 @@ export function mutterrezept(slug: string): Mutterrezept | undefined {
 export function sicht(m: Mutterrezept, vollzugriff: boolean): MutterrezeptSicht {
   const formen = Object.fromEntries(
     (Object.keys(m.formen) as Einsatzform[]).map((k) => {
-      const f = m.formen[k];
+      const f = m.formen[k]!;
       const oeffentlich: FormOeffentlich = {
         label: f.label,
         kuerzel: f.kuerzel,
         ergebnis: f.ergebnis,
-        wasserGramm: vollzugriff ? f.wasserGramm : null,
+        reglerGramm: vollzugriff ? f.reglerGramm : null,
       };
       return [k, oeffentlich];
     }),
-  ) as Record<Einsatzform, FormOeffentlich>;
+  ) as Partial<Record<Einsatzform, FormOeffentlich>>;
 
   return {
     slug: m.slug,
     zentrum: m.zentrum,
     vollzugriff,
+    regler: m.regler,
     zutatenGramm: vollzugriff ? m.zutatenGramm : null,
     formen,
     aeste: m.aeste,
@@ -50,7 +51,7 @@ export function sicht(m: Mutterrezept, vollzugriff: boolean): MutterrezeptSicht 
         quelle: b.quelle,
         herkunft: b.herkunft,
         ableitung: b.ableitung,
-        wasserGramm: m.formen[b.form].wasserGramm,
+        reglerGramm: m.formen[b.form]?.reglerGramm,
       };
     }),
   };

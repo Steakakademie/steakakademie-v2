@@ -12,6 +12,7 @@ import GeraeteLink from '@/components/affiliate/GeraeteLink';
 import { ohneGeraete, schrittTeile } from '@/lib/mutterrezepte/schritt-text';
 import { MUTTERREZEPTE, anzahlFrei, mutterrezept, sicht } from '@/lib/mutterrezepte';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
+import { getAuthorBySlug } from '@/lib/authors';
 import { authorSchemaRef, breadcrumbSchema } from '@/lib/schema';
 
 /**
@@ -69,6 +70,7 @@ export default async function MutterrezeptSeite(props: Props) {
 
   const url = `/mutterrezepte/${m.slug}`;
   const frei = anzahlFrei(m);
+  const autor = getAuthorBySlug(m.autorSlug)?.name ?? m.autorSlug;
 
   const recipeLd = {
     '@context': 'https://schema.org',
@@ -82,7 +84,7 @@ export default async function MutterrezeptSeite(props: Props) {
     totalTime: 'PT20M',
     recipeYield: m.ergibt,
     recipeCategory: 'Sauce',
-    keywords: 'Cashewcreme, Cashew-Dip, Cashewsauce, vegane Grillsauce, Sauce zum Grillen',
+    keywords: m.keywords,
     recipeIngredient: m.zutatenLoeffel.map((z) => `${z.menge} ${z.name}`),
     recipeInstructions: m.schritte.map((s, i) => ({
       '@type': 'HowToStep',
@@ -121,12 +123,8 @@ export default async function MutterrezeptSeite(props: Props) {
             <h1 className="mt-2 font-serif text-3xl font-bold leading-tight text-text-light sm:text-4xl lg:text-5xl">
               {m.titel}: ein Grundrezept, {m.blaetter.length} Einsätze
             </h1>
-            <p className="mt-4 font-body text-[1.08rem] leading-relaxed text-text-secondary">
-              Cremig wie Mayonnaise, frisch durch Limette, ohne Ei und ohne Milch. Wie bei den Muttersaucen der
-              klassischen Küche steht ein Grundrezept in der Mitte — und daraus werden Dip, Spiegel, Dressing,
-              Marinade oder warme Sauce. Die Ideen stammen aus Küchen rund um die Welt, von Brasilien bis Japan — jede mit Quelle.
-            </p>
-            <p className="mt-5 font-sans text-xs text-text-muted">Von Jonas · Saucen &amp; Rubs</p>
+            <p className="mt-4 font-body text-[1.08rem] leading-relaxed text-text-secondary">{m.einleitung}</p>
+            <p className="mt-5 font-sans text-xs text-text-muted">Von {autor} · {m.rubrik}</p>
             <AutorHinweis authorSlug={m.autorSlug} variante="rezept" dokument={m} />
             </div>
             {/* Ein Bild je Mutterrezept (Uwe, 22.10.2026). Kennzeichnung wie RecipeTemplate:
@@ -170,7 +168,7 @@ export default async function MutterrezeptSeite(props: Props) {
               <p className="mt-3 flex items-start gap-2 font-sans text-xs leading-relaxed text-text-muted">
                 <Scale size={14} className="mt-0.5 shrink-0 text-brand-gold" aria-hidden="true" />
                 <span>
-                  Grammgenau — samt Wassermenge für jede Einsatzform — im{' '}
+                  Grammgenau — samt Konsistenz-Regler für jede Einsatzform — im{' '}
                   <Link href="/vip" className="underline hover:text-brand-fire">VIP-Pass</Link>.
                 </span>
               </p>
@@ -213,11 +211,11 @@ export default async function MutterrezeptSeite(props: Props) {
           {/* ── Baum ── */}
           <section className="mt-16" aria-labelledby="baum">
             <h2 id="baum" className="font-serif text-2xl font-bold text-text-light sm:text-3xl">
-              Der Baum: {m.blaetter.length} Einsätze für die Creme
+              Der Baum: {m.blaetter.length} Einsätze
             </h2>
             <p className="mt-2 max-w-3xl font-body text-text-secondary">
               Wähle einen Ast, dann ein Blatt. Der Buchstabe im Punkt zeigt die Einsatzform. {frei} Einsätze sind
-              hier frei — mit Abwandlung in Gramm, Wassermenge und Link zum Rezept. Alle übrigen gehören zum VIP-Pass.
+              hier frei — mit Abwandlung in Gramm, Konsistenz-Regler und Link zum Rezept. Alle übrigen gehören zum VIP-Pass.
             </p>
             <div className="mt-6">
               <MutterrezeptBaum start={sicht(m, false)} rezepte={rezepte} />
@@ -227,9 +225,9 @@ export default async function MutterrezeptSeite(props: Props) {
           <section className="mt-14 max-w-3xl rounded-xl border border-border-subtle bg-surface-card p-5 font-sans text-sm leading-relaxed text-text-secondary">
             <p>
               <strong className="text-text-light">So entsteht der Baum:</strong> Jede Einsatzidee stammt aus einer
-              öffentlich zugänglichen Quelle und ist am Blatt verlinkt; Rezepttexte haben wir nicht übernommen. Wo das
-              Original ganze oder gehackte Cashews nutzt und wir es auf die Creme übertragen, steht „Eigene Ableitung“.
-              Die Grammangaben der Abwandlungen sind Richtwerte und nicht probegekocht — schmeck immer ab.
+              öffentlich zugänglichen Quelle und ist am Blatt verlinkt; Rezepttexte haben wir nicht übernommen.{' '}
+              {m.ableitungHinweis} Die Grammangaben der Abwandlungen sind Richtwerte und nicht probegekocht — schmeck
+              immer ab.
             </p>
           </section>
         </div>
