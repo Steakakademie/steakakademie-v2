@@ -23,7 +23,7 @@ davon viele reine Doku-Commits (`docs(...)`, `chore(gitignore)`).
 **1. Ignored Build Step** (Projekt-Einstellung, nicht in `vercel.json`):
 
 ```sh
-P=$VERCEL_GIT_PREVIOUS_SHA;[ "$P" ]&&[ $P != $VERCEL_GIT_COMMIT_SHA ]&&git diff --quiet $P HEAD -- ':!docs' ':!plans' ':!compliance' ':!steakakademie-audit' ':!handoff' ':!wachstum' ':!.claude' ':!.agents' ':!.github' ':!.gitignore' ':(exclude,glob)*.md'
+P=$VERCEL_GIT_PREVIOUS_SHA;[ "$P" ]&&[ $P != $VERCEL_GIT_COMMIT_SHA ]&&git diff --quiet $P HEAD -- ':!docs' ':!plans' ':!compliance' ':!steakakademie-audit' ':!handoff' ':!wachstum' ':!.claude' ':!.agents' ':!.github' ':(exclude,glob)*.md';[ $? = 0 ]
 ```
 
 - Exit 0 = Build überspringen, alles andere = bauen.
@@ -33,8 +33,19 @@ P=$VERCEL_GIT_PREVIOUS_SHA;[ "$P" ]&&[ $P != $VERCEL_GIT_COMMIT_SHA ]&&git diff 
   endeten `CANCELED`, das neue Passwort griff nicht. Env-Änderungen brauchen einen Build.
 - `VERCEL_GIT_PREVIOUS_SHA` ist der letzte **erfolgreiche** Deploy dieses Branches.
   Verglichen wird also alles seit dem letzten Build, nicht nur der letzte Commit.
-- Sicher nach oben: Fehlt die Variable (erster Push eines neuen Branches) oder liegt
-  der alte Commit nicht im flachen Klon (Exit 128), wird gebaut.
+- Sicher nach oben: Fehlt die Variable (erster Push eines neuen Branches), wird gebaut.
+- **Exit 128 ist KEIN „bauen" — Korrektur 23.10.2026, belegt.** Die Fassung vom 19.10.
+  endete mit dem Exitcode von `git diff`; liegt der Vorgänger-Commit nicht im flachen
+  Klon (`fatal: bad object c8687ae…`), ist das 128, und Vercel setzt das Deployment auf
+  **ERROR** statt zu bauen. Genau das traf am 22.10. 22:41 UTC drei Preview-Deploys
+  (Branches von #471/#472/#473, jeweils nach einem Merge von `main` in den Branch —
+  der letzte erfolgreiche Deploy des Branches lag damit außerhalb der Klon-Tiefe) und
+  erzeugte KAN-96/KAN-97. Deshalb endet der Befehl jetzt mit `;[ $? = 0 ]`: nur ein
+  leerer Diff liefert 0 (überspringen), alles andere — auch 128 — liefert 1 (bauen).
+  Lokal geprüft (23.10.): fehlender Vorgänger → 1, Code-Commit → 1, leere Variable → 1,
+  Redeploy → 1, Doku-Commit #468 → 0. Dafür ist `':!.gitignore'` aus der Liste
+  gefallen (Feldgrenze 256 Zeichen, jetzt 250): eine `.gitignore`-Änderung baut
+  einmal umsonst, das ist der billigere Fehler.
 - Ausgenommen sind nur Pfade, die der Build nachweislich nicht liest (prebuild,
   postbuild, `contentlayer.config`, `next.config`, `src/` am 19.10.2026 per grep geprüft)
   und `.md` **nur im Wurzelverzeichnis** (`glob`-Magie: `*` überspringt kein `/`).
@@ -43,7 +54,7 @@ P=$VERCEL_GIT_PREVIOUS_SHA;[ "$P" ]&&[ $P != $VERCEL_GIT_COMMIT_SHA ]&&git diff 
   Änderungen unter `content/`, `data/` oder `design/`.
 - **Wer einen neuen Ordner anlegt, den der Build liest, darf ihn nicht in diese
   Liste aufnehmen.** Wer einen neuen reinen Doku-Ordner anlegt, kann ihn ergänzen
-  (Feld max. 256 Zeichen, aktuell 254).
+  (Feld max. 256 Zeichen, aktuell 250).
 - PRs blockiert das nicht: Vercel ist seit 05.09.2026 kein Pflicht-Check (CLAUDE.md §A).
 
 **2. Build-Maschine:** fest **Standard** (4 vCPU, 8 GB) statt Elastic. Elastic lief
