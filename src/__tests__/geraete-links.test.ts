@@ -87,16 +87,15 @@ describe('Der eine Schalter (Programmstatus)', () => {
     }
   });
 
-  // Start-PR 01.11.2026 (C11): der Schalter steht auf active. Bis dahin galt der
-  // umgekehrte Test („zeigt nichts auf awin1.com") — nach dem Merge dieses PR ist
-  // der Amazon-Weg fuer SharkNinja-Geraete Geschichte.
-  it('SharkNinja ist active — /go/ zeigt auf awin1.com, nicht mehr auf Amazon', () => {
+  // Bis zur Gewerbeanmeldung (Uwe, 23.10.2026) steht der Schalter auf applied:
+  // kein Klick darf Provision ausloesen. #470 hatte ihn am 22.10. auf active
+  // gestellt, dieser Test hat ihn zurueckgeholt. Der Start-PR am 01.11. dreht
+  // diesen Test wieder um (status active, Ziel www.awin1.com, awinmid 19810).
+  it('solange SharkNinja nicht active ist, zeigt nichts auf awin1.com', () => {
     const programm = getAffiliatePrograms().find((p) => p.providers.includes('sharkninja'));
-    expect(programm?.status).toBe('active');
-    expect(aktivesPartnerziel(set)).toMatchObject({ advertiser: 'sharkninja' });
-    const u = new URL(weiterleitungsZiel(set, 'mr-limetten-cashewcreme-s3').url);
-    expect(u.hostname).toBe('www.awin1.com');
-    expect(u.searchParams.get('awinmid')).toBe('19810');
+    expect(programm?.status).not.toBe('active');
+    expect(aktivesPartnerziel(set)).toBeNull();
+    expect(weiterleitungsZiel(set, 'mr-limetten-cashewcreme-s3').url).toBe(set.affiliateUrl);
   });
 
   it('mit active geht /go/ zum AWIN-Link mit clickref = Platz', async () => {
