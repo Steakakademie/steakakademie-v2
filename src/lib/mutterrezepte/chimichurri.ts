@@ -102,7 +102,7 @@ export const CHIMICHURRI: Mutterrezept = {
   schritte: [
     {
       titel: 'Hacken, nicht pürieren',
-      text: 'Petersilie waschen, trocken schleudern und mit dem Messer fein hacken. Knoblauch sehr fein würfeln. Ein Mixer macht Brei und zieht Bitterstoffe aus den Stielen — das Messer lässt die Blätter ganz.',
+      text: 'Petersilie waschen, trocken schleudern und mit einem scharfen [[wuesthof-classic-kochmesser-20|Kochmesser]] fein hacken. Knoblauch sehr fein würfeln. Ein Mixer macht Brei und zieht Bitterstoffe aus den Stielen — das Messer lässt die Blätter ganz.',
     },
     {
       titel: 'Trocken würzen',
