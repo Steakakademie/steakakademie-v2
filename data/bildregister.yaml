@@ -935,6 +935,13 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-22
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft. Motiv laut Prompt ohne Personen und ohne Marken (Schale Creme, Limette, Cashews, Fladenbrot); nur Verkleinern/Komprimieren, kein generativer Nachlauf. Kennzeichnung auf der Seite - Alt-Text und Badge "KI-Symbolbild" mit Link /ki-disclaimer (AI Act Art. 50)
+  images/mutterrezepte/nam-jim-jaew.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/nano-banana-pro, 16:9), Prompt-Kern und Verfahren in public/images/mutterrezepte/CREDITS.md
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-23
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft. Motiv laut Prompt ohne Personen und ohne Marken (Schale Jaew-Sauce, Limetten, getrocknete Chilis, Reispulver, Bambuskoerbchen auf Holz); nur Verkleinern/Komprimieren, kein generativer Nachlauf. Kennzeichnung auf der Seite - Alt-Text und Badge "KI-Symbolbild" mit Link /ki-disclaimer (AI Act Art. 50)
   images/mutterrezepte/chimichurri.jpg:
     status: ki
     quelle: fal.ai (fal-ai/nano-banana-pro, 16:9), Prompt-Kern und Verfahren in public/images/mutterrezepte/CREDITS.md
