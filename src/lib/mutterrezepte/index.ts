@@ -1,11 +1,12 @@
 import { LIMETTEN_CASHEWCREME } from './limetten-cashewcreme';
 import { CHIMICHURRI } from './chimichurri';
+import { NAM_JIM_JAEW } from './nam-jim-jaew';
 import type { Einsatzform, FormOeffentlich, Mutterrezept, MutterrezeptSicht } from './typen';
 
 export type * from './typen';
 
 /** Alle Mutterrezepte. Neue Bäume hier eintragen. */
-export const MUTTERREZEPTE: readonly Mutterrezept[] = [LIMETTEN_CASHEWCREME, CHIMICHURRI];
+export const MUTTERREZEPTE: readonly Mutterrezept[] = [LIMETTEN_CASHEWCREME, CHIMICHURRI, NAM_JIM_JAEW];
 
 export function mutterrezept(slug: string): Mutterrezept | undefined {
   return MUTTERREZEPTE.find((m) => m.slug === slug);
