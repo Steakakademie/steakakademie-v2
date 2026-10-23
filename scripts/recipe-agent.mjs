@@ -1105,7 +1105,13 @@ async function main() {
     }
   }
   const pendingTotal = toGenerate.length
-  if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT)   // „täglich 1" etc.
+  // „täglich 1" heisst: ein GELIEFERTES Rezept. Scheitert ein Seed in beiden Anlaeufen,
+  // kommt der naechste dran — bis RESERVE weitere Seeds verbraucht sind (Kostendeckel:
+  // hoechstens (LIMIT + RESERVE) × VERSUCHE Modellaufrufe). Vorher nahm der Lauf genau
+  // LIMIT Seeds und gab bei deren Scheitern auf: 21.–23.10.2026 dreimal derselbe Seed,
+  // dreimal 0 Rezepte (KAN-95).
+  const RESERVE = 2
+  if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT + RESERVE)
 
   // Seed-Liste trockengelaufen → Signal für CI-Benachrichtigung (Jira),
   // damit Uwe neue Cuts nachlegt. Nur im echten Wachstums-Lauf (nicht --force/--slug).
@@ -1118,7 +1124,7 @@ async function main() {
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)
   console.log(`  ${seeds.length - toGenerate.length} bereits generiert (Cache)`)
-  console.log(`  ${c.yellow(toGenerate.length + '')} neu zu generieren\n`)
+  console.log(`  ${c.yellow(toGenerate.length + '')} neu zu generieren${LIMIT > 0 ? c.dim(` (Ziel: ${LIMIT}, bis zu ${RESERVE} Ersatz-Seeds bei Fehlern)`) : ''}\n`)
 
   if (toGenerate.length === 0) {
     console.log(c.green('  Alle Rezepte aktuell — nichts zu tun.\n'))
@@ -1134,6 +1140,7 @@ async function main() {
   const VERSUCHE = 2
 
   for (const seed of toGenerate) {
+    if (LIMIT > 0 && success >= LIMIT) break   // Ziel erreicht, Ersatz-Seeds bleiben unberuehrt
     let data = null
     let letzteFehler = []
     // Nur Validierungsfehler gehen ans Modell zurueck — ein API-Fehler (Timeout,
