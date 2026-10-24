@@ -949,3 +949,10 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-23
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft. Motiv laut Prompt ohne Personen und ohne Marken (Schale gehacktes Chimichurri, Holzloeffel, Petersilie, Knoblauchknolle, Essigflasche ohne Etikett auf Holzbrett); nur Verkleinern/Komprimieren, kein generativer Nachlauf. Kennzeichnung auf der Seite - Alt-Text und Badge "KI-Symbolbild" mit Link /ki-disclaimer (AI Act Art. 50)
+  images/rezepte/braai-chicken-peri-peri.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/braai-chicken-peri-peri.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-24
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
