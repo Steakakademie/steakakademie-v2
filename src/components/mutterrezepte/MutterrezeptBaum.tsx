@@ -67,7 +67,7 @@ function BlattDetail({
   sicht: MutterrezeptSicht;
   rezepte: Record<string, { titel: string; url: string }>;
 }) {
-  const form = sicht.formen[blatt.form];
+  const form = sicht.formen[blatt.form]!;
   const ast = sicht.aeste.find((a) => a.id === blatt.ast);
   const farbe = FARBE[blatt.form];
 
@@ -90,7 +90,7 @@ function BlattDetail({
           <Lock className="mx-auto text-brand-gold" size={24} aria-hidden="true" />
           <p className="mt-2 font-serif text-lg font-bold text-text-light">Dieser Einsatz ist Teil des VIP-Passes</p>
           <p className="mt-1 font-body text-sm leading-relaxed text-text-secondary">
-            Abwandlung in Gramm, Wassermenge für die Konsistenz und die Verknüpfung zum Rezept.
+            Abwandlung in Gramm, Konsistenz-Regler und die Verknüpfung zum Rezept.
           </p>
           <Link
             href="/vip#warteliste"
@@ -104,17 +104,17 @@ function BlattDetail({
           <p className="mt-4 font-body leading-relaxed text-text-primary">{blatt.warum}</p>
           <div className="mt-4 rounded-xl bg-surface-elevated p-4">
             <p className="font-sans text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
-              Abwandlung · auf eine Grundmenge (ca. 300 g)
+              Abwandlung · auf eine Grundmenge ({sicht.regler.grundmenge})
             </p>
             <p className="mt-1 font-body text-sm leading-relaxed text-text-primary">{blatt.abwandlung}</p>
           </div>
-          {blatt.wasserGramm != null && (
+          {blatt.reglerGramm != null && (
             <div className="mt-3 rounded-xl bg-surface-elevated p-4">
               <p className="font-sans text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
                 Konsistenz für {form.label}
               </p>
               <p className="mt-1 font-body text-sm leading-relaxed text-text-primary">
-                150 g Cashews + <strong className="text-text-light">{blatt.wasserGramm} g Wasser</strong> — {form.ergebnis}
+                {sicht.regler.basis} + <strong className="text-text-light">{blatt.reglerGramm} g {sicht.regler.name}</strong> — {form.ergebnis}
               </p>
             </div>
           )}
@@ -192,6 +192,8 @@ export default function MutterrezeptBaum({
 
   const blatt = sicht.blaetter.find((b) => b.id === blattId) ?? null;
   const astBlaetter = sicht.blaetter.filter((b) => b.ast === astId);
+  // Nur die Einsatzformen, die dieses Grundrezept kennt (Reihenfolge wie die Legende).
+  const formenReihe = FORMEN_REIHE.filter((f) => sicht.formen[f]);
   const freiAnzahl = sicht.blaetter.filter((b) => !b.gesperrt).length;
 
   const geo = useMemo(() => {
@@ -243,7 +245,7 @@ export default function MutterrezeptBaum({
         >
           Alle Einsatzformen
         </button>
-        {FORMEN_REIHE.map((f) => (
+        {formenReihe.map((f) => (
           <button
             key={f}
             type="button"
@@ -251,8 +253,8 @@ export default function MutterrezeptBaum({
             aria-pressed={filter === f}
             className={`inline-flex min-h-[40px] items-center gap-2 rounded-full border px-3.5 font-sans text-sm transition-colors ${filter === f ? 'border-text-light bg-text-light text-surface-dark' : 'border-border-subtle text-text-primary hover:border-brand-gold'}`}
           >
-            <Punkt form={f} /> {sicht.formen[f].label}
-            <span className="font-bold opacity-70">{sicht.formen[f].kuerzel}</span>
+            <Punkt form={f} /> {sicht.formen[f]!.label}
+            <span className="font-bold opacity-70">{sicht.formen[f]!.kuerzel}</span>
           </button>
         ))}
       </div>
@@ -333,7 +335,7 @@ export default function MutterrezeptBaum({
                     type="button"
                     onClick={() => waehleBlatt(b)}
                     aria-pressed={gewaehlt}
-                    aria-label={`${b.name} — ${sicht.formen[b.form].label}${b.gesperrt ? ' (VIP)' : ''}`}
+                    aria-label={`${b.name} — ${sicht.formen[b.form]!.label}${b.gesperrt ? ' (VIP)' : ''}`}
                     title={b.name}
                     className="absolute flex h-[26px] w-[26px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-sans text-[10px] font-bold leading-none transition-opacity"
                     style={{
@@ -346,7 +348,7 @@ export default function MutterrezeptBaum({
                       boxShadow: gewaehlt ? '0 0 0 3px #0F0A06, 0 0 0 5px #F0E8D8' : 'none',
                     }}
                   >
-                    {sicht.formen[b.form].kuerzel}
+                    {sicht.formen[b.form]!.kuerzel}
                   </button>
                 );
               }),
@@ -376,7 +378,7 @@ export default function MutterrezeptBaum({
                   >
                     <Punkt form={b.form} hohl={b.gesperrt} />
                     <span className="flex-1">{b.name}</span>
-                    <span className="font-sans text-xs text-text-muted">{b.gesperrt ? 'VIP' : sicht.formen[b.form].label}</span>
+                    <span className="font-sans text-xs text-text-muted">{b.gesperrt ? 'VIP' : sicht.formen[b.form]!.label}</span>
                   </button>
                 </li>
               ))}
@@ -417,7 +419,7 @@ export default function MutterrezeptBaum({
                 >
                   <Punkt form={b.form} hohl={b.gesperrt} size={14} />
                   <span className="flex-1">{b.name}</span>
-                  <span className="font-sans text-xs text-text-muted">{b.gesperrt ? 'VIP' : sicht.formen[b.form].label}</span>
+                  <span className="font-sans text-xs text-text-muted">{b.gesperrt ? 'VIP' : sicht.formen[b.form]!.label}</span>
                 </button>
                 {offen && (
                   <div className="border-t border-border-subtle px-4 pb-5 pt-4">
@@ -436,19 +438,19 @@ export default function MutterrezeptBaum({
           Konsistenz-Regler
         </h2>
         <p className="mt-2 max-w-2xl font-body text-text-secondary">
-          Dieselbe Grundmenge, andere Wassermenge — so wird aus der Creme ein Aufstrich, ein Dip oder ein Dressing.
-          Basis: 150 g Cashews.
+          Dieselbe Grundmenge, andere Menge {sicht.regler.name} — so wird aus dem Grundrezept ein Aufstrich, ein Dip
+          oder ein Dressing. Basis: {sicht.regler.basis}.
         </p>
         <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
-          {FORMEN_REIHE.map((f) => {
-            const info = sicht.formen[f];
+          {formenReihe.map((f) => {
+            const info = sicht.formen[f]!;
             return (
               <li key={f} className="rounded-xl border border-border-subtle bg-surface-card p-3">
                 <span className="flex items-center gap-2 font-sans text-xs font-semibold text-text-light">
                   <Punkt form={f} /> {info.label}
                 </span>
                 <span className="mt-2 block font-serif text-xl font-bold text-text-light">
-                  {info.wasserGramm != null ? `${info.wasserGramm} g` : <Lock size={16} className="text-brand-gold" aria-label="im VIP-Pass" />}
+                  {info.reglerGramm != null ? `${info.reglerGramm} g` : <Lock size={16} className="text-brand-gold" aria-label="im VIP-Pass" />}
                 </span>
                 <span className="mt-1 block font-sans text-xs leading-snug text-text-muted">{info.ergebnis}</span>
               </li>
@@ -457,7 +459,7 @@ export default function MutterrezeptBaum({
         </ul>
         {!sicht.vollzugriff && (
           <p className="mt-3 font-sans text-xs text-text-muted">
-            Die Wassermengen in Gramm gehören zum VIP-Pass.{' '}
+            Die Mengen in Gramm gehören zum VIP-Pass.{' '}
             <Link href="/vip#warteliste" className="underline hover:text-brand-fire">
               Zur Warteliste
             </Link>

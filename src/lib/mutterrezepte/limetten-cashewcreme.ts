@@ -20,14 +20,14 @@ import type { Ast, Einsatzform, FormInfo, Mutterrezept } from './typen';
  * - Cashew ist ein häufiges, oft schweres Allergen → immer kennzeichnen.
  */
 
-const FORMEN: Record<Einsatzform, FormInfo> = {
-  dip: { label: 'Dip', kuerzel: 'D', wasserGramm: 80, ergebnis: 'hält am Gemüse, tropft nicht' },
-  klecks: { label: 'Klecks', kuerzel: 'K', wasserGramm: 95, ergebnis: 'bleibt als Tupfer stehen' },
-  spiegel: { label: 'Spiegel', kuerzel: 'S', wasserGramm: 110, ergebnis: 'läuft langsam, hält den Rand' },
-  dressing: { label: 'Dressing', kuerzel: 'Dr', wasserGramm: 160, ergebnis: 'gießfähig' },
-  aufstrich: { label: 'Aufstrich', kuerzel: 'A', wasserGramm: 60, ergebnis: 'streichfest' },
-  marinade: { label: 'Marinade', kuerzel: 'M', wasserGramm: 120, ergebnis: 'haftet am Fleisch' },
-  warm: { label: 'Warme Sauce', kuerzel: 'W', wasserGramm: 180, ergebnis: 'dickt beim Erhitzen nach — zum Schluss einrühren' },
+const FORMEN: Partial<Record<Einsatzform, FormInfo>> = {
+  dip: { label: 'Dip', kuerzel: 'D', reglerGramm: 80, ergebnis: 'hält am Gemüse, tropft nicht' },
+  klecks: { label: 'Klecks', kuerzel: 'K', reglerGramm: 95, ergebnis: 'bleibt als Tupfer stehen' },
+  spiegel: { label: 'Spiegel', kuerzel: 'S', reglerGramm: 110, ergebnis: 'läuft langsam, hält den Rand' },
+  dressing: { label: 'Dressing', kuerzel: 'Dr', reglerGramm: 160, ergebnis: 'gießfähig' },
+  aufstrich: { label: 'Aufstrich', kuerzel: 'A', reglerGramm: 60, ergebnis: 'streichfest' },
+  marinade: { label: 'Marinade', kuerzel: 'M', reglerGramm: 120, ergebnis: 'haftet am Fleisch' },
+  warm: { label: 'Warme Sauce', kuerzel: 'W', reglerGramm: 180, ergebnis: 'dickt beim Erhitzen nach — zum Schluss einrühren' },
 };
 
 const AESTE: Ast[] = [
@@ -55,6 +55,12 @@ export const LIMETTEN_CASHEWCREME: Mutterrezept = {
   zentrum: 'Cashew­creme',
   beschreibung:
     'Cremig wie Mayonnaise, frisch durch Limette, ohne Ei und ohne Milch: die Limetten-Cashewcreme als Mutterrezept — mit Einsätzen als Dip, Spiegel, Klecks, Dressing, Marinade und warme Sauce für Gemüse, Fleisch, Fisch und Beilagen vom Grill.',
+  einleitung:
+    'Cremig wie Mayonnaise, frisch durch Limette, ohne Ei und ohne Milch. Wie bei den Muttersaucen der klassischen Küche steht ein Grundrezept in der Mitte — und daraus werden Dip, Spiegel, Dressing, Marinade oder warme Sauce. Die Ideen stammen aus Küchen rund um die Welt, von Brasilien bis Japan — jede mit Quelle.',
+  rubrik: 'Saucen & Rubs',
+  keywords: 'Cashewcreme, Cashew-Dip, Cashewsauce, vegane Grillsauce, Sauce zum Grillen',
+  ableitungHinweis:
+    'Wo das Original ganze oder gehackte Cashews nutzt und wir es auf die Creme übertragen, steht „Eigene Ableitung“.',
   autorSlug: 'jonas',
   veroeffentlicht: '2026-10-21',
   // Entscheidung Uwe 22.10.2026: ein KI-Bild je Mutterrezept (Nano Banana Pro via fal.ai,
@@ -111,6 +117,7 @@ export const LIMETTEN_CASHEWCREME: Mutterrezept = {
   lagerung:
     'Luftdicht im Kühlschrank aufbewahren und innerhalb von drei Tagen verbrauchen. Sie dickt nach: vor dem Servieren mit einem Schluck Wasser glattrühren. Zum Einfrieren eignet sie sich nicht — sie trennt sich und wird körnig.',
   allergene: 'Enthält Cashewkerne (Schalenfrüchte).',
+  regler: { basis: '150 g Cashews', name: 'Wasser', grundmenge: 'ca. 300 g' },
   formen: FORMEN,
   aeste: AESTE,
   blaetter: [

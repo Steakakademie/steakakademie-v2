@@ -30,7 +30,9 @@ describe.each(MUTTERREZEPTE.map((m) => [m.slug, m] as const))('Mutterrezept %s',
     for (const b of m.blaetter) {
       expect(aeste.has(b.ast), `${b.id}: Ast ${b.ast}`).toBe(true);
       expect(FORMEN, `${b.id}: Form ${b.form}`).toContain(b.form);
+      expect(m.formen[b.form], `${b.id}: Form ${b.form} hat keinen Konsistenz-Regler in diesem Mutterrezept`).toBeTruthy();
     }
+    expect(Object.keys(m.formen).length, 'mindestens drei Einsatzformen').toBeGreaterThanOrEqual(3);
     for (const a of m.aeste) {
       expect(m.blaetter.some((b) => b.ast === a.id), `Ast ${a.id} ohne Blatt`).toBe(true);
     }
@@ -59,15 +61,20 @@ describe.each(MUTTERREZEPTE.map((m) => [m.slug, m] as const))('Mutterrezept %s',
     expect(frei).toBeLessThan(m.blaetter.length);
   });
 
-  it('nennt die Allergene', () => {
-    expect(m.allergene).toMatch(/Cashew|Schalenfrücht/);
+  it('nennt Allergene, Konsistenz-Regler und die Seitentexte', () => {
+    // Ein Allergen-Satz ist Pflicht — auch „keine“ muss dastehen, nie leer.
+    expect(m.allergene.trim().length).toBeGreaterThan(10);
+    for (const feld of ['basis', 'name', 'grundmenge'] as const) expect(m.regler[feld].trim()).not.toBe('');
+    for (const feld of ['einleitung', 'rubrik', 'keywords', 'ableitungHinweis'] as const) {
+      expect(m[feld].trim().length, feld).toBeGreaterThan(5);
+    }
   });
 
   it('öffentliche Sicht verrät keine gesperrten Inhalte', () => {
     const s = sicht(m, false);
     expect(s.vollzugriff).toBe(false);
     expect(s.zutatenGramm).toBeNull();
-    for (const f of Object.values(s.formen)) expect(f.wasserGramm).toBeNull();
+    for (const f of Object.values(s.formen)) expect(f.reglerGramm).toBeNull();
 
     const json = JSON.stringify(s);
     for (const b of m.blaetter.filter((x) => !x.frei)) {
@@ -79,14 +86,14 @@ describe.each(MUTTERREZEPTE.map((m) => [m.slug, m] as const))('Mutterrezept %s',
       expect(o.schmiedeAuftrag).toBeUndefined();
       expect(o.quelle).toBeUndefined();
       expect(o.herkunft).toBeUndefined();
-      expect(o.wasserGramm).toBeUndefined();
+      expect(o.reglerGramm).toBeUndefined();
       expect(json).not.toContain(b.warum);
     }
     for (const b of m.blaetter.filter((x) => x.frei)) {
       const o = s.blaetter.find((x) => x.id === b.id)!;
       expect(o.gesperrt).toBe(false);
       expect(o.abwandlung).toBe(b.abwandlung);
-      expect(o.wasserGramm).toBe(m.formen[b.form].wasserGramm);
+      expect(o.reglerGramm).toBe(m.formen[b.form]!.reglerGramm);
     }
   });
 
@@ -113,7 +120,7 @@ describe('API /api/mutterrezepte/[slug]', () => {
   it('verweigert die Vollansicht ohne Vollzugriff (403)', async () => {
     const res = await aufruf('limetten-cashewcreme', '203.0.113.10');
     expect(res.status).toBe(403);
-    expect(await res.text()).not.toContain('wasserGramm');
+    expect(await res.text()).not.toContain('reglerGramm');
   });
 
   it('liefert die Vollansicht mit Vollzugriff, nie aus dem Cache', async () => {
