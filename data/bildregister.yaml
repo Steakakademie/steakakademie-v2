@@ -935,6 +935,13 @@ bilder:
     namensnennung: false
     erworben_am: 2026-10-22
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft. Motiv laut Prompt ohne Personen und ohne Marken (Schale Creme, Limette, Cashews, Fladenbrot); nur Verkleinern/Komprimieren, kein generativer Nachlauf. Kennzeichnung auf der Seite - Alt-Text und Badge "KI-Symbolbild" mit Link /ki-disclaimer (AI Act Art. 50)
+  images/rezepte/patlican-kebabi-auberginen-hackfleisch.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/patlican-kebabi-auberginen-hackfleisch.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-23
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/mutterrezepte/nam-jim-jaew.jpg:
     status: ki
     quelle: fal.ai (fal-ai/nano-banana-pro, 16:9), Prompt-Kern und Verfahren in public/images/mutterrezepte/CREDITS.md
