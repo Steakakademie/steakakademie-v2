@@ -55,6 +55,11 @@ export const nichtKopierbar = (msg) =>
   !/quotaExceeded|rateLimitExceeded|dailyLimitExceeded|userRateLimitExceeded/.test(msg) &&
   /HTTP (403|404)\b|videoNotFound|forbidden|playlistItemsNotAccessible/.test(msg);
 
+/** 400 failedPrecondition = YouTube lehnt das Einfügen ab, z. B. bei privaten Fremdvideos („Private video“).
+ *  Nur überspringen, wenn das Video für das Ziel tatsächlich unsichtbar ist — sonst ist es ein echter Fehler. */
+export const istVorbedingungsfehler = (msg) => /failedPrecondition/.test(msg);
+export const unsichtbar = (antwort, videoId) => !(antwort?.items ?? []).some((v) => v.id === videoId);
+
 async function main() {
   const a = argumente(process.argv.slice(2), ['anwenden', 'pruefen']);
   const tagesBudget = a['max-einheiten'] ? Number(a['max-einheiten']) : 8000;
@@ -122,7 +127,13 @@ async function main() {
         await mitWiederholung(() => api('playlistItems', { method: 'POST', params: { part: 'snippet' }, body: { snippet: { playlistId: s.zielId, resourceId: { kind: 'youtube#video', videoId } } }, z: zz }));
         s.erledigt.push(videoId);
       } catch (e) {
-        if (!nichtKopierbar(e.message)) {
+        let ueberspringen = nichtKopierbar(e.message);
+        if (!ueberspringen && istVorbedingungsfehler(e.message)) {
+          const sicht = await api('videos', { params: { part: 'id', id: videoId }, z: zz });
+          verbraucht += 1;
+          ueberspringen = unsichtbar(sicht, videoId);
+        }
+        if (!ueberspringen) {
           speichernMitBudget();
           // Kontingent leer → für heute als verbraucht markieren, der nächste Aufruf wartet auf den Reset.
           if (/quotaExceeded|dailyLimitExceeded/.test(e.message)) { stand._tag.verbraucht = tagesBudget; speichern(); }
