@@ -1,0 +1,60 @@
+# Platzhalter zum Gegenlesen des Layouts — kein echter Partner, wird nie öffentlich.
+# Form: src/lib/chefs-table/typen.ts · Konzept: konzept_portraitseite_kuechenpartner_2026-10-24
+# Ein echter Eintrag entsteht aus dem Fragebogen (5 Fragen) und wird erst mit beiden
+# Freigabe-Daten (partner + uwe) und ohne `platzhalter: true` öffentlich.
+slug: beispiel-kueche
+name: "[Name des Restaurants]"
+art: restaurant
+ort: "[Stadt]"
+land: DE
+seit: 2026
+platzhalter: true
+koch:
+  name: "[Name des Kochs]"
+  rolle: "[Küchenchef · Inhaber]"
+kurz: "[Ein Satz, wofür diese Küche steht — aus Frage 2 „Was macht deine Küche aus?“]"
+geschichte:
+  - "[Absatz 1 der Feuer-Geschichte — aus Frage 1 „Wann hat dich das Feuer gepackt?“. Von der KI im Steakakademie-Ton geschrieben, vom Partner per Vorschau-Link freigegeben, dann von Uwe.]"
+  - "[Absatz 2 — aus Frage 2 „Was macht deine Küche aus?“. Insgesamt vier bis sechs Sätze, keine Superlative, keine Bewertungen.]"
+zitat: "[Ein Satz des Kochs, wörtlich aus dem Fragebogen]"
+signature:
+  titel: "[Name des Signature-Gerichts]"
+  warum: "[Warum gerade dieses Gericht — Antwort auf Frage 3, zwei Sätze. Hier steht die Geschichte hinter dem Gericht, nicht das Rezept.]"
+  rezept:
+    titel: "[Name des Signature-Gerichts]"
+    vip: true
+    kicker: "[Land / Kategorie] · [Technik]"
+    zeit: "[Zeit]"
+    portionen: "[Portionen]"
+tipp: "[Antwort auf Frage 4 „Dein bester Tipp für Grill-Anfänger?“ — ein konkreter Tipp, ein bis zwei Sätze.]"
+rezepte:
+  - titel: "[Rezepttitel 1 — frei]"
+    vip: false
+    kicker: "[Land] · [Technik]"
+    zeit: "[Zeit]"
+    portionen: "[Portionen]"
+  - titel: "[Rezepttitel 2 — VIP]"
+    vip: true
+    kicker: "[Land] · [Technik]"
+    zeit: "[Zeit]"
+    portionen: "[Portionen]"
+  - titel: "[Rezepttitel 3 — VIP]"
+    vip: true
+    kicker: "[Land] · [Technik]"
+    zeit: "[Zeit]"
+    portionen: "[Portionen]"
+fakten:
+  name: "[Name exakt wie im Google-Unternehmensprofil]"
+  adresse: "[Straße Nr., PLZ Ort]"
+  telefon: "[Telefon wie im Google-Profil]"
+  website: "https://example.com"
+  reservierung: "https://example.com/reservieren"
+  instagram: "https://www.instagram.com/beispiel"
+  route: "https://www.google.com/maps/dir/?api=1&destination=Beispiel"
+faq:
+  - frage: "Wofür ist [Name] in [Stadt] bekannt?"
+    antwort: "[Name] in [Stadt] ist bekannt für [Signature-Gericht] und [Merkmal der Küche]. Ein klarer Satz, den auch eine KI-Suche zitieren kann."
+  - frage: "Wer kocht bei [Name]?"
+    antwort: "[Name des Kochs], [Rolle]. Seit [Jahr] Küchenpartner der Steakakademie."
+  - frage: "Kann ich die Rezepte zu Hause nachkochen?"
+    antwort: "Ja. Alle Rezepte von [Name] sind grammgenau mit Garzeiten und Kerntemperaturen beschrieben."
