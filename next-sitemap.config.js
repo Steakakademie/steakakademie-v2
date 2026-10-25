@@ -121,6 +121,11 @@ module.exports = {
   sitemapSize: 5000,
   exclude: [
     '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
+    // 25.10.2026: Chefs' Table (Kuechenpartner) ist bis zur ersten Partner-Zusage
+    // versteckt — noindex, kein Menuepunkt. Schalter: src/lib/chefs-table/index.ts
+    // (OEFFENTLICH). Beim Umschalten BEIDE Zeilen entfernen.
+    '/chefs-table',
+    '/chefs-table/*',
     // Canonical-Crawl 01.10.2026 (585 Sitemap-URLs live geprueft): 425 Seiten mit
     // korrektem Self-Canonical, KEINE Abweichung auf der Alt-Site. Aber 163
     // noindex-Seiten standen in der Sitemap — widerspruechliches Signal an
