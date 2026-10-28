@@ -966,6 +966,31 @@ bilder:
     erworben_am: 2026-10-24
     namensnennung: false
     hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 entfernt Sojasaucen-Flasche mit Markenetikett, Sushi-Teller und QR-Code-Aufkleber am Bildrand; keine Personen im Bild
+  images/rezepte/singapore-bbq-chicken-wings-sambal.jpg:
+    status: lizenz
+    quelle: Pexels (ID 7290308)
+    urheber: Ahmed Bhutta
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/red-chilies-sprinkling-on-chicken-barbeque-7290308/
+    erworben_am: 2026-10-28
+    namensnennung: false
+    hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 aus Hochformat-Original; keine Personen, keine erkennbaren Marken im Bild
+
+  images/rezepte/suuron-nuong-vietnamesische-schweinerippchen.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/suuron-nuong-vietnamesische-schweinerippchen.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-25
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/rezepte/nem-nuong-schweinefleischspiesse-vietnam.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/nem-nuong-schweinefleischspiesse-vietnam.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-27
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/kangaroo-nein-lamb-rump-australian.jpg:
     status: ki
     quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/kangaroo-nein-lamb-rump-australian.mdx, scripts/recipe-images.mjs
