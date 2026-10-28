@@ -992,9 +992,12 @@ bilder:
     erworben_am: 2026-10-27
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/rezepte/kangaroo-nein-lamb-rump-australian.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/kangaroo-nein-lamb-rump-australian.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
-    namensnennung: false
+    status: lizenz
+    quelle: Unsplash (ID cpkPJ-U9eUM)
+    urheber: Emerson Vieira
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/cooked-sliced-meat-cpkPJ-U9eUM
     erworben_am: 2026-10-28
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    namensnennung: false
+    hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 aus Querformat-Original; keine Personen, keine erkennbaren Marken. Fleischart/Cut im Foto nicht belegt (Unsplash-Titel Cooked sliced meat), daher neutraler Alt-Text

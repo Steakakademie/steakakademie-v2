@@ -90,6 +90,7 @@ Nachgetragen am 16.10.2026, Wächter seitdem: `src/__tests__/rezeptbild-credits.
 | iberico-presa | Pexels | Boris Ivas | 18824023 | Web-Zuschnitt 4:3 und 16:9 aus Hochformat-Original/-Kompression; Pexels-Titel „Meat on a Grill“ (Rippchen), Schnitt/Tierart nicht belegt | false | offen (Merge durch Uwe) |
 | braai-chicken-peri-peri | Pexels | Valeria Boltneva | 19615789 | Web-Zuschnitt 1600x1200 (4:3) aus Hochformat-Original/-Kompression; Flasche mit Markenetikett, Sushi-Teller und QR-Aufkleber weggeschnitten | false | offen (ersetzt PR 481, Merge durch Uwe) |
 | singapore-bbq-chicken-wings-sambal | Pexels | Ahmed Bhutta | 7290308 | Web-Zuschnitt 1600x1200 (4:3) aus Hochformat-Original/-Kompression; ersetzt KI-Bild (PR 487) | false | offen (Merge durch Uwe) |
+| kangaroo-nein-lamb-rump-australian | Unsplash | Emerson Vieira | cpkPJ-U9eUM | Web-Zuschnitt 1600x1200 (4:3) aus Querformat-Original/-Kompression; ersetzt KI-Bild (PR 489); Fleischart im Foto nicht belegt | false | offen (Merge durch Uwe) |
 
 ## Übriger Bestand
 
