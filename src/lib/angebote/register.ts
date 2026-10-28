@@ -53,6 +53,7 @@ export function verkaufsstand(id: string): { kaufbar: boolean; hinweis: string }
     const [jahr, monat, tag] = a.ab.split('-').map(Number);
     return { kaufbar: false, hinweis: `Verkaufsstart geplant: ${tag}. ${MONATE[monat - 1]} ${jahr}` };
   }
+  if (a.status === 'vorbereitung') return { kaufbar: false, hinweis: 'Verkaufsstart in Vorbereitung' };
   return { kaufbar: false, hinweis: 'Derzeit nicht buchbar' };
 }
 
