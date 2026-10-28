@@ -967,9 +967,12 @@ bilder:
     namensnennung: false
     hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 entfernt Sojasaucen-Flasche mit Markenetikett, Sushi-Teller und QR-Code-Aufkleber am Bildrand; keine Personen im Bild
   images/rezepte/singapore-bbq-chicken-wings-sambal.jpg:
-    status: ki
-    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/singapore-bbq-chicken-wings-sambal.mdx, scripts/recipe-images.mjs
-    urheber: Steakakademie (Uwe Yendell)
+    status: lizenz
+    quelle: Pexels (ID 7290308)
+    urheber: Ahmed Bhutta
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/red-chilies-sprinkling-on-chicken-barbeque-7290308/
+    erworben_am: 2026-10-28
     namensnennung: false
-    erworben_am: 2026-10-26
-    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+    hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 aus Hochformat-Original; keine Personen, keine erkennbaren Marken im Bild
