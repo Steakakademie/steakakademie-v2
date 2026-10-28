@@ -50,12 +50,20 @@ describe('Register (data/angebote.yaml)', () => {
     }
   });
 
-  it('Steak-Beichte: ab 1. November, nicht kaufbar (Uwe, 20.10.2026: Gewerbe noch nicht angemeldet)', () => {
-    // Vorher live seit 06.10.2026; nach dem Website-Audit zurück auf ab_datum.
-    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart geplant: 1. November 2026' });
+  it('Steak-Beichte: in Vorbereitung, ohne Datum, nicht kaufbar (Uwe, 28.10.2026: Gewerbetermin offen)', () => {
+    // Vorher live seit 06.10.2026; 20.10. zurück auf ab_datum 01.11.; 28.10. auf
+    // vorbereitung, weil die Einstiegsgeld-Zusage aussteht und der 01.11. sonst
+    // als gebrochene Zusage auf der Seite stünde.
+    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart in Vorbereitung' });
     const h = passendeHinweise(angebote(), { typ: 'rezept', slug: 'x', felder: { kategorie: 'fleisch', difficulty: 'Profi' } }, HEUTE)
       .find((x) => x.id === 'steak-beichte');
-    expect(h?.marke).toBe('ab 1. November');
+    expect(h?.marke).toBe('In Vorbereitung');
+  });
+
+  it('kein bezahltes Angebot nennt ein Startdatum, solange der Gewerbetermin offen ist (Uwe, 28.10.2026)', () => {
+    for (const a of angebote().filter((x) => x.art === 'bezahlt')) {
+      expect(a.status, a.id).not.toBe('ab_datum');
+    }
   });
 
   it('Antwortseiten (Hackfleisch, Spickzettel): Regal mit gratis Angeboten und Mein Protokoll, nie pausiertes', () => {
@@ -76,8 +84,8 @@ describe('Register (data/angebote.yaml)', () => {
     const h = passendeHinweise(angebote(), { typ: 'rettung', slug: 'rettung' }, HEUTE);
     expect(h.map((x) => x.id)).toEqual(['steak-beichte']);
     expect(h[0].url).toBe('/steak-beichte');
-    // Marke kommt aus dem Register (Status ab_datum → Datum statt Preis), nicht aus dem Text.
-    expect(h[0].marke).toBe('ab 1. November');
+    // Marke kommt aus dem Register (Status vorbereitung → „In Vorbereitung" statt Preis), nicht aus dem Text.
+    expect(h[0].marke).toBe('In Vorbereitung');
   });
 
   it('pausierte Angebote sind nie kaufbar', () => {
@@ -89,11 +97,12 @@ describe('Register (data/angebote.yaml)', () => {
     expect(angebot('mein-protokoll').preis_text).toContain(`${PAKETE[0].preis} €`);
   });
 
-  it('Mein Protokoll trägt bis zum Verkaufsstart das Datum statt eines Preises', () => {
+  it('Mein Protokoll trägt bis zum Verkaufsstart „In Vorbereitung" statt eines Preises', () => {
     const mp = hinweiseFuer({ typ: 'temperatur-guide', slug: 'temperatur-guide' });
     const eintrag = [mp.imText, ...mp.regal].find((h) => h?.id === 'mein-protokoll');
     expect(eintrag).toBeTruthy();
-    expect(markeVon(angebot('mein-protokoll'), HEUTE)).toBe('ab 1. November');
+    expect(markeVon(angebot('mein-protokoll'), HEUTE)).toBe('In Vorbereitung');
+    expect(verkaufsstand('mein-protokoll')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart in Vorbereitung' });
   });
 });
 
@@ -102,6 +111,7 @@ describe('Formprüfung', () => {
     const gut = { id: 'a', name: 'A A', url: '/a', art: 'gratis', status: 'live', preis_text: '', knopf: 'Los', anlaesse: [] };
     expect(AngebotSchema.safeParse({ ...gut, status: 'ab_datum' }).success).toBe(false);
     expect(AngebotSchema.safeParse({ ...gut, status: 'ab_datum', ab: '2026-11-01' }).success).toBe(true);
+    expect(AngebotSchema.safeParse({ ...gut, status: 'vorbereitung' }).success).toBe(true);
     expect(AngebotSchema.safeParse({ ...gut, status: 'pausiert' }).success).toBe(false);
     expect(AngebotSchema.safeParse({ ...gut, status: 'pausiert', grund: 'x', anlaesse: [{ typ: 'rezept', satz: 'Ein Satz, lang genug.' }] }).success).toBe(false);
     expect(RegisterSchema.safeParse({ angebote: [gut, gut] }).success).toBe(false);
@@ -161,6 +171,7 @@ describe('Auswahl', () => {
     expect(markeVon(basis({ id: 'w', art: 'warteliste', status: 'warteliste' }), HEUTE)).toBe('Warteliste');
     expect(markeVon(basis({ id: 'b', art: 'bezahlt', preis_text: 'ab 19 €' }), HEUTE)).toBe('ab 19 €');
     expect(markeVon(basis({ id: 'd', art: 'bezahlt', status: 'ab_datum', ab: '2026-11-01', preis_text: 'ab 19 €' }), HEUTE)).toBe('ab 1. November');
+    expect(markeVon(basis({ id: 'v', art: 'bezahlt', status: 'vorbereitung', preis_text: 'ab 19 €' }), HEUTE)).toBe('In Vorbereitung');
     expect(abText('2026-11-01', new Date('2027-01-05'))).toBe('ab 1. November 2026');
   });
 });

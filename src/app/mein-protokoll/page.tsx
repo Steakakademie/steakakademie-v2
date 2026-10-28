@@ -7,7 +7,7 @@ import {
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { badge } from '@/lib/kerntemperatur-referenz';
-import { CHECKOUT_URL, VERKAUF_AN, VERKAUFSSTART_TEXT } from '@/lib/mein-protokoll/angebot';
+import { CHECKOUT_URL, VERKAUF_AN, VERKAUFSSTART_HINWEIS } from '@/lib/mein-protokoll/angebot';
 import { PAKETE } from '@/lib/mein-protokoll/guthaben';
 import GutscheinHinweis from '@/components/gutschein/GutscheinHinweis';
 
@@ -146,7 +146,7 @@ export default function MeinProtokollPage() {
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
-                  {VERKAUF_AN ? 'Protokoll wählen — ab 19 €' : `Ab 19 € — Verkaufsstart ${VERKAUFSSTART_TEXT}`} <ArrowRight size={15} />
+                  {VERKAUF_AN ? 'Protokoll wählen — ab 19 €' : `Ab 19 € — ${VERKAUFSSTART_HINWEIS}`} <ArrowRight size={15} />
                 </a>
                 <a
                   href="#wie-es-funktioniert"
@@ -376,7 +376,7 @@ export default function MeinProtokollPage() {
                           className="flex items-center justify-center px-6 py-3.5 font-sans font-bold text-base border border-brand-gold/40 text-text-muted cursor-not-allowed"
                           aria-disabled="true"
                         >
-                          Verkaufsstart geplant: {VERKAUFSSTART_TEXT}
+                          {VERKAUFSSTART_HINWEIS}
                         </span>
                       )}
                     </div>
@@ -387,7 +387,7 @@ export default function MeinProtokollPage() {
               <p className="mt-4 text-xs font-sans text-text-muted">
                 {VERKAUF_AN
                   ? 'Das Paket wählst du im Bestellformular. Nach dem Kauf bekommst du eine E-Mail mit deinem Login-Link zum Fragebogen.'
-                  : `Noch nicht bestellbar — Verkaufsstart geplant: ${VERKAUFSSTART_TEXT}. Preise und Leistung stehen fest.`}
+                  : `Noch nicht bestellbar — ${VERKAUFSSTART_HINWEIS}. Preise und Leistung stehen fest.`}
               </p>
 
               <div

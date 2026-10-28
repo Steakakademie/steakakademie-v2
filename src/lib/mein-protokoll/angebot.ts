@@ -1,9 +1,10 @@
 /**
  * Mein Protokoll — Verkaufsschalter und Checkout-Ziel.
  *
- * Verkauf erst ab Gewerbeanmeldung und Jobcenter-Zustimmung (Uwe, 27.09.2026);
- * geplant ist der 01.11.2026. Der Start hängt an einem Bescheid, nicht am
- * Kalender — deshalb ein ausdrücklicher Schalter statt eines Datumsvergleichs:
+ * Verkauf erst ab Gewerbeanmeldung und Jobcenter-Zustimmung (Uwe, 27.09.2026).
+ * Geplant war der 01.11.2026; seit 28.10.2026 ist der Termin offen, weil die
+ * Einstiegsgeld-Zusage noch aussteht (Uwe). Der Start hängt an einem Bescheid,
+ * nicht am Kalender — deshalb ein ausdrücklicher Schalter statt eines Datumsvergleichs:
  *
  *   Vercel-Env NEXT_PUBLIC_MEIN_PROTOKOLL_VERKAUF=an (alle Umgebungen) + Redeploy.
  *
@@ -17,4 +18,5 @@
 export const DS_PRODUCT_ID = '696396';
 export const CHECKOUT_URL = `https://www.checkout-ds24.com/product/${DS_PRODUCT_ID}`;
 export const VERKAUF_AN = process.env.NEXT_PUBLIC_MEIN_PROTOKOLL_VERKAUF === 'an';
-export const VERKAUFSSTART_TEXT = '1. November 2026';
+/** Ohne Datum, solange der Termin offen ist — ein vergangenes Datum wäre eine gebrochene Zusage. */
+export const VERKAUFSSTART_HINWEIS = 'Verkaufsstart in Vorbereitung';

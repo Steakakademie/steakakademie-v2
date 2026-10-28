@@ -22,7 +22,7 @@ export const AngebotSchema = z.object({
   name: z.string().min(2),
   url: z.string().regex(/^\/[a-z0-9/-]*$/),
   art: z.enum(['gratis', 'bezahlt', 'warteliste']),
-  status: z.enum(['live', 'ab_datum', 'warteliste', 'pausiert']),
+  status: z.enum(['live', 'ab_datum', 'vorbereitung', 'warteliste', 'pausiert']),
   // js-yaml liest ein nacktes 2026-11-01 als Datum — beides zulassen, als Text führen.
   ab: z.union([z.string(), z.date()]).optional()
     .transform((v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v))
@@ -69,7 +69,7 @@ export interface Hinweis {
   url: string;
   satz: string;
   knopf: string;
-  /** „Kostenlos" · „ab 1. November" · „Warteliste" · Preis */
+  /** „Kostenlos" · „ab 1. November" · „In Vorbereitung" · „Warteliste" · Preis */
   marke: string;
   art: Angebot['art'];
 }

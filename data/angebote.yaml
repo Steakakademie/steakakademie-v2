@@ -24,6 +24,11 @@
 #               ab_datum   → Hinweis erscheint mit „ab <Datum>"; Feld `ab` ist Pflicht.
 #                            Der Status wechselt NICHT von selbst: der Verkaufsstart
 #                            hängt an einem Bescheid, nicht am Kalender.
+#               vorbereitung → Hinweis erscheint mit „In Vorbereitung", ohne Datum.
+#                            Für bezahlte Angebote, deren Start feststeht, aber nicht
+#                            wann (28.10.2026: Gewerbeanmeldung wartet auf die
+#                            Einstiegsgeld-Zusage). Ein Datum, das vergeht, ohne dass
+#                            verkauft wird, wäre eine gebrochene Zusage (§2 Regel 12).
 #               warteliste → Hinweis erscheint mit „Warteliste"
 #               pausiert   → erscheint nirgends. Immer mit `grund`.
 #   preis_text  Was als Preis gezeigt wird („ab 19 €"). Preise stehen NUR hier.
@@ -179,8 +184,9 @@ angebote:
     name: Mein Protokoll
     url: /mein-protokoll
     art: bezahlt
-    status: ab_datum
-    ab: 2026-11-01
+    # 28.10.2026 (Uwe): ab_datum 2026-11-01 → vorbereitung. Die Gewerbeanmeldung
+    # wartet auf die Einstiegsgeld-Zusage per Brief, der Termin ist offen.
+    status: vorbereitung
     preis_text: ab 19 €
     knopf: Mein Protokoll ansehen
     anlaesse:
@@ -216,11 +222,12 @@ angebote:
     # Frage an die Kanzlei: Verkauf vor Gewerbeanmeldung am 01.11.
     # DIESER STATUS STEUERT AUCH DIE SEITE: /steak-beichte zeigt die Kaufknöpfe
     # nur bei `live` (verkaufsstand() in src/lib/angebote/register.ts).
-    # Verkaufsstart = diese Zeile auf `live` setzen, `ab` entfernen.
+    # Verkaufsstart = diese Zeile auf `live` setzen.
     # 20.10.2026 zurück auf ab_datum (Uwe, nach Website-Audit): Gewerbe noch
     # nicht angemeldet — kein Verkauf, bis es steht.
-    status: ab_datum
-    ab: "2026-11-01"
+    # 28.10.2026 (Uwe): ab_datum 2026-11-01 → vorbereitung. Die Gewerbeanmeldung
+    # wartet auf die Einstiegsgeld-Zusage per Brief, der Termin ist offen.
+    status: vorbereitung
     preis_text: ab 7 €
     knopf: Zur Steak-Beichte
     anlaesse:

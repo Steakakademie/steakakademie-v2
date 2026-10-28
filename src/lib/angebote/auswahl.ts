@@ -38,6 +38,7 @@ export function abText(iso: string, heute: Date = new Date()): string {
 
 export function markeVon(a: Angebot, heute: Date = new Date()): string {
   if (a.status === 'ab_datum' && a.ab) return abText(a.ab, heute);
+  if (a.status === 'vorbereitung') return 'In Vorbereitung';
   if (a.status === 'warteliste') return 'Warteliste';
   if (a.art === 'gratis') return 'Kostenlos';
   return a.preis_text;
