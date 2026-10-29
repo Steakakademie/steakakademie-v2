@@ -554,5 +554,55 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "churrasco-picanha-knobi-rub",
+    "kategorie": "fleisch",
+    "title": "Picanha mit Knoblauch-Salzkruste vom Schwertspieß",
+    "meatType": "Tafelspitzdeckel (Picanha)",
+    "cookingMethod": "Direkt, hohe Glut, Schwertspieß",
+    "difficulty": "Mittel",
+    "concept": "Die Picanha ist Brasiliens bekanntester Churrasco-Cut: ein kompakter Muskel mit dicker Fettkappe, der auf dem Schwertspieß halbmondförmig aufgefädelt und über starker Glut gedreht wird. Entscheidend ist, die Fettkappe nicht zu entfernen, sondern sie als natürliche Schutzschicht zu nutzen, die das Fleisch saftig hält und beim Schmelzen für Röstaromen sorgt. Der Artikel erklärt, wie man den richtigen Garpunkt erkennt, warum nur grobes Meersalz und Knoblauch als Würzung nötig sind und wie man den Spieß richtig positioniert, damit Fett in die Glut tropft ohne Flammen zu erzeugen. Herkunft: Brasilien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pulled-lamb-shoulder",
+    "kategorie": "fleisch",
+    "title": "Pulled Lamb – Lammschulter low & slow aus dem Smoker",
+    "meatType": "Lammschulter",
+    "cookingMethod": "Indirekt, low & slow, 110–120 °C",
+    "difficulty": "Fortgeschritten",
+    "concept": "Pulled Lamb ist die australische Antwort auf Pulled Pork: Eine ganze Lammschulter wird mit einem Rub aus Knoblauch, Rosmarin, Paprika und schwarzem Pfeffer eingerieben und bei niedriger Temperatur über Stunden geräuchert, bis das Bindegewebe vollständig aufgelöst ist und sich das Fleisch mit zwei Gabeln zerziehen lässt. Der kritische Schritt ist das Überwinden der Plateauphase zwischen 70 und 80 °C Kerntemperatur, bei der viele Griller zu früh aufgeben. Der Artikel beantwortet, warum Lammschulter durch ihren höheren Kollagengehalt besonders gut für diese Methode geeignet ist und wie man das intensive Lammaroma durch die Wahl des Räucherholzes gezielt steuert. Herkunft: Australien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "canadian-cedar-smoked-pork-ribs",
+    "kategorie": "fleisch",
+    "title": "Kanada-Style Spareribs mit Ahornsenf-Glasur",
+    "meatType": "Spareribs (Schweinerippchen)",
+    "cookingMethod": "Indirekt, low & slow, 3-2-1-Methode",
+    "difficulty": "Mittel",
+    "concept": "Diese kanadische Variante der klassischen Spareribs ersetzt die süße Bourbon-Glasur durch eine Kombination aus Ahornsirup und grobem Senf, die dem deutschen Gaumen sofort vertraut ist und gleichzeitig ein unverwechselbares Profil erzeugt. Die Rippchen werden nach der 3-2-1-Methode geräuchert, wobei die Glasur erst in der letzten offenen Stunde aufgetragen wird, damit sie karamellisiert ohne zu verbrennen. Der Artikel beantwortet, wie man den Unterschied zwischen Fall-off-the-Bone und Bite-off-the-Bone gezielt steuert und warum die Silberhaut auf der Knochenseite unbedingt entfernt werden muss. Herkunft: Kanada.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "izgara-kuzu-pirzola",
+    "kategorie": "fleisch",
+    "title": "Kuzu Pirzola – Türkische Lammkoteletts vom Mangal",
+    "meatType": "Lammkoteletts (Karree)",
+    "cookingMethod": "Direkt, starke Glut, Mangal",
+    "difficulty": "Einfach",
+    "concept": "Kuzu Pirzola sind einzeln geschnittene Lammkarree-Koteletts, die in der türkischen Grillküche schlicht mit Olivenöl, Knoblauch, Thymian und schwarzem Pfeffer mariniert und dann bei starker Hitze auf dem Mangal kurz und heiß gegrillt werden. Das dünne Fleisch zwischen den Knochen gart in wenigen Minuten durch, weshalb der Zeitpunkt des Wendens über Saftigkeit oder Trockenheit entscheidet. Der Artikel erklärt, warum Lammkarree vom Metzger in Einzelkoteletts gesägt werden sollte, wie man die Kerntemperatur ohne Thermometer sicher trifft und welche Beilagen aus dem türkischen Brauch direkt auf dem Mangal mitgegrillt werden. Herkunft: Türkei.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "yakitori-torikawa-haehnchenfluegelspitze",
+    "kategorie": "fleisch",
+    "title": "Tebasaki Yakitori – Knusprige Hähnchenflügelspitzen vom Grill",
+    "meatType": "Hähnchenflügelspitzen",
+    "cookingMethod": "Direkt, mittlere bis starke Glut, Holzkohle",
+    "difficulty": "Mittel",
+    "concept": "Tebasaki sind japanische Hähnchenflügelspitzen, die ohne Panade nur mit Salz, Pfeffer und einer reduzierten Sojaglasur (Tare) aus Sojasoße, Mirin und Zucker gegrillt werden, bis die Haut blasig und knusprig ist. Das Gericht ist in Japan ein Izakaya-Klassiker und spricht deutsche Griller direkt an, weil Knusprigkeit und Salzigkeit im Vordergrund stehen. Der kritische Schritt ist das mehrfache Wenden bei indirekter Hitze, bevor die Tare aufgetragen wird, damit die Haut vollständig austrocknet und nicht weich bleibt. Der Artikel beantwortet, wie man Mirin im deutschen Supermarkt findet oder durch trockenen Sherry ersetzt und warum Flügelspitzen für diese Technik besser geeignet sind als ganze Flügel. Herkunft: Japan.",
+    "stil": "vertraut"
   }
 ]
