@@ -554,5 +554,65 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "churrasco-picanha-knobi-rub",
+    "kategorie": "fleisch",
+    "title": "Picanha mit Knoblauch-Salzkruste – Brasilianischer Schwertspieß",
+    "meatType": "Picanha (Tafelspitzdeckel)",
+    "cookingMethod": "Direkt, hohe Glut, Schwertspieß",
+    "difficulty": "Mittel",
+    "concept": "Die Picanha wird mit ihrer dicken Fettkappe auf den Schwertspieß gezogen, mit grobem Meersalz und Knoblauch eingerieben und über starker Glut rotierend gegrillt. Entscheidend ist, die Fettkappe nicht zu entfernen: Sie schmilzt langsam auf das Fleisch und sorgt für Saftigkeit und Röstaroma. Der Artikel beantwortet, warum Picanha immer mit Fettkappe gegrillt wird und wie man den richtigen Garpunkt ohne Thermometer erkennt. Herkunft: Brasilien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-lamb-shoulder-low-slow",
+    "kategorie": "fleisch",
+    "title": "Lammschulter Low & Slow – 8 Stunden im Rauch",
+    "meatType": "Lammschulter",
+    "cookingMethod": "Indirekt, low & slow, Rauch",
+    "difficulty": "Fortgeschritten",
+    "concept": "Die Lammschulter wird mit einem einfachen Rub aus Salz, Pfeffer, Knoblauch und Rosmarin eingerieben und bei 110 °C über Buchenholzrauch acht Stunden gegart, bis das Bindegewebe vollständig aufgelöst ist und sich das Fleisch mit den Händen zerteilen lässt. Der kritische Moment ist das Durchstoßen des Temperaturplateaus zwischen 70 und 75 °C, das viele Einsteiger zum vorzeitigen Abbruch verleitet. Der Artikel erklärt, warum Lammschulter dem Lammkarree beim langen Garen weit überlegen ist und wie man die Bark ohne Zuckerzusatz aufbaut. Herkunft: Australien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "asado-vacio-offenes-feuer",
+    "kategorie": "fleisch",
+    "title": "Vacío vom offenen Feuer – Argentinisches Flanken-Asado",
+    "meatType": "Vacío (Dünnung / Flanke)",
+    "cookingMethod": "Indirekt, offenes Holzfeuer, Parrilla",
+    "difficulty": "Fortgeschritten",
+    "concept": "Der Vacío ist ein großflächiger, von Fettschichten durchzogener Cut, der beim argentinischen Asado traditionell über mehrere Stunden neben der Glut hängt oder flach auf dem Rost liegt, bis die äußere Fettschicht knusprig und das Innere noch rosa ist. Gelingen oder Scheitern entscheidet die Glutführung: zu viel Hitze verbrennt das Fett, zu wenig lässt den Cut zäh bleiben. Der Artikel beantwortet, wie man mit einem einfachen Kugelgrill und Buchenholzscheiten die Bedingungen einer argentinischen Parrilla annähert und welche Kerntemperatur für diesen Cut angestrebt wird. Herkunft: Argentinien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "canadian-cedar-pork-tenderloin",
+    "kategorie": "fleisch",
+    "title": "Schweinefilet auf Zedernholzbrett – Kanadischer Grillklassiker",
+    "meatType": "Schweinefilet",
+    "cookingMethod": "Indirekt, Zedernholzbrett, mittlere Hitze",
+    "difficulty": "Einfach",
+    "concept": "Das Schweinefilet wird auf einem gewässerten Zedernholzbrett bei geschlossenem Deckel indirekt gegart, sodass der aufsteigende Holzrauch das Fleisch aromatisiert, ohne es direkt zu beflammen. Eine Glasur aus Ahornsirup, Senf und Thymian wird in den letzten zehn Minuten aufgetragen und karamellisiert auf der Oberfläche. Entscheidend ist das rechtzeitige Schließen des Deckels, damit das Brett raucht statt brennt. Der Artikel erklärt, wie man Zedernholzbretter im deutschen Handel oder online bezieht, richtig wässert und mehrfach verwendet. Herkunft: Kanada.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pork-belly-burnt-ends",
+    "kategorie": "fleisch",
+    "title": "Schweinebauch Burnt Ends – Knusprige Würfel aus dem Smoker",
+    "meatType": "Schweinebauch",
+    "cookingMethod": "Indirekt, low & slow, Rauch",
+    "difficulty": "Mittel",
+    "concept": "Der Schweinebauch wird zunächst als ganzes Stück bei 120 °C über Kirsch- oder Buchenholz geräuchert, dann in Würfel geschnitten, mit einer einfachen BBQ-Sauce aus Ketchup, Honig, Senf und Apfelessig glasiert und in einer Aluschale nochmals bei hoher Hitze karamellisiert, bis die Würfel außen knusprig und innen butterzart sind. Der kritische Schritt ist die zweite Garphase: Zu wenig Hitze verhindert die Karamellisierung, zu viel verbrennt die Glasur. Der Artikel erklärt den Unterschied zwischen Brisket Burnt Ends und Schweinebauch Burnt Ends und warum letztere für Einsteiger zugänglicher sind. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "braai-sosaties-lamm-aprikose",
+    "kategorie": "fleisch",
+    "title": "Sosaties vom Braai – Südafrikanische Lammspieße mit Aprikosen-Senf-Marinade",
+    "meatType": "Lammschulter (gewürfelt)",
+    "cookingMethod": "Direkt, mittlere Glut, Holzkohle",
+    "difficulty": "Einfach",
+    "concept": "Gewürfelte Lammschulter wird über Nacht in einer Marinade aus getrockneten Aprikosen, Senf, Knoblauch, Zwiebel, Kreuzkümmel und Essig eingelegt, auf Holzspieße gesteckt und über mittlerer Braai-Glut gleichmäßig gegrillt. Die Marinade mit getrockneten Aprikosen ist in jedem deutschen Supermarkt erhältlich und ersetzt die im Original verwendete Aprikosenkonfitüre durch eine weniger süße, fruchtbetonte Variante. Entscheidend ist das häufige Wenden, da die Zuckerstoffe der Aprikose schnell verbrennen. Der Artikel beantwortet, was Sosaties von anderen Lammspießen unterscheidet und wie die kapmalaiischen Gewürzeinflüsse in der deutschen Küche nachgebaut werden können. Herkunft: Südafrika.",
+    "stil": "vertraut"
   }
 ]
