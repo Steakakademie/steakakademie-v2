@@ -15,6 +15,7 @@ import SaisonChip from '@/components/home/SaisonChip';
 import { chipEintrag } from '@/lib/aktionen/leiste';
 import ToolBoxes from '@/components/home/ToolBoxes';
 import { FREE_LIMIT as AROMA_FREE_LIMIT } from '@/lib/aroma-matcher/data';
+import { STEAKAKADEMIE_TOOLS } from '@/lib/werkzeuge/daten';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
@@ -202,8 +203,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── WERKZEUGE — 6 Kacheln (Aroma-Matcher zuerst) · Marco-Band · VIP-Zeile ── */}
-        <ToolBoxes freeLimit={AROMA_FREE_LIMIT} />
+        {/* ── WERKZEUGE — Bento-Grid (Aroma-Matcher zuerst, Uwe 02.11.2026) · Rezept-Schmiede · Marco-Band · VIP-Zeile ── */}
+        <ToolBoxes freeLimit={AROMA_FREE_LIMIT} werkzeuge={STEAKAKADEMIE_TOOLS} />
 
         {/* ── LEADMAGNET — nach dem redaktionellen Einstieg (Uwe, 16.08.2026) ──
             Entscheidung: erst Inhalt beweisen, dann Geschenk anbieten (Reziprozitaet,

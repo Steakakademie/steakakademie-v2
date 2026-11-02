@@ -8,6 +8,7 @@ import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import FrischSaisonal from '@/components/home/FrischSaisonal';
 import ToolBoxes from '@/components/home/ToolBoxes';
+import { STEAKAKADEMIE_TOOLS } from '@/lib/werkzeuge/daten';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls, anzahlDiplomLektionen } from '@/lib/plattform-puls';
@@ -357,7 +358,7 @@ export default async function HomeVariantB() {
 
         {/* ── WERKZEUGE — Cut-Generator · Foodpairing · Rezept-Schmiede ── */}
         <DarkBand>
-          <ToolBoxes />
+          <ToolBoxes werkzeuge={STEAKAKADEMIE_TOOLS} />
         </DarkBand>
 
         {/* ── LEADMAGNET: Spickzettel (Inhalt vor Angebot — Regel 8) ── */}
