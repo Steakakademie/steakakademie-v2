@@ -554,5 +554,45 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "churrasco-picanha-knochen",
+    "kategorie": "fleisch",
+    "title": "Picanha am Knochen – Brasilianischer Tafelspitz vom Schwertspieß",
+    "meatType": "Tafelspitz mit Fettdeckel",
+    "cookingMethod": "Direkt und indirekt, Schwertspieß über Holzkohle",
+    "difficulty": "Mittel",
+    "concept": "Die Picanha am Knochen ist in Brasilien die Königsdisziplin des Churrasco: Der Tafelspitz wird mit dickem Fettdeckel hufeisenförmig auf den Spieß gesteckt und über glühender Holzkohle langsam gedreht, bis das Fett goldbraun karamellisiert und das Fleisch innen rosa bleibt. Entscheidend ist die Kerntemperatur von 54–56 °C, denn zu langes Garen macht den zarten Muskel zäh. Der Artikel erklärt, warum der Fettdeckel beim Drehen als natürliche Selbstbegießung wirkt und wie man ohne Schwertspieß mit einem Kugelgrill ein vergleichbares Ergebnis erzielt. Herkunft: Brasilien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-lamb-shoulder-low-slow",
+    "kategorie": "fleisch",
+    "title": "Lammschulter Low & Slow – 8 Stunden im Rauch",
+    "meatType": "Lammschulter",
+    "cookingMethod": "Indirekt, low & slow, 110–120 °C, Hickory oder Buchenholz",
+    "difficulty": "Fortgeschritten",
+    "concept": "Die Lammschulter ist ein kollagenreiches Stück, das erst bei einer Kerntemperatur von 93–95 °C wirklich mürbe wird – ein Prozess, der im Smoker acht Stunden dauert und mit einem einfachen Rub aus Salz, Pfeffer, Knoblauch und Rosmarin auskommt. Der kritische Moment ist das Plateau zwischen 70 und 80 °C, in dem die Temperatur stundenlang stagniert und unerfahrene Griller die Hitze vorschnell erhöhen, was das Fleisch austrocknet. Der Artikel beantwortet, warum Lammschulter dem Pulled Pork strukturell ähnelt, sich aber durch den höheren Myoglobingehalt und das charakteristische Fettaroma grundlegend unterscheidet. Herkunft: Australien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "braai-lamb-chops-knoblauch-zitrone",
+    "kategorie": "fleisch",
+    "title": "Braai Lammkoteletts mit Knoblauch-Zitronen-Marinade",
+    "meatType": "Lammkoteletts (Karree oder Stielkoteletts)",
+    "cookingMethod": "Direkt, starke Glut, Holzkohle",
+    "difficulty": "Einfach",
+    "concept": "Beim südafrikanischen Braai werden Lammkoteletts in einer schlichten Marinade aus Knoblauch, Zitronensaft, Olivenöl, Salz und Pfeffer eingelegt und dann bei starker Holzkohleglut in wenigen Minuten pro Seite gegrillt – das Ergebnis ist eine kräftige Kruste bei rosa Kern. Der kritische Punkt ist die Ruhezeit nach dem Grillen: Mindestens fünf Minuten unter Alufolie lassen die Fleischsäfte sich neu verteilen und verhindern, dass das Kotlett beim Anschneiden ausblutet. Der Artikel erklärt, warum Lammkoteletts vom Karree und vom Stiel unterschiedliche Garzeiten brauchen und wie man beide Cuts am selben Rost gleichzeitig perfekt hinbekommt. Herkunft: Südafrika.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "izgara-balik-levrek",
+    "kategorie": "fisch",
+    "title": "Izgara Levrek – Türkischer Wolfsbarsch vom Holzkohlegrill",
+    "meatType": "Wolfsbarsch (Loup de Mer, ganz)",
+    "cookingMethod": "Direkt, mittlere Glut, Fischzange oder Rost",
+    "difficulty": "Mittel",
+    "concept": "Der Wolfsbarsch ist in der türkischen Küstenküche das meistgegrillte Fischgericht: Der ganze Fisch wird mit Olivenöl, Salz, Zitrone und frischem Thymian eingerieben und bei mittlerer Holzkohleglut in der Fischzange gegrillt, bis die Haut knusprig und das Fleisch am Rückgrat gerade eben gar ist. Der häufigste Fehler ist das zu frühe Wenden – die Haut klebt am Rost, reißt auf und das Fleisch trocknet aus; der Artikel erklärt, wann sich der Fisch von selbst löst und wie man den richtigen Moment erkennt. Zusätzlich beantwortet der Artikel, warum ein ganzer Fisch auf dem Grill saftiger bleibt als ein Filet und welche Rolle das Rückgrat als Wärmeleiter spielt. Herkunft: Türkei.",
+    "stil": "vertraut"
   }
 ]
