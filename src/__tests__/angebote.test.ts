@@ -50,12 +50,12 @@ describe('Register (data/angebote.yaml)', () => {
     }
   });
 
-  it('Steak-Beichte: ab 1. November, nicht kaufbar (Uwe, 20.10.2026: Gewerbe noch nicht angemeldet)', () => {
+  it('Steak-Beichte: ab 1. Dezember, nicht kaufbar (Uwe, 04.11.2026: Gewerbeanmeldung zum 01.12.2026)', () => {
     // Vorher live seit 06.10.2026; nach dem Website-Audit zurück auf ab_datum.
-    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart geplant: 1. November 2026' });
+    expect(verkaufsstand('steak-beichte')).toEqual({ kaufbar: false, hinweis: 'Verkaufsstart geplant: 1. Dezember 2026' });
     const h = passendeHinweise(angebote(), { typ: 'rezept', slug: 'x', felder: { kategorie: 'fleisch', difficulty: 'Profi' } }, HEUTE)
       .find((x) => x.id === 'steak-beichte');
-    expect(h?.marke).toBe('ab 1. November');
+    expect(h?.marke).toBe('ab 1. Dezember');
   });
 
   it('Antwortseiten (Hackfleisch, Spickzettel): Regal mit gratis Angeboten und Mein Protokoll, nie pausiertes', () => {
@@ -77,7 +77,7 @@ describe('Register (data/angebote.yaml)', () => {
     expect(h.map((x) => x.id)).toEqual(['steak-beichte']);
     expect(h[0].url).toBe('/steak-beichte');
     // Marke kommt aus dem Register (Status ab_datum → Datum statt Preis), nicht aus dem Text.
-    expect(h[0].marke).toBe('ab 1. November');
+    expect(h[0].marke).toBe('ab 1. Dezember');
   });
 
   it('pausierte Angebote sind nie kaufbar', () => {
@@ -93,7 +93,7 @@ describe('Register (data/angebote.yaml)', () => {
     const mp = hinweiseFuer({ typ: 'temperatur-guide', slug: 'temperatur-guide' });
     const eintrag = [mp.imText, ...mp.regal].find((h) => h?.id === 'mein-protokoll');
     expect(eintrag).toBeTruthy();
-    expect(markeVon(angebot('mein-protokoll'), HEUTE)).toBe('ab 1. November');
+    expect(markeVon(angebot('mein-protokoll'), HEUTE)).toBe('ab 1. Dezember');
   });
 });
 
