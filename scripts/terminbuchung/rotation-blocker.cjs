@@ -32,7 +32,7 @@
 const KONFIG = {
   kalenderId: 'primary',
   anker: '2026-10-05',            // Montag der ersten „Woche 1"
-  ersterTag: '2026-11-02',        // vorher ist nichts buchbar (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung 01.11.)
+  ersterTag: '2026-12-01',        // vorher ist nichts buchbar (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung 01.12.2026; Uwe, 04.11.2026 — vorher 02.11.)
   horizontTage: 63,               // 8 Wochen + 1 Woche Reserve
   von: 9, bis: 17,                // Rotations-Blocker: ganzer Tag
   slots: ['09:00', '10:30', '13:00', '14:30', '16:00'], // Terminbeginne (60 Min + 30 Min Vorbereitung, Mittag 12–13)

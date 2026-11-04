@@ -50,7 +50,7 @@ describe('awinLink', () => {
 });
 
 describe('Fleischbrücke: noch kein Partner', () => {
-  it('bis ein Händler feststeht, bleibt der Amazon-Fallback aktiv — kein Partnerlink vor dem 01.11.', () => {
+  it('bis ein Händler feststeht, bleibt der Amazon-Fallback aktiv — kein Partnerlink vor dem 01.12.', () => {
     expect(activeMeatPartner().id).toBe('amazon');
     expect(getMeatOffer(ALL_CUTS[0]).premiumActive).toBe(false);
     for (const cut of ALL_CUTS) expect(buildMeatTargetUrl(cut)).toContain('tag=steakakademie-21');

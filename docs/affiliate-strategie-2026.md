@@ -3,15 +3,15 @@
 Stand 09.10.2026. Entwurf von Claude für die Arbeitssitzung am 10.10.2026
 (Cockpit #28 „Affiliate läuft ungeprüft", CLAUDE.md § 5 Blocker 4). Ziel: die
 neuen Zusagen bei AWIN und Webgains nutzen, bevor sie verfallen — und zwar so,
-dass vor dem 01.11.2026 keine Einnahmen entstehen, die das Einstiegsgeld
+dass vor dem 01.12.2026 keine Einnahmen entstehen, die das Einstiegsgeld
 gefährden.
 
 ## Kurz
 
 1. **Morgen (10.10.):** alles vorbereiten, nichts scharf schalten. Registry
    nachziehen, AWIN-Deeplinks bauen, Platzierungen festlegen, den Advertisern
-   schreiben, dass es am 01.11. losgeht.
-2. **Ab 01.11. (oder nach Zusage des Jobcenters):** Links live, Black Week und
+   schreiben, dass es am 01.12. losgeht.
+2. **Ab 01.12. (oder nach Zusage des Jobcenters):** Links live, Black Week und
    Weihnachten mitnehmen.
 3. **Amazon** im selben Jobcenter-Gespräch klären — die Amazon-Links sind
    schon heute live (siehe „Ein Haken").
@@ -68,23 +68,23 @@ Kurzfristig nicht. Advertiser räumen inaktive Publisher meist in größeren
 Abständen aus — nach Monaten ohne Klicks, nicht nach drei Wochen. Was hilft
 und nichts kostet: **eine kurze Nachricht an jeden zugelassenen Advertiser
 über die AWIN-Nachrichtenfunktion**, dass die Platzierungen vorbereitet sind
-und am 01.11. live gehen (Vorlage unten). Burghardt fragt ausdrücklich danach.
+und am 01.12. live gehen (Vorlage unten). Burghardt fragt ausdrücklich danach.
 
 **Echte Frist bei Amazon:** Amazon schließt neue Partnerkonten, die in den
 ersten 180 Tagen nach der Anmeldung keine drei qualifizierten Verkäufe
 erreichen. Morgen in PartnerNet das Anmeldedatum nachsehen. Wurde das Konto
 im Juni eröffnet, endet die Frist im Dezember.
 
-## Ein Haken: Einnahmen vor dem 01.11.
+## Ein Haken: Einnahmen vor dem 01.12.
 
 Provisionen sind Einnahmen. Für Partnerlinks gilt deshalb dasselbe wie für die
 Steak-Beichte (Cockpit #43): Einstiegsgeld wird nach gängiger Praxis vor
 Aufnahme der Selbstständigkeit beantragt, und Einnahmen während der
 Grundsicherung sind zu melden (Einschätzung, keine Beratung).
 
-- **Neue Partnerlinks** (AWIN, Webgains) erst ab 01.11. bzw. nach Zusage live.
+- **Neue Partnerlinks** (AWIN, Webgains) erst ab 01.12. bzw. nach Zusage live.
 - **Amazon-Links sind schon live.** Im Jobcenter-Gespräch mitnennen und
-  fragen, ob sie bis zum 01.11. raus sollen. In PartnerNet nachsehen, ob es
+  fragen, ob sie bis zum 01.12. raus sollen. In PartnerNet nachsehen, ob es
   bisher Provisionen gab.
 
 ## Platzierung — wo welcher Partner hin
@@ -92,7 +92,7 @@ Grundsicherung sind zu melden (Einschätzung, keine Beratung).
 Grundsatz: Partnerlinks stehen dort, wo jemand ohnehin eine Kaufentscheidung
 vorbereitet. Kein Link ohne Bezug, keine Banner im Lesefluss.
 
-| Ort | Heute | Ab 01.11. |
+| Ort | Heute | Ab 01.12. |
 |---|---|---|
 | Marktübersichten (`/vergleich/*`) | Amazon-Suchen | Santos als Fachhändler für Grills und Oberhitze; SharkNinja für Ninja Woodfire; Amazon für Kleinteile |
 | Cut-Seiten und Cut-Generator | Amazon-Fallback | Fleischpartner **offen** (Don Carne/Albers ohne Rückmeldung, meatshop.de: Uwe ruft am 12.10. an); bis dahin Amazon-Fallback |
@@ -115,7 +115,7 @@ vorbereitet. Kein Link ohne Bezug, keine Banner im Lesefluss.
    führen, die Ziel-URL beim Händler ergänzen — vorerst ohne Umschalten.
 4. **Fleisch-Brücke**: ~~BOS FOOD als Partner vorbereiten~~ — **entfällt (Uwe, 10.10.2026)**: Fleischpartner ist noch offen, BOS FOOD ist für Spezialitäten vorgesehen.
 5. **Ein Schalter für den Start**: alles hängt an `status` im Register — am
-   01.11. auf `active` stellen, ein PR, fertig.
+   01.12. auf `active` stellen, ein PR, fertig.
 6. **Kennzeichnung prüfen**: Jeder Partnerlink wird so ausgezeichnet und
    gekennzeichnet wie heute die Amazon-Links (`rel="sponsored"` in den
    Komponenten unter `src/components/affiliate/`) — auch bei AWIN und Webgains.
@@ -131,7 +131,7 @@ eingebunden, nicht als Kopie — sonst zählt der Klick nicht.
 > vielen Dank für die Freischaltung. Ich bereite gerade die Platzierungen auf
 > steakakademie.de vor: [z. B. die Grill-Marktübersicht und die Seiten zu
 > Oberhitze und Gasgrills / die Cut-Seiten mit Bezugsquellen für Wagyu und
-> Dry Aged]. Online gehen sie am 01.11.2026, rechtzeitig vor der Black Week.
+> Dry Aged]. Online gehen sie am 01.12.2026, rechtzeitig vor der Black Week.
 >
 > Falls Sie für November und Dezember Aktionen planen, nehme ich die Codes
 > gern in den Ratgeber „Geschenke für Grillfans" und in den Wissens-Brief auf.
@@ -151,7 +151,7 @@ PartnerNet. Der Cockpit-Abgleich nimmt ab November eine Zahl je Woche auf.
 
 ## Offene Entscheidungen für Uwe
 
-1. Amazon-Links bis zum 01.11. lassen oder herausnehmen? (Jobcenter fragen)
+1. Amazon-Links bis zum 01.12. lassen oder herausnehmen? (Jobcenter fragen)
 2. Air Fryer Club und brickzonehub ablehnen — einverstanden?
 3. Burghardt im Wissens-Brief zur Black Week fest einplanen?
 
@@ -168,7 +168,7 @@ Umgesetzt (PR „AWIN-Vorbereitung"); **alle neuen Links sind aus**:
 | 5 Ein Schalter | `status` in `products/affiliate-programs.yaml` je Programm; die Fleisch-Brücke zusätzlich über `PRIMARY` in `cut-affiliate.ts` (derzeit leer) — ein PR. |
 | 6 Kennzeichnung | Die Weiterleitungen `/go/…` und `/go-fleisch/…` zählen und kennzeichnen jeden Partnerlink gleich; Test `affiliate-weiterleitung.test.ts` bleibt grün. |
 
-### Start am 01.11.2026 (oder nach Zusage des Jobcenters)
+### Start am 01.12.2026 (oder nach Zusage des Jobcenters)
 1. In AWIN je Advertiser Provision und Cookie-Dauer ablesen und in `products/affiliate-programs.yaml` eintragen.
 2. Die vier Einträge dort von `applied` auf `active` stellen.
 3. Steht bis dahin ein Fleischhändler fest: `PRIMARY` in `src/lib/cut-affiliate.ts` setzen (Händler, Link-Aufbau, Status `'active'`). Ohne Händler bleibt der Amazon-Fallback.

@@ -6,7 +6,7 @@ import { awinLink, type AwinAdvertiser } from '@/lib/awin';
  * Der eine Schalter für den Start (docs/affiliate-strategie-2026.md, „Technik — morgen“, 5):
  * Ein Produkt mit `partnerZiele` geht zum Netzwerk-Partner, SOBALD dessen Programm im
  * Programmregister auf `status: active` steht — vorher bleibt `affiliateUrl` (Amazon).
- * Am Starttag (01.11.2026 bzw. nach Zusage des Jobcenters) wird nur der Status
+ * Am Starttag (01.12.2026 bzw. nach Zusage des Jobcenters) wird nur der Status
  * umgestellt; Register, /go/ und die Geräte-Links folgen automatisch.
  *
  * Kein Datum im Code: Der Start hängt an einer Entscheidung, nicht am Kalender.

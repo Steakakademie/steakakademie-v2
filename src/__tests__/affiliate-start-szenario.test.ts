@@ -1,5 +1,5 @@
 /**
- * Abnahmetest Affiliate-Start 01.11.2026 (12.10.2026).
+ * Abnahmetest Affiliate-Start 01.12.2026 (12.10.2026).
  *
  * Der Start ist ein Schalter: `status` der AWIN-Programme in
  * products/affiliate-programs.yaml wechselt von `applied` auf `active`.
