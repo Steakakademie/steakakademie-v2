@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { KONFIG: k, istBuchbar, zuBlockendeTage, rhythmusWoche, feiertageNRW, datum, sollBlocker, plusTage, ymd } = require('./rotation-blocker.cjs');
-// Rhythmus-Tests ab dem Anker 05.10.; live gilt ersterTag 02.11. (eigener Test unten)
+// Rhythmus-Tests ab dem Anker 05.10.; live gilt ersterTag 01.12.2026 (eigener Test unten)
 const kr = { ...k, ersterTag: '2026-10-05' };
 const tage = (liste) => liste.map((s) => istBuchbar(datum(s), kr));
 
@@ -16,10 +16,11 @@ describe('Rotations-Blocker Terminbuchung (Rhythmus Uwe, 26.09.2026)', () => {
     expect(rhythmusWoche(datum('2026-11-02'), k.anker)).toBe(1);
   });
 
-  it('live: vor dem 02.11.2026 nichts buchbar, danach im Rhythmus', () => {
-    expect(k.ersterTag).toBe('2026-11-02');
-    expect(istBuchbar(datum('2026-10-30'), k)).toBe(false);
-    expect(['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-06'].map((s) => istBuchbar(datum(s), k))).toEqual([true, false, true, true]);
+  it('live: vor dem 01.12.2026 (Gewerbeanmeldung) nichts buchbar, danach im Rhythmus', () => {
+    expect(k.ersterTag).toBe('2026-12-01');
+    expect(rhythmusWoche(datum('2026-11-30'), k.anker)).toBe(1);
+    expect(['2026-11-02', '2026-11-04', '2026-11-27', '2026-11-30'].map((s) => istBuchbar(datum(s), k))).toEqual([false, false, false, false]);
+    expect(['2026-12-01', '2026-12-02', '2026-12-03', '2026-12-04'].map((s) => istBuchbar(datum(s), k))).toEqual([false, true, false, true]);
   });
 
   it('vor dem ersten Tag, am Wochenende und an NRW-Feiertagen nichts buchbar', () => {

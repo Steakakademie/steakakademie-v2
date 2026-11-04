@@ -1,6 +1,6 @@
 # Weihnachts-Gutscheine scharfschalten — Uwes Checkliste
 
-> ⏳ **VERKAUFSSTART: 01.11.2026** (Gewerbeanmeldung zum 01.11. — vorher keine
+> ⏳ **VERKAUFSSTART: 01.12.2026** (Gewerbeanmeldung zum 01.12. — vorher keine
 > neuen Verkaufsprodukte freischalten). Konzept, Sortiment und Zeitplan:
 > `docs/gutschein-konzept-weihnachten-2026.md`.
 >
@@ -25,7 +25,7 @@
 ## Stand 11.10.2026 — Schritt 1 und 2 erledigt, Schritt 3 offen
 
 **Schritt 1 (Digistore24) ist fertig** — drei Produkte angelegt, alle **inaktiv**, Verkaufsstart
-01.11.2026 00:00, Genehmigung „noch nicht beantragen", Danke-Seite
+01.12.2026 00:00, Genehmigung „noch nicht beantragen", Danke-Seite
 `https://steakakademie.de/danke/gutschein`, Produkttyp Downloads. Der Preisplan der Vorlage, der
 nicht zum Gutschein gehört, ist **deaktiviert**, nicht gelöscht:
 
@@ -48,7 +48,7 @@ Nächster Schritt: Testkauf im Digistore-Testmodus.
 
 **Schritt 3 (Vercel):** `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE`, `NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE_5ER`
 und `NEXT_PUBLIC_DS_VOUCHER_MEIN_PROTOKOLL` auf die Checkout-Adressen oben, dann Redeploy. **Erst
-kurz vor dem 01.11.** — mit der Variablen wechselt die Karte auf `/gutschein` von „In Vorbereitung"
+kurz vor dem 01.12.** — mit der Variablen wechselt die Karte auf `/gutschein` von „In Vorbereitung"
 auf den Kaufknopf.
 
 **Gültigkeit der Gutscheine:** bis 31.12. des dritten Folgejahres (Kauf 2026 → 31.12.2029),
@@ -102,7 +102,7 @@ Digistore24 → Produkte → **Produkt kopieren** (vom bestehenden Produkt) →
   zahlt, ein Code entsteht nicht. Die IPN-Anbindung meldet sich über `sha_sign`
   (`DIGISTORE_IPN_PASSPHRASE`).
 - **Danke-Seite**: `https://steakakademie.de/danke/gutschein`
-- **Verkaufsstart** auf den 01.11.2026 setzen.
+- **Verkaufsstart** auf den 01.12.2026 setzen.
 - Notiere die neue **Produkt-ID** (z. B. 69xxxx) und gib sie Claude.
 
 ### 2) Datenbank: Produkt als Gutschein zuordnen
@@ -153,7 +153,7 @@ Schenkende zahlt, der Beschenkte kann nichts einlösen.
 ---
 
 ## Abnahme (Testkauf)
-1. Gutschein-Produkt im Digistore-Testmodus kaufen (vor dem 01.11. kein Echtkauf)
+1. Gutschein-Produkt im Digistore-Testmodus kaufen (vor dem 01.12. kein Echtkauf)
 2. E-Mail mit Code kommt (Loops-Template `LOOPS_VOUCHER_TEMPLATE_ID`)
 3. `/gutschein/<code>` zeigt die druckbare Geschenkseite
 4. Mit Zweit-Konto auf `/gutschein/einloesen` einlösen → Zugang, Diagnosen bzw.

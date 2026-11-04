@@ -25,7 +25,7 @@
 
 # ── AWIN (Publisher-ID 3102406, Konto seit 22.09.2026) ────────────────────────
 # Zugelassen laut Postfach, Stand 09.10.2026 (docs/affiliate-strategie-2026.md).
-# status `applied` = zugelassen, NICHT live: Links gehen erst ab 01.11.2026 scharf
+# status `applied` = zugelassen, NICHT live: Links gehen erst ab 01.12.2026 scharf
 # (Einstiegsgeld, siehe Strategie „Ein Haken"). Start = status auf `active` — ein PR.
 # Provisionssätze und Cookie-Dauer stehen im AWIN-Profil und wurden hier NICHT
 # übernommen (die Sätze haben sich am 06.10. und 09.10. geändert): vor dem Start dort
@@ -43,7 +43,7 @@
   applyUrl: "https://www.santosgrills.de/"
   focus: "Grills (Gas, Kohle, Oberhitze) — Fachhändler, hoher Warenkorb"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
-  note: "AWIN-ID 32287. Zugelassen 05.10.2026. AGB gelesen 12.10.2026: Santos-Produktbilder, Logos und Texte nur mit vorheriger schriftlicher Zustimmung von Santos; nur freigegebene Gutscheincodes; Links unverändert wie bereitgestellt, Referrer nicht verschleiern; alle werbenden Seiten gegenüber Santos offenlegen; keine Paid-Search-Werbung; Cross-Sales nicht vergütet. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.11."
+  note: "AWIN-ID 32287. Zugelassen 05.10.2026. AGB gelesen 12.10.2026: Santos-Produktbilder, Logos und Texte nur mit vorheriger schriftlicher Zustimmung von Santos; nur freigegebene Gutscheincodes; Links unverändert wie bereitgestellt, Referrer nicht verschleiern; alle werbenden Seiten gegenüber Santos offenlegen; keine Paid-Search-Werbung; Cross-Sales nicht vergütet. Programmtext nennt für Fremdmarken noch 7 %, im Commission Manager gelten seit 12.10.2026 5 %. Vorgesehen: Marktübersichten (Grills, Oberhitze) ab 01.12."
   disclosureNote: "Kaufst du über einen Santos-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
 
 - id: bos-food
@@ -67,7 +67,7 @@
   commission: "5 %; Newsletter-Code 1 %, Zubehör/Ersatzteile/Refurbished 0 % (Commission Manager, 12.10.2026)"
   cookie: "30 Tage"
   avgCartEur: null
-  status: applied  # Zulassung Awin 09.10.2026, Feed live seit 22.10.2026. War 22.10.–23.10. kurz active (#470); Uwe 23.10.: zurueck auf applied bis zur Gewerbeanmeldung. Start = eigener PR am 01.11. (docs/start-checkliste-2026-11-01.md Teil B)
+  status: applied  # Zulassung Awin 09.10.2026, Feed live seit 22.10.2026. War 22.10.–23.10. kurz active (#470); Uwe 23.10.: zurueck auf applied bis zur Gewerbeanmeldung. Start = eigener PR am 01.12. (docs/start-checkliste-2026-11-01.md Teil B)
   applyUrl: "https://www.sharkninja.de/"
   focus: "Ninja-Geräte (Woodfire Outdoor-Grill/Smoker, Küchenmaschinen)"
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
@@ -105,7 +105,7 @@
 # ── Webgains (Konto seit 21.09.2026) ──────────────────────────────────────────
 # Beigetreten laut Webgains-Oberfläche, Stand 10.10.2026 (Screenshot Uwe): als einziges
 # Programm. status `applied` = beigetreten, NICHT live — Start wie bei AWIN frühestens
-# 01.11.2026 (docs/affiliate-strategie-2026.md, „Ein Haken").
+# 01.12.2026 (docs/affiliate-strategie-2026.md, „Ein Haken").
 
 - id: vineshop24
   name: "vineshop24"

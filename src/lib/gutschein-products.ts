@@ -135,7 +135,7 @@ export function gutscheinKaufbar(courseSlug: string, liste: GiftableProduct[] = 
 
 /**
  * Geschenk-Saison: 1. November bis einschließlich 24. Dezember (Verkaufsstart
- * mit der Gewerbeanmeldung am 01.11.2026). Gerechnet in deutscher Zeit, damit
+ * mit der Gewerbeanmeldung am 01.12.2026). Gerechnet in deutscher Zeit, damit
  * der Hinweis nicht um Mitternacht UTC kippt.
  */
 export function istGeschenkSaison(jetzt: Date = new Date()): boolean {

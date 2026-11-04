@@ -28,7 +28,7 @@
   badge: "Unsere Auswahl"
   lastChecked: "2026-05-22"
   recommended: true
-  # Vorgemerkt für den AWIN-Start (01.11.2026) — affiliateUrl bleibt bis dahin Amazon.
+  # Vorgemerkt für den AWIN-Start (01.12.2026) — affiliateUrl bleibt bis dahin Amazon.
   # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/32287
   partnerZiele:
     - advertiser: santosgrills
@@ -194,7 +194,7 @@
   badge: "Premium-Wahl"
   lastChecked: "2026-05-22"
   recommended: false
-  # Vorgemerkt für den AWIN-Start (01.11.2026). Santos führt Stand-Alone (ohne Wagen)
+  # Vorgemerkt für den AWIN-Start (01.12.2026). Santos führt Stand-Alone (ohne Wagen)
   # und eine Variante mit Rollwagen; der Eintrag hier ist die Grundversion.
   # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/32287
   partnerZiele:
@@ -209,7 +209,7 @@
 # (OG701EU, OG850EU Pro XL, OG901EU Pro Connect XL); hier Einstieg und Topmodell.
 # Preise, Namen und Ausstattung von sharkninja.de am 14.10.2026 (Herstellerangaben).
 # Keine Amazon-Sterne eingetragen (nicht geprüft) — die Karte zeigt dann keine.
-# affiliateUrl bleibt bis zum AWIN-Start (01.11.2026) die Amazon-Suche.
+# affiliateUrl bleibt bis zum AWIN-Start (01.12.2026) die Amazon-Suche.
 
 - id: ninja-woodfire-og701
   name: "Ninja Woodfire Elektrischer Outdoor Grill & Smoker (OG701EU)"
@@ -828,7 +828,7 @@
 # Ninja (SharkNinja DE, AWIN-ID 19810) — eingetragen 14.10.2026 für die Küchenmaschinen-
 # Übersicht (docs/affiliate-strategie-2026.md, „Technik", Schritt 3). Angaben von
 # sharkninja.de am 14.10.2026; dort an dem Tag als „ausverkauft" geführt, Seite erreichbar.
-# affiliateUrl bleibt bis zum AWIN-Start (01.11.2026) die Amazon-Suche; keine Sterne eingetragen.
+# affiliateUrl bleibt bis zum AWIN-Start (01.12.2026) die Amazon-Suche; keine Sterne eingetragen.
 # AWIN-Programmseite (Login): https://ui.awin.com/awin/affiliate/3102406/merchant-profile/19810
 
 # ── NINJA MIXER (SharkNinja DE, AWIN-ID 19810) ───────────────────────────────
