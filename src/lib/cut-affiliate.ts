@@ -11,7 +11,7 @@
 //
 // START mit Partner: PRIMARY unten setzen (id, name, buildUrl — AWIN-Link über
 // src/lib/awin.ts oder der Partnerlink des Händlers), status 'active', und den Eintrag
-// in products/affiliate-programs.yaml auf `active`. Nicht vor dem 01.11.2026
+// in products/affiliate-programs.yaml auf `active`. Nicht vor dem 01.12.2026
 // (Einstiegsgeld, siehe docs/affiliate-strategie-2026.md, „Ein Haken"). Der Rest (UI,
 // Tracking-Route) bleibt unverändert.
 

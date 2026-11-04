@@ -89,7 +89,7 @@ describe('Der eine Schalter (Programmstatus)', () => {
 
   // Bis zur Gewerbeanmeldung (Uwe, 23.10.2026) steht der Schalter auf applied:
   // kein Klick darf Provision ausloesen. #470 hatte ihn am 22.10. auf active
-  // gestellt, dieser Test hat ihn zurueckgeholt. Der Start-PR am 01.11. dreht
+  // gestellt, dieser Test hat ihn zurueckgeholt. Der Start-PR am 01.12. dreht
   // diesen Test wieder um (status active, Ziel www.awin1.com, awinmid 19810).
   it('solange SharkNinja nicht active ist, zeigt nichts auf awin1.com', () => {
     const programm = getAffiliatePrograms().find((p) => p.providers.includes('sharkninja'));

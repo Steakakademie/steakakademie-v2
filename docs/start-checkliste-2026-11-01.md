@@ -1,4 +1,4 @@
-# Start-Checkliste 01.11.2026 — Verkaufsstart und Affiliate-Start
+# Start-Checkliste 01.12.2026 — Verkaufsstart und Affiliate-Start
 
 > Abteilung: Systems & Ops, mit Wachstum (Affiliate) und Kanzlei (Gewerbe). Angelegt 22.10.2026
 > (Paket T8 / C23 im Launch-Plan) als Draft-PR; der Merge dieser Datei ist **kein** Start.
@@ -6,14 +6,14 @@
 > Kauf ohne Zugang (Runbook `docs/digistore-diplom-anbindung.md`).
 >
 > **Vorbedingung (Uwe, 17.10.2026):** „das Produkt darf noch nicht verkauft werden, erst nachdem ich
-> das Gewerbe angemeldet habe." Ohne Gewerbeanmeldung gibt es am 01.11. nur Teil B (Affiliate) —
+> das Gewerbe angemeldet habe." Ohne Gewerbeanmeldung gibt es am 01.12. nur Teil B (Affiliate) —
 > Soft-Start, neuer Verkaufstermin 15.11. (Arbeitsplan, Abschnitt 5).
 
 ## 0. Go/No-Go am 29.10. — was grün sein muss
 
 | Nr | Kriterium | Beleg | Stand 22.10. |
 |---|---|---|---|
-| 1 | Gewerbeanmeldung liegt vor (oder Soft-Start beschlossen) | Datum im Cockpit | Termin 01.11. (K1) |
+| 1 | Gewerbeanmeldung liegt vor (oder Soft-Start beschlossen) | Datum im Cockpit | Termin 01.12. (K1) |
 | 2 | Testkauf Mein Protokoll **und** Steak-Beichte protokolliert, inkl. echter Plan-Erzeugung | Protokoll mit Screenshots (K7 / C18) | nur Diplom belegt |
 | 3 | `main` grün, 21/21 Funktionsproben an drei Tagen | Actions | 15/21 ohne Testkonto (T2 / C22) |
 | 4 | Zusagen-Gate grün für den Abgabeumfang, Prüfdatum Tranche 1 | `npm run check:zusagen`, `npm run pruefstand` | 168 Altbestand (Z1 / C20) |
@@ -57,8 +57,8 @@ Rot bei 2, 3 oder 4 → Teil A verschiebt sich auf den 15.11., Teil B läuft tro
 - [ ] Sentry 60 min beobachten: kein „Kassiert ohne Auslieferung", kein neuer Fehler-Cluster.
 - [ ] Erster echter Kauf (oder Testkauf im Testmodus): `digistore_orders` Zeile `processed`, `bookings`
       aktiv, Login-Mail angekommen, Zugang sichtbar, Rechnung aus Digistore — Protokoll mit Screenshots.
-- [ ] Cockpit: Zeile „Verkauf live seit 01.11.2026, HH:MM, Deploy <id>" in Wachstum und Kanzlei.
-- [ ] Tagesfakten: am 02.11. Zeile für den 01.11. mit `kaeufe` prüfen (`docs/tagesfakten.md`).
+- [ ] Cockpit: Zeile „Verkauf live seit 01.12.2026, HH:MM, Deploy <id>" in Wachstum und Kanzlei.
+- [ ] Tagesfakten: am 02.12. Zeile für den 01.12. mit `kaeufe` prüfen (`docs/tagesfakten.md`).
 
 ## B. Affiliate-Start (läuft auch ohne Gewerbeanmeldung — Provisionen fließen erst später)
 

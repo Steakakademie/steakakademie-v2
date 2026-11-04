@@ -616,7 +616,7 @@ describe('Digistore24-Webhook: Geschenkgutscheine (Gutschein-Konzept T7, 09.10.2
     expect(mailBodies()[0].dataVariables.voucher_url).toBe('https://steakakademie.de/gutschein/SA-TEST-0001');
   });
 
-  it('unveröffentlichter Kurs löst beim Gutschein-Kauf keinen Alarm aus (Mein Protokoll vor dem 01.11.)', async () => {
+  it('unveröffentlichter Kurs löst beim Gutschein-Kauf keinen Alarm aus (Mein Protokoll vor dem 01.12.)', async () => {
     await POST(kauf('800001'));
     expect(db.sentry).toHaveLength(0);
   });

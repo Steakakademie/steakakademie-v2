@@ -223,7 +223,7 @@ verspricht) · Startseite Lighthouse mobil 71 / LCP 5,2 s (JS, kein Quick Win) �
 Search Console existiert (`sc-domain:steakakademie.de`, Korrektur zum Audit), Leistungsdaten
 werden aber noch nirgends ausgewertet.
 
-**Nächster Schritt:** *17.10.2026:* **Gewerbe anmelden (01.11.), dann Verkaufsstart nach
+**Nächster Schritt:** *17.10.2026:* **Gewerbe anmelden (01.12.), dann Verkaufsstart nach
 `docs/digistore-diplom-anbindung.md` Abschnitt 0a** — Claudes Teil: Produkt-ID zurück auf
 Production, Redeploy, Impressum/AGB gegen die Gewerbedaten; alles andere wartet darauf.
 Daneben Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
@@ -240,7 +240,7 @@ gegenprüfen. Ribeye-Nomenklatur (#354) fachlich gegenlesen.
 *17.10.2026, Tagesstand (15 PRs #420–#434):* **Diplom 750228 (99 € oder 3 × 35 €) technisch
 fertig und belegt** — Kaufweg live (#424), Testkauf 4YY6TULF samt Erstattung und Entzug durch,
 Digistore im Testmodus, kein Geldfluss. **Verkauf gesperrt bis zur Gewerbeanmeldung (Uwe, geplant
-01.11.2026):** Produkt-ID nur auf Preview, Verkaufsstopp in Digistore. **Gedruckte Urkunde
+01.12.2026):** Produkt-ID nur auf Preview, Verkaufsstopp in Digistore. **Gedruckte Urkunde
 (17,99 €, Selbstkosten 11,85 €) live bestellbar und belegt:** `GELATO_API_KEY` gültig, zwei
 Gelato-Proben als kostenloser Entwurf, Vorschau zeigt das Druckbild, Urkunde je Stufe ohne
 Level-Auswahl, Pflichtzeile und Grad mit Träger auf allen fünf Vorlagen, beide Bestell-Mails
@@ -274,7 +274,7 @@ erst nach Gewerbeanmeldung klärbar.
 
 **Nächster Schritt (real, nur Uwe):** Gewerbe **erst nach** ESG-Antragseingang anmelden,
 Aufnahmedatum 01.09.2026 im Antragsgespräch bestätigen. *17.10.2026:* Gewerbeanmeldung geplant
-zum **01.11.2026**; bis dahin bleibt der Diplom-Verkauf gesperrt (Wachstum). Vor dem ersten echten
+zum **01.12.2026**; bis dahin bleibt der Diplom-Verkauf gesperrt (Wachstum). Vor dem ersten echten
 Urkunden-Druck: Pflichtzeile und Grad mit Träger stehen seit #432 auf allen Druckvorlagen.
 
 ---
