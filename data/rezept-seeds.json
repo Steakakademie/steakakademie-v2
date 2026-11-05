@@ -554,5 +554,55 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "picanha-argentina-parrilla",
+    "kategorie": "fleisch",
+    "title": "Picanha a la Parrilla – Argentinische Fettkappe vom Rost",
+    "meatType": "Picanha (Tafelspitzdeckel)",
+    "cookingMethod": "Direkt und indirekt, Holzkohle",
+    "difficulty": "Mittel",
+    "concept": "In Argentinien wird die Picanha nicht am Spieß, sondern als ganzes Stück mit dicker Fettkappe auf der Parrilla gegart – zuerst die Fettseite direkt über der Glut, dann das Fleisch indirekt zu Ende. Das Fett schmilzt langsam und übergießt das Fleisch von selbst, was jeden Pinsel überflüssig macht. Der Artikel beantwortet, warum die Fettkappe unbedingt draufbleiben muss und wie man den richtigen Schnitt beim deutschen Metzger bestellt. Herkunft: Argentinien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pork-shoulder-carolina-style",
+    "kategorie": "fleisch",
+    "title": "Carolina Pulled Pork – Schweineschulter aus dem Smoker",
+    "meatType": "Schweineschulter",
+    "cookingMethod": "Indirekt, low & slow, Rauch",
+    "difficulty": "Fortgeschritten",
+    "concept": "Der Carolina-Stil unterscheidet sich vom deutschen Pulled Pork durch den Verzicht auf süße Saucen während des Garens – das Fleisch bekommt nur Salz, Pfeffer und Paprika, die Säure kommt erst am Ende durch einen Essig-Mop. Entscheidend ist das Erreichen der Stall-Phase und das geduldige Durcharbeiten bis zur Kerntemperatur von 95 °C, damit das Kollagen vollständig geliert. Der Artikel erklärt den Unterschied zwischen Carolina Vinegar Style und Kansas City Style und warum deutsche Griller den herzhaft-rauchigen Geschmack ohne Süße oft als intensiver empfinden. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "yakitori-momo-haehnchenoberschenkel-vom-grill",
+    "kategorie": "fleisch",
+    "title": "Yakitori Momo – Hähnchenschenkel-Spieße mit Tare-Glasur",
+    "meatType": "Hähnchenschenkel (ausgelöst)",
+    "cookingMethod": "Direkt, mittlere Glut",
+    "difficulty": "Mittel",
+    "concept": "Yakitori Momo ist der meistbestellte Spieß in japanischen Yakitori-Bars: ausgelöste Hähnchenschenkel werden in mundgerechte Stücke geschnitten, auf Bambusspieße gezogen und über Holzkohle mit einer selbst gekochten Tare-Glasur aus Sojasoße, Mirin, Sake und Zucker mehrfach lackiert. Der kritische Schritt ist das wiederholte Glasieren in kurzen Abständen, das eine karamellisierte, glänzende Schicht aufbaut ohne zu verbrennen. Der Artikel erklärt, wie man Tare aus Supermarkt-Zutaten kocht und warum das Hähnchen auf Spießen gleichmäßiger gart als als ganzes Stück. Herkunft: Japan.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "boerewors-vom-grill-selbst-gemacht",
+    "kategorie": "fleisch",
+    "title": "Boerewors selbst machen und am Braai grillen",
+    "meatType": "Rinderhackfleisch, Schweinehackfleisch",
+    "cookingMethod": "Direkt, mittlere Glut",
+    "difficulty": "Mittel",
+    "concept": "Boerewors – wörtlich „Bauernwurst\" – ist die Seele des südafrikanischen Braai: eine grobe Spiralwurst aus Rind und Schwein, gewürzt mit Koriandersamen, Muskat, Nelke und Essig, die niemals aufgeschnitten auf den Grill kommt, sondern als Spirale im Ganzen gewendet wird. Der entscheidende Schritt beim Selbermachen ist das Verhältnis von Fett zu Mager und das schonende Mischen, damit die Wurst saftig bleibt und nicht krümelig wird. Der Artikel beantwortet, welche Gewürze aus dem deutschen Supermarkt das Original ersetzen und warum Boerewors niemals durchgestochen werden darf. Herkunft: Südafrika.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "moo-yang-schweinenacken-knoblauch-pfeffer",
+    "kategorie": "fleisch",
+    "title": "Moo Yang – Gegrillter Schweinenacken mit Knoblauch und Pfeffer",
+    "meatType": "Schweinenacken",
+    "cookingMethod": "Direkt, mittlere bis hohe Glut",
+    "difficulty": "Einfach",
+    "concept": "Moo Yang ist Thailands beliebtestes Straßengrill-Gericht: dünne Schweinenackenscheiben werden in einer Marinade aus Knoblauch, weißem Pfeffer, Fischsauce, Zucker und Öl eingelegt und dann über Holzkohle knusprig gegrillt. Alle Zutaten sind im deutschen Supermarkt erhältlich, und der Hauptgeschmack ist herzhaft-rauchig mit einer dezenten Süße – kein exotischer Fremdkörper, sondern sofort vertraut für deutsche Griller. Der Artikel erklärt, warum weißer Pfeffer statt schwarzem das Aroma prägt und wie die richtige Scheibendicke über Saftigkeit oder Trockenheit entscheidet. Herkunft: Thailand.",
+    "stil": "vertraut"
   }
 ]
