@@ -554,5 +554,35 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "churrasco-picanha-knobi-rub",
+    "kategorie": "fleisch",
+    "title": "Picanha mit Knoblauch-Salzkruste vom Schwertspieß",
+    "meatType": "Tafelspitzdeckel (Picanha)",
+    "cookingMethod": "Direkt, hohe Glut, Schwertspieß",
+    "difficulty": "Mittel",
+    "concept": "Die Picanha ist Brasiliens bekanntester Churrasco-Cut: ein kompakter Muskel mit dicker Fettkappe, der auf dem Schwertspieß halbmondförmig aufgefädelt und über starker Glut gedreht wird. Entscheidend ist, die Fettkappe nicht zu entfernen, sondern sie als natürliche Schutzschicht zu nutzen, die das Fleisch saftig hält und beim Schmelzen für Röstaromen sorgt. Der Artikel erklärt, warum der Cut in Deutschland als Tafelspitzdeckel beim Metzger erhältlich ist, wie man ihn richtig aufspießt und wann man gegen die Faser aufschneidet. Herkunft: Brasilien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-schweineschulter-pulled-pork-senf",
+    "kategorie": "fleisch",
+    "title": "Pulled Pork mit Senf-Slather und Apfelholz-Rauch",
+    "meatType": "Schweineschulter",
+    "cookingMethod": "Indirekt, low & slow, Smoker oder Kugelgrill",
+    "difficulty": "Fortgeschritten",
+    "concept": "Während Boston Butt bereits in der Bestandsliste steht, fokussiert dieses Rezept auf die europäisch leichter verfügbare Schweineschulter mit Knochen und zeigt, wie ein Senf-Slather als Haftschicht für den Rub funktioniert und gleichzeitig Geschmack gibt. Der kritische Schritt ist das Überwinden der Stall-Phase um 70 °C Kerntemperatur, ohne das Fleisch einzuwickeln, um eine maximale Bark zu erzielen. Der Artikel beantwortet, warum Senf als Bindemittel chemisch sinnvoll ist und wie sich Schulter und Boston Butt in Fettverteilung und Garergebnis unterscheiden. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "kangaroo-nein-kalbsruecken-australisch",
+    "kategorie": "fleisch",
+    "title": "Australischer Kalbsrücken mit Eukalyptus-Honig-Glasur",
+    "meatType": "Kalbsrücken (Kalbsloin)",
+    "cookingMethod": "Indirekt, mittlere Hitze, dann direkt zum Abflammen",
+    "difficulty": "Mittel",
+    "concept": "In Australien wird Kalbfleisch auf dem Grill mit lokalen Honig- und Kräuteraromen kombiniert; Eukalyptushonig ist in deutschen Supermärkten und Bioläden erhältlich und gibt der Glasur eine harzige, leicht mentholische Note, die perfekt zur milden Kalbsfleischnote passt. Der kritische Schritt ist das Glasieren erst in den letzten zehn Minuten der indirekten Phase, damit der Honig nicht verbrennt, bevor das Fleisch die Zieltemperatur von 58 °C erreicht. Der Artikel beantwortet, warum Kalbsrücken auf dem Grill oft unterschätzt wird, wie man die Glasur in zwei Schichten aufbaut und welche Kerntemperatur für zartes, saftiges Ergebnis entscheidend ist. Herkunft: Australien.",
+    "stil": "vertraut"
   }
 ]

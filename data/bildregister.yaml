@@ -1001,3 +1001,10 @@ bilder:
     erworben_am: 2026-10-28
     namensnennung: false
     hinweis: Ersetzt das KI-Bild (fal.ai). Zuschnitt 4:3 aus Querformat-Original; keine Personen, keine erkennbaren Marken. Fleischart/Cut im Foto nicht belegt (Unsplash-Titel Cooked sliced meat), daher neutraler Alt-Text
+  images/rezepte/yakitori-kawa-haehnchenhaut-spiesse.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/yakitori-kawa-haehnchenhaut-spiesse.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-10-31
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
