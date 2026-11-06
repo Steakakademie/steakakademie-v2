@@ -554,5 +554,45 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "picanha-argentina-parrilla",
+    "kategorie": "fleisch",
+    "title": "Picanha a la Parrilla – Argentinische Fettdeckel-Kunst",
+    "meatType": "Picanha (Tafelspitz mit Fettdeckel)",
+    "cookingMethod": "Direkt und indirekt, mittlere Glut",
+    "difficulty": "Mittel",
+    "concept": "Während Brasilien die Picanha am Schwertspieß kennt, grillt Argentinien denselben Cut flach auf der Parrilla: der Fettdeckel bleibt vollständig erhalten, wird kreuzweise eingeschnitten und zuerst mit der Fettseite nach unten über die Glut gelegt, bis das Fett goldbraun ausgebraten ist. Dieser Schritt ist spielentscheidend, denn das ausgetretene Fett tropft auf die Glut und erzeugt den charakteristischen Rauch, der das Fleisch von unten aromatisiert. Der Artikel erklärt den Unterschied zwischen brasilianischer und argentinischer Zubereitungsweise desselben Cuts und warum nur grobes Salz an dieses Fleisch gehört. Herkunft: Argentinien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pork-belly-burnt-ends",
+    "kategorie": "fleisch",
+    "title": "Pork Belly Burnt Ends – Schweinebauch-Würfel aus dem Smoker",
+    "meatType": "Schweinebauch",
+    "cookingMethod": "Indirekt, low & slow",
+    "difficulty": "Fortgeschritten",
+    "concept": "Pork Belly Burnt Ends sind in Kansas City der jüngere Bruder der klassischen Brisket Burnt Ends: Schweinebauch wird in gleichmäßige Würfel geschnitten, mehrere Stunden bei niedriger Temperatur geräuchert, dann in BBQ-Sauce, Honig und Butter gewendet und in einer geschlossenen Schale nochmals karamellisiert, bis jeder Würfel eine lackierte, klebrige Kruste trägt. Der kritische Punkt liegt im zweiten Garprozess in der Schale, denn zu wenig Zeit ergibt zähe Würfel, zu viel Zeit zerfallende Matsche. Der Artikel beantwortet, wie man Schweinebauch so zuschneidet und gart, dass jeder Würfel außen knusprig und innen butterzart ist. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "teriyaki-yakitori-negima-rind",
+    "kategorie": "fleisch",
+    "title": "Gyū Teriyaki Spieße – Rindfleisch mit Teriyaki-Glasur vom Grill",
+    "meatType": "Rinderhüfte oder Roastbeef",
+    "cookingMethod": "Direkt, mittlere bis hohe Glut",
+    "difficulty": "Einfach",
+    "concept": "Gyū Teriyaki Spieße sind ein japanischer Grillklassiker, bei dem dünne Rindfleischstreifen auf Bambusspieße gezogen und über Holzkohle gegrillt werden, während sie mehrfach mit einer selbst gekochten Teriyaki-Glasur aus Sojasoße, Mirin, Sake und Zucker bestrichen werden. Die Glasur wird vor dem Grillen auf dem Herd eingekocht, bis sie sirupartig zieht, denn nur dann haftet sie am Fleisch und verbrennt nicht sofort. Der Artikel erklärt, wie man Teriyaki-Glasur selbst herstellt, warum das mehrfache Bestreichen während des Grillens die Kruste aufbaut, und welcher Rindfleisch-Cut sich für dünne Spieße am besten eignet. Herkunft: Japan.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "izgara-balik-levrek",
+    "kategorie": "fisch",
+    "title": "Izgara Levrek – Gegrillter Wolfsbarsch vom türkischen Mangal",
+    "meatType": "Wolfsbarsch (Loup de Mer)",
+    "cookingMethod": "Direkt, mittlere Glut in der Fischzange",
+    "difficulty": "Einfach",
+    "concept": "Izgara Levrek ist an der türkischen Ägäisküste so alltäglich wie das Steak in Deutschland: Der ganze Wolfsbarsch wird innen mit Salz, Pfeffer, Knoblauch und frischem Thymian gefüllt, außen mit Olivenöl eingerieben und in einer Fischzange über mittlerer Holzkohleglut gegrillt, bis die Haut blasig und knusprig ist. Der kritische Punkt ist die Hitzesteuerung, denn zu hohe Glut verbrennt die Haut bevor das Fleisch gar ist, zu niedrige Glut lässt die Haut kleben und reißen. Der Artikel beantwortet, wie man den richtigen Garzeitpunkt am ganzen Fisch erkennt, warum die Fischzange dem Rost überlegen ist und welche Beilagen die türkische Küstenküche traditionell dazu reicht. Herkunft: Türkei.",
+    "stil": "vertraut"
   }
 ]
