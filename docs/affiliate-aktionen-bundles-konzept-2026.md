@@ -5,7 +5,7 @@ Richtungen" und Aktionsseiten (Weihnachten, Neujahr, …) im Stil der Steakakade
 die Mechanik: grillfuerst.de. Dazu die Fragen: Bedingungen der Advertiser, darf ich Bundles
 packen, was ist zu beachten, ist alles DSGVO-konform?
 
-Ergänzt `docs/affiliate-strategie-2026.md` (Programme, Start 01.11.) und
+Ergänzt `docs/affiliate-strategie-2026.md` (Programme, Start 01.12.) und
 `docs/gutschein-sichtbarkeit-konzept.md` (Gutscheine). Grundlage: zwei Recherchen vom 11.10.2026 —
 Bestand im Repo (Code, Tests, Datenschutzerklärung) und öffentliche Quellen (Awin-AGB + Code of
 Conduct, Webgains-AGB, Amazon-Programmrichtlinien, PAngV, UWG, JMStV, Werberat, Awin-DSGVO-Annex).
@@ -27,7 +27,7 @@ Conduct, Webgains-AGB, Amazon-Programmrichtlinien, PAngV, UWG, JMStV, Werberat, 
 4. **DSGVO: Der heutige Stand ist sauber** (keine Tracking-Skripte, keine Cookies, Weiterleitung
    speichert nichts). **Für Awin/Webgains ist er noch nicht fertig:** Datenschutzerklärung
    Abschnitt 13 ist veraltet, und die Kennzeichnungsregel im Code kennt nur Amazon.
-5. **Vor dem 01.11. braucht es einen Compliance-PR** (Abschnitt 6), sonst liefen die ersten
+5. **Vor dem 01.12. braucht es einen Compliance-PR** (Abschnitt 6), sonst liefen die ersten
    Awin-Links ohne „Anzeige" — das wäre ein Abmahnrisiko am ersten Tag.
 
 ---
@@ -145,7 +145,7 @@ dann im Browser per Plausible-Klasse zählen (die Klassen gibt es schon).
 - Alle Amazon-Links tragen „Anzeige" + `rel="sponsored"` (Tests `partnerlink-preisstand`,
   `MdxTextLink`, legal-guard).
 
-### Fehlt — Compliance-PR vor dem 01.11. (Regel 6: autonom, dann Bericht)
+### Fehlt — Compliance-PR vor dem 01.12. (Regel 6: autonom, dann Bericht)
 
 1. **Kennzeichnungsregel erweitern:** `src/components/affiliate/produkt-anzeige.ts` erkennt nur
    Amazon-URLs mit `tag=`. Awin- (`awin1.com`) und Webgains-Links müssen ebenso als Partnerlink
@@ -255,5 +255,5 @@ Testaussagen (Kopfkommentar der YAML).
 | jetzt | Compliance-PR (Abschnitt 6, Punkte 1–7) | Claude, Regel 6 |
 | nach Freischaltung | Terms je Programm lesen, ins Register; Logo-Freigaben anfragen (BOS FOOD) | Uwe liest, Claude trägt ein |
 | ✓ 11.10. | `/aktionen/[slug]` + `/geschenke` gebaut, ohne Preise (PR). Black-Week-Fenster im Kalender offen | Claude |
-| 01.11. | Programme `active`, erste Setups live | Uwe schaltet |
+| 01.12. | Programme `active`, erste Setups live | Uwe schaltet |
 | ab Dezember | Feed-Anbindung prüfen (BOS FOOD, SharkNinja haben Feeds) → dann Preise mit Stand | Entscheidung |

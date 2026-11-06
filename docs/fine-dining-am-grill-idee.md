@@ -6,7 +6,7 @@ die am Grill zubereitet werden können, als eigener Unterbereich. Uwes Winkel, w
 Kerntemperatur, Timing und Beschaffbarkeit.** Nach Uwes Kenntnis gibt es keine BBQ-/Grill-Website,
 die sich explizit damit beschäftigt (nicht geprüft).
 
-**Status: geparkt.** Nichts Neues vor dem 01.11.2026; bis dahin Gutschein-Start, Affiliate-Start,
+**Status: geparkt.** Nichts Neues vor dem 01.12.2026; bis dahin Gutschein-Start, Affiliate-Start,
 Aktionsseiten. Ein-Seiten-Konzept folgt, sobald die Suchvolumen vorliegen (Team-Aufgabe 1, Teil 2:
 „Sterneküche grillen", „Fine Dining Grill", „Gourmet grillen", „Sternekoch Grillrezepte").
 

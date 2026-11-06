@@ -2,7 +2,7 @@
 
 Festgelegt von Uwe am 26./27.09.2026. Buchungswerkzeug: **Cal.com Free** (0 €). Dazu ein Google-Apps-Script (0 €), das den Rhythmus pflegt.
 
-**Stand 27.09.2026: eingerichtet und geprüft.** Buchungslink: **https://cal.com/mingma/personal-coaching** · buchbar ab **Mo 02.11.2026** (`ersterTag`, Jobcenter). Apps-Script-Projekt „Rotations-Blocker Coaching“ im Konto steakakademie@gmail.com, Trigger täglich 03:00.
+**Stand 27.09.2026: eingerichtet und geprüft.** Buchungslink: **https://cal.com/mingma/personal-coaching** · buchbar ab **Di 01.12.2026** (`ersterTag`, Gewerbeanmeldung; Uwe, 04.11.2026 — vorher 02.11.2026). Erster freier Tag im Rhythmus: Mi 02.12.2026. Apps-Script-Projekt „Rotations-Blocker Coaching“ im Konto steakakademie@gmail.com, Trigger täglich 03:00.
 
 ## Ablauf für den Kunden
 
@@ -14,7 +14,7 @@ Festgelegt von Uwe am 26./27.09.2026. Buchungswerkzeug: **Cal.com Free** (0 €)
 
 | Rhythmuswoche | buchbar |
 |---|---|
-| 1 (Anker Mo 05.10.2026; erste buchbare Woche ab 02.11.) | Mo, Mi, Fr |
+| 1 (Anker Mo 05.10.2026; erste buchbare Woche ab 30.11., buchbar ab 01.12.) | Mo, Mi, Fr |
 | 2 | Di, Mi, Do |
 | 3 | Mo–Fr |
 | 4 | Mo, Di, Do, Fr |
@@ -50,7 +50,7 @@ Zum Nachbauen:
 - Das Skript läuft jeden Morgen um 03:00 Uhr und pflegt die Blocker für die nächsten 9 Wochen.
 - **Abwesenheit:** einen normalen Termin (Status „beschäftigt") in einen der verbundenen Kalender eintragen. Die Zeit verschwindet sofort von der Buchungsseite.
 - **Rhythmus ändern:** `KONFIG.muster` im Skript. Der nächste Lauf räumt alte Blocker selbst auf.
-- **Buchbar erst ab einem Tag:** `KONFIG.ersterTag`, aktuell `'2026-11-02'` (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung).
+- **Buchbar erst ab einem Tag:** `KONFIG.ersterTag`, aktuell `'2026-12-01'` (Jobcenter: bezahlte Coachings erst ab Gewerbeanmeldung zum 01.12.2026).
 - **Raster:** Cal.com setzt freie Zeiten direkt hinter belegte Blöcke. Deshalb belegt das Skript jeden Zufallsblocker und jeden echten Termin bis zum nächsten Terminbeginn (60 + 30 Min, `KONFIG.pauseMin`). Ein privater Termin, der erst nach dem 3-Uhr-Lauf eingetragen wird, kann das Raster bis zum nächsten Lauf verschieben; sofort korrigieren: `aktualisiereBlocker` im Skript-Editor ausführen.
 - **Terminbeginne ändern:** `KONFIG.slots` anpassen und in Cal.com Zeitintervall und Verfügbarkeit gleich halten.
 

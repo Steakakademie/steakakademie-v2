@@ -4,7 +4,7 @@ Stand 09.10.2026. Konzept zu Cockpit-Problem #103. **Sortiment entschieden
 (Uwe, 09.10.2026): G1–G4 und freie Wertgutscheine über 25, 50, 75 und 100 €.**
 **Nachtrag 09.10.2026 abends (Uwe):** Wertgutscheine auf 2027 verschoben;
 Werbemails unterschreibt „Die Steakakademie", Social-Posts tragen „Werbung" im
-Bild. Damit entfällt die Kanzlei-Anfrage vor dem 01.11. (siehe „Rechtsfragen").
+Bild. Damit entfällt die Kanzlei-Anfrage vor dem 01.12. (siehe „Rechtsfragen").
 Offen bleiben eine Anfrage an den Digistore-Support und Uwes Schritte in
 Digistore und Vercel.
 Ersetzt nicht die Checkliste `docs/weihnachts-gutschein-checkliste.md` — die
@@ -12,7 +12,7 @@ bleibt die Klickanleitung für die Produktgutscheine.
 
 ## Ziel
 
-Digitale Geschenkgutscheine ab dem Verkaufsstart am **01.11.2026**
+Digitale Geschenkgutscheine ab dem Verkaufsstart am **01.12.2026**
 (Gewerbeanmeldung) bis Heiligabend verkaufen. Sichtbar werden sie organisch,
 ohne Anzeigen. Das stärkste Argument im Dezember: **Der Gutschein ist in zwei
 Minuten im Postfach — auch am 24.12.**
@@ -44,7 +44,7 @@ Minuten im Postfach — auch am 24.12.**
 
 **Die Checkliste war an drei Stellen veraltet** (mit T1 im selben PR korrigiert):
 
-1. Verkaufsstart steht auf 01.10., gilt ist 01.11.
+1. Verkaufsstart steht auf 01.10., gilt ist 01.12.
 2. Sie nennt als Webhook `…/digistore24?token=…`. Die Anmeldung per URL-Token
    greift nur mit `DIGISTORE_WEBHOOK_ALLOW_URL_TOKEN=true`, und die Variable ist
    in Vercel nicht gesetzt. Ein so angelegtes Gutschein-Produkt bekäme 401: Der
@@ -174,7 +174,7 @@ Mehrzweckgutschein abbilden kann, beantwortet zuerst der Digistore-Support
    (Abschnitt „Rechtsfragen").
 3. Digistore: Gutschein-Produkte anlegen (Produkt kopieren), **an die
    IPN-Anbindung 352984 hängen**, Danke-Seite `/danke/gutschein`, Verkauf ab
-   01.11. G4 erst, wenn das Diplom selbst kaufbar ist. W25–W100 nicht 2026.
+   01.12. G4 erst, wenn das Diplom selbst kaufbar ist. W25–W100 nicht 2026.
 4. Vercel: `NEXT_PUBLIC_DS_VOUCHER_*` setzen, neu bauen.
 5. Testkauf im Digistore-Testmodus, Einlösen mit einem zweiten Konto.
 6. Social-Beiträge und Mails freigeben und veröffentlichen.
@@ -192,7 +192,7 @@ Einlösung.
 
 | Frage | Einschätzung | Sicherheit | Folge |
 |---|---|---|---|
-| Ankündigung vor 01.11. („In Vorbereitung", ohne Kauf) | Kein Verkauf; Preise mit „inkl. MwSt." unproblematisch | hoch | so lassen |
+| Ankündigung vor 01.12. („In Vorbereitung", ohne Kauf) | Kein Verkauf; Preise mit „inkl. MwSt." unproblematisch | hoch | so lassen |
 | Widerruf beim Gutscheinkauf | Belehrung und Frist über den Digistore-Checkout; bei Widerruf wird der Gutschein gesperrt (`revoke_voucher`) | mittel–hoch | Digistore-Support fragt nach dem Ablauf |
 | Umsatzsteuer Einzweckgutschein | Entsteht beim Verkauf (§ 3 Abs. 14 UStG); über Digistore per Gutschrift wie jeder Verkauf | hoch | nichts zu tun |
 | Gültigkeit „bis 31.12. des dritten Folgejahres" | Entspricht der gesetzlichen Verjährung (§§ 195, 199 BGB); angreifbar wären nur kürzere Fristen | hoch | seit 09.10. überall so (Migration `20261009170345`) |
@@ -233,10 +233,10 @@ allen zwölf Fragen liegt weiter in Gmail (Entwürfe) für später.
 |---|---|---|
 | 09.10. | Sortiment entschieden | Uwe ✓ |
 | 09.10. | T1–T8, T10, Ratgeber-, Social- und Mail-Entwürfe | Claude ✓ |
-| 09.10. | Wertgutscheine auf 2027, keine Kanzlei vor dem 01.11. | Uwe ✓ |
+| 09.10. | Wertgutscheine auf 2027, keine Kanzlei vor dem 01.12. | Uwe ✓ |
 | 16.10. | Anfrage an den Digistore-Support gesendet | Uwe |
 | 31.10. | Digistore-Produkte, Variablen, Zuordnung (T6), Testkauf | Uwe, Claude prüft |
-| 01.11. | Verkauf live für G1–G3 (G4, sobald das Diplom kaufbar ist) | — |
+| 01.12. | Verkauf live für G1–G3 (G4, sobald das Diplom kaufbar ist) | — |
 | 2027 | T9 Wertgutscheine | Claude |
 | 01.11.–24.12. | Ratgeber, Social, Mails | Claude entwirft, Uwe veröffentlicht |
 

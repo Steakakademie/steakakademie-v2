@@ -20,7 +20,7 @@
 ### 0a. Verkaufssperre bis zur Gewerbeanmeldung (Uwe, 17.10.2026)
 
 Uwe, nach dem Merge von #425: „das Produkt darf noch nicht verkauft werden, erst nachdem ich
-das Gewerbe angemeldet habe." Geplant ist die Gewerbeanmeldung zum **01.11.2026** (Uwe, 17.10.2026).
+das Gewerbe angemeldet habe." Geplant ist die Gewerbeanmeldung zum **01.12.2026** (Uwe, 04.11.2026; vorher 01.11.2026, Stand 17.10.2026).
 Zwei Riegel, beide müssen beim Verkaufsstart wieder fallen:
 
 | Riegel | Stand | Wer öffnet ihn |
@@ -33,7 +33,7 @@ steht auf `refunded` mit `revoked_at`, Uwes Konto hat keinen Diplom-Zugang mehr.
 bleibt scharf — eine echte Bestellung würde trotzdem ausgeliefert, deshalb ist der Verkaufsstopp
 in Digistore der eigentliche Riegel, der Button nur die Sichtbarkeit.
 
-**Verkaufsstart nach Gewerbeanmeldung (geplant 01.11.2026), in dieser Reihenfolge:** (1) Verkaufsstopp in Digistore
+**Verkaufsstart nach Gewerbeanmeldung (geplant 01.12.2026), in dieser Reihenfolge:** (1) Verkaufsstopp in Digistore
 aufheben, Leistungszeitraum auf unbefristet; (2) Variable zurück auf Production + Preview,
 Redeploy, Button auf `/diplome` sichtbar; (3) Produkt bei DS-de zur Prüfung einreichen;
 (4) Impressum/AGB auf die Gewerbedaten prüfen (Kanzlei).

@@ -991,7 +991,7 @@ richten sich ab jetzt nach gemessener Nachfrage, nicht nach geschätzten Suchvol
    wird gefunden.) **Stand 17.10.2026: technisch fertig und per Testkauf belegt** (Produkt
    750228, Webhook, Login-Mail, Roadmap; `docs/digistore-diplom-anbindung.md`). **Verkauf
    trotzdem gesperrt — Uwe, 17.10.2026: „das Produkt darf noch nicht verkauft werden, erst
-   nachdem ich das Gewerbe angemeldet habe." — geplant zum 01.11.2026.** Bis dahin: Produkt-ID nur auf Preview (kein
+   nachdem ich das Gewerbe angemeldet habe." — geplant zum 01.12.2026.** Bis dahin: Produkt-ID nur auf Preview (kein
    Kauf-Button in der Produktion), Verkaufsstopp in Digistore. Kein Verkaufsstart ohne diese
    Freigabe von Uwe — gilt für jedes neue Produkt, nicht nur das Diplom.
 4. **Community:** Supabase Auth (OAuth + Magic Link) ist **live** — offen ist nur
