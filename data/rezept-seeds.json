@@ -554,5 +554,45 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "lammkotelett-braai-peri-peri",
+    "kategorie": "fleisch",
+    "title": "Lammkoteletts mit Peri-Peri-Marinade vom Braai",
+    "meatType": "Lammkoteletts",
+    "cookingMethod": "Direkt, hohe Glut",
+    "difficulty": "Einfach",
+    "concept": "Südafrikanische Braai-Kultur trifft auf eine Marinade aus Chili, Knoblauch, Zitrone und Paprika – alles Zutaten, die im deutschen Supermarkt problemlos zu finden sind. Lammkoteletts sind dünn und reagieren extrem empfindlich auf Hitze: Wer sie eine Minute zu lang auf dem Rost lässt, verliert die zarte Rosa-Mitte. Der Artikel erklärt, wie Fleischdicke, Gluttemperatur und Ruhezeit zusammenspielen, damit das Kotelett außen Röstaromen entwickelt und innen saftig bleibt. Herkunft: Südafrika.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pork-shoulder-carolina",
+    "kategorie": "fleisch",
+    "title": "Carolina Pulled Pork – Schweineschulter aus dem Smoker",
+    "meatType": "Schweineschulter (Boston Butt)",
+    "cookingMethod": "Indirekt, low & slow, Smoker",
+    "difficulty": "Fortgeschritten",
+    "concept": "Während Pulled Pork aus Boston Butt bereits in der Bestandsliste steht, fokussiert dieser Artikel auf die Schweineschulter ohne Knochen im Eastern-Carolina-Stil: kein Rub mit Zucker, kein Tomatenanteil in der Sauce, stattdessen Essig, Pfeffer und Chiliflocken als einzige Würzung. Der kritische Punkt ist das Überwinden des Plateaus zwischen 70 und 80 Grad Kerntemperatur, in dem Kollagen schmilzt und das Fleisch scheinbar aufhört zu garen. Der Artikel erklärt die Biochemie des Plateaus und warum das Einwickeln in Butcher Paper hier anders wirkt als bei Brisket. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "hara-masala-seekh-kebab",
+    "kategorie": "fleisch",
+    "title": "Seekh Kebab mit Kräuter-Knoblauch-Rub vom Grill",
+    "meatType": "Lammhack",
+    "cookingMethod": "Direkt, mittlere bis hohe Glut",
+    "difficulty": "Mittel",
+    "concept": "Seekh Kebab ist ein in ganz Zentralasien und der Türkei verbreiteter Hackfleischspieß, der in Pakistan und Nordindien über Holzkohle gegart wird – mit Kreuzkümmel, Koriander, Knoblauch, Ingwer und frischen Kräutern, allesamt im deutschen Supermarkt erhältlich. Das Gelingen hängt daran, dass das Hack kalt und fest genug ist, um ohne Bindemittel am Flachspieß zu haften: Zu warmes Fleisch fällt in die Glut. Der Artikel erklärt die richtige Fettzusammensetzung des Hackfleischs, die Knetzeit und warum der Spieß vor dem Grillen gekühlt werden muss. Herkunft: Australien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "thai-gai-yang-klassisch",
+    "kategorie": "fleisch",
+    "title": "Gai Yang – Thailändisches Grillhähnchen mit Knoblauch-Korianderwurzel",
+    "meatType": "Hähnchen (aufgeschnitten, spatchcock)",
+    "cookingMethod": "Direkt und indirekt, Holzkohle",
+    "difficulty": "Mittel",
+    "concept": "Gai Yang aus der Isaan-Region ist bereits in der Bestandsliste vertreten; dieser Artikel behandelt die Zentralthailand-Variante, bei der Korianderwurzel, Knoblauch, weißer Pfeffer und Fischsauce die Marinade bilden – Korianderwurzel ist in deutschen Supermärkten mit Asiaabteilung oder auf dem Wochenmarkt erhältlich, alternativ funktioniert Koriandergrün mit Stielen. Das Hähnchen wird aufgeschnitten und flach auf den Rost gelegt, damit Haut und Fleisch gleichmäßig garen. Der Artikel beantwortet, warum die Marinade mindestens vier Stunden ziehen muss, wie indirektes Nachgaren das Austrocknen verhindert und welche Dipping-Sauce aus Limette, Chili und Fischsauce das Gericht erst komplett macht. Herkunft: Thailand.",
+    "stil": "vertraut"
   }
 ]
