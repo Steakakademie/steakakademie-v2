@@ -554,5 +554,65 @@
     "difficulty": "Einfach",
     "concept": "Moo Yang ist ein in ganz Thailand verbreiteter Straßengrillklassiker, bei dem Schweinenacken-Scheiben in einer Marinade aus Knoblauch, Korianderwurzel, Fischsoße, Palmzucker und weißem Pfeffer eingelegt und dann langsam über Holzkohle gegrillt werden, bis sie karamellisiert und leicht angebrannt sind. Korianderwurzel ist die einzige schwerer erhältliche Zutat; frischer Koriander mit Stielen funktioniert als vollwertiger Ersatz. Der entscheidende Schritt ist das mehrfache Wenden bei moderater Hitze, damit der Zucker in der Marinade gleichmäßig karamellisiert, ohne zu verbrennen. Der Artikel beantwortet, warum Schweinenacken mit seinem intramuskulären Fett für diese Methode besser geeignet ist als Lende oder Schulter. Herkunft: Thailand.",
     "stil": "original"
+  },
+  {
+    "slug": "lammkotelett-braai-peri-peri",
+    "kategorie": "fleisch",
+    "title": "Lammkoteletts mit Peri-Peri-Marinade vom Braai",
+    "meatType": "Lammkoteletts",
+    "cookingMethod": "Direkt, hohe Glut",
+    "difficulty": "Einfach",
+    "concept": "Südafrikanische Braai-Kultur trifft auf eine Marinade aus Chili, Knoblauch, Zitrone und Paprika – alles Zutaten, die im deutschen Supermarkt problemlos zu finden sind. Lammkoteletts sind dünn und reagieren extrem empfindlich auf Hitze: Wer sie eine Minute zu lang auf dem Rost lässt, verliert die Saftigkeit unwiederbringlich. Der Artikel erklärt, wie man den richtigen Garpunkt bei dünnen Koteletts sicher trifft und warum direktes, sehr heißes Grillen hier der Schlüssel ist. Herkunft: Südafrika.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "picanha-argentina-parrilla-salzkruste",
+    "kategorie": "fleisch",
+    "title": "Picanha von der Parrilla – Argentinisch mit Salzkruste",
+    "meatType": "Tafelspitz mit Fettdeckel (Picanha)",
+    "cookingMethod": "Direkt, mittlere bis hohe Glut",
+    "difficulty": "Mittel",
+    "concept": "In Argentinien wird Picanha mit nichts weiter als grobem Salz auf der Parrilla gegrillt – ein Prinzip, das deutschen Grillfans sofort einleuchtet, weil es das Fleisch in den Mittelpunkt stellt. Der Fettdeckel wird kreuzweise eingeschnitten und zuerst zur Glut gelegt, damit das Fett langsam ausläuft und das Fleisch von innen mit Geschmack versorgt. Der Artikel beantwortet die Frage, warum Tafelspitz mit Fettdeckel beim deutschen Metzger bestellt werden muss und wie die Salzkruste Saft und Röstaroma gleichzeitig erzeugt. Herkunft: Argentinien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "smoked-pork-shoulder-carolina-pulled",
+    "kategorie": "fleisch",
+    "title": "Carolina Pulled Pork – Schweineschulter aus dem Smoker",
+    "meatType": "Schweineschulter",
+    "cookingMethod": "Indirekt, low & slow",
+    "difficulty": "Fortgeschritten",
+    "concept": "Während Pulled Pork aus Boston Butt bereits in der Bestandsliste steht, setzt dieser Artikel auf die Schweineschulter mit Knochen im Carolina-Stil – leaner, mit einer dünnen Essig-Pfeffer-Sauce statt süßer Glasur, was dem deutschen Geschmack nach klaren Fleischaromen entgegenkommt. Der kritische Schritt ist das Überwinden der Stall-Phase zwischen 70 und 80 Grad Kerntemperatur, ohne das Fleisch einzuwickeln und damit die Bark zu ruinieren. Der Artikel erklärt den Unterschied zwischen Schulter und Nacken, warum der Knochen als Garindikator dient und wie die Essig-Sauce das Fett auf dem Teller schneidet. Herkunft: USA.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "gai-yang-kokos-schweinenacken",
+    "kategorie": "fleisch",
+    "title": "Gai Yang Stil: Schweinenacken mit Kokos-Knoblauch-Marinade",
+    "meatType": "Schweinenacken",
+    "cookingMethod": "Direkt, mittlere Glut",
+    "difficulty": "Einfach",
+    "concept": "Gai Yang ist das bekannteste Grillgericht Nordthailands – traditionell mit Hähnchen, aber die Marinade aus Kokosraspeln, Knoblauch, Korianderwurzel, weißem Pfeffer und Fischsauce funktioniert auf Schweinenacken noch überzeugender und trifft den deutschen Geschmack nach saftigem, würzigem Grillgut ohne exotische Fremdheit. Alle Zutaten sind im deutschen Supermarkt erhältlich; Korianderwurzel kann durch Koriandergrün und etwas mehr Knoblauch ersetzt werden. Der Artikel erklärt, warum Kokosraspeln in der Marinade die Oberfläche karamellisieren und gleichzeitig vor dem Austrocknen schützen. Herkunft: Thailand.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "lamb-shoulder-chops-australisch",
+    "kategorie": "fleisch",
+    "title": "Australische Lammschulterkoteletts mit Rosmarin-Knoblauch-Rub",
+    "meatType": "Lammschulterkoteletts",
+    "cookingMethod": "Direkt, hohe Glut",
+    "difficulty": "Einfach",
+    "concept": "Lammschulterkoteletts sind in Australien der Alltagsschnitt für den Backyard-Grill – günstiger als Karree, aber durch den höheren Fettanteil und den Knochen aromatisch überlegen, wenn man sie heiß und kurz grillt. Ein einfacher Rub aus Rosmarin, Knoblauch, Salz und Pfeffer reicht vollständig aus; die Fettränder werden eingeschnitten, damit sich das Fleisch nicht wölbt. Der Artikel erklärt den Unterschied zwischen Schulter- und Rückenkoteletts beim Lamm, warum Schulterkoteletts mehr Hitze vertragen und wie man sie beim deutschen Metzger richtig bestellt. Herkunft: Australien.",
+    "stil": "vertraut"
+  },
+  {
+    "slug": "yakitori-torikawa-haehnchenhaut-spiessse",
+    "kategorie": "fleisch",
+    "title": "Torikawa Yakitori – Knusprige Hähnchenhaut-Spieße vom Grill",
+    "meatType": "Hähnchenhaut",
+    "cookingMethod": "Direkt, mittlere Glut mit Tare-Glasur",
+    "difficulty": "Mittel",
+    "concept": "Torikawa ist in japanischen Yakitori-Bars eine der beliebtesten Bestellungen – aufgerollte Hähnchenhaut auf Bambusspießen, mehrfach mit Tare aus Sojasoße, Mirin und Zucker glasiert, bis sie außen knusprig und innen noch zart fettig ist. Das Gericht spricht deutsche Griller direkt an, weil knusprige Haut und Röstaromen universell beliebt sind; die Zutaten für die Tare sind in jedem Supermarkt erhältlich. Der kritische Schritt ist das geduldige Grillen bei mittlerer Hitze mit mehrfachem Wenden, damit das Fett langsam ausläuft, ohne die Haut zu verbrennen, und der Artikel erklärt, wie man Hähnchenhaut beim Metzger oder aus ganzen Hähnchen gewinnt und sauber auf Spieße rollt. Herkunft: Japan.",
+    "stil": "vertraut"
   }
 ]
