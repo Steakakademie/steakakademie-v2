@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-11-02T00:00:00Z",
+  "aromaMatcher": {
+    "totalStudiesReferenced": 124,
+    "cuts": [
+      {
+        "id": "dry-aged-ribeye",
+        "name": "Dry-Aged Ribeye",
+        "keyAromas": [
+          {
+            "name": "röstig",
+            "chemicalCompound": "Pyrazin"
+          },
+          {
+            "name": "karamellig",
+            "chemicalCompound": "Furaneol"
+          },
+          {
+            "name": "rauchig",
+            "chemicalCompound": "Guaiacol"
+          }
+        ],
+        "recommendedRubs": [
+          "Kaffee-Kardamom-Rub",
+          "Klassischer Dalmatien-Rub"
+        ],
+        "recommendedWoods": [
+          "Hickory",
+          "Eiche"
+        ],
+        "pairings": {
+          "food": [
+            {
+              "item": "Dunkle Schokolade",
+              "sharedAromasCount": 3,
+              "sharedAromas": [
+                "röstig",
+                "karamellig",
+                "rauchig"
+              ],
+              "scientificSource": "Maillard-Reaction Aroma Foodpairing Study 2024"
+            }
+          ],
+          "drinks": [
+            {
+              "category": "wine",
+              "recommendation": "Syrah / Shiraz (Barossa Valley)",
+              "explanation": "Die kräftigen Tannine schneiden durch das Fett des Ribeyes, während die pfeffrige Note perfekt mit den Röstaromen harmoniert.",
+              "pairingNote": "Kräftig & Würzig"
+            },
+            {
+              "category": "non-alcoholic",
+              "recommendation": "Kaltgebrühter Cascara-Infusion-Tee",
+              "explanation": "Die feine Fruchtsäure und die Tabaknoten des Kaffeekirschen-Tees balancieren das reichhaltige Dry-Aged-Aroma optimal.",
+              "pairingNote": "Herbstlich & Komplex"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "woodFinder": {
+    "woods": [
+      {
+        "id": "hickory",
+        "name": "Hickory",
+        "flavorProfile": "strong",
+        "bestForCuts": [
+          "dry-aged-ribeye",
+          "brisket"
+        ],
+        "dosages": [
+          {
+            "grillSystem": "smoker",
+            "mildChunksCount": 2,
+            "strongChunksCount": 4,
+            "unit": "chunks",
+            "applicationNote": "Chunks direkt auf die Glut legen, sobald das Fleisch in den Smoker kommt."
+          }
+        ],
+        "safety": {
+          "isUnsuitable": false,
+          "dangerLevel": "low",
+          "reason": "Hervorragend für fast alle roten Fleischsorten geeignet. Bei Geflügel sparsam dosieren."
+        }
+      },
+      {
+        "id": "nadelholz",
+        "name": "Kiefer / Nadelholz",
+        "flavorProfile": "heavy",
+        "bestForCuts": [],
+        "dosages": [],
+        "safety": {
+          "isUnsuitable": true,
+          "dangerLevel": "critical",
+          "reason": "Enthält hohe Mengen an Harzen. Erzeugt bitteren, gesundheitsschädlichen Rauch und kann den Grill ruinieren."
+        }
+      }
+    ]
+  }
+}

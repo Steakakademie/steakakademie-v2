@@ -1,7 +1,13 @@
 'use client';
 
 /**
- * Werkzeuge-Sektion der Startseite (Position 5, Konzept Uwe 19.09.2026,
+ * Werkzeuge-Sektion der Startseite. SEIT 02.11.2026 (Uwe): Kopf und Kachel-Grid kommen
+ * aus BentoGridDashboard.tsx (Bento-Grid, Datenbasis data/werkzeuge/); hier bleiben die
+ * Rezept-Schmiede (live, #rezept-schmiede), das Marco-Band und die VIP-Zeile. Die
+ * Aroma-Tuning-Suchbox der Startseite ist damit entfallen — das Werkzeug lebt unter
+ * /foodpairing weiter. Ursprungskonzept darunter zur Einordnung:
+ *
+ * (Position 5, Konzept Uwe 19.09.2026,
  * Design-Canvas „Aroma-Matcher – Darstellung", Artboard „Startseite-B"):
  *   6 Kacheln 3×2 — Aroma-Matcher (Platz 1, Bild, Gold-Rahmen, NEU + VIP) ·
  *   Cut-Atlas · Foodpairing · Rezept-Schmiede · Hofladen-Radar · Räucherholz-Finder (GEPLANT, VIP)
@@ -20,195 +26,14 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus, Radar, Wine, Trees, Crown } from 'lucide-react';
+import { ChefHat, ChevronRight, Loader2, Users, Plus, Minus, Wine, Crown } from 'lucide-react';
 import LazyMarkdown from '@/components/ui/LazyMarkdown';
 import MarcoStarter from '@/components/relaunch/MarcoStarter';
-import AromaBrueckeSvg from '@/components/foodpairing/AromaBrueckeSvg';
-import { KACHEL_TEASER, FOODPAIRING_BEISPIELE } from '@/lib/foodpairing-inhalte';
-
-type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
-
-// Ersatzanzeige NUR bei Serverfehler: echte Ribeye-Treffer, 1:1 aus data/foodpairing
-// (Stand 30.09.2026 inkl. Beleg Li et al. 2021 → 2-Acetyl-1-pyrrolin im Rind; entspricht
-// match_foodpairing('Rind', 5), sobald der Import-Workflow gelaufen ist). Die RPC blendet
-// Partner derselben Kategorie aus — deshalb kein Schwein/Lamm. Wird ausdrücklich als
-// „Beispiel: Ribeye" beschriftet. Die v1-Demo zeigte „Kaffee · 7 Moleküle", die
-// echte DB lieferte 3 — solche Zahlen gehören nie in eine Vorschau.
-const DEMO_PAIRINGS: Pairing[] = [
-  { partner: 'Brotkruste', category: 'Backwaren', shared: 6, shared_examples: ['(E,E)-2,4-Decadienal', '(E)-2-Nonenal', '2-Acetyl-1-pyrrolin'] },
-  { partner: 'Kartoffel', category: 'Gemüse', shared: 6, shared_examples: ['(E,E)-2,4-Decadienal', '2-Ethyl-3,5-dimethylpyrazin', '2,3-Diethyl-5-methylpyrazin'] },
-  { partner: 'Erdnuss', category: 'Nüsse', shared: 5, shared_examples: ['(E,E)-2,4-Decadienal', '2-Acetyl-1-pyrrolin', 'Furaneol'] },
-  { partner: 'Garnele', category: 'Meeresfrüchte', shared: 5, shared_examples: ['2-Acetyl-1-pyrrolin', '2-Acetylthiazolin', '2,3-Diethyl-5-methylpyrazin'] },
-  { partner: 'Champignon', category: 'Pilze', shared: 4, shared_examples: ['2-Acetyl-1-pyrrolin', '2,3-Diethyl-5-methylpyrazin', 'Furaneol'] },
-];
+import BentoGridDashboard from '@/components/home/BentoGridDashboard';
+import type { SteakakademieToolsDatabase } from '@/lib/werkzeuge/typen';
 
 const KACHEL_BOX =
   'flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold focus-within:border-brand-gold transition-colors';
-
-function Bar({ value, max }: { value: number; max: number }) {
-  const pct = Math.max(8, Math.round((value / max) * 100));
-  return (
-    <span className="inline-block h-1.5 rounded-full bg-brand-gold/80" style={{ width: `${pct}%` }} aria-hidden />
-  );
-}
-
-function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partner: string) => void }) {
-  const [zutat, setZutat] = useState('');
-  const [treffer, setTreffer] = useState<Pairing[] | null>(null);
-  const [demo, setDemo] = useState(false);
-  const [hinweis, setHinweis] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  function suchen(e: React.FormEvent) {
-    e.preventDefault();
-    // Leeres Feld: sagen, was fehlt — sonst wirkt der Knopf kaputt (Audit 20.10.2026).
-    if (!zutat.trim()) {
-      setHinweis('Gib zuerst eine Zutat ein.');
-      return;
-    }
-    abfragen(zutat);
-  }
-
-  async function abfragen(eingabe: string) {
-    const q = eingabe.trim();
-    if (!q) return;
-    setLoading(true);
-    setTreffer(null);
-    setDemo(false);
-    setHinweis(null);
-    try {
-      const res = await fetch('/api/foodpairing', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zutat: q, limit: 6 }),
-      });
-      const data = await res.json();
-      if (res.ok && Array.isArray(data.treffer) && data.treffer.length) {
-        setTreffer(data.treffer);
-      } else if (res.status === 404) {
-        // Zutat fehlt im Aroma-Netzwerk: ehrlich sagen, keine fremden Treffer zeigen.
-        setHinweis(`„${q}" ist noch nicht in unserer Aroma-Datenbank.`);
-      } else {
-        setTreffer(DEMO_PAIRINGS);
-        setDemo(true);
-      }
-    } catch {
-      setTreffer(DEMO_PAIRINGS);
-      setDemo(true);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const max = treffer?.reduce((m, t) => Math.max(m, t.shared), 1) ?? 1;
-
-  return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold focus-within:border-brand-gold transition-colors">
-      {/* Name „Aroma-Tuning" statt „Foodpairing" (Uwe, 30.09.2026): Foodpairing NV hält
-          eine Bildmarke mit EU-Benennung in Kl. 41/42/43 — der Werkzeugname soll nicht
-          die Marke sein; „Foodpairing" steht nur beschreibend im Fließtext.
-          „Aroma-Kompass" verworfen: aromakompass.ch ist ein Pairing-Tool in DACH.
-          Aufhänger (Uwe, 30.09.2026: „Kachel muss mehr Neugier wecken") — eigene
-          Datengrafik statt Stockfoto; Werte aus KACHEL_TEASER, per Test gegen
-          data/foodpairing abgesichert. */}
-      <Link href="/foodpairing" className="group block" aria-label="Foodpairing erklärt: Warum Steak und Schokolade zusammenpassen">
-        <AromaBrueckeSvg
-          a={KACHEL_TEASER.a}
-          b={KACHEL_TEASER.b}
-          bruecken={KACHEL_TEASER.bruecken}
-          idSuffix="kachel"
-          className="block w-full transition-opacity group-hover:opacity-90"
-          titel="Steak und Schokolade teilen drei Schlüssel-Aromen: röstig, karamellig, rauchig"
-        />
-      </Link>
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-          <FlaskConical size={18} />
-          <h3 className="font-serif text-lg font-bold text-text-light">Aroma-Tuning</h3>
-        </div>
-        <p className="text-sm font-semibold text-text-light">Steak und Schokolade? Passt.</p>
-        <p className="text-xs text-text-secondary mb-2">
-          Beide teilen drei Schlüssel-Aromen. Finde heraus, welche Zutaten für dein Foodpairing zusammenpassen —
-          belegt aus über 100 Fachstudien.
-        </p>
-        <Link
-          href="/foodpairing"
-          className="mb-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold hover:gap-2 hover:text-brand-fire transition-[gap]"
-        >
-          So funktioniert’s <ChevronRight size={14} />
-        </Link>
-
-        <form onSubmit={suchen} className="flex gap-2">
-          <input
-            value={zutat}
-            onChange={(e) => setZutat(e.target.value)}
-            placeholder="Deine Zutat, z. B. Erdbeere"
-            aria-label="Zutat für das Aroma-Tuning"
-            className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
-          >
-            {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Tunen
-          </button>
-        </form>
-
-        {hinweis && <p className="mt-3 text-xs text-text-muted">{hinweis} Probier eine der Zutaten unten.</p>}
-
-        {!treffer && (
-          <div className="mt-auto pt-5">
-            <p className="mb-2 text-[11px] uppercase tracking-wide text-text-muted">Oder starte mit</p>
-            <div className="flex flex-wrap gap-2">
-              {FOODPAIRING_BEISPIELE.map((b) => (
-                <button
-                  key={b}
-                  type="button"
-                  disabled={loading}
-                  onClick={() => {
-                    setZutat(b);
-                    abfragen(b);
-                  }}
-                  className="rounded-full border border-brand-gold/40 px-3 py-1 text-xs text-text-secondary hover:border-brand-gold hover:text-brand-gold disabled:opacity-50 transition-colors"
-                >
-                  {b}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {treffer && (
-          <div className="mt-4 space-y-2">
-            {demo && (
-              <p className="text-[11px] text-text-muted italic">Server gerade nicht erreichbar — Beispiel: Ribeye.</p>
-            )}
-            {treffer.map((t) => (
-              <div key={t.partner} className="text-sm">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-text-light font-medium">{t.partner}</span>
-                  <button
-                    type="button"
-                    onClick={() => onSeedRezept(demo ? 'Ribeye' : zutat, t.partner)}
-                    className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-brand-gold hover:text-brand-fire"
-                    title={`Rezept: ${demo ? 'Ribeye' : zutat} mit ${t.partner}`}
-                  >
-                    → Rezept
-                  </button>
-                </div>
-                <Bar value={t.shared} max={max} />
-                <p className="text-[11px] text-text-muted truncate">
-                  {t.shared} Moleküle{t.shared_examples?.length ? ` · ${t.shared_examples.join(', ')}` : ''}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 const NIVEAUS = [
   { n: 1, label: '⭐ Einsteiger' },
@@ -517,7 +342,7 @@ const MARCO_FRAGEN = [
   'Alkoholfrei zum Tomahawk für 6 Gäste?',
 ];
 
-export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
+export default function ToolBoxes({ freeLimit = 5, werkzeuge }: { freeLimit?: number; werkzeuge: SteakakademieToolsDatabase }) {
   // Verkettung: Foodpairing → Rezept-Schmiede (nonce, damit auch gleiche Vorgabe erneut auslöst).
   const [seed, setSeed] = useState<{ auftrag: string; nonce: number } | null>(null);
 
@@ -532,148 +357,14 @@ export default function ToolBoxes({ freeLimit = 5 }: { freeLimit?: number }) {
   return (
     <section id="werkzeuge" className="bg-surface-dark border-b border-brand-gold/15">
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
-        <div className="text-center mb-6">
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire">
-            <Flame size={12} /> Werkzeuge
-          </span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mt-2">
-            Spiel mit Aromen, Cuts & Rezepten
-          </h2>
-        </div>
+        {/* Bento-Grid (Uwe, 02.11.2026) — ersetzt Kopf und 6-Kachel-Grid; Datenbasis
+            kommt als Prop aus page.tsx (src/lib/werkzeuge/daten.ts). */}
+        <BentoGridDashboard database={werkzeuge} freeLimit={freeLimit} />
 
-        {/* 6 Kacheln, 3×2 — Aroma-Matcher auf Platz 1 (Uwe, 19.09.2026) */}
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {/* Aroma-Matcher — Platz 1, Bild, Gold-Rahmen, NEU + VIP */}
-          <Link
-            href="/aroma-matcher"
-            className="group flex flex-col overflow-hidden rounded-xl border-2 border-brand-gold bg-surface-card hover:bg-surface-elevated hover:shadow-lg hover:shadow-brand-gold/25 transition-[background-color,box-shadow]"
-          >
-            <div className="relative h-32 w-full">
-              <Image
-                src="/images/cuts/ribeye.jpg"
-                alt="Dry-Aged Ribeye — Ausgangspunkt des Aroma-Matchers"
-                fill
-                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <div className="mb-2 flex gap-2">
-                <Badge>Neu</Badge>
-                <Badge filled>VIP</Badge>
-              </div>
-              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-                <Wine size={18} />
-                <h3 className="font-serif text-lg font-bold text-text-light">Aroma-Matcher</h3>
-              </div>
-              <p className="text-xs text-text-secondary mb-2">
-                Was passt zu deinem Cut? Rub, Holz und das passende Glas — mit einem Satz, warum.
-              </p>
-              <p className="text-[11px] text-text-muted mb-4">{freeLimit} Cuts gratis · ohne Limit: für den VIP-Pass geplant</p>
-              <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-                Cut wählen <ChevronRight size={14} />
-              </span>
-            </div>
-          </Link>
-
-          {/* Cut-Atlas → bestehende Cut-Welt. Bild (Uwe, 28.09.2026): die Kachel
-              stand neben Aroma-Matcher und Foodpairing fast leer. Das Bild waechst
-              mit der Zeilenhoehe (flex-1) und fuellt so genau den Leerraum. */}
-          <Link
-            href="/cuts"
-            className="group flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
-          >
-            <div className="relative min-h-40 w-full flex-1">
-              <Image
-                src="/images/cut-atlas-stier.jpg"
-                alt="Schwarzer Stier im Glutlicht — Einstieg in den Cut-Atlas"
-                fill
-                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
-                className="object-cover object-[center_20%] transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </div>
-            <div className="flex flex-col p-5">
-              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-                <Flame size={18} />
-                <h3 className="font-serif text-lg font-bold text-text-light">Cut-Atlas</h3>
-              </div>
-              <p className="text-xs text-text-secondary mb-4">
-                Jeder Cut erklärt — Lage, Muskel, Marmorierung und der perfekte Garpunkt.
-              </p>
-              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-                Entdecken <ChevronRight size={14} />
-              </span>
-            </div>
-          </Link>
-
-          <FoodpairingBox
-            onSeedRezept={(z, p) => setSeed({ auftrag: `${z} mit ${p}`, nonce: Date.now() })}
-          />
+        {/* Rezept-Schmiede — live, unter dem Grid. Ziel der Bento-Kachel „Rezept schmieden"
+            und der Deeplinks /?schmiede=…#werkzeuge (AromaPairing, AromaRad, MutterrezeptBaum). */}
+        <div id="rezept-schmiede" className="mt-6 scroll-mt-24">
           <RezeptSchmiedeBox seed={seed} />
-
-          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe). Foto (Uwe, 29.09.2026)
-              statt der Reetdach-Illustration: die Zeichnung brach die Bildsprache der
-              Nachbarkacheln (Fotos in Glutlicht). Marktkörbe, warm abgedunkelt.
-              Herkunft: data/bildregister.yaml. */}
-          <Link
-            href="/hoefe"
-            className="group flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
-          >
-            <div className="relative min-h-40 w-full flex-1">
-              <Image
-                src="/images/hofladen-radar-markt.jpg"
-                alt="Weidenkörbe mit Zwiebeln, Tomaten, Frühlingszwiebeln und Kohl — frisch vom Hof"
-                fill
-                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
-                className="object-cover object-[center_60%] transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </div>
-            <div className="flex flex-col p-5">
-              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-                <Radar size={18} />
-                <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
-              </div>
-              <p className="text-xs text-text-secondary mb-4">
-                Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
-                Deutschland, Österreich und die Schweiz.
-              </p>
-              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
-                Höfe finden <ChevronRight size={14} />
-              </span>
-            </div>
-          </Link>
-
-          {/* Räucherholz-Finder — noch nicht gebaut (Uwe-Angaben offen), deshalb kein Link */}
-          {/* Bild (Uwe, 28.09.2026): Kachel stand leer. Motiv aus dem Streitfall
-              „Holz wässern" — Scheite auf Glut mit Rauch. */}
-          <div
-            className="flex flex-col overflow-hidden rounded-xl border border-brand-gold/25 bg-surface-card hover:border-brand-gold transition-colors"
-            aria-label="Räucherholz-Finder — geplant, noch nicht verfügbar"
-          >
-            <div className="relative min-h-40 w-full flex-1">
-              <Image
-                src="/images/streitfaelle/holz-waessern.jpg"
-                alt="Holzscheite auf glühender Glut mit aufsteigendem Rauch"
-                fill
-                sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
-                className="object-cover object-[center_60%]"
-              />
-            </div>
-            <div className="flex flex-col p-5">
-              <div className="mb-2 flex gap-2">
-                <Badge muted>Geplant</Badge>
-                <Badge filled>VIP</Badge>
-              </div>
-              <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
-                <Trees size={18} />
-                <h3 className="font-serif text-lg font-bold text-text-light">Räucherholz-Finder</h3>
-              </div>
-              <p className="text-xs text-text-secondary mb-4">
-                Welches Holz zu welchem Grillgut — mit Dosierung und Warnliste der ungeeigneten Hölzer.
-              </p>
-              <span className="text-[11px] text-text-muted">Geplant als Baustein des VIP-Passes.</span>
-            </div>
-          </div>
         </div>
 
         {/* Marco-Band „Sommelier am Grill" — plakativ, aber dezent (Uwe, 19.09.2026) */}

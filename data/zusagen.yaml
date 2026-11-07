@@ -620,7 +620,7 @@ zusagen:
   - id: hoefe-radar-bestand
     zusage: Der Hofladen-Radar findet Direktvermarkter in der Nähe.
     wo:
-      - datei: src/components/home/ToolBoxes.tsx
+      - datei: src/components/home/BentoGridDashboard.tsx
         muster: "Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick."
       - datei: src/components/hoefe/HofladenHinweis.tsx
         muster: "Der Hofladen-Radar zeigt Direktvermarkter in deiner Nähe"
@@ -698,7 +698,7 @@ zusagen:
   - id: foodpairing-ueber-hundert-studien
     zusage: Das Foodpairing stützt sich auf über 100 Fachstudien.
     wo:
-      - datei: src/components/home/ToolBoxes.tsx
+      - datei: src/components/home/BentoGridDashboard.tsx
         muster: "belegt aus über 100 Fachstudien"
     beleg:
       typ: zaehlung
