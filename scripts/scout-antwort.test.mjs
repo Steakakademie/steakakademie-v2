@@ -34,7 +34,8 @@ describe('Lauf-Bewertung', () => {
 
   it.each([
     [{ briefings: 6, generiert: 0, technisch: 6 }, true],   // 15.11.2026
-    [{ briefings: 5, generiert: 1, technisch: 4 }, false],  // 08.11.2026: ein Entwurf kam durch
+    [{ briefings: 4, generiert: 0, technisch: 4 }, true],   // 08.11.2026
+    [{ briefings: 5, generiert: 1, technisch: 4 }, false],  // ein Entwurf kam durch: kein Ausfall
     [{ briefings: 4, generiert: 0, technisch: 0 }, false],  // alles vom Gate verworfen
     [{ briefings: 0, generiert: 0, technisch: 0 }, false],
   ])('%o → gescheitert: %s', (lage, erwartet) => {

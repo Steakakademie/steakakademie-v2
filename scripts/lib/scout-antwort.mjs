@@ -3,7 +3,7 @@
  * damit beides testbar ist (scripts/scout-antwort.test.mjs).
  *
  * ANLASS (17.11.2026): content-grow lief am 08.11. und 15.11.2026 gruen durch und
- * lieferte 1 bzw. 0 Entwuerfe aus 5 bzw. 6 Briefings. Jede Generierung endete mit
+ * lieferte 0 Entwuerfe aus 4 bzw. 6 Briefings. Jede Generierung endete mit
  * „Kein JSON in Antwort", der Bericht zeigte „Fehler: 0", der Workflow blieb gruen.
  * Der Ops-Heartbeat meldete den Stillstand erst nach 10 Tagen.
  */
