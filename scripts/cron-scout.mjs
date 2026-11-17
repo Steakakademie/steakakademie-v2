@@ -19,6 +19,7 @@ import { readFile }       from 'fs/promises'
 import { join, dirname }  from 'path'
 import { fileURLToPath }  from 'url'
 import dotenv             from 'dotenv'
+import { leseAntwort, istTechnischerFehler, laufGescheitert, SCOUT_MAX_TOKENS } from './lib/scout-antwort.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
@@ -278,7 +279,7 @@ async function generateContent(briefing) {
 - Nur metrische Einheiten und °C. Kein °F, keine Pfund, Unzen, Zoll.`
   const msg = await anthropic.messages.create({
     model:      'claude-opus-4-7',
-    max_tokens: 3072,
+    max_tokens: SCOUT_MAX_TOKENS,
     // Automatisches Prompt-Caching (Breakpoint setzt/verschiebt die API selbst)
     cache_control: { type: 'ephemeral' },
     thinking:   { type: 'adaptive' },
@@ -297,10 +298,7 @@ Antworte NUR als JSON:
     }],
   })
 
-  const text = msg.content.find(b => b.type === 'text')?.text ?? ''
-  const m    = text.match(/\{[\s\S]*\}/)
-  if (!m) throw new Error('Kein JSON in Antwort')
-  const parsed = JSON.parse(m[0])
+  const parsed = leseAntwort(msg)
 
   // Qualitäts-Gate (29.09.2026): Was die Regeln bricht, landet nicht in der
   // Review-Warteschlange — Uwe soll entscheiden, nicht aussortieren.
@@ -459,7 +457,7 @@ async function main() {
 
   console.log(c.blue('\n━━ Phase 2: Content + Image '))
   const pairs = []
-  let generated = 0, skipped = 0
+  let generated = 0, skipped = 0, technisch = 0
 
   for (const briefing of briefings) {
     process.stdout.write(c.dim(`  Generiere: ${briefing.article.title.slice(0,50)}... `))
@@ -475,8 +473,9 @@ async function main() {
         console.log(c.yellow(`    Ton-Verletzungen: ${draft.tone_violations.join(', ')}`))
       }
     } catch (err) {
-      console.log(c.red(`✗ Fehler: ${err.message.slice(0,60)}`))
+      console.log(c.red(`✗ Fehler: ${err.message.slice(0,140)}`))
       skipped++
+      if (istTechnischerFehler(err.message)) technisch++
     }
   }
 
@@ -513,10 +512,19 @@ async function main() {
   console.log(`  Briefings erstellt : ${c.green(briefings.length)}`)
   console.log(`  Drafts generiert   : ${c.green(generated)}`)
   console.log(`  Publiziert         : ${c.green(published)}`)
+  console.log(`  Nicht generiert    : ${skipped > 0 ? c.yellow(skipped) : c.dim(skipped)}${skipped > 0 ? c.dim(` (davon technisch: ${technisch}, vom Gate verworfen: ${skipped - technisch})`) : ''}`)
   console.log(`  Fehler             : ${failed > 0 ? c.red(failed) : c.dim(failed)}`)
   console.log(`  Laufzeit           : ${elapsed}s`)
   if (DRY_RUN) console.log(c.yellow('\n  DRY-RUN — nichts wurde in DB geschrieben'))
   console.log()
+
+  // Kein einziger Entwurf, obwohl Briefings anstanden und die Generierung technisch
+  // scheiterte → Ausfall, kein Normalzustand. Vorher endete der Lauf hier gruen und still
+  // (08.11. und 15.11.2026). Gleiches Muster wie scripts/recipe-agent.mjs.
+  if (laufGescheitert({ briefings: briefings.length, generiert: generated, technisch })) {
+    console.error(c.red(`  Alle ${technisch} Generierungen technisch gescheitert — Lauf wird als Fehler gewertet.`))
+    process.exitCode = 1
+  }
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main().catch(err => {
