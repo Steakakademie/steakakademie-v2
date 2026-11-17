@@ -187,6 +187,9 @@ describe('sicherheitsKlasse', () => {
     [{ meatType: 'Haehnchenschenkel' },                       'gefluegel',   72],
     [{ meatType: 'Hähnchenhack', title: 'Tsukune — Japanische Hähnchen-Hackspieße' }, 'gefluegel', 72],
     [{ meatType: 'Schweinelachs / Kotelettstrang' },          'schwein',     63],
+    [{ meatType: 'Kotelett', title: 'Thit Nuong — Zitronengras-Kotelett' }, 'schwein', 63],
+    [{ meatType: 'Nackenkotelett' },                          'schwein',     63],
+    [{ meatType: 'Wildschweinkotelett' },                     'wildschwein', 70],
     [{ meatType: 'Schweine- und Rindfleisch', title: 'Texas Hot Links — Scharfe Grobwurst aus dem Smoker' }, 'hackfleisch', 70],
     [{ meatType: 'Rinderhack', title: 'Smash Burger' },       'hackfleisch', 70],
     [{ meatType: 'Wildschweinkeule' },                        'wildschwein', 70],
@@ -198,6 +201,10 @@ describe('sicherheitsKlasse', () => {
     [{ meatType: 'Entrecôte' }],
     [{ meatType: 'Entenbrust' }],   // Sonderfall der Referenz: darf rosa bleiben (duck_breast 56–62)
     [{ meatType: 'Lammkoteletts' }], // "kotelett" allein heisst nicht Schwein
+    // Zusammensetzung mit Teilstueck dazwischen — KAN-102, Seed lamb-shoulder-chops-australisch
+    [{ meatType: 'Lammschulterkoteletts', title: 'Australische Lammschulterkoteletts mit Rosmarin-Knoblauch-Rub' }],
+    [{ meatType: 'Kalbsrückenkotelett' }],
+    [{ meatType: 'Rinderkotelett (Côte de Bœuf)' }],
     [{ meatType: 'Lachs' }],
     [{ meatType: 'Kartoffeln' }],
   ])('%o hat keinen Sicherheits-Mindestwert', (seed) => {
