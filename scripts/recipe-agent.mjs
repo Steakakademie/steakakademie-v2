@@ -612,7 +612,12 @@ ${referenz().text}`
 // nicht als Gefluegel: Die Referenz erlaubt Entenbrust rosa (duck_breast).
 const SICHERHEITS_MUSTER = {
   gefluegel:   /h(?:ä|ae)hnchen|huhn|h(?:ü|ue)hner|chicken|pute|truthahn|turkey|gefl(?:ü|ue)gel|wachtel|stubenk(?:ü|ue)ken|poularde/,
-  schwein:     /schwein|pork|spare ?ribs|(?<!lamm|kalbs|kalb)kotelett|porchetta|kassler|spanferkel/,
+  // „kotelett" zaehlt nur dann als Schwein, wenn im selben Wort keine andere Tierart
+  // davorsteht. Bis 17.11.2026 pruefte der Lookbehind nur das Wort UNMITTELBAR davor:
+  // „Lammschulterkoteletts" fiel deshalb in die Klasse schwein (63 °C), der Seed
+  // lamb-shoulder-chops-australisch scheiterte drei Tage in Folge an lamb_mr 59 °C und
+  // legte die Tagesproduktion lahm (KAN-102).
+  schwein:     /schwein|pork|spare ?ribs|(?<!(?:lamm|kalb|rind|hirsch|reh)[a-zäöüß-]*)kotelett|porchetta|kassler|spanferkel/,
   hackfleisch: /hack|burger|w(?:u|ü|ue)rst|sausage|\blinks\b|[cć]evap|kofta|k(?:ö|oe)fte|frikadell|tsukune/,
   wildschwein: /wildschwein|wild boar/,
 }
